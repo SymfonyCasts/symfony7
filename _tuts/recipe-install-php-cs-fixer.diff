@@ -1,0 +1,140 @@
+diff --git a/.gitignore b/.gitignore
+index a67f91e..eb3eab3 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -8,3 +8,8 @@
+ /var/
+ /vendor/
+ ###< symfony/framework-bundle ###
++
++###> php-cs-fixer/shim ###
++/.php-cs-fixer.php
++/.php-cs-fixer.cache
++###< php-cs-fixer/shim ###
+diff --git a/.php-cs-fixer.dist.php b/.php-cs-fixer.dist.php
+new file mode 100644
+index 0000000..3788194
+--- /dev/null
++++ b/.php-cs-fixer.dist.php
+@@ -0,0 +1,13 @@
++<?php
++
++$finder = (new PhpCsFixer\Finder())
++    ->in(__DIR__)
++    ->exclude('var')
++;
++
++return (new PhpCsFixer\Config())
++    ->setRules([
++        '@Symfony' => true,
++    ])
++    ->setFinder($finder)
++;
+diff --git a/composer.json b/composer.json
+index 9fc4a7c..6b95ab6 100644
+--- a/composer.json
++++ b/composer.json
+@@ -7,6 +7,7 @@
+         "php": ">=8.2",
+         "ext-ctype": "*",
+         "ext-iconv": "*",
++        "php-cs-fixer/shim": "^3.46",
+         "symfony/console": "7.0.*",
+         "symfony/dotenv": "7.0.*",
+         "symfony/flex": "^2",
+@@ -14,8 +15,6 @@
+         "symfony/runtime": "7.0.*",
+         "symfony/yaml": "7.0.*"
+     },
+-    "require-dev": {
+-    },
+     "config": {
+         "allow-plugins": {
+             "php-http/discovery": true,
+diff --git a/composer.lock b/composer.lock
+index 04f7272..fd17393 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,8 +4,60 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "e35f3617f3b9fbf8a1fd858641bffd14",
++    "content-hash": "a03b989c65f5a3b112a0ee32b46a21af",
+     "packages": [
++        {
++            "name": "php-cs-fixer/shim",
++            "version": "v3.46.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/PHP-CS-Fixer/shim.git",
++                "reference": "e9fc76796f284c050615937b9bd2df7688452c33"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/PHP-CS-Fixer/shim/zipball/e9fc76796f284c050615937b9bd2df7688452c33",
++                "reference": "e9fc76796f284c050615937b9bd2df7688452c33",
++                "shasum": ""
++            },
++            "require": {
++                "ext-json": "*",
++                "ext-tokenizer": "*",
++                "php": "^7.4 || ^8.0"
++            },
++            "replace": {
++                "friendsofphp/php-cs-fixer": "self.version"
++            },
++            "suggest": {
++                "ext-dom": "For handling output formats in XML",
++                "ext-mbstring": "For handling non-UTF8 characters."
++            },
++            "bin": [
++                "php-cs-fixer",
++                "php-cs-fixer.phar"
++            ],
++            "type": "application",
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Fabien Potencier",
++                    "email": "fabien@symfony.com"
++                },
++                {
++                    "name": "Dariusz Rumiński",
++                    "email": "dariusz.ruminski@gmail.com"
++                }
++            ],
++            "description": "A tool to automatically fix PHP code style",
++            "support": {
++                "issues": "https://github.com/PHP-CS-Fixer/shim/issues",
++                "source": "https://github.com/PHP-CS-Fixer/shim/tree/v3.46.0"
++            },
++            "time": "2024-01-03T21:39:12+00:00"
++        },
+         {
+             "name": "psr/cache",
+             "version": "3.0.0",
+diff --git a/symfony.lock b/symfony.lock
+index 087b814..5a71bc6 100644
+--- a/symfony.lock
++++ b/symfony.lock
+@@ -1,4 +1,16 @@
+ {
++    "php-cs-fixer/shim": {
++        "version": "3.46",
++        "recipe": {
++            "repo": "github.com/symfony/recipes",
++            "branch": "main",
++            "version": "3.0",
++            "ref": "16422bf8eac6c3be42afe07d37e2abc89d2bdf6b"
++        },
++        "files": [
++            ".php-cs-fixer.dist.php"
++        ]
++    },
+     "symfony/console": {
+         "version": "7.0",
+         "recipe": {

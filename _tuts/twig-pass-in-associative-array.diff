@@ -1,0 +1,48 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 79ffe18..9ddc12a 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -12,9 +12,16 @@ class MainController extends AbstractController
+     public function homepage()
+     {
+         $starshipCount = 457;
++        // example startrek star ship with some attributes
++        $featuredShip = [
++            'name' => 'USS Enterprise (NCC-1701-D)',
++            'class' => 'Galaxy',
++            'captain' => 'Jean-Luc Picard',
++        ];
+ 
+         return $this->render('main/homepage.html.twig', [
+             'numberOfStarships' => $starshipCount,
++            'featuredShip' => $featuredShip,
+         ]);
+     }
+ }
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index b0e4197..1a804ec 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -12,3 +12,22 @@
+         </p>
+     {% endif %}
+ </div>
++
++<div>
++    <h2>Featured Ship</h2>
++
++    <table>
++        <tr>
++            <th>Name</th>
++            <td>{{ featuredShip.name }}</td>
++        </tr>
++        <tr>
++            <th>Class</th>
++            <td>{{ featuredShip.class }}</td>
++        </tr>
++        <tr>
++            <th>Captain</th>
++            <td>{{ featuredShip.captain }}</td>
++        </tr>
++    </table>
++</div>

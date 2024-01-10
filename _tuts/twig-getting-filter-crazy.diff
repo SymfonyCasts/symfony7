@@ -1,0 +1,13 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index a0e047c..5ddf4ab 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -27,7 +27,7 @@
+         </tr>
+         <tr>
+             <th>Captain</th>
+-            <td>{{ featuredShip.captain|upper }}</td>
++            <td>{{ featuredShip.captain|upper|lower|title }}</td>
+         </tr>
+     </table>
+ </div>

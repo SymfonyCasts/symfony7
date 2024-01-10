@@ -1,0 +1,17 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 8461d79..e8dbc59 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -2,10 +2,11 @@
+ 
+ namespace App\Controller;
+ 
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+ 
+-class MainController
++class MainController extends AbstractController
+ {
+     #[Route('/')]
+     public function homepage()

@@ -1,0 +1,11 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 4fd8637..a113fbe 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -3,5 +3,5 @@
+ </h1>
+ 
+ <div>
+-    Browse through {{ numberOfStarships }} starships!
++    Browse through {{ numberOfStarships * 10 }} starships!
+ </div>

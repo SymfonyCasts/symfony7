@@ -1,0 +1,16 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 97c6f3c..e2f3e84 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -2,8 +2,11 @@
+ 
+ namespace App\Controller;
+ 
++use Symfony\Component\Routing\Attribute\Route;
++
+ class MainController
+ {
++    #[Route('/')]
+     public function homepage()
+     {
+ 

@@ -1,0 +1,15 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index a113fbe..be908a7 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -4,4 +4,10 @@
+ 
+ <div>
+     Browse through {{ numberOfStarships * 10 }} starships!
++
++    {% if numberOfStarships > 400 %}
++        <p>
++            That's a lot a shiploads of ships!
++        </p>
++    {% endif %}
+ </div>

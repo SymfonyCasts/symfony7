@@ -1,0 +1,12 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index be908a7..b0e4197 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -7,6 +7,7 @@
+ 
+     {% if numberOfStarships > 400 %}
+         <p>
++            {# Do you think "shiploads" will pass the legal team? #}
+             That's a lot a shiploads of ships!
+         </p>
+     {% endif %}

@@ -1,0 +1,28 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 474ab06..79ffe18 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -11,6 +11,10 @@ class MainController extends AbstractController
+     #[Route('/')]
+     public function homepage()
+     {
+-        return $this->render('main/homepage.html.twig');
++        $starshipCount = 457;
++
++        return $this->render('main/homepage.html.twig', [
++            'numberOfStarships' => $starshipCount,
++        ]);
+     }
+ }
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 89c82d7..4fd8637 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -1,3 +1,7 @@
+ <h1>
+     Starshop: your monopoly-busting option for Starship parts!
+ </h1>
++
++<div>
++    Browse through {{ numberOfStarships }} starships!
++</div>
