@@ -20,6 +20,7 @@
         "symfony/property-info": "7.0.*",
         "symfony/runtime": "7.0.*",
         "symfony/serializer": "7.0.*",
+        "symfony/stimulus-bundle": "^2.13",
         "symfony/twig-bundle": "7.0.*",
         "symfony/yaml": "7.0.*",
         "symfonycasts/tailwind-bundle": "^0.5.0",
