@@ -1,9 +1,9 @@
 diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
 new file mode 100644
-index 0000000..631c159
+index 0000000..7edc447
 --- /dev/null
 +++ b/src/Controller/StarshipApiController.php
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,37 @@
 +<?php
 +
 +namespace App\Controller;
@@ -22,16 +22,19 @@ index 0000000..631c159
 +                'name' => 'USS LeafyCruiser (NCC-0001)',
 +                'class' => 'Garden',
 +                'captain' => 'Jean-Luc Pickles',
++                'status' => 'taken over by Q',
 +            ],
 +            [
 +                'name' => 'USS Espresso (NCC-1234-C)',
 +                'class' => 'Latte',
 +                'captain' => 'James T. Quick!',
++                'status' => 'repaired',
 +            ],
 +            [
 +                'name' => 'USS Wanderlust (NCC-2024-W)',
 +                'class' => 'Delta Tourist',
 +                'captain' => 'Kathryn Journeyway',
++                'status' => 'under construction',
 +            ],
 +        ];
 +
