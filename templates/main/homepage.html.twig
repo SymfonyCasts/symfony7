@@ -4,8 +4,14 @@
 
 {% block body %}
     <main class="flex flex-col lg:flex-row flex-1 space-y-4 lg:space-y-0">
-        <aside class="hidden relative w-72 p-2 lg:block lg:h-full bg-gray-800 text-white space-y-4">
-            <button class="absolute top-1 right-1">
+        <aside
+            class="hidden relative w-72 p-2 lg:block lg:h-full bg-gray-800 text-white space-y-4"
+            data-controller="closeable"
+        >
+            <button
+                class="absolute top-1 right-1"
+                data-action="closeable#close"
+            >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
             </button>
 
