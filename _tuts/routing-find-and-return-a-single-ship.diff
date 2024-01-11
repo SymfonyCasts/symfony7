@@ -1,0 +1,37 @@
+diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
+index 3dc36e5..42bb3cb 100644
+--- a/src/Controller/StarshipApiController.php
++++ b/src/Controller/StarshipApiController.php
+@@ -22,8 +22,10 @@ class StarshipApiController extends AbstractController
+     }
+ 
+     #[Route('/{id<\d+>}', methods: ['GET'])]
+-    public function get(int $id): Response
++    public function get(int $id, StarshipRepository $repository): Response
+     {
+-        dd($id);
++        $starship = $repository->find($id);
++
++        return $this->json($starship);
+     }
+ }
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index cf741d7..dd9f8c7 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -33,4 +33,15 @@ class StarshipRepository extends AbstractController
+             ),
+         ];
+     }
++
++    public function find(int $id): ?Starship
++    {
++        foreach ($this->findAll() as $starship) {
++            if ($starship->getId() === $id) {
++                return $starship;
++            }
++        }
++
++        return null;
++    }
+ }

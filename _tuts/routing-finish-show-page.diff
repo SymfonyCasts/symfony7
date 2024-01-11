@@ -1,0 +1,56 @@
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+index e47a8a1..bef0189 100644
+--- a/src/Controller/StarshipController.php
++++ b/src/Controller/StarshipController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Controller;
+ 
++use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -9,8 +10,15 @@ use Symfony\Component\Routing\Attribute\Route;
+ class StarshipController extends AbstractController
+ {
+     #[Route('/starships/{id<\d+>}')]
+-    public function show(int $id): Response
++    public function show(int $id, StarshipRepository $repository): Response
+     {
+-        dd($id);
++        $ship = $repository->find($id);
++        if (!$ship) {
++            throw $this->createNotFoundException('Starship not found');
++        }
++
++        return $this->render('starship/show.html.twig', [
++            'ship' => $ship,
++        ]);
+     }
+ }
+diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
+new file mode 100644
+index 0000000..2f7caa7
+--- /dev/null
++++ b/templates/starship/show.html.twig
+@@ -0,0 +1,20 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}{{ ship.name }}{% endblock %}
++
++{% block body %}
++    <h1>{{ ship.name }}</h1>
++
++    <table>
++        <tbody>
++            <tr>
++                <th>Class</th>
++                <td>{{ ship.class }}</td>
++            </tr>
++            <tr>
++                <th>Captain</th>
++                <td>{{ ship.captain }}</td>
++            </tr>
++        </tbody>
++    </table>
++{% endblock %}

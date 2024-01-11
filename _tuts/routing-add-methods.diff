@@ -1,0 +1,22 @@
+diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
+index 8b62d67..3a229f8 100644
+--- a/src/Controller/StarshipApiController.php
++++ b/src/Controller/StarshipApiController.php
+@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
+ 
+ class StarshipApiController extends AbstractController
+ {
+-    #[Route('/api/starships')]
++    #[Route('/api/starships', methods: ['GET'])]
+     public function getCollection(LoggerInterface $logger, StarshipRepository $repository): Response
+     {
+         $logger->info('Starship collection retrieved');
+@@ -20,7 +20,7 @@ class StarshipApiController extends AbstractController
+         return $this->json($starships);
+     }
+ 
+-    #[Route('/api/starships/{id<\d+>}')]
++    #[Route('/api/starships/{id<\d+>}', methods: ['GET'])]
+     public function get(int $id): Response
+     {
+         dd($id);

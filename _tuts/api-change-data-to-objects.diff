@@ -1,0 +1,52 @@
+diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
+index 631c159..6bb948b 100644
+--- a/src/Controller/StarshipApiController.php
++++ b/src/Controller/StarshipApiController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Controller;
+ 
++use App\Model\Starship;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -12,21 +13,24 @@ class StarshipApiController extends AbstractController
+     public function getCollection(): Response
+     {
+         $starships = [
+-            [
+-                'name' => 'USS LeafyCruiser (NCC-0001)',
+-                'class' => 'Garden',
+-                'captain' => 'Jean-Luc Pickles',
+-            ],
+-            [
+-                'name' => 'USS Espresso (NCC-1234-C)',
+-                'class' => 'Latte',
+-                'captain' => 'James T. Quick!',
+-            ],
+-            [
+-                'name' => 'USS Wanderlust (NCC-2024-W)',
+-                'class' => 'Delta Tourist',
+-                'captain' => 'Kathryn Journeyway',
+-            ],
++            new Starship(
++                1,
++                'USS LeafyCruiser (NCC-0001)',
++                'Garden',
++                'Jean-Luc Pickles',
++            ),
++            new Starship(
++                2,
++                'USS Espresso (NCC-1234-C)',
++                'Latte',
++                'James T. Quick!',
++            ),
++            new Starship(
++                3,
++                'USS Wanderlust (NCC-2024-W)',
++                'Delta Tourist',
++                'Kathryn Journeyway',
++            ),
+         ];
+ 
+         return $this->json($starships);

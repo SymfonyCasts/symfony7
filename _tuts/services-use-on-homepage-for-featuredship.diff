@@ -1,0 +1,31 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 9d34150..bd987cc 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Controller;
+ 
++use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -9,14 +10,11 @@ use Symfony\Component\Routing\Attribute\Route;
+ class MainController extends AbstractController
+ {
+     #[Route('/')]
+-    public function homepage(): Response
++    public function homepage(StarshipRepository $starshipRepository): Response
+     {
+-        $starshipCount = 457;
+-        $featuredShip = [
+-            'name' => 'USS LeafyCruiser (NCC-0001)',
+-            'class' => 'Garden',
+-            'captain' => 'Jean-Luc Pickles',
+-        ];
++        $ships = $starshipRepository->findAll();
++        $starshipCount = count($ships);
++        $featuredShip = $ships[array_rand($ships)];
+ 
+         return $this->render('main/homepage.html.twig', [
+             'numberOfStarships' => $starshipCount,

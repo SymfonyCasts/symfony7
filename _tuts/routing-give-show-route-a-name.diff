@@ -1,0 +1,13 @@
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+index bef0189..eec8e63 100644
+--- a/src/Controller/StarshipController.php
++++ b/src/Controller/StarshipController.php
+@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
+ 
+ class StarshipController extends AbstractController
+ {
+-    #[Route('/starships/{id<\d+>}')]
++    #[Route('/starships/{id<\d+>}', name: 'app_starship_show')]
+     public function show(int $id, StarshipRepository $repository): Response
+     {
+         $ship = $repository->find($id);

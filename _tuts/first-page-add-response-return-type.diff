@@ -1,0 +1,13 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 8461d79..721f002 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
+ class MainController
+ {
+     #[Route('/')]
+-    public function homepage()
++    public function homepage(): Response
+     {
+         return new Response('<strong>Starshop</strong>: your monopoly-busting option for Starship parts!');
+     }

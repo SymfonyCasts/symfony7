@@ -1,0 +1,22 @@
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+new file mode 100644
+index 0000000..e47a8a1
+--- /dev/null
++++ b/src/Controller/StarshipController.php
+@@ -0,0 +1,16 @@
++<?php
++
++namespace App\Controller;
++
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Component\Routing\Attribute\Route;
++
++class StarshipController extends AbstractController
++{
++    #[Route('/starships/{id<\d+>}')]
++    public function show(int $id): Response
++    {
++        dd($id);
++    }
++}

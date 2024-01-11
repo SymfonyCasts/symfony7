@@ -1,0 +1,37 @@
+diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
+index 87d5718..60f19c9 100644
+--- a/src/Controller/StarshipApiController.php
++++ b/src/Controller/StarshipApiController.php
+@@ -3,6 +3,7 @@
+ namespace App\Controller;
+ 
+ use App\Model\Starship;
++use App\Repository\StarshipRepository;
+ use Psr\Log\LoggerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+@@ -11,9 +12,10 @@ use Symfony\Component\Routing\Attribute\Route;
+ class StarshipApiController extends AbstractController
+ {
+     #[Route('/api/starships')]
+-    public function getCollection(LoggerInterface $logger): Response
++    public function getCollection(LoggerInterface $logger, StarshipRepository $repository): Response
+     {
+         $logger->info('Starship collection retrieved');
++        dd($repository);
+         $starships = [
+             new Starship(
+                 1,
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+new file mode 100644
+index 0000000..d97732b
+--- /dev/null
++++ b/src/Repository/StarshipRepository.php
+@@ -0,0 +1,7 @@
++<?php
++
++namespace App\Repository;
++
++class StarshipRepository
++{
++}

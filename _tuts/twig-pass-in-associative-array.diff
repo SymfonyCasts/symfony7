@@ -1,16 +1,15 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 79ffe18..9ddc12a 100644
+index 18284ac..9d34150 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
-@@ -12,9 +12,16 @@ class MainController extends AbstractController
-     public function homepage()
+@@ -12,9 +12,15 @@ class MainController extends AbstractController
+     public function homepage(): Response
      {
          $starshipCount = 457;
-+        // example startrek star ship with some attributes
 +        $featuredShip = [
-+            'name' => 'USS Enterprise (NCC-1701-D)',
-+            'class' => 'Galaxy',
-+            'captain' => 'Jean-Luc Picard',
++            'name' => 'USS LeafyCruiser (NCC-0001)',
++            'class' => 'Garden',
++            'captain' => 'Jean-Luc Pickles',
 +        ];
  
          return $this->render('main/homepage.html.twig', [

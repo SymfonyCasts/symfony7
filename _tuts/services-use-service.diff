@@ -1,0 +1,13 @@
+diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
+index 49d1b6e..87d5718 100644
+--- a/src/Controller/StarshipApiController.php
++++ b/src/Controller/StarshipApiController.php
+@@ -13,7 +13,7 @@ class StarshipApiController extends AbstractController
+     #[Route('/api/starships')]
+     public function getCollection(LoggerInterface $logger): Response
+     {
+-        dd($logger);
++        $logger->info('Starship collection retrieved');
+         $starships = [
+             new Starship(
+                 1,

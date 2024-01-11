@@ -1,0 +1,12 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index f786ff7..d27ce14 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -1,5 +1,7 @@
+ {% extends 'base.html.twig' %}
+ 
++{% block title %}Starshop: Beam up some parts!{% endblock %}
++
+ {% block body %}
+ <h1>
+     Starshop: your monopoly-busting option for Starship parts!

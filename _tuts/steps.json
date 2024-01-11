@@ -26,6 +26,11 @@
             "description": null
         },
         {
+            "id": "first-page-add-response-return-type",
+            "name": "First Page: Add Response return type",
+            "description": null
+        },
+        {
             "id": "recipe-install-php-cs-fixer",
             "name": "Recipe: install php-cs-fixer",
             "description": null
@@ -84,7 +89,142 @@
             "id": "twig-getting-filter-crazy",
             "name": "Twig: Getting filter crazy",
             "description": null
+        },
+        {
+            "id": "twigextends-extend-base-template",
+            "name": "TwigExtends: extend base template",
+            "description": null
+        },
+        {
+            "id": "twigextends-add-block-body",
+            "name": "TwigExtends: Add block body",
+            "description": null
+        },
+        {
+            "id": "twigextends-add-title-block",
+            "name": "TwigExtends: Add title block",
+            "description": null
+        },
+        {
+            "id": "twigextends-add-parent",
+            "name": "TwigExtends: Add parent()",
+            "description": null
+        },
+        {
+            "id": "twigextends-remove-parent",
+            "name": "TwigExtends: Remove parent()",
+            "description": null
+        },
+        {
+            "id": "debug-install-debug",
+            "name": "Debug: Install Debug",
+            "description": null
+        },
+        {
+            "id": "api-create-new-controller-and-return-json",
+            "name": "API: Create new controller and return JSON",
+            "description": null
+        },
+        {
+            "id": "api-add-starship-class",
+            "name": "API: Add Starship class",
+            "description": null
+        },
+        {
+            "id": "api-change-data-to-objects",
+            "name": "API: Change data to objects",
+            "description": null
+        },
+        {
+            "id": "api-install-serializer",
+            "name": "API: Install serializer",
+            "description": null
+        },
+        {
+            "id": "services-autowire-loggerinterface",
+            "name": "Services: Autowire LoggerInterface",
+            "description": null
+        },
+        {
+            "id": "services-use-service",
+            "name": "Services: Use service",
+            "description": null
+        },
+        {
+            "id": "services-create-starshiprepository",
+            "name": "Services: Create StarshipRepository",
+            "description": null
+        },
+        {
+            "id": "services-add-findall-to-repo",
+            "name": "Services: Add findAll() to repo",
+            "description": null
+        },
+        {
+            "id": "services-use-on-homepage-for-featuredship",
+            "name": "Services: Use on homepage for featuredShip",
+            "description": null
+        },
+        {
+            "id": "services-use-on-homepage",
+            "name": "Services: Use on homepage",
+            "description": null
+        },
+        {
+            "id": "routing-create-get-one-controller",
+            "name": "Routing: Create get one controller",
+            "description": null
+        },
+        {
+            "id": "routing-add-d-requirement",
+            "name": "Routing: Add \\d+ requirement",
+            "description": null
+        },
+        {
+            "id": "routing-add-methods",
+            "name": "Routing: Add methods",
+            "description": null
+        },
+        {
+            "id": "routing-add-route-above-class",
+            "name": "Routing: Add Route above class",
+            "description": null
+        },
+        {
+            "id": "delete-me-2",
+            "name": "delete me 2",
+            "description": null
+        },
+        {
+            "id": "routing-find-and-return-a-single-ship",
+            "name": "Routing: Find and return a single ship",
+            "description": null
+        },
+        {
+            "id": "routing-throw-a-404",
+            "name": "Routing: throw a 404",
+            "description": null
+        },
+        {
+            "id": "routing-create-starship-show-page",
+            "name": "Routing: Create starship show page",
+            "description": null
+        },
+        {
+            "id": "routing-finish-show-page",
+            "name": "Routing: Finish show page",
+            "description": null
+        },
+        {
+            "id": "routing-give-show-route-a-name",
+            "name": "Routing: give show route a name",
+            "description": null
+        },
+        {
+            "id": "routing-link-to-show-page",
+            "name": "Routing: Link to show page",
+            "description": null
         }
     ],
-    "sha": "b3afd03f339dcd41ff2f7b4a88bc2675637f6387"
+    "sha": "38ec99296671889d01de8ee6cbf25272db58cc6f"
 }

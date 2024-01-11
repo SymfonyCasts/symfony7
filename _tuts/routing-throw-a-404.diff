@@ -1,0 +1,15 @@
+diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
+index 42bb3cb..e876511 100644
+--- a/src/Controller/StarshipApiController.php
++++ b/src/Controller/StarshipApiController.php
+@@ -26,6 +26,10 @@ class StarshipApiController extends AbstractController
+     {
+         $starship = $repository->find($id);
+ 
++        if (!$starship) {
++            throw $this->createNotFoundException('Starship not found');
++        }
++
+         return $this->json($starship);
+     }
+ }

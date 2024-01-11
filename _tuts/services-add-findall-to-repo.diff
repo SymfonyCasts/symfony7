@@ -1,0 +1,74 @@
+diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
+index 60f19c9..16216e2 100644
+--- a/src/Controller/StarshipApiController.php
++++ b/src/Controller/StarshipApiController.php
+@@ -15,27 +15,7 @@ class StarshipApiController extends AbstractController
+     public function getCollection(LoggerInterface $logger, StarshipRepository $repository): Response
+     {
+         $logger->info('Starship collection retrieved');
+-        dd($repository);
+-        $starships = [
+-            new Starship(
+-                1,
+-                'USS LeafyCruiser (NCC-0001)',
+-                'Garden',
+-                'Jean-Luc Pickles',
+-            ),
+-            new Starship(
+-                2,
+-                'USS Espresso (NCC-1234-C)',
+-                'Latte',
+-                'James T. Quick!',
+-            ),
+-            new Starship(
+-                3,
+-                'USS Wanderlust (NCC-2024-W)',
+-                'Delta Tourist',
+-                'Kathryn Journeyway',
+-            ),
+-        ];
++        $starships = $repository->findAll();
+ 
+         return $this->json($starships);
+     }
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index d97732b..cf741d7 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -2,6 +2,35 @@
+ 
+ namespace App\Repository;
+ 
+-class StarshipRepository
++use App\Model\Starship;
++use Psr\Log\LoggerInterface;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Component\Routing\Attribute\Route;
++
++class StarshipRepository extends AbstractController
+ {
++    public function findAll(): array
++    {
++        return [
++            new Starship(
++                1,
++                'USS LeafyCruiser (NCC-0001)',
++                'Garden',
++                'Jean-Luc Pickles',
++            ),
++            new Starship(
++                2,
++                'USS Espresso (NCC-1234-C)',
++                'Latte',
++                'James T. Quick!',
++            ),
++            new Starship(
++                3,
++                'USS Wanderlust (NCC-2024-W)',
++                'Delta Tourist',
++                'Kathryn Journeyway',
++            ),
++        ];
++    }
+ }

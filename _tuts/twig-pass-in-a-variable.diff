@@ -1,10 +1,10 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 474ab06..79ffe18 100644
+index ff5a71c..18284ac 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
 @@ -11,6 +11,10 @@ class MainController extends AbstractController
      #[Route('/')]
-     public function homepage()
+     public function homepage(): Response
      {
 -        return $this->render('main/homepage.html.twig');
 +        $starshipCount = 457;
