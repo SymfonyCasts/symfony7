@@ -1,13 +1,13 @@
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 1a804ec..a0e047c 100644
+index 5448f7d..4b2017f 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -27,7 +27,7 @@
          </tr>
          <tr>
              <th>Captain</th>
--            <td>{{ featuredShip.captain }}</td>
-+            <td>{{ featuredShip.captain|upper }}</td>
+-            <td>{{ myShip.captain }}</td>
++            <td>{{ myShip.captain|upper }}</td>
          </tr>
-     </table>
- </div>
+         <tr>
+             <th>Status</th>

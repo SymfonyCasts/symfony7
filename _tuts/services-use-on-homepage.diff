@@ -1,5 +1,5 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index bd987cc..afa369c 100644
+index 70187a4..e8983fc 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
 @@ -13,12 +13,11 @@ class MainController extends AbstractController
@@ -7,17 +7,17 @@ index bd987cc..afa369c 100644
      {
          $ships = $starshipRepository->findAll();
 -        $starshipCount = count($ships);
-         $featuredShip = $ships[array_rand($ships)];
+         $myShip = $ships[array_rand($ships)];
  
          return $this->render('main/homepage.html.twig', [
 -            'numberOfStarships' => $starshipCount,
-             'featuredShip' => $featuredShip,
+             'myShip' => $myShip,
 +            'ships' => $ships,
          ]);
      }
  }
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index d27ce14..5b923f8 100644
+index a5a1c04..508a1b2 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -8,9 +8,9 @@
