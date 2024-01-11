@@ -31,7 +31,7 @@ index 0000000..3788194
 +    ->setFinder($finder)
 +;
 diff --git a/composer.json b/composer.json
-index 9fc4a7c..6b95ab6 100644
+index d5a7b55..4ce15f6 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -7,6 +7,7 @@
@@ -49,18 +49,18 @@ index 9fc4a7c..6b95ab6 100644
 -    "require-dev": {
 -    },
      "config": {
-         "allow-plugins": {
-             "php-http/discovery": true,
+         "platform": {
+             "php": "8.3"
 diff --git a/composer.lock b/composer.lock
-index 04f7272..fd17393 100644
+index 0dfd943..2840c28 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,8 +4,60 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "e35f3617f3b9fbf8a1fd858641bffd14",
-+    "content-hash": "a03b989c65f5a3b112a0ee32b46a21af",
+-    "content-hash": "da870741ae89b839db3d5ee191c23d07",
++    "content-hash": "8310a58bb9e33111fdbae201f34e9747",
      "packages": [
 +        {
 +            "name": "php-cs-fixer/shim",
