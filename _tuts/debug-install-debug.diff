@@ -1,5 +1,5 @@
 diff --git a/composer.json b/composer.json
-index 5a9a80b..c558ddb 100644
+index 5bf75eb..bd1af62 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -12,6 +12,7 @@
@@ -10,7 +10,7 @@ index 5a9a80b..c558ddb 100644
          "symfony/runtime": "7.0.*",
          "symfony/twig-bundle": "7.0.*",
          "symfony/yaml": "7.0.*",
-@@ -66,5 +67,10 @@
+@@ -69,5 +70,10 @@
              "allow-contrib": false,
              "require": "7.0.*"
          }
@@ -22,15 +22,15 @@ index 5a9a80b..c558ddb 100644
      }
  }
 diff --git a/composer.lock b/composer.lock
-index 7d321e3..b9906f6 100644
+index 1f05fb8..d5a18f0 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,8 +4,109 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "e1c9908720da29ff27d30c7145cf58da",
-+    "content-hash": "b3035e8f4925b523124d9aebc8829b8d",
+-    "content-hash": "17b1f6e428830c7ed65f6f98c8f38cbd",
++    "content-hash": "a31c65f2945550bf001ecf0809587a8a",
      "packages": [
 +        {
 +            "name": "monolog/monolog",
