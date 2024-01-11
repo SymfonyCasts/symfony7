@@ -1,16 +1,16 @@
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 5b923f8..466f1a1 100644
+index 508a1b2..8474658 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -24,7 +24,11 @@
      <table>
          <tr>
              <th>Name</th>
--            <td>{{ featuredShip.name }}</td>
+-            <td>{{ myShip.name }}</td>
 +            <td>
 +                <a href="{{ path('app_starship_show', {
-+                    id: featuredShip.id
-+                }) }}">{{ featuredShip.name }}</a>
++                    id: myShip.id
++                }) }}">{{ myShip.name }}</a>
 +            </td>
          </tr>
          <tr>
