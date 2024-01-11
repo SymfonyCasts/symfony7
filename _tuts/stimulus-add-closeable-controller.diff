@@ -12,7 +12,7 @@ index 0000000..4345d10
 +    }
 +}
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 0fea323..f64cf73 100644
+index f14cf3d..f1583b7 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -4,8 +4,14 @@
