@@ -11,6 +11,10 @@ class MainController extends AbstractController
     #[Route('/')]
     public function homepage(): Response
     {
-        return $this->render('main/homepage.html.twig');
+        $starshipCount = 457;
+
+        return $this->render('main/homepage.html.twig', [
+            'numberOfStarships' => $starshipCount,
+        ]);
     }
 }
