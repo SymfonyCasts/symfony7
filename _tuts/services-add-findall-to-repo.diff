@@ -1,8 +1,8 @@
 diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
-index 60f19c9..16216e2 100644
+index 1d803cb..16216e2 100644
 --- a/src/Controller/StarshipApiController.php
 +++ b/src/Controller/StarshipApiController.php
-@@ -15,27 +15,7 @@ class StarshipApiController extends AbstractController
+@@ -15,30 +15,7 @@ class StarshipApiController extends AbstractController
      public function getCollection(LoggerInterface $logger, StarshipRepository $repository): Response
      {
          $logger->info('Starship collection retrieved');
@@ -13,18 +13,21 @@ index 60f19c9..16216e2 100644
 -                'USS LeafyCruiser (NCC-0001)',
 -                'Garden',
 -                'Jean-Luc Pickles',
+-                'taken over by Q'
 -            ),
 -            new Starship(
 -                2,
 -                'USS Espresso (NCC-1234-C)',
 -                'Latte',
 -                'James T. Quick!',
+-                'repaired',
 -            ),
 -            new Starship(
 -                3,
 -                'USS Wanderlust (NCC-2024-W)',
 -                'Delta Tourist',
 -                'Kathryn Journeyway',
+-                'under construction',
 -            ),
 -        ];
 +        $starships = $repository->findAll();
@@ -32,10 +35,10 @@ index 60f19c9..16216e2 100644
          return $this->json($starships);
      }
 diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
-index d97732b..cf741d7 100644
+index d97732b..68d4566 100644
 --- a/src/Repository/StarshipRepository.php
 +++ b/src/Repository/StarshipRepository.php
-@@ -2,6 +2,35 @@
+@@ -2,6 +2,38 @@
  
  namespace App\Repository;
  
@@ -56,18 +59,21 @@ index d97732b..cf741d7 100644
 +                'USS LeafyCruiser (NCC-0001)',
 +                'Garden',
 +                'Jean-Luc Pickles',
++                'taken over by Q'
 +            ),
 +            new Starship(
 +                2,
 +                'USS Espresso (NCC-1234-C)',
 +                'Latte',
 +                'James T. Quick!',
++                'repaired',
 +            ),
 +            new Starship(
 +                3,
 +                'USS Wanderlust (NCC-2024-W)',
 +                'Delta Tourist',
 +                'Kathryn Journeyway',
++                'under construction',
 +            ),
 +        ];
 +    }
