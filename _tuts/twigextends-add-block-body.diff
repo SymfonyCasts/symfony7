@@ -1,5 +1,5 @@
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 382c0ca..f786ff7 100644
+index 64d8126..0787d53 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -1,5 +1,6 @@
@@ -9,7 +9,7 @@ index 382c0ca..f786ff7 100644
  <h1>
      Starshop: your monopoly-busting option for Starship parts!
  </h1>
-@@ -33,3 +34,4 @@
+@@ -37,3 +38,4 @@
          </tr>
      </table>
  </div>
