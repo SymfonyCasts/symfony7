@@ -1,7 +1,7 @@
-# SymCosmic Coding with Symfony 7fony 7
+# Cosmic Coding with Symfony 7
 
 Well hi there! This repository holds the code and script for the
-[SymCosmic Coding with Symfony 7fony 7](https://symfonycasts.com/screencast/symfony7)
+[Cosmic Coding with Symfony 7](https://symfonycasts.com/screencast/symfony7)
 course on SymfonyCasts.
 
 ## Have Ideas, Feedback or an Issue?
