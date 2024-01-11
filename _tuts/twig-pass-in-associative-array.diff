@@ -1,47 +1,52 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 18284ac..9d34150 100644
+index 18284ac..e34d35f 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
-@@ -12,9 +12,15 @@ class MainController extends AbstractController
+@@ -12,9 +12,16 @@ class MainController extends AbstractController
      public function homepage(): Response
      {
          $starshipCount = 457;
-+        $featuredShip = [
++        $myShip = [
 +            'name' => 'USS LeafyCruiser (NCC-0001)',
 +            'class' => 'Garden',
 +            'captain' => 'Jean-Luc Pickles',
++            'status' => 'under construction',
 +        ];
  
          return $this->render('main/homepage.html.twig', [
              'numberOfStarships' => $starshipCount,
-+            'featuredShip' => $featuredShip,
++            'myShip' => $myShip,
          ]);
      }
  }
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index b0e4197..1a804ec 100644
+index b0e4197..5448f7d 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
-@@ -12,3 +12,22 @@
+@@ -12,3 +12,26 @@
          </p>
      {% endif %}
  </div>
 +
 +<div>
-+    <h2>Featured Ship</h2>
++    <h2>My Ship</h2>
 +
 +    <table>
 +        <tr>
 +            <th>Name</th>
-+            <td>{{ featuredShip.name }}</td>
++            <td>{{ myShip.name }}</td>
 +        </tr>
 +        <tr>
 +            <th>Class</th>
-+            <td>{{ featuredShip.class }}</td>
++            <td>{{ myShip.class }}</td>
 +        </tr>
 +        <tr>
 +            <th>Captain</th>
-+            <td>{{ featuredShip.captain }}</td>
++            <td>{{ myShip.captain }}</td>
++        </tr>
++        <tr>
++            <th>Status</th>
++            <td>{{ myShip.status }}</td>
 +        </tr>
 +    </table>
 +</div>
