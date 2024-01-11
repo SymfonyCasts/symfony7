@@ -1,0 +1,363 @@
+diff --git a/composer.json b/composer.json
+index 8bb0d1b..2209630 100644
+--- a/composer.json
++++ b/composer.json
+@@ -80,6 +80,7 @@
+     },
+     "require-dev": {
+         "symfony/debug-bundle": "7.0.*",
++        "symfony/maker-bundle": "^1.52",
+         "symfony/stopwatch": "7.0.*",
+         "symfony/web-profiler-bundle": "7.0.*"
+     }
+diff --git a/composer.lock b/composer.lock
+index 81689c4..db5bb44 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "8180ca7ff6ff03bbb528a6d3aaa9c9cc",
++    "content-hash": "1ae03573fc36cafb9a5948f538df9ba4",
+     "packages": [
+         {
+             "name": "composer/semver",
+@@ -4324,6 +4324,153 @@
+         }
+     ],
+     "packages-dev": [
++        {
++            "name": "doctrine/inflector",
++            "version": "2.0.8",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/doctrine/inflector.git",
++                "reference": "f9301a5b2fb1216b2b08f02ba04dc45423db6bff"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/doctrine/inflector/zipball/f9301a5b2fb1216b2b08f02ba04dc45423db6bff",
++                "reference": "f9301a5b2fb1216b2b08f02ba04dc45423db6bff",
++                "shasum": ""
++            },
++            "require": {
++                "php": "^7.2 || ^8.0"
++            },
++            "require-dev": {
++                "doctrine/coding-standard": "^11.0",
++                "phpstan/phpstan": "^1.8",
++                "phpstan/phpstan-phpunit": "^1.1",
++                "phpstan/phpstan-strict-rules": "^1.3",
++                "phpunit/phpunit": "^8.5 || ^9.5",
++                "vimeo/psalm": "^4.25 || ^5.4"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Doctrine\\Inflector\\": "lib/Doctrine/Inflector"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Guilherme Blanco",
++                    "email": "guilhermeblanco@gmail.com"
++                },
++                {
++                    "name": "Roman Borschel",
++                    "email": "roman@code-factory.org"
++                },
++                {
++                    "name": "Benjamin Eberlei",
++                    "email": "kontakt@beberlei.de"
++                },
++                {
++                    "name": "Jonathan Wage",
++                    "email": "jonwage@gmail.com"
++                },
++                {
++                    "name": "Johannes Schmitt",
++                    "email": "schmittjoh@gmail.com"
++                }
++            ],
++            "description": "PHP Doctrine Inflector is a small library that can perform string manipulations with regard to upper/lowercase and singular/plural forms of words.",
++            "homepage": "https://www.doctrine-project.org/projects/inflector.html",
++            "keywords": [
++                "inflection",
++                "inflector",
++                "lowercase",
++                "manipulation",
++                "php",
++                "plural",
++                "singular",
++                "strings",
++                "uppercase",
++                "words"
++            ],
++            "support": {
++                "issues": "https://github.com/doctrine/inflector/issues",
++                "source": "https://github.com/doctrine/inflector/tree/2.0.8"
++            },
++            "funding": [
++                {
++                    "url": "https://www.doctrine-project.org/sponsorship.html",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://www.patreon.com/phpdoctrine",
++                    "type": "patreon"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Finflector",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2023-06-16T13:40:37+00:00"
++        },
++        {
++            "name": "nikic/php-parser",
++            "version": "v4.18.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/nikic/PHP-Parser.git",
++                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1bcbb2179f97633e98bbbc87044ee2611c7d7999",
++                "reference": "1bcbb2179f97633e98bbbc87044ee2611c7d7999",
++                "shasum": ""
++            },
++            "require": {
++                "ext-tokenizer": "*",
++                "php": ">=7.0"
++            },
++            "require-dev": {
++                "ircmaxell/php-yacc": "^0.0.7",
++                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
++            },
++            "bin": [
++                "bin/php-parse"
++            ],
++            "type": "library",
++            "extra": {
++                "branch-alias": {
++                    "dev-master": "4.9-dev"
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "PhpParser\\": "lib/PhpParser"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "BSD-3-Clause"
++            ],
++            "authors": [
++                {
++                    "name": "Nikita Popov"
++                }
++            ],
++            "description": "A PHP parser written in PHP",
++            "keywords": [
++                "parser",
++                "php"
++            ],
++            "support": {
++                "issues": "https://github.com/nikic/PHP-Parser/issues",
++                "source": "https://github.com/nikic/PHP-Parser/tree/v4.18.0"
++            },
++            "time": "2023-12-10T21:03:43+00:00"
++        },
+         {
+             "name": "symfony/debug-bundle",
+             "version": "v7.0.0",
+@@ -4398,6 +4545,98 @@
+             ],
+             "time": "2023-11-07T10:26:03+00:00"
+         },
++        {
++            "name": "symfony/maker-bundle",
++            "version": "v1.52.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/maker-bundle.git",
++                "reference": "112f9466c94a46ca33dc441eee59a12cd1790757"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/112f9466c94a46ca33dc441eee59a12cd1790757",
++                "reference": "112f9466c94a46ca33dc441eee59a12cd1790757",
++                "shasum": ""
++            },
++            "require": {
++                "doctrine/inflector": "^2.0",
++                "nikic/php-parser": "^4.11",
++                "php": ">=8.1",
++                "symfony/config": "^6.3|^7.0",
++                "symfony/console": "^6.3|^7.0",
++                "symfony/dependency-injection": "^6.3|^7.0",
++                "symfony/deprecation-contracts": "^2.2|^3",
++                "symfony/filesystem": "^6.3|^7.0",
++                "symfony/finder": "^6.3|^7.0",
++                "symfony/framework-bundle": "^6.3|^7.0",
++                "symfony/http-kernel": "^6.3|^7.0",
++                "symfony/process": "^6.3|^7.0"
++            },
++            "conflict": {
++                "doctrine/doctrine-bundle": "<2.4",
++                "doctrine/orm": "<2.10"
++            },
++            "require-dev": {
++                "composer/semver": "^3.0",
++                "doctrine/doctrine-bundle": "^2.5.0",
++                "doctrine/orm": "^2.10.0",
++                "symfony/http-client": "^6.3|^7.0",
++                "symfony/phpunit-bridge": "^6.3|^7.0",
++                "symfony/security-core": "^6.3|^7.0",
++                "symfony/yaml": "^6.3|^7.0",
++                "twig/twig": "^2.0|^3.0"
++            },
++            "type": "symfony-bundle",
++            "extra": {
++                "branch-alias": {
++                    "dev-main": "1.x-dev"
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Bundle\\MakerBundle\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Symfony Maker helps you create empty commands, controllers, form classes, tests and more so you can forget about writing boilerplate code.",
++            "homepage": "https://symfony.com/doc/current/bundles/SymfonyMakerBundle/index.html",
++            "keywords": [
++                "code generator",
++                "dev",
++                "generator",
++                "scaffold",
++                "scaffolding"
++            ],
++            "support": {
++                "issues": "https://github.com/symfony/maker-bundle/issues",
++                "source": "https://github.com/symfony/maker-bundle/tree/v1.52.0"
++            },
++            "funding": [
++                {
++                    "url": "https://symfony.com/sponsor",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://github.com/fabpot",
++                    "type": "github"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2023-10-31T18:23:49+00:00"
++        },
+         {
+             "name": "symfony/stopwatch",
+             "version": "v7.0.0",
+diff --git a/config/bundles.php b/config/bundles.php
+index b6c7bf5..cd1f8f0 100644
+--- a/config/bundles.php
++++ b/config/bundles.php
+@@ -10,4 +10,5 @@ return [
+     Symfonycasts\TailwindBundle\SymfonycastsTailwindBundle::class => ['all' => true],
+     Symfony\UX\StimulusBundle\StimulusBundle::class => ['all' => true],
+     Symfony\UX\Turbo\TurboBundle::class => ['all' => true],
++    Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
+ ];
+diff --git a/src/Command/ShipReportCommand.php b/src/Command/ShipReportCommand.php
+new file mode 100644
+index 0000000..43c3840
+--- /dev/null
++++ b/src/Command/ShipReportCommand.php
+@@ -0,0 +1,49 @@
++<?php
++
++namespace App\Command;
++
++use Symfony\Component\Console\Attribute\AsCommand;
++use Symfony\Component\Console\Command\Command;
++use Symfony\Component\Console\Input\InputArgument;
++use Symfony\Component\Console\Input\InputInterface;
++use Symfony\Component\Console\Input\InputOption;
++use Symfony\Component\Console\Output\OutputInterface;
++use Symfony\Component\Console\Style\SymfonyStyle;
++
++#[AsCommand(
++    name: 'app:ship-report',
++    description: 'Add a short description for your command',
++)]
++class ShipReportCommand extends Command
++{
++    public function __construct()
++    {
++        parent::__construct();
++    }
++
++    protected function configure(): void
++    {
++        $this
++            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
++            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
++        ;
++    }
++
++    protected function execute(InputInterface $input, OutputInterface $output): int
++    {
++        $io = new SymfonyStyle($input, $output);
++        $arg1 = $input->getArgument('arg1');
++
++        if ($arg1) {
++            $io->note(sprintf('You passed an argument: %s', $arg1));
++        }
++
++        if ($input->getOption('option1')) {
++            // ...
++        }
++
++        $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
++
++        return Command::SUCCESS;
++    }
++}
+diff --git a/symfony.lock b/symfony.lock
+index 13bee8f..13972e0 100644
+--- a/symfony.lock
++++ b/symfony.lock
+@@ -81,6 +81,15 @@
+             "src/Kernel.php"
+         ]
+     },
++    "symfony/maker-bundle": {
++        "version": "1.52",
++        "recipe": {
++            "repo": "github.com/symfony/recipes",
++            "branch": "main",
++            "version": "1.0",
++            "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
++        }
++    },
+     "symfony/monolog-bundle": {
+         "version": "3.10",
+         "recipe": {

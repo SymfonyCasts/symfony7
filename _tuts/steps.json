@@ -224,7 +224,72 @@
             "id": "routing-link-to-show-page",
             "name": "Routing: Link to show page",
             "description": null
+        },
+        {
+            "id": "assets-install-assetmapper",
+            "name": "Assets: Install AssetMapper",
+            "description": null
+        },
+        {
+            "id": "assets-install-tailwind-bundle",
+            "name": "Assets: Install tailwind-bundle",
+            "description": null
+        },
+        {
+            "id": "assets-tailwind-init",
+            "name": "Assets: tailwind:init",
+            "description": null
+        },
+        {
+            "id": "assets-remove-blue-background",
+            "name": "Assets: Remove blue background",
+            "description": null
+        },
+        {
+            "id": "assets-copy-in-templates",
+            "name": "Assets: Copy in templates",
+            "description": null
+        },
+        {
+            "id": "assets-add-homepage-links",
+            "name": "Assets: Add homepage links",
+            "description": null
+        },
+        {
+            "id": "stimulus-install-it",
+            "name": "Stimulus: install it",
+            "description": null
+        },
+        {
+            "id": "stimulus-add-closeable-controller",
+            "name": "Stimulus: Add closeable controller",
+            "description": null
+        },
+        {
+            "id": "stimulus-animate-width-change",
+            "name": "Stimulus: Animate width change",
+            "description": null
+        },
+        {
+            "id": "stimulus-waitforanimation",
+            "name": "Stimulus: waitForAnimation()",
+            "description": null
+        },
+        {
+            "id": "turbo-install-it",
+            "name": "Turbo: Install it",
+            "description": null
+        },
+        {
+            "id": "maker-install-it",
+            "name": "Maker: Install it",
+            "description": null
+        },
+        {
+            "id": "maker-use-the-progress-bar",
+            "name": "Maker: Use the progress bar",
+            "description": null
         }
     ],
-    "sha": "38ec99296671889d01de8ee6cbf25272db58cc6f"
+    "sha": "0bfd02e979a27ace58ba9256f7fdcf17bb538056"
 }

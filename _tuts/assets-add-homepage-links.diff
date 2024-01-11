@@ -1,0 +1,39 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index afa369c..cbb6ded 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
+ 
+ class MainController extends AbstractController
+ {
+-    #[Route('/')]
++    #[Route('/', name: 'app_homepage')]
+     public function homepage(StarshipRepository $starshipRepository): Response
+     {
+         $ships = $starshipRepository->findAll();
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index 5faaf0e..a4ed4c7 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -29,7 +29,7 @@
+                 >
+                     <path d="M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1"></path>
+                 </svg>
+-                <a href="#">
++                <a href="{{ path('app_homepage') }}">
+                     <span class="text-2xl font-bold">Starshop</span>
+                 </a>
+             </div>
+diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
+index 3797c13..47fed8f 100644
+--- a/templates/starship/show.html.twig
++++ b/templates/starship/show.html.twig
+@@ -13,7 +13,7 @@
+         </div>
+ 
+         <div class="my-4 px-8">
+-            <a class="text-sm text-blue-400 hover:text-blue-200" href="#">
++            <a class="text-sm text-blue-400 hover:text-blue-200" href="{{ path('app_homepage') }}">
+               &lt;-- Back
+             </a>
+         </div>

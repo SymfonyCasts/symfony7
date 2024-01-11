@@ -1,0 +1,17 @@
+diff --git a/src/Command/ShipReportCommand.php b/src/Command/ShipReportCommand.php
+index 43c3840..819e0b2 100644
+--- a/src/Command/ShipReportCommand.php
++++ b/src/Command/ShipReportCommand.php
+@@ -42,6 +42,12 @@ class ShipReportCommand extends Command
+             // ...
+         }
+ 
++        $io->progressStart(100);
++        for ($i = 0; $i < 100; ++$i) {
++            $io->progressAdvance();
++            usleep(10000);
++        }
++
+         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
+ 
+         return Command::SUCCESS;
