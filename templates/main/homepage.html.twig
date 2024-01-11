@@ -8,9 +8,9 @@
 </h1>
 
 <div>
-    Browse through {{ numberOfStarships * 10 }} starships!
+    Browse through {{ ships|length * 10 }} starships!
 
-    {% if numberOfStarships > 400 %}
+    {% if ships|length > 2 %}
         <p>
             {# Do you think "shiploads" will pass the legal team? #}
             That's a lot a shiploads of ships!
