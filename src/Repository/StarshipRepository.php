@@ -36,4 +36,15 @@ class StarshipRepository extends AbstractController
             ),
         ];
     }
+
+    public function find(int $id): ?Starship
+    {
+        foreach ($this->findAll() as $starship) {
+            if ($starship->getId() === $id) {
+                return $starship;
+            }
+        }
+
+        return null;
+    }
 }
