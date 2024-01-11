@@ -133,6 +133,9 @@
             "templates/base.html.twig"
         ]
     },
+    "symfony/ux-turbo": {
+        "version": "v2.13.2"
+    },
     "symfony/web-profiler-bundle": {
         "version": "7.0",
         "recipe": {
