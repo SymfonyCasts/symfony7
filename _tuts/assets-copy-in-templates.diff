@@ -50,10 +50,10 @@ index 2b4acd7..5faaf0e 100644
      </body>
  </html>
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 466f1a1..0fea323 100644
+index 8474658..f14cf3d 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
-@@ -3,41 +3,40 @@
+@@ -3,45 +3,40 @@
  {% block title %}Starshop: Beam up some parts!{% endblock %}
  
  {% block body %}
@@ -68,21 +68,21 @@ index 466f1a1..0fea323 100644
  
 -<div>
 -    Browse through {{ ships|length * 10 }} starships!
-+            <h2 class="text-2xl font-bold">Featured Ship</h2>
++            <h2 class="text-2xl font-bold">My Ship Status</h2>
 +                <div class="border-l-2 text-white"
 +                     data-v0-t="card">
 +                    <div class="flex flex-col space-y-1.5 p-3">
 +                        <h3 class="tracking-tight text-m text-bold uppercase">
 +                            <a class="hover:underline" href="{{ path('app_starship_show', {
-+                                id: featuredShip.id
-+                            }) }}">{{ featuredShip.name }}</a>
++                                id: myShip.id
++                            }) }}">{{ myShip.name }}</a>
 +                        </h3>
 +                    </div>
 +                    <div class="p-3 text-lg grid grid-cols-2">
 +                        <span class="text-slate-400">Captain:</span>
-+                        <span>{{ featuredShip.captain }}</span>
++                        <span>{{ myShip.captain }}</span>
 +                        <span class="text-slate-400">Class:</span>
-+                        <span>{{ featuredShip.class }}</span>
++                        <span>{{ myShip.class }}</span>
 +                    </div>
 +                </div>
 +        </aside>
@@ -101,24 +101,28 @@ index 466f1a1..0fea323 100644
 -</div>
 -
 -<div>
--    <h2>Featured Ship</h2>
+-    <h2>My Ship</h2>
 -
 -    <table>
 -        <tr>
 -            <th>Name</th>
 -            <td>
 -                <a href="{{ path('app_starship_show', {
--                    id: featuredShip.id
--                }) }}">{{ featuredShip.name }}</a>
+-                    id: myShip.id
+-                }) }}">{{ myShip.name }}</a>
 -            </td>
 -        </tr>
 -        <tr>
 -            <th>Class</th>
--            <td>{{ featuredShip.class }}</td>
+-            <td>{{ myShip.class }}</td>
 -        </tr>
 -        <tr>
 -            <th>Captain</th>
--            <td>{{ featuredShip.captain|upper|lower|title }}</td>
+-            <td>{{ myShip.captain|upper|lower|title }}</td>
+-        </tr>
+-        <tr>
+-            <th>Status</th>
+-            <td>{{ myShip.status }}</td>
 -        </tr>
 -    </table>
 -</div>
