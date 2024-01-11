@@ -1,9 +1,9 @@
 diff --git a/src/Model/Starship.php b/src/Model/Starship.php
 new file mode 100644
-index 0000000..21c27e7
+index 0000000..afcd5be
 --- /dev/null
 +++ b/src/Model/Starship.php
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,40 @@
 +<?php
 +
 +namespace App\Model;
@@ -15,6 +15,7 @@ index 0000000..21c27e7
 +        private string $name,
 +        private string $class,
 +        private string $captain,
++        private string $status,
 +    ) {
 +    }
 +
@@ -36,5 +37,10 @@ index 0000000..21c27e7
 +    public function getCaptain(): string
 +    {
 +        return $this->captain;
++    }
++
++    public function getStatus(): string
++    {
++        return $this->status;
 +    }
 +}
