@@ -11,7 +11,45 @@
 {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
     </head>
-    <body>
+    <body class="bg-black text-white">
+    <div class="flex flex-col h-screen">
+        <header class="flex items-center justify-between px-6 py-4 bg-gray-800 border-b border-gray-700 shadow-md">
+            <div class="flex items-center space-x-2">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="h-8 w-8 text-white"
+                >
+                    <path d="M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1"></path>
+                </svg>
+                <a href="#">
+                    <span class="text-2xl font-bold">Starshop</span>
+                </a>
+            </div>
+          <nav class="flex space-x-4">
+              <a class="hover:underline" href="#">
+                  Home
+              </a>
+              <a class="hover:underline" href="#">
+                  About
+              </a>
+              <a class="hover:underline" href="#">
+                  Contact
+              </a>
+          </nav>
+      </header>
         {% block body %}{% endblock %}
+    </div>
+
+    <footer class="p-4 text-center justify-center bg-gray-800 shadow-md text-white">
+        Made with ❤️ by the gals and guys at <a href="https://symfonycasts.com">SymfonyCasts</a>
+    </footer>
     </body>
 </html>

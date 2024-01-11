@@ -3,45 +3,40 @@
 {% block title %}Starshop: Beam up some parts!{% endblock %}
 
 {% block body %}
-<h1>
-    Starshop: your monopoly-busting option for Starship parts!
-</h1>
+    <main class="flex flex-col lg:flex-row flex-1 space-y-4 lg:space-y-0">
+        <aside class="hidden relative w-72 p-2 lg:block lg:h-full bg-gray-800 text-white space-y-4">
+            <button class="absolute top-1 right-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+            </button>
 
-<div>
-    Browse through {{ ships|length * 10 }} starships!
+            <h2 class="text-2xl font-bold">My Ship Status</h2>
+                <div class="border-l-2 text-white"
+                     data-v0-t="card">
+                    <div class="flex flex-col space-y-1.5 p-3">
+                        <h3 class="tracking-tight text-m text-bold uppercase">
+                            <a class="hover:underline" href="{{ path('app_starship_show', {
+                                id: myShip.id
+                            }) }}">{{ myShip.name }}</a>
+                        </h3>
+                    </div>
+                    <div class="p-3 text-lg grid grid-cols-2">
+                        <span class="text-slate-400">Captain:</span>
+                        <span>{{ myShip.captain }}</span>
+                        <span class="text-slate-400">Class:</span>
+                        <span>{{ myShip.class }}</span>
+                    </div>
+                </div>
+        </aside>
+        <div class="lg:pl-6 flex-grow px-6 py-4">
+            <div class="mb-2">
+                <h1 class="text-4xl font-bold">
+                    Starshop: monopoly-busting Starship parts!
+                </h1>
 
-    {% if ships|length > 2 %}
-        <p>
-            {# Do you think "shiploads" will pass the legal team? #}
-            That's a lot a shiploads of ships!
-        </p>
-    {% endif %}
-</div>
-
-<div>
-    <h2>My Ship</h2>
-
-    <table>
-        <tr>
-            <th>Name</th>
-            <td>
-                <a href="{{ path('app_starship_show', {
-                    id: myShip.id
-                }) }}">{{ myShip.name }}</a>
-            </td>
-        </tr>
-        <tr>
-            <th>Class</th>
-            <td>{{ myShip.class }}</td>
-        </tr>
-        <tr>
-            <th>Captain</th>
-            <td>{{ myShip.captain|upper|lower|title }}</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td>{{ myShip.status }}</td>
-        </tr>
-    </table>
-</div>
+                <p class="text-lg font-semibold text-slate-200">
+                    Browse through {{ ships|length * 10 }} starships!
+                </p>
+            </div>
+        </div>
+    </main>
 {% endblock %}

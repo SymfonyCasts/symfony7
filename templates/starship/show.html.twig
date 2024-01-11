@@ -3,18 +3,19 @@
 {% block title %}{{ ship.name }}{% endblock %}
 
 {% block body %}
-    <h1>{{ ship.name }}</h1>
+    <div class="mt-8 border text-card-foreground max-w-xl mx-auto bg-gray-800 rounded-xl shadow-md">
+        <div class="px-8 pt-8">
+            <h1 class="text-xl font-semibold text-gray-100">
+                {{ ship.name }}
+            </h1>
+            <p class="mt-2 text-gray-400">Spaceship Class: {{ ship.class }}</p>
+            <p class="mt-2 text-gray-400">Spaceship Captain: {{ ship.captain }}</p>
+        </div>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Class</th>
-                <td>{{ ship.class }}</td>
-            </tr>
-            <tr>
-                <th>Captain</th>
-                <td>{{ ship.captain }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="my-4 px-8">
+            <a class="text-sm text-blue-400 hover:text-blue-200" href="#">
+              &lt;-- Back
+            </a>
+        </div>
+    </div>
 {% endblock %}
