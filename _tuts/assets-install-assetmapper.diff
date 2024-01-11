@@ -36,7 +36,7 @@ index 0000000..dd6181a
 +    background-color: skyblue;
 +}
 diff --git a/composer.json b/composer.json
-index 1e29ac7..d2e710c 100644
+index 9be028d..ba56a06 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -10,6 +10,7 @@
@@ -47,7 +47,7 @@ index 1e29ac7..d2e710c 100644
          "symfony/console": "7.0.*",
          "symfony/dotenv": "7.0.*",
          "symfony/flex": "^2",
-@@ -55,7 +56,8 @@
+@@ -58,7 +59,8 @@
      "scripts": {
          "auto-scripts": {
              "cache:clear": "symfony-cmd",
@@ -58,15 +58,15 @@ index 1e29ac7..d2e710c 100644
          "post-install-cmd": [
              "@auto-scripts"
 diff --git a/composer.lock b/composer.lock
-index 1cbfee8..f75d69f 100644
+index 8df0eeb..dc4df5a 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,8 +4,89 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "a0a0e97106210b9cbd277e7875e62b49",
-+    "content-hash": "43ccab7b5c87855715973b9e9355f841",
+-    "content-hash": "f7742a3cc85c9638207c6451c3da7428",
++    "content-hash": "1330342e8b87cff82e76913e495f9df6",
      "packages": [
 +        {
 +            "name": "composer/semver",
