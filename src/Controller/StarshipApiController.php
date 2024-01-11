@@ -26,6 +26,10 @@ class StarshipApiController extends AbstractController
     {
         $starship = $repository->find($id);
 
+        if (!$starship) {
+            throw $this->createNotFoundException('Starship not found');
+        }
+
         return $this->json($starship);
     }
 }
