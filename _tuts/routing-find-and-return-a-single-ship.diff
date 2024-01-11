@@ -16,10 +16,10 @@ index 3dc36e5..42bb3cb 100644
      }
  }
 diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
-index cf741d7..dd9f8c7 100644
+index 68d4566..dadce38 100644
 --- a/src/Repository/StarshipRepository.php
 +++ b/src/Repository/StarshipRepository.php
-@@ -33,4 +33,15 @@ class StarshipRepository extends AbstractController
+@@ -36,4 +36,15 @@ class StarshipRepository extends AbstractController
              ),
          ];
      }
