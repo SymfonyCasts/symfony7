@@ -11,6 +11,6 @@ class MainController extends AbstractController
     #[Route('/')]
     public function homepage(): Response
     {
-        return new Response('<strong>Starshop</strong>: your monopoly-busting option for Starship parts!');
+        return $this->render('main/homepage.html.twig');
     }
 }
