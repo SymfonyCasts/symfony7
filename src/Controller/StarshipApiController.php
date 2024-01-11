@@ -19,4 +19,10 @@ class StarshipApiController extends AbstractController
 
         return $this->json($starships);
     }
+
+    #[Route('/api/starships/{id}')]
+    public function get($id): Response
+    {
+        dd($id);
+    }
 }
