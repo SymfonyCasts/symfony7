@@ -1,5 +1,5 @@
 diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
-index 631c159..6bb948b 100644
+index 7edc447..42d1b97 100644
 --- a/src/Controller/StarshipApiController.php
 +++ b/src/Controller/StarshipApiController.php
 @@ -2,6 +2,7 @@
@@ -10,7 +10,7 @@ index 631c159..6bb948b 100644
  use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  use Symfony\Component\HttpFoundation\Response;
  use Symfony\Component\Routing\Attribute\Route;
-@@ -12,21 +13,24 @@ class StarshipApiController extends AbstractController
+@@ -12,24 +13,27 @@ class StarshipApiController extends AbstractController
      public function getCollection(): Response
      {
          $starships = [
@@ -18,34 +18,40 @@ index 631c159..6bb948b 100644
 -                'name' => 'USS LeafyCruiser (NCC-0001)',
 -                'class' => 'Garden',
 -                'captain' => 'Jean-Luc Pickles',
+-                'status' => 'taken over by Q',
 -            ],
 -            [
 -                'name' => 'USS Espresso (NCC-1234-C)',
 -                'class' => 'Latte',
 -                'captain' => 'James T. Quick!',
+-                'status' => 'repaired',
 -            ],
 -            [
 -                'name' => 'USS Wanderlust (NCC-2024-W)',
 -                'class' => 'Delta Tourist',
 -                'captain' => 'Kathryn Journeyway',
+-                'status' => 'under construction',
 -            ],
 +            new Starship(
 +                1,
 +                'USS LeafyCruiser (NCC-0001)',
 +                'Garden',
 +                'Jean-Luc Pickles',
++                'taken over by Q'
 +            ),
 +            new Starship(
 +                2,
 +                'USS Espresso (NCC-1234-C)',
 +                'Latte',
 +                'James T. Quick!',
++                'repaired',
 +            ),
 +            new Starship(
 +                3,
 +                'USS Wanderlust (NCC-2024-W)',
 +                'Delta Tourist',
 +                'Kathryn Journeyway',
++                'under construction',
 +            ),
          ];
  
