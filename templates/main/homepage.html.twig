@@ -5,17 +5,19 @@
 {% block body %}
     <main class="flex flex-col lg:flex-row flex-1 space-y-4 lg:space-y-0">
         <aside
-            class="hidden relative w-72 p-2 lg:block lg:h-full bg-gray-800 text-white space-y-4 transition-all overflow-hidden"
+            class="lg:w-72 lg:block lg:h-full bg-gray-800 text-white space-y-4 transition-all overflow-hidden"
             data-controller="closeable"
         >
-            <button
-                class="absolute top-1 right-1"
-                data-action="closeable#close"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
-            </button>
+            <div class="flex justify-between bg-amber-400 p-2">
+                <h2 class="text-2xl font-bold">My Ship Status</h2>
+                <button
+                    class=""
+                    data-action="closeable#close"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+                </button>
+            </div>
 
-            <h2 class="text-2xl font-bold">My Ship Status</h2>
                 <div class="border-l-2 text-white"
                      data-v0-t="card">
                     <div class="flex flex-col space-y-1.5 p-3">
@@ -33,15 +35,61 @@
                     </div>
                 </div>
         </aside>
-        <div class="lg:pl-6 flex-grow px-6 py-4">
+        <div class="lg:pl-6 flex-grow px-6 py-4"
+            style="background: rgb(2,21,51);
+            background: linear-gradient(180deg, rgba(2,21,51,1) 0%, rgba(15,27,68,1) 61%, rgba(95,135,174,1) 100%);"
+            >
             <div class="mb-2">
                 <h1 class="text-4xl font-bold">
-                    Starshop: monopoly-busting Starship parts!
+                    Ship Repair Queue
                 </h1>
 
-                <p class="text-lg font-semibold text-slate-200">
-                    Browse through {{ ships|length * 10 }} starships!
+                <div class="grid grid-cols-1 md:grid-cols-4 space-x-3 mt-5">
+                    <div class="md:col-span-3 space-y-5">
+                        <div class="lg:w-2/3">
+                            <div class="pt-4 px-4 pb-2 rounded-t-xl bg-blue-950 text-xl font-semibold">USS LeafyCruiser</div>
+                            <div class="p-4 rounded-b-xl bg-blue-300 text-blue-950">
+                                <p><span class="font-semibold">Class:</span> Garden</p>
+                                <p><span class="font-semibold">Status:</span> Repair in Progress</p>
+                            </div>
+                        </div>
+
+                        <div class="lg:w-2/3">
+                            <div class="pt-4 px-4 pb-2 rounded-t-xl bg-blue-950 text-xl font-semibold">USS ESPRESSO (NCC-1234-C)</div>
+                            <div class="p-4 rounded-b-xl bg-blue-300 text-blue-950">
+                                <p><span class="font-semibold">Class:</span> Latte</p>
+                                <p><span class="font-semibold">Status:</span> In Hangar</p>
+                            </div>
+                        </div>
+
+                        <div class="lg:w-2/3">
+                            <div class="pt-4 px-4 pb-2 rounded-t-xl bg-blue-950 text-xl font-semibold">USS WANDERLUST</div>
+                            <div class="p-4 rounded-b-xl bg-blue-300 text-blue-950">
+                                <p><span class="font-semibold">Class:</span> Delta Tourist</p>
+                                <p><span class="font-semibold">Status:</span> In Hangar</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="bg-gradient-to-b from-red-600 to-sky-950 rounded-md text-center p-5 mt-8 md:mt-0">
+                            <h3 class="text-3xl font-semibold">Portal Pizza</h3>
+                            <div class="flex justify-center my-7">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="100" width="100" viewBox="0 0 576 512">
+                                <!--!Font Awesome Pro 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc.-->
+                                <path fill="#fff" d="M254.2 322.1c-8.4 3.8-14.2 12.2-14.2 21.9c0 13.3 10.7 24 24 24c9.8 0 18.2-5.8 21.9-14.2L318.1 386c-18.8 9-39.8 14-62.1 14c-79.5 0-144-64.5-144-144s64.5-144 144-144c22.2 0 43.3 5 62.1 14l-84.7 84.7c-25 25-25 65.5 0 90.5l20.8 20.8zm87.6 87.6l23.4 23.4C333.5 452.7 296.1 464 256 464C141.1 464 48 370.9 48 256S141.1 48 256 48c40.1 0 77.5 11.3 109.2 30.9l-23.4 23.4C316.4 88.1 287.1 80 256 80C158.8 80 80 158.8 80 256s78.8 176 176 176c31.1 0 60.4-8.1 85.8-22.3zM425.4 448c6.6-5.8 6.6-16 .3-22.3L267.3 267.3c-6.2-6.2-6.2-16.4 0-22.6L425.7 86.3C432 80 432 69.9 425.4 64C380.2 24.2 320.9 0 256 0C114.6 0 0 114.6 0 256S114.6 512 256 512c64.9 0 124.2-24.2 169.4-64zm71.7-82.8l-23.4-23.4C487.9 316.4 496 287.1 496 256s-8.1-60.4-22.3-85.8l23.4-23.4C516.7 178.5 528 215.9 528 256s-11.3 77.5-30.9 109.2zM464 256c0 22.2-5 43.3-14 62.1L387.9 256 450 193.9c9 18.8 14 39.8 14 62.1zm48 169.4c39.8-45.1 64-104.4 64-169.4s-24.2-124.2-64-169.4c-5.8-6.6-16-6.6-22.3-.3L331.3 244.7c-6.2 6.2-6.2 16.4 0 22.6L489.7 425.7c6.2 6.2 16.4 6.3 22.3-.3zM216 192a24 24 0 1 0 0-48 24 24 0 1 0 0 48zm-32 64a24 24 0 1 0 -48 0 24 24 0 1 0 48 0z"/>
+                                </svg>
+                            </div>
+                            <p class="text-xl mb-8">Now delivering to: <br>Alpha and Beta Quandrants</p>
+                            <a class="bg-red-600 text-white hover:bg-red-700 rounded-2xl font-semibold p-4 text-lg" href="#">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+                 <p class="text-lg font-semibold text-slate-200 mt-16">
+                    Looking for your next galatic ride?
+                    <a href="#" class="underline">Browse the {{ ships|length * 10 }} starships for sale!</a>
                 </p>
+                
             </div>
         </div>
     </main>
