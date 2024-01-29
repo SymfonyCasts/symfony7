@@ -4,41 +4,36 @@
 
 {% block body %}
 <div class="my-4 px-8">
-    <a class="bg-blue-400 hover:bg-blue-200 rounded-xl p-2" href="{{ path('app_homepage') }}">
-    <svg class="inline text-blue-400" xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#fff" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
-    Back
+    <a class="bg-white hover:bg-gray-200 rounded-xl p-2 text-black" href="{{ path('app_homepage') }}">
+        <svg class="inline text-black" xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#000" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+        Back
     </a>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-4 space-x-3 mt-5 px-4 lg:px-8">
-    <div class="md:col-span-3 space-y-5">
-        <div class="mt-8 text-card-foreground max-w-xl mx-auto">
-            <div class="px-8 pt-8">
-                <svg xmlns="http://www.w3.org/2000/svg" height="160" width="200" viewBox="0 0 640 512">
-                <!--!Font Awesome Pro 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc.-->
-                <path fill="#efefee"class="fa-secondary" opacity=".4" d="M48 72c13.3 0 24 10.7 24 24v24c13.3 0 24 10.7 24 24s-10.7 24-24 24V448c0 13.3-10.7 24-24 24s-24-10.7-24-24V168c-13.3 0-24-10.7-24-24s10.7-24 24-24V96c0-13.3 10.7-24 24-24zm544 0c13.3 0 24 10.7 24 24v24c13.3 0 24 10.7 24 24s-10.7 24-24 24V448c0 13.3-10.7 24-24 24s-24-10.7-24-24V168c-13.3 0-24-10.7-24-24s10.7-24 24-24V96c0-13.3 10.7-24 24-24zM320 224c17.7 0 32 14.3 32 32v48c0 8.8-7.2 16-16 16H304c-8.8 0-16-7.2-16-16V256c0-17.7 14.3-32 32-32zM128 320c0-17.7 14.3-32 32-32h32c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32H160c-17.7 0-32-14.3-32-32V320zm352-32c17.7 0 32 14.3 32 32v96c0 17.7-14.3 32-32 32H448c-17.7 0-32-14.3-32-32V320c0-17.7 14.3-32 32-32h32z"/>
-                <path fill="#fff" class="fa-primary" d="M353.8 14c-1-8-7.8-14-15.9-14H302.1c-8.1 0-14.9 6-15.9 14L256 256v96H224v64c0 17.7-14.3 32-32 32H160c-17.7 0-32-14.3-32-32V352H72v92l88 26.4V480c0 17.7 14.3 32 32 32s32-14.3 32-32h48 96 48c0 17.7 14.3 32 32 32s32-14.3 32-32v-9.6L568 444V352H512v64c0 17.7-14.3 32-32 32H448c-17.7 0-32-14.3-32-32V352H384V256L353.8 14zM288 256c0-17.7 14.3-32 32-32s32 14.3 32 32v48c0 8.8-7.2 16-16 16H304c-8.8 0-16-7.2-16-16V256z"/>
-                </svg>
-                <div class="bg-blue-950 p-4 mt-8 rounded-t-xl">
-                    <h1 class="text-2xl font-semibold text-gray-100">
-                        {{ ship.name }}
-                    </h1>
-                </div>
-                <div class="bg-indigo-800 rounded-b-xl pt-2 pb-4 px-4">
-                    <p class="text-xl mt-2"><span class="text-gray-400 font-semibold">Spaceship Class:</span> {{ ship.class }}</p>
-                    <p class="text-xl mt-2"><span class="text-gray-400 font-semibold">Spaceship Captain:</span> {{ ship.captain }}</p>
-                    <p class="text-xl mt-2"><span class="text-gray-400 font-semibold">Spaceship Status:</span> 30,000 lys to next service</p>
-                </div>
-            </div>
-        </div>
+<div class="md:flex justify-center space-x-3 mt-5 px-4 lg:px-8">
+    <div class="flex justify-center">
+        <img class="max-h-[300px] md:max-h-[500px]" src="{{ asset('images/purple-rocket.png') }}" alt="purple ship launching">
     </div>
-    <div>
-        <div class="bg-gradient-to-b from-sky-950 to-indigo-950 rounded-md text-center p-5 mt-8 md:mt-0 mb-8">
-            <h3 class="text-3xl font-semibold">Aftermarket Parts</h3>
-            <div class="flex justify-center my-7">
-                <svg xmlns="http://www.w3.org/2000/svg" height="96" width="84" viewBox="0 0 448 512"><!--!Font Awesome Pro 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2024 Fonticons, Inc.--><path fill="#fff" d="M32 203.6l88.1 50.3 3.7 2.1H128 320h4.2l3.7-2.1L416 203.6v91.1L315.8 352H132.2L32 294.7V203.6zm0-36.9v-69L137.2 32H310.8L416 97.7v69L315.8 224H132.2L32 166.7zm0 247.6V331.6l88.1 50.3 3.7 2.1H128 320h4.2l3.7-2.1L416 331.6v82.7L310.8 480H137.2L32 414.3zM128 0L0 80V432l128 80H320l128-80V80L320 0H128z"/></svg>
+    <div class="space-y-5">
+        <div class="mt-8 max-w-xl mx-auto">
+            <div class="px-8 pt-8">
+                <div class="rounded-2xl py-1 px-3 flex justify-center w-32 items-center bg-amber-400/10">
+                    <div class="rounded-full h-2 w-2 bg-amber-400 blur-[1px] mr-2"></div>
+                    <p class="uppercase text-xs">in progress</p>
+                </div>
+                
+                <h1 class="text-[32px] font-semibold border-b border-white/10 pb-5 mb-5">
+                    {{ ship.name }}
+                </h1>
+                <h4 class="text-xs text-slate-300 font-semibold mt-2 uppercase">Spaceship Captain</h4> 
+                <p class="text-[22px] font-semibold">{{ ship.captain }}</p>
+
+                <h4 class="text-xs text-slate-300 font-semibold mt-2 uppercase">Class</h4> 
+                <p class="text-[22px] font-semibold">{{ ship.class }}</p>
+                
+                <h4 class="text-xs text-slate-300 font-semibold mt-2 uppercase">Ship Status</h4> 
+                <p class="text-[22px] font-semibold">30,000 lys to next service</p>
+                
             </div>
-            <p class="text-xl mb-8">All parts reviewed by verified technicians</p>
-            <a class="bg-amber-500 text-white hover:bg-amber-700 rounded-2xl font-semibold p-4 text-lg" href="#">Buy/Sell Now</a>
         </div>
     </div>
 </div>
