@@ -1,5 +1,5 @@
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index a113fbe..be908a7 100644
+index a113fbe..6a2479d 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -4,4 +4,10 @@
@@ -9,7 +9,7 @@ index a113fbe..be908a7 100644
 +
 +    {% if numberOfStarships > 400 %}
 +        <p>
-+            That's a lot a shiploads of ships!
++            That's a shiploads of ships!
 +        </p>
 +    {% endif %}
  </div>

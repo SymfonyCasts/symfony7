@@ -1,17 +1,13 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-new file mode 100644
-index 0000000..97c6f3c
---- /dev/null
+index 6de43fa..97c6f3c 100644
+--- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
-@@ -0,0 +1,11 @@
-+<?php
-+
-+namespace App\Controller;
-+
-+class MainController
-+{
+@@ -4,4 +4,8 @@ namespace App\Controller;
+ 
+ class MainController
+ {
 +    public function homepage()
 +    {
 +
 +    }
-+}
+ }

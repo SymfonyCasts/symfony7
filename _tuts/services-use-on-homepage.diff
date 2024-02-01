@@ -17,7 +17,7 @@ index 70187a4..e8983fc 100644
      }
  }
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index a5a1c04..508a1b2 100644
+index f056988..34e8a9c 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -8,9 +8,9 @@
@@ -31,4 +31,4 @@ index a5a1c04..508a1b2 100644
 +    {% if ships|length > 2 %}
          <p>
              {# Do you think "shiploads" will pass the legal team? #}
-             That's a lot a shiploads of ships!
+             That's a shiploads of ships!

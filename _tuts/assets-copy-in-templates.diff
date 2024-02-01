@@ -50,7 +50,7 @@ index 2b4acd7..5faaf0e 100644
      </body>
  </html>
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 8474658..f14cf3d 100644
+index 07d05a7..f14cf3d 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -3,45 +3,40 @@
@@ -95,7 +95,7 @@ index 8474658..f14cf3d 100644
 -    {% if ships|length > 2 %}
 -        <p>
 -            {# Do you think "shiploads" will pass the legal team? #}
--            That's a lot a shiploads of ships!
+-            That's a shiploads of ships!
 -        </p>
 -    {% endif %}
 -</div>
