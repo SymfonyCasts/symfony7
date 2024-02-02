@@ -161,6 +161,11 @@
             "description": null
         },
         {
+            "id": "services-add-logger-to-repository",
+            "name": "Services: Add logger to repository",
+            "description": null
+        },
+        {
             "id": "services-use-on-homepage-for-featuredship",
             "name": "Services: Use on homepage for featuredShip",
             "description": null
@@ -168,6 +173,11 @@
         {
             "id": "services-use-on-homepage",
             "name": "Services: Use on homepage",
+            "description": null
+        },
+        {
+            "id": "delete-me-3",
+            "name": "delete me 3",
             "description": null
         },
         {
@@ -291,5 +301,5 @@
             "description": null
         }
     ],
-    "sha": "49d84e2715d0890866b439ecfa047b82f76edca4"
+    "sha": "90321817cf3e2e8a8be6caabe6be0bb560e6c8cb"
 }

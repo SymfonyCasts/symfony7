@@ -1,0 +1,34 @@
+diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
+index 16216e2..9cebecd 100644
+--- a/src/Controller/StarshipApiController.php
++++ b/src/Controller/StarshipApiController.php
+@@ -12,9 +12,8 @@ use Symfony\Component\Routing\Attribute\Route;
+ class StarshipApiController extends AbstractController
+ {
+     #[Route('/api/starships')]
+-    public function getCollection(LoggerInterface $logger, StarshipRepository $repository): Response
++    public function getCollection(StarshipRepository $repository): Response
+     {
+-        $logger->info('Starship collection retrieved');
+         $starships = $repository->findAll();
+ 
+         return $this->json($starships);
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index 68d4566..c083a8d 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -10,8 +10,14 @@ use Symfony\Component\Routing\Attribute\Route;
+ 
+ class StarshipRepository extends AbstractController
+ {
++    public function __construct(private LoggerInterface $logger)
++    {
++    }
++
+     public function findAll(): array
+     {
++        $this->logger->info('Starship collection retrieved');
++
+         return [
+             new Starship(
+                 1,
