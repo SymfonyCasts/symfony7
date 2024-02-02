@@ -41,11 +41,6 @@
             "description": null
         },
         {
-            "id": "delete-me-1",
-            "name": "delete me 1",
-            "description": null
-        },
-        {
             "id": "twig-extend-abstractcontroller",
             "name": "Twig: Extend AbstractController",
             "description": null
@@ -176,11 +171,6 @@
             "description": null
         },
         {
-            "id": "delete-me-3",
-            "name": "delete me 3",
-            "description": null
-        },
-        {
             "id": "routing-create-get-one-controller",
             "name": "Routing: Create get one controller",
             "description": null
@@ -198,11 +188,6 @@
         {
             "id": "routing-add-route-above-class",
             "name": "Routing: Add Route above class",
-            "description": null
-        },
-        {
-            "id": "delete-me-2",
-            "name": "delete me 2",
             "description": null
         },
         {
