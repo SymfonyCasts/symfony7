@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+{% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body class="text-white" style="background: radial-gradient(102.21% 102.21% at 50% 28.75%, #00121C 42.62%, #013954 100%);">
+        <div class="flex flex-col justify-between min-h-screen relative">
+            <div>
+                <header class="h-[114px] shrink-0 flex flex-col sm:flex-row items-center sm:justify-between py-4 sm:py-0 px-6 border-b border-white/20 shadow-md">
+                    <a href="#">
+                        <img class="h-[42px]" src="{{ asset('images/starshop-logo.png') }}" alt="starshop logo">
+                    </a>
+                    <nav class="flex space-x-4 font-semibold">
+                        <a class="hover:text-amber-400 pt-2" href="#">
+                            Home
+                        </a>
+                        <a class="hover:text-amber-400  pt-2" href="#">
+                            About
+                        </a>
+                        <a class="hover:text-amber-400 pt-2" href="#">
+                            Contact
+                        </a>
+                        <a class="rounded-[60px] py-2 px-5 bg-white/10 hover:bg-white/20" href="#">
+                            Get Started
+                        </a>
+                    </nav>
+                </header>
+                {% block body %}{% endblock %}
+            </div>
+            <div class="p-5 bg-white/5 mt-3 text-center">
+                Made with ❤️ by <a class="text-[#0086C4]" href="https://symfonycasts.com">SymfonyCasts</a>
+            </div>
+        </div>
+    </body>
+</html>
