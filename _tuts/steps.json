@@ -226,6 +226,16 @@
             "description": null
         },
         {
+            "id": "assets-add-logo-img-tag",
+            "name": "Assets: Add logo img tag",
+            "description": null
+        },
+        {
+            "id": "assets-install-asset-component",
+            "name": "Assets: Install Asset component",
+            "description": null
+        },
+        {
             "id": "assets-install-tailwind-bundle",
             "name": "Assets: Install tailwind-bundle",
             "description": null
@@ -243,6 +253,31 @@
         {
             "id": "assets-copy-in-templates",
             "name": "Assets: Copy in templates",
+            "description": null
+        },
+        {
+            "id": "assets-create-template-partial",
+            "name": "Assets: Create template partial",
+            "description": null
+        },
+        {
+            "id": "assets-create-status-enum",
+            "name": "Assets: Create status enum",
+            "description": null
+        },
+        {
+            "id": "assets-fix-enum-printing",
+            "name": "Assets: Fix enum printing",
+            "description": null
+        },
+        {
+            "id": "assets-make-homepage-dynamic",
+            "name": "Assets: Make homepage dynamic",
+            "description": null
+        },
+        {
+            "id": "assets-print-status-image",
+            "name": "Assets: print status image",
             "description": null
         },
         {
@@ -286,5 +321,5 @@
             "description": null
         }
     ],
-    "sha": "90321817cf3e2e8a8be6caabe6be0bb560e6c8cb"
+    "sha": "23c2cd7285cf6ec1481091b619e78e1fe4bbf36b"
 }

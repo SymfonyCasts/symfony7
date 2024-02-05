@@ -1,13 +1,11 @@
-diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index f1583b7..7c84ad6 100644
---- a/templates/main/homepage.html.twig
-+++ b/templates/main/homepage.html.twig
-@@ -5,7 +5,7 @@
- {% block body %}
-     <main class="flex flex-col lg:flex-row flex-1 space-y-4 lg:space-y-0">
-         <aside
--            class="hidden relative w-72 p-2 lg:block lg:h-full bg-gray-800 text-white space-y-4"
-+            class="hidden relative w-72 p-2 lg:block lg:h-full bg-gray-800 text-white space-y-4 transition-all overflow-hidden"
-             data-controller="closeable"
-         >
-             <button
+diff --git a/templates/main/_shipStatusAside.html.twig b/templates/main/_shipStatusAside.html.twig
+index 881f555..aff8de8 100644
+--- a/templates/main/_shipStatusAside.html.twig
++++ b/templates/main/_shipStatusAside.html.twig
+@@ -1,5 +1,5 @@
+ <aside
+-    class="pb-8 lg:pb-0 lg:w-[411px] shrink-0 lg:block lg:min-h-screen text-white transition-all overflow-hidden px-8 border-b lg:border-b-0 lg:border-r border-white/20"
++    class="pb-8 lg:pb-0 lg:w-[411px] shrink-0 lg:block lg:min-h-screen text-white transition-all overflow-hidden px-8 border-b lg:border-b-0 lg:border-r border-white/20 transition-all overflow-hidden"
+     data-controller="closeable"
+ >
+     <div class="flex justify-between mt-11 mb-7">

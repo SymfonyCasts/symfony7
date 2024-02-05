@@ -1,8 +1,8 @@
 diff --git a/composer.json b/composer.json
-index ba56a06..fef39d8 100644
+index 0adce38..db7fa31 100644
 --- a/composer.json
 +++ b/composer.json
-@@ -22,6 +22,7 @@
+@@ -23,6 +23,7 @@
          "symfony/serializer": "7.0.*",
          "symfony/twig-bundle": "7.0.*",
          "symfony/yaml": "7.0.*",
@@ -11,19 +11,19 @@ index ba56a06..fef39d8 100644
          "twig/twig": "^2.12|^3.0"
      },
 diff --git a/composer.lock b/composer.lock
-index dc4df5a..c69779a 100644
+index 95fb63a..8dff8d6 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "1330342e8b87cff82e76913e495f9df6",
-+    "content-hash": "03801909e31bf6d5907475954f8a1563",
+-    "content-hash": "aa313327f9864cc45bf1c587fd61978f",
++    "content-hash": "cfd2eeac94477d5967eff4f92b5ed21c",
      "packages": [
          {
              "name": "composer/semver",
-@@ -2758,6 +2758,67 @@
+@@ -2827,6 +2827,67 @@
              ],
              "time": "2023-08-16T06:22:46+00:00"
          },
@@ -91,7 +91,7 @@ index dc4df5a..c69779a 100644
          {
              "name": "symfony/property-access",
              "version": "v7.0.0",
-@@ -3838,6 +3899,60 @@
+@@ -3907,6 +3968,60 @@
              ],
              "time": "2023-11-07T10:26:03+00:00"
          },

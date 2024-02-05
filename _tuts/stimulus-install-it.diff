@@ -51,10 +51,10 @@ index 0000000..e847027
 +    }
 +}
 diff --git a/composer.json b/composer.json
-index fef39d8..2f97c40 100644
+index db7fa31..2322016 100644
 --- a/composer.json
 +++ b/composer.json
-@@ -20,6 +20,7 @@
+@@ -21,6 +21,7 @@
          "symfony/property-info": "7.0.*",
          "symfony/runtime": "7.0.*",
          "symfony/serializer": "7.0.*",
@@ -63,19 +63,19 @@ index fef39d8..2f97c40 100644
          "symfony/yaml": "7.0.*",
          "symfonycasts/tailwind-bundle": "^0.5.0",
 diff --git a/composer.lock b/composer.lock
-index c69779a..e631bc5 100644
+index 8dff8d6..43ae31a 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "03801909e31bf6d5907475954f8a1563",
-+    "content-hash": "0eea8b270abc60ad86a0b4733d4529fb",
+-    "content-hash": "cfd2eeac94477d5967eff4f92b5ed21c",
++    "content-hash": "b6ed3b4612d949009eab4d10e1d8a3a0",
      "packages": [
          {
              "name": "composer/semver",
-@@ -3315,6 +3315,75 @@
+@@ -3384,6 +3384,75 @@
              ],
              "time": "2023-12-26T14:02:43+00:00"
          },

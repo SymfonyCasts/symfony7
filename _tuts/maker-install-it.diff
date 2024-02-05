@@ -1,8 +1,8 @@
 diff --git a/composer.json b/composer.json
-index 0ad46fe..aa61dc2 100644
+index 1d79880..be47002 100644
 --- a/composer.json
 +++ b/composer.json
-@@ -83,6 +83,7 @@
+@@ -84,6 +84,7 @@
      },
      "require-dev": {
          "symfony/debug-bundle": "7.0.*",
@@ -11,19 +11,19 @@ index 0ad46fe..aa61dc2 100644
          "symfony/web-profiler-bundle": "7.0.*"
      }
 diff --git a/composer.lock b/composer.lock
-index 3bde7b3..a15f2b5 100644
+index 6a371cb..2829bf6 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "acb4305331c9eb77a1779a603e6fd21a",
-+    "content-hash": "f16a2662fcafcda29215dfe6ffc0ca44",
+-    "content-hash": "9aeb8be9d13bf45870c4f16d24917c91",
++    "content-hash": "0534b84bde4b02ba14766cbf770d364b",
      "packages": [
          {
              "name": "composer/semver",
-@@ -4324,6 +4324,153 @@
+@@ -4393,6 +4393,153 @@
          }
      ],
      "packages-dev": [
@@ -177,27 +177,27 @@ index 3bde7b3..a15f2b5 100644
          {
              "name": "symfony/debug-bundle",
              "version": "v7.0.0",
-@@ -4398,6 +4545,98 @@
+@@ -4467,6 +4614,98 @@
              ],
              "time": "2023-11-07T10:26:03+00:00"
          },
 +        {
 +            "name": "symfony/maker-bundle",
-+            "version": "v1.52.0",
++            "version": "v1.53.0",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/symfony/maker-bundle.git",
-+                "reference": "112f9466c94a46ca33dc441eee59a12cd1790757"
++                "reference": "8d2f3f96704766837548d177fe3ae39ae94822d9"
 +            },
 +            "dist": {
 +                "type": "zip",
-+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/112f9466c94a46ca33dc441eee59a12cd1790757",
-+                "reference": "112f9466c94a46ca33dc441eee59a12cd1790757",
++                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/8d2f3f96704766837548d177fe3ae39ae94822d9",
++                "reference": "8d2f3f96704766837548d177fe3ae39ae94822d9",
 +                "shasum": ""
 +            },
 +            "require": {
 +                "doctrine/inflector": "^2.0",
-+                "nikic/php-parser": "^4.11",
++                "nikic/php-parser": "^4.18|^5.0",
 +                "php": ">=8.1",
 +                "symfony/config": "^6.3|^7.0",
 +                "symfony/console": "^6.3|^7.0",
@@ -221,7 +221,7 @@ index 3bde7b3..a15f2b5 100644
 +                "symfony/phpunit-bridge": "^6.3|^7.0",
 +                "symfony/security-core": "^6.3|^7.0",
 +                "symfony/yaml": "^6.3|^7.0",
-+                "twig/twig": "^2.0|^3.0"
++                "twig/twig": "^3.0|^4.x-dev"
 +            },
 +            "type": "symfony-bundle",
 +            "extra": {
@@ -255,7 +255,7 @@ index 3bde7b3..a15f2b5 100644
 +            ],
 +            "support": {
 +                "issues": "https://github.com/symfony/maker-bundle/issues",
-+                "source": "https://github.com/symfony/maker-bundle/tree/v1.52.0"
++                "source": "https://github.com/symfony/maker-bundle/tree/v1.53.0"
 +            },
 +            "funding": [
 +                {
@@ -271,7 +271,7 @@ index 3bde7b3..a15f2b5 100644
 +                    "type": "tidelift"
 +                }
 +            ],
-+            "time": "2023-10-31T18:23:49+00:00"
++            "time": "2024-02-01T10:05:38+00:00"
 +        },
          {
              "name": "symfony/stopwatch",

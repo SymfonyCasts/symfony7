@@ -1,0 +1,75 @@
+diff --git a/src/Model/Starship.php b/src/Model/Starship.php
+index afcd5be..f89f1cc 100644
+--- a/src/Model/Starship.php
++++ b/src/Model/Starship.php
+@@ -9,7 +9,7 @@ class Starship
+         private string $name,
+         private string $class,
+         private string $captain,
+-        private string $status,
++        private StarshipStatusEnum $status,
+     ) {
+     }
+ 
+@@ -33,7 +33,7 @@ class Starship
+         return $this->captain;
+     }
+ 
+-    public function getStatus(): string
++    public function getStatus(): StarshipStatusEnum
+     {
+         return $this->status;
+     }
+diff --git a/src/Model/StarshipStatusEnum.php b/src/Model/StarshipStatusEnum.php
+new file mode 100644
+index 0000000..fa381c9
+--- /dev/null
++++ b/src/Model/StarshipStatusEnum.php
+@@ -0,0 +1,10 @@
++<?php
++
++namespace App\Model;
++
++enum StarshipStatusEnum: string
++{
++    case WAITING = 'waiting';
++    case IN_PROGRESS = 'in progress';
++    case COMPLETED = 'completed';
++}
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index f6e0f83..0dd922c 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -3,6 +3,7 @@
+ namespace App\Repository;
+ 
+ use App\Model\Starship;
++use App\Model\StarshipStatusEnum;
+ use Psr\Log\LoggerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+@@ -24,21 +25,21 @@ class StarshipRepository extends AbstractController
+                 'USS LeafyCruiser (NCC-0001)',
+                 'Garden',
+                 'Jean-Luc Pickles',
+-                'taken over by Q'
++                StarshipStatusEnum::IN_PROGRESS
+             ),
+             new Starship(
+                 2,
+                 'USS Espresso (NCC-1234-C)',
+                 'Latte',
+                 'James T. Quick!',
+-                'repaired',
++                StarshipStatusEnum::COMPLETED
+             ),
+             new Starship(
+                 3,
+                 'USS Wanderlust (NCC-2024-W)',
+                 'Delta Tourist',
+                 'Kathryn Journeyway',
+-                'under construction',
++                StarshipStatusEnum::WAITING
+             ),
+         ];
+     }

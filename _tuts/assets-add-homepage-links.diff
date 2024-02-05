@@ -12,28 +12,33 @@ index e8983fc..04a5058 100644
      {
          $ships = $starshipRepository->findAll();
 diff --git a/templates/base.html.twig b/templates/base.html.twig
-index 5faaf0e..a4ed4c7 100644
+index 57abdf3..a06e168 100644
 --- a/templates/base.html.twig
 +++ b/templates/base.html.twig
-@@ -29,7 +29,7 @@
-                 >
-                     <path d="M22 17v1c0 .5-.5 1-1 1H3c-.5 0-1-.5-1-1v-1"></path>
-                 </svg>
--                <a href="#">
-+                <a href="{{ path('app_homepage') }}">
-                     <span class="text-2xl font-bold">Starshop</span>
-                 </a>
-             </div>
+@@ -15,11 +15,11 @@
+         <div class="flex flex-col justify-between min-h-screen relative">
+             <div>
+                 <header class="h-[114px] shrink-0 flex flex-col sm:flex-row items-center sm:justify-between py-4 sm:py-0 px-6 border-b border-white/20 shadow-md">
+-                    <a href="#">
++                    <a href="{{ path('app_homepage') }}">
+                         <img class="h-[42px]" src="{{ asset('images/starshop-logo.png') }}" alt="starshop logo">
+                     </a>
+                     <nav class="flex space-x-4 font-semibold">
+-                        <a class="hover:text-amber-400 pt-2" href="#">
++                        <a class="hover:text-amber-400 pt-2" href="{{ path('app_homepage') }}">
+                             Home
+                         </a>
+                         <a class="hover:text-amber-400  pt-2" href="#">
 diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
-index 3797c13..47fed8f 100644
+index 54e3f29..619e944 100644
 --- a/templates/starship/show.html.twig
 +++ b/templates/starship/show.html.twig
-@@ -13,7 +13,7 @@
-         </div>
+@@ -4,7 +4,7 @@
  
-         <div class="my-4 px-8">
--            <a class="text-sm text-blue-400 hover:text-blue-200" href="#">
-+            <a class="text-sm text-blue-400 hover:text-blue-200" href="{{ path('app_homepage') }}">
-               &lt;-- Back
-             </a>
-         </div>
+ {% block body %}
+ <div class="my-4 px-8">
+-    <a class="bg-white hover:bg-gray-200 rounded-xl p-2 text-black" href="#">
++    <a class="bg-white hover:bg-gray-200 rounded-xl p-2 text-black" href="{{ path('app_homepage') }}">
+         <svg class="inline text-black" xmlns="http://www.w3.org/2000/svg" height="16" width="14" viewBox="0 0 448 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#000" d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg>
+         Back
+     </a>

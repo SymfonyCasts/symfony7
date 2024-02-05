@@ -1,0 +1,27 @@
+diff --git a/src/Model/Starship.php b/src/Model/Starship.php
+index f89f1cc..18a5793 100644
+--- a/src/Model/Starship.php
++++ b/src/Model/Starship.php
+@@ -37,4 +37,9 @@ class Starship
+     {
+         return $this->status;
+     }
++
++    public function getStatusString(): string
++    {
++        return $this->status->value;
++    }
+ }
+diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
+index ab1fd5c..54e3f29 100644
+--- a/templates/starship/show.html.twig
++++ b/templates/starship/show.html.twig
+@@ -18,7 +18,7 @@
+             <div class="px-8 pt-8">
+                 <div class="rounded-2xl py-1 px-3 flex justify-center w-32 items-center bg-amber-400/10">
+                     <div class="rounded-full h-2 w-2 bg-amber-400 blur-[1px] mr-2"></div>
+-                    <p class="uppercase text-xs">{{ ship.status }}</p>
++                    <p class="uppercase text-xs">{{ ship.statusString }}</p>
+                 </div>
+ 
+                 <h1 class="text-[32px] font-semibold border-b border-white/10 pb-5 mb-5">
