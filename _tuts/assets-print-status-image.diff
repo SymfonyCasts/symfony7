@@ -17,14 +17,14 @@ index 18a5793..72a3787 100644
 +    }
  }
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 66a088d..7881147 100644
+index 823db71..cada3bf 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -15,7 +15,7 @@
                  {% for ship in ships %}
                      <div class="bg-[#16202A] rounded-2xl pl-5 py-5 pr-11 flex flex-col min-[1174px]:flex-row min-[1174px]:justify-between">
                          <div class="flex justify-center min-[1174px]:justify-start">
--                            <img class="h-[83px] w-[84px]" src="{{ asset('images/status-in-progress.png') }}" alt="Status: {{ ship.statusString }}">
+-                            <img class="h-[83px] w-[84px]" src="/images/status-in-progress.png" alt="Status: {{ ship.statusString }}">
 +                            <img class="h-[83px] w-[84px]" src="{{ asset(ship.statusImageFilename) }}" alt="Status: {{ ship.statusString }}">
                              <div class="ml-5">
                                  <div class="rounded-2xl py-1 px-3 flex justify-center w-32 items-center bg-amber-400/10">

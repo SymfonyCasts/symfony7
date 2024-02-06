@@ -1,0 +1,23 @@
+diff --git a/.symfony.local.yaml b/.symfony.local.yaml
+new file mode 100644
+index 0000000..2d234f9
+--- /dev/null
++++ b/.symfony.local.yaml
+@@ -0,0 +1,4 @@
++workers:
++    # ...
++    tailwind:
++        cmd: ['symfony', 'console', 'tailwind:build', '--watch']
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 4c88b77..6f9cf26 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -3,7 +3,7 @@
+ {% block title %}Starshop: Beam up some parts!{% endblock %}
+ 
+ {% block body %}
+-<h1 class="text-2xl">
++<h1 class="text-4xl">
+     Starshop: your monopoly-busting option for Starship parts!
+ </h1>
+ 

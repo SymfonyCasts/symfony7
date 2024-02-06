@@ -129,14 +129,14 @@ index b404742..57abdf3 100644
      </body>
  </html>
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 07d05a7..5b8a1f1 100644
+index 6f9cf26..b897c47 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
-@@ -3,45 +3,86 @@
+@@ -3,45 +3,85 @@
  {% block title %}Starshop: Beam up some parts!{% endblock %}
  
  {% block body %}
--<h1>
+-<h1 class="text-4xl">
 -    Starshop: your monopoly-busting option for Starship parts!
 -</h1>
 -
@@ -220,10 +220,10 @@ index 07d05a7..5b8a1f1 100644
 +            </h1>
 +
 +            <div class="space-y-5">
-+                {% for ship in ships %}
++                <!-- start ship item -->
 +                    <div class="bg-[#16202A] rounded-2xl pl-5 py-5 pr-11 flex flex-col min-[1174px]:flex-row min-[1174px]:justify-between">
 +                        <div class="flex justify-center min-[1174px]:justify-start">
-+                            <img class="h-[83px] w-[84px]" src="{{ asset('images/status-in-progress.png') }}" alt="Status: in progress">
++                            <img class="h-[83px] w-[84px]" src="/images/status-in-progress.png" alt="Status: in progress">
 +                            <div class="ml-5">
 +                                <div class="rounded-2xl py-1 px-3 flex justify-center w-32 items-center bg-amber-400/10">
 +                                    <div class="rounded-full h-2 w-2 bg-amber-400 blur-[1px] mr-2"></div>
@@ -249,14 +249,13 @@ index 07d05a7..5b8a1f1 100644
 +                            </div>
 +                        </div>
 +                    </div>
-+                {% endfor %}
++                <!-- end ship item -->
 +            </div>
 +
 +            <p class="text-lg mt-5 text-center md:text-left">
 +                Looking for your next galactic ride?
 +                <a href="#" class="underline font-semibold">Browse the {{ ships|length * 10 }} starships for sale!</a>
 +            </p>
-+
 +        </div>
 +    </main>
  {% endblock %}

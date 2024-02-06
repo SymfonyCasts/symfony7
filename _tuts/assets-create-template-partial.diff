@@ -40,7 +40,7 @@ index 0000000..b15e476
 +    </div>
 +</aside>
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 5b8a1f1..3ec9d9b 100644
+index b897c47..e5145ba 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -4,41 +4,7 @@

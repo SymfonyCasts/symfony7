@@ -246,6 +246,16 @@
             "description": null
         },
         {
+            "id": "assets-test-out-tailwind",
+            "name": "Assets: Test out tailwind",
+            "description": null
+        },
+        {
+            "id": "assets-run-tailwind-through-the-binary",
+            "name": "Assets: Run tailwind through the binary",
+            "description": null
+        },
+        {
             "id": "assets-remove-blue-background",
             "name": "Assets: Remove blue background",
             "description": null
@@ -258,6 +268,11 @@
         {
             "id": "assets-create-template-partial",
             "name": "Assets: Create template partial",
+            "description": null
+        },
+        {
+            "id": "assets-add-for-loop",
+            "name": "Assets: Add for loop",
             "description": null
         },
         {
@@ -321,5 +336,5 @@
             "description": null
         }
     ],
-    "sha": "51f7c053ad74e55f8f880ac362b3f2645372b97d"
+    "sha": "d6b84ce3ca07009eb02d1e9586815a318ed97e87"
 }
