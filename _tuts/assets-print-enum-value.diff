@@ -1,0 +1,13 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 9e8bc85..8a97d0d 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -19,7 +19,7 @@
+                             <div class="ml-5">
+                                 <div class="rounded-2xl py-1 px-3 flex justify-center w-32 items-center bg-amber-400/10">
+                                     <div class="rounded-full h-2 w-2 bg-amber-400 blur-[1px] mr-2"></div>
+-                                    <p class="uppercase text-xs text-nowrap">{{ ship.status }}</p>
++                                    <p class="uppercase text-xs text-nowrap">{{ ship.status.value }}</p>
+                                 </div>
+                                 <h4 class="text-[22px] pt-1 font-semibold">
+                                     <a

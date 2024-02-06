@@ -276,8 +276,18 @@
             "description": null
         },
         {
+            "id": "assets-print-out-ship-status",
+            "name": "Assets: Print out ship status",
+            "description": null
+        },
+        {
             "id": "assets-create-status-enum",
             "name": "Assets: Create status enum",
+            "description": null
+        },
+        {
+            "id": "assets-print-enum-value",
+            "name": "Assets: print enum value",
             "description": null
         },
         {
@@ -331,10 +341,15 @@
             "description": null
         },
         {
+            "id": "maker-make-command",
+            "name": "Maker: make:command",
+            "description": null
+        },
+        {
             "id": "maker-use-the-progress-bar",
             "name": "Maker: Use the progress bar",
             "description": null
         }
     ],
-    "sha": "d6b84ce3ca07009eb02d1e9586815a318ed97e87"
+    "sha": "499b97630044b2daf0560c841590a85b45ad728a"
 }
