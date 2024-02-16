@@ -1,5 +1,101 @@
 # Setting up our Symfony App
 
-Coming Soon...
+Welcome to the first Symfony 7 tutorial! My name is Ryan - I live here in the
+fantasy world of Symfonycasts and... I am *beyond* excited to be *your* guide through
+this series all about Symfony, web development... bad jokes... space animations,
+and most importantly, building *real* things we can be proud of. For me, it feels
+like *I'm* the lucky person that gets to give you a personal tour of the Enterprise...
+or whatever nerdy thing gets *you* most excited.
 
-Welcome to the Symfony 7 tutorial. My name is Ryan and I am so excited to be your guide through this entire series about Symfony, web development, and to hopefully help you love this stuff as much as I do. Symfony is actually a bunch of small reusable pieces called components that you can use in any PHP project. For example, there's one called Finder, which is just really good at finding files in different directories with different extensions. There's another component called Process, which you could pull into any PHP project to help you run processes. In this tutorial, we're going to focus on the Symfony framework. That's a collection of the components all glued together to feel like one thing so that we can get to work building faster. Now you can build anything with Symfony, whether that's a web app that returns HTML like you see here, or a pure API. In this tutorial series, we're going to build a web app. But if you're building a pure API, API Platform is a Symfony-based API framework that is absolutely incredible. So if you are building an API, follow the first few tutorials in this series, then pop over to our API Platform tutorials. But whatever you build, my goal is the same. I want you to be great at this stuff and love love doing it and become an even better developer. This course is about the basics, but we're going to get a lot of stuff working. The only prerequisite is that you is an understanding of PHP and object oriented principles. And we have tutorials on both. All right, ready? Let's do this. Step one, head to symphony.com slash download. On this page, you're going to find instructions on how to download a standalone binary called symphony. Now this is not symphony itself, it's just a little tool that's going to help you do things like start new symphony projects, run a local web server, and even if you want to deploy your application to production. Once you've downloaded, once you've downloaded and installed Once you've downloaded, once you've downloaded and installed it, open a terminal and move into any project on your system. To make sure that the symphony binary is working, I'll run symphony dash dash help to see the full list of all the commands that it does.  Don't worry, we're gonna use just a few of those to get things rocking. Before we start a project, run symphony check rec, which stands for check requirements. This is going to make sure that you have everything on your system that you need to run symphony like PHP, the correct version and PHP extensions. Once this is happy, start a new project with symphony new and then the name of a door and then the directory for your new project. I'll call mine star shop. By the way, this is going to give us a tiny project with only the base things installed. And then we're going to add more stuff little by little as we go along the way. Later when you feel comfortable with symphony, if you want to get started more quickly, you can run the same command with dash dash web app to get an app with much more stuff pre installed. Anyway, CD into the directories run CD run CD star shop to move into the directory and then ls to see our new project. We're going to get to know these files in the next chapter, but we already have a working symphony application. The only thing we need to do the only thing we need to see it. The only thing we have to do is start a local web server that points at this. And you can use any web server you want Apache Nginx caddy. But for local development, I highly recommend just using the symphony binary, you can run symphony serve inside this directory, and bam, you have a new local web server for our project running at 127.0.0.1 colon 8000. I'm gonna copy that, spin over, paste, and welcome to symphony seven. That's what I was gonna say. All right, let's get to know our tiny new app. Next.
+And that's because, I *love* this stuff. Bootstrapping databases, building
+beautiful user interfaces, writing high-quality code... it gets me out of bed in
+the morning. And Symfony is *the* best tool to do all of this... and become a better
+developer along the way.
+
+And that's really my goal: I want *you* to enjoy all of this as much as I do
+... and to feel empowered to build all the amazing things you have floating around
+in your mind.
+
+## What Makes Symfony Special
+
+Now, one of my *favorite* things about teaching Symfony is that our project is going
+to start *tiny*. That makes it easy to learn. But then, it'll scale up
+automatically as we need more tools via a unique *recipe* system. Symfony
+is actually a collection of over *200* small PHP libraries. So that's a *ton* of
+tools... but *we* get to choose what we need.
+
+Because, you might be building a pure API... or a full web app, which is what we'll
+focus on in *this* tutorial. Though, if you *are* building an API, follow the first
+few tutorials in this series, then pop over to our API Platform tutorials. API Platform
+is a mind-blowingly fun & powerful system for making APIs, built right on top
+of Symfony.
+
+Symfony is also *blazingly* fast, has long-term support versions and works a lot
+on creating a delightful developer experience *while* keeping to programming
+best-practices. This means we get to write high-quality code and *still* get our
+work done quickly.
+
+Ok, enough of me gushing about Symfony. Ready to get to work? Then beam aboard.
+
+## Installing the Symfony Binary
+
+And head over to https://symfony.com/download. This page has instructions on how
+to download a standalone binary called `symfony`. Now this is *not* Symfony itself...
+it's just a little tool that'll help us do things, like start new Symfony projects,
+run a local web server or even deploy our app to production.
+
+Once you've downloaded and installed it, open a terminal and move into *any*
+directory. Check that the `symfony` binary is ready to go by running:
+
+```terminal
+symfony --help
+```
+
+It's got a *bunch* of commands, but we'll just need a few. Before we start a project,
+also run
+
+```terminal
+symfony check-req
+```
+
+which stands for check requirements. This makes sure that we have everything
+on our system needed to run Symfony, like PHP at the correct version and
+some PHP extensions.
+
+Once this is happy, we can start a new project! Do it with `symfony new` and then
+a directory name. I'll call mine `starshop`. More on that later.
+
+```terminal-silent
+symfony new starshop
+```
+
+This will give us a *tiny* project with only the *base* things installed.
+Then, we'll add more stuff little-by-little along the way. It's gonna be great!
+But later, when you feel comfortable with Symfony, if you want to get started more
+quickly, you can run the same command, but with `--webapp` to get a project with
+*much* more stuff pre-installed.
+
+Anyway, move into the directory - `cd starshop` - then I'll type `ls` to check
+things out. Cool! We'll get to know these files in the next chapter, but
+this is *our* project... and it's already working!
+
+## Starting the symfony Web Server
+
+To *see* it working in a browser, we need to start a web server. You can use
+*any* web server you want - Apache, Nginx, Caddy, whatever. But for local
+development, I highly recommend using the `symfony` binary we just installed.
+Run:
+
+```terminal
+symfony serve
+```
+
+The first time you do this, it might ask you to run another command to set up
+an SSL certificate, which is nice because then the server supports https.
+
+And... bam! We have a new web server for our project running at https://127.0.0.1:8000.
+Copy that, spin over to your most favorite browser, paste and... welcome to
+Symfony 7! That's what I was going to say!
+
+Next, let's sit down, order some Earl Grey tea, and become friends with every
+file in our new app... which isn't very many.
