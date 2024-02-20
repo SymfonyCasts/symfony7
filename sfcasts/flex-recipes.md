@@ -1,5 +1,121 @@
 # Magical Flex Recipes
 
-Coming Soon...
+I have a secret. When our project was created, it wasn't 15 files. It was...
+*one* file. If you peeked inside the code for the `symfony new` command, you'd
+discover that it's a shortcut for just two things. First, it clones a
+repository called `symfony/skeleton`... which is just *one* file if you ignore the
+license. And second, it runs `composer install`.
 
-I have a little secret. When our project was created, it wasn't 15 files. It was actually a single file. If you looked inside the code for the Symfony new command, you would discover that it's a shortcut for just two things. First, it clones this repository called Symfony Skeleton, which is just two files. And then it runs Composer install. So if that's true, then where did all these other files come from in our project, like the bin directory, config directory, source directory? Well, the answer to that starts with a special package we have in our composer.json file called Symfony Flex. Symfony Flex is a Composer plugin, and it adds two superpowers to Composer. The first is called aliases and recipes. Now, aliases are a really simple idea. When you install a package with Composer, which we're going to do in a minute, you run Composer require and then the name of the package like HTTP client, which is one of the components in Symfony. Now, we're not going to use this. Many of the most important packages for Symfony have an alias internally. What that would allow us to do is say Composer require HTTP client, and then Symfony Flex would translate that to the final package name. So it's just a tiny shortcut when you install the packages. And it's basically that simple. If you want to see what all the aliases are that are available, go to a repository called Symfony slash recipes. And down here, click this recipes.md. And within this, you can see all the different aliases that we have. The second superpower that Symfony Flex gives to Composer is recipes. And these are more interesting. When you install a package, it may have a recipe, which is basically a set of files that will be added to your project. And it turns out that every file that we have in our project been all these things and config public. These came from one of the recipes of the packages that was originally installed. For example, symphony slash framework bundle is probably the most core part of the symphony framework, you can check out its recipe by going to this symphony recipes repository, then navigating navigating for it. symphony framework bundle, find the latest version, and boom, check it out config packages.  Most of the stuff that we started with in our project came from the recipe from framework bundle. Another way to see the recipes is to go to your command line and run compete composer recipes. So apparently for the packages we installed had recipes. And we can even get more information about a specific recipe by adding its name. Anyway, recipes are amazing, because we can install a package and get any files we need instantly. So we can just get to work without fussing with configuration. So let's install our first package. We're going to install something called PHP CS fixer. This is a this is a this library gives us a command line tool that will fix our code if we violate any coding standards. So for example, in source controller main controller, if you follow this standard, you follow the coding standards of PHP, your the curly brace is always on the next line after a function. So if we did something like this, our files now violating coding standards, that wouldn't hurt anything. But you know, we want to keep our code nice and standard. So we can install PHP CS fixer, and it'll find and fix these things for us. So normally, when you install it, run composer require CS fixer shim. The first thing to notice on top is that this is an alias, it actually required PHP CS fixer slash shim. The second thing to notice is its recipe, which you can see by running git status. Now composer JSON and composer that lock, those are always going to be changed after you require a new package into your project. And you can see that composer that JSON has the new library right here. Every other modified file is thanks to the recipe system. So let's look at these dot get in, open up dot get ignore. Cool. At the bottom and added two new dot get ignore entries for two common files that you want to ignore when you use PHP CS fixer. This also added a new PHP CS fixer.dist.php. This is PHP secret. See, this is PHP CS fixers configuration file. And check it out. It's just pre built to work for symphony. It tells it to fix all files in the current directory, but ignore the var directory because that's where symphony stores its cache files.  So that's not something we need to worry about. It also tells it to use a rule set called symphony. So that basically means that by default, we want our code to look like symphonies core code. The last modified file is symphony dot lock. And this just keeps track of which recipes we have installed and at what version. And yes, you are going to commit all of these files to your repository. Alright, since we installed this package, let's use it. To do that run vendor bin PHP CS fixer. That'll show you all of the available commands in this and the one we want is called fix. So run PHP CS fixer fix and check it out. It find that found the violation and main control dot PHP. So when I scroll over, yes, it moved my curly brace from the end of the line back down here. That's awesome. Next up, let's meet and install one of my favorite libraries in PHP, the twig templating engine.
+That's it! But hold on, if that's the case, where in the world did all these other
+files come from? Like, the stuff in `bin/`, `config/` and `src/`?
+The answer starts with a special package inside our `composer.json` file called
+`symfony/flex`. Flex is a Composer *plugin* that adds two superpowers to
+Composer: aliases and recipes.
+
+## Flex Aliases
+
+Aliases are simple. To add a *new* package to your app - which we'll do in a minute -
+you run `composer require` then the name of the package like `symfony/http-client`.
+Flex gives the most important packages in the Symfony ecosystem a *shorter* name,
+called an alias. For example, `symfony/http-client` has an alias called
+`http-client`. Yup, we could run `composer require http-client` and
+Flex would translate that to the final package name. It's just a shortcut
+when adding packages.
+
+If you want to see all the available aliases, go to a repository called
+[symfony/recipes](https://github.com/symfony/recipes)... then click the link
+to `RECIPES.md`. On the right, there they are!
+
+## The Recipes System
+
+The second superpower that Symfony Flex adds to Composer is *recipes*. These
+are fascinating. When you add a new package, it *may* have a recipe, which is
+basically a set of files that will be added to your project. And it turns out that
+*every* file that we started with - in `bin/`, `config/`, `public/` -
+these *all* came from the recipes of the packages that were originally
+installed.
+
+For example, `symfony/framework-bundle` is the "core" package of the Symfony Framework.
+You can check out its recipe by going to the `symfony/recipes` repository
+and navigating to `symfony`, `framework-bundle`, then the latest version. Boom!
+Check out `config/packages/`: most of the stuff we started with
+came from this recipe!
+
+Another way to see the recipes is at your command line. Run:
+
+```terminal
+composer recipes
+```
+
+Apparently the recipes of *four* different packages were installed. And we could
+get info about any of these by adding its name to the end of the command.
+
+Anyway, recipes are amazing because we can install a package and instantly get any
+files we need. Instead of fussing around with configuration, we get right to work.
+
+## Installing PHP CS Fixer
+
+Let's try this out: let's add a new package called PHP-CS-Fixer that will give us an
+executable file to fix the *styling* of our code. For example, in
+`src/Controller/MainController.php`, if you follow PHP coding standards,
+the curly brace should live on the next line after a function. If we did something
+like this, our file now violates those standards. That wouldn't hurt anything,
+but you know, we want to keep our code looking clean. And PHP-CS-Fixer can help
+us do that.
+
+To install it, run:
+
+```terminal
+composer require cs-fixer-shim
+```
+
+And yes, this is an *alias*. On top, the true package is `php-cs-fixer/shim`.
+
+Did this package come with a recipe? It did! The `Configuring php-cs-fixer/shim`
+tells us that. But, we can *also* see it by running:
+
+```terminal
+git status
+```
+
+The fact that `composer.json` and `composer.lock` are modified is 100% normal
+Composer behavior. You can see that `composer.json` has the new library under
+the `require` key. But every *other* modified or new file *is* thanks to the
+package's recipe.
+
+## Investigating the Recipe
+
+Let's investigate these! Open up `.gitignore`. Cool! At the bottom, it added two
+new entries for two common files that you want to ignore when you use PHP CS fixer.
+The recipe also added a new `.php-cs-fixer.dist.php` file. This is CS Fixer's
+configuration file. And check it out! It's pre-built to work for our Symfony app.
+It tells it to fix all files in the current directory, but ignore the `var/` directory
+because that's where Symfony stores its cache files. It also tells it to use a
+ruleset called Symfony. That means that we want our code style to
+match Symfony's style. The point is: instead of *us* wasting time hunting down this
+default config... we just get it!
+
+The last modified file is `symfony.lock`. This keeps track of which recipes we have
+installed and at what version. And yes, we *are* going to commit all these files
+to our repository.
+
+## Using PHP-CS-Fixer
+
+Now that we've installed the package, let's use it. Do that by running:
+
+```terminal
+./vendor/bin/php-cs-fixer
+```
+
+That'll show all the available commands. The one we want is called fix. Try it:
+
+```terminal-silent
+./vendor/bin/php-cs-fixer fix
+```
+
+And... yes! It found the violation in `MainController.php`! When we
+go to that file... yea! It moved my curly brace from the end of the line back down
+to the next line. That's awesome.
+
+Next up, let's meet and install one of my favorite libraries in all of PHP: the
+Twig templating engine.
