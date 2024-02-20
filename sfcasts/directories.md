@@ -1,5 +1,99 @@
 # Getting to Know our Tiny Project
 
-Coming Soon...
+Sprint back to your command center (aka terminal). This first tab is running the
+web server. If you need to stop it, press Ctrl-C... then restart it with:
 
-Head back to your terminal. This first tab is running our web server. If you need to stop it, you can run Ctrl-C and then you can restart it by running Symfony serve. So we're just going to leave this here and let it do its thing. I'm now going to open a second tab into the same directory. When we ran the Symfony new command, it downloaded a tiny project for us and initialized a Git repository with an initial commit. That was super nice. To see the files we have, I'm going to pop open this directory in my favorite editor, phpStorm. And the first thing I want you to notice is just how small this thing is. There's not a lot going on. To see the full list of files in Git, back your terminal, run Git ls-files. Yeah, that's it. Only about 15 total files committed to our repository. This is our app. This is our code. We're going to modify these. And my goal is to make you feel perfectly comfortable with what all of them do. So then if these are our files, where the heck is Symfony? One of the files that we started with is composer.json. Composer is the package manager for PHP. Its job is to read all the package names that you have under this require key, and then to download those for you. Now, when we ran Symfony new command, it downloaded these 15 files, and it actually ran composer install for us. That composer install command is what reads this file and downloads all of these into the vendor directory. So where is Symfony? It's in vendor slash Symfony. And right now we're using about 20 Symfony packages. There are about 150 in total. Now, this vendor directory is ignored from Git thanks to another file that we got for free, .gitignore. This means the vendor files aren't committed to your Git repository, which is great. It also means that if a teammate clones your project, they're not going to have a vendor directory. And that's okay. You can always repopulate the vendor directory by running composer install. So check this out. I am going to right click and delete this file, delete the entire vendor directory. And then I'm going to go to the directory that I'm going to install. Delete the entire vendor directory.  And if we try our app now, it's totally broken. Bad feels. But your terminal, you just run composer install. And that's it. It's back. The directory is back. And over here, our site works again. Now looking at our files, let's take a look at our files. There are really only two directories that we even need, that you even need to think about. The first is the config directory. This holds your configuration. And we're going to learn about what these files do little by little. The second directory is source. This is where all of your PHP code is going to go. That's really it. You're either creating configuration or you're writing PHP code. That's all you need to think about. The other four directories aren't really very important. The bin directory holds a console binary that we're going to learn about later. But we're never going to look at or modify that file. The public directory has an index.php. This is known as your front controller. And it's technically what your web server executes to get everything started. So it's super important in one sense. But again, you're never going to open this file or look at this file or think about this file. The var directory is also ignored from git. And this is where Symfony stores the log files and also cache files it needs internally. So very important, but also not something we know we care about. And we already talked about the vendor directory. Now before we get coding, as I mentioned, I'm using phpStorm, but you're free to use whatever editor you want. However, phpStorm is awesome. And one of the reasons it's awesome is because it has an incredible Symfony plugin available. If you go to phpStorm settings and search for Symfony, down here under plugins and then marketplace, you're going to find a Symfony plugin that you can download. And this is a great plugin to get started. marketplace, you're going to find a Symfony plugin that you can download and install into phpStorm if you don't already have it. After you install it, restart phpStorm. And then there's one more step. I want you to go back into settings, search for Symfony again. And you should now have a Symfony section right here.  You need to make sure that you enable this plugin on a project by project basis. So you can get its magic. All right, that's it. Let's start coding next and build our first page in Symfony.
+```terminal
+symfony serve
+```
+
+**TIP
+You can use `symfony serve -d` to run the command in the "background" so that
+you can continue using this terminal tab.
+***
+
+We'll leave that alone and let it do its thing.
+
+## Our Project's 15 Files
+
+Open a second terminal tab in the same directory. When we ran the `symfony new`
+command, it downloaded a tiny project *and* initialized a Git repository with
+an initial commit. That was super nice! To see our files, I'm going to open this
+directory in my favorite editor: PhpStorm. More on this editor in a few minutes.
+
+Right now, I want you to notice just how *small* our project is! To see the full
+list of committed files, back at your terminal, run:
+
+```terminal
+git ls-files
+```
+
+Yea, that's it. Only about 15 files committed to git!
+
+## Where's Symfony?
+
+So then... where the heck is Symfony? One of our 15 files is especially important:
+`composer.json`. Composer is the package manager for PHP. Its job is simple: read
+the package names under this `require` key and download them. When we ran the
+`symfony new` command, it downloaded these 15 files and *also* ran `composer install`.
+That downloaded all of these packages into the `vendor/` directory.
+
+So where is Symfony? It's in `vendor/symfony/`... and we're already using about
+20 of its packages!
+
+## Running Composer
+
+The `vendor/` directory is *not* committed to git. It's ignored thanks to another
+file we started with: `.gitignore`. This means that if a teammate clones our project,
+they will *not* have this directory. And that's okay! We can always repopulate
+it by running `composer install`.
+
+Watch: I'll right-click and delete the entire `vendor/` directory. Gasp!
+
+If we try our app now, it's busted. Bad feels! To fix it & save the day, at
+your terminal,
+run:
+
+```terminal
+composer install
+```
+
+And... presto! The directory is back.... and over here, the site works again.
+
+## The 2 Directories you Care About
+
+Looking back at our files, there are only two directories that we even need
+to think about. The first is `config/`: this holds... configuration! We'll
+learn about what these files do along the way.
+
+The second is `src/`. This is where *all* your PHP code will live.
+
+And that's really it! 99% of the time you're either configuring something or writing
+PHP code. That happens in `config/` & `src/`.
+
+What about the other 4 directories? `bin/` holds a single `console` executable
+file that we'll try out soon. But we're never going to look at or modify that file.
+The `public/` directory is known as your document root. Anything you put here - like
+an image - will be publicly accessible. More about that stuff later.
+It also holds `index.php`. This is known as your "front controller": it's the main
+PHP file that your web server executes at the start of every request. And while it
+*is* super important... you'll never edit or even think about this file.
+
+Up next is `var/`. This is *also* ignored from git: it's where
+Symfony stores log files and cache files that it needs internally. So very important...
+but not something we need to think about. And we already talked about `vendor/`.
+That's everything!
+
+## Prepping PhpStorm
+
+Now before we get coding, I mentioned that I use PhpStorm. You're free to use whatever
+editor you want. However, PhpStorm is *incredible*. And one big reason is the
+unmatched Symfony *plugin*. If you go to PhpStorm -> Settings and search
+for "Symfony", down here under Plugins and then Marketplace, you can find
+it. Download & install the plugin if you don't already have it. *After*
+installation, restart PhpStorm. Then there's one more step. Go back into settings
+and search for Symfony again. This time you'll have a Symfony section. Be sure
+to enable the plugin for each Symfony project you work on... otherwise you won't
+see all the same magic I have.
+
+Ok! Let's start coding and build our first page in Symfony next.
