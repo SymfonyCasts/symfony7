@@ -1,5 +1,164 @@
 # Services: The Backbone of Everything
 
-Coming Soon...
+Let's talk about services. These are *the* most important concept in Symfony. And
+once you understand them, honestly, you'll be able to do *anything*.
 
-Let's talk about services. These are the most important concept in Symfony. Once you understand them, you can really do anything. First, a service is an object that does work. That's it. For example, if you add a logger object with a log method, that's a service. It does work. Or a database connection object that makes queries to the database. What's an example of a class that's not a service? Our Starship class is a perfect example. It's main job is not to do work, but instead to hold data. Sure, it has a few public methods, and you could even put some logic inside of these methods to do something. But ultimately, it's not a worker, it's a data holder. What about a controller? Yeah, that's technically a service too. It's work is to create response objects. Anyway, every bit of work that's done in Symfony is actually done by a service. Logging log messages to this file? Yeah, there's a service for that. Figuring out which route matches the current URL? That's the router service. What about rendering a twig template? Yep, turns out that this render method is just a shortcut to go and call a method on a service object. Now internally, while it's not super important, you'll often hear that these services are organized into a big object called the service container. It's like a giant associative array of service objects, each with a unique ID. Want to see a list of every service in our app right now? Me too. Find your terminal and run bin console debug container. I'm actually going to make this smaller. There we go. We can see everything on one line. What we're seeing here is on the left, this is the ID of the service. On the right, it's telling you what type of object corresponds to that ID. Cool, right? If we go back and open up our JSON, hold control or command to open up the JSON method, this now makes more sense. It's checking to see if the container has a service whose ID is serializer. If it does, it grabs that service from the container and calls the serialized method on it. Now, when we work with services, it won't quite look like this, but we now understand what's going on. And that is so important.  My next question is where do these services come from? Like what says there's a service whose ID is twig and that when I ask for it gives me a twig environment object? The answer is entirely from bundles. In fact, that's the main point of installing a new bundle. Bundles give us services. Remember when we installed twig? Well, we actually, when we did that, it actually added a bundle to our project. And guess what that bundle did? You guessed it. It gave us new services, including this twig service. Bundles give us more services and services are tools. Now, in reality, we're never going to need to use the vast majority of the services in this list, nor are we going to care about this internal ID most of the time. Instead, I'm going to make this big again. Run a related command called bin console debug auto wiring. This shows us all of the services that are auto-wireable. Basically all of the services that are meant to be used by us. These are services where symphony makes it a little extra, a little easier for us to access them. So let's do a challenge. Let's log something from our controller. The way I approach this problem is I think, okay. Logging is work. All work is done by a service. So if I want to log something, I just need to find the logger service. Okay. So let's rerun this command again and search for a log and boom, it actually finds about 10 services, all starting with this PSR log logger interface. Now we're going to talk about logger interface. Now we're going to talk about what these other services are in the next tutorial. Right now, I just want you to focus on this one. What this tells me is that there is a service in the container for a logger. And if I want to get it, I can auto-wire it using this interface. So the way you do that is in the controller method, where you want the logger, you add an argument with that type headed with that logger interface. So I'll hit tab and then say logger. Now the name of the argument isn't important. The important thing is the logger interface that corresponds to this use statement up here. So PSR log logger interface matches PSR log logger interface.  So it's really simple. Symfony is going to see this type hint and say, oh, since that matches this type in here, they must want us to pass the, this service object there. See if this is working. Let's DD logger, DD logger, which stands for dump and die. That's also a symphony function that as you can see, prints a really nice dump of the object and then dies. And the point is it's working. It passes us a monologue slash logger object, which implements that, that logger interface, which interface. This trick is called auto wiring and it works in two places in controller methods and also constructor methods of other services. And we'll see that in the next chapter. If you're wondering where this logger service came from, we already know the answer from a bundle in this case, from monologue bundle. And how do we get from a bundle in this case from monologue bundle and how do we configure that service and tell it, I don't know where to log config packages monologue.yaml. This configuration, including this line right here, configures the monologue bundle. The monologue bundle is what gives us this service. This percent syntax is a little fancy, but that actually is what configures the logger service to log to this dev.log file. All right, let's try using this. How do we? Well, we could read the docs, but we have this type in here, so our editor is going to help us. It has a bunch of methods on it. Let's use info and I'll say starship collection retrieved. And when we move on refresh, the page works. Did it actually log something? Well, we could tail the dev.log file and look at there, but remember, we can also see log information in the profiler for request. Because this is an API request, we don't have a web debug toolbar on the bottom, but there is still a profiler that was created with information about this request, and we can totally go check it out. To do that, change the URL to slash underscore profiler. This gives a list of all the most recent requests to your application with the newest on top. See this one right there? That's the API request we made a second ago.  If you click this token, boom, we're looking at the profiler and all the information for that API recall, including our log message. Now that we've seen how to use a core service, how to use a service, let's create our own service next to organize our code.
+## What is a Service?
+
+First, a service is an object that does work. That's it. For example, if you instantiated
+a `Logger` object that has a `log()` method, that's a service! It does work: it
+logs things! Or if you created a database connection object that makes queries
+to the database then... yup! That's a service too.
+
+So then... if a service is just an object that does work... what *isn't* a service?
+Our `Startship` class is a perfect example of a *non* service. It's main job is *not*
+to do work: it's to hold data. Sure, it has a few public methods... and you could
+even put some logic inside of these methods to do something. But ultimately, it's
+not a worker, it's a data holder.
+
+What about a controller? Yeah, that's technically a service too. It's work is to
+create response objects.
+
+Anyway, *every* bit of work that's done in Symfony is actually done by a service.
+Writing log messages to this file? Yeah, there's a service for that. Figuring out
+which route matches the current URL? That's the `router` service! What about rendering
+a twig template? Yep, it turns out that the `render()` method is just a shortcut
+to find the correct service object and call a method on it.
+
+## The Container & debug:container
+
+You may sometimes also hear that these services are organized into a big object called
+the "service container". You can think of the container like a giant associative
+array of service objects, each with a unique id. Want to see a list of every service
+in our app right now? Me too.
+
+Find your terminal and run:
+
+```terminal
+bin/console debug:container
+```
+
+That's a lot of service! Let me make this smaller so each service is on its own
+line... better.
+
+On the left side, we see the *ID* of each service. And on the right, the *class*
+of the object that the ID corresponds to. Cool, right?
+
+Go back to our controller and hold control or command to open up the `json()` method
+again. Now this makes more sense! It's checking to see if the container has a service
+whose ID is `serializer`. If it does, it grabs that service from the container and
+calls the `serialize()` method on it.
+
+When *we* work with services, it won't look exactly like this. But the important
+thing is that we now understand what's going on. And that is *so* important.
+
+## Bundles Provide Services
+
+My next question is: where do these services come from? Like, who says there's a
+service whose ID is `twig`... and that when we ask the container for it, it should
+return a twig `Environment` object? The answer is: *entirely* from bundles. In fact,
+that's the main point of installing a new bundle. Bundles give us services.
+
+Remember when we installed `twig`? When we did that, it added a bundle to our
+app. And guess what that bundle did? Yup: it gave us new services, including the
+`twig` service. Bundles give us services... and services are *tools*.
+
+## Autowiring
+
+And though there are *many* services in this list, the vast majority of these are
+low-level service objects that we won't ever use or care about. We also won't
+care about the ID of the services most of the time.
+
+Instead, run a related command called:
+
+```terminal
+php bin/console debug:autowiring
+```
+
+This shows us all of the services that are autowireable, which is the technique
+that we'll use to fetch services from the container. It's basically a curated
+list of the services that you'll most likely need to use.
+
+## Autowiring the Logger Service
+
+So let's do a challenge: let's log something from our controller. Here's a sneak
+peek into how I approach this problem in my brain:
+
+> Ok, I need to log something!
+> And... logging is work.
+> And... services are work!
+> Thus, there must be a logger service that I can use!
+> Quod erat demonstrandum!
+
+Forgive me latin nerds. The point is: if we want to log something, we just need to
+find the service that *does* that work. Okay! Rerun the command but search for log:
+
+```terminal-silent
+php bin/console debug:autowiring log
+```
+
+Boom! It found about 10 services, all starting with `PSR\Log\LoggerInterface`.
+We're going to talk about what these *other* services are in the next tutorial. For
+now, focus on the main one. This tells me is that there *is* a service in the
+container for a logger. And to get it, we can autowire it using this interface.
+
+What does that mean? In the controller method where we want the logger, add an
+argument type-hinted with `LoggerInterface` - hit tab - then say `$logger`.
+
+In this case, the *name* of the argument isn't important: it could be anything.
+What matters is that the `LoggerInterface` - that corresponds to this `use` statement -
+matches the `PSR\Log\LoggerInterface` from `debug:autowiring`.
+
+It's that simple! Symfony will see this type-hint and say:
+
+> Oh! Since that type-hint matches the autowiring type for this service, they must
+> want me to *pass* them that service object.
+
+I don't know why Symfony sounds like a frog in my head. Anyway, let's see if
+this works. Add `dd($logger)`: `dd()` stands for "dump and die" and comes from
+Symfony.
+
+Refresh! Yes! It printed the object beautifully then stopped execution. It's
+*working*! Symfony passes us a `Monolog\Logger` object, which implements tha
+`LoggerInterface`.
+
+The trick we just - called autowiring - works in exactly two places: our controller
+methods and the `__construct()` method of any service. We'll see that second
+situation in the next chapter.
+
+## Controlling how Services Behave
+
+And if you're wondering where this `Logger` service came from in the first place...
+we already know the answer! From a bundle. In this case, from `MonologBundle`.
+And... how could we *configure* that service... to, I don't know, tell it to log
+to a different file? The answer is: `config/packages/monolog.yaml`.
+
+This config - including this line - configures `MonologBundle`... which really
+means that it configures how the *services* work that MonologBundle give us. We'll
+learn about this percent syntax in the next tutorial, but this tells the `Logger`
+service to log to this `dev.log` file.
+
+## Using the Logger
+
+Ok, now that we have the `Logger` service, let's use it! How? Well, *of course*,
+you can read the docs. But thanks to the type-hint, our editor will help us!
+`LoggerInterface` has a *bunch* of methods. Let's use `->info()` and I'll say:
+
+> Starship collection retrieved.
+
+Try it out: refresh. The page worked... but did it log anything? We could go check
+the `dev.log` file. But remember: we can also see log info in the profiler for
+this request.
+
+## Seeing the Profiler for an API Request
+
+But this is an API request... so we don't have that cool web debug toolbar on the
+bottom! That's true... but Symfony *did* still collect all that info! To get to
+the profiler for this request, change the URL to `/_profiler`. This gives us a list
+of the most recent requests to our app, with the newest on top. See this one?
+That's our API request from a minute ago! If you click this token... boom!
+We're looking at the profiler in all its glory for that API call.... including
+a Log section with our message.
+
+Ok, now that we've seen how to *use* a service, let's create our *own* service next
+to organize our code.
