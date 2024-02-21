@@ -1,5 +1,140 @@
 # Fancier Routes: Requirements, Wildcards, and More
 
-Coming Soon...
+With all of the new code organization, let's celebrate by creating another API
+endpoint to fetch a single `starship`. We'll start like usual: create
+a `public function` called, how about just `get()`. I'll inclue the optional `Response`
+return type. Above this add the `#[Route]` with a URL set to `/api/starships/`...
+hmm. This time, the last part of the URL needs to be dynamic: it should match
+`/api/starships/5` or `/api/starships/25`... and then we'll return the JSON for
+the ship with that id. How can we do that? How can we make a route match a
+wildcard?
 
-With all of our new code organization, let's celebrate by creating another API endpoint to fetch a single Starship. So we'll start this like usual. We'll create a public function. This time I'll call it just Git. And I'll put the optional response return type. And then above this, we want a route. This time it's going to be slash API slash Starships slash hmm. In this case, the last part needs to be something dynamic, right? Because this should match slash API slash Starships slash five or 25 or 255. How can we do that? How can we make a route that matches a wildcard? The answer is by creating, is by adding a curly brace and then a name, close curling brace. Now this name inside here could be anything. This is not going to match slash API slash Starships slash star, but whatever you put here, you're now allowed to have an argument with the same name ID. Below, I'm going to dump this so we can make sure it's working. So I'll head over, go to slash API slash Starships slash two, and it works. And by the way, we don't always care, but in our app, this ID is going to be an integer. If you go back and try something that is not an integers like slash wharf, it still matches our route and calls our controller. And really that's almost always. Okay. In a real app, we would query the database where ID equals wharf, and that wouldn't be found and we could trigger a four or four page, but sometimes you do want to restrict these values. You want to say, I want to match anything here, but it must be an integer to do that inside the curly brace after the name, you can add a less than greater than, and inside that a little regular expression slash D plus. So this means match a digit of any length. So with this setup, if you refresh the wharf, we get a four Oh four. And what happened was our route simply wasn't matched. And so our controller was never called, which is exactly what we want. And if we go back to slash two, that still works.  And as an added benefit to this, now that we know that this is only going to match a digit, we can add an int type to our argument. And now when somebody passes us that too, it passes us an integer to, instead of a string to not that big of a deal. These are details that aren't really that important, really that important, but I want you to know how things are working. One thing that is common with APIs is to make routes only match a certain HTTP method like get or post in an API. When you want to fetch all the starships, this would be a get request. This should be a get request. And we want to fetch a certain, a singular one. This should also be a get request. Now we might not care quite yet, but if we decided to keep going with our API, we might eventually create a new route and controller to add a new starship. And the standard way to do that is to have the same URL slash API slash starships. Right now, this would not work. Every time we went to slash API stars, slash starships, it's going to match this first route, it'll never match the second route. So for that reason, it's common with an API to add a methods option up here set to an array, where you just say get or post. And then I'll do the same thing down here, methods, get. Now I can't easily test this in a browser, but if I made a post request to slash API slash starships, that's two, it would not match our route. And one way we can see this, if you head over to your terminal is run bin console debug router. Like we saw before, we can see all of our routes in here. And now you can see there are two API routes will only match if it is a get request that is being made to them. All right. One more routing trick. While we're on the topic, notice that every route in this controller is going to start with slash API slash starships. It's fine to have that URL inside of every route route, but if you want, you can add a prefix at a route above the class with slash API slash slash starships.  Now, unlike when we put this above our methods, this doesn't create a controller. It just says every single route in this class should be prefixed with this URL. So down here on our first route, we just remove it entirely. And on our second route, we're just going to leave the slash ID part and watch what happens when we run debug router. Again, watch these URLs here. They don't change the exact same process as before. Okay. Let's finish our end points. We need to find the one ship that matches this ID. Normally we'd query the database, select star from ship where ID equals this ID here. Our ships are hard coded right now, but we can still create a pattern. That's going to look pretty much exactly like what we're going to use. Once we get to a database later, specifically, we have a find in a real app. If we have a find all method on a repository, I would also create a find method. So public function find, and this would accept an int ID and it would return a nullable starship. So a starship object or no, if we can't find a starship inside right now, the easiest way to do this is just to loop over this arrow. Find all as starship. And then if starship arrow get ID equals the ID, then we found the starship. I'll change my OOF to if much better. And then if we didn't find anything by the whole loop at the bottom, we'll return null. Thanks to this, our controller is really simple. First, we need to get access to the starship repository service. We know how to do that. We're going to type in an argument with starship repository and I'll call it just repository. Then it's going to be starship equals repository arrow, find ID. Then finally, at the bottom to return this as Jason, we can use the same thing we did before. Return this arrow, Jason can pass it starship. All right, let's check this out. When we refresh, got it. It's perfect. Though, if we try an ID that's not there, like slash 200, that's not exactly what we want. Just no printing to the screen. In this case, it should be 404 response. Okay. To trigger that, we're going to do follow a really common pattern.  And that is we query for something like from the database or somewhere else. And then we check and say, Hey, if we didn't find that, here's where I want to trigger a 404. The way you do that in symphony is by saying, throw this arrow, create not found exception. And I'll pass starship not found. So as you can see with the throw keyword, this actually creates an exception object, which is nice because it means as soon as it hits this line of code, nothing after it is going to be executed, but it's a special type of exception that as you'll see corresponds to a 404 response. And this message here, starship not found that's only going to be shown to you. The developer is by default. It's not going to be public. All right. Next let's build the HTML version of this page, a page that just shows all the information about a single starship. And then we'll learn how to link between pages with the route name.
+The answer is by adding `{`, a name, the `}`.
+
+The name inside this could be anything. No matter what, this route will now match
+`/api/startships/*`. But whatever you name this, you're now *allowed* to have an
+argument with a matching *name*: `$id`.
+
+Below, dump this so we can make sure it's working.
+
+## Restricting the Wildcard to be a Number
+
+Ok! Head over to `/api/starships/2` and... it works! And by the way, we don't always
+care, but in our app, the ID will be an integer. If try something that is *not* an
+integers - like `/wharf` - the route still matches and calls our controller. And,
+that's almost always okay. In a real app, if we queried the database
+`WHERE ID = 'wharf'`, it wouldn't cause an error: we just wouldn't find any matching
+ships! And then we could trigger a 404 page, which I'll show you how to do soon.
+
+But sometimes, we *do* want to restrict these values: we want to say:
+
+> Only match this route if the wildcard is an *integer*.
+
+To do that, inside the curly brace, after the name, add a `<`, `>` and inside,
+a regular expression `\d+`.
+
+This means: match a digit of any length. With this setup, if we refresh the `wharf`
+URL, we we get a 404 error. Our route simply wasn't matched - *no* route matched -
+so our controller was never called. But if we go back to `/2`, that still works.
+
+And as an added benefit, now that we know this will only match digits, we can add
+an `int` type to the argument. Thanks to this, instead of the string `2`, we get
+the `integer` 2. These are details that aren't super important, but I want you to
+know how things are working and what options you have.
+
+## Restricting the Route HTTP Method
+
+One thing that *is* common with APIs is to make routes only match a certain HTTP
+*method*, like `GET` or `POST` in an API. For example, if you want to *fetch* all the
+starships, you should use a `GET` request... same if you want to fetch a single
+ship. Imagine if we kept building our API and created an endpoint that can be used
+to create a *new* `Starship`. The standard way to do that is to have use the same
+URL: `/api/starships` but with a `POST` request.
+
+Right now, this wouldn't work. *Every* time the user requested `/api/starships` - no
+matter if they use a `GET` or `POST` request, it will match this *first* route.
+
+For that reason, it's common with an API to add a `methods` option  to an array,
+where with `GET` or `POST`. I'll do the same thing down here: `methods: ['GET']`.
+
+I can't easily test this in a browser, but if we made a POST request to
+`/api/starships/2`, it would *not* match our route.
+
+But we *can* see the change in our terminal. Run:
+
+```terminal
+php bin/console debug:router
+```
+
+Perfect! Most routes match *any* method... but our two API routes will only match
+if a `GET` request is made to that URL.
+
+## Prefixing all of the Route URLs
+
+Ok, I have *one* more routing trick to show you... and this is a fun one. Notice
+that every route in this controller starts with the same URL: `/api/starships`. It's
+fine to have the full URL inside every route. But if you want, we can add a prefix
+to every route. Above the class, add `#[Route]` attribute with `/api/starships`.
+
+Now, unlike when we put this above a *method*, this does *not* create a route.
+It just says: every single route in this class should be prefixed with this URL.
+So for the first route, remove the path entirely. And for the second, we only
+need the wildcard part.
+
+Try `debug:router` again - watch these URLs:
+
+```terminal-silent
+php bin/console debug:router
+```
+
+
+They don't change!
+
+## Finishing the new API Endpoint
+
+Okay. Let's finish our end point. We need to find the one ship that matches this
+ID. Normally we'd query the database: `select ** from ship where id =` this ID.
+Our ships are hardcoded right now, but we can still do something that's going to
+look pretty much exactly like what it will once we *do* have a database.
+
+We already have a service - `StarshipRepository` - whose whole job is to fetch
+starship data. Let's give it a new superpower: the ability to fetch the *single*
+`Starship` for an id. Add `public function find()` with an `int $id` argument that
+will return a nullable `Starship`: so a `Starship` if we find one for this id, else
+`null`.
+
+Right now, the easiest way write this logic is to loop over `$this->findAll()`
+as `$starship`... then if `$starship->getId() = $id`, return `$starship`. I'll
+change my `uf` to `if`. Much better.
+
+And if we didn't find anything, at the bottom, `return null`.
+
+Thanks to this, our controller is *so* simple. First, autowire the repository
+by adding an argument: `StarshipRepository` and just call it `$repository`. The
+order of arguments in a controller doesn't matter.
+
+Then `$starship = $repository->find($id)`. Finish at the bottom with
+`return $this->json($starship)`.
+
+I think we're ready! Refresh. It's perfect!
+
+## Triggering a 404 Page
+
+Though... if we try an id that does not exist in our fake database - like `/200` -
+the word `null` isn't what we want. In this situation, we should return a 404
+response.
+
+To trigger that, we're going to follow a really common pattern: query for an object,
+then check if that returned anything. If it did *not* trigger a 404. Do that in
+Symfony by saying: throw `$this->createNotFoundException()`. I'll pass this a message.
+
+Notice the `throw` keyword: we're throwing a special exception object that triggers
+a 404. That's nice because it means that, as soon as it hits this line, nothing
+*after* will be executed.
+
+Try it out! Yes! A 404 response - and the message - "Starship not found" - is only
+shown to developers in dev mode. In production, a totally different page - or JSON -
+will be returned. You can check the docs for details on production error pages.
+
+Next: let's build the HTML version of this page, a page that shows details about
+a *single* starship. Then we'll learn how to link between pages via the route name.
