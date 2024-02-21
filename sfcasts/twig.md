@@ -1,5 +1,169 @@
 # Twig & Templates
 
-Coming Soon...
+I want to return HTML for this page. We *could* put that HTML right inside the
+controller... but that's going to get ugly fast. Fortunately, there's a better
+way: by using a templating library called Twig.
 
-I want to return HTML for our page. Now, of course, we can return HTML right from inside of our PHP code, but that is going to get ugly fast. So instead, we'll use a PHP library called twig. At your terminal, make sure that you've committed your changes, just so we can better see what this package's recipe does to our project. I've already committed everything. Then install it with composer require twig. You probably recognize this is a twig alias, and this time it's a twig alias to symphony slash twig pack. This word pack here is important in symphony. Packs are kind of fake packages that help you install multiple packages. So even though, so what's the result here? Open up composer.json. Instead of there being one new one new library in here called symphony slash twig pack, symphony slash twig pack isn't even in here. Instead, we have three new packages for twig. The three packages that we need for a really robust twig setup. So when you see pack, it's not a big deal. This is just a shortcut to install multiple package is into our code at once. All right, let's check out the recipe by running git status. So we see the usual composer.json, composer.lock and symphony.lock. But for the first time we see a config bundles.php. A bundle is a PHP package that adds something to symphony. It's basically a symphony plugin. And whenever you install a bundle, you need to configure it in this bundles.php file. But honestly, but the recipe system is always going to do it for us. So this is a good thing to notice, but you're never going to need to think about or modify this file ever. The second thing the recipe did was create a config packages twig.yaml file. It turns out everything in config packages is configuration to configure the bundles in our system. So for example, twig.yaml is configuration for the twig bundle, it controls the behavior of twig bundle. This case, we have some configuration that tells twig, hey, all my templates are going to end in dot twig. And there's a whole bunch of other things that we can configure in here. And we're going to talk more about these configuration files in the next tutorial.  The final thing the package did was add a templates directory, which you guessed it is where our templates are going to live. It started us with a base dot html twig template, which we'll talk about in a few minutes. So let's render our first template. To do that, make your controller extend a base class called abstract controller, be sure to hit tab so that it adds the US statement on top. Extending this base class is optional, but it gives us a bunch of shortcut methods, which are going to be super handy. For example, to render, copy the string we have inside of here. And then to render a template type return this arrow render, and then pass your a file name for your template. main slash homepage dot html dot twig, you can call your twig template whatever you want. But the standard is to have a directory that matches your controller name, and a file name that matches your method name. All right, let's go create that. And templates create a new directory called main. And inside of that, a new file called homepage dot html dot twig. And paste. And let's change this to an h1. And we'll put it around everything. All right, check it out, refresh. It works. And by the way, I just want to point out, our controller is still returning a response object. I know this because I have a response return type, and it's not my code isn't exploding. The render method is just a shortcut to render this template, get the string and put the string into a response object for us. So even though rendering a template, it's still always go back goes back to the idea of our controller returns a response. Okay, what about passing data to the template? Maybe we query the database and pass in the number of starships that we have info about. We don't have a database in our application yet. So let's fake this by saying starship count equals I don't know 457. That seems like a believable fake number. To pass in a variable to pass in variables, add a second argument to render an array. Now pass number of starships set to starship count. So the key here is going to become the name of the variable inside the twig template.  To print this, I'll add a div. And then we'll say browse through and print that number, right curly curly, and then the variable name. All right, when we move over and try it, it works. So we just saw our first twig code. And twig only has three different types of syntaxes. The first is curly curly. And I call this the say something syntax. If you're printing something into intuit, you are going to use curly curly. What goes inside of here is twig language, which is almost identical to JavaScript. So for example, you could print the string number of starships. Or you could print the variable number of starships or even the or even number of starships times 10. The second syntax and twig starts with curly brace percent and I call this the do something syntax. It doesn't print anything it's when you're doing things like an if statement or a for loop or setting a variable. To do an if statement say if number of starships is greater than 400. And then close this with curly brace percent and if inside, I'll put a little comment. And when we try it, that works to documentation for documentation for twig lives at twig dot symphony.com. And one of the most important things to notice here are these tags. It turns out that there are a finite number of things you can use in a do something tag. Like you can't just say curly brace percent applesauce, that's going to be an error. The only things you can use with a do something tag are the tags you see in this list. So there's really not that many of them that you're going to need to learn. I probably use about five of these on a regular basis. The third and final syntax and twig is not even a syntax at all. It's the comment syntax. Curly brace percent to write a comment. That's it. In addition to handling simple numbers, twig can handle whatever complex data you throw at it. For example, in our controller, I'm going to create a new my ship variable, which is an associative array, and then pass that in as a new variable called my ship. Inside the template, I'll add another div. Let's say my ship and then a table to print that data.  Inside the TD, we can't just print my ship because that's printing an associative array, which doesn't make sense in PHP and doesn't make sense in twig. You get the error warning array to string conversion. We want to print the name key on that associative array. And the way we do that looks exactly like JavaScript, my ship dot name. That's it. It works. I'll paste in the rest of our template, which just prints the other keys on our ship. Looking good. So we does have a few other tricks up its sleeve, but it's nothing too complex. It has some functions built into it, which work like functions in any other languages. It also has something called tests, which are a little bit unique in Symfony in twig, but they're also simple enough to understand. Probably my favorite thing inside of twig are these filters. filters are basically a function with a cooler, more hipster syntax. For example, there's a filter called upper to send a string to uppercase. The way you use a filter is you find the string that you want to turn into uppercase, and you say pipe upper. So the value on the left gets passed through the filter. Just like you would do with a, a, a command line pipe in Linux. We tried this time, we have uppercase john Luke pickles. And you can go crazy with the stuff you can pipe to upper than pipe to lower just to confuse your teammates, and then pipe to title case. And everything works just fine. Okay, we've already Okay, we've already learned pretty much all of twig, except for one thing inheritance. Next, let's learn how to use a base layout template.
+## Installing Twig
+
+At your terminal, make sure you've committed your changes, because I want to see what
+this new package's recipe adds to our project. I've already done that. Install it
+with:
+
+```terminal
+composer require twig
+```
+
+## Composer "Packs"
+
+You probably recognize that `twig` is an alias... this time to a package called
+`symfony/twig-pack`. And the word "pack" is important in Symfony. A pack is...
+kind of a fake package that helps install *multiple* packages at once.
+
+Watch: open up `composer.json`. Instead of *one* new package in here called
+`symfony/twig-pack`, we have *three* new packages... and `twig-pack` isn't even
+one of them! The three packages give us everything we need for a full, robust
+Twig setup. So when you see the word "pack", it's not a huge deal: just a shortcut
+to install multiple packages at once.
+
+## Symfony Bundles
+
+Ok, let's see what the recipe did! Run:
+
+```terminal
+git status
+```
+
+We see the usual `composer.json`, `composer.lock` and `symfony.lock`. But for the
+first time, we also see a modification to `config/bundles.php`. A bundle is a PHP
+package that integrates with Symfony... it's basically a Symfony plugin. Whenever
+you install a bundle, you need to activate it in this `bundles.php` file. But
+honestly, the recipe system will always do that *for* us... so it's a good thing
+to notice, but we'll never edit this file by hand.
+
+## The Twig Recipe
+
+The second thing the recipe did was create a `config/packages/twig.yaml` file. The
+purpose of each file in `config/packages/` is to configure a *bundle*.
+For example, `twig.yaml` controls the behavior of TwigBundle. This line here
+tells Twig:
+
+> Hey! All my template files will end in `.twig`.
+
+There's a lot more that we *could* configure, but we don't need to. And we'll
+dive deeper into these config files in the next tutorial.
+
+The final thing the recipe did was add a `templates/` directory, which.... you guessed
+it! Is where our template files will live! It even started us with a `base.html.twig`
+file that we'll talk about in a few minutes.
+
+## Rendering a Template
+
+So let's render our first template! To do that, make your controller extend a base
+class called `AbstractController`. Be sure to hit tab so that it adds the `use`
+statement on top. Extending this base class is optional, but it gives us a bunch
+of shortcut methods.
+
+For example, copy the string and then, to render a template type
+`return $this->render()` and pass a filename to a template. Use:
+`main/homepage.html.twig`.
+
+Your template filename can be whatever you want, but the standard is to have a
+directory that matches your controller name and a filename that matches your method
+name.
+
+Let's go create that! In `templates/`, add a new directory called `main`. And inside
+that, a file called `homepage.html.twig`. I'll paste... then add an `h1` and
+put it around everything.
+
+Let's do this! Refresh. Got it!
+
+And by the way, what is our controller returning? It's *still* a `Response` object!
+I *know* because we have a `Response` return type... and our code isn't exploding.
+`render()` is just a shortcut to render this template, grab that string of HTML
+and put it into a `Response` object. So even though we're rendering a template,
+it still goes back to the idea that a controller returns a response.
+
+## Passing Data to a Template
+
+What about passing data to the template? Maybe we query the database and pass in
+the total number of starships. We don't have a database in our
+app yet, so let's fake it by saying `$starshipCount` equals... I don't know... 457.
+That seems like a believable fake number.
+
+To pass variables to the template, add a second argument to `render()`: an array.
+Pass `numberOfStarships` set to `$starshipCount`. The *key* will become the name of
+the variable inside the Twig template. 
+
+## Rendering Variables
+
+In the template, I'll add a div, and some text. To print the number, write `{{`,
+the variable name, close `}}`.
+
+Ok! Move over and try it. Got it! And we just saw our first Twig code!
+
+Twig is its own language, but it's super friendly. It has just three different
+syntaxes. The first is `{{` and I call this the "say something" syntax. If you're
+printing something, you'll use `{{`. Inside the curlies, we're writing Twig, which
+is *very* similar to JavaScript.
+
+## Twig Tags & the "do something" Syntax
+
+For example, we could print the string `'numberOfStarships'`... or the
+variable `numberOfStarships`... or even `numberOfStarships` times 10.
+
+The second syntax of the three starts with `{%`. I call this the "do something"
+syntax. This doesn't print anything. Instead, it's used for language constructs
+like `if` statements, for loops or setting a variable.
+
+To do an if statement say `if numberOfStarships > 400`, then close this with
+`{% endif %}`. Inside, I'll add a comment.
+
+Try it out! That works too!
+
+Twig is its own library, but it's maintained by Symfony... so its docs live at
+https://twig.symfony.com. Click the "Docs" link then scroll down. See the "tags"?
+It turns out that there are a *finite* number of things you can use with the
+*do* something syntax: it's these tags. Like, you can't say `{% applesauce`...
+it just won't work. You can only use `{%` then one of these tags. The list is
+pretty short... and I probably only use 5 of these on a daily basis.
+
+The third and final syntax of Twig isn't even a syntax at all: it's for comments.
+`{#` to write a comment.
+
+## Rendering an Associative Array
+
+So we're passing a simple number to Twig and printing it. But Twig can handle
+whatever complex data you throw at it. For example, in the controller, create a
+new `$myShip` variable, set to an associative array. Then pass that into the template
+as a new variable: `myShip`.
+
+In the template, add another `div`... some text and a table to print the data.
+In the `<td>`, we can't just print `myShip`... because printing an associative array
+doesn't make sense in PHP... and so it doesn't make sense in Twig. You get the famous
+error about array to string conversion.
+
+What we want is to print the `name` key on that array. The way we do that looks
+exactly like JavaScript: `myShip.name`.
+
+That's it! And... it works. I'll paste in the rest of our template, which prints
+the other keys from the array. Looking good.
+
+## Twig Functions & Filters
+
+Twig does have a few other tricks up its sleeve, but nothing complex. It has
+functions... which work like functions in any language. It also has something
+called tests, which *are* a bit unique to Twig, but simple enough to understand.
+My favorite concept is probably filters, which are basically functions
+with a cooler, more hipster syntax.
+
+For example, there's a filter called `upper` to send a string to uppercase. To
+use a filter, find the string that you want to turn into uppercase then add a
+`|` and `upper`.
+
+The value on the left gets passed through the filter, a lot like using a pipe
+at the command line. It works beautifully.... and you can go crazy with filters:
+piping to `upper`, then `lower` then to `title` case *just* to confuse your teammates.
+
+Okay, we pretty much just learned all of Twig in one session except for one thing:
+template inheritance. That's next.

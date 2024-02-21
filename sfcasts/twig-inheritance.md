@@ -1,5 +1,72 @@
-# Template Inheritance
+# Twig Template Inheritance
 
-Coming Soon...
+What about adding a layout to our page - like a header and a footer? Take a peek
+at the HTML for the page: it's *just* the HTML from the template. There's nothing
+special in Twig where a base layout with a header and a footer is automatically
+wrapped around our content. Whatever you have in your template is what you get on
+the page.
 
-What about a base layout, like a header and a footer? If you view the HTML on our page right now, it's just the HTML from our template. So there's nothing special in Twig where a base layout is automatically rendered for us. Whatever you have in your template is what you get on the page. However, the Twig recipe did start us with a base layout called base.html.twig. Now, it's simple now, but this is the layout that we want to use. So how can we? In Twig, we use something called template inheritance. In homepage.html.twig, at the top, type curly brace percent extends, and then the name of the template, base.html.twig. And notice, this is the do something tag. We're not printing this template. We're just telling Twig that we want to extend it. And we're going to see what that does right now. If we stopped, if we did nothing else and refreshed, we get an error. A template that extends another one cannot include content outside Twig blocks. Hmm. When you extend another template, it tells Twig that you want to render your template inside this base template. But Twig has no idea where our template content should go. Should it take our homepage template and put it down here or up here or right there? It doesn't know. So it throws that error. The way we tell it is via these blocks. Blocks are holes into which a child template can put content. And if you look at this block called body, this is exactly where we want our content to go. To put it there, surround all of our content with a block body, and then at the bottom, end block. And now it works. And even though it doesn't look much different, we are inside of a base layout. This is called template inheritance because it works exactly like PHP class inheritance. Imagine you have a homepage class that extends a base class. That base class has a body method, and we override that body method in our homepage class. Now, these block names like JavaScript style sheets and body, they aren't special names, and they're not registered anywhere. You're free to create new blocks however and whenever you want.  For example, suppose we want to change the title control, change the title of our page from our child template. In that case, the recipe actually already gave us a block called a title to do that. And notice that this block has default content, which is why we already see welcome on the screen right now. Let's override this in our child template. So anywhere outside of our block body, say block title, I'll add a title and then end block. And now, got it, new title. And notice that when we override the block, we override it completely. We don't see the word welcome there anymore. If you did, if you did override the block, you would see that the title is now a new title. So if you did override the block, you would see that the title is now a new title. If you did, if you instead wanted to append to the, to the default content, you could do that by saying curly curly parent. And this is really neat. The parent function is just going to grab the content from the title block of the parent template. And then we're using curly curly to print it. This time we can see welcome and then our title. Since we don't actually want that, I'll remove it. So cool. We're returning HTML. We have a base layout. And yeah, our site is still ugly, but we're going to fix that soon. Next up, let's run one command and instantly gain access to some of the coolest debugging tools on the web.
+However, the Twig recipe *did* add a base layout file called `base.html.twig`. It's
+really simple now, but *this* is where we'll add our top nav, footer and any other
+things that should live on every page. The question is: how can we make *our*
+template use this?
+
+## Extending the Base Layout
+
+With a *cool* feature called template inheritance. In `homepage.html.twig`, at the
+top, type `{% extends` then the name of the base template: `base.html.twig`. And
+notice: this is the *do* something tag. We're not *printing* this template, we're
+telling Twig that we want to *extend* it.
+
+If we do nothing else and refresh, we get an error:
+
+> a template that extends another one cannot include content outside Twig blocks.
+
+Hmm. When you extend a template, it tells Twig that you want to render your
+template *inside* that base layout. But... Twig has no idea *where* our content
+should go. Should it take our homepage HTML and put it down here? Or up here? Or
+right there? It doesn't know! So it throws that error.
+
+The way we tell it is via these *blocks*. Blocks are holes into which a child template
+can put content. And you may have noticed one block called `body`... which is
+*exactly* where we want our content to go. To put it there, surround all the content
+with a `{% block body %}`... and at the bottom, `{% endblock %}`.
+
+And now... it's alive! It doesn't look much different, but we *are* inside the base
+layout.
+
+This is called template inheritance because it works exactly like PHP class
+inheritance. Imagine you have a `Homepage` class that extends a `Base` class. That
+`Base` class has a `body()` method, and we override that `body()` method in the
+`Homepage` class. It's the same concept in Twig.
+
+## Overriding the Page Title
+
+And these block names - like `javascripts`, `stylesheets` and `body` - aren't special
+names... and they're not registered anywhere. Feel free to create new blocks however
+and whenever you want. For example, suppose we want to change the `title` of the
+page from a child template. In this case, the recipe already gave us a block called
+`title` to do that. And *this* block has default content... which is why we already
+see `Welcome` on the browser tab. Let's override this in *our* template.
+
+Anywhere outside the `body` block, say `{% block title %}`, type something, then
+`{% endblock %}`.
+
+## Replacing vs Appending the Parent Block
+
+And now, got it! New title! And notice that when we override a block, we override
+it *completely*. We don't see the word `Welcome` anymore. Occasionally, you *may*
+want to *add* to the parent block instead of replacing it. You can do that by saying
+`{{ parent() }}`.
+
+This is really neat! The `parent()` function grabs the content from the `title` block
+of the parent template. Then we use `{{` to print it. This time we see welcome
+and *then* our title.
+
+But since we don't really want that, I'll remove it.
+
+Status check: we're returning HTML and we have a base layout. Yeah, our site is still
+horribly ugly, but we'll fix that in a bit.
+
+Next up, let's run one command and instantly gain access to some of the most powerful
+debugging tools on the web.
