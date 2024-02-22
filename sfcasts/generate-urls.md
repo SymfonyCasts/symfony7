@@ -1,5 +1,108 @@
-# Generate URLs
+# Generating URLs
 
-Coming Soon...
+Let's create a "show page" for ships: a page that displays the details for just *one*
+ship. The homepage lives in `MainController`. And so we *could* add another route
+and method here. But as my site grows, I'm probably going to have multiple pages
+related to starships: maybe to edit and delete them. So instead, in the `Controller/`
+directory, create a new class. Call it `StarshipController`, and, as usual, extend
+`AbstractController`.
 
-Head back to our homepage. Right now we're showing one ship status on our homepage. And what I want to do now is create a show page for a ship, a page we can go to that shows all the information about one specific ship. The homepage lives in main controller. And so we could create another route and another method inside of here. But as my site grows, I'm probably going to have multiple different pages related to starships, maybe editing starships or deleting starships. So instead in my controller directory, let's create a new starship controller class, and as usual, we'll extend abstract controller. All right. Inside of here, let's get to work public function. I'll call this show and we'll put the response return type, which again is optional and like with our, then add the route and like with our API endpoint, this is going to be slash starships slash, and then a wildcard ID. And again, it's optional, but I'm going to be fancy and do the slash D plus so that this wildcard only matches a number. And then because we have an ID wildcard here, we are allowed to have an ID argument down there. Cool. Let's DD ID to see how we are doing so far. So let's head to slash starships slash two and got it. We see too. Next we're going to do something very familiar. We have this ID, so we now need to query the database for it. Again, we don't have a database, but we have set up this starship repository class, which is going to look like a lot, a lot like the type of class you'll use when you are querying the database. The important thing is we've created a really nice find method that we can use. So the process is going to be just like with our API controller. We're going to type it a starship repository argument so we can fetch that service. I'll call it repository and then ship equals starship repository arrow, find ID. And then if not ship, we need to handle our four or four. So throw this arrow, create not found exception starship not found. Then at the bottom, instead of turning this in Jason, the big difference is we're going to render a template. So return this arrow render.  And again, you can call your templates, anything you want, but typically we follow the class name and the method name. So starship slash show.html.twig. And we're going to need access to this ship variable inside of our template. So I'll pass a ship variable set to ship. Cool. Next up is to create this template, which means that in the templates directory, we need to create a starship directory and then that new show.html twig inside. But I'm going to show you a shortcut because I have the symphony plugin installed, I can click here, go to alt enter and check this out on top. It says twig create template. It confirms the path and boom, we've got our new templates and it's kind of hiding over here. But if I reopen up templates, there it is. Starship show.html.twig. Now our templates are going to kind of all start the same way. So let's do this one by hand. So we can remember first, we need to extend base that HTML twigs. We get our base template and then we're going to override blocks.  And pretty often you're going to want to override the block called title to control the title on the page. This time let's use that ship variable and we can say ship.name. And you can even add the word details here if you want to. And then at the end, you'll run end block. And then for the main content of the page, that's a block called body. So we'll say block body and block. And here we'll do an H one. And again, we'll just use curly curly to print ship.name. Now for that, we'll just. I'm just going to paste in a table with a little bit more information. So nothing special here, just a table Prince, the class and the captain from our ship. And back over here, we got it. We have our show page. So now the question is, how can I link from the homepage to that page? Maybe when I click the name of the ship here, it takes us there. So one option is we can hard code URLs like slash starships slash, and then the ID, but there's a better way.  Instead, what we're going to do is tell symphony, Hey, I want to generate a URL to this route. The advantage of doing this is that if we decide later to change the URL of this, our links are going to update automatically because we've kind of told it to generate a URL to this route without specifying the URL. If you're confused, let me show you. If you run back over, go back to your console and run debug router. One thing I haven't mentioned is that every route has a name and right now they're just being auto-generated by symphony, which is fine, but as soon as you want to generate a URL to a specific route, I want you to take control of that name just to make sure it never changes. So I actually like this name, but over here, I'm gonna make sure it doesn't change by adding a name key. And then I'm gonna say app underscore starship underscore show. Now this name could be anything, but this is the convention I follow app underscore because it's a route that I'm making in my app and then following the controller name and then the method name. Now giving this route a name doesn't change how anything works.  What it does do is it makes it easier for us to link to this. So open up templates, main homepage dot HTML twig. And down here, let's make the ship name into a link. So I'll put this on a multiple lines and we'll do an a tag here with H ref. And then to generate the URL, Okay. Say curly, curly path, and then use a special twig function called path. This takes the first argument of this is going to be the name of our route. And then I'll put the a tag on the other side of that. If we stop now, this isn't going to quite work. However, I go back to the homepage and refresh. We get an error. Some mandatory parameters are missing ID to generate a URL for route app starship show. And that makes sense. We're telling symphony, Hey, I want to generate a URL to this route. And symphony is going cool, but this route has a wild card in it. So what do you want me to put in the URL for the ID wild card?  So when there is a wild card in the URL, we need to add a second argument here with curly, curly. This is twigs associative race index. So it's exactly like JavaScript. It's a key value pair. And here we'll pass ID set to my ship dot ID. And now when we try it, it works. And look at that URL slash starship slash three dynamically updates. All right, next our site is ugly. It's time to fix that by bringing in tailwind CSS and learning about asset mapper.
+## Creating the Show Page
+
+Inside, let's get to work! Add a `public function` called `show()`, I'll add
+the `Response` return type, then the route, with `/starships/` and a wildcard
+called `{id}`. And again, it's optional, but I'll be fancy and add the `\d+` so
+the wildcard only matches a number.
+
+Now, *because* we have an `{id}` wildcard, we are *allowed* to have an `$id` argument
+down there. `dd($id)` to see how we're doing so far.
+
+Let's try it Head to `/starships/2`. Lovely!
+
+Next, we're going to do something familiar: take this `$id` and query our imaginary
+database for that matching `Starship`. The key to doing this is our `StarshipRepository`
+service and its helpful `find()` method.
+
+In the controller, add a `StarshipRepository $repository` argument... then say
+`$ship` equals `$starshipRepository->findId()`. And if *not* `$ship`, trigger a
+404 page with throw `$this->createNotFoundException()` with `starship not found`.
+
+Cool! At the bottom, instead of returning JSON, render a template: return
+`$this->render()` and follow the standard naming convention for the template:
+`starship/show.html.twig`. Pass this one variable: `$ship`.
+
+## Creating the Template
+
+Controller, check! Next, in the `templates/` directory, we *could* create a
+`starship/` directory and the `show.html.twig` inside. But want to show you a
+shortcut from the Symfony PhpStorm plugin. Click on the template name, press
+Alt+Enter and... check it out! On top it says "Twig: Create Template". Confirm the
+path and boom! We've got our new template! It's... hiding over here. There it is:
+`starship/show.html.twig`.
+
+Pretty much every template starts the same: `{% extend 'base.html.twig' %}`...
+then override some blocks! Override the `title`... and this time, let's use that
+`ship` variable: `ship.name`. Finis that with `endblock`.
+
+And for the main content, add the block `body`... `endblock` and put an `h1`
+inside. Print `ship.name` again and... I'll paste in a table with some info.
+
+Nothing special here: we're just printing the basic ship data.
+
+When we try it... it's alive!
+
+## Linking Between Pages
+
+Next question: from the homepage, how could we add a link to the ship show page?
+The most obvious option is to hardcode the URL, like `/starships/` then the id.
+But there's a *better* way. Instead, we're going to tell Symfony:
+
+> Hey, I want to generate a URL to this *route*.
+
+The advantage is that if we decide later to change the URL of this route, every
+link to this page will update automatically.
+
+Let me show you. Find your terminal and run:
+
+```terminal
+php bin/console debug:router
+```
+
+I haven't mentioned it yet, but every route has an internal name. Right now, they're
+being auto-generated by Symfony, which is fine. But as soon as you want to generate
+a URL to a route, I want you to take *control* of that name to make sure it never
+changes.
+
+Find the show page route and add a `name` key. I'll use `app_starship_show`.
+
+The name could be anything, but this is the convention I follow: `app` because it's
+a route that I'm making in my app, then the controller class name and method name.
+
+Naming a route doesn't change how it works. But it *does* let us generate a URL
+to it. Open up `templates/main/homepage.html.twig`. Down here, let's turn the ship
+name into a link. I'll put this onto multiple lines and add an `a` tag with
+`href=""`. To generate the URL, say `{{ path() }}` and pass it the *name* of the
+route. I'll put the closing tag on the other side.
+
+If we stopped now, this won't *quite* work. On the homepage:
+
+> Some mandatory parameters are missing - `id` - to generate a URL for route
+> `app_starship_show`.
+
+That makes sense! We're telling Symfony:
+
+> Howdy! I want to generate a URL to this route.
+
+Symfony then responds:
+
+> Cool... except that this route has a wildcard in it. So what do you want me to
+> put in the URL for the `id` part? 
+
+When there's a wildcard in the route, we need to add a second argument to `path()`
+with `{}`. This is Twig's associative array syntax. So it's exactly like JavaScript:
+it's a key-value pair list. Pass `id` set to `myShip.id`.
+
+And when we try it, it works! Look at that URL: `/starships/3`.
+
+Alrighty, our site is still *ugly*. It's time to start fixing that by bringing in
+Tailwind CSS and learning about Symfony's AssetMapper component.
