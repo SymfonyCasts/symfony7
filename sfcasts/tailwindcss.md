@@ -1,5 +1,137 @@
 # Tailwind CSS
 
-Coming Soon...
+What about CSS? You're free to add whatever CSS you want to `app/styles/app.css`.
+That file is already loaded on the page.
 
-What about CSS? You're free to add whatever CSS you want to app-styles-app.css, which is already being included on the page. If you want to use Bootstrap CSS, you can check the asset-mapper docs on how to do that. Or if you want to use Sass, there's a SymfonyCast Sass bundle to make using Sass really easy. Though I would recommend not jumping into Sass too quickly, as a lot of the features that Sass is famous for can now just be done in native CSS, like CSS variables and even CSS nesting. For me personally, I absolutely love Tailwind, and part of the reason is that Tailwind is really popular, so if you're looking for some resources or some pre-built components, you're going to have a lot of luck if you use Tailwind. Now Tailwind is a bit odd, because it's not just a big CSS file that you plop onto your site. Instead, it has a build process that scans your code and looks for the Tailwind classes. It then dumps only the CSS you need into your final CSS file, which keeps it lean and mean. In the Symfony world, if you want to use Tailwind, there's a bundle that makes it really easy. So spin over your terminal and install a new package, composer require symfonycasts, I know them, slash Tailwind bundle. In this case, the recipe didn't really didn't do anything fancy other than enable a new bundle. To get Tailwind going, the first time we need to run bin console Tailwind init. That's going to do three things. First, it's going to download a Tailwind binary in the background, which you'll never really need to think about. Second, it creates a Tailwind dot config dot j s file at the root of our project, which tells it where to look in our project for those Tailwind CSS file CSS classes. And finally, it updated our app to CSS to add these three lines right here. These lines are going to be replaced by the dynamic Tailwind code. Now finally, we do need to run Tailwind. So do that by running it bin console Tailwind build colon w. So that's going to scan our templates, output the final CSS file, and the dash w puts it in watch mode. So now it's now watching our templates for changes.  And whenever we update our templates, it's going to automatically dump the fresh CSS that we need. And we are going to see that in a moment. But already, if we try this out, check it. Let's actually go to the homepage. And it works. Look, things look different. Our h1 is now small. So let's try this out for real. Open templates main homepage dot html twig. And up on the h1, let's make this a little bit bigger by adding a tailwind class. Class equals text dash two xl. As soon as I save that you can see over here tailwind saw that and it rebuilt. And when I refresh over here, it gets bigger. Now the way this is working is even though our app dot CSS looks really simple right now, in the background, if I view the page source, the final app dot CSS that is actually being served to our users is the one being built by tailwind. So it's got all the tailwind classes inside of it, including the text to Excel that we just used. So that's really it. No, there is a simpler way to run tailwind. Instead, instead of running it manually, so hit Ctrl C on this process, and then go into your project. And at the root of your directory, create a new file called dot symphony dot local dot yaml. This is a configuration file for the symphony binary web server that we've been running through this tutorial. Inside of here at workers, then tailwind, then CMD. And this is on a little array syntax, we're going to say symphony, console, tailwind build, and then dash dash watch, or you could use dash w there, we're doing here is building. Okay, a few things here. First, we're building a command symphony console tailwind build dash dash watch, I haven't talked about it yet. But instead of running bin console, we're actually free to run, we can also run symphony console, and then any of the commands get to get the exact same result. So that's what this is doing here symphony console tailwind build dash dash watch. Second, by putting this under the workers config, it means that instead of us needing to run this command manually, when we start the symphony web server, it's going to handle making sure this is always running in the background.  So check this out. In your first tab, hit Ctrl C to stop the built in web server, and then hit and then I'll rerun symphony surf. So this will see that configuration, it'll start a web server and watch it here. There it is, you can see it's running the tailwind worker in the background. And we can take advantage of this immediately. In homepage that HTML twig, let's change this to four XL, spin over and it works. So now I've got tailwind running and we don't even really need to think about that tailwind binary at all. And since we have tailwind, let's go and remove our manual blue background. Alright, this tutorial is not about tailwind. And it's not about how to design a website. Unfortunately, I am terrible at that. But I do want to give us the real experience. But I do want to have a nice site. And I want to give us a go through a real experience of of building a site. So let's pretend that someone else has designed the site. Someone else has created a design for our site. And they've even given us some HTML with tailwind classes for that design. And these files live if you download the course code in a tutorial templates directory. So we have our three templates right here. And what I'm gonna do is copy these and one by one, paste them over my original ones. And we'll look at what's happening in each of these files. There's homepage.html twig. And finally showed at HTML twig over showed at HTML twig. And I'm gonna I'm going to delete my tutorial directory entirely. So I don't get confused and edit the wrong templates. Now we spin over and try it. It looks beautiful immediately. Ah, I love this. But you can see some things are broken. In homepage.html twig. Here's our ship repair queue, see ship repair queue. And down here, here's our ship. And as you can see, there's no twig code here. Things are just hard coded. There's a in progress status here on the site. And that's just hard coded in there. The name of the ship is all hard coded. And there's no loop. It's just one ship put right here. So next, let's take our new design and make it dynamic.  Better organize things with a template partial and also introduce a PHP enum.
+Want to use Bootstrap CSS? Check out the Asset Mapper docs on how to do
+that. Or, if you want to use Sass, there's a [symfonycasts/sass-bundle](https://github.com/symfonycasts/sass-bundle)
+to make that easy. Though, I recommend not jumping into Sass *too* quickly.
+A lot of the features that Sass is famous for can now be done in native CSS, like
+CSS variables and even CSS nesting.
+
+## Hello Tailwind
+
+What's my personal choice for a CSS framework? Tailwind. And part of the reason is
+that Tailwind is *insanely* popular. So if you're looking for resources or pre-built
+components, you're going to have a lot of luck if you use Tailwind.
+
+But Tailwind *is* a bit odd in one way: it's not simply a big CSS file that you plop
+onto your page. Instead, it has a *build* process that scans your code for
+all the Tailwind classes you're using. It then dumps a final CSS file that *only*
+contains the code you need.
+
+In the Symfony world, if you want to use Tailwind, there's a bundle that makes it
+really easy. Spin over your terminal and install a new package: `composer require`
+`symfonycasts` - hey I know them - `tailwind-bundle`:
+
+```terminal-silent
+composer require symfonycasts/tailwind-bundle
+```
+
+For this package, the recipe doesn't do anything other than enable the new bundle.
+To get Tailwind rocking, *one* time in your project, run:
+
+```terminal
+php bin/console tailwind:init
+```
+
+This does three things. First, it downloads a Tailwind binary in the background,
+which you'll never really need to think about. Second, it creates a `tailwind.config.js`
+file at the root of our project. This tells Tailwind *where* it needs to look in
+our project for Tailwind CSS classes. And third, it updated our `app.css` to add
+these three lines. These will be replaced by the *real* Tailwind code in the
+background by the binary.
+
+## Running Tailwind
+
+Finally, Tailwind needs to be *built*, so we need to run a command to do that:
+
+```terminal
+php bin/console tailwind:build -w
+```
+
+This scans our templates and output the final CSS file in the background.
+The `-w` puts it in "watch" mode: instead of building *once* and exiting, it
+watches our templates for changes. When it notices any updates, it will
+automatically rebuild the CSS file. We'll see that in minute.
+
+But we should already see a difference. Let's go to the homepage. Did you see that?
+The base Tailwind code did a reset. For example, our `h1` is now tiny!
+
+## Seeing Tailwind in Action
+
+Let's try this out for real. Open `templates/main/homepage.html.twig`. Up
+on the `h1`, make this bigger by adding a class: `text-2xl`.
+
+As soon as we save that, you can see that tailwind *noticed* our change and
+rebuilt the CSS. And when we refresh, it got bigger!
+
+Our source `app.css` file is *still* super simple - just those few lines
+we saw earlier. But view the page source and open the `app.css` that's being sent
+to our users. It's the built version from Tailwind! Behind the scenes, some magic
+exists that replaces those three Tailwind lines with the *real* Tailwind CSS code.
+
+## Automatically Running Tailwind with the symfony Binary
+
+And... that's kind of it! It just works. Though there *is* an easier and more
+automatic way to run Tailwind. Hit Ctrl+C on the Tailwind command to stop it.
+Then, at the root of our project, create a file called `.symfony.local.yaml`.
+This is a config file for the `symfony` binary web server that we're using.
+Inside, add `workers`, `tailwind`, then `cmd` set to an array with each part
+of a command: `symfony`, `console`, `tailwind`, `build`, `--watch`, or you
+could use `-w`: it's the same.
+
+I haven't talked about it yet, but instead of running `php bin/console`, we can
+also run `symfony console` followed by any command to get the same result. We'll
+talk about *why* you might want to do that in a future tutorial. But for now,
+consider `bin/console` and `symfony console` the same thing.
+
+Also, by adding this `workers` key, it means that instead of *us* needing
+to run the command manually, when we start the `symfony` web server, *it* will
+run it *for* us in the background.
+
+Watch. In your first tab, hit Ctrl+C to stop the web server... then re-run
+
+```terminal
+symfony serve
+```
+
+so it sees the new config file. Watch: there it is! It's running
+the tailwind command in the background!
+
+We can take advantage of this immediately. In `homepage.html.twig`, change this to
+`text-4xl`, spin over and... it works! We don't even need to *think* about the
+`tailwind:build` command anymore.
+
+And since we'll be styling with Tailwind, remove the blue background.
+
+## Copying in Styled Templates
+
+Ok, this tutorial is *not* about Tailwind or how to design a website. Trust me,
+you do *not* want Ryan leading the web design charge. But I *do* want to have a
+nice-looking site... and it's *also* important to go through the process of working
+with a designer.
+
+So let's pretend that someone else has created a design for our site. And they've
+even given us some HTML with Tailwind classes *for* that design. If you download
+the course code, in a `tutorial/templates/` directory, we have 3 templates.
+One-by-one, I'm going to copy each file and paste it over the original. Don't
+worry, we'll look at what's happening in each of these files. Do
+`homepage.html.twig`... and finally `show.html.twig`.
+
+***TIP
+If you copy the files (instead of the file contents), Symfony's cache system
+may not notice the change and you won't see the new design. If that happens,
+clear the cache by running `php bin/console cache:clear`.
+***
+
+I'm going to delete the `tutorial/` directory entirely so I don't get confused and
+edit the wrong templates.
+
+Ok, let's see what this did! Refresh. It looks beautiful! I *love* working inside
+a nice design. But... some parts are broken. In `homepage.html.twig`, this is our ship
+repair queue... which looks nice... but there's no Twig code! The
+status is hardcoded, name is hardcoded and there's no loop.
+
+Next: let's take our new design and make it *dynamic*. We'll also learn how to
+organize things into template partials *and* introduce a PHP enum, which are fun.

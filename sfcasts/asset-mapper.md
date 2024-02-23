@@ -1,5 +1,143 @@
 # CSS & JavaScript with Asset Mapper
 
-Coming Soon...
+What about images, CSS and JavaScript? How does that work in Symfony?
 
-What about images, CSS, JavaScript? How does that work in Symfony? Well, first thing to know is that the public directory is known as your document root. Anything inside your public directory is accessible to your end user. Anything not in the public directory is not accessible, which is great. It means all of our source files can't be downloaded by the end user. So if you want to have a CSS or an image file or anything else, the simplest thing to do is just to create an image in public and that's it. I can now go to slash foo.txt and we see the file. However, Symfony has a great component called asset mapper, which is going to help us effectively do that same thing, but with some extra wonderful features. Now we have two tutorials about asset. We've, we have multiple tutorials about, we have two tutorials that go deeper into this topic. One about asset mapper and another one about building things with asset mapper called last stack. If you want to go deeper into it, but let's get a quick preview. So commit everything I already have and then install asset mapper with composer required Symfony slash asset mapper. This recipe is going to make several changes, but we're actually going to walk through these little by little as they're important. The first thing to notice, if you go over and refresh is we suddenly have a blue background. And if you inspect element and go to the console, we have a console log. This log comes from asset slash app dot JS. Welcome to asset mapper. So the asset mapper has two big superpowers. The first one is that it helps us load CSS and JavaScript. One of the things that recipe gave us is a new assets directory with an app dot JS and an app dot CS and CSS inside of it. As you can see, the console log is coming from app dot JS. So this file is being loaded onto our site. It also imports app dot CSS, which is what's giving us that blue background.  So we're going to go into more detail later into how these files are So we're going to go into more detail later into how these files are being loaded and how that all works, but for right now, just know that these two files are being loaded onto our page. The second big superpower of asset mapper is actually a bit simpler. Another file, the recipe gave us was a config packages, asset mapper.yaml. There's not a lot in here, just paths. And then something called pointing to a directory called assets.  Because of this, any file that you put into the assets directory becomes magically available publicly. It's as if this assets directory lives inside of the public directory. So, as I mentioned, a pretty simple idea, however, we're going to get, however, it's going to give us one extra thing that putting files in the public directory can't give us, and that's asset versioning, which we'll see in a moment. Head of your terminal and run bin console. And we're going to use another debug command called debug asset. This is really cool. This is going to show us every asset that is exposed publicly through asset mapper. So right now it's just two app dot CSS and app dot JS.  Back over. If you download the course code, you'll find a tutorial, you'll have a tutorial directory with an images directory inside with some images we're going to use. I'm going to cut this and then paste this into my assets directory. So now I have an assets slash images directory with five images inside, and you can organize the assets directory however you want, but as soon as we add those five files, if you spin back over and run debug asset again, they're there. So this is telling us, Hey, we see these five image files and these five images are now available publicly. On the left here, you see something called the logical path. That's going to be the path that we use to reference that file. So let's put the logo on our site. So I'll copy this star shop logo dot PNG logical path. And then head over into templates and base dot HTML twig. And down here, right above the body, let's add an image tag for the source.  Instead of trying to hard code something right there, say curly, curly, and use a special tweak function called asset and pass that our logical name. That's it over here. I'll add, I'll be responsible and add a alt attribute. All right. Try that out, refresh and error. Did you forget to run composer requires symphony slash asset. So remember our application starts really small. And then as we need more features from symphony, we install more symphony components. Sometimes you'll actually use a feature from a component you don't have installed yet. In this case, that asset function comes from another component called symphony slash asset. The great thing is symphony tells us, it says, Hey, yo, just run this command and you'll be good to go. So I'll copy that composer require command, spin up on my terminal, run that. And now it works. There's our logo. And the most important thing, if you view the source is check out that URL slash assets, slash images, slash star shop logo dash, and then a big long version hash dot PNG, this version hash is created based on the content of the file. And what that means is if we decided later to change our logo, this hash would automatically update. That's important because browsers like to cache images, JavaScript, and CSS, which is great, but because the file name will change when we update the image. After we deploy everyone's browser will download the new file instead of trying to use the old cached one. So this is a small detail, but incredibly important on the web to give you a good experience. And you just don't even need to worry about it's just going to be a little bit experience and you just don't even need to worry about it's just going to work for you. All right. Next. What about CSS? Let's talk about that. And tailwind CSS.
+## Stuff in public is... Public
+
+First off, the `public/` directory is known as your document
+root. Anything inside `public/` is accessible to your end user. Anything
+*not* in `public/` is *not* accessible, which is great! None of our top secret source
+files can be downloaded by our users.
+
+So if you want to create a CSS file or an image file or anything else, life
+*can* be as simple as putting it in `public/`. I can now go to `/foo.txt`... and
+we see the file.
+
+## Hello Asset Mapper
+
+*However*, Symfony has a *great* component called Asset Mapper that lets us
+*effectively* do the same thing... but with some important, extra features. We
+have a few tutorials that go deeper into this topic: one about Asset Mapper
+specifically and another about building things *with* Asset Mapper called
+[LAST Stack](https://symfonycasts.com/screencast/last-stack). Check those out to go deeper.
+
+But let's dive into the friendly waters of Asset Mapper! Commit all your changes -
+I already have - then install it with:
+
+```terminal
+composer require symfony/asset-mapper
+```
+
+This recipe makes several changes... and we'll walk through each little-by-little as
+they're important.
+
+But already, if we move over and refresh, our background is blue! Inspect Element
+in your browser and go to the console. We also have a console log!
+
+> This log comes from `assets/app.js`. Welcome to asset mapper.
+
+Why thank you!
+
+## Asset Mapper's 2 Super Powers
+
+Asset Mapper has two big superpowers. The first is that it helps us load CSS and
+JavaScript. The recipe gave us a new `assets/` directory with an `app.js` file and
+a `styles/app.css` file. As we saw, the console log is coming from `app.js`. So this
+file *is* being loaded. It's also apparently including `app.css`, which is what
+gives us that blue background.
+
+We're going to talk more later about how these files are loaded and how this all
+works. But for right now, it's enough to know that `app.js` and `app.css` are
+included on the page.
+
+The second big superpower of Asset Mapper is a bit simpler. The recipe
+created a `config/packages/asset_mapper.yaml` file. There's not a lot here:
+just `paths` pointing to our `assets/` directory. But because of this line, *any*
+file that we put in the `assets/` directory becomes available publicly.
+It's as if the `assets/` directory physically lives inside `public/`. This is
+useful because, along the way, Asset Mapper adds asset *versioning*: an
+important frontend concept that we'll see in a minute.
+
+## Listing Assets & the Logical Path
+
+But first, head to your terminal and run *another* new `debug` command:
+
+```terminal
+php bin/console debug:asset
+```
+
+This shows *every* asset that's exposed publicly through Asset Mapper. Right
+now it's just two: `app.css` and `app.js`. 
+
+If you download the course code from this page and unzip it, you'll find a `tutorial/`
+directory with an `images/` subdirectory. I'll cut this... then paste into
+`assets/`.
+
+So now we have an `assets/images/` directory with 5 files inside. And, by the way,
+you can organize the `assets/` directory however you want.
+
+But now, spin back over and run `debug:asset` again:
+
+```terminal-silent
+php bin/console debug:asset
+```
+
+The new files are there!
+
+## Rendering an Image
+
+On the left, see this "logical path"? That's the path we'll use to *reference*
+that file in Asset Mapper.
+
+I'll show you: let's render an `img` tag to the logo. Copy the `starshop-logo.png`
+logical path. Then head into `templates/base.html.twig`. Right above the body
+block - so it's not overridden by our page content - add an `<img>` tag with
+`src=""`. Instead of trying to hardcode a path, say `{{` and use a new
+Twig function called `asset()`. Pass *this* the logical path.
+
+That's it! Ok, I'll add an `alt` attribute... to be a good citizen of the
+web. Let's try this. Refresh and... it explodes!
+
+> Did you forget to run` composer require symfony/asset`. Unknown function "asset".
+
+Remember: our app starts tiny. And then, as we need more features, we install
+more Symfony components. And often, if you try to use a
+feature from a component that's *not* installed, it'll tell you. The Twig
+`asset()` function comes from another tiny component called `symfony/asset`.
+All *we* need to do is follow the advice. Copy the `composer require` command, spin
+over to your terminal and run it:
+
+```terminal-silent
+composer require symfony/asset
+```
+
+When it finishes, move over and refresh. There's our logo!
+
+## Automatic Asset Versioning
+
+The most interesting part? View the page source and check out the URL:
+`/assets/images/starshop-logo-` then a long string of letters and numbers, `.png`.
+This string is called the version hash and its generated based on the *content* of
+the file. That means that if we update our logo later on, this hash will change
+automatically.
+
+That's *super* important. Browsers like to cache images, JavaScript, and CSS files,
+which is great: it helps performance. But when we *change* those files, we want
+our users to download the *new* version: not keep using the outdated, cached version.
+
+But because the filename will change when we update the image, the browser is going
+to automatically use the new one! It looks like this:
+
+* User goes to our site and downloads `logo-abc123.png`. Their browser caches it.
+* On the next visit, their browser sees the `img` tag for `logo-abc123.png`,
+  finds the file in its cache and uses it.
+* Then we come along, update that file and deploy.
+* The next time the user goes to our site, the `img` tag will be pointing at
+  a *different* filename: `logo-def456.png`. And since the browser doesn't have
+  *that* file in its cache, it downloads it fresh.
+
+This is kind of a small detail, but it's also *incredibly* important
+to make sure our users are always using the latest files. And the best part?
+It just works. Now that I've explained it, you'll never need to think about this again.
+
+Ok team, let's install & start using Tailwind CSS next.
