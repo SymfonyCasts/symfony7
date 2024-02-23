@@ -55,7 +55,7 @@ It's got a *bunch* of commands, but we'll just need a few. Before we start a pro
 also run
 
 ```terminal
-symfony check-req
+symfony check:req
 ```
 
 which stands for check requirements. This makes sure that we have everything
