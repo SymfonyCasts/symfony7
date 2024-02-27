@@ -1,5 +1,89 @@
 # Turbo: Your Single Page App
 
-Coming Soon...
+When I build a UI, I want it to be beautiful, interactive, and smooth. Personally, 
+I choose *not* to use front-end frameworks like React or Vue or Next. But you
+*can*... and there's nothing wrong with them: those are great tools. Also,
+building an API in Symfony is awesome!
 
-When I build a UI, I want it to be beautiful, interactive, and slick. I choose not to use a front-end framework like React or Vue or Next to build my site. You absolutely can, and there's nothing wrong with that, and those are great tools. Also, building an API in JavaScript is awesome. But if you want to build your HTML in Twig like I am, we can absolutely have a super rich, responsive, interactive, fancy user interface. One big piece of a fancy interface is removing full-page reloads. Right now, when I click around, if you watch, it's fast, but these are full-page reloads, which don't happen if you use something like React or Vue. To eliminate those, we're going to use another library from the same people that made Stimulus called Turbo. Turbo can do a lot of things, but its main job is to eliminate those full-page refreshes. Like Stimulus, it's a JavaScript library. And also like Stimulus, Symfony has a bundle that helps us integrate it. So find your terminal and run composer require Symfony slash UX Turbo. This time, its recipe made two interesting changes. I'll show you. The first is an import map dot PHP. It added hotwired slash Turbo JavaScript library to our app. The second change is an asset slash controllers dot JSON. We didn't talk about this file before, but this was added when we installed Stimulus bundle. And it's a way for us to activate Stimulus controllers that live inside third-party packages. So the Symfony UX Turbo PHP package we just installed has a controller in it called Turbo Core. And because we have enabled true here, it means that controller is being activated automatically. It's as if the code behind this controller lives inside of our controllers directory. Now we're not going to use this controller. We're not really going to use this controller directory directly, but the fact that it's being loaded means that Turbo is now active on our site. What the heck does that actually mean in practice? It means if we refresh full page, reloads are now gone. Watch up here. When I click back, you're not going to see it reload. Boom. It's super fast. I click around. It's all happening via Ajax. Thanks to Turbo.  When we click this link, instead of a full page reload, it makes an Ajax call to that page, gets the content back and puts it right on. And that small little thing turns our app into a single page application. And it makes a big difference with how fast our site feels. As an added bonus, let me refresh one more time so we can see it. Whenever you make an Ajax call in a Symfony app, whether it's via Turbo or any other way, the Web Debug Toolbar actually notices that. Watch right around here when I click. Check that out. We now have a running list of all the Ajax calls made on this page. And if we want to see the profiler for any of those Ajax requests, we can just click this little link right here. And yeah, there we are. Here's the Ajax request that was made for the homepage. Now with Turbo, you don't even need to rely on that because as we click around, you'll see this entire bar being replaced by the new Web Debug Toolbar for this page. Turbo has a lot of other features. And we use a bunch of them in our last stack tutorial where we build a really awesome front end with popovers, modals, toast notifications, and more. Now one note about Turbo is that because full page reloads are gone, your JavaScript needs to be built in a way to handle that. A lot of JavaScript kind of expects the full page reloads. The good news is if you write your controller in Stimulus, you're good. Stimulus works out of the box. Watch. No matter how we get to the homepage, our JavaScript to close the sidebar just keeps on working. Okay, Tim, we are almost done. I want to do one last bonus chapter where we get to play with Symfony's awesome generation tool, Maker Bundle.
+But if you want to build your HTML in Twig - like I love doing - we can absolutely
+have a super-rich, responsive, interactive user interface!
+
+One *big* piece of a fancy interface is removing full-page reloads. Right now, when
+I click around, watch: it's fast, but these are full-page reloads. Those don't happen
+if you use something like React or Vue.
+
+To eliminate those, we're going to use another library from the same people that
+made Stimulus called Turbo. Turbo can do a *lot* of things, but its main job is to
+eliminate full-page refreshes. Like Stimulus, it's a JavaScript library. And
+also like Stimulus, Symfony has a bundle that helps integrate it.
+
+## Installing Turbo
+
+Find your terminal and run:
+
+```terminal
+composer require symfony/ux-turbo
+```
+
+This time, the recipe made two interesting changes. I'll show you. The first is in
+`importmap.php`: it added the `@hotwired/turbo` JavaScript package. The second change
+is in `assets/controllers.json`. We didn't talk about this file before, but it was
+added by the StimulusBundle recipe: it's a way to activate Stimulus controllers
+that live inside third-party packages.
+
+So the `symfony/ux-turbo` PHP package we just installed has a JavaScript controller
+inside called `turbo-core`. And because we have `enabled: true` here, it means that
+controller is now registered and available: it's as if it lived in our `assets/controllers/`
+directory.
+
+Now we're not going to *use* this controller directly - we're not going to attach
+it to an element. But the fact that it's being loaded & registered with Stimulus
+is enough to *activate* Turbo on our site.
+
+## Full Page Refreshes Gone
+
+What the heck does that mean? It's like magic: give the page a refresh, and bam!
+Full-page reloads vanish! Watch up here: when I click back, you won't see it reload.
+Boom! It's super fast and all happening via Ajax.
+
+Here's how it works. When we click this link, Turbo intercepts the click and,
+instead of a full page reload, it makes an Ajax call to that page. That Ajax call
+returns the full HTML for that page and then Turbo puts that onto *this* page.
+
+That small thing transforms our project into a single page application and makes
+a big difference with how fast our site feels.
+
+## AJAX Calls & the Web Debug Toolbar
+
+But there's one more thing. I'll refresh so we can see it. Whenever you make an Ajax
+call in a Symfony app - whether it's via Turbo or any other way - the Web Debug
+Toolbar *notices* that. Watch right around here when I click. Check that out!
+We have a running list of all the Ajax calls made on this page. And if we want to
+see the profiler for any of those Ajax requests, we can click the link.
+
+And yeah... there we are. Here's the Ajax request that was made for the homepage.
+Though with Turbo, you don't even need to rely on this trick because, as we click
+around, this entire bar is replaced by the new Web Debug Toolbar for the page.
+
+Oh, and get this: in Turbo 8, which is out now, your site will feel even *faster*.
+That's thanks to a new feature called Instant Click. With this, when you *hover* over
+a link, Turbo makes an Ajax call to that page *before* you click. Then, when you
+*do* click, it loads instantly... or at least has a head start.
+
+Turbo has a lot of other features, and we use a *bunch* of them in our
+[LAST Stack Tutorial](https://symfonycasts.com/screencast/last-stack) where we build
+a frontend with popovers, modals, toast notifications, and more.
+
+## Turbo Requires Good JavaScript
+
+But one note about Turbo. Because full page reloads are gone, your JavaScript needs
+to be built in a way to handle that. A lot of JavaScript expects full page reloads...
+and if HTML is suddenly added to the page *without* a reload, it breaks. The good
+news is that if you write your JavaScript in Stimulus, you're good.
+
+Watch. No matter how we get to the homepage, our JavaScript to close the sidebar
+just keeps working.
+
+Alright squad, we're on the home stretch! Before we finish, I want to do one
+last bonus chapter where we play with Symfony's awesome generation tool:
+MakerBundle.

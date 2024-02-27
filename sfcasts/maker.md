@@ -1,5 +1,129 @@
 # Maker Bundle: Let's Generate Some Code!
 
-Coming Soon...
+Hats off for nearly making it through the first Symfony tutorial. You've taken
+a huge step toward building whatever you want on the web. To celebrate, I want to
+play with MakerBundle: Symfony's awesome tool for code generation.
 
-Congrats on just about making it through the first Symfony tutorial. You've taken a huge step toward building whatever you want out there on the web. To celebrate, I want to play with Maker Bundle, Symfony's awesome tool for code generation. Let's get it installed. composer require symfony-maker-bundle-dev Now I haven't seen that "-"-dev flag yet. It's not that important. If you go over to composer.json and open that up, because of that flag, instead of Maker Bundle going into our require key, it was added down here under the require-dev key. Now by default, when you run composer, it's going to install everything under both require and require-dev, but the purpose of require-dev is supposed to be for packages that you don't need on production, packages that you only need when you're developing locally, and that's because when you do deploy, if you want to, there's a way to tell composer, hey, only install the things under my require key. Don't install the things under my require-dev, that can give you a really small performance boost on production, but mostly it's not that big of a deal, so if you mess up and put Maker Bundle onto the require key, no big deal. Now we just installed a bundle, and I've talked a little bit about the main reason you install a bundle in your application is because bundles give you more services, and services are more tools. In this case, the services that Maker Bundle gave us are services that give us new console commands. Check it out, run bin console, or actually, I'll start running symphony console, which is just an alias for the same thing, and now, thanks to the new bundle, we have a ton of commands that start with make, commands for generating a security system, making a controller, generating doctrine entities to talk to the database, forms, listeners, a registration form, lots and lots of things inside of here. Let's use one of these to actually make our own new custom console command. So run symphony console make command. This will interactively ask us a little bit about our command. Let's call ours app colon ship report. So we just ran make colon command. We're going to call ours app colon ship report, and done. This created exactly one class, source command, ship report command dot php.  Let's go check it out. And awesome. So it's a normal class. This is a service, by the way, if you're wondering, with an attribute above it that describes the name of the command and also description. Inside, there's a configure method where you can add arguments and options, but the main thing is, when somebody calls this command, it's going to call execute, and this IO object here is really cool. It allows us to output things like this note or this success down here. And even though we don't see it, it also allows us to ask the user questions interactively. So just by creating this class, this is already ready for us to use. Watch symphony console app colon ship dash report. And it works. This message down here is coming from the success message at the bottom of our command. And thanks to the configure, these arguments, we have one argument called arg one. We can pass that by saying arguments are just strings we pass after the command. So I'll pass that. And now we get this. You pass an argument, Ryan, which is coming from this spot right here. So awesome. Creating commands is super cool, and there's lots of awesome things you can do with it that we won't go too deeply into right now, but I do want to play with one thing. This IO object can also do a progress bar. So let's pretend like we're building an actual ship report and it requires some heavy queries and we want to show a progress bar on the screen. To do that, we can say IO arrow progress start, and then pass it however many rows of data maybe you're looping through and handling. So let's pretend that we're looping over a hundred rows of data to create this report. Then instead of looping over real data, I'm just going to create a fake loop with a for loop. I'm even going to include the I variable in the middle. And inside here, to advance the progress, we'll say IO arrow progress start. And then here's where we would do our heavy query or heavy work. We're going to fake that by doing a use sleep and pass that 10,000. So just a really short pause there so we can see this working.  And at the end to finish, you can say IO arrow progress finish. That's it. So spin over, give that a try. And oh, that is so cool. We've only scratched the surface on commands, but I'll let you dive in and learn more. That's it. You made it. Give yourself a high five and go grab a soda, coffee, tea, pizza, something special for the occasion. Then try this stuff out, play with it, build a blog, just a couple of static pages, anything. If you have any questions, we watch the comment section below each video closely and answer everyone. Also keep going. In the next tutorial, we're really going to make you dangerous by diving deeper into Symfony's configuration and services, the systems that drive everything you'll do in Symfony. All right, friends, see you next time.
+## Composer require vs require-dev
+
+Let's get it installed:
+
+```terminal
+composer require symfony/maker-bundle --dev
+```
+
+We haven't seen that `--dev` flag yet, but it's not *that* important. Move over and
+open `composer.json`. Thanks to the flag, instead of `symfony/maker-bundle` going
+under the `require` key, it was added down here under `require-dev`. By default,
+when you run `composer install`, it will download everything under *both* `require`
+and `require-dev`. But `require-dev` is meant for packages that *don't* need
+to be available on production: packages that you only need when you're developing
+locally. That's because, when you do deploy, if you want, you can tell Composer:
+
+> Hey! Only install the packages under my `require` key: don't install the
+> `require-dev` stuff.
+
+That can give you a small performance boost on production. But mostly, it's not a
+big deal.
+
+## The Maker Commands
+
+Now, we just installed a *bundle*. Do you remember the main thing that bundles
+give us? That's right: *services*. This time, the services that MakerBundle gave
+us are services that provide new *console* commands. Drumroll please. Run:
+
+```terminal
+php bin/console
+```
+
+Or, actually, I'll start running `symfony console`, which is the same thing. Thanks
+to the new bundle, we have a ton of commands that start with `make`! Commands for
+generating a security system, making a controller, generating doctrine entities to
+talk to the database, forms, listeners, a registration form.... lots and lots of
+stuff!
+
+## Generating a Console Command
+
+Let's use one of these to make our *own* custom console command. Run:
+
+```terminal
+symfony console make:command
+```
+
+This will interactively ask us about our command. Let's call it: `app:ship-report`.
+Done!
+
+This created exactly one file: `src/Command/ShipReportCommand.php`. Let's go check
+that out! Cool! This is a normal class - it *is* a service, by the way - but with
+an *attribute* above: `#[AsCommand]`. This tells Symfony:
+
+> Yo! See this service? It's not *just* a service: I would like you to include it
+> in the list of console commands.
+
+The attribute includes the name of the command and a description. Then the class itself
+has a `configure()` method where we can add arguments and options. But the main part
+is that, when somebody *calls* this command, Symfony will call `execute()`.
+
+This `$io` variable is cool. It lets us output things - like `$this->note()`
+or `$this->success()` - with different styles. And though we don't see it here,
+we can also ask the user questions interactively.
+
+The best part? *Just* by creating this class, it's ready to use! Try it out:
+
+```terminal
+symfony console app:ship-report
+```
+
+That's so cool! The message down here comes from the success message at the
+bottom of the command. And thanks to `configure()`, we have one *argument* called
+`arg1`. Arguments are string that we pass *after* the command, like:
+
+```terminal
+symfony console app:ship-report ryan
+```
+
+It says: 
+
+> You passed an argument: ryan
+
+... which comes from this spot in the command.
+
+## Building a Progress Bar
+
+There are a *lot* of fun things you can do with commands... and I want to play
+with one of them. One of the superpowers of the `$io` object is to create
+animated progress bars.
+
+Imagine we're building a ship report... and it requires some heavy queries.
+So we want to show a progress bar on the screen. To do that, say `$io->progressStart()`
+and pass it however many rows of data we're looping through and handling. Let's
+pretend we're looping over 100 rows of data for this report.
+
+Instead of looping over real data, create a fake loop with `for`. I'm even
+going to include the `$i` variable in the middle! Inside, to advance the
+progress bar, say `$io->advance()`. Then, here is where we would do our heavy query
+or heavy work. Fake that with a `usleep(10000)` to create a short pause.
+
+After the loop, finish with `$io->progressFinish()`.
+
+That's it! Spin over and give that a try:
+
+```terminal-silent
+symfony console app:ship-report ryan
+```
+
+Oh, that is *so* cool.
+
+And... that's it people! Give yourself a high five... or, better, surprise a co-worker
+with a jumping high five! Then celebrate with a well-deserved beer, tea, walk
+around the block or frisbee match with your dog. Because... you did it! You took
+the first big step into being dangerous with Symfony. Then, come back and try
+this stuff out: play with it, build a blog, create a few static pages, *anything*.
+That will make a huge difference.
+
+And if you ever have any questions, we watch the comment section below each video
+closely and answer everything. Also keep going! In the next tutorial, we're going
+to become even *more* dangerous by diving deeper into Symfony's configuration and
+services: the systems that drive *everything* you'll do in Symfony.
+
+Alright, friends, see you next time!

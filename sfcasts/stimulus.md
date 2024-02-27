@@ -1,5 +1,146 @@
 # Stimulus: Writing Pro JavaScript
 
-Coming Soon...
+We know how to write HTML in our templates. And we're handling CSS with Tailwind.
+What about JavaScript? Well, like with CSS, there's an `app.js` file, and it's already
+included on the page. So you can put whatever JavaScript you want right here.
 
-We know how to write HTML in our templates. And we're handling CSS with Tailwind. So what about JavaScript? Well, like with CSS, there's an app.js file, and it's already been included on the page. So you can put whatever JavaScript you want right here. But I highly recommend using a small but mean JavaScript library called Stimulus. It is one of my absolute favorite things on the internet. You take a little bit of your existing HTML and you connect it to a small JavaScript file called a controller. This allows you to add behavior, like when you click this button, the greet method on your controller should be called. And that's really it. Sure, this library has more features, but you already understand how it works. And as simple as this may seem, this is going to allow us to build any crazy JavaScript and user interface functionality that we need in a very reliable and predictable way. So let's get it installed. Stimulus is a JavaScript library, but Symfony has a bundle that helps integrate it. Over your terminal, if you want to see what the recipe is going to do, go ahead and commit your changes. I already have. And then run composer require symphony slash stimulus bundle. And as you can see, when this finishes, the recipe did make a number of changes. And I'll walk you through the most important ones. First, in app.js, our main JavaScript file. If I open this up, there we go. It added a new import on top dot slash bootstrap.js for a new file that lives right next to it. The purpose of this file is to start the stimulus engine. Also in import map dot PHP, the recipe added these stimulus JavaScript library, as well as a little bit of JavaScript that helps boot up that stimulus inside of symphony. And finally, it created an assets controllers directory, which is where our custom controllers are going to live, and included one demo controller to get us started. Now there's a naming convention with these controllers. Because this is called hello underscore controller dot JS, we're going to connect this with an element on the page by saying data dash controller equals hello.  Now one of the properties of stimulus is that as soon as stimulus finds an element with data dash controller equals hello on the page, it will instantiate a new instance of this controller and call this connect method. So this demo controller should automatically change the content of whatever element it is attached to as soon as we add it to the page. And we can already play with this. If you refresh the page, stimulus is now active on our site, which means it's watching for a data dash controller to be added. And we can just mess with our page. I'll inspect element, find any element like this anchor tag, and I'll add data dash controller equals hello. And watch what happens as soon as I click off of this. Boom, stimulus saw that instantiated our controller called the connect method and replaced it. And you can do this as many times as you want on the page. And the really important thing is that no matter how that data dash controller elements get gets added to the page stimulus sees it. So if we make an Ajax call later, and we bring in some new HTML and put it onto our page, yeah, stimulus is going to see that and our JavaScript is going to work. That's the key thing. When you write your stimulus, when you write your JavaScript with stimulus, your JavaScript always works no matter how and when that HTML is added to the page. So let's use this to power our our close button. Over in the assets controller directory, I'm going to duplicate hello controller, make a new one called closeable controller. And then I'm going to clear out almost everything and get it down to the absolute basics, which is we import a controller from stimulus, and then we create a class that extends it. So there's nothing here yet. But we can already attach this to an element on our page. So here's the plan. We're going to attach this element to the entire this controller to the entire aside element. And then when we click this button, we will remove that aside element. That element lives over in templates main ship status aside that HTML twig to attach that controller to this element will say data dash controller equals and then closeable.  And you can see I'm getting auto completion from this, which is awesome. This comes from a stimulus plugin for PHP storm closeable. Now, if we go over and refresh, nothing's going to happen yet. This close button doesn't work yet, but stimulus is active on our site. If you go to the console, you can see that stimulus has some log messages that it's starting. And then it says closeable initialize closeable connect. This means that it saw the data dash controller on our side, and it initialized that controller and it's ready and waiting. Our goal is that when we click this button, we want to call some code inside of our closeable controller that will remove the aside. So in closeable controller, add a new method called, how about close? This could be called anything. Then inside say this dot element dot remove. Okay. So in stimulus, this dot element is always going to be equal to whatever element your controller is attached to. So this aside element, but otherwise this is just standard JavaScript. This fetches a HTML element. And then every HTML element has a remove method that removes it from the page to call this close method on the button. We add data dash action equals, then the name of our controller closeable pound sign, and then the name of the method close. And that's it. Watch over here. When we click it's gone, but we can make it fancier. I want to animate that close instead of it happening instantly. Can we do that? Sure. And we don't really need much JavaScript for that. Modern CSS is amazing over on the aside element. I'm going to add a new CSS class. It could go anywhere, but at the end, I'll add transition all that's a tailwind class. That's going to activate CSS transitions when certain properties on our element change. What we're going to do is change the width to zero and have it animate that change. Also add an overflow hidden so that as it, and as the width gets smaller, it doesn't create a weird scroll bar. Just by making this change. If I click right now, you'll see it's still just closes instantly. And that's because we're not changing the width. We're just still removing the element. But if you find that aside, let me inspect that.  Here it is over here. We can change the width to zero manually. Watch what happens when I do. You see that? You got tiny, big, tiny, big, tiny. So it's already working all thanks to CSS over in our controller. What we need to do now is instead of just removing the element, change the width to zero, wait for the CSS transition, then remove the element. We can do the first thing by saying this dot L by using standard CSS, this dot element dot style dot width equals zero. The only tricky part is we need to now wait for the CSS transition to finish and then remove the element. To help with that, I'm going to copy in a method at the bottom of our controller. If this pound sign just makes the pound sign makes us a, if you're not familiar, the pound sign makes us a private method in JavaScript, but otherwise it's not important at all. This code in here looks fancy, but it's doing a really simple thing. It's asking, it's asking the element to tell us when all of its CSS animations are finished. So now thanks to that up here, we can say a weight, this dot element, this dot wait for animation. And whenever you use a weight, you need to put a sync on the function above it. I won't go into the details about that, but it's not going to change anything and how our code works. Fine. Let's check out the results refresh. And Oh, I absolutely love that. All right. Next up, everyone wants a single page application, right? A site where there are zero full page refreshes, but to build one, don't you need to use a JavaScript framework like react? Nope. Let's transform our app into a single page application in three minutes. Next with turbo.
+*But* I highly recommend using a small, but mean, JavaScript library called Stimulus.
+It is one of my absolute favorite things on the Internet. You take a part of your
+existing HTML and *connect* it to a small JavaScript file, called a controller. This
+allows you to add behavior: like when you click this button, the `greet` method on
+the controller will be called.
+
+And that's really it! Sure, Stimulus has more features, but you already understand
+the core of how it works. Despite its simplicity, this will let us
+build any JavaScript and user interface functionality we need, in a reliable
+and predictable way. So let's get it installed.
+
+## Installing Stimulus
+
+Stimulus is a *JavaScript* library, but Symfony has a bundle that helps integrate it.
+Over at your terminal, if you want to see what the recipe does, commit your changes.
+I already have. Then run:
+
+```terminal
+composer require symfony/stimulus-bundle
+```
+
+When this finishes... the recipe *did* make some changes. Let's walk through
+the important ones. The first is in `app.js`: our main JavaScript file. Open that
+up, there we go.
+
+It added an `import` on top - `./bootstrap.js` - to a new file that lives right
+*next* to this. The purpose of this file is to start the Stimulus engine. Also, in
+`importmap.php`, the recipe added the `@hotwired/stimulus` JavaScript package along
+with another file that helps boot up Stimulus inside Symfony.
+
+Finally, the recipe created an `assets/controllers/` directory. This is where *our*
+custom controllers will live. And it included a demo controller to get us started!
+Thanks!
+
+These controller files *do* have an important naming convention. Because this is
+called `hello_controller.js`, to connect this with an element on the page, we'll
+use `data-controller="hello"`.
+
+## How Stimulus Works
+
+So here's how this works. As soon as Stimulus sees an element on the page with
+`data-controller="hello"`, it will instantiate a new instance of this controller
+and call the `connect()` method. So, this `hello` controller should automatically
+and instantly change the content of the element it's attached to.
+
+And we can already see this. Refresh the page. Stimulus is *now* active on our
+site. This means it's watching for elements with `data-controller`. Let's do
+something wild: inspect element on the page, find *any* element - like this anchor
+tag - and add `data-controller="hello"`. Watch what happens when I click off to
+activate this change. Boom! Stimulus saw that element, instantiated our controller
+and called the `connect()` method. And you can do this as many times as you want
+on the page.
+
+The point is: no matter *how* a `data-controller` element get on your page, Stimulus
+sees it. So if we make an Ajax call that returns HTML and put that onto the page...
+yeah, Stimulus is going to see that and our JavaScript is going to work. That's the
+*key*: when you write JavaScript with Stimulus, your JavaScript will *always* work,
+no matter how and when that HTML is added to the page.
+
+## Creating a closeable Stimulus Controller
+
+So let's use Stimulus to power our close button. Over in the `assets/controller/`
+directory, duplicate `hello_controller.js` and make a new one called
+`closeable_controller.js`.
+
+I'll clear out almost everything and get down to the absolute basics: import
+`Controller` from stimulus... then create a class that extends it.
+
+This doesn't *do* anything, but we can already attach it to an element on the page.
+Here's the plan: we're going to attach the controller to the entire `aside` element.
+Then, when we click this button, we'll *remove* the `aside`.
+
+That element lives over in `templates/main/_shipStatusAside.html.twig`. To attach
+the controller, add `data-controller="closeable"`. Oh, see that autocompletion?
+That comes from a Stimulus plugin for PhpStorm.
+
+If we move over and refresh, nothing will happen yet: the close button doesn't
+work. But open your browser's console. Nice! Stimulus adds helpful debugging
+messages: that it's starting and then - importantly `closeable initialize`,
+`closeable connect`.
+
+This means that it *did* see the `data-controller` element and initialized that
+controller.
+
+So back to our goal: when we click this button, we want to call code inside
+the closeable controller that will remove the `aside`. *In* `closeable_controller.js`,
+add a new method called, how about, `close()`. Inside, say `this.element.remove()`.
+
+In Stimulus, `this.element` will always be whatever element your controller is
+attached to. So, this `aside` element. But otherwise, this code is standard
+JavaScript: every Element has a `remove()` method.
+
+To call the `close()` method, on the button, add `data-action=""` then the name
+of our controller - `closeable` - a `#` sign, and the name of the method: `close`.
+
+## Animating the Close
+
+That's it! Testing time. Click! Gone! But I want it be fancier! I want it to
+animate when closing instead of being instant. Can we do that? Sure! And we don't
+need much JavaScript... because modern CSS is amazing.
+
+Over on the `aside` element, add a new CSS class - it could go anywhere - called
+`transition-all`.
+
+That's a Tailwind class that activates CSS transitions. This means that if
+certain *style* properties change - like the width suddenly being set to 0 - it
+will *transition* that change, instead of instantly changing it.
+
+Also add `overflow-hidden` so that, as the width gets smaller, it doesn't create
+a weird scroll bar.
+
+If we try this now, it still closes instantly. That's because there's nothing
+to *transition*: we're not changing the width... just removing the element.
+
+But watch this. Inspect Element and find the `aside`: here it is. Manually change
+the width to 0. Cool! You go tiny, big, tiny, big, tiny! The CSS side of things
+*is* working.
+
+Back in our controller, instead of removing the element, we need to change the width
+to zero, *wait* for the CSS transition to finish, *then* remove the element. We can
+do the first with `this.element.style.width = 0`.
+
+The *tricky* part is *waiting* for the CSS transition to finish *before* removing
+the element. To help with that, I'm going to paste a method at the bottom of our
+controller.
+
+If you're not familiar, the `#` sign makes this a private method in JavaScript:
+a small detail. This code looks fancy, but it has a simple job: to
+ask the element to tell us when all of its CSS animations are finished.
+
+Thanks to that, up here, we can say `await this.#waitForAnimation()`. And whenever
+you use `await`, you need to put `async` on the function around this. I won't go
+into details about `async`, but that won't change how our code works.
+
+Let's check the result! Refresh. And... I absolutely *love* that.
+
+Next up, everyone wants a single page application, right? A site where there are
+zero full page refreshes. But to build one, don't we need to use a JavaScript
+framework like React? No! We're going to transform our app into a single page
+application in... about 3 minutes with Turbo.
