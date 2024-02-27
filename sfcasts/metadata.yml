@@ -13,6 +13,8 @@ chapters:
     - generate-urls
     - asset-mapper
     - tailwindcss
+    - partials
+    - enums
     - design
     - stimulus
     - turbo

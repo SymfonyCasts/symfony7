@@ -1,6 +1,88 @@
-# Implementing our Design
+# Smart Model Methods & Making the Design Dynamic
 
-Coming Soon...
+This works great. But I want to show you another solution.
 
-We just pasted a new design into our site, which meant we updated our templates to include elements that have a bunch of Tailwind classes. The end result is this really cool looking site here. Now for some parts of the templates, I have already kept things dynamic, using twig code to dynamically print out the captain and the class. In other parts of our code, though, things are still hard-coded. Our job is to bring this new design fully to life. At the top of homepage.html twig, this long aside element here represents our sidebar. It's fine that this code lives right in homepage.html twig, but it does take up quite a lot of space. And what if we want to reuse this sidebar on another page? One of the great things you can do in twig is take chunks of your HTML and actually isolate them to their own templates so you can reuse them. It's called a template partial. So copy this code, and then in the main directory, though this could go anywhere, create a new file called underscore ship status aside.html.twig. And then I will paste inside of there. Then back in homepage.html twig, delete that, and we can re-include it with curly curly. So the print statement, include, and then the name of that template, which is main slash ship status aside.html.twig. And we try it, it works. The include statement just says, render this template, give it the same variables that I have, take the string, and print it. And if you're wondering why I prefix the template with an underscore, that's just a convention. When you have a template that only renders a small chunk of code, we call those template partials, and to help them stand out from our main templates, we usually include an underscore in the file name, but there's no technical reason for that. All right, now in homepage, we can focus on our ship list below, which is this area. Right now, there's just one ship, and it's totally hard-coded. But our intention is to list every ship that we're currently repairing. And in our template, we do have a ships variable that we're using at the bottom. If you remember, this is an array of starship objects.  So for the first time in our Twig template, we need to loop over an array. To do that, I'll remove this comment, and we'll say curly brace percent, so the Twig do something tag, and then for ship in ships. So ships is the variable we already have that represents our array, and ship is going to be the new variable name in the for loop that represents each ship object. At the bottom, add curly brace percent, end for. And already when we try it, we get three hard-coded ships for the three starships in our project. Inside of this for loop, making things dynamic is really nothing new, which is great. So for example, this in progress, we could say curly curly ship dot status. When we refresh, it prints, though it does highlight a problem. Our statuses are running way out of this space. It turns out that some design requirements just changed on the project. Each ship now needs a status of either in progress, waiting, or completed. Over in source repository, starship repository, our ships do all have a status. It's this argument right here, but it's just a random string that we make up on a ship by ship basis. So we need to do a little refactoring to fit the new design requirements. So let's think, there are exactly three valid statuses. It's actually a perfect use case for a PHP enum. If you're not familiar with enums, don't worry, they're a simple but really powerful concept. In the model directory, though this enum could live anywhere, it's just, we're just creating it for our own organization, create a new class, and call it starship status enum. Now as soon as I type the word enum at the end, PHPStorm changed the template from class to an enum. So we're not actually creating a PHP class, we are creating an enum. Add a colon string to the enum to make it a, what's called a string backed enum. I'm not going to go too deep into the details, but what that allows us to have is each case, like waiting, can be assigned to a string, which you'll see in a moment is going to be handy for us. So let's add a status for in progress, and finally one for completed. That's it. That's all an enum is.  A set collection of options. Now open up our starship class. This last argument right now is currently a string status, but now it's going to be a starship status enum. And then at the bottom, the getter method, get status is no longer going to return a it's also going to return a starship status enum. Finally, in our starship repository, where we create our starships, you can see my editor is angry. It says, hey, this argument accepts a starship status enum, but you're passing a string. So change this to starship status enum, and let's make the first, and it already autocompletes. Let's make the first one in progress. And that did add the use statement for that enum to the top of my class. The next one, let's call it, let's make it completed. And for the last one, let's make it waiting and refactoring done though. When we refresh, it breaks the page. It says object of class starship status enum could not be converted to string. And it's coming from the ship.status part. And that makes sense. Even the ship status is no longer a string. It's now this enum, which can't be directly echoed as a string. The easiest way to fix this in homepage.html twig is to add a dot value because we made our enum a string backed. It has a value property, which is going to be the string that we assigned to whatever the current status is. And sure enough, when we refresh that, it looks great in progress, completed waiting.
-But there's also another solution, totally optional, but in Starship, it's probably going to be pretty common for us to want to get the string status of a Starship. So if we want to, it's totally up to us, we could add a new method in here called getStatusString, which will return a string, and inside of it will return this arrow status, arrow value. So the same thing we just did in our twig template. Now over in our template, we can just say ship.statusString. Now one cool thing about this to note is there is no status string property on Starship. We have a status property, but there's no such thing as a status string property. But Twig doesn't care. It's going to see that there's a getStatusString method, and it's going to call that. Check it out. When we refresh, it still works. So I really like that solution, so I'm going to copy that. Let's repeat it up here inside the alt attribute. And then while we're fixing this in our show.html twig, we also print out the status inside of here. So I'm going to change it there and go ahead and close that template. All right, let's finish making our homepage dynamic. It's pretty easy from here. The ship name, it's CurlyCurlyShip.name. For the captain, CurlyCurlyShip.captain. And down here for the ship class, it's CurlyCurlyShip.class. Oh, and also, let's fill in the link. That's going to be CurlyCurlyPath. Then the name of a route, so this is going to go to the show page for the ship. So that's going to be AppStarshipShow. And remember, this requires an ID wildcard, so we'll pass ID ship.id. And now, ah, much better, fully dynamic. We can click these links. It works, except this image is broken. Earlier, when we copied images into our assets directory, I included three for our three statuses. So up here, we are kind of pointing to the status in progress, but this isn't the right way to reference images in the assets directory. Instead, we say CurlyCurlyAsset, and then we pass the string relative to the assets directory. Remember, that's called the logical path to the image. So now if we try that, we get the image closer.  Of course, the problem now is that the in progress part here is meant to be dynamic based on the status. One thing we could do is try to use some twig concatenation here to try to do ship.status string. There is a way to do that. That is possible, though it's a little bit ugly. Instead, I want to revisit a solution we just used a second ago, and that is to make all the information about our starship really easily accessible from our starship class. So what I mean is let's add a public function, getStatusImageFilename. That returns a string, and let's do all the logic for figuring out the filename right here. I'm going to paste in a short match function. So what this says is check this arrow status, and if it's equal to waiting, then return this string. If it's equal to in progress, return this string, and if it's equal to completed, return this string. And just like before, because we have a getStatusImageFilename, we can, in twig, kind of pretend like we have a status image filename property. So over here, inside the asset function, instead of passing in a hard-coded string, we'll say ship.statusImageFilename. And now, ah, we've got it. All right, last thing. Let's fill in a couple missing links. Like this logo should go to the homepage. Right now, it goes nowhere. Remember, when you want to link to a page, you need to make sure that route has a name. In source controller, main controller, right now our homepage doesn't have a name. Give it one with name colon. How about app underscore homepage? Or you also could say app main homepage if you want. Then, to link the logo in base.html twig, let's find the logo. Here it is. Use curly curly path app underscore homepage. Then I'll copy that, and we'll repeat it right down here below for another home link. And we'll leave these other links for a future tutorial. So now over here, click that logo. That works. The last link is over here on the show page. It's this back link that should also go to the homepage. So open up show.html twig. And up on top, there it is. I'll paste that same link there. All right, design done. We can click around. We can check out ships.  We can head back. It looks great. It's working great. I'm super happy. The only tiny little missing thing here is this, is that the design calls for the sidebar to collapse when we click this link, which totally does not work yet. To handle that, I want to introduce you to my favorite tool for writing JavaScript, Stimulus.
+## Adding Smarter Model Methods
+
+In `Starship`, it will
+probably be common for us to want to get the *string* status of a `Starship`. To
+make that easier, why not add a shortcut method here called `getStatusString()`.
+This will return a `string`, and inside, return `$this->status->value`.
+
+Thanks to this, over in the template, we can shorten to `ship.statusString`.
+
+Oh, and this is *more* Twig smartness! There is *no* property called `statusString`
+on `Starship`! But Twig doesn't care. It will see that there's a `getStatusString()`
+method and will call that.
+
+Watch: when we refresh, the page still works. I really like this solution, so I'll
+copy that... and repeat it up here for the `alt` attribute.
+
+And while we're fixing this, in `show.html.twig`, we print the status here too.
+So I'll make that same change... then close this.
+
+## Finishing our Dynamic Template
+
+Ok: let's finish making our homepage template dynamic: it's pretty easy from here.
+For ship name, it's `{{ ship.name }}`, for the captain, `{{ ship.captain }}`.
+And down here for the class, it's `{{ ship.class }}`.
+
+Oh and let's fill in the link: `{{ path() }}` then the name of the route. We're
+linking to the show page for the ship, so the route is `app_starship_show`. And
+because this has an `id` wildcard, pass `id` set to `ship.id`.
+
+And now, so much better! It looks nice and we can click these links.
+
+## Dynamic Image Paths
+
+But... the image is still broken. Earlier, when we copied the images into our
+`assets/` directory, I included three files for the three statuses. Up here, we
+*are* kind of pointing to the in progress status... but this isn't the right way
+to reference images in the `assets/` directory. Instead, say `{{ asset() }}` and
+pass the path relative to the `assets/` directory, called the "logical" path.
+
+If we try that now... we're closer. The problem *now* is that the "in progress" part
+needs to be dynamic based on the status. One thing we could try is Twig
+concatenation: to add `ship.status` to the string. That *is* possible, though it's
+a bit ugly.
+
+Instead, let's revisit a solution we used a minute ago: making all the data
+about our `Starship` easily accessible... from the `Starship` class.
+
+Here's what I mean: add a `public function getStatusImageFilename()` that returns
+a string. Let's do all the logic for creating the filename right here. I'll
+paste in a `match` function.
+
+This says: check `$this->status` and if it's equal to `WAITING`, return this string.
+If it's equal to `IN_PROGRESS` return this string and so on.
+
+And exactly like before, because we have a `getStatusImageFilename()` method, we
+get to, in Twig, *pretend* like we have a `statusImageFilename` property.
+
+And now, we've got it!
+
+Final things! Let's fill in a some missing links, like this logo should go to the
+homepage. Right now... it goes nowhere.
+
+Remember, when we want to link to a page, we need to make sure that route has a name.
+In `src/Controller.MainController.php`... our homepage does *not* have a name.
+Ok, it has an auto-generated name, but we don't want to rely on that. 
+
+Add `name:` set to `app_homepage`. Or you could use `app_main_homepage`.
+
+To link the logo, in `base.html.twig`... here it is. Use `{{ path('app_homepage') }}`.
+
+Copy that and repeat it down here below for another home link.
+
+We'll leave these other links for a future tutorial.
+
+Back at the browser, click that logo! All good. The final missing link is over
+on the show page. This "back" link should *also* go to the homepage. Open up
+`show.html.twig`. And up on top - there it is - I'll paste that same link here.
+
+Ok team, the design is done! Congrats! But yourself a tea... or latte... or donut
+to celebrate. This is huge - our site *looks* and feels *real*. I'm super happy.
+
+Now we can focus some finer details. Like, when we click this link the sidebar
+is *supposed* to collapse. To handle that, I want to introduce you to my favorite
+tool for writing JavaScript: Stimulus.
