@@ -12,6 +12,8 @@ The answer starts with a special package inside our `composer.json` file called
 `symfony/flex`. Flex is a Composer *plugin* that adds two superpowers to
 Composer: aliases and recipes.
 
+[[[ code('2a52ebb1a0') ]]]
+
 ## Flex Aliases
 
 Aliases are simple. To add a *new* package to your app - which we'll do in a minute -
@@ -80,20 +82,29 @@ git status
 
 The fact that `composer.json` and `composer.lock` are modified is 100% normal
 Composer behavior. You can see that `composer.json` has the new library under
-the `require` key. But every *other* modified or new file *is* thanks to the
-package's recipe.
+the `require` key. 
+
+[[[ code('3af38c89f5') ]]]
+
+But every *other* modified or new file *is* thanks to the package's recipe.
 
 ## Investigating the Recipe
 
 Let's investigate these! Open up `.gitignore`. Cool! At the bottom, it added two
 new entries for two common files that you want to ignore when you use PHP CS fixer.
+
+[[[ code('7a2e45e201') ]]]
+
 The recipe also added a new `.php-cs-fixer.dist.php` file. This is CS Fixer's
-configuration file. And check it out! It's pre-built to work for our Symfony app.
-It tells it to fix all files in the current directory, but ignore the `var/` directory
-because that's where Symfony stores its cache files. It also tells it to use a
-ruleset called Symfony. That means that we want our code style to
-match Symfony's style. The point is: instead of *us* wasting time hunting down this
-default config... we just get it!
+configuration file. And check it out! 
+
+[[[ code('cf79d4391f') ]]]
+
+It's pre-built to work for our Symfony app. It tells it to fix all files in the 
+current directory, but ignore the `var/` directory because that's where Symfony 
+stores its cache files. It also tells it to use a ruleset called Symfony. 
+That means that we want our code style to match Symfony's style. The point is: 
+instead of *us* wasting time hunting down this default config... we just get it!
 
 The last modified file is `symfony.lock`. This keeps track of which recipes we have
 installed and at what version. And yes, we *are* going to commit all these files
