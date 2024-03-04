@@ -33,7 +33,11 @@ Yea, that's it. Only about 15 files committed to git!
 ## Where's Symfony?
 
 So then... where the heck is Symfony? One of our 15 files is especially important:
-`composer.json`. Composer is the package manager for PHP. Its job is simple: read
+`composer.json`. 
+
+[[[ code('dd6d61790e') ]]]
+
+Composer is the package manager for PHP. Its job is simple: read
 the package names under this `require` key and download them. When we ran the
 `symfony new` command, it downloaded these 15 files and *also* ran `composer install`.
 That downloaded all of these packages into the `vendor/` directory.
@@ -44,9 +48,12 @@ So where is Symfony? It's in `vendor/symfony/`... and we're already using about
 ## Running Composer
 
 The `vendor/` directory is *not* committed to git. It's ignored thanks to another
-file we started with: `.gitignore`. This means that if a teammate clones our project,
-they will *not* have this directory. And that's okay! We can always repopulate
-it by running `composer install`.
+file we started with: `.gitignore`. 
+
+[[[ code('9895cd1cc5') ]]]
+
+This means that if a teammate clones our project, they will *not* have this directory. 
+And that's okay! We can always repopulate it by running `composer install`.
 
 Watch: I'll right-click and delete the entire `vendor/` directory. Gasp!
 
@@ -75,7 +82,11 @@ What about the other 4 directories? `bin/` holds a single `console` executable
 file that we'll try out soon. But we're never going to look at or modify that file.
 The `public/` directory is known as your document root. Anything you put here - like
 an image - will be publicly accessible. More about that stuff later.
-It also holds `index.php`. This is known as your "front controller": it's the main
+It also holds `index.php`. 
+
+[[[ code('fef370b8cc') ]]]
+
+This is known as your "front controller": it's the main
 PHP file that your web server executes at the start of every request. And while it
 *is* super important... you'll never edit or even think about this file.
 
