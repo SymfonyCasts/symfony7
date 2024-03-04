@@ -24,6 +24,8 @@ part by hand. Call it `MainController.php`, but you can name this whatever you w
 Inside, add the open PHP tag, and then say `class MainController`. Above this, add
 a namespace of `App\Controller`.
 
+[[[ code('51ebc199a2') ]]]
+
 ## Namespaces & Directories
 
 Okay, a few things about this. First, the fact that I put this class inside
@@ -47,6 +49,8 @@ Anyway, our goal is to create a *controller*, which is a *method* in a class
 that builds the page. Add a new public function and call it `homepage`. But, again,
 the name doesn't matter. And... yea! It's not done yet, but *this* is our controller!
 
+[[[ code('77472b5890') ]]]
+
 But remember, a page is the combination of a controller and a *route*, which defines
 the page's URL. Where do we put the route? Right *above* the controller method
 using a feature of PHP called an *attribute*. Write `#[]` then start typing
@@ -59,6 +63,8 @@ hit tab. When I did that, something super important happened: my editor added a
 
 These attributes work almost like PHP functions: you can pass a bunch of
 arguments. The first one is the path. Set this to `/`.
+
+[[[ code('08f356a54e') ]]]
 
 Thanks to this, when someone goes to the homepage - `/` - Symfony will call this
 controller method to build the page!
@@ -100,6 +106,8 @@ error that it can't find the `Response` class.
 Inside this, the first argument is the content that we want to return.
 Start with a hardcoded string.
 
+[[[ code('1df1b30322') ]]]
+
 Route, check! Controller that returns a Response, check! Let's try this. Back at
 the browser, this page was just a demo that shows before we have a *real* homepage.
 Now that we do, when we refresh... there it is!
@@ -112,6 +120,8 @@ Oh, and it's optional, but because our controller always returns a `Response`, w
 can add a `Response` return type. That doesn't change how our code works, but it
 makes it more descriptive to read. And if we ever did something silly and returned
 something *other* than a response, PHP would give us a clear reminder.
+
+[[[ code('5d504440d6') ]]]
 
 Next up: to supercharge our development, let's install our first third-party
 package and learn about Symfony's amazing recipe system.
