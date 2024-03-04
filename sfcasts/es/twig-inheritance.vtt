@@ -1,0 +1,229 @@
+WEBVTT
+
+00:00:01.496 --> 00:00:04.836 align:middle
+¿Y si añadimos un diseño a nuestra página,
+como una cabecera y un pie de página?
+
+00:00:05.336 --> 00:00:10.156 align:middle
+Echa un vistazo al HTML de la página:
+es sólo el HTML de la plantilla.
+
+00:00:10.446 --> 00:00:14.016 align:middle
+No hay nada especial en Twig para
+que un diseño base con un encabezado
+
+00:00:14.016 --> 00:00:17.306 align:middle
+y un pie de página se envuelva
+automáticamente alrededor de nuestro contenido.
+
+00:00:17.496 --> 00:00:20.416 align:middle
+Lo que tengas en tu plantilla es
+lo que obtendrás en la página.
+
+00:00:20.996 --> 00:00:26.736 align:middle
+Sin embargo, la receta de Twig añadió un
+archivo de diseño base llamado base.html.twig.
+
+00:00:27.206 --> 00:00:31.236 align:middle
+Ahora es muy sencillo, pero aquí es donde
+añadiremos nuestra navegación superior, el
+
+00:00:31.486 --> 00:00:34.626 align:middle
+pie de página y cualquier otra cosa
+que deba aparecer en cada página.
+
+00:00:35.036 --> 00:00:38.566 align:middle
+La pregunta es: ¿cómo podemos hacer
+que nuestra plantilla utilice esto?
+
+00:00:39.076 --> 00:00:41.986 align:middle
+Con una función genial
+llamada herencia de plantillas.
+
+00:00:42.536 --> 00:00:48.506 align:middle
+En homepage.html.twig, en la parte superior,
+escribe {% extends y luego el nombre
+
+00:00:48.506 --> 00:00:51.106 align:middle
+de la plantilla base: base.html.twig.
+
+00:00:51.476 --> 00:00:54.416 align:middle
+Y fíjate: esta es la etiqueta hacer algo.
+
+00:00:54.776 --> 00:00:58.966 align:middle
+No estamos imprimiendo esta plantilla, le
+estamos diciendo a Twig que queremos ampliarla.
+
+00:00:59.886 --> 00:01:03.066 align:middle
+Si no hacemos nada más y
+actualizamos, obtendremos un error:
+
+00:01:03.356 --> 00:01:07.856 align:middle
+una plantilla que extiende otra no puede
+incluir contenido fuera de los bloques Twig.
+
+00:01:08.246 --> 00:01:11.696 align:middle
+Hmmm. Cuando extiendes una plantilla,
+le dices a Twig que quieres
+
+00:01:11.696 --> 00:01:14.386 align:middle
+renderizar tu plantilla
+dentro de ese diseño base.
+
+00:01:14.676 --> 00:01:18.376 align:middle
+Pero... Twig no tiene ni idea de
+dónde debe ir nuestro contenido.
+
+00:01:18.896 --> 00:01:21.946 align:middle
+¿Debería coger el HTML de nuestra
+página de inicio y ponerlo aquí abajo?
+
+00:01:21.946 --> 00:01:22.936 align:middle
+¿O aquí arriba?
+
+00:01:22.936 --> 00:01:23.726 align:middle
+¿O justo ahí?
+
+00:01:24.176 --> 00:01:24.976 align:middle
+No lo sabe
+
+00:01:25.176 --> 00:01:26.796 align:middle
+Así que lanza ese error.
+
+00:01:27.286 --> 00:01:29.746 align:middle
+La forma de decírselo es
+mediante estos bloques.
+
+00:01:30.516 --> 00:01:34.806 align:middle
+Los bloques son huecos en los que una
+plantilla hija puede poner contenido.
+
+00:01:35.586 --> 00:01:38.176 align:middle
+Y te habrás fijado en
+un bloque llamado body...
+
+00:01:38.296 --> 00:01:41.236 align:middle
+que es exactamente donde queremos
+que vaya nuestro contenido.
+
+00:01:41.976 --> 00:01:47.626 align:middle
+Para ponerlo ahí, rodea todo el
+contenido con un {% block body %}...
+
+00:01:47.626 --> 00:01:52.006 align:middle
+y en la parte inferior, {% endblock %}.
+
+00:01:52.006 --> 00:01:52.806 align:middle
+Y ahora...
+
+00:01:53.136 --> 00:01:54.346 align:middle
+¡está vivo!
+
+00:01:54.666 --> 00:01:58.626 align:middle
+No parece muy diferente, pero
+estamos dentro del diseño base.
+
+00:01:59.216 --> 00:02:04.476 align:middle
+Esto se llama herencia de plantillas porque funciona
+exactamente igual que la herencia de clases PHP.
+
+00:02:04.886 --> 00:02:08.076 align:middle
+Imagina que tienes una clase Homepage
+que extiende a una clase Base.
+
+00:02:08.426 --> 00:02:10.566 align:middle
+Esa clase Base tiene un método body(),
+
+00:02:10.776 --> 00:02:14.026 align:middle
+y nosotros anulamos ese método
+body() en la clase Homepage.
+
+00:02:14.286 --> 00:02:16.276 align:middle
+Es el mismo concepto en Twig.
+
+00:02:17.086 --> 00:02:22.346 align:middle
+Y estos nombres de bloque - como javascripts,
+stylesheets y body - no son nombres especiales...
+
+00:02:22.346 --> 00:02:23.986 align:middle
+y no están registrados en ningún sitio.
+
+00:02:24.576 --> 00:02:28.056 align:middle
+Puedes crear nuevos bloques
+como quieras y cuando quieras.
+
+00:02:28.656 --> 00:02:33.146 align:middle
+Por ejemplo, supongamos que queremos cambiar el
+title de la página desde una plantilla hija.
+
+00:02:33.996 --> 00:02:37.926 align:middle
+En este caso, la receta ya nos ha proporcionado
+un bloque llamado title para hacerlo.
+
+00:02:38.526 --> 00:02:40.876 align:middle
+Y este bloque tiene contenido por defecto...
+
+00:02:41.126 --> 00:02:44.606 align:middle
+por lo que ya vemos Welcome
+en la pestaña del navegador.
+
+00:02:45.506 --> 00:02:47.296 align:middle
+Anulemos esto en nuestra plantilla.
+
+00:02:48.256 --> 00:02:57.806 align:middle
+En cualquier lugar fuera del bloque body, di {%
+block title %}, escribe algo, y luego {% endblock %}.
+
+00:02:57.806 --> 00:02:59.726 align:middle
+Y ahora, ¡ya está!
+
+00:02:59.816 --> 00:03:00.836 align:middle
+¡Nuevo título!
+
+00:03:01.226 --> 00:03:05.646 align:middle
+Y fíjate en que cuando anulamos un
+bloque, lo anulamos por completo.
+
+00:03:05.946 --> 00:03:07.876 align:middle
+Ya no vemos la palabra Welcome.
+
+00:03:08.636 --> 00:03:12.886 align:middle
+En ocasiones, puede que quieras añadir algo
+al bloque padre en lugar de sustituirlo.
+
+00:03:13.666 --> 00:03:16.576 align:middle
+Puedes hacerlo diciendo {{ parent() }}.
+
+00:03:17.366 --> 00:03:18.596 align:middle
+¡Esto está muy bien!
+
+00:03:18.786 --> 00:03:22.766 align:middle
+La función parent() coge el contenido
+del bloque title de la plantilla padre.
+
+00:03:23.416 --> 00:03:26.036 align:middle
+Luego utilizamos {{ para imprimirlo.
+
+00:03:27.176 --> 00:03:29.756 align:middle
+Esta vez vemos la bienvenida
+y luego nuestro título.
+
+00:03:30.406 --> 00:03:32.716 align:middle
+Pero como en realidad no
+queremos eso, lo eliminaré.
+
+00:03:33.636 --> 00:03:37.626 align:middle
+Comprobación de estado: estamos
+devolviendo HTML y tenemos un diseño base.
+
+00:03:38.076 --> 00:03:42.016 align:middle
+Sí, nuestro sitio sigue siendo horriblemente feo,
+pero lo arreglaremos dentro de un rato. A continuación
+
+00:03:42.686 --> 00:03:46.826 align:middle
+, vamos a ejecutar un comando
+y acceder al instante a algunas
+
+00:03:46.826 --> 00:03:49.756 align:middle
+de las herramientas de depuración
+más potentes de la web.
