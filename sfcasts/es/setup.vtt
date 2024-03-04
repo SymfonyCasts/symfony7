@@ -1,0 +1,265 @@
+WEBVTT
+
+00:00:00.106 --> 00:00:06.246 align:middle
+¡Bienvenido al primer tutorial de Symfony 7!
+
+00:00:06.526 --> 00:00:11.006 align:middle
+Mi nombre es Ryan - Vivo aquí en el
+mundo de fantasía de Symfonycasts y...
+
+00:00:11.276 --> 00:00:15.156 align:middle
+Estoy más que emocionado de ser
+tu guía a través de esta serie
+
+00:00:15.156 --> 00:00:17.236 align:middle
+sobre Symfony, desarrollo web...
+
+00:00:17.426 --> 00:00:18.366 align:middle
+chistes malos...
+
+00:00:18.466 --> 00:00:23.876 align:middle
+animaciones espaciales, y lo más importante, construir
+cosas reales de las que podamos estar orgullosos.
+
+00:00:24.436 --> 00:00:26.886 align:middle
+Para mí, es como si fuera la
+persona afortunada que consigue
+
+00:00:26.886 --> 00:00:30.106 align:middle
+darte un tour personal por el Enterprise...
+
+00:00:30.106 --> 00:00:32.956 align:middle
+o cualquier cosa friki que te emocione más.
+
+00:00:32.956 --> 00:00:35.376 align:middle
+Y eso es porque me encantan estas cosas.
+
+00:00:35.766 --> 00:00:40.706 align:middle
+Crear bases de datos, construir bonitas interfaces
+de usuario, escribir código de alta calidad...
+
+00:00:40.896 --> 00:00:42.956 align:middle
+me levanta de la cama por las mañanas.
+
+00:00:43.606 --> 00:00:46.646 align:middle
+Y Symfony es la mejor herramienta
+para hacer todo esto...
+
+00:00:46.896 --> 00:00:49.076 align:middle
+y convertirme en un mejor
+desarrollador por el camino.
+
+00:00:49.546 --> 00:00:54.786 align:middle
+Y ese es realmente mi objetivo: quiero que
+disfrutes de todo esto tanto como yo...
+
+00:00:55.116 --> 00:01:00.166 align:middle
+y que te sientas capacitado para construir todas las
+cosas increíbles que tienes flotando en tu mente.
+
+00:01:00.926 --> 00:01:03.346 align:middle
+Ahora bien, una de mis cosas
+favoritas de enseñar Symfony es que
+
+00:01:03.346 --> 00:01:05.726 align:middle
+nuestro proyecto va a empezar diminuto.
+
+00:01:06.036 --> 00:01:07.426 align:middle
+Eso facilita el aprendizaje.
+
+00:01:07.786 --> 00:01:13.846 align:middle
+Pero luego, escalará automáticamente a medida que necesitemos
+más herramientas mediante un sistema de recetas único.
+
+00:01:14.436 --> 00:01:19.116 align:middle
+Symfony es en realidad una colección
+de más de 200 pequeñas librerías PHP.
+
+00:01:19.286 --> 00:01:20.726 align:middle
+Así que son un montón de herramientas...
+
+00:01:20.866 --> 00:01:22.836 align:middle
+pero podemos elegir lo que necesitamos.
+
+00:01:23.466 --> 00:01:25.346 align:middle
+Porque, puedes estar
+construyendo una API pura...
+
+00:01:25.736 --> 00:01:30.476 align:middle
+o una aplicación web completa, que es en
+lo que nos centraremos en este tutorial.
+
+00:01:30.936 --> 00:01:35.736 align:middle
+Aunque, si estás construyendo una API,
+sigue los primeros tutoriales de esta serie,
+
+00:01:36.016 --> 00:01:38.986 align:middle
+y luego pasa a nuestros
+tutoriales sobre la API Platform.
+
+00:01:39.606 --> 00:01:43.486 align:middle
+API Platform es un sistema
+alucinantemente divertido y potente
+
+00:01:43.486 --> 00:01:46.736 align:middle
+para crear APIs, construido sobre Symfony.
+
+00:01:47.426 --> 00:01:52.646 align:middle
+Symfony también es increíblemente rápido, tiene
+versiones de soporte a largo plazo y se esfuerza mucho
+
+00:01:52.646 --> 00:01:58.696 align:middle
+en crear una experiencia agradable para el desarrollador,
+manteniendo las mejores prácticas de programación.
+
+00:01:59.146 --> 00:02:03.406 align:middle
+Esto significa que podemos escribir código de
+alta calidad y hacer nuestro trabajo rápidamente.
+
+00:02:03.936 --> 00:02:06.086 align:middle
+Vale, ya está bien de
+hablar maravillas de Symfony.
+
+00:02:06.346 --> 00:02:07.206 align:middle
+¿Listo para empezar a trabajar?
+
+00:02:07.516 --> 00:02:08.756 align:middle
+Pues sube a bordo.
+
+00:02:08.756 --> 00:02:11.906 align:middle
+Y dirígete a https://symfony.com/download.
+
+00:02:12.406 --> 00:02:16.856 align:middle
+Esta página contiene instrucciones para descargar
+un binario independiente llamado symfony.
+
+00:02:17.306 --> 00:02:19.626 align:middle
+Esto no es Symfony propiamente dicho... es
+
+00:02:19.656 --> 00:02:24.646 align:middle
+sólo una pequeña herramienta que nos ayudará a
+hacer cosas, como iniciar nuevos proyectos Symfony,
+
+00:02:24.646 --> 00:02:28.606 align:middle
+ejecutar un servidor web local o incluso
+desplegar nuestra aplicación en producción.
+
+00:02:29.286 --> 00:02:33.856 align:middle
+Una vez que lo hayas descargado e instalado,
+abre un terminal y entra en cualquier directorio.
+
+00:02:34.566 --> 00:02:37.856 align:middle
+Comprueba que el binario symfony está
+listo para funcionar ejecutándolo: symfony
+
+00:02:37.856 --> 00:02:42.976 align:middle
+--help Tiene un montón de comandos,
+pero sólo necesitaremos unos pocos.
+
+00:02:43.736 --> 00:02:49.836 align:middle
+Antes de iniciar un proyecto, ejecuta también symfony
+check:req , que significa comprobar requisitos.
+
+00:02:50.416 --> 00:02:53.826 align:middle
+Esto asegura que tenemos todo lo necesario
+en nuestro sistema para ejecutar Symfony,
+
+00:02:54.076 --> 00:02:57.666 align:middle
+como PHP en la versión correcta
+y algunas extensiones PHP.
+
+00:02:58.196 --> 00:03:01.086 align:middle
+Una vez que esto esté contento,
+¡podemos empezar un nuevo proyecto!
+
+00:03:01.686 --> 00:03:04.746 align:middle
+Hazlo con symfony new y luego
+un nombre de directorio.
+
+00:03:05.076 --> 00:03:06.776 align:middle
+Yo llamaré al mío starshop.
+
+00:03:07.036 --> 00:03:08.306 align:middle
+Más adelante hablaremos de ello.
+
+00:03:09.356 --> 00:03:13.156 align:middle
+Esto nos dará un pequeño proyecto
+con sólo las cosas base instaladas.
+
+00:03:13.666 --> 00:03:17.096 align:middle
+Luego, iremos añadiendo
+más cosas poco a poco.
+
+00:03:17.096 --> 00:03:18.146 align:middle
+¡Va a ser genial!
+
+00:03:18.676 --> 00:03:21.016 align:middle
+Pero más adelante, cuando te
+sientas cómodo con Symfony
+
+00:03:21.306 --> 00:03:25.666 align:middle
+, si quieres empezar más rápidamente,
+puedes ejecutar el mismo comando, pero con
+
+00:03:25.666 --> 00:03:29.066 align:middle
+--webapp para obtener un proyecto
+con muchas más cosas preinstaladas.
+
+00:03:29.696 --> 00:03:35.176 align:middle
+De todas formas, entra en el directorio - cd starshop
+- y luego escribiré ls para comprobar las cosas.
+
+00:03:35.676 --> 00:03:40.826 align:middle
+¡Genial! Conoceremos estos archivos en el próximo
+capítulo, pero éste es nuestro proyecto...
+
+00:03:40.826 --> 00:03:42.496 align:middle
+¡y ya funciona!
+
+00:03:43.016 --> 00:03:46.056 align:middle
+Para verlo funcionando en un navegador,
+necesitamos iniciar un servidor web.
+
+00:03:46.636 --> 00:03:50.966 align:middle
+Puedes utilizar el servidor web que
+quieras: Apache, Nginx, Caddy, lo que sea.
+
+00:03:51.586 --> 00:03:56.726 align:middle
+Pero para el desarrollo local, recomiendo encarecidamente
+utilizar el binario symfony que acabamos de instalar.
+
+00:03:57.346 --> 00:04:03.516 align:middle
+Ejecuta: symfony serve La primera vez que hagas esto,
+puede que te pida que ejecutes otro comando para
+
+00:04:03.706 --> 00:04:08.966 align:middle
+configurar un certificado SSL, lo cual está
+bien porque entonces el servidor admite https.
+
+00:04:09.596 --> 00:04:10.786 align:middle
+Y... ¡bam!
+
+00:04:10.946 --> 00:04:16.996 align:middle
+Tenemos un nuevo servidor web para nuestro
+proyecto en https://127.0.0.1:8000.
+
+00:04:17.516 --> 00:04:21.856 align:middle
+Copia eso, gira a tu
+navegador favorito, pega y...
+
+00:04:22.186 --> 00:04:23.756 align:middle
+¡bienvenido a Symfony 7!
+
+00:04:23.756 --> 00:04:25.286 align:middle
+¡Eso es lo que iba a decir!
+
+00:04:25.916 --> 00:04:29.746 align:middle
+A continuación, sentémonos, pidamos
+un té Earl Grey y hagámonos amigos
+
+00:04:29.746 --> 00:04:31.776 align:middle
+de todos los archivos de
+nuestra nueva aplicación...
+
+00:04:31.946 --> 00:04:33.346 align:middle
+que no son muchos.
