@@ -1,0 +1,313 @@
+WEBVTT
+
+00:00:01.046 --> 00:00:02.036 align:middle
+Tengo un secreto.
+
+00:00:02.456 --> 00:00:05.996 align:middle
+Cuando se creó nuestro
+proyecto, no eran 15 archivos.
+
+00:00:06.396 --> 00:00:08.406 align:middle
+Era... un solo archivo.
+
+00:00:08.926 --> 00:00:11.506 align:middle
+Si miraras dentro del código
+del comando symfony new,
+
+00:00:11.846 --> 00:00:14.826 align:middle
+descubrirías que es un
+atajo para sólo dos cosas.
+
+00:00:15.226 --> 00:00:19.296 align:middle
+En primer lugar, clona un repositorio
+llamado symfony/skeleton...
+
+00:00:19.486 --> 00:00:22.876 align:middle
+que es sólo un archivo si ignoras la licencia.
+
+00:00:23.196 --> 00:00:25.736 align:middle
+Y en segundo lugar, ejecuta composer install.
+
+00:00:26.156 --> 00:00:26.606 align:middle
+Y ya está
+
+00:00:26.996 --> 00:00:32.796 align:middle
+Pero espera, si ese es el caso, ¿de dónde
+han salido todos esos otros archivos?
+
+00:00:33.046 --> 00:00:35.896 align:middle
+¿Como las cosas de bin/, config/ y src/?
+
+00:00:36.576 --> 00:00:42.686 align:middle
+La respuesta comienza con un paquete especial dentro
+de nuestro archivo composer.json llamado symfony/flex.
+
+00:00:43.236 --> 00:00:50.026 align:middle
+Flex es un complemento de Composer que añade
+dos superpoderes a Composer: alias y recetas.
+
+00:00:50.666 --> 00:00:51.906 align:middle
+Los alias son sencillos.
+
+00:00:52.506 --> 00:00:55.786 align:middle
+Para añadir un nuevo paquete a tu
+aplicación -lo que haremos en un minuto-
+
+00:00:56.146 --> 00:01:02.056 align:middle
+, ejecuta composer require y luego el nombre
+del paquete, como symfony/http-client.
+
+00:01:02.636 --> 00:01:04.556 align:middle
+Flex da a los paquetes más importantes
+
+00:01:04.556 --> 00:01:08.206 align:middle
+del ecosistema Symfony un nombre
+más corto, llamado alias.
+
+00:01:08.696 --> 00:01:14.536 align:middle
+Por ejemplo, symfony/http-client
+tiene un alias llamado http-client.
+
+00:01:15.056 --> 00:01:18.396 align:middle
+Sí, podríamos ejecutar
+composer require http-client
+
+00:01:18.596 --> 00:01:21.796 align:middle
+y Flex lo traduciría al
+nombre final del paquete.
+
+00:01:22.296 --> 00:01:24.726 align:middle
+Es sólo un atajo a la
+hora de añadir paquetes.
+
+00:01:25.316 --> 00:01:30.736 align:middle
+Si quieres ver todos los alias disponibles,
+ve a un repositorio llamado symfony/recetas...
+
+00:01:30.886 --> 00:01:33.056 align:middle
+y luego haz clic en el enlace RECIPES.md.
+
+00:01:33.866 --> 00:01:36.026 align:middle
+A la derecha, ¡ahí están!
+
+00:01:36.726 --> 00:01:41.226 align:middle
+El segundo superpoder que Symfony Flex
+añade a Composer son las recetas.
+
+00:01:41.466 --> 00:01:43.156 align:middle
+Son fascinantes.
+
+00:01:43.656 --> 00:01:49.426 align:middle
+Cuando añades un nuevo paquete, puede tener una
+receta, que es básicamente un conjunto de archivos
+
+00:01:49.426 --> 00:01:51.036 align:middle
+que se añadirán a tu proyecto.
+
+00:01:51.536 --> 00:01:57.286 align:middle
+Y resulta que todos los archivos con los que empezamos
+-en bin/, config/, public/ - proceden de las recetas
+
+00:01:57.656 --> 00:02:02.106 align:middle
+de los paquetes que se
+instalaron originalmente.
+
+00:02:02.756 --> 00:02:08.056 align:middle
+Por ejemplo, symfony/framework-bundle es
+el paquete "core" del Framework Symfony.
+
+00:02:08.706 --> 00:02:14.136 align:middle
+Puedes consultar su receta yendo al
+repositorio symfony/recipes y navegando
+
+00:02:14.136 --> 00:02:19.396 align:middle
+a symfony, framework-bundle,
+y luego a la última versión.
+
+00:02:20.306 --> 00:02:26.856 align:middle
+¡Bum! Echa un vistazo a config/packages/: ¡la mayoría
+de las cosas con las que empezamos proceden de esta receta!
+
+00:02:27.816 --> 00:02:30.296 align:middle
+Otra forma de ver las recetas
+es en tu línea de comandos.
+
+00:02:30.716 --> 00:02:36.726 align:middle
+Ejecuta: composer recipes Aparentemente se
+instalaron las recetas de cuatro paquetes diferentes.
+
+00:02:37.256 --> 00:02:41.466 align:middle
+Y podíamos obtener información sobre cualquiera de
+ellos añadiendo su nombre al final del comando. De
+
+00:02:42.216 --> 00:02:46.206 align:middle
+todos modos, las recetas son increíbles
+porque podemos instalar un paquete
+
+00:02:46.246 --> 00:02:48.676 align:middle
+y obtener al instante cualquier
+archivo que necesitemos.
+
+00:02:49.216 --> 00:02:52.676 align:middle
+En lugar de complicarnos con la configuración,
+nos ponemos a trabajar directamente.
+
+00:02:53.406 --> 00:02:58.666 align:middle
+Probemos esto: añadamos un nuevo
+paquete llamado PHP-CS-Fixer
+
+00:02:58.956 --> 00:03:02.876 align:middle
+que nos dará un archivo ejecutable para
+arreglar el estilo de nuestro código. Por
+
+00:03:03.776 --> 00:03:06.696 align:middle
+ejemplo, en src/Controller/MainController.php,
+
+00:03:06.696 --> 00:03:10.856 align:middle
+si sigues las normas de
+codificación de PHP, la llave debe
+
+00:03:10.856 --> 00:03:13.056 align:middle
+estar en la línea siguiente a una función.
+
+00:03:13.656 --> 00:03:18.236 align:middle
+Si hiciéramos algo así, nuestro
+archivo violaría ahora esas normas.
+
+00:03:18.666 --> 00:03:22.656 align:middle
+Eso no dañaría nada, pero ya sabes, queremos
+que nuestro código tenga un aspecto limpio.
+
+00:03:23.146 --> 00:03:25.546 align:middle
+Y PHP-CS-Fixer puede ayudarnos a hacerlo.
+
+00:03:26.086 --> 00:03:33.416 align:middle
+Para instalarlo, ejecuta: composer require
+cs-fixer-shim Y sí, se trata de un alias.
+
+00:03:33.896 --> 00:03:38.316 align:middle
+Encima, el paquete verdadero
+es php-cs-fixer/shim.
+
+00:03:39.016 --> 00:03:41.086 align:middle
+¿Este paquete venía con una receta?
+
+00:03:41.416 --> 00:03:46.846 align:middle
+¡Pues sí! El Configuring
+php-cs-fixer/shim nos lo indica.
+
+00:03:47.256 --> 00:03:52.346 align:middle
+Pero, también podemos verlo ejecutando:
+git status El hecho de que composer.json
+
+00:03:52.346 --> 00:03:57.866 align:middle
+y composer.lock estén modificados es un
+comportamiento 100% normal de Composer.
+
+00:03:58.376 --> 00:04:02.626 align:middle
+Puedes ver que composer.json tiene la
+nueva biblioteca bajo la clave require.
+
+00:04:03.406 --> 00:04:07.896 align:middle
+Pero todos los demás archivos modificados o
+nuevos lo son gracias a la receta del paquete.
+
+00:04:08.476 --> 00:04:09.936 align:middle
+¡Vamos a investigarlas!
+
+00:04:10.456 --> 00:04:11.826 align:middle
+Abre .gitignore.
+
+00:04:12.806 --> 00:04:18.126 align:middle
+¡Genial! En la parte inferior , ha añadido dos
+nuevas entradas para dos archivos comunes que querrás
+
+00:04:18.126 --> 00:04:20.716 align:middle
+ignorar cuando utilices PHP CS fixer.
+
+00:04:21.326 --> 00:04:26.056 align:middle
+La receta también añadió un nuevo
+archivo .php-cs-fixer.dist.php.
+
+00:04:26.496 --> 00:04:29.226 align:middle
+Este es el archivo de
+configuración de CS Fixer.
+
+00:04:29.636 --> 00:04:30.316 align:middle
+¡Y compruébalo!
+
+00:04:30.566 --> 00:04:32.976 align:middle
+Está prediseñado para funcionar
+con nuestra aplicación Symfony. Le
+
+00:04:33.366 --> 00:04:37.696 align:middle
+dice que arregle todos los archivos del directorio
+actual, pero que ignore el directorio var/
+
+00:04:37.886 --> 00:04:40.406 align:middle
+porque es donde Symfony
+almacena sus archivos de caché.
+
+00:04:41.056 --> 00:04:44.026 align:middle
+También le dice que utilice un
+conjunto de reglas llamado Symfony.
+
+00:04:44.536 --> 00:04:48.096 align:middle
+Eso significa que queremos que el estilo de
+nuestro código coincida con el estilo de Symfony.
+
+00:04:48.686 --> 00:04:52.766 align:middle
+La cuestión es: en lugar de perder el tiempo
+buscando esta configuración por defecto...
+
+00:04:53.116 --> 00:04:54.006 align:middle
+¡simplemente la cogemos!
+
+00:04:54.856 --> 00:04:57.396 align:middle
+El último archivo modificado es symfony.lock.
+
+00:04:57.726 --> 00:05:01.976 align:middle
+Esto mantiene un registro de qué recetas
+tenemos instaladas y en qué versión.
+
+00:05:02.436 --> 00:05:06.346 align:middle
+Y sí, vamos a enviar todos estos
+archivos a nuestro repositorio.
+
+00:05:07.146 --> 00:05:09.506 align:middle
+Ahora que hemos instalado el
+paquete, vamos a utilizarlo.
+
+00:05:10.036 --> 00:05:10.826 align:middle
+Para ello, ejecuta: ./vendor/bin/php-cs-fixer
+
+00:05:11.126 --> 00:05:16.156 align:middle
+Eso mostrará todos los
+comandos disponibles. El que
+
+00:05:16.426 --> 00:05:18.526 align:middle
+queremos se llama arreglar. Pruébalo
+
+00:05:18.946 --> 00:05:20.396 align:middle
+: Y... ¡sí!
+
+00:05:20.756 --> 00:05:24.206 align:middle
+¡Ha encontrado la infracción en
+MainController.php! Cuando vamos
+
+00:05:24.956 --> 00:05:26.406 align:middle
+a ese archivo ... ¡sí!
+
+00:05:26.956 --> 00:05:31.826 align:middle
+Movió mi llave rizada desde el final de
+la línea hasta la línea siguiente. Es
+
+00:05:32.316 --> 00:05:33.376 align:middle
+fantástico. A continuación
+
+00:05:34.246 --> 00:05:37.976 align:middle
+, vamos a conocer e instalar una de
+mis bibliotecas favoritas de todo
+
+00:05:37.976 --> 00:05:40.466 align:middle
+PHP: el motor de plantillas Twig.
