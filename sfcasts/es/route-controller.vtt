@@ -1,0 +1,371 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:02.416 align:middle
+Bien, ésta es la primicia.
+
+00:00:02.846 --> 00:00:07.836 align:middle
+Wesley Crusher -el alférez favorito de todos
+en Star Trek- se ha retirado de la Flota Estelar
+
+00:00:07.836 --> 00:00:11.906 align:middle
+y colabora con nosotros para poner en marcha
+un nuevo negocio: La Tienda Estelar de Wesley.
+
+00:00:11.906 --> 00:00:16.376 align:middle
+Alguien tiene que romper el monopolio ferengi en el
+negocio de reparación de naves estelares de la galaxia,
+
+00:00:16.376 --> 00:00:19.116 align:middle
+y nos ha contratado para
+construir el sitio que lo haga.
+
+00:00:19.496 --> 00:00:22.336 align:middle
+¡Estamos a punto de hacerles
+la puñeta a los ferengis!
+
+00:00:22.766 --> 00:00:24.676 align:middle
+Y todo empieza con la construcción
+de nuestra primera página.
+
+00:00:25.086 --> 00:00:27.416 align:middle
+La idea detrás de cada
+página es siempre la misma.
+
+00:00:27.416 --> 00:00:30.136 align:middle
+Primer paso: dale una URL chula.
+
+00:00:30.426 --> 00:00:31.776 align:middle
+Eso se llama la ruta.
+
+00:00:32.226 --> 00:00:35.916 align:middle
+Paso dos, escribir una función
+PHP que genere la página.
+
+00:00:36.246 --> 00:00:37.776 align:middle
+Eso se conoce como el controlador.
+
+00:00:38.256 --> 00:00:42.426 align:middle
+Y esa página puede ser HTML,
+JSON, arte ASCII, cualquier cosa.
+
+00:00:42.946 --> 00:00:47.176 align:middle
+En Symfony, el controlador es siempre
+un método dentro de una clase PHP.
+
+00:00:47.176 --> 00:00:50.006 align:middle
+Así que, ¡necesitamos crear
+nuestro primer código PHP!
+
+00:00:50.356 --> 00:00:53.146 align:middle
+¿Dónde vive el código
+PHP en nuestra aplicación?
+
+00:00:53.566 --> 00:00:55.496 align:middle
+Exacto, en el directorio src/.
+
+00:00:56.086 --> 00:00:59.456 align:middle
+Dentro de este directorio
+src/Controller/, crea un nuevo archivo.
+
+00:01:00.096 --> 00:01:05.566 align:middle
+Normalmente seleccionaría nueva "clase PHP", pero
+para esta primera vez, crea un archivo vacío.
+
+00:01:05.966 --> 00:01:07.446 align:middle
+Haremos cada parte a mano.
+
+00:01:07.806 --> 00:01:11.696 align:middle
+Llámalo MainController.php, pero
+puedes ponerle el nombre que quieras.
+
+00:01:12.386 --> 00:01:16.766 align:middle
+Dentro, añade la etiqueta open PHP,
+y luego di class MainController.
+
+00:01:18.106 --> 00:01:21.826 align:middle
+Encima de esto, añade un espacio
+de nombres de App\Controller.
+
+00:01:22.996 --> 00:01:24.626 align:middle
+Vale, algunas cosas sobre esto.
+
+00:01:24.766 --> 00:01:29.836 align:middle
+Primero, el hecho de que ponga esta clase dentro
+de un directorio llamado Controller es opcional.
+
+00:01:30.036 --> 00:01:31.636 align:middle
+Es sólo una convención.
+
+00:01:31.806 --> 00:01:34.546 align:middle
+Podrías cambiarle el nombre por
+cualquiera que sea la palabra klingon
+
+00:01:34.546 --> 00:01:37.336 align:middle
+para Controller y todo seguiría igual...
+
+00:01:37.426 --> 00:01:39.306 align:middle
+¡y probablemente sería más interesante!
+
+00:01:39.986 --> 00:01:44.126 align:middle
+Sin embargo, hay algunas reglas
+sobre las clases PHP en general.
+
+00:01:44.616 --> 00:01:50.086 align:middle
+La primera es que cada clase debe tener un
+espacio de nombres y ese espacio de nombres tiene
+
+00:01:50.086 --> 00:01:51.996 align:middle
+que coincidir con tu estructura de directorios.
+
+00:01:52.426 --> 00:01:56.606 align:middle
+Siempre será App\ y luego el
+directorio en el que estés.
+
+00:01:56.606 --> 00:02:02.076 align:middle
+Sin entrar en demasiados detalles, es una regla
+que encontrarás en todos los proyectos PHP.
+
+00:02:02.816 --> 00:02:06.996 align:middle
+La segunda regla es que el nombre de tu clase
+debe coincidir con el nombre de tu archivo .php.
+
+00:02:06.996 --> 00:02:13.096 align:middle
+Si te equivocas en cualquiera de estas dos cosas, recibirás
+un error de PHP diciendo que no puede encontrar tu clase.
+
+00:02:13.466 --> 00:02:15.676 align:middle
+Los ferengis nunca cometen este error. De
+
+00:02:16.436 --> 00:02:19.186 align:middle
+todos modos, nuestro objetivo
+es crear un controlador,
+
+00:02:19.186 --> 00:02:21.946 align:middle
+que es un método en una clase
+que construye la página.
+
+00:02:22.356 --> 00:02:24.656 align:middle
+Añade una nueva función
+pública y llámala homepage.
+
+00:02:24.976 --> 00:02:26.636 align:middle
+Pero, de nuevo, el nombre no importa.
+
+00:02:27.256 --> 00:02:27.836 align:middle
+Y... ¡sí!
+
+00:02:28.196 --> 00:02:31.266 align:middle
+Aún no está hecho, ¡pero
+este es nuestro controlador!
+
+00:02:31.766 --> 00:02:35.266 align:middle
+Pero recuerda, una página es la
+combinación de un controlador
+
+00:02:35.266 --> 00:02:38.366 align:middle
+y una ruta, que define la URL de la página.
+
+00:02:38.866 --> 00:02:40.106 align:middle
+¿Dónde ponemos la ruta?
+
+00:02:40.466 --> 00:02:44.856 align:middle
+Justo encima del método controlador,
+utilizando una función de PHP llamada atributo.
+
+00:02:45.246 --> 00:02:51.996 align:middle
+Escribe #[] y luego empieza a escribir Route con
+mayúscula R. ¡Fíjate en el autocompletado!
+
+00:02:52.516 --> 00:02:57.966 align:middle
+Cualquiera de las opciones funcionará, pero utiliza la
+de Attribute -que es más nueva- y luego pulsa tabulador.
+
+00:02:58.616 --> 00:03:01.366 align:middle
+Cuando hice eso, ocurrió algo superimportante:
+
+00:03:01.756 --> 00:03:05.466 align:middle
+mi editor añadió una declaración
+use al principio de la clase.
+
+00:03:05.466 --> 00:03:09.966 align:middle
+Siempre que utilices un atributo
+PHP, debes tener una declaración use
+
+00:03:10.046 --> 00:03:11.886 align:middle
+correspondiente para él en el mismo archivo.
+
+00:03:12.356 --> 00:03:17.356 align:middle
+Estos atributos funcionan casi como las funciones
+PHP: puedes pasar un montón de argumentos.
+
+00:03:17.726 --> 00:03:19.406 align:middle
+El primero es la ruta.
+
+00:03:19.406 --> 00:03:24.396 align:middle
+Establécela en /. ¡Gracias a esto, cuando
+alguien vaya a la página de inicio - / -
+
+00:03:24.396 --> 00:03:28.956 align:middle
+Symfony llamará a este método
+controlador para construir la página!
+
+00:03:29.386 --> 00:03:31.386 align:middle
+¿Qué... debería devolver nuestro método?
+
+00:03:31.786 --> 00:03:34.056 align:middle
+Sólo el HTML que queremos, ¿verdad?
+
+00:03:34.056 --> 00:03:36.126 align:middle
+¿O el JSON si estamos construyendo una API?
+
+00:03:37.156 --> 00:03:40.166 align:middle
+Casi. La web funciona con
+un sistema bien conocido.
+
+00:03:40.436 --> 00:03:43.326 align:middle
+Primero, un usuario solicita una página.
+
+00:03:43.686 --> 00:03:46.386 align:middle
+Dicen: Quiero ver /products...
+
+00:03:46.386 --> 00:03:48.866 align:middle
+o quiero ver /users.json.
+
+00:03:49.426 --> 00:03:53.326 align:middle
+Lo que les devolvemos,
+sí, contiene HTML o JSON.
+
+00:03:53.756 --> 00:03:55.146 align:middle
+Pero es más que eso.
+
+00:03:55.546 --> 00:04:00.136 align:middle
+También comunicamos de vuelta un código de
+estado -que dice si la respuesta era correcta
+
+00:04:00.136 --> 00:04:05.996 align:middle
+o tenía un error-, así como estas cosas llamadas
+cabeceras, que comunican un poco más de información,
+
+00:04:06.186 --> 00:04:08.256 align:middle
+como el formato de lo que estamos devolviendo.
+
+00:04:08.766 --> 00:04:12.356 align:middle
+Todo este hermoso paquete se llama respuesta.
+
+00:04:12.396 --> 00:04:16.816 align:middle
+Así que sí, la mayoría de las veces,
+sólo pensaremos en devolver HTML o JSON.
+
+00:04:16.816 --> 00:04:22.556 align:middle
+Pero lo que realmente estamos enviando es esta
+cosa más grande y friki llamada respuesta.
+
+00:04:22.556 --> 00:04:26.946 align:middle
+Así que todo nuestro trabajo como desarrolladores web
+-independientemente del lenguaje en el que programemos-
+
+00:04:27.096 --> 00:04:31.476 align:middle
+consiste en comprender la petición del usuario
+y, a continuación, crear y devolver la respuesta.
+
+00:04:31.886 --> 00:04:34.926 align:middle
+Y esto nos lleva de nuevo a
+algo que me encanta de Symfony.
+
+00:04:35.436 --> 00:04:36.996 align:middle
+¿Qué devuelve nuestro controlador?
+
+00:04:37.346 --> 00:04:39.796 align:middle
+¡Un nuevo objeto Response de Symfony!
+
+00:04:40.076 --> 00:04:45.736 align:middle
+Y de nuevo, PhpStorm quiere autocompletar esto,
+sugiriendo unas cuantas clases diferentes de Response.
+
+00:04:46.296 --> 00:04:49.546 align:middle
+Nosotros queremos la del componente
+HttpFoundation de Symfony.
+
+00:04:50.026 --> 00:04:54.606 align:middle
+Esa es la librería de Symfony que contiene
+todo lo relacionado con peticiones y respuestas.
+
+00:04:55.076 --> 00:05:01.896 align:middle
+Pulsa tabulador. Una vez más, cuando hicimos eso, PhpStorm
+añadió una declaración use en la parte superior del archivo.
+
+00:05:02.366 --> 00:05:04.626 align:middle
+Voy a utilizar este truco constantemente.
+
+00:05:05.086 --> 00:05:09.356 align:middle
+Cada vez que hagas referencia a un nombre de clase,
+debes tener una declaración use correspondiente,
+
+00:05:09.356 --> 00:05:12.776 align:middle
+de lo contrario PHP te dará un error diciendo
+que no puede encontrar la clase Response.
+
+00:05:13.356 --> 00:05:17.216 align:middle
+Dentro de esto, el primer argumento
+es el contenido que queremos devolver.
+
+00:05:17.216 --> 00:05:19.306 align:middle
+Empieza con una cadena codificada.
+
+00:05:22.386 --> 00:05:23.366 align:middle
+Ruta, ¡comprobado!
+
+00:05:23.556 --> 00:05:25.746 align:middle
+Controlador que devuelve
+una Respuesta, ¡comprobado!
+
+00:05:25.956 --> 00:05:27.256 align:middle
+Probemos esto.
+
+00:05:27.766 --> 00:05:33.096 align:middle
+En el navegador, esta página era sólo una demo que
+muestra antes de que tengamos una página de inicio real.
+
+00:05:33.596 --> 00:05:35.666 align:middle
+Ahora que la tenemos, cuando actualizamos...
+
+00:05:36.096 --> 00:05:37.066 align:middle
+¡ahí está!
+
+00:05:37.516 --> 00:05:42.336 align:middle
+Sé que aún no es mucho, pero acabamos de
+aprender la primera parte fundamental de Symfony:
+
+00:05:42.656 --> 00:05:44.926 align:middle
+que cada página es una
+ruta y un controlador...
+
+00:05:45.156 --> 00:05:48.856 align:middle
+y que cada controlador devuelve una respuesta.
+
+00:05:48.856 --> 00:05:53.456 align:middle
+Ah, y es opcional, pero como nuestro
+controlador siempre devuelve un Response,
+
+00:05:53.726 --> 00:05:56.046 align:middle
+podemos añadir un tipo de retorno Response.
+
+00:05:56.696 --> 00:06:01.216 align:middle
+Eso no cambia el funcionamiento de nuestro
+código, pero lo hace más descriptivo de leer.
+
+00:06:01.216 --> 00:06:05.366 align:middle
+Y si alguna vez hiciéramos una tontería y
+devolviéramos algo que no fuera una respuesta,
+
+00:06:05.366 --> 00:06:07.626 align:middle
+PHP nos lo recordaría
+claramente. A continuación
+
+00:06:08.686 --> 00:06:14.306 align:middle
+: para potenciar nuestro desarrollo,
+instalemos nuestro primer paquete de terceros y
+
+00:06:14.306 --> 00:06:16.736 align:middle
+conozcamos el increíble
+sistema de recetas de Symfony.
