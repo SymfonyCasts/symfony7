@@ -1,0 +1,492 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:03.236 align:middle
+Quiero devolver HTML para esta página.
+
+00:00:03.656 --> 00:00:06.946 align:middle
+Podríamos poner ese HTML
+dentro del controlador...
+
+00:00:07.146 --> 00:00:09.236 align:middle
+pero eso se va a poner feo rápidamente.
+
+00:00:09.236 --> 00:00:14.696 align:middle
+Afortunadamente, hay una forma mejor: utilizar
+una biblioteca de plantillas llamada Twig.
+
+00:00:15.196 --> 00:00:17.576 align:middle
+En tu terminal, asegúrate de
+haber confirmado tus cambios,
+
+00:00:17.686 --> 00:00:21.976 align:middle
+porque quiero ver qué añade la receta
+de este nuevo paquete a nuestro proyecto.
+
+00:00:22.216 --> 00:00:23.306 align:middle
+Ya lo he hecho.
+
+00:00:23.886 --> 00:00:29.836 align:middle
+Instálalo con: composer require twig
+Probablemente reconozcas que twig es un alias...
+
+00:00:30.136 --> 00:00:33.136 align:middle
+esta vez de un paquete
+llamado symfony/twig-pack.
+
+00:00:33.426 --> 00:00:36.066 align:middle
+Y la palabra "paquete"
+es importante en Symfony.
+
+00:00:36.456 --> 00:00:37.346 align:middle
+Un paquete es...
+
+00:00:37.526 --> 00:00:41.616 align:middle
+una especie de paquete falso que ayuda
+a instalar varios paquetes a la vez.
+
+00:00:42.126 --> 00:00:44.426 align:middle
+Observa: abre composer.json.
+
+00:00:44.856 --> 00:00:50.726 align:middle
+En lugar de un nuevo paquete aquí llamado
+symfony/twig-pack, tenemos tres nuevos paquetes...
+
+00:00:50.906 --> 00:00:53.496 align:middle
+¡y twig-pack ni siquiera es uno de ellos!
+
+00:00:53.946 --> 00:00:58.446 align:middle
+Los tres paquetes nos dan todo lo que necesitamos
+para una configuración Twig completa y robusta.
+
+00:00:58.856 --> 00:01:01.766 align:middle
+Así que cuando veas la
+palabra "paquete", no es
+
+00:01:02.016 --> 00:01:05.576 align:middle
+sólo un atajo para instalar
+varios paquetes a la vez.
+
+00:01:06.496 --> 00:01:08.146 align:middle
+Bien, ¡vamos a ver qué ha hecho la receta!
+
+00:01:08.716 --> 00:01:14.946 align:middle
+Ejecuta: git status Vemos los habituales
+composer.json, composer.lock y symfony.lock.
+
+00:01:15.256 --> 00:01:20.446 align:middle
+Pero, por primera vez, también vemos
+una modificación de config/bundles.php.
+
+00:01:21.056 --> 00:01:24.146 align:middle
+Un bundle es un paquete PHP
+que se integra con Symfony...
+
+00:01:24.336 --> 00:01:26.496 align:middle
+es básicamente un plugin de Symfony.
+
+00:01:26.856 --> 00:01:31.166 align:middle
+Siempre que instales un bundle, tienes
+que activarlo en este archivo bundles.php.
+
+00:01:31.856 --> 00:01:35.446 align:middle
+Pero honestamente, el sistema de recetas
+siempre hará eso por nosotros...
+
+00:01:35.446 --> 00:01:39.406 align:middle
+así que es bueno darse cuenta, pero
+nunca editaremos este archivo a mano.
+
+00:01:40.256 --> 00:01:44.436 align:middle
+Lo segundo que hizo la receta fue crear
+un archivo config/packages/twig.yaml.
+
+00:01:45.056 --> 00:01:49.676 align:middle
+La finalidad de cada archivo de
+config/packages/ es configurar un bundle.
+
+00:01:49.676 --> 00:01:53.766 align:middle
+Por ejemplo, twig.yaml controla
+el comportamiento de TwigBundle.
+
+00:01:54.426 --> 00:01:56.326 align:middle
+Esta línea de aquí le dice a Twig: ¡Eh!
+
+00:01:56.576 --> 00:01:59.296 align:middle
+Todos mis archivos de
+plantilla terminarán en .twig.
+
+00:01:59.796 --> 00:02:03.466 align:middle
+Hay muchas más cosas que podríamos
+configurar, pero no es necesario.
+
+00:02:03.736 --> 00:02:07.266 align:middle
+Y profundizaremos en estos archivos de
+configuración en el próximo tutorial.
+
+00:02:07.956 --> 00:02:11.476 align:middle
+Lo último que hizo la receta fue
+añadir un directorio templates/, que....
+
+00:02:11.636 --> 00:02:12.446 align:middle
+¡lo has adivinado!
+
+00:02:12.646 --> 00:02:14.646 align:middle
+Es donde vivirán nuestros
+archivos de plantilla
+
+00:02:14.646 --> 00:02:20.216 align:middle
+Incluso nos inició con un archivo base.html.twig
+del que hablaremos en unos minutos.
+
+00:02:20.746 --> 00:02:22.746 align:middle
+Así que ¡vamos a renderizar
+nuestra primera plantilla!
+
+00:02:23.236 --> 00:02:28.296 align:middle
+Para ello, haz que tu controlador extienda
+una clase base llamada AbstractController.
+
+00:02:28.756 --> 00:02:31.976 align:middle
+Asegúrate de pulsar el tabulador para que
+añada la declaración use en la parte superior.
+
+00:02:32.476 --> 00:02:36.976 align:middle
+Extender esta clase base es opcional, pero nos proporciona
+un montón de métodos abreviados. Por ejemplo,
+
+00:02:36.976 --> 00:02:44.336 align:middle
+copia la cadena y luego, para renderizar una
+plantilla escribe return $this->render()
+
+00:02:44.506 --> 00:02:46.576 align:middle
+y pasa un nombre de archivo a una plantilla.
+
+00:02:46.956 --> 00:02:49.726 align:middle
+Utiliza: main/homepage.html.twig.
+
+00:02:50.296 --> 00:02:54.546 align:middle
+El nombre de archivo de tu plantilla puede ser el
+que quieras, pero lo estándar es tener un directorio
+
+00:02:54.546 --> 00:02:58.636 align:middle
+que coincida con el nombre de tu controlador y un nombre
+de archivo que coincida con el nombre de tu método.
+
+00:02:59.246 --> 00:03:00.546 align:middle
+¡Vamos a crearlo!
+
+00:03:01.046 --> 00:03:03.396 align:middle
+En templates/, añade un
+nuevo directorio llamado main.
+
+00:03:04.246 --> 00:03:08.016 align:middle
+Y dentro de él, un archivo
+llamado homepage.html.twig.
+
+00:03:08.826 --> 00:03:09.536 align:middle
+Voy a pegar...
+
+00:03:10.086 --> 00:03:12.966 align:middle
+luego añadiré un h1 y lo
+pondré alrededor de todo.
+
+00:03:14.786 --> 00:03:15.646 align:middle
+¡Hagamos esto!
+
+00:03:15.946 --> 00:03:17.886 align:middle
+Actualiza. ¡Ya está!
+
+00:03:18.596 --> 00:03:21.266 align:middle
+Y por cierto, ¿qué está
+devolviendo nuestro controlador?
+
+00:03:21.686 --> 00:03:23.706 align:middle
+¡Sigue siendo un objeto Response!
+
+00:03:24.046 --> 00:03:26.746 align:middle
+Lo sé porque tenemos un
+tipo de retorno Response...
+
+00:03:27.026 --> 00:03:29.126 align:middle
+y nuestro código no está explotando.
+
+00:03:29.686 --> 00:03:34.236 align:middle
+render() es sólo un atajo para renderizar
+esta plantilla, coger esa cadena de HTML
+
+00:03:34.406 --> 00:03:36.676 align:middle
+y ponerla en un objeto Response.
+
+00:03:37.256 --> 00:03:40.986 align:middle
+Así que, aunque estemos renderizando una
+plantilla, seguimos volviendo a la idea
+
+00:03:40.986 --> 00:03:43.206 align:middle
+de que un controlador devuelve una respuesta.
+
+00:03:43.686 --> 00:03:45.246 align:middle
+¿Y si pasamos datos a la plantilla?
+
+00:03:45.736 --> 00:03:49.736 align:middle
+Quizá consultemos la base de datos y le
+pasemos el número total de naves estelares.
+
+00:03:50.266 --> 00:03:56.036 align:middle
+Aún no tenemos una base de datos en nuestra aplicación, así
+que vamos a fingirlo diciendo que $starshipCount es igual a...
+
+00:03:56.296 --> 00:03:56.846 align:middle
+No sé...
+
+00:03:56.846 --> 00:04:00.826 align:middle
+457. Parece un número falso creíble.
+
+00:04:01.356 --> 00:04:05.796 align:middle
+Para pasar variables a la plantilla, añade
+un segundo argumento a render(): una matriz.
+
+00:04:06.726 --> 00:04:09.846 align:middle
+Pasa numberOfStarships
+ajustado a $starshipCount.
+
+00:04:10.446 --> 00:04:14.046 align:middle
+La clave se convertirá en el nombre de
+la variable dentro de la plantilla Twig.
+
+00:04:14.626 --> 00:04:17.686 align:middle
+En la plantilla, añadiré
+un div y algo de texto.
+
+00:04:18.126 --> 00:04:23.236 align:middle
+Para imprimir el número, escribe {{,
+el nombre de la variable, cierra }}.
+
+00:04:23.236 --> 00:04:27.006 align:middle
+¡Vale! Muévete y pruébalo.
+
+00:04:27.526 --> 00:04:30.466 align:middle
+¡Ya está! ¡Y acabamos de ver
+nuestro primer código Twig!
+
+00:04:31.026 --> 00:04:34.306 align:middle
+Twig es su propio lenguaje,
+pero es superamigable.
+
+00:04:34.696 --> 00:04:36.966 align:middle
+Sólo tiene tres sintaxis diferentes.
+
+00:04:37.626 --> 00:04:41.496 align:middle
+La primera es {{ y yo la llamo
+la sintaxis "decir algo".
+
+00:04:41.876 --> 00:04:43.726 align:middle
+Si estás imprimiendo algo, utilizarás {{.
+
+00:04:43.726 --> 00:04:50.166 align:middle
+Dentro de los rizos, estamos escribiendo
+Twig, que es muy similar a JavaScript.
+
+00:04:50.166 --> 00:04:53.986 align:middle
+Por ejemplo, podríamos imprimir
+la cadena 'numberOfStarships'...
+
+00:04:53.986 --> 00:04:56.176 align:middle
+o la variable numberOfStarships...
+
+00:04:56.256 --> 00:04:58.936 align:middle
+o incluso numberOfStarships
+multiplicado por 10.
+
+00:05:00.346 --> 00:05:04.256 align:middle
+La segunda sintaxis de las tres empieza por {%.
+
+00:05:04.656 --> 00:05:07.236 align:middle
+Yo la llamo la sintaxis "hacer algo".
+
+00:05:07.666 --> 00:05:09.086 align:middle
+No imprime nada.
+
+00:05:09.486 --> 00:05:15.096 align:middle
+En su lugar, se utiliza para construcciones del lenguaje como
+las sentencias if, los bucles for o establecer una variable.
+
+00:05:15.836 --> 00:05:23.926 align:middle
+Para hacer una sentencia if, di if numberOfStarships
+> 400, y ciérrala con {% endif %}.
+
+00:05:23.926 --> 00:05:25.456 align:middle
+Dentro, añadiré un comentario.
+
+00:05:28.016 --> 00:05:28.746 align:middle
+¡Pruébalo!
+
+00:05:29.456 --> 00:05:30.656 align:middle
+¡Eso también funciona!
+
+00:05:31.226 --> 00:05:34.526 align:middle
+Twig es su propia biblioteca, pero
+está mantenida por Symfony...
+
+00:05:34.696 --> 00:05:37.596 align:middle
+por lo que su documentación se
+encuentra en https://twig.symfony.com.
+
+00:05:38.266 --> 00:05:40.736 align:middle
+Haz clic en el enlace "Docs"
+y desplázate hacia abajo.
+
+00:05:41.266 --> 00:05:42.156 align:middle
+¿Ves las "etiquetas"? Resulta
+
+00:05:42.616 --> 00:05:46.176 align:middle
+que hay un número finito
+de cosas que puedes utilizar
+
+00:05:46.176 --> 00:05:49.916 align:middle
+con la sintaxis "hacer
+algo": son estas etiquetas.
+
+00:05:50.396 --> 00:05:53.186 align:middle
+Por ejemplo, no puedes decir {% applesauce...
+
+00:05:53.276 --> 00:05:54.606 align:middle
+simplemente no funcionará.
+
+00:05:54.896 --> 00:05:58.536 align:middle
+Sólo puedes usar {% y luego
+una de estas etiquetas.
+
+00:05:58.956 --> 00:06:00.276 align:middle
+La lista es bastante corta...
+
+00:06:00.276 --> 00:06:03.566 align:middle
+y probablemente sólo
+utilice 5 de ellas a diario.
+
+00:06:04.336 --> 00:06:09.646 align:middle
+La tercera y última sintaxis de Twig ni siquiera
+es una sintaxis: es para los comentarios.
+
+00:06:10.026 --> 00:06:12.276 align:middle
+{# para escribir un comentario.
+
+00:06:13.006 --> 00:06:16.036 align:middle
+Así que estamos pasando un simple
+número a Twig e imprimiéndolo.
+
+00:06:16.386 --> 00:06:19.576 align:middle
+Pero Twig puede manejar cualquier
+dato complejo que le lances.
+
+00:06:19.576 --> 00:06:26.246 align:middle
+Por ejemplo, en el controlador, crea una nueva variable
+$myShip, configurada como una matriz asociativa.
+
+00:06:26.766 --> 00:06:30.676 align:middle
+Luego pásala a la plantilla
+como una nueva variable: myShip.
+
+00:06:31.596 --> 00:06:33.516 align:middle
+En la plantilla, añade otro div...
+
+00:06:34.296 --> 00:06:38.946 align:middle
+algo de texto y una tabla
+para imprimir los datos.
+
+00:06:41.016 --> 00:06:44.156 align:middle
+En <td>, no podemos
+imprimir simplemente myShip...
+
+00:06:44.426 --> 00:06:47.946 align:middle
+porque imprimir una matriz
+asociativa no tiene sentido en PHP...
+
+00:06:47.946 --> 00:06:49.986 align:middle
+y tampoco tiene sentido en Twig.
+
+00:06:50.756 --> 00:06:53.966 align:middle
+Obtendrás el famoso error sobre
+la conversión de array a cadena.
+
+00:06:54.576 --> 00:06:57.666 align:middle
+Lo que queremos es imprimir
+la clave name de esa matriz.
+
+00:06:58.196 --> 00:07:02.396 align:middle
+La forma de hacerlo es exactamente
+igual que en JavaScript: myShip.name.
+
+00:07:02.926 --> 00:07:03.536 align:middle
+Ya está
+
+00:07:03.916 --> 00:07:05.836 align:middle
+Y... funciona.
+
+00:07:06.466 --> 00:07:10.656 align:middle
+Voy a pegar el resto de nuestra plantilla,
+que imprime las demás claves de la matriz.
+
+00:07:12.086 --> 00:07:13.146 align:middle
+Tiene buena pinta.
+
+00:07:13.626 --> 00:07:17.346 align:middle
+Twig tiene algunos trucos más
+en la manga, pero nada complejo.
+
+00:07:17.646 --> 00:07:19.016 align:middle
+Tiene funciones...
+
+00:07:19.046 --> 00:07:21.626 align:middle
+que funcionan como las
+funciones de cualquier lenguaje.
+
+00:07:22.196 --> 00:07:25.556 align:middle
+También tiene algo llamado
+pruebas, que son un poco exclusivas
+
+00:07:25.556 --> 00:07:27.706 align:middle
+de Twig, pero bastante sencillas de entender.
+
+00:07:28.206 --> 00:07:32.236 align:middle
+Mi concepto favorito probablemente sean
+los filtros, que son básicamente funciones
+
+00:07:32.236 --> 00:07:34.586 align:middle
+con una sintaxis más cool y hipster.
+
+00:07:34.586 --> 00:07:39.376 align:middle
+Por ejemplo, hay un filtro llamado upper
+para enviar una cadena a mayúsculas.
+
+00:07:39.906 --> 00:07:45.746 align:middle
+Para utilizar un filtro, busca la cadena que
+quieres pasar a mayúsculas y añade | y upper.
+
+00:07:47.246 --> 00:07:49.896 align:middle
+El valor de la izquierda se
+pasa a través del filtro,
+
+00:07:50.026 --> 00:07:52.256 align:middle
+muy parecido a utilizar una
+tubería en la línea de comandos.
+
+00:07:53.596 --> 00:07:55.136 align:middle
+Funciona de maravilla....
+
+00:07:55.646 --> 00:07:59.126 align:middle
+y puedes volverte loco con
+los filtros: pipeando a upper,
+
+00:07:59.216 --> 00:08:03.736 align:middle
+luego a lower y después a title case
+sólo para confundir a tus compañeros.
+
+00:08:04.386 --> 00:08:08.296 align:middle
+Vale, acabamos de aprender prácticamente
+todo Twig en una sesión , excepto
+
+00:08:08.296 --> 00:08:10.876 align:middle
+una cosa: la herencia de plantillas.
+
+00:08:11.116 --> 00:08:12.036 align:middle
+Eso a continuación.
