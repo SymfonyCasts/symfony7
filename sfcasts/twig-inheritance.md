@@ -6,8 +6,11 @@ special in Twig where a base layout with a header and a footer is automatically
 wrapped around our content. Whatever you have in your template is what you get on
 the page.
 
-However, the Twig recipe *did* add a base layout file called `base.html.twig`. It's
-really simple now, but *this* is where we'll add our top nav, footer and any other
+However, the Twig recipe *did* add a base layout file called `base.html.twig`. 
+
+[[[ code('339b00d890') ]]]
+
+It's really simple now, but *this* is where we'll add our top nav, footer and any other
 things that should live on every page. The question is: how can we make *our*
 template use this?
 
@@ -17,6 +20,8 @@ With a *cool* feature called template inheritance. In `homepage.html.twig`, at t
 top, type `{% extends` then the name of the base template: `base.html.twig`. And
 notice: this is the *do* something tag. We're not *printing* this template, we're
 telling Twig that we want to *extend* it.
+
+[[[ code('432c044dc7') ]]]
 
 If we do nothing else and refresh, we get an error:
 
@@ -31,6 +36,8 @@ The way we tell it is via these *blocks*. Blocks are holes into which a child te
 can put content. And you may have noticed one block called `body`... which is
 *exactly* where we want our content to go. To put it there, surround all the content
 with a `{% block body %}`... and at the bottom, `{% endblock %}`.
+
+[[[ code('463b23afe2') ]]]
 
 And now... it's alive! It doesn't look much different, but we *are* inside the base
 layout.
@@ -49,8 +56,12 @@ page from a child template. In this case, the recipe already gave us a block cal
 `title` to do that. And *this* block has default content... which is why we already
 see `Welcome` on the browser tab. Let's override this in *our* template.
 
+[[[ code('9cd48b3d9f') ]]]
+
 Anywhere outside the `body` block, say `{% block title %}`, type something, then
 `{% endblock %}`.
+
+[[[ code('6c92b85954') ]]]
 
 ## Replacing vs Appending the Parent Block
 
