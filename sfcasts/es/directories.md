@@ -6,7 +6,9 @@ Vuelve a tu centro de comandos (también conocido como terminal). Esta primera p
 symfony serve
 ```
 
-SUGERENCIA Puedes utilizar `symfony serve -d` para ejecutar el comando en "segundo plano", de modo que puedas seguir utilizando esta pestaña del terminal.*
+***TIP
+Puedes utilizar `symfony serve -d` para ejecutar el comando en "segundo plano", de modo que puedas seguir utilizando esta pestaña del terminal.
+***
 
 Lo dejaremos así y dejaremos que haga lo suyo.
 
