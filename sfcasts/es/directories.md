@@ -7,7 +7,7 @@ symfony serve
 ```
 
 ***TIP
-Puedes utilizar `symfony serve -d` para ejecutar el comando en "segundo plano", de modo que puedas seguir utilizando esta pestaña del terminal.
+Puedes utilizar `symfony serve -d` para ejecutar el comando en "segundo plano" y poder seguir utilizando esta pestaña del terminal.
 ***
 
 Lo dejaremos así y dejaremos que haga lo suyo.
