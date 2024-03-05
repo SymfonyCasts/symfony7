@@ -11,266 +11,259 @@ ejecutando el servidor web.
 00:00:06.946 --> 00:00:08.896 align:middle
 Si necesitas detenerlo, pulsa Ctrl-C...
 
-00:00:09.236 --> 00:00:18.866 align:middle
-y luego reinícialo con: symfony serve * *TIP Puedes
-utilizar symfony serve -d para ejecutar el comando
+00:00:09.236 --> 00:00:14.486 align:middle
+y luego reinícialo con: symfony
+serve Dejaremos que haga lo suyo.
 
-00:00:18.866 --> 00:00:23.096 align:middle
-en "segundo plano" y poder seguir
-utilizando esta pestaña del terminal.
-
-00:00:23.096 --> 00:00:25.996 align:middle
-Lo dejaremos así y dejaremos que haga lo suyo.
-
-00:00:25.996 --> 00:00:29.576 align:middle
+00:00:15.056 --> 00:00:17.366 align:middle
 Abre una segunda pestaña de
 terminal en el mismo directorio.
 
-00:00:29.576 --> 00:00:34.256 align:middle
+00:00:17.876 --> 00:00:21.136 align:middle
 Cuando ejecutamos el comando symfony
 new, descargó un pequeño proyecto
 
-00:00:34.256 --> 00:00:41.546 align:middle
+00:00:21.196 --> 00:00:24.796 align:middle
 e inicializó un repositorio Git
 con una confirmación inicial.
 
-00:00:42.236 --> 00:00:43.666 align:middle
+00:00:25.226 --> 00:00:26.576 align:middle
 ¡Eso estuvo muy bien!
 
-00:00:43.796 --> 00:00:53.226 align:middle
+00:00:26.966 --> 00:00:32.366 align:middle
 Para ver nuestros archivos, voy a abrir este
 directorio en mi editor favorito: PhpStorm.
 
-00:00:53.746 --> 00:00:55.696 align:middle
+00:00:32.626 --> 00:00:34.976 align:middle
 Más sobre este editor en unos minutos.
 
-00:00:55.696 --> 00:01:00.706 align:middle
+00:00:35.526 --> 00:00:39.306 align:middle
 Ahora quiero que te des cuenta de
 lo pequeño que es nuestro proyecto
 
-00:01:00.706 --> 00:01:10.026 align:middle
+00:00:39.826 --> 00:00:47.376 align:middle
 Para ver la lista completa de archivos confirmados,
 vuelve a tu terminal y ejecuta: git ls-files Sí, eso es.
 
-00:01:10.026 --> 00:01:13.156 align:middle
+00:00:47.686 --> 00:00:50.106 align:middle
 Sólo hay unos 15 archivos confirmados en git
 
-00:01:13.156 --> 00:01:14.456 align:middle
+00:00:50.676 --> 00:00:51.376 align:middle
 Entonces...
 
-00:01:14.456 --> 00:01:17.286 align:middle
+00:00:51.416 --> 00:00:53.226 align:middle
 ¿dónde demonios está Symfony?
 
-00:01:17.856 --> 00:01:24.256 align:middle
+00:00:53.746 --> 00:00:58.526 align:middle
 Uno de nuestros 15 archivos es
 especialmente importante: composer.json.
 
-00:01:24.256 --> 00:01:27.116 align:middle
+00:00:59.146 --> 00:01:01.326 align:middle
 Composer es el gestor de paquetes de PHP.
 
-00:01:27.116 --> 00:01:35.296 align:middle
+00:01:01.916 --> 00:01:07.096 align:middle
 Su trabajo es sencillo: leer los nombres de los
 paquetes bajo esta clave require y descargarlos.
 
-00:01:35.486 --> 00:01:38.496 align:middle
+00:01:07.096 --> 00:01:09.296 align:middle
 Cuando ejecutamos el comando symfony new,
 
-00:01:38.926 --> 00:01:42.056 align:middle
+00:01:09.546 --> 00:01:13.586 align:middle
 descargó estos 15 archivos y
 también ejecutó composer install.
 
-00:01:42.616 --> 00:01:46.866 align:middle
+00:01:14.126 --> 00:01:17.286 align:middle
 Eso descargó todos estos
 paquetes en el directorio vendor/.
 
-00:01:47.396 --> 00:01:51.656 align:middle
+00:01:17.856 --> 00:01:19.276 align:middle
 ¿Dónde está Symfony?
 
-00:01:51.746 --> 00:01:55.616 align:middle
+00:01:19.606 --> 00:01:21.746 align:middle
 Está en vendor/symfony/...
 
-00:01:55.846 --> 00:02:00.366 align:middle
+00:01:22.176 --> 00:01:25.616 align:middle
 ¡y ya estamos utilizando
 unos 20 de sus paquetes!
 
-00:02:00.366 --> 00:02:03.506 align:middle
+00:01:26.356 --> 00:01:28.376 align:middle
 El directorio vendor/ no
 está comprometido en git.
 
-00:02:04.006 --> 00:02:08.736 align:middle
+00:01:28.836 --> 00:01:32.456 align:middle
 Se ignora gracias a otro archivo
 con el que empezamos: .gitignore.
 
-00:02:08.736 --> 00:02:14.456 align:middle
+00:01:33.116 --> 00:01:37.346 align:middle
 Esto significa que si un compañero de equipo
 clona nuestro proyecto, no tendrá este directorio.
 
-00:02:14.456 --> 00:02:14.846 align:middle
+00:01:37.346 --> 00:01:38.496 align:middle
 ¡Y no pasa nada!
 
-00:02:15.266 --> 00:02:20.996 align:middle
+00:01:38.946 --> 00:01:42.056 align:middle
 Siempre podemos repoblarlo
 ejecutando composer install.
 
-00:02:20.996 --> 00:02:27.116 align:middle
+00:01:42.616 --> 00:01:46.866 align:middle
 Observa: Haré clic con el botón derecho del
 ratón y borraré todo el directorio vendor/.
 
-00:02:27.116 --> 00:02:29.226 align:middle
+00:01:47.416 --> 00:01:52.106 align:middle
 Y ¡huy! Si probamos ahora nuestra
 aplicación, se estropeará.
 
-00:02:29.606 --> 00:02:30.066 align:middle
+00:01:52.286 --> 00:01:53.426 align:middle
 ¡Mal rollo!
 
-00:02:30.066 --> 00:02:35.616 align:middle
+00:01:53.936 --> 00:01:59.656 align:middle
 Para arreglarlo y salvar el día, en tu
 terminal, ejecuta: composer install Y...
 
-00:02:35.746 --> 00:02:37.456 align:middle
+00:01:59.986 --> 00:02:02.126 align:middle
 ¡listo! El directorio vuelve a ser ....
 
-00:02:37.456 --> 00:02:40.686 align:middle
+00:02:02.426 --> 00:02:05.266 align:middle
 y por aquí, el sitio vuelve a funcionar.
 
-00:02:40.686 --> 00:02:47.976 align:middle
+00:02:05.996 --> 00:02:10.686 align:middle
 Si volvemos a mirar nuestros archivos, sólo hay
 dos directorios en los que tengamos que pensar.
 
-00:02:47.976 --> 00:02:49.826 align:middle
+00:02:11.036 --> 00:02:13.496 align:middle
 El primero es config/: contiene...
 
-00:02:49.826 --> 00:02:50.936 align:middle
+00:02:13.716 --> 00:02:14.796 align:middle
 ¡la configuración!
 
-00:02:50.936 --> 00:02:54.896 align:middle
+00:02:15.266 --> 00:02:17.486 align:middle
 Aprenderemos lo que hacen
 estos archivos por el camino.
 
-00:02:54.896 --> 00:02:56.056 align:middle
+00:02:18.186 --> 00:02:19.746 align:middle
 El segundo es src/.
 
-00:02:56.536 --> 00:02:57.636 align:middle
+00:02:20.286 --> 00:02:22.586 align:middle
 Aquí es donde vivirá todo tu código PHP.
 
-00:02:57.636 --> 00:02:58.646 align:middle
+00:02:23.066 --> 00:02:24.296 align:middle
 ¡Y eso es todo!
 
-00:02:58.646 --> 00:03:02.936 align:middle
+00:02:24.636 --> 00:02:29.226 align:middle
 el 99% del tiempo estarás configurando
 algo o escribiendo código PHP.
 
-00:03:02.936 --> 00:03:05.626 align:middle
+00:02:29.606 --> 00:02:31.426 align:middle
 Eso ocurre en config/ y src/.
 
-00:03:05.626 --> 00:03:07.706 align:middle
+00:02:31.956 --> 00:02:33.726 align:middle
 ¿Qué pasa con los otros 4 directorios?
 
-00:03:07.706 --> 00:03:12.406 align:middle
+00:02:34.256 --> 00:02:39.126 align:middle
 bin/ contiene un único archivo
 ejecutable console que probaremos pronto.
 
-00:03:12.406 --> 00:03:16.206 align:middle
+00:02:39.636 --> 00:02:43.136 align:middle
 Pero nunca vamos a mirar
 ni modificar ese archivo.
 
-00:03:16.206 --> 00:03:20.176 align:middle
+00:02:43.786 --> 00:02:46.806 align:middle
 El directorio public/ se conoce
 como la raíz de tu documento.
 
-00:03:20.176 --> 00:03:24.386 align:middle
+00:02:47.266 --> 00:02:51.096 align:middle
 Cualquier cosa que pongas aquí -como una
 imagen- será accesible públicamente.
 
-00:03:24.386 --> 00:03:26.186 align:middle
+00:02:51.496 --> 00:02:53.266 align:middle
 Más adelante hablaremos de ello.
 
-00:03:26.186 --> 00:03:28.276 align:middle
+00:02:53.766 --> 00:02:56.576 align:middle
 También contiene index.php. Esto se conoce
 
-00:03:28.276 --> 00:03:32.826 align:middle
+00:02:56.576 --> 00:03:00.076 align:middle
 como tu "controlador frontal":
 es el archivo PHP principal
 
-00:03:32.886 --> 00:03:39.466 align:middle
+00:03:00.076 --> 00:03:03.346 align:middle
 que tu servidor web ejecuta
 al inicio de cada petición.
 
-00:03:39.466 --> 00:03:43.676 align:middle
+00:03:03.846 --> 00:03:05.986 align:middle
 Y aunque es superimportante...
 
-00:03:43.676 --> 00:03:47.906 align:middle
+00:03:06.256 --> 00:03:09.096 align:middle
 nunca editarás ni pensarás en este archivo.
 
-00:03:47.906 --> 00:03:49.286 align:middle
+00:03:09.856 --> 00:03:11.096 align:middle
 El siguiente es var/.
 
-00:03:49.286 --> 00:03:52.776 align:middle
+00:03:11.456 --> 00:03:15.226 align:middle
 Esto también se ignora desde git: es donde
 Symfony almacena los archivos de registro
 
-00:03:52.776 --> 00:03:53.926 align:middle
+00:03:15.226 --> 00:03:17.356 align:middle
 y los archivos de caché
 que necesita internamente.
 
-00:03:53.956 --> 00:03:54.466 align:middle
+00:03:17.736 --> 00:03:19.266 align:middle
 Así que muy importante...
 
-00:03:54.496 --> 00:03:55.516 align:middle
+00:03:19.266 --> 00:03:21.336 align:middle
 pero no es algo en lo que tengamos que pensar.
 
-00:03:55.546 --> 00:03:56.416 align:middle
+00:03:21.876 --> 00:03:23.726 align:middle
 Y ya hemos hablado de vendor/.
 
-00:03:56.446 --> 00:03:56.806 align:middle
+00:03:23.966 --> 00:03:24.856 align:middle
 ¡Eso es todo!
 
-00:03:56.836 --> 00:03:58.306 align:middle
+00:03:25.546 --> 00:03:28.956 align:middle
 Ahora, antes de ponernos a codificar,
 he mencionado que yo utilizo PhpStorm.
 
-00:03:58.336 --> 00:03:59.386 align:middle
+00:03:29.396 --> 00:03:31.946 align:middle
 Eres libre de usar el editor que quieras.
 
-00:03:59.416 --> 00:04:00.226 align:middle
+00:03:32.436 --> 00:03:35.956 align:middle
 Sin embargo, PhpStorm es increíble.
 
-00:04:00.256 --> 00:04:01.606 align:middle
+00:03:36.356 --> 00:03:40.416 align:middle
 Y una gran razón es el
 incomparable plugin Symfony.
 
-00:04:01.636 --> 00:04:03.646 align:middle
+00:03:41.046 --> 00:03:45.846 align:middle
 Si vas a PhpStorm -> Configuración y
 buscas "Symfony", aquí abajo bajo Plugins
 
-00:04:03.676 --> 00:04:04.666 align:middle
+00:03:45.906 --> 00:03:48.176 align:middle
 y luego Marketplace, podrás encontrarlo.
 
-00:04:04.696 --> 00:04:06.256 align:middle
+00:03:48.856 --> 00:03:51.876 align:middle
 Descarga e instala el
 plugin si aún no lo tienes.
 
-00:04:06.286 --> 00:04:07.216 align:middle
+00:03:51.996 --> 00:03:54.396 align:middle
 Después de la instalación, reinicia PhpStorm.
 
-00:04:07.246 --> 00:04:07.876 align:middle
+00:03:54.956 --> 00:03:56.856 align:middle
 Luego hay un paso más.
 
-00:04:07.906 --> 00:04:09.196 align:middle
+00:03:57.326 --> 00:03:59.966 align:middle
 Vuelve a la configuración
 y busca Symfony de nuevo.
 
-00:04:09.226 --> 00:04:10.186 align:middle
+00:04:00.546 --> 00:04:02.846 align:middle
 Esta vez tendrás una sección Symfony.
 
-00:04:10.216 --> 00:04:11.986 align:middle
+00:04:03.386 --> 00:04:06.936 align:middle
 Asegúrate de activar el plugin para cada
 proyecto Symfony en el que trabajes...
 
-00:04:12.016 --> 00:04:13.186 align:middle
+00:04:07.266 --> 00:04:09.566 align:middle
 de lo contrario no verás
 la misma magia que yo.
 
-00:04:13.216 --> 00:04:14.956 align:middle
+00:04:10.406 --> 00:04:13.996 align:middle
 ¡De acuerdo! Empecemos a codificar y construyamos
 nuestra primera página en Symfony a continuación.
