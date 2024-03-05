@@ -7,7 +7,7 @@ web server. If you need to stop it, press Ctrl-C... then restart it with:
 symfony serve
 ```
 
-**TIP
+***TIP
 You can use `symfony serve -d` to run the command in the "background" so that
 you can continue using this terminal tab.
 ***
