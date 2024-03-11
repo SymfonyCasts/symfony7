@@ -20,6 +20,8 @@ Super nice! Also, going forward, each time I create a controller, I'll immediate
 extend `AbstractController`... because those shortcuts are nice and there's no
 downside.
 
+[[[ code('e002409119') ]]]
+
 Add a `public function getCollection()` because this will return info about a
 *collection* of starships. And, like always, you can add the `Response` return
 type or skip it. Above this, add the route with `#[Route()]`. Select the one from
@@ -39,6 +41,8 @@ JSON? Well, it can be this simple: `return new Response` with
 `json_encode($starships)`.
 
 But we can do better! Instead, return `$this->json($starships)`.
+
+[[[ code('e52ace2207') ]]]
 
 Let's try it! Find your browser and head to `/api/starships`. Dang, that was easy.
 If you're wondering why the JSON is styled and looks cool, that's not a Symfony thing.
@@ -63,10 +67,14 @@ directory - this could be called anything - and inside a new class called `Stars
 And *because* this class is just to help *us*, we get to make it look *however*
 we want, and it doesn't need to extend any base class.
 
+[[[ code('9e8dc4aef1') ]]]
+
 Create a `public function __construct()` with five properties: a `private int $id`,
 then four more properties for each of the four keys that we have in the array:
 `private string $name`, `private string $class`, `private string $captain` and
 `private string $status`.
+
+[[[ code('5fac6bec3b') ]]]
 
 Oh, and my editor is highlighting this file because we installed PHP-CS-Fixer
 and that found a code style violation. I can click this to fix it or go here and
@@ -82,6 +90,8 @@ that, we can create getter methods. But, I'm not going to do this by hand. Inste
 go to the Code -> Generate menu option - or Cmd + N on a Mac - select getters then
 generate a getter for *every* property.
 
+[[[ code('c29463d2b4') ]]]
+
 Nice! Five shiny new, public getter method.
 
 ## Creating the Model Objects
@@ -92,6 +102,8 @@ and transfer the other values for `name`, `class`, `captain`, and finally `statu
 
 And just like that, we have our first object! I'll highlight the other two
 arrays and paste in the two objects to save time.
+
+[[[ code('419fec735e') ]]]
 
 We now have an array of 3 `Starship` *objects*... which feels nicer. And we're
 passing those to `$this->json()`. Is that still going to work? Totally not! We get
