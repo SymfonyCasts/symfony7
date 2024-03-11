@@ -1,0 +1,489 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:02.756 align:middle
+Hablemos de los servicios.
+
+00:00:03.056 --> 00:00:05.466 align:middle
+Son el concepto más importante en Symfony.
+
+00:00:05.856 --> 00:00:10.196 align:middle
+Y una vez que los entiendas, sinceramente,
+serás capaz de hacer cualquier cosa.
+
+00:00:10.886 --> 00:00:13.906 align:middle
+En primer lugar, un servicio es
+un objeto que hace un trabajo.
+
+00:00:14.256 --> 00:00:14.776 align:middle
+Eso es todo.
+
+00:00:15.236 --> 00:00:20.496 align:middle
+Por ejemplo, si instancias un objeto Logger que
+tiene un método log(), ¡eso es un servicio!
+
+00:00:20.756 --> 00:00:23.066 align:middle
+Funciona: ¡registra cosas!
+
+00:00:23.466 --> 00:00:28.296 align:middle
+O si creaste un objeto de conexión a una base
+de datos que hace consultas a la base de datos...
+
+00:00:28.556 --> 00:00:30.396 align:middle
+¡sí! Eso también es un servicio.
+
+00:00:31.076 --> 00:00:31.466 align:middle
+Entonces...
+
+00:00:31.586 --> 00:00:34.276 align:middle
+si un servicio es sólo
+un objeto que funciona...
+
+00:00:34.476 --> 00:00:37.046 align:middle
+¿qué objetos perezosos no son servicios?
+
+00:00:37.616 --> 00:00:41.636 align:middle
+Nuestra clase Starship es un
+ejemplo perfecto de no-servicio.
+
+00:00:42.046 --> 00:00:45.816 align:middle
+Su función principal no es
+hacer trabajo: es guardar datos.
+
+00:00:46.396 --> 00:00:48.806 align:middle
+Claro, tiene algunos métodos públicos...
+
+00:00:48.806 --> 00:00:52.656 align:middle
+e incluso podrías poner algo de lógica
+dentro de estos métodos para hacer algo.
+
+00:00:53.136 --> 00:00:56.966 align:middle
+Pero en última instancia, no es un
+trabajador, es un poseedor de datos.
+
+00:00:57.506 --> 00:00:58.986 align:middle
+¿Y las clases controladoras?
+
+00:00:59.396 --> 00:01:01.046 align:middle
+Sí, también son servicios.
+
+00:01:01.376 --> 00:01:03.776 align:middle
+Su trabajo consiste en
+crear objetos de respuesta.
+
+00:01:04.406 --> 00:01:09.256 align:middle
+De todas formas, todo el trabajo que se hace
+en Symfony lo hace en realidad un servicio.
+
+00:01:09.656 --> 00:01:11.416 align:middle
+¿Escribir mensajes de
+registro en este archivo?
+
+00:01:11.836 --> 00:01:13.246 align:middle
+Sí, hay un servicio para eso.
+
+00:01:13.786 --> 00:01:16.486 align:middle
+¿Descubrir qué ruta
+coincide con la URL actual?
+
+00:01:16.756 --> 00:01:18.206 align:middle
+¡Ese es el servicio router!
+
+00:01:18.766 --> 00:01:20.576 align:middle
+¿Y la representación de una plantilla Twig?
+
+00:01:21.056 --> 00:01:24.336 align:middle
+Sí, resulta que el método
+render() es un atajo
+
+00:01:24.336 --> 00:01:27.826 align:middle
+para encontrar el objeto de servicio
+correcto y llamar a un método en él. A
+
+00:01:28.566 --> 00:01:31.866 align:middle
+veces también oirás que estos
+servicios están organizados
+
+00:01:31.866 --> 00:01:34.806 align:middle
+en un gran objeto llamado
+"contenedor de servicios".
+
+00:01:34.806 --> 00:01:38.186 align:middle
+Puedes pensar en el contenedor como
+en una gigantesca matriz asociativa
+
+00:01:38.186 --> 00:01:41.396 align:middle
+de objetos de servicio, cada
+uno con un identificador único.
+
+00:01:41.986 --> 00:01:44.616 align:middle
+¿Quieres ver una lista de todos los
+servicios de nuestra aplicación ahora mismo?
+
+00:01:45.026 --> 00:01:52.666 align:middle
+Yo también Busca tu terminal y ejecuta:
+bin/console debug:container ¡Son muchos servicios!
+
+00:01:53.176 --> 00:01:56.266 align:middle
+Déjame hacerlo más pequeño para que
+cada uno quepa en su propia línea...
+
+00:01:56.826 --> 00:02:00.396 align:middle
+mejor. A la izquierda, vemos
+el ID de cada servicio.
+
+00:02:00.726 --> 00:02:04.866 align:middle
+Y a la derecha, la clase del
+objeto al que corresponde el ID.
+
+00:02:05.396 --> 00:02:05.976 align:middle
+Genial, ¿verdad?
+
+00:02:06.866 --> 00:02:11.826 align:middle
+Vuelve a nuestro controlador y mantén pulsado control
+o comando para abrir de nuevo el método json().
+
+00:02:12.386 --> 00:02:14.366 align:middle
+¡Ahora tiene más sentido!
+
+00:02:14.896 --> 00:02:20.026 align:middle
+Está comprobando si el contenedor
+tiene un servicio cuyo ID es serializer.
+
+00:02:20.656 --> 00:02:23.656 align:middle
+Si lo tiene, coge ese servicio del contenedor
+
+00:02:23.796 --> 00:02:25.626 align:middle
+y llama al método serialize() en él.
+
+00:02:26.406 --> 00:02:30.086 align:middle
+Cuando trabajemos con servicios,
+no será exactamente así.
+
+00:02:30.436 --> 00:02:34.026 align:middle
+Pero lo superimportante es que ahora
+entendemos lo que está pasando.
+
+00:02:34.656 --> 00:02:37.586 align:middle
+Mi siguiente pregunta es: ¿de
+dónde vienen estos servicios?
+
+00:02:37.956 --> 00:02:41.196 align:middle
+Como, ¿quién dice que hay
+un servicio cuyo ID es twig...
+
+00:02:41.536 --> 00:02:47.026 align:middle
+y que cuando se lo pedimos al contenedor,
+éste debe devolver un objeto Twig Environment?
+
+00:02:47.586 --> 00:02:50.716 align:middle
+La respuesta es: totalmente de bundles.
+
+00:02:51.066 --> 00:02:53.916 align:middle
+De hecho, ése es el objetivo
+principal de instalar un nuevo bundle.
+
+00:02:54.236 --> 00:02:55.966 align:middle
+Los bundles nos proporcionan servicios.
+
+00:02:56.686 --> 00:02:58.026 align:middle
+¿Recuerdas cuando instalamos twig?
+
+00:02:58.486 --> 00:03:00.306 align:middle
+Añadió un bundle a nuestra aplicación.
+
+00:03:00.696 --> 00:03:01.926 align:middle
+¿Y adivinas qué hizo ese bundle?
+
+00:03:02.336 --> 00:03:06.436 align:middle
+Sí: nos proporcionó nuevos
+servicios, incluido el servicio twig.
+
+00:03:07.126 --> 00:03:08.486 align:middle
+Los bundles nos dan servicios...
+
+00:03:08.606 --> 00:03:10.446 align:middle
+y los servicios son herramientas.
+
+00:03:10.926 --> 00:03:13.526 align:middle
+Y aunque hay muchos servicios en esta lista,
+
+00:03:13.746 --> 00:03:19.576 align:middle
+la gran mayoría son objetos de servicio de bajo
+nivel que nunca utilizaremos ni nos interesarán.
+
+00:03:20.316 --> 00:03:23.496 align:middle
+Tampoco nos importará el ID de los
+servicios la mayoría de las veces.
+
+00:03:24.256 --> 00:03:26.666 align:middle
+En su lugar, ejecuta un
+comando relacionado llamado:
+
+00:03:26.666 --> 00:03:33.096 align:middle
+php bin/console debug:autowiring Esto nos muestra
+todos los servicios que son autocableables,
+
+00:03:33.326 --> 00:03:36.736 align:middle
+que es la técnica que utilizaremos
+para obtener servicios.
+
+00:03:37.226 --> 00:03:41.796 align:middle
+Básicamente, es una lista curada de los
+servicios que es más probable que necesitemos.
+
+00:03:42.646 --> 00:03:46.496 align:middle
+Así que vamos a hacer un reto: vamos a registrar
+algo desde nuestro controlador. He aquí
+
+00:03:47.046 --> 00:03:49.326 align:middle
+un vistazo a cómo enfoco este problema
+
+00:03:49.326 --> 00:03:52.196 align:middle
+en mi cerebro: Vale,
+¡tengo que registrar algo!
+
+00:03:52.526 --> 00:03:54.126 align:middle
+Y... registrar es trabajo.
+
+00:03:54.456 --> 00:03:56.226 align:middle
+Y... ¡los servicios hacen trabajo!
+
+00:03:56.586 --> 00:03:59.736 align:middle
+Por lo tanto, ¡tiene que haber un
+servicio de registro que pueda utilizar!
+
+00:04:00.086 --> 00:04:02.166 align:middle
+¡Quod erat demonstrandum!
+
+00:04:02.536 --> 00:04:04.056 align:middle
+Perdonadme, frikis del latín. La
+
+00:04:04.516 --> 00:04:06.796 align:middle
+cuestión es: si queremos registrar algo,
+
+00:04:06.796 --> 00:04:10.126 align:middle
+sólo tenemos que encontrar el
+servicio que hace ese trabajo.
+
+00:04:10.786 --> 00:04:14.666 align:middle
+¡De acuerdo! Vuelve a ejecutar
+el comando pero busca log: ¡Boom!
+
+00:04:14.846 --> 00:04:19.556 align:middle
+Encontró unos 10 servicios, todos ellos
+empezando por Psr\Log\LoggerInterface.
+
+00:04:20.216 --> 00:04:23.696 align:middle
+Hablaremos de cuáles son estos otros
+servicios en el próximo tutorial.
+
+00:04:24.196 --> 00:04:25.916 align:middle
+Por ahora, céntrate en el principal.
+
+00:04:26.456 --> 00:04:30.466 align:middle
+Esto me dice que hay un servicio en
+el contenedor para un registrador.
+
+00:04:30.846 --> 00:04:34.986 align:middle
+Y para obtenerlo, podemos
+autoconectarlo utilizando esta interfaz.
+
+00:04:35.546 --> 00:04:36.796 align:middle
+¿Qué significa esto?
+
+00:04:37.376 --> 00:04:41.816 align:middle
+En el método del controlador donde queremos
+el logger, añade un argumento de tipo
+
+00:04:41.816 --> 00:04:45.806 align:middle
+LoggerInterface - pulsa
+tabulador - y luego di $logger.
+
+00:04:46.446 --> 00:04:50.516 align:middle
+En este caso, el nombre del argumento no
+es importante: puede ser cualquier cosa.
+
+00:04:50.896 --> 00:04:55.876 align:middle
+Lo que importa es que el LoggerInterface -que
+corresponde a esta declaración use - coincida con
+
+00:04:56.156 --> 00:05:01.556 align:middle
+el Psr\Log\LoggerInterface de debug:autowiring.
+
+00:05:02.226 --> 00:05:03.026 align:middle
+¡Así de sencillo!
+
+00:05:03.296 --> 00:05:06.126 align:middle
+Symfony verá esta sugerencia
+de tipo y dirá ¡Oh!
+
+00:05:06.366 --> 00:05:09.446 align:middle
+Como ese type-hint coincide con el
+tipo de autocableado de este servicio,
+
+00:05:09.686 --> 00:05:13.096 align:middle
+seguro que quieren que les
+pase ese objeto de servicio.
+
+00:05:13.576 --> 00:05:15.536 align:middle
+No sé por qué Symfony suena
+como una rana en mi cabeza.
+
+00:05:16.026 --> 00:05:17.956 align:middle
+En fin, veamos si esto funciona.
+
+00:05:18.356 --> 00:05:23.796 align:middle
+Añade dd($logger): dd() significa
+"volcar y morir" y viene de Symfony.
+
+00:05:24.526 --> 00:05:26.066 align:middle
+¡Actualiza! ¡Sí!
+
+00:05:26.126 --> 00:05:29.676 align:middle
+Imprimió el objeto maravillosamente
+y luego detuvo la ejecución.
+
+00:05:30.096 --> 00:05:31.186 align:middle
+¡Funciona!
+
+00:05:31.686 --> 00:05:37.196 align:middle
+Symfony nos pasa un objeto Monolog\Logger,
+que implementa ese LoggerInterface.
+
+00:05:37.896 --> 00:05:42.756 align:middle
+El truco que acabamos de hacer -llamado
+autocableado- funciona exactamente en dos sitios
+
+00:05:43.226 --> 00:05:48.376 align:middle
+nuestros métodos de controlador y el
+método __construct() de cualquier servicio.
+
+00:05:48.756 --> 00:05:51.466 align:middle
+Veremos esta segunda situación
+en el próximo capítulo.
+
+00:05:52.096 --> 00:05:55.256 align:middle
+Y si te estás preguntando de dónde salió
+este servicio Logger en primer lugar...
+
+00:05:55.546 --> 00:05:56.666 align:middle
+¡ya sabemos la respuesta!
+
+00:05:56.956 --> 00:05:58.196 align:middle
+De un bundle.
+
+00:05:58.586 --> 00:06:00.236 align:middle
+En este caso, MonologBundle.
+
+00:06:00.816 --> 00:06:03.376 align:middle
+Y... ¿cómo podríamos
+configurar ese servicio...
+
+00:06:03.376 --> 00:06:06.086 align:middle
+para que, no sé, se registre
+en un archivo diferente?
+
+00:06:06.566 --> 00:06:10.026 align:middle
+La respuesta es: config/packages/monolog.yaml.
+
+00:06:10.766 --> 00:06:14.886 align:middle
+Esta configuración -incluida esta
+línea- configura MonologBundle...
+
+00:06:15.176 --> 00:06:21.136 align:middle
+lo que en realidad significa que configura el funcionamiento
+de los servicios que nos proporciona MonologBundle.
+
+00:06:21.836 --> 00:06:24.786 align:middle
+Aprenderemos sobre esta sintaxis
+porcentual en el próximo tutorial,
+
+00:06:25.076 --> 00:06:28.956 align:middle
+pero esto le dice al servicio Logger
+que se registre en este archivo dev.log.
+
+00:06:29.706 --> 00:06:32.806 align:middle
+Vale, ahora que tenemos el servicio
+Logger, ¡vamos a utilizarlo!
+
+00:06:33.246 --> 00:06:36.696 align:middle
+¿Cómo? Bueno, por supuesto,
+puedes leer la documentación.
+
+00:06:37.046 --> 00:06:39.906 align:middle
+Pero gracias a la sugerencia de
+tipo, ¡nuestro editor nos ayudará!
+
+00:06:40.396 --> 00:06:42.756 align:middle
+LoggerInterface tiene un montón de métodos.
+
+00:06:43.086 --> 00:06:46.696 align:middle
+Utilicemos ->info() y digamos
+Colección de naves estelares recuperada.
+
+00:06:48.086 --> 00:06:49.646 align:middle
+Pruébalo: actualizar.
+
+00:06:50.126 --> 00:06:51.146 align:middle
+La página funcionó...
+
+00:06:51.296 --> 00:06:53.026 align:middle
+¿pero registró algo?
+
+00:06:53.426 --> 00:06:55.836 align:middle
+Podríamos comprobar el archivo dev.log.
+
+00:06:56.376 --> 00:07:01.406 align:middle
+O podemos utilizar la sección Log
+del perfilador para esta petición.
+
+00:07:02.066 --> 00:07:03.036 align:middle
+Pero... ¡espera!
+
+00:07:03.306 --> 00:07:04.986 align:middle
+Se trata de una petición API...
+
+00:07:05.156 --> 00:07:08.936 align:middle
+¡así que no tenemos esa genial barra de
+herramientas de depuración web en la parte inferior!
+
+00:07:09.656 --> 00:07:10.576 align:middle
+Es cierto...
+
+00:07:11.116 --> 00:07:13.966 align:middle
+¡pero Symfony sigue recopilando
+toda esa información!
+
+00:07:14.726 --> 00:07:19.796 align:middle
+Para acceder al perfilador de esta
+petición, cambia la URL a /_profiler.
+
+00:07:20.496 --> 00:07:24.426 align:middle
+Esto muestra las peticiones más recientes a nuestra
+aplicación, con la más reciente en la parte superior.
+
+00:07:24.846 --> 00:07:25.716 align:middle
+¿Ves ésta?
+
+00:07:26.056 --> 00:07:28.106 align:middle
+Es nuestra petición a la API de hace un minuto
+
+00:07:28.556 --> 00:07:29.996 align:middle
+Si haces clic en este token...
+
+00:07:30.446 --> 00:07:36.126 align:middle
+¡boom! Veremos el perfil de esa
+llamada a la API en todo su esplendor...
+
+00:07:36.776 --> 00:07:38.446 align:middle
+incluyendo una sección de Registro...
+
+00:07:38.686 --> 00:07:40.186 align:middle
+con nuestro mensaje.
+
+00:07:40.886 --> 00:07:45.636 align:middle
+Bien, ahora que hemos visto cómo utilizar un
+servicio, ¡vamos a crear nuestro propio servicio!
+
+00:07:45.856 --> 00:07:47.296 align:middle
+¡Somos imparables!
