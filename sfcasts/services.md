@@ -105,6 +105,8 @@ container for a logger. And to get it, we can autowire it using this interface.
 What does that mean? In the controller method where we want the logger, add an
 argument type-hinted with `LoggerInterface` - hit tab - then say `$logger`.
 
+[[[ code('6b3f42abe8') ]]]
+
 In this case, the *name* of the argument isn't important: it could be anything.
 What matters is that the `LoggerInterface` - that corresponds to this `use` statement -
 matches the `Psr\Log\LoggerInterface` from `debug:autowiring`.
@@ -117,6 +119,8 @@ It's that simple! Symfony will see this type-hint and say:
 I don't know why Symfony sounds like a frog in my head. Anyway, let's see if
 this works. Add `dd($logger)`: `dd()` stands for "dump and die" and comes from
 Symfony.
+
+[[[ code('7f28368d2c') ]]]
 
 Refresh! Yes! It printed the object beautifully then stopped execution. It's
 *working*! Symfony passes us a `Monolog\Logger` object, which implements that
@@ -143,6 +147,8 @@ service to log to this `dev.log` file.
 Ok, now that we have the `Logger` service, let's use it! How? Well, *of course*,
 you can read the docs. But thanks to the type-hint, our editor will help us!
 `LoggerInterface` has a *bunch* of methods. Let's use `->info()` and say:
+
+[[[ code('d3a5032330') ]]]
 
 > Starship collection retrieved.
 
