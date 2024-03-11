@@ -1,0 +1,266 @@
+WEBVTT
+
+00:00:01.126 --> 00:00:05.586 align:middle
+Symfony presume de tener algunas de las herramientas
+de depuración más épicas de todo Internet.
+
+00:00:05.946 --> 00:00:10.406 align:middle
+Pero como las aplicaciones Symfony empiezan
+tan pequeñas, aún no las tenemos instaladas.
+
+00:00:10.746 --> 00:00:11.906 align:middle
+Es hora de arreglarlo. Dirígete
+
+00:00:12.316 --> 00:00:16.036 align:middle
+a tu terminal y, como antes,
+confirma todos tus cambios
+
+00:00:16.036 --> 00:00:18.466 align:middle
+para que podamos comprobar
+lo que harán las recetas.
+
+00:00:18.866 --> 00:00:19.966 align:middle
+Yo ya lo he hecho.
+
+00:00:20.576 --> 00:00:25.666 align:middle
+Luego ejecuta: composer require debug ¡Sí!
+
+00:00:25.666 --> 00:00:27.306 align:middle
+Es otro alias de Flex.
+
+00:00:27.646 --> 00:00:30.106 align:middle
+E... instala un paquete.
+
+00:00:30.566 --> 00:00:36.266 align:middle
+Esto instala cuatro paquetes diferentes que añaden una
+variedad de bondades de depuración a nuestro proyecto.
+
+00:00:36.926 --> 00:00:39.016 align:middle
+Gira y abre composer.json.
+
+00:00:39.886 --> 00:00:44.886 align:middle
+Vale, el paquete ha añadido una nueva línea
+bajo la clave require para monolog-bundle.
+
+00:00:45.366 --> 00:00:47.336 align:middle
+Monolog es una biblioteca de registro.
+
+00:00:47.956 --> 00:00:53.236 align:middle
+Luego, al final, ha añadido tres
+paquetes a la sección require-dev.
+
+00:00:53.826 --> 00:00:56.136 align:middle
+Se conocen como dependencias dev...
+
+00:00:56.246 --> 00:00:59.156 align:middle
+lo que significa que no se descargarán
+cuando los despliegues en producción.
+
+00:00:59.536 --> 00:01:03.126 align:middle
+Por lo demás, funcionan igual que
+los paquetes de la clave require.
+
+00:01:03.676 --> 00:01:06.806 align:middle
+Los tres ayudan a potenciar
+algo llamado perfilador.
+
+00:01:07.116 --> 00:01:09.106 align:middle
+Lo veremos dentro de un minuto.
+
+00:01:09.736 --> 00:01:14.836 align:middle
+Antes de hacerlo, vuelve a tu terminal y ejecuta git
+status para que podamos ver lo que hicieron las recetas.
+
+00:01:16.296 --> 00:01:20.146 align:middle
+Vale: actualizó los archivos normales,
+habilitó unos cuantos bundles nuevos
+
+00:01:20.226 --> 00:01:23.736 align:middle
+y nos dio tres archivos de
+configuración nuevos para esos bundles.
+
+00:01:24.326 --> 00:01:27.066 align:middle
+¿Cuál es el resultado final
+de todas estas cosas nuevas?
+
+00:01:27.566 --> 00:01:30.526 align:middle
+Bueno, en primer lugar, ahora
+tenemos una biblioteca de registros.
+
+00:01:30.976 --> 00:01:35.426 align:middle
+Así que, como por arte de magia, los registros
+empezarán a aparecer en el directorio var/log/.
+
+00:01:35.946 --> 00:01:39.796 align:middle
+Pero el momento alucinante ocurre
+cuando actualizamos la página.
+
+00:01:40.146 --> 00:01:46.026 align:middle
+¡Woh! Una nueva y hermosa barra negra en la parte
+inferior llamada barra de herramientas de depuración web.
+
+00:01:46.446 --> 00:01:48.366 align:middle
+Está repleta de información.
+
+00:01:48.806 --> 00:01:51.976 align:middle
+Aquí podemos ver la ruta y el
+controlador de esta página.
+
+00:01:52.256 --> 00:01:57.106 align:middle
+Eso facilita ir a cualquier página de tu sitio
+-quizá una que ni siquiera hayas construido-
+
+00:01:57.336 --> 00:01:59.106 align:middle
+y encontrar rápidamente
+el código que hay detrás.
+
+00:01:59.566 --> 00:02:03.626 align:middle
+También podemos ver cuánto tardó en cargarse
+esta página, cuánta memoria utilizó,
+
+00:02:03.626 --> 00:02:07.386 align:middle
+e incluso la plantilla Twig que
+se renderizó y cuánto tardó.
+
+00:02:08.136 --> 00:02:11.886 align:middle
+Pero la verdadera magia de la barra de herramientas de
+depuración web ocurre cuando haces clic en cualquiera
+
+00:02:11.886 --> 00:02:15.436 align:middle
+de estos enlaces: saltas al perfilador.
+
+00:02:15.856 --> 00:02:20.096 align:middle
+Éste tiene diez veces más información:
+detalles sobre la petición y la respuesta,
+
+00:02:20.256 --> 00:02:23.506 align:middle
+registros que se produjeron mientras se
+cargaba la página, detalles de enrutamiento
+
+00:02:23.636 --> 00:02:26.376 align:middle
+e incluso estadísticas sobre las
+plantillas Twig que se procesaron.
+
+00:02:26.856 --> 00:02:31.876 align:middle
+Aparentemente, se estaban renderizando seis plantillas:
+la principal, el diseño base y algunas otras
+
+00:02:31.876 --> 00:02:36.416 align:middle
+que alimentan la barra de herramientas de
+depuración web, que, por cierto, no se renderizarán
+
+00:02:36.416 --> 00:02:38.616 align:middle
+ni se mostrarán cuando pasemos a producción.
+
+00:02:38.616 --> 00:02:41.066 align:middle
+Pero de eso hablaremos en el próximo tutorial.
+
+00:02:41.586 --> 00:02:45.476 align:middle
+Luego está probablemente mi
+sección favorita: Rendimiento.
+
+00:02:46.056 --> 00:02:49.906 align:middle
+Aquí se divide todo el tiempo de carga
+de nuestra página en diferentes partes.
+
+00:02:50.256 --> 00:02:51.466 align:middle
+Esto me encanta.
+
+00:02:51.956 --> 00:02:56.636 align:middle
+A medida que aprendas más sobre Symfony, te irás
+familiarizando con lo que son estas diferentes piezas.
+
+00:02:57.256 --> 00:03:01.546 align:middle
+Esta sección es útil para saber qué parte de
+tu código puede estar ralentizando la página...
+
+00:03:01.656 --> 00:03:05.816 align:middle
+pero también es una forma
+fantástica de profundizar en Symfony
+
+00:03:05.996 --> 00:03:08.376 align:middle
+y comprender todas sus piezas móviles. Vamos a
+
+00:03:09.096 --> 00:03:12.066 align:middle
+utilizar el perfilador a
+lo largo de esta serie,
+
+00:03:12.226 --> 00:03:14.426 align:middle
+pero vamos a recurrir a otra
+herramienta de depuración:
+
+00:03:14.746 --> 00:03:17.466 align:middle
+¡una que ha estado instalada en
+nuestra aplicación todo este tiempo!
+
+00:03:17.966 --> 00:03:21.936 align:middle
+Dirígete a la línea de comandos
+y ejecuta: php bin/console O,
+
+00:03:21.936 --> 00:03:24.236 align:middle
+en la mayoría de las máquinas,
+puedes decir simplemente ./bin/console.
+
+00:03:24.236 --> 00:03:24.986 align:middle
+Esta
+
+00:03:25.586 --> 00:03:30.966 align:middle
+es la consola de Symfony, y está repleta de
+comandos que pueden hacer todo tipo de cosas
+
+00:03:31.286 --> 00:03:32.756 align:middle
+Aprenderemos sobre ellos a lo largo del camino.
+
+00:03:33.316 --> 00:03:36.806 align:middle
+También puedes añadir tus propios comandos,
+cosa que haremos al final del tutorial. Fíjate en
+
+00:03:37.656 --> 00:03:41.806 align:middle
+que muchos de ellos empiezan por
+debug, como debug:router. Pruébalo
+
+00:03:42.236 --> 00:03:46.506 align:middle
+: php bin/console debug:router ¡Genial! Esto
+
+00:03:46.986 --> 00:03:52.046 align:middle
+nos muestra todas las rutas de nuestra aplicación: la ruta
+de la página de inicio en la parte inferior y un montón de
+
+00:03:52.046 --> 00:03:54.866 align:middle
+rutas añadidas por Symfony
+en el entorno dev que
+
+00:03:55.056 --> 00:03:57.466 align:middle
+alimentan la barra de herramientas de
+depuración web y el perfilador. Otro
+
+00:03:58.126 --> 00:04:02.936 align:middle
+comando es debug:twig: Esto nos indica
+todas las funciones Twig, filtros
+
+00:04:03.006 --> 00:04:06.036 align:middle
+u otras cosas que existen
+en nuestra aplicación.
+
+00:04:07.066 --> 00:04:08.986 align:middle
+Es como la documentación de Twig... salvo que
+
+00:04:09.196 --> 00:04:13.346 align:middle
+también incluye funciones y filtros
+adicionales añadidos a Twig por
+
+00:04:13.346 --> 00:04:15.136 align:middle
+los bundles que hemos instalado. Genial.
+
+00:04:15.456 --> 00:04:16.426 align:middle
+Estos
+
+00:04:17.096 --> 00:04:21.236 align:middle
+comandos dedebug son superútiles, y seguiremos probando
+más de ellos por el camino. A continuación, vamos a
+
+00:04:21.966 --> 00:04:25.056 align:middle
+crear nuestra primera ruta API y a conocer
+
+00:04:25.056 --> 00:04:27.546 align:middle
+el potente componente serializador de Symfony.
