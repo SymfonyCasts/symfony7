@@ -15,10 +15,17 @@ composer require debug
 
 Yup! That's another Flex alias. *And*... it installs a *pack*. This installs
 four different packages that add a variety of debugging goodness to our project.
-Spin over and open `composer.json`. Ok, the pack added one new line under the `require`
-key for `monolog-bundle`. Monolog is a logging library.
+Spin over and open `composer.json`. 
+
+[[[ code('3921cfe932') ]]]
+
+Ok, the pack added one new line under the `require` key for `monolog-bundle`. 
+Monolog is a logging library.
 
 Then all the way at the bottom, it added three packages to a `require-dev` section.
+
+[[[ code('23fb5876dc') ]]]
+
 These are known as *dev* dependencies... which means they won't be downloaded when
 you deploy to production. But otherwise, they work the same as packages under
 the `require` key. All three of these help power something called the *profiler*.
