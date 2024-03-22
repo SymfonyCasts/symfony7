@@ -1,0 +1,392 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:02.636 align:middle
+Con toda la nueva organización de código,
+
+00:00:02.746 --> 00:00:07.586 align:middle
+celebrémoslo creando otra ruta API
+para obtener un único starship.
+
+00:00:08.256 --> 00:00:11.686 align:middle
+Empieza como siempre: crea un public
+function llamado, qué tal, get().
+
+00:00:11.686 --> 00:00:14.456 align:middle
+Incluiré el tipo de retorno opcional Response.
+
+00:00:15.216 --> 00:00:20.546 align:middle
+Sobre éste, añade el #[Route]
+con una URL de /api/starships/...
+
+00:00:20.876 --> 00:00:24.696 align:middle
+hmm. Esta vez, la última parte
+de la URL tiene que ser dinámica:
+
+00:00:24.876 --> 00:00:31.126 align:middle
+debe coincidir con /api/starships/5
+o /api/starships/25.
+
+00:00:31.786 --> 00:00:32.576 align:middle
+¿Cómo podemos hacerlo?
+
+00:00:33.016 --> 00:00:35.286 align:middle
+¿Cómo podemos hacer que una
+ruta coincida con un comodín?
+
+00:00:35.856 --> 00:00:42.466 align:middle
+La respuesta es añadiendo {, un nombre, el }. El
+nombre dentro de éste podría ser cualquier cosa.
+
+00:00:42.846 --> 00:00:48.016 align:middle
+No importa lo que sea, ahora esta
+ruta coincidirá con /api/starships/*.
+
+00:00:48.736 --> 00:00:54.796 align:middle
+Pero sea cual sea el nombre que le pongas, ahora puedes
+tener un argumento con un nombre que coincida: $id.
+
+00:00:55.526 --> 00:00:57.476 align:middle
+A continuación, vuelca esto
+para asegurarte de que funciona.
+
+00:00:58.686 --> 00:01:02.756 align:middle
+¡Ok! Pasa a /api/starships/2 y...
+
+00:01:03.256 --> 00:01:04.656 align:middle
+¡funciona!
+
+00:01:05.146 --> 00:01:07.596 align:middle
+En nuestra aplicación, el
+ID será un número entero.
+
+00:01:08.056 --> 00:01:11.296 align:middle
+Si pruebo con algo que no
+sea un entero -como /wharf -
+
+00:01:11.556 --> 00:01:13.796 align:middle
+la ruta sigue coincidiendo y
+llama a nuestro controlador.
+
+00:01:14.426 --> 00:01:16.416 align:middle
+Y eso casi siempre está bien.
+
+00:01:16.796 --> 00:01:22.636 align:middle
+En una aplicación real, si consultáramos la base de
+datos con WHERE ID = 'wharf', no se produciría un error:
+
+00:01:22.836 --> 00:01:24.776 align:middle
+¡simplemente no encontraría
+una nave coincidente!
+
+00:01:25.346 --> 00:01:29.136 align:middle
+Y entonces podríamos lanzar una página
+404, que pronto te enseñaré cómo hacer.
+
+00:01:29.786 --> 00:01:32.596 align:middle
+Pero a veces podemos querer
+restringir estos valores.
+
+00:01:32.966 --> 00:01:37.266 align:middle
+Puede que queramos decir Sólo coincide con esta
+ruta si el comodín es un número entero. Para ello
+
+00:01:37.996 --> 00:01:42.296 align:middle
+, dentro de la llave, después
+del nombre, añade un <,
+
+00:01:42.296 --> 00:01:46.756 align:middle
+> y dentro, una expresión regular \d+.
+
+00:01:47.336 --> 00:01:49.846 align:middle
+Esto significa: coincide con un
+dígito de cualquier longitud.
+
+00:01:50.396 --> 00:01:55.516 align:middle
+Con esta configuración, si actualizamos
+la URL wharf, obtenemos un error 404.
+
+00:01:55.516 --> 00:02:01.026 align:middle
+Sencillamente, nuestra ruta no coincidió -ninguna ruta
+coincidió-, por lo que nunca se llamó a nuestro controlador.
+
+00:02:01.596 --> 00:02:04.616 align:middle
+Pero si volvemos a /2, sigue funcionando.
+
+00:02:05.196 --> 00:02:08.946 align:middle
+Y como ventaja añadida, ahora que
+esto sólo coincide con dígitos,
+
+00:02:09.146 --> 00:02:11.466 align:middle
+podemos añadir un tipo int al argumento.
+
+00:02:12.116 --> 00:02:15.416 align:middle
+Ahora, en lugar de la cadena
+2, obtenemos el integer 2.
+
+00:02:15.976 --> 00:02:19.826 align:middle
+Estos detalles no son superimportantes,
+pero quiero que sepas qué opciones tienes.
+
+00:02:20.546 --> 00:02:22.726 align:middle
+Algo habitual en las API es
+
+00:02:22.726 --> 00:02:27.426 align:middle
+hacer que las rutas sólo coincidan con un
+determinado método HTTP, como GET o POST.
+
+00:02:28.096 --> 00:02:33.266 align:middle
+Por ejemplo, si quieres obtener todas las naves
+estelares, los usuarios deben hacer una petición a GET...
+
+00:02:33.556 --> 00:02:35.606 align:middle
+lo mismo si quieren obtener una sola nave.
+
+00:02:36.426 --> 00:02:40.066 align:middle
+Si siguiéramos construyendo nuestra API y
+creáramos una ruta que pudiera utilizarse
+
+00:02:40.066 --> 00:02:45.126 align:middle
+para crear un nuevo Starship, la forma estándar
+de hacerlo sería utilizar la misma URL:
+
+00:02:45.306 --> 00:02:49.106 align:middle
+/api/starships pero con una petición a POST.
+
+00:02:49.836 --> 00:02:51.366 align:middle
+Ahora mismo, esto no funcionaría.
+
+00:02:51.786 --> 00:02:56.706 align:middle
+Cada vez que el usuario solicitara /api/starships
+-no importa si utiliza una petición GET
+
+00:02:56.706 --> 00:03:00.176 align:middle
+o POST, coincidiría con
+esta primera ruta. Por eso
+
+00:03:00.926 --> 00:03:03.256 align:middle
+, es habitual en una API
+
+00:03:03.416 --> 00:03:07.596 align:middle
+añadir una opción methods establecida
+en una matriz, con GET o POST.
+
+00:03:08.376 --> 00:03:10.876 align:middle
+Haré lo mismo aquí abajo: methods: ['GET'].
+
+00:03:12.006 --> 00:03:16.286 align:middle
+No puedo probarlo fácilmente en un navegador,
+pero si hiciéramos una petición POST
+
+00:03:16.286 --> 00:03:20.546 align:middle
+a /api/starships/2, no
+coincidiría con nuestra ruta.
+
+00:03:21.156 --> 00:03:22.836 align:middle
+Pero podemos ver el cambio en nuestro terminal.
+
+00:03:23.326 --> 00:03:26.856 align:middle
+Ejecuta: php bin/console
+debug:router ¡Perfecto!
+
+00:03:27.646 --> 00:03:29.496 align:middle
+La mayoría de las rutas
+coinciden con cualquier método...
+
+00:03:29.646 --> 00:03:34.296 align:middle
+pero nuestras dos rutas API sólo coinciden
+si se realiza una petición GET a esa URL.
+
+00:03:34.916 --> 00:03:37.356 align:middle
+Vale, tengo un truco más de
+enrutamiento que enseñarte...
+
+00:03:37.476 --> 00:03:39.056 align:middle
+¡y es divertido!
+
+00:03:39.756 --> 00:03:44.236 align:middle
+Todas las rutas de este controlador
+empiezan con la misma URL: /api/starships.
+
+00:03:44.766 --> 00:03:47.626 align:middle
+Tener la URL completa en cada ruta está bien.
+
+00:03:48.106 --> 00:03:52.026 align:middle
+Pero si queremos, podemos prefijar
+automáticamente la URL de cada ruta.
+
+00:03:52.536 --> 00:03:57.526 align:middle
+Encima de la clase, añade un
+atributo #[Route] con /api/starships.
+
+00:03:58.216 --> 00:04:02.236 align:middle
+A diferencia de cuando lo ponemos encima
+de un método, esto no crea una ruta.
+
+00:04:02.596 --> 00:04:07.266 align:middle
+Sólo dice: cada ruta de esta clase
+debe ir precedida de esta URL.
+
+00:04:07.826 --> 00:04:10.516 align:middle
+Así que para la primera ruta,
+elimina la ruta por completo.
+
+00:04:10.866 --> 00:04:13.536 align:middle
+Y para la segunda, sólo
+necesitamos la parte del comodín.
+
+00:04:14.116 --> 00:04:15.696 align:middle
+Prueba de nuevo con debug:router...
+
+00:04:15.826 --> 00:04:19.726 align:middle
+y observa estas URL: ¡No cambian!
+
+00:04:20.396 --> 00:04:22.006 align:middle
+Bien. Terminemos nuestra ruta.
+
+00:04:22.226 --> 00:04:24.796 align:middle
+Tenemos que encontrar el barco
+que coincida con este ID.
+
+00:04:25.246 --> 00:04:30.686 align:middle
+Normalmente consultaríamos la base de
+datos: select * from ship where id = este ID.
+
+00:04:31.136 --> 00:04:34.076 align:middle
+Nuestras naves están codificadas ahora mismo,
+pero aún podemos hacer algo que se parecerá
+
+00:04:34.076 --> 00:04:38.586 align:middle
+bastante a lo que haremos cuando
+tengamos una base de datos.
+
+00:04:38.946 --> 00:04:44.786 align:middle
+Ya tenemos un servicio - StarshipRepository - cuyo
+trabajo consiste en obtener datos sobre naves estelares.
+
+00:04:45.416 --> 00:04:50.526 align:middle
+Démosle un nuevo superpoder: la capacidad
+de obtener un único Starship para un id.
+
+00:04:50.996 --> 00:04:56.406 align:middle
+Añade public function find() con un argumento
+int $id que devolverá un Starship anulable.
+
+00:04:57.056 --> 00:05:00.426 align:middle
+Por tanto, un Starship si encontramos
+uno para este id, si no null.
+
+00:05:00.966 --> 00:05:06.226 align:middle
+Ahora mismo, la forma más fácil de escribir esta lógica
+es hacer un bucle sobre $this->findAll() como $starship...
+
+00:05:07.016 --> 00:05:11.566 align:middle
+entonces si $starship->getId()
+=== $id, devuelve $starship.
+
+00:05:12.286 --> 00:05:14.206 align:middle
+Cambiaré mi uf por if.
+
+00:05:14.646 --> 00:05:15.256 align:middle
+Mucho mejor.
+
+00:05:15.846 --> 00:05:18.756 align:middle
+Y si no encontramos nada,
+al final, return null.
+
+00:05:19.626 --> 00:05:22.566 align:middle
+Gracias a esto, nuestro
+controlador es muy sencillo.
+
+00:05:23.006 --> 00:05:25.816 align:middle
+Primero, autoconecta el
+repositorio añadiendo un argumento
+
+00:05:26.126 --> 00:05:29.226 align:middle
+StarshipRepository y simplemente
+llámalo $repository.
+
+00:05:30.046 --> 00:05:33.126 align:middle
+Por cierto, el orden de los argumentos
+en un controlador no importa.
+
+00:05:33.786 --> 00:05:37.356 align:middle
+Después $starship = $repository->find($id).
+
+00:05:38.256 --> 00:05:41.676 align:middle
+Termina en la parte inferior con
+return $this->json($starship).
+
+00:05:42.346 --> 00:05:43.256 align:middle
+Creo que ya estamos listos
+
+00:05:43.686 --> 00:05:45.946 align:middle
+Actualiza. ¡Perfecto!
+
+00:05:46.536 --> 00:05:51.426 align:middle
+Pero prueba con un identificador que no exista
+en nuestra base de datos falsa, como /200.
+
+00:05:52.286 --> 00:05:53.716 align:middle
+La palabra null es...
+
+00:05:54.016 --> 00:05:55.066 align:middle
+no es lo que queremos.
+
+00:05:55.596 --> 00:05:59.546 align:middle
+En esta situación, deberíamos devolver
+una respuesta con un código de estado 404.
+
+00:06:00.226 --> 00:06:04.196 align:middle
+Para ello, vamos a seguir un
+patrón común: consulta un objeto y
+
+00:06:04.366 --> 00:06:06.486 align:middle
+comprueba si devuelve algo.
+
+00:06:07.096 --> 00:06:09.666 align:middle
+Si no devuelve nada, lanza un 404.
+
+00:06:10.376 --> 00:06:14.376 align:middle
+Hazlo con throw
+$this->createNotFoundException().
+
+00:06:14.806 --> 00:06:16.136 align:middle
+Le pasaré un mensaje.
+
+00:06:17.486 --> 00:06:22.596 align:middle
+Fíjate en la palabra clave throw: estamos lanzando
+una excepción especial que provoca un 404.
+
+00:06:23.056 --> 00:06:27.966 align:middle
+Eso está bien porque, en cuanto llegue a esta línea,
+no se ejecutará nada de lo que venga después.
+
+00:06:28.786 --> 00:06:29.306 align:middle
+¡Pruébalo!
+
+00:06:30.246 --> 00:06:32.536 align:middle
+¡Sí! ¡Una respuesta 404!
+
+00:06:32.956 --> 00:06:37.326 align:middle
+El mensaje - "Nave no encontrada"- sólo se
+muestra a los desarrolladores en modo dev.
+
+00:06:37.916 --> 00:06:42.026 align:middle
+En producción, se devolvería una
+página -o JSON- totalmente diferente.
+
+00:06:42.406 --> 00:06:45.506 align:middle
+Puedes consultar la documentación para obtener más
+información sobre las páginas de error de producción.
+
+00:06:46.286 --> 00:06:49.086 align:middle
+A continuación: vamos a construir
+la versión HTML de esta página,
+
+00:06:49.336 --> 00:06:52.106 align:middle
+una página que muestra detalles
+sobre una única nave estelar.
+
+00:06:52.636 --> 00:06:55.756 align:middle
+Luego aprenderemos a enlazar entre
+páginas utilizando el nombre de la ruta.
