@@ -42,9 +42,14 @@ Why thank you!
 
 Asset Mapper has two big superpowers. The first is that it helps us load CSS and
 JavaScript. The recipe gave us a new `assets/` directory with an `app.js` file and
-a `styles/app.css` file. As we saw, the console log is coming from `app.js`. So this
-file *is* being loaded. It's also apparently including `app.css`, which is what
+a `styles/app.css` file. As we saw, the console log is coming from `app.js`. 
+
+[[[ code('963c6fbd7c') ]]]
+
+So this file *is* being loaded. It's also apparently including `app.css`, which is what
 gives us that blue background.
+
+[[[ code('240833ed57') ]]]
 
 We're going to talk more later about how these files are loaded and how this all
 works. But for right now, it's enough to know that `app.js` and `app.css` are
@@ -52,6 +57,9 @@ included on the page.
 
 The second big superpower of Asset Mapper is a bit simpler. The recipe
 created a `config/packages/asset_mapper.yaml` file. There's not a lot here:
+
+[[[ code('391af354c5') ]]]
+
 just `paths` pointing to our `assets/` directory. But because of this line, *any*
 file that we put in the `assets/` directory becomes available publicly.
 It's as if the `assets/` directory physically lives inside `public/`. This is
@@ -96,7 +104,11 @@ block - so it's not overridden by our page content - add an `<img>` tag with
 Twig function called `asset()`. Pass *this* the logical path.
 
 That's it! Ok, I'll add an `alt` attribute... to be a good citizen of the
-web. Let's try this. Refresh and... it explodes!
+web. 
+
+[[[ code('36753afdc0') ]]]
+
+Let's try this. Refresh and... it explodes!
 
 > Did you forget to run` composer require symfony/asset`. Unknown function "asset".
 
