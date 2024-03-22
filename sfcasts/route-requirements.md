@@ -16,6 +16,8 @@ argument with a *matching* name: `$id`.
 
 Below, dump this to make sure it's working.
 
+[[[ code('b16bd7698e') ]]]
+
 ## Restricting the Wildcard to be a Number
 
 Ok! Zoom over to `/api/starships/2` and... it *is* working!
@@ -32,6 +34,8 @@ But sometimes, we *may* want to restrict these values. We may want to say:
 
 To do that, inside the curly brace, after the name, add a `<`, `>` and inside,
 a regular expression `\d+`.
+
+[[[ code('69b82678c5') ]]]
 
 This means: match a digit of any length. With this setup, if we refresh the `wharf`
 URL, we get a 404 error. Our route simply wasn't matched - *no* route matched -
@@ -57,6 +61,8 @@ matter if they use a `GET` or `POST` request, it would match this *first* route.
 For that reason, it's common in an API to add a `methods` option set to an array,
 with `GET` or `POST`. I'll do the same thing down here: `methods: ['GET']`.
 
+[[[ code('c62385b5de') ]]]
+
 I can't easily test this in a browser, but if we made a POST request to
 `/api/starships/2`, it would *not* match our route.
 
@@ -80,6 +86,8 @@ Unlike when we put this above a *method*, this does *not* create a route.
 It just says: every route in this class should be prefixed with this URL.
 So for the first route, remove the path entirely. And for the second, we only
 need the wildcard part.
+
+[[[ code('23887d008f') ]]]
 
 Try `debug:router` again... and watch these URLs:
 
@@ -108,12 +116,16 @@ change my `uf` to `if`. Much better.
 
 And if we didn't find anything, at the bottom, `return null`.
 
+[[[ code('28e91b0460') ]]]
+
 Thanks to this, our controller is *so* simple. First, autowire the repository
 by adding an argument: `StarshipRepository` and just call it `$repository`. By
 the way, the order of arguments in a controller doesn't matter.
 
 Then `$starship = $repository->find($id)`. Finish at the bottom with
 `return $this->json($starship)`.
+
+[[[ code('89a45b2246') ]]]
 
 I think we're ready! Refresh. It's perfect!
 
@@ -127,6 +139,8 @@ To do that, we're going to follow a common pattern: query for an object,
 then check if it returned anything. If it did *not* return something, trigger 
 a 404. Do that with throw `$this->createNotFoundException()`. I'll pass this a
 message.
+
+[[[ code('d378dcbf47') ]]]
 
 Notice the `throw` keyword: we're throwing a special exception that triggers
 a 404. That's nice because, as soon as it hits this line, nothing
