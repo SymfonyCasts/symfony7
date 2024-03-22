@@ -17,6 +17,8 @@ the wildcard only matches a number.
 Now, *because* we have an `{id}` wildcard, we are *allowed* to have an `$id` argument
 down here. `dd($id)` to see how we're doing so far.
 
+[[[ code('8d6cc93142') ]]]
+
 Try it. Head to `/starships/2`. Lovely!
 
 Now we're going to do something familiar: take this `$id` and query our imaginary
@@ -30,6 +32,8 @@ In the controller, add a `StarshipRepository $repository` argument... then say
 Cool! At the bottom, instead of returning JSON, render a template: return
 `$this->render()` and follow the standard naming convention for templates:
 `starship/show.html.twig`. Pass this one variable: `$ship`.
+
+[[[ code('0988a1b906') ]]]
 
 ## Creating the Template
 
@@ -46,6 +50,8 @@ then override some blocks! Override `title`... and this time, let's use that
 
 And for the main content, add the block `body`... `endblock` and put an `h1`
 inside. Print `ship.name` again and... I'll paste in a table with some info.
+
+[[[ code('0988a1b906') ]]]
 
 Nothing special here: we're just printing basic ship data.
 
@@ -75,6 +81,8 @@ changes.
 
 Find the show page route and add a `name` key. I'll use `app_starship_show`.
 
+[[[ code('9254226423') ]]]
+
 The name could be anything, but this is the convention I follow: `app` because it's
 a route that I'm making in my app, then the controller class name and method name.
 
@@ -101,6 +109,8 @@ Symfony then responds:
 When there's a wildcard in the route, we need to add a second argument to `path()`
 with `{}`. This is Twig's associative array syntax. So it's exactly like JavaScript:
 it's a key-value pair list. Pass `id` set to `myShip.id`.
+
+[[[ code('9c72287b2c') ]]]
 
 And now... got it! Look at that URL: `/starships/3`.
 
