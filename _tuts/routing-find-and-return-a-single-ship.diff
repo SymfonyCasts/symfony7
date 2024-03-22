@@ -1,8 +1,8 @@
 diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
-index 8a38153..b4dd0ae 100644
+index e50f16e..7833cfa 100644
 --- a/src/Controller/StarshipApiController.php
 +++ b/src/Controller/StarshipApiController.php
-@@ -21,8 +21,10 @@ class StarshipApiController extends AbstractController
+@@ -19,8 +19,10 @@ class StarshipApiController extends AbstractController
      }
  
      #[Route('/{id<\d+>}', methods: ['GET'])]
@@ -16,10 +16,10 @@ index 8a38153..b4dd0ae 100644
      }
  }
 diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
-index c083a8d..f6e0f83 100644
+index 515a46c..382aa35 100644
 --- a/src/Repository/StarshipRepository.php
 +++ b/src/Repository/StarshipRepository.php
-@@ -42,4 +42,15 @@ class StarshipRepository extends AbstractController
+@@ -39,4 +39,15 @@ class StarshipRepository
              ),
          ];
      }

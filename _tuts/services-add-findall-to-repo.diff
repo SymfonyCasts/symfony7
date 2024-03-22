@@ -1,8 +1,16 @@
 diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
-index 1d803cb..16216e2 100644
+index 1d803cb..826fa48 100644
 --- a/src/Controller/StarshipApiController.php
 +++ b/src/Controller/StarshipApiController.php
-@@ -15,30 +15,7 @@ class StarshipApiController extends AbstractController
+@@ -2,7 +2,6 @@
+ 
+ namespace App\Controller;
+ 
+-use App\Model\Starship;
+ use App\Repository\StarshipRepository;
+ use Psr\Log\LoggerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+@@ -15,30 +14,7 @@ class StarshipApiController extends AbstractController
      public function getCollection(LoggerInterface $logger, StarshipRepository $repository): Response
      {
          $logger->info('Starship collection retrieved');
@@ -35,21 +43,16 @@ index 1d803cb..16216e2 100644
          return $this->json($starships);
      }
 diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
-index d97732b..68d4566 100644
+index d97732b..a9b483b 100644
 --- a/src/Repository/StarshipRepository.php
 +++ b/src/Repository/StarshipRepository.php
-@@ -2,6 +2,38 @@
+@@ -2,6 +2,34 @@
  
  namespace App\Repository;
  
--class StarshipRepository
 +use App\Model\Starship;
-+use Psr\Log\LoggerInterface;
-+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-+use Symfony\Component\HttpFoundation\Response;
-+use Symfony\Component\Routing\Attribute\Route;
 +
-+class StarshipRepository extends AbstractController
+ class StarshipRepository
  {
 +    public function findAll(): array
 +    {

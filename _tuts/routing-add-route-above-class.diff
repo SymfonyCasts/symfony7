@@ -1,8 +1,8 @@
 diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
-index dce2abf..8a38153 100644
+index 5ddfa93..e50f16e 100644
 --- a/src/Controller/StarshipApiController.php
 +++ b/src/Controller/StarshipApiController.php
-@@ -9,9 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+@@ -7,9 +7,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  use Symfony\Component\HttpFoundation\Response;
  use Symfony\Component\Routing\Attribute\Route;
  
@@ -14,7 +14,7 @@ index dce2abf..8a38153 100644
      public function getCollection(StarshipRepository $repository): Response
      {
          $starships = $repository->findAll();
-@@ -19,7 +20,7 @@ class StarshipApiController extends AbstractController
+@@ -17,7 +18,7 @@ class StarshipApiController extends AbstractController
          return $this->json($starships);
      }
  

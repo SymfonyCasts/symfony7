@@ -1,8 +1,8 @@
 diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
-index f272f08..dce2abf 100644
+index cc7b805..5ddfa93 100644
 --- a/src/Controller/StarshipApiController.php
 +++ b/src/Controller/StarshipApiController.php
-@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
+@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
  
  class StarshipApiController extends AbstractController
  {
@@ -11,7 +11,7 @@ index f272f08..dce2abf 100644
      public function getCollection(StarshipRepository $repository): Response
      {
          $starships = $repository->findAll();
-@@ -19,7 +19,7 @@ class StarshipApiController extends AbstractController
+@@ -17,7 +17,7 @@ class StarshipApiController extends AbstractController
          return $this->json($starships);
      }
  

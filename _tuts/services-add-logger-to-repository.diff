@@ -1,8 +1,16 @@
 diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
-index 16216e2..9cebecd 100644
+index 826fa48..166ff05 100644
 --- a/src/Controller/StarshipApiController.php
 +++ b/src/Controller/StarshipApiController.php
-@@ -12,9 +12,8 @@ use Symfony\Component\Routing\Attribute\Route;
+@@ -3,7 +3,6 @@
+ namespace App\Controller;
+ 
+ use App\Repository\StarshipRepository;
+-use Psr\Log\LoggerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -11,9 +10,8 @@ use Symfony\Component\Routing\Attribute\Route;
  class StarshipApiController extends AbstractController
  {
      #[Route('/api/starships')]
@@ -14,12 +22,16 @@ index 16216e2..9cebecd 100644
  
          return $this->json($starships);
 diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
-index 68d4566..c083a8d 100644
+index a9b483b..515a46c 100644
 --- a/src/Repository/StarshipRepository.php
 +++ b/src/Repository/StarshipRepository.php
-@@ -10,8 +10,14 @@ use Symfony\Component\Routing\Attribute\Route;
+@@ -3,11 +3,18 @@
+ namespace App\Repository;
  
- class StarshipRepository extends AbstractController
+ use App\Model\Starship;
++use Psr\Log\LoggerInterface;
+ 
+ class StarshipRepository
  {
 +    public function __construct(private LoggerInterface $logger)
 +    {

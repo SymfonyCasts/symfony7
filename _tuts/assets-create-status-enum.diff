@@ -37,7 +37,7 @@ index 0000000..fa381c9
 +    case COMPLETED = 'completed';
 +}
 diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
-index f6e0f83..0dd922c 100644
+index 382aa35..e70471d 100644
 --- a/src/Repository/StarshipRepository.php
 +++ b/src/Repository/StarshipRepository.php
 @@ -3,6 +3,7 @@
@@ -46,9 +46,9 @@ index f6e0f83..0dd922c 100644
  use App\Model\Starship;
 +use App\Model\StarshipStatusEnum;
  use Psr\Log\LoggerInterface;
- use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
- use Symfony\Component\HttpFoundation\Response;
-@@ -24,21 +25,21 @@ class StarshipRepository extends AbstractController
+ 
+ class StarshipRepository
+@@ -21,21 +22,21 @@ class StarshipRepository
                  'USS LeafyCruiser (NCC-0001)',
                  'Garden',
                  'Jean-Luc Pickles',

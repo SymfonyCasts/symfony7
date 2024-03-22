@@ -1,8 +1,8 @@
 diff --git a/src/Controller/StarshipApiController.php b/src/Controller/StarshipApiController.php
-index 9cebecd..833116f 100644
+index 166ff05..5c0ee17 100644
 --- a/src/Controller/StarshipApiController.php
 +++ b/src/Controller/StarshipApiController.php
-@@ -18,4 +18,10 @@ class StarshipApiController extends AbstractController
+@@ -16,4 +16,10 @@ class StarshipApiController extends AbstractController
  
          return $this->json($starships);
      }
