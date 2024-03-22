@@ -1,0 +1,414 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:06.126 align:middle
+Sabemos que los servicios funcionan, y sabemos que
+Symfony está lleno de servicios que podemos utilizar.
+
+00:00:06.126 --> 00:00:12.336 align:middle
+Si Ejecutas: php bin/console debug:autowiring
+Obtenemos el menú de servicios,
+
+00:00:12.456 --> 00:00:16.026 align:middle
+en el que puedes pedir cualquiera de
+ellos añadiendo un argumento de tipo
+
+00:00:16.026 --> 00:00:17.736 align:middle
+con la clase o interfaz correspondiente.
+
+00:00:18.186 --> 00:00:21.516 align:middle
+Nosotros, por supuesto, también
+trabajamos en nuestro código...
+
+00:00:21.886 --> 00:00:22.366 align:middle
+con suerte.
+
+00:00:22.886 --> 00:00:27.906 align:middle
+Ahora mismo, todo ese trabajo se realiza dentro de nuestro
+controlador, como la creación de los datos de la Nave Estelar.
+
+00:00:28.616 --> 00:00:31.116 align:middle
+Claro, esto está codificado
+ahora mismo, pero imagina
+
+00:00:31.116 --> 00:00:34.406 align:middle
+que fuera trabajo real: como una
+consulta compleja a una base de datos.
+
+00:00:34.956 --> 00:00:37.666 align:middle
+Poner la lógica dentro de un
+controlador está "bien"...
+
+00:00:37.826 --> 00:00:41.546 align:middle
+pero ¿y si quisiéramos reutilizar
+este código en otro sitio?
+
+00:00:41.546 --> 00:00:45.236 align:middle
+¿Y si, en nuestra página de inicio,
+quisiéramos obtener un recuento dinámico de las
+
+00:00:45.236 --> 00:00:47.606 align:middle
+naves estelares tomando estos mismos datos?
+
+00:00:48.286 --> 00:00:51.396 align:middle
+Para ello, tenemos que trasladar
+este "trabajo" a un servicio propio
+
+00:00:51.476 --> 00:00:54.056 align:middle
+que puedan utilizar ambos controladores.
+
+00:00:54.056 --> 00:00:56.886 align:middle
+En el directorio src/, crea
+un nuevo directorio Repository
+
+00:00:57.316 --> 00:01:00.266 align:middle
+y una nueva clase PHP en su interior
+llamada StarshipRepository. Al
+
+00:01:01.186 --> 00:01:03.456 align:middle
+igual que cuando creamos
+nuestra clase Starship,
+
+00:01:03.776 --> 00:01:06.826 align:middle
+esta nueva clase no tiene
+absolutamente nada que ver con Symfony.
+
+00:01:07.146 --> 00:01:11.496 align:middle
+Es sólo una clase que hemos decidido
+crear para organizar nuestro trabajo.
+
+00:01:12.046 --> 00:01:16.836 align:middle
+Por lo tanto, a Symfony no le importa cómo
+se llama, dónde vive o qué aspecto tiene.
+
+00:01:17.216 --> 00:01:21.466 align:middle
+Yo la llamé StarshipRepository y
+la puse en un directorio Repository
+
+00:01:21.626 --> 00:01:25.636 align:middle
+porque es un nombre de programación común
+para una clase cuyo "trabajo" consiste
+
+00:01:25.636 --> 00:01:28.296 align:middle
+en obtener un tipo de datos, como
+los datos de la Nave Estelar.
+
+00:01:28.996 --> 00:01:33.706 align:middle
+Vale, antes de hacer nada aquí, vamos a ver si
+podemos utilizar esto dentro de un controlador.
+
+00:01:34.126 --> 00:01:35.346 align:middle
+Y, ¡buenas noticias!
+
+00:01:35.656 --> 00:01:39.706 align:middle
+Sólo con crear esta clase, ya
+está disponible para autocableado.
+
+00:01:40.396 --> 00:01:46.466 align:middle
+Añade un argumento StarshipRepository $repository
+y, para asegurarte de que funciona, dd($repository).
+
+00:01:47.436 --> 00:01:50.436 align:middle
+Muy bien, gira, haz clic de
+nuevo en nuestra ruta, y...
+
+00:01:50.756 --> 00:01:53.266 align:middle
+ya está. ¡Qué guay!
+
+00:01:53.266 --> 00:02:01.026 align:middle
+Symfony ha visto la sugerencia de tipo StarshipRepository,
+ha instanciado ese objeto y nos lo ha pasado.
+
+00:02:01.026 --> 00:02:02.506 align:middle
+Borra el dd()...
+
+00:02:02.506 --> 00:02:04.706 align:middle
+y movamos los datos de la nave dentro.
+
+00:02:05.056 --> 00:02:05.606 align:middle
+Cópialo...
+
+00:02:05.956 --> 00:02:08.956 align:middle
+y crea una nueva función pública
+llamada, qué tal, findAll().
+
+00:02:10.446 --> 00:02:14.116 align:middle
+Dentro, return, y pégala.
+
+00:02:14.166 --> 00:02:16.746 align:middle
+De vuelta en
+StarshipApiController, borra eso...
+
+00:02:17.196 --> 00:02:23.146 align:middle
+y queda maravillosamente sencillo:
+$starships = $repository->findAll().
+
+00:02:23.146 --> 00:02:26.296 align:middle
+¡Listo! Cuando lo probamos,
+sigue funcionando...
+
+00:02:26.496 --> 00:02:29.676 align:middle
+y ahora el código para obtener
+naves estelares está bien organizado
+
+00:02:29.676 --> 00:02:32.816 align:middle
+en su propia clase y es reutilizable
+en toda nuestra aplicación.
+
+00:02:33.486 --> 00:02:36.836 align:middle
+Con esta victoria en nuestro haber,
+vamos a hacer algo más difícil.
+
+00:02:37.186 --> 00:02:40.196 align:middle
+¿Y si, desde dentro de StarshipRepository,
+
+00:02:40.486 --> 00:02:44.936 align:middle
+necesitáramos acceder a otro servicio
+que nos ayudara a hacer nuestro trabajo?
+
+00:02:45.586 --> 00:02:46.226 align:middle
+¡No hay problema!
+
+00:02:46.516 --> 00:02:48.116 align:middle
+¡Podemos utilizar el autocableado!
+
+00:02:48.116 --> 00:02:51.096 align:middle
+Intentemos autocablear de
+nuevo el servicio logger.
+
+00:02:51.716 --> 00:02:56.216 align:middle
+La única diferencia esta vez es que no
+vamos a añadir el argumento a findAll().
+
+00:02:56.856 --> 00:02:58.326 align:middle
+Te explicaré por qué en un minuto.
+
+00:02:58.326 --> 00:03:02.466 align:middle
+En su lugar, añade un nuevo
+public function __construct()
+
+00:03:02.466 --> 00:03:06.646 align:middle
+y realiza el autocableado allí:
+private LoggerInterface $logger. Abajo
+
+00:03:08.286 --> 00:03:12.376 align:middle
+, para utilizarlo, copia el código
+de nuestro controlador, bórralo,
+
+00:03:12.976 --> 00:03:16.906 align:middle
+pégalo aquí y actualízalo
+a $this->logger.
+
+00:03:17.796 --> 00:03:22.246 align:middle
+¡Genial! En el controlador, podemos eliminar
+ese argumento porque ya no lo vamos a utilizar.
+
+00:03:22.246 --> 00:03:24.566 align:middle
+¡Hora de probar!
+
+00:03:24.956 --> 00:03:27.866 align:middle
+¡Actualiza! No hay error: buena señal.
+
+00:03:28.396 --> 00:03:35.926 align:middle
+Para ver si se ha registrado algo, ve a /_profiler,
+haz clic en la petición superior, Registros, y...
+
+00:03:36.256 --> 00:03:37.506 align:middle
+¡ahí está!
+
+00:03:37.506 --> 00:03:41.686 align:middle
+Te explicaré por qué hemos añadido
+el argumento de servicio al constructor.
+
+00:03:41.686 --> 00:03:46.936 align:middle
+Si queremos obtener un servicio -como el registrador,
+una conexión a una base de datos, lo que sea-,
+
+00:03:47.216 --> 00:03:54.176 align:middle
+ésta es la forma correcta de utilizar el autocableado:
+añadir un método __construct dentro de otro servicio.
+
+00:03:54.816 --> 00:03:59.666 align:middle
+El truco que vimos antes -en el que añadimos
+el argumento a un método normal- sí,
+
+00:03:59.756 --> 00:04:03.676 align:middle
+eso es especial y sólo funciona
+para métodos de controlador.
+
+00:04:04.116 --> 00:04:06.596 align:middle
+Es una comodidad adicional
+que se añadió al sistema.
+
+00:04:07.086 --> 00:04:09.496 align:middle
+Es una gran característica,
+pero la forma del constructor...
+
+00:04:09.866 --> 00:04:12.726 align:middle
+así es como funciona
+realmente el autocableado.
+
+00:04:12.726 --> 00:04:15.736 align:middle
+Y esta forma "normal", funciona
+incluso en un controlador.
+
+00:04:16.196 --> 00:04:18.316 align:middle
+Podrías añadir un método __construct()
+
+00:04:18.456 --> 00:04:21.676 align:middle
+con un argumento autocableable
+y funcionaría perfectamente. La
+
+00:04:22.296 --> 00:04:25.526 align:middle
+cuestión es: si estás en un
+método controlador, claro,
+
+00:04:25.736 --> 00:04:28.406 align:middle
+añade el argumento al método, ¡está bien!
+
+00:04:28.926 --> 00:04:32.326 align:middle
+Sólo recuerda que es algo
+especial que sólo funciona aquí.
+
+00:04:32.836 --> 00:04:35.396 align:middle
+En cualquier otra parte, autocablea
+a través del constructor.
+
+00:04:36.126 --> 00:04:39.056 align:middle
+Celebremos nuestro nuevo servicio
+utilizándolo en la página de inicio.
+
+00:04:39.456 --> 00:04:40.736 align:middle
+Abre MainController.
+
+00:04:41.386 --> 00:04:45.156 align:middle
+Este $starshipCount codificado es
+tan de hace 30 minutos. Autocablea
+
+00:04:45.656 --> 00:04:48.766 align:middle
+StarshipRepository $starshipRepository,
+
+00:04:49.346 --> 00:04:54.896 align:middle
+luego di $ships = $starshipRepository->findAll()
+y cuéntalos con count().
+
+00:04:56.216 --> 00:04:59.396 align:middle
+Ya que estamos aquí, en lugar de esta
+matriz $myShip codificada, vamos a
+
+00:04:59.686 --> 00:05:02.356 align:middle
+coger un objeto Starship al azar.
+
+00:05:03.276 --> 00:05:09.916 align:middle
+Podemos hacerlo diciendo $myShip igual a
+$ships[array_rand($ships)] ¡Probémoslo!
+
+00:05:10.246 --> 00:05:12.656 align:middle
+Busca en tu navegador y
+dirígete a la página de inicio.
+
+00:05:13.286 --> 00:05:18.796 align:middle
+¡Ya está! Vemos la nave que cambia aleatoriamente aquí
+abajo, y el número de nave correcto aquí arriba...
+
+00:05:19.096 --> 00:05:21.416 align:middle
+porque lo estamos multiplicando
+por 10 en la plantilla.
+
+00:05:22.096 --> 00:05:24.146 align:middle
+¡Y acaba de ocurrir una locura!
+
+00:05:24.546 --> 00:05:27.936 align:middle
+Hace un momento, myShip
+era una matriz asociativa.
+
+00:05:28.226 --> 00:05:31.446 align:middle
+Pero lo hemos cambiado para
+que sea un objeto Nave Estelar.
+
+00:05:31.926 --> 00:05:34.856 align:middle
+Y aun así, el código de nuestra
+página siguió funcionando.
+
+00:05:35.336 --> 00:05:37.956 align:middle
+Acabamos de ver accidentalmente
+un superpoder de Twig.
+
+00:05:38.636 --> 00:05:42.606 align:middle
+Ve a templates/main/homepage.html.twig
+y desplázate hasta el final.
+
+00:05:43.406 --> 00:05:46.586 align:middle
+Cuando dices myShip.name,
+Twig es realmente inteligente.
+
+00:05:47.126 --> 00:05:50.746 align:middle
+Si myShip es una matriz
+asociativa, cogerá la clave name.
+
+00:05:50.746 --> 00:05:56.226 align:middle
+Si myShip es un objeto, como lo es
+ahora, cogerá la propiedad name.
+
+00:05:56.926 --> 00:05:59.616 align:middle
+Pero aún más, si miras Starship,
+
+00:05:59.786 --> 00:06:03.896 align:middle
+la propiedad name es privada, por lo que
+no podemos acceder a ella directamente.
+
+00:06:04.396 --> 00:06:05.916 align:middle
+Twig se da cuenta de ello.
+
+00:06:06.536 --> 00:06:09.286 align:middle
+Mira la propiedad name, ve que es privada,
+
+00:06:09.556 --> 00:06:13.036 align:middle
+pero también ve que hay
+una getName() pública.
+
+00:06:13.456 --> 00:06:15.526 align:middle
+Así que llama a esa.
+
+00:06:16.326 --> 00:06:18.696 align:middle
+Todo lo que tenemos que decir es myShip.name...
+
+00:06:18.926 --> 00:06:22.836 align:middle
+y Twig se encarga de los detalles de
+cómo obtenerlo, lo cual me encanta.
+
+00:06:23.636 --> 00:06:25.296 align:middle
+Vale, un último pequeño ajuste.
+
+00:06:25.296 --> 00:06:30.346 align:middle
+En lugar de pasar el starshipCount a nuestra
+plantilla, podemos hacer el recuento dentro de Twig.
+
+00:06:30.926 --> 00:06:35.976 align:middle
+Elimina esta variable y, en su
+lugar, pasa una variable ships.
+
+00:06:37.616 --> 00:06:43.236 align:middle
+En la plantilla, ya está, para el recuento,
+podemos decir ships, que es una matriz,
+
+00:06:43.476 --> 00:06:47.466 align:middle
+y luego utilizar un filtro Twig: |length.
+
+00:06:47.466 --> 00:06:48.376 align:middle
+Así queda bien.
+
+00:06:48.746 --> 00:06:49.976 align:middle
+Hagamos lo mismo aquí abajo...
+
+00:06:49.976 --> 00:06:53.696 align:middle
+y cambiémoslo a mayor que 2.
+
+00:06:54.506 --> 00:06:56.066 align:middle
+Pruébalo.
+
+00:06:56.066 --> 00:06:58.036 align:middle
+¡Nuestro sitio sigue funcionando!
+
+00:06:58.036 --> 00:07:03.536 align:middle
+Lo siguiente: creemos más páginas y
+aprendamos a hacer rutas aún más inteligentes.
