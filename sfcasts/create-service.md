@@ -47,8 +47,12 @@ it to us. Delete the `dd()`... and let's move the starship data inside. Copy it.
 and create a new public function called, how about, `findAll()`. Inside, `return`,
 then paste.
 
+[[[ code('32a1c49c94') ]]]
+
 Back over in `StarshipApiController`, delete that... and it's beautifully simple:
 `$starships = $repository->findAll()`.
+
+[[[ code('65335f0982') ]]]
 
 Done! When we try it, it *still* works... and now the code for fetching starships
 is nicely organized into its own class and reusable across our app.
@@ -64,8 +68,12 @@ The only difference this time is that we're *not* going to add the argument to `
 I'll explain why in a minute. Instead, add a new `public function __construct()`
 and do the auto-wiring *there*: `private LoggerInterface $logger`.
 
+[[[ code('f4faf9e448') ]]]
+
 Down below, to use it, copy the code from our controller, delete that, paste
 it here, and update it to `$this->logger`.
+
+[[[ code('9e890e9870') ]]]
 
 Cool! Over in the controller, we can remove that argument because we're not using
 it anymore.
@@ -95,9 +103,13 @@ Let's celebrate our new service by using it on the homepage. Open up
 `StarshipRepository $starshipRepository`, then say 
 `$ships = $starshipRepository->findAll()` and count them with `count()`.
 
+[[[ code('9b65357996') ]]]
+
 While we're here, instead of this hardcoded `$myShip` array, let's grab
 a random `Starship` object. We can do that by saying `$myShip` equals
 `$ships[array_rand($ships)]`
+
+[[[ code('5823e7aff9') ]]]
 
 Let's try it! Hunt down your browser and head to the homepage. Got it! We see the
 randomly changing ship down here, and the correct ship number up here... because
@@ -121,8 +133,14 @@ fetch that, which I love.
 
 Ok, one last tiny tweak. Instead of passing the `starshipCount` into our template,
 we can do the count inside Twig. Delete this variable, and instead, pass a `ships`
-variable. In the template, there we go, for the count, we can say `ships`,
+variable. 
+
+[[[ code('1e0a8b1e9e') ]]]
+
+In the template, there we go, for the count, we can say `ships`,
 which is an array, and then use a Twig filter: `|length`.
+
+[[[ code('7ba898b73e') ]]]
 
 That feels good. Let's do the same thing down here... and change it to greater than 2.
 Try that out. Our site just keeps working!
