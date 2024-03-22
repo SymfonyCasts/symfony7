@@ -23,6 +23,8 @@ To do that, we need to move this "work" into its own service that *both* control
 could then use. In the `src/` directory, create a new `Repository` directory and
 a new PHP class inside called `StarshipRepository`.
 
+[[[ code('9be4c8e3f6') ]]]
+
 Just like when we built our `Starship` class, this new class has absolutely nothing
 to do with Symfony. It's just a class that *we've* decided to create to organize
 *our* work. And so, Symfony doesn't care what it's called, where it lives or what
@@ -36,6 +38,8 @@ Ok, before we even do anything in here, let's see if we can use this inside a
 controller. And, good news! *Just* by creating this class, it's already available
 for autowiring. Add a `StarshipRepository $repository` argument, and,
 to make sure it's working, `dd($repository)`.
+
+[[[ code('f5d319e9bc') ]]]
 
 All right, spin over, click back to our endpoint, and... got it. That's so cool!
 Symfony saw the `StarshipRepository` type-hint, instantiated that object, then passed
