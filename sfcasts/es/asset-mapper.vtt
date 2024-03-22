@@ -1,0 +1,377 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:03.496 align:middle
+¿Qué pasa con las
+imágenes, CSS y JavaScript?
+
+00:00:03.696 --> 00:00:04.766 align:middle
+¿Cómo funciona eso en Symfony?
+
+00:00:05.346 --> 00:00:08.776 align:middle
+En primer lugar, el directorio public/
+se conoce como la raíz de tu documento.
+
+00:00:09.276 --> 00:00:12.336 align:middle
+Cualquier cosa dentro de public/
+es accesible para tu usuario final.
+
+00:00:12.666 --> 00:00:16.496 align:middle
+Todo lo que no esté en public/ no
+es accesible, ¡lo cual es genial!
+
+00:00:16.866 --> 00:00:20.316 align:middle
+Ninguno de nuestros archivos fuente de alto
+secreto puede ser descargado por nuestros usuarios.
+
+00:00:20.906 --> 00:00:24.636 align:middle
+Así que si quieres crear un archivo CSS o
+un archivo de imagen o cualquier otra cosa,
+
+00:00:24.826 --> 00:00:28.036 align:middle
+la vida puede ser tan sencilla
+como ponerlo en public/.
+
+00:00:28.506 --> 00:00:30.766 align:middle
+Ahora puedo ir a /foo.txt...
+
+00:00:31.026 --> 00:00:32.466 align:middle
+y veremos el archivo. Sin
+
+00:00:33.116 --> 00:00:37.166 align:middle
+embargo, Symfony tiene un gran
+componente llamado Asset Mapper
+
+00:00:37.296 --> 00:00:39.996 align:middle
+que nos permite hacer efectivamente lo mismo...
+
+00:00:40.106 --> 00:00:42.266 align:middle
+pero con algunas importantes
+funciones adicionales.
+
+00:00:42.826 --> 00:00:47.306 align:middle
+Tenemos algunos tutoriales que profundizan en
+este tema: uno sobre Asset Mapper específicamente
+
+00:00:47.526 --> 00:00:51.146 align:middle
+y otro sobre la construcción de cosas
+con Asset Mapper llamado LAST Stack.
+
+00:00:51.656 --> 00:00:52.996 align:middle
+Échales un vistazo para profundizar.
+
+00:00:53.666 --> 00:00:56.596 align:middle
+¡Pero vamos a sumergirnos en las
+amistosas aguas del Mapeador de Activos!
+
+00:00:56.956 --> 00:01:00.306 align:middle
+Confirma todos tus cambios -yo
+ya lo he hecho- e instálalo con:
+
+00:01:00.536 --> 00:01:05.826 align:middle
+composer require symfony/asset-mapper
+Esta receta hace varios cambios...
+
+00:01:05.826 --> 00:01:09.496 align:middle
+y los iremos repasando poco a poco
+a medida que sean importantes.
+
+00:01:09.896 --> 00:01:14.146 align:middle
+Pero ya, si nos desplazamos y
+actualizamos, ¡nuestro fondo es azul!
+
+00:01:14.626 --> 00:01:17.636 align:middle
+Inspecciona Element en tu
+navegador y ve a la consola.
+
+00:01:18.106 --> 00:01:19.686 align:middle
+¡También tenemos un registro de consola!
+
+00:01:20.016 --> 00:01:22.396 align:middle
+Este log viene de assets/app.js.
+
+00:01:22.526 --> 00:01:23.786 align:middle
+Bienvenido al mapeador de activos.
+
+00:01:24.146 --> 00:01:25.286 align:middle
+¡Muchas gracias!
+
+00:01:25.756 --> 00:01:27.826 align:middle
+Asset Mapper tiene dos grandes superpoderes.
+
+00:01:28.236 --> 00:01:31.366 align:middle
+El primero es que nos ayuda
+a cargar CSS y JavaScript.
+
+00:01:31.866 --> 00:01:38.196 align:middle
+La receta nos ha proporcionado un nuevo directorio
+assets/ con un archivo app.js y un archivo styles/app.css.
+
+00:01:38.716 --> 00:01:41.896 align:middle
+Como hemos visto, el registro
+de la consola procede de app.js.
+
+00:01:42.956 --> 00:01:44.636 align:middle
+Así que este archivo se está cargando.
+
+00:01:45.186 --> 00:01:50.136 align:middle
+Al parecer, también está incluyendo
+app.css, que es lo que nos da ese fondo azul.
+
+00:01:50.686 --> 00:01:55.586 align:middle
+Hablaremos más adelante sobre cómo se cargan
+estos archivos y cómo funciona todo esto.
+
+00:01:55.876 --> 00:02:01.416 align:middle
+Pero por ahora, basta con saber que app.js
+y app.css están incluidos en la página.
+
+00:02:02.026 --> 00:02:05.666 align:middle
+El segundo gran superpoder de Asset
+Mapper es un poco más sencillo.
+
+00:02:06.196 --> 00:02:10.226 align:middle
+La receta ha creado un archivo
+config/packages/asset_mapper.yaml.
+
+00:02:10.686 --> 00:02:14.866 align:middle
+No hay mucho aquí: sólo paths
+apuntando a nuestro directorio assets/.
+
+00:02:15.426 --> 00:02:18.146 align:middle
+Pero gracias a esta línea,
+cualquier archivo que pongamos
+
+00:02:18.146 --> 00:02:21.096 align:middle
+en el directorio assets/ estará
+disponible públicamente.
+
+00:02:21.616 --> 00:02:25.536 align:middle
+Es como si el directorio assets/
+viviera físicamente dentro de public/.
+
+00:02:26.026 --> 00:02:31.126 align:middle
+Esto es útil porque, sobre la marcha, Asset
+Mapper añade el versionado de activos:
+
+00:02:31.516 --> 00:02:33.966 align:middle
+un importante concepto del
+frontend que veremos en un minuto.
+
+00:02:34.496 --> 00:02:38.456 align:middle
+Pero antes, dirígete a tu terminal
+y ejecuta otro nuevo comando debug:
+
+00:02:38.456 --> 00:02:43.936 align:middle
+php bin/console debug:asset Esto muestra
+todos los activos expuestos públicamente
+
+00:02:43.936 --> 00:02:44.906 align:middle
+a través del Mapeador de Activos.
+
+00:02:45.286 --> 00:02:49.196 align:middle
+Ahora mismo son sólo dos: app.css y app.js.
+
+00:02:49.766 --> 00:02:52.646 align:middle
+Si descargas el código del curso
+de esta página y lo descomprimes,
+
+00:02:52.856 --> 00:02:56.466 align:middle
+encontrarás un directorio tutorial/
+con un subdirectorio images/.
+
+00:02:57.066 --> 00:02:57.986 align:middle
+Cortaré esto...
+
+00:02:58.456 --> 00:03:00.246 align:middle
+y lo pegaré en assets/.
+
+00:03:01.966 --> 00:03:05.866 align:middle
+Así que ahora tenemos un directorio
+assets/images/ con 5 archivos dentro.
+
+00:03:06.636 --> 00:03:10.206 align:middle
+Y, por cierto, puedes organizar el
+directorio assets/ como quieras.
+
+00:03:10.646 --> 00:03:16.726 align:middle
+Pero ahora, vuelve atrás y ejecuta de nuevo
+debug:asset: ¡Los nuevos archivos están ahí!
+
+00:03:17.376 --> 00:03:19.476 align:middle
+A la izquierda, ¿ves esta "ruta lógica"?
+
+00:03:19.926 --> 00:03:23.806 align:middle
+Es la ruta que utilizaremos para hacer
+referencia a ese archivo en Asset Mapper.
+
+00:03:24.356 --> 00:03:27.116 align:middle
+Te lo mostraré: vamos a renderizar
+una etiqueta img en el logotipo.
+
+00:03:27.686 --> 00:03:30.606 align:middle
+Copia la ruta lógica starshop-logo.png.
+
+00:03:31.126 --> 00:03:34.256 align:middle
+Luego dirígete a templates/base.html.twig.
+
+00:03:35.466 --> 00:03:38.756 align:middle
+Justo encima del bloque del
+cuerpo -para que no quede anulado
+
+00:03:38.756 --> 00:03:42.366 align:middle
+por el contenido de nuestra página-
+añade una etiqueta <img> con src="".
+
+00:03:43.126 --> 00:03:49.406 align:middle
+En lugar de intentar codificar una ruta, di {{ y
+utiliza una nueva función Twig llamada asset().
+
+00:03:50.236 --> 00:03:51.946 align:middle
+Pásale la ruta lógica.
+
+00:03:52.856 --> 00:03:53.376 align:middle
+Ya está
+
+00:03:53.876 --> 00:03:55.546 align:middle
+Vale, añadiré un atributo alt...
+
+00:03:55.646 --> 00:03:57.136 align:middle
+para ser un buen ciudadano de la web.
+
+00:03:57.746 --> 00:03:58.866 align:middle
+Probemos esto.
+
+00:03:59.156 --> 00:04:00.326 align:middle
+Actualiza y...
+
+00:04:00.656 --> 00:04:02.626 align:middle
+¡estalla!
+
+00:04:02.986 --> 00:04:05.506 align:middle
+¿Has olvidado ejecutar
+composer require symfony/asset.
+
+00:04:05.726 --> 00:04:07.306 align:middle
+Función desconocida "activo".
+
+00:04:08.236 --> 00:04:10.136 align:middle
+Recuerda: nuestra aplicación
+empieza siendo pequeña.
+
+00:04:10.556 --> 00:04:14.696 align:middle
+Y luego, a medida que necesitamos más
+funciones, instalamos más componentes Symfony.
+
+00:04:15.016 --> 00:04:19.936 align:middle
+Y a menudo, si intentas utilizar una función de
+un componente que no está instalado, te lo dirá.
+
+00:04:20.396 --> 00:04:24.876 align:middle
+La función Twig asset() proviene de otro
+pequeño componente llamado symfony/asset.
+
+00:04:25.476 --> 00:04:27.596 align:middle
+Todo lo que tenemos que
+hacer es seguir el consejo.
+
+00:04:28.086 --> 00:04:31.616 align:middle
+Copia el comando composer require,
+pasa a tu terminal y ejecútalo:
+
+00:04:33.186 --> 00:04:36.246 align:middle
+Cuando termine, muévete y actualiza.
+
+00:04:36.916 --> 00:04:38.196 align:middle
+¡Ahí está nuestro logotipo!
+
+00:04:38.696 --> 00:04:40.046 align:middle
+¿Lo más interesante?
+
+00:04:40.286 --> 00:04:46.156 align:middle
+Ver el código fuente de la página y
+comprobar la URL: /assets/images/starshop-logo-
+
+00:04:46.556 --> 00:04:49.966 align:middle
+a continuación, una larga cadena
+de letras y números, .png.
+
+00:04:50.456 --> 00:04:55.766 align:middle
+Esta cadena se llama hash de la versión y
+se genera a partir del contenido del archivo.
+
+00:04:56.326 --> 00:05:01.186 align:middle
+Eso significa que si más adelante actualizamos
+nuestro logotipo, este hash cambiará automáticamente.
+
+00:05:01.746 --> 00:05:03.146 align:middle
+Esto es superimportante.
+
+00:05:03.576 --> 00:05:09.446 align:middle
+A los navegadores les gusta almacenar en caché las imágenes, el
+JavaScript y los archivos CSS, lo que está muy bien: ayuda al rendimiento.
+
+00:05:09.996 --> 00:05:14.666 align:middle
+Pero cuando cambiamos esos archivos, queremos que
+nuestros usuarios descarguen la nueva versión:
+
+00:05:14.866 --> 00:05:17.166 align:middle
+no que sigan utilizando la versión
+obsoleta, almacenada en caché.
+
+00:05:17.796 --> 00:05:22.016 align:middle
+Pero como el nombre del archivo cambiará cuando
+actualicemos la imagen, ¡el navegador va a
+
+00:05:22.016 --> 00:05:23.796 align:middle
+utilizar automáticamente el nuevo!
+
+00:05:24.176 --> 00:05:29.896 align:middle
+Esto es así: El usuario va a nuestro
+sitio y descarga logo-abc123.png.
+
+00:05:30.176 --> 00:05:31.346 align:middle
+Su navegador lo almacena en caché. En
+
+00:05:31.926 --> 00:05:37.056 align:middle
+la siguiente visita, su navegador ve
+la etiqueta img para logo-abc123.png,
+
+00:05:37.216 --> 00:05:39.636 align:middle
+encuentra el archivo en su caché y lo utiliza.
+
+00:05:40.376 --> 00:05:43.996 align:middle
+Entonces llegamos nosotros, actualizamos
+ese archivo y lo desplegamos. La
+
+00:05:44.786 --> 00:05:48.296 align:middle
+próxima vez que el usuario visite nuestro
+sitio, la etiqueta img apuntará a un
+
+00:05:48.296 --> 00:05:52.756 align:middle
+nombre de archivo diferente: logo-def456.png.
+
+00:05:52.836 --> 00:05:58.736 align:middle
+Y como el navegador no tiene ese archivo en
+su caché, lo descarga nuevo. Se trata de
+
+00:05:59.486 --> 00:06:03.336 align:middle
+un pequeño detalle, pero también
+es increíblemente importante
+
+00:06:03.336 --> 00:06:06.336 align:middle
+para asegurarnos de que nuestros usuarios
+utilizan siempre los archivos más recientes.
+
+00:06:06.766 --> 00:06:07.436 align:middle
+¿Y lo mejor?
+
+00:06:07.716 --> 00:06:08.866 align:middle
+Simplemente funciona.
+
+00:06:09.096 --> 00:06:12.326 align:middle
+Ahora que te lo he explicado, no
+tendrás que volver a pensar en esto.
+
+00:06:12.946 --> 00:06:16.736 align:middle
+Ok equipo, vamos a instalar y empezar
+a usar Tailwind CSS a continuación.
