@@ -1,0 +1,321 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:06.006 align:middle
+Vamos a crear una "página de presentación" para barcos:
+una página que muestre los detalles de un solo barco.
+
+00:00:06.586 --> 00:00:08.446 align:middle
+La página de inicio vive en MainController.
+
+00:00:08.686 --> 00:00:11.766 align:middle
+Y así podríamos añadir
+otra ruta y método aquí.
+
+00:00:12.126 --> 00:00:16.186 align:middle
+Pero a medida que mi sitio crezca, probablemente
+tendré varias páginas relacionadas
+
+00:00:16.186 --> 00:00:18.656 align:middle
+con naves estelares: quizá
+para editarlas y borrarlas.
+
+00:00:18.656 --> 00:00:22.916 align:middle
+Así que, en lugar de eso, en el directorio
+Controller/, crea una nueva clase.
+
+00:00:23.256 --> 00:00:28.596 align:middle
+Llámala StarshipController, y, como de
+costumbre, extiende AbstractController.
+
+00:00:29.416 --> 00:00:31.136 align:middle
+Dentro, ¡manos a la obra!
+
+00:00:31.486 --> 00:00:37.916 align:middle
+Añade un public function llamado show(), yo
+añadiré el tipo de retorno Response, luego la ruta,
+
+00:00:37.916 --> 00:00:42.566 align:middle
+con /starships/ y un comodín llamado {id}.
+
+00:00:42.566 --> 00:00:47.136 align:middle
+Y de nuevo, es opcional, pero seré
+extravagante y añadiré el \d+
+
+00:00:47.256 --> 00:00:49.266 align:middle
+para que el comodín sólo
+coincida con un número.
+
+00:00:50.196 --> 00:00:56.596 align:middle
+Ahora, como tenemos un comodín {id}, se nos
+permite tener un argumento $id aquí abajo.
+
+00:00:57.626 --> 00:01:00.066 align:middle
+dd($id) para ver cómo vamos hasta ahora.
+
+00:01:00.696 --> 00:01:03.406 align:middle
+Pruébalo. Dirígete a /starships/2.
+
+00:01:04.086 --> 00:01:08.226 align:middle
+¡Estupendo! Ahora vamos a hacer
+algo familiar: tomar este $id
+
+00:01:08.226 --> 00:01:11.546 align:middle
+y consultar nuestra base de datos imaginaria
+en busca del Starship coincidente.
+
+00:01:12.116 --> 00:01:17.576 align:middle
+La clave para hacerlo es nuestro servicio
+StarshipRepository y su útil método find().
+
+00:01:18.626 --> 00:01:22.026 align:middle
+En el controlador, añade un argumento
+StarshipRepository $repository...
+
+00:01:22.446 --> 00:01:26.636 align:middle
+y luego di que $ship es igual
+a $repository->find($id).
+
+00:01:26.636 --> 00:01:29.016 align:middle
+Y si no es $ship, activa una página 404
+
+00:01:29.016 --> 00:01:33.726 align:middle
+con los lanzamientos $this->createNotFoundException()
+y starship not found.
+
+00:01:34.526 --> 00:01:40.066 align:middle
+¡Genial! En la parte inferior, en lugar de devolver
+JSON, renderiza una plantilla: devuelve $this->render()
+
+00:01:40.256 --> 00:01:45.756 align:middle
+y sigue la convención de nomenclatura estándar
+para plantillas: starship/show.html.twig.
+
+00:01:46.726 --> 00:01:49.156 align:middle
+Pasa esta variable: $ship.
+
+00:01:52.516 --> 00:01:53.926 align:middle
+Controlador, ¡comprobado!
+
+00:01:54.456 --> 00:01:56.136 align:middle
+A continuación, en el directorio templates/,
+
+00:01:56.256 --> 00:02:01.106 align:middle
+podríamos crear un directorio
+starship/ y show.html.twig dentro.
+
+00:02:01.566 --> 00:02:05.896 align:middle
+Pero quiero mostrarte un atajo
+del plugin Symfony PhpStorm.
+
+00:02:06.526 --> 00:02:09.616 align:middle
+Haz clic en el nombre de la
+plantilla, pulsa Alt+Enter y...
+
+00:02:09.816 --> 00:02:10.626 align:middle
+¡mira esto!
+
+00:02:11.026 --> 00:02:13.556 align:middle
+En la parte superior pone
+"Twig: Crear plantilla".
+
+00:02:14.156 --> 00:02:16.246 align:middle
+Confirma la ruta y ¡boom!
+
+00:02:16.586 --> 00:02:18.386 align:middle
+¡Ya tenemos nuestra nueva plantilla!
+
+00:02:18.696 --> 00:02:20.296 align:middle
+Está... escondida por aquí.
+
+00:02:20.816 --> 00:02:23.796 align:middle
+Ahí está: starship/show.html.twig.
+
+00:02:24.576 --> 00:02:30.516 align:middle
+Casi todas las plantillas empiezan
+igual: {% extend 'base.html.twig' %}...
+
+00:02:30.516 --> 00:02:32.696 align:middle
+¡y luego anula algunos bloques!
+
+00:02:32.696 --> 00:02:33.426 align:middle
+Anula title...
+
+00:02:33.736 --> 00:02:37.476 align:middle
+y esta vez, vamos a utilizar
+esa variable ship: ship.name.
+
+00:02:37.476 --> 00:02:39.406 align:middle
+Termina con endblock.
+
+00:02:40.046 --> 00:02:42.596 align:middle
+Y para el contenido principal,
+añade el bloque body...
+
+00:02:43.906 --> 00:02:46.516 align:middle
+endblock y pon un h1 dentro.
+
+00:02:47.356 --> 00:02:49.356 align:middle
+Vuelve a imprimir ship.name y...
+
+00:02:49.356 --> 00:02:51.036 align:middle
+Pegaré una tabla con algo de información.
+
+00:02:51.426 --> 00:02:54.406 align:middle
+Aquí no hay nada especial: sólo estamos
+imprimiendo datos básicos del barco.
+
+00:02:55.456 --> 00:02:56.776 align:middle
+Cuando probamos la página...
+
+00:02:57.486 --> 00:02:58.866 align:middle
+¡está viva!
+
+00:02:59.466 --> 00:03:05.746 align:middle
+Siguiente pregunta: desde la página de inicio, ¿cómo podríamos
+añadir un enlace a la nueva página de presentación de barcos?
+
+00:03:06.356 --> 00:03:11.806 align:middle
+La opción más obvia es codificar la
+URL, como /starships/ y luego el id.
+
+00:03:12.316 --> 00:03:14.056 align:middle
+Pero hay una forma mejor.
+
+00:03:14.536 --> 00:03:20.446 align:middle
+En lugar de eso, vamos a decirle a Symfony
+Quiero generar una URL para esta ruta. La
+
+00:03:21.126 --> 00:03:25.446 align:middle
+ventaja es que si más adelante
+decidimos cambiar la URL de esta ruta,
+
+00:03:25.696 --> 00:03:28.096 align:middle
+todos los enlaces a ella se
+actualizarán automáticamente.
+
+00:03:28.586 --> 00:03:29.176 align:middle
+Déjame que te lo enseñe.
+
+00:03:29.176 --> 00:03:34.106 align:middle
+Busca tu terminal y ejecuta: php bin/console
+debug:router Aún no lo he mencionado,
+
+00:03:34.256 --> 00:03:36.586 align:middle
+pero cada ruta tiene un nombre interno.
+
+00:03:37.046 --> 00:03:40.866 align:middle
+Ahora mismo, están siendo autogeneradas
+por Symfony, lo cual está bien.
+
+00:03:41.356 --> 00:03:45.806 align:middle
+Pero en cuanto quieras generar una URL
+a una ruta, debemos tomar el control
+
+00:03:45.806 --> 00:03:48.136 align:middle
+de ese nombre para asegurarnos
+de que nunca cambie.
+
+00:03:48.136 --> 00:03:51.166 align:middle
+Busca la ruta show page
+y añade una clave name.
+
+00:03:52.356 --> 00:03:55.066 align:middle
+Yo utilizaré app_starship_show.
+
+00:03:55.886 --> 00:04:00.466 align:middle
+El nombre podría ser cualquier cosa, pero ésta es
+la convención que yo sigo: app porque es una ruta
+
+00:04:00.466 --> 00:04:04.496 align:middle
+que estoy creando en mi aplicación, y luego el nombre
+de la clase del controlador y el nombre del método.
+
+00:04:05.666 --> 00:04:07.796 align:middle
+Nombrar una ruta no cambia su funcionamiento.
+
+00:04:08.056 --> 00:04:10.706 align:middle
+Pero sí nos permite
+generar una URL hacia ella.
+
+00:04:11.206 --> 00:04:13.916 align:middle
+Abre templates/main/homepage.html.twig.
+
+00:04:14.856 --> 00:04:17.946 align:middle
+Aquí abajo, convierte el
+nombre de la ruta en un enlace.
+
+00:04:18.536 --> 00:04:22.916 align:middle
+Lo pondré en varias líneas y
+añadiré una etiqueta a con href="".
+
+00:04:23.486 --> 00:04:28.806 align:middle
+Para generar la URL, diré {{ path()
+}} y le pasaré el nombre de la ruta.
+
+00:04:29.456 --> 00:04:31.416 align:middle
+Pondré la etiqueta de cierre en el otro lado.
+
+00:04:33.646 --> 00:04:36.116 align:middle
+Si nos detenemos ahora, esto
+no funcionará del todo.
+
+00:04:36.626 --> 00:04:40.596 align:middle
+En la página de inicio: Faltan
+algunos parámetros obligatorios - id -
+
+00:04:40.766 --> 00:04:43.546 align:middle
+para generar una URL para
+la ruta app_starship_show.
+
+00:04:44.156 --> 00:04:44.966 align:middle
+¡Eso tiene sentido!
+
+00:04:45.326 --> 00:04:47.136 align:middle
+Le estamos diciendo a Symfony ¡Hola!
+
+00:04:47.366 --> 00:04:49.326 align:middle
+Quiero generar una URL para esta ruta.
+
+00:04:49.326 --> 00:04:51.746 align:middle
+Symfony responde entonces: Genial...
+
+00:04:51.746 --> 00:04:54.496 align:middle
+excepto que esta ruta tiene un comodín.
+
+00:04:54.496 --> 00:04:55.186 align:middle
+Así que...
+
+00:04:55.316 --> 00:04:58.606 align:middle
+¿qué quieres que ponga
+en la URL para la parte id?
+
+00:04:59.266 --> 00:05:04.806 align:middle
+Cuando hay un comodín en la ruta, tenemos que
+añadir un segundo argumento a path() con {}.
+
+00:05:05.356 --> 00:05:08.216 align:middle
+Esta es la sintaxis de
+matriz asociativa de Twig.
+
+00:05:08.216 --> 00:05:12.566 align:middle
+Es exactamente igual que JavaScript:
+es una lista de pares clave-valor.
+
+00:05:13.206 --> 00:05:15.496 align:middle
+Pasa id a myShip.id.
+
+00:05:16.036 --> 00:05:17.026 align:middle
+Y ahora...
+
+00:05:17.426 --> 00:05:21.296 align:middle
+¡ya está! Mira esa URL: /starships/3.
+
+00:05:22.316 --> 00:05:24.776 align:middle
+Muy bien, nuestro sitio sigue siendo feo. Es
+
+00:05:24.776 --> 00:05:28.776 align:middle
+hora de empezar a arreglarlo
+incorporando Tailwind CSS y aprendiendo
+
+00:05:28.776 --> 00:05:30.936 align:middle
+sobre el componente AssetMapper de Symfony.
