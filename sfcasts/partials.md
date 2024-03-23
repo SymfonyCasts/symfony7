@@ -1,4 +1,4 @@
-# Twig Partials, Loops & PHP Enums
+# Twig Partials & for Loops
 
 We just gave our site a design makeover... which means we updated our templates
 to include HTML elements with a bunch of Tailwind classes. The result? A site that's
