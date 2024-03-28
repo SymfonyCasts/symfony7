@@ -65,7 +65,7 @@ about our `Starship` easily accessible... *from* the `Starship` class.
 Here's what I mean: add a `public function getStatusImageFilename()` that returns
 a string. 
 
-[[[ code('713d6d6740) ]]]
+[[[ code('713d6d6740') ]]]
 
 Let's do all the logic for creating the filename right here. I'll
 paste in a `match` function.
