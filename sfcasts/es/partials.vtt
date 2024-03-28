@@ -1,0 +1,168 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:03.336 align:middle
+Acabamos de renovar el
+diseño de nuestro sitio...
+
+00:00:03.406 --> 00:00:08.786 align:middle
+lo que significa que hemos actualizado nuestras plantillas para
+incluir elementos HTML con un montón de clases de Tailwind.
+
+00:00:09.246 --> 00:00:09.736 align:middle
+¿El resultado?
+
+00:00:10.026 --> 00:00:12.206 align:middle
+Un sitio agradable a la vista.
+
+00:00:12.636 --> 00:00:15.406 align:middle
+En algunas partes de las plantillas,
+las cosas siguen siendo dinámicas:
+
+00:00:15.626 --> 00:00:18.256 align:middle
+tenemos código Twig para
+imprimir el capitán y la clase.
+
+00:00:18.666 --> 00:00:21.276 align:middle
+Pero en otras partes, todo está codificado.
+
+00:00:21.656 --> 00:00:24.996 align:middle
+Y... esto es bastante típico: un
+desarrollador frontend puede codificar
+
+00:00:24.996 --> 00:00:27.146 align:middle
+el sitio en HTML y Tailwind...
+
+00:00:27.386 --> 00:00:31.066 align:middle
+pero dejarte a ti que lo
+dinamices y le des vida.
+
+00:00:31.646 --> 00:00:36.656 align:middle
+En la parte superior de homepage.html.twig, este
+largo elemento <aside> es la barra lateral.
+
+00:00:36.986 --> 00:00:40.226 align:middle
+Está bien que este código
+viva en homepage.html.twig...
+
+00:00:40.526 --> 00:00:42.736 align:middle
+¡pero ocupa mucho espacio!
+
+00:00:43.006 --> 00:00:46.386 align:middle
+¿Y si queremos reutilizar esta
+barra lateral en otra página?
+
+00:00:47.046 --> 00:00:51.876 align:middle
+Una gran característica de Twig es la
+posibilidad de tomar "trozos" de HTML y aislarlos
+
+00:00:51.876 --> 00:00:54.326 align:middle
+en sus propias plantillas
+para que puedas reutilizarlos.
+
+00:00:54.786 --> 00:00:56.886 align:middle
+Se llaman parciales de plantilla...
+
+00:00:57.116 --> 00:00:59.446 align:middle
+ya que contienen el código de
+sólo una parte de la página.
+
+00:01:00.026 --> 00:01:04.036 align:middle
+Copia este código, y en el directorio main/
+-aunque esto puede ir en cualquier sitio-
+
+00:01:04.296 --> 00:01:08.796 align:middle
+añade un nuevo archivo llamado
+_shipStatusAside.html.twig.
+
+00:01:09.496 --> 00:01:10.366 align:middle
+Pégalo dentro. De
+
+00:01:11.266 --> 00:01:16.586 align:middle
+vuelta en homepage.html.twig, borra
+eso, y luego inclúyelo con {{-
+
+00:01:16.866 --> 00:01:20.386 align:middle
+para que diga algo de sintaxis
+- include() y el nombre
+
+00:01:20.386 --> 00:01:25.006 align:middle
+de la plantilla:
+main/_shipStatusAside.html.twig.
+
+00:01:25.626 --> 00:01:26.956 align:middle
+¡Pruébalo!
+
+00:01:27.396 --> 00:01:28.976 align:middle
+Y... ¡no hay cambios!
+
+00:01:29.446 --> 00:01:33.656 align:middle
+La declaración include() es sencilla: Renderiza
+esta plantilla y dale las mismas variables
+
+00:01:33.656 --> 00:01:38.326 align:middle
+que yo Si te preguntas por qué he
+antepuesto un guión bajo a la plantilla...
+
+00:01:38.636 --> 00:01:39.386 align:middle
+¡por nada!
+
+00:01:39.716 --> 00:01:44.476 align:middle
+Es sólo una convención que me ayuda a saber que
+esta plantilla contiene sólo una parte de la página.
+
+00:01:45.146 --> 00:01:49.356 align:middle
+En la plantilla de la página de inicio, podemos centrarnos
+en la lista de barcos de abajo, que es esta zona.
+
+00:01:50.066 --> 00:01:51.876 align:middle
+Ahora mismo, sólo hay una nave...
+
+00:01:52.126 --> 00:01:53.356 align:middle
+y está codificada.
+
+00:01:53.986 --> 00:01:58.026 align:middle
+Nuestra intención es listar todas las
+naves que estamos reparando actualmente.
+
+00:01:58.486 --> 00:02:02.026 align:middle
+Y ya tenemos una variable ships que
+estamos utilizando en la parte inferior:
+
+00:02:02.596 --> 00:02:04.946 align:middle
+es una matriz de objetos Starship.
+
+00:02:06.046 --> 00:02:09.796 align:middle
+Así que, por primera vez en Twig, ¡tenemos
+que hacer un bucle sobre una matriz!
+
+00:02:10.276 --> 00:02:14.256 align:middle
+Para ello, eliminaré este
+comentario, y diré {%
+
+00:02:14.526 --> 00:02:19.236 align:middle
+-así que la etiqueta hacer
+algo- y luego for ship in ships.
+
+00:02:19.696 --> 00:02:24.906 align:middle
+ships es la variable de matriz que ya tenemos y
+ship es el nuevo nombre de la variable en el bucle
+
+00:02:25.056 --> 00:02:27.516 align:middle
+que representa un único objeto Starship.
+
+00:02:28.276 --> 00:02:31.836 align:middle
+En la parte inferior, añade {% endfor %}.
+
+00:02:31.836 --> 00:02:32.726 align:middle
+Y ya...
+
+00:02:32.856 --> 00:02:36.426 align:middle
+cuando lo probamos, ¡obtenemos
+tres naves codificadas!
+
+00:02:36.776 --> 00:02:37.756 align:middle
+¡Eso es una mejora!
+
+00:02:38.506 --> 00:02:43.326 align:middle
+A continuación: es hora de un giro argumental
+que nos llevará a crear un enum PHP.
