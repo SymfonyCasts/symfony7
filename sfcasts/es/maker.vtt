@@ -1,0 +1,319 @@
+WEBVTT
+
+00:00:01.096 --> 00:00:04.536 align:middle
+Me quito el sombrero por haber conseguido
+casi terminar el primer tutorial de Symfony.
+
+00:00:04.756 --> 00:00:08.246 align:middle
+Has dado un gran paso hacia la
+construcción de lo que quieras en la web.
+
+00:00:08.786 --> 00:00:13.526 align:middle
+Para celebrarlo, quiero jugar con MakerBundle: La impresionante
+herramienta de Symfony para la generación de código.
+
+00:00:13.916 --> 00:00:17.646 align:middle
+Vamos a instalarla: composer
+require symfony/maker-bundle
+
+00:00:17.646 --> 00:00:23.616 align:middle
+--dev Aún no hemos visto la bandera
+--dev, pero no es tan importante.
+
+00:00:24.336 --> 00:00:26.316 align:middle
+Muévete y abre composer.json.
+Gracias a la bandera
+
+00:00:26.316 --> 00:00:31.096 align:middle
+, en lugar de que symfony/maker-bundle vaya
+
+00:00:31.146 --> 00:00:35.276 align:middle
+bajo la clave require, se ha añadido
+aquí abajo, bajo require-dev. Por
+
+00:00:36.096 --> 00:00:39.526 align:middle
+defecto, cuando ejecutes composer
+install, descargará todo lo que
+
+00:00:39.526 --> 00:00:42.546 align:middle
+esté bajo require y require-dev.
+
+00:00:43.196 --> 00:00:47.586 align:middle
+Pero require-dev está pensado para paquetes que
+no necesitan estar disponibles en producción:
+
+00:00:47.936 --> 00:00:50.786 align:middle
+paquetes que sólo necesitas
+cuando desarrollas localmente.
+
+00:00:51.286 --> 00:00:56.096 align:middle
+Esto se debe a que, cuando realices el despliegue,
+si quieres, puedes decirle a Composer: ¡Eh!
+
+00:00:56.346 --> 00:01:01.576 align:middle
+Instala sólo los paquetes bajo mi clave
+require: no instales las cosas de require-dev.
+
+00:01:01.576 --> 00:01:04.136 align:middle
+Eso puede darte un pequeño aumento
+de rendimiento en producción.
+
+00:01:04.486 --> 00:01:06.096 align:middle
+Pero, en general, no es gran cosa.
+
+00:01:06.716 --> 00:01:08.666 align:middle
+Ahora acabamos de instalar un bundle.
+
+00:01:08.996 --> 00:01:11.606 align:middle
+¿Recuerdas lo principal que
+nos proporcionan los bundles?
+
+00:01:11.996 --> 00:01:13.506 align:middle
+Exacto: servicios.
+
+00:01:14.016 --> 00:01:18.926 align:middle
+Esta vez, los servicios que nos da MakerBundle son
+servicios que proporcionan nuevos comandos de consola.
+
+00:01:19.286 --> 00:01:20.396 align:middle
+Redoble de tambores, por favor.
+
+00:01:21.166 --> 00:01:24.536 align:middle
+Ejecuta: php bin/console O, en realidad,
+
+00:01:24.536 --> 00:01:27.006 align:middle
+empezaré a ejecutar symfony
+console, que es lo mismo.
+
+00:01:27.006 --> 00:01:31.906 align:middle
+¡Gracias al nuevo bundle, tenemos un
+montón de comandos que empiezan por make!
+
+00:01:32.606 --> 00:01:35.736 align:middle
+Comandos para generar un sistema
+de seguridad, hacer un controlador,
+
+00:01:35.856 --> 00:01:39.176 align:middle
+generar entidades de doctrina para
+hablar con la base de datos, formularios,
+
+00:01:39.176 --> 00:01:40.896 align:middle
+oyentes, un formulario de registro....
+
+00:01:41.056 --> 00:01:43.306 align:middle
+¡montones y montones de cosas!
+
+00:01:43.306 --> 00:01:46.536 align:middle
+Utilicemos uno de ellos para crear nuestro
+propio comando de consola personalizado.
+
+00:01:47.056 --> 00:01:52.106 align:middle
+Ejecuta: symfony console make:command Esto nos
+preguntará interactivamente por nuestro comando.
+
+00:01:52.396 --> 00:01:54.586 align:middle
+Llamémoslo: app:ship-report.
+
+00:01:55.446 --> 00:02:01.116 align:middle
+¡Listo! Esto ha creado exactamente un
+archivo: src/Command/ShipReportCommand.php.
+
+00:02:01.116 --> 00:02:02.086 align:middle
+¡Vamos a comprobarlo!
+
+00:02:06.386 --> 00:02:10.856 align:middle
+¡Genial! Esta es una clase normal
+- es un servicio, por cierto -
+
+00:02:11.086 --> 00:02:13.596 align:middle
+pero con un atributo encima: #[AsCommand].
+
+00:02:14.056 --> 00:02:15.906 align:middle
+Esto le dice a Symfony ¡Eh!
+
+00:02:15.996 --> 00:02:17.106 align:middle
+¿Ves este servicio?
+
+00:02:17.226 --> 00:02:22.536 align:middle
+No es sólo un servicio: Me gustaría que lo
+incluyeras en la lista de comandos de la consola.
+
+00:02:22.536 --> 00:02:26.186 align:middle
+El atributo incluye el nombre
+del comando y una descripción.
+
+00:02:26.626 --> 00:02:31.016 align:middle
+Además, la propia clase tiene un método configure()
+en el que podemos añadir argumentos y opciones.
+
+00:02:31.626 --> 00:02:36.736 align:middle
+Pero la parte principal es que, cuando alguien
+llame a este comando, Symfony llamará a execute().
+
+00:02:37.326 --> 00:02:39.156 align:middle
+Esta variable $io es genial.
+
+00:02:39.486 --> 00:02:45.136 align:middle
+Nos permite mostrar cosas -como $this->note()
+o $this->success() - con diferentes estilos.
+
+00:02:45.356 --> 00:02:50.266 align:middle
+Y aunque no lo veamos aquí, también podemos
+hacer preguntas al usuario de forma interactiva.
+
+00:02:50.786 --> 00:02:51.476 align:middle
+¿Y lo mejor?
+
+00:02:51.726 --> 00:02:55.346 align:middle
+Con sólo crear esta clase,
+¡ya está lista para usar!
+
+00:02:55.346 --> 00:03:01.396 align:middle
+Pruébala: symfony console
+app:ship-report ¡Qué guay!
+
+00:03:01.686 --> 00:03:05.076 align:middle
+El mensaje de aquí abajo procede del mensaje
+de éxito de la parte inferior del comando.
+
+00:03:05.076 --> 00:03:10.126 align:middle
+Y gracias a configure(), tenemos
+un argumento llamado arg1.
+
+00:03:10.666 --> 00:03:13.916 align:middle
+Los argumentos son cadenas que
+pasamos después del comando, como:
+
+00:03:13.916 --> 00:03:20.566 align:middle
+symfony console app:ship-report ryan
+Dice Has pasado un argumento: ryan ...
+
+00:03:20.896 --> 00:03:22.906 align:middle
+que viene de este lugar del comando.
+
+00:03:23.486 --> 00:03:25.816 align:middle
+Hay muchas cosas divertidas que
+puedes hacer con los comandos...
+
+00:03:26.036 --> 00:03:27.496 align:middle
+y quiero jugar con una de ellas.
+
+00:03:28.156 --> 00:03:32.566 align:middle
+Uno de los superpoderes del objeto $io
+es crear barras de progreso animadas.
+
+00:03:33.086 --> 00:03:34.726 align:middle
+Imagina que estamos construyendo
+un informe sobre un barco...
+
+00:03:34.966 --> 00:03:36.956 align:middle
+y requiere algunas consultas pesadas.
+
+00:03:36.956 --> 00:03:39.496 align:middle
+Así que queremos mostrar una barra
+de progreso en la pantalla. Para ello
+
+00:03:40.156 --> 00:03:44.506 align:middle
+, decimos $io->progressStart()
+y le pasamos el número de filas
+
+00:03:44.506 --> 00:03:46.386 align:middle
+de datos que estemos recorriendo y manejando.
+
+00:03:46.856 --> 00:03:50.086 align:middle
+Imaginemos que estamos haciendo un bucle
+sobre 100 filas de datos para este informe.
+
+00:03:50.086 --> 00:03:54.036 align:middle
+En lugar de hacer un bucle sobre datos
+reales, crea un bucle falso con for.
+
+00:03:55.126 --> 00:03:57.896 align:middle
+¡Incluso voy a incluir la
+variable $i en el medio!
+
+00:03:59.226 --> 00:04:04.166 align:middle
+Dentro, para hacer avanzar la barra
+de progreso, di $io->advance().
+
+00:04:04.166 --> 00:04:07.566 align:middle
+Entonces, aquí es donde haríamos
+nuestra consulta pesada o trabajo pesado.
+
+00:04:07.566 --> 00:04:11.546 align:middle
+Finge eso con un usleep(10000)
+para crear una breve pausa.
+
+00:04:11.546 --> 00:04:15.616 align:middle
+Después del bucle, termina
+con $io->progressFinish().
+
+00:04:16.326 --> 00:04:16.806 align:middle
+Ya está
+
+00:04:16.806 --> 00:04:22.566 align:middle
+Gira y pruébalo: Qué guay.
+
+00:04:23.186 --> 00:04:24.566 align:middle
+Y... ¡eso es todo, gente!
+
+00:04:24.956 --> 00:04:26.336 align:middle
+Choca esos cinco...
+
+00:04:26.336 --> 00:04:29.286 align:middle
+o, mejor, ¡sorprende a un compañero
+de trabajo chocando los cinco saltando!
+
+00:04:29.686 --> 00:04:32.736 align:middle
+Después, celébralo con una
+merecida cerveza, un té, un
+
+00:04:32.986 --> 00:04:35.636 align:middle
+paseo por la manzana o un
+partido de frisbee con tu perro.
+
+00:04:36.086 --> 00:04:36.476 align:middle
+Porque...
+
+00:04:36.586 --> 00:04:37.286 align:middle
+¡lo has conseguido!
+
+00:04:37.546 --> 00:04:40.726 align:middle
+Has dado el primer gran paso
+para ser peligroso con Symfony.
+
+00:04:41.186 --> 00:04:45.836 align:middle
+Entonces, vuelve y prueba este material:
+juega con él, construye un blog,
+
+00:04:45.836 --> 00:04:48.536 align:middle
+crea unas cuantas páginas
+estáticas, lo que sea.
+
+00:04:48.926 --> 00:04:51.226 align:middle
+Eso marcará una gran diferencia.
+
+00:04:51.226 --> 00:04:55.666 align:middle
+Y si alguna vez tienes alguna pregunta, miramos atentamente
+la sección de comentarios debajo de cada vídeo
+
+00:04:55.666 --> 00:04:56.936 align:middle
+y respondemos a todo.
+
+00:04:57.556 --> 00:04:59.036 align:middle
+Además, ¡sigue adelante!
+
+00:04:59.356 --> 00:05:03.566 align:middle
+En el próximo tutorial, vamos a ponernos
+aún más peligrosos profundizando
+
+00:05:03.566 --> 00:05:05.756 align:middle
+en la configuración y
+los servicios de Symfony:
+
+00:05:06.226 --> 00:05:09.016 align:middle
+los sistemas que dirigen todo
+lo que harás en Symfony.
+
+00:05:09.516 --> 00:05:11.036 align:middle
+Muy bien, amigos, ¡hasta la próxima!
