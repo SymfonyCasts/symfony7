@@ -10,7 +10,11 @@ of a `Starship`. To make that easier, why not add a shortcut method here called
 `getStatusString()`? This will return a `string`, and inside,
 return `$this->status->value`.
 
+[[[ code('9cdffd8f58') ]]]
+
 Thanks to this, over in the template, we can shorten to `ship.statusString`.
+
+[[[ code('2cb8e165e8') ]]]
 
 Oh, and this is *more* Twig smartness! There is *no* property called `statusString`
 on `Starship`! But Twig doesn't care. It sees that there *is* a `getStatusString()`
@@ -19,8 +23,12 @@ method and calls that.
 Watch: when we refresh, the page still works. I really like this solution, so I'll
 copy that... and repeat it up here for the `alt` attribute.
 
+[[[ code('4252263063') ]]]
+
 And while we're fixing this, in `show.html.twig`, we print the status there too.
 So I'll make that same change... then close this.
+
+[[[ code('c96437117d') ]]]
 
 ## Finishing our Dynamic Template
 
@@ -28,9 +36,13 @@ Ok: let's finish making our homepage template dynamic: it's smooth space sailing
 from here. For the ship name, `{{ ship.name }}`, for the captain, `{{ ship.captain }}`.
 And down here for the class, `{{ ship.class }}`.
 
+[[[ code('58d92b3fd5') ]]]
+
 Oh, and let's fill in the link: `{{ path() }}` then the name of the route. We're
 linking to the show page for the ship, so the route is `app_starship_show`. And
 because this has an `id` wildcard, pass `id` set to `ship.id`.
+
+[[[ code('c3ca2a3021') ]]]
 
 And now, so much better! It looks nice and we can click these links.
 
@@ -51,14 +63,22 @@ Instead, let's revisit the solution we used a minute ago: making all the data
 about our `Starship` easily accessible... *from* the `Starship` class.
 
 Here's what I mean: add a `public function getStatusImageFilename()` that returns
-a string. Let's do all the logic for creating the filename right here. I'll
+a string. 
+
+[[[ code('713d6d6740) ]]]
+
+Let's do all the logic for creating the filename right here. I'll
 paste in a `match` function.
 
 This says: check `$this->status` and if it's equal to `WAITING`, return this string.
 If it's equal to `IN_PROGRESS` return this string and so on.
 
+[[[ code('2878484585') ]]]
+
 And exactly like before, because we have a `getStatusImageFilename()` method, we
 get to, in Twig, *pretend* like we have a `statusImageFilename` property.
+
+[[[ code('c3ca2a3021') ]]]
 
 And now, we got it!
 
@@ -73,15 +93,23 @@ a name. Ok, it has an auto-generated name, but we don't want to rely on that.
 
 Add `name:` set to `app_homepage`. Or you could use `app_main_homepage`.
 
+[[[ code('5440bc2365') ]]]
+
 To link the logo, in `base.html.twig`... here it is... Use `{{ path('app_homepage') }}`.
 
+[[[ code('e54d14499e') ]]]
+
 Copy that and repeat it below for another home link. 
+
+[[[ code('2e5bb7042c') ]]]
 
 We'll leave these other links for a future tutorial.
 
 Back at the browser, click that logo! All good. The final missing link is over
 on the show page. This "back" link should *also* go to the homepage. Open up
 `show.html.twig`. And up on top - there it is - I'll paste that same link.
+
+[[[ code('84e9aa66d3') ]]]
 
 Ok team, the design is done! Congrats! Treat yourself to a tea... or latte... or
 donut or a walk amongst nature to celebrate. Because this is huge! Our site
