@@ -26,10 +26,15 @@ composer require symfony/ux-turbo
 ```
 
 This time, the recipe made two interesting changes. I'll show you. The first is in
-`importmap.php`: it added the `@hotwired/turbo` JavaScript package. The second change
-is in `assets/controllers.json`. We didn't talk about this file before, but it was
-added by the StimulusBundle recipe: it's a way to activate Stimulus controllers
-that live inside third-party packages.
+`importmap.php`: it added the `@hotwired/turbo` JavaScript package. 
+
+[[[ code('10866a256b') ]]]
+
+The second change is in `assets/controllers.json`. We didn't talk about this file 
+before, but it was added by the StimulusBundle recipe: it's a way to activate 
+Stimulus controllers that live inside third-party packages.
+
+[[[ code('c1639fbd7f') ]]]
 
 So the `symfony/ux-turbo` PHP package we just installed has a JavaScript controller
 inside called `turbo-core`. And because we have `enabled: true` here, it means that
