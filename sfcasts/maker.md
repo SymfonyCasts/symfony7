@@ -14,8 +14,11 @@ composer require symfony/maker-bundle --dev
 
 We haven't seen that `--dev` flag yet, but it's not *that* important. Move over and
 open `composer.json`. Thanks to the flag, instead of `symfony/maker-bundle` going
-under the `require` key, it was added down here under `require-dev`. By default,
-when you run `composer install`, it will download everything under *both* `require`
+under the `require` key, it was added down here under `require-dev`. 
+
+[[[ code('958656467c') ]]]
+
+By default, when you run `composer install`, it will download everything under *both* `require`
 and `require-dev`. But `require-dev` is meant for packages that *don't* need
 to be available on production: packages that you only need when you're developing
 locally. That's because, when you do deploy, if you want, you can tell Composer:
@@ -54,7 +57,11 @@ This will interactively ask us about our command. Let's call it: `app:ship-repor
 Done!
 
 This created exactly one file: `src/Command/ShipReportCommand.php`. Let's go check
-that out! Cool! This is a normal class - it *is* a service, by the way - but with
+that out! 
+
+[[[ code('73dc758763') ]]]
+
+Cool! This is a normal class - it *is* a service, by the way - but with
 an *attribute* above: `#[AsCommand]`. This tells Symfony:
 
 > Yo! See this service? It's not *just* a service: I would like you to include it
@@ -105,6 +112,8 @@ progress bar, say `$io->advance()`. Then, here is where we would do our heavy qu
 or heavy work. Fake that with a `usleep(10000)` to create a short pause.
 
 After the loop, finish with `$io->progressFinish()`.
+
+[[[ code('c6afb73551') ]]]
 
 That's it! Spin over and give that a try:
 
