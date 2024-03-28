@@ -24,9 +24,13 @@ into their *own* templates so you can reuse them. These are called template
 Copy this code, and in the `main/` directory - though this could go anywhere - add
 a new file called `_shipStatusAside.html.twig`. Paste inside.
 
+[[[ code('51aa8a0e14') ]]]
+
 Back in `homepage.html.twig`, delete that, then include it with `{{` - so the say
 something syntax - `include()` and the name of the template:
 `main/_shipStatusAside.html.twig`.
+
+[[[ code('4eea3185dd') ]]]
 
 Try it out! And... no change! The `include()` statement is simple:
 
@@ -49,6 +53,8 @@ I'll remove this comment, and say `{%` - so the *do* something tag - then
 `for ship in ships`. `ships` is the array variable we already have
 and `ship` is the *new* variable name in the loop that represents a single
 `Starship` object. At the bottom, add `{% endfor %}`.
+
+[[[ code('9fdb2495cc') ]]]
 
 And already... when we try it, we get *three* hard-coded ships! That's an
 improvement!
