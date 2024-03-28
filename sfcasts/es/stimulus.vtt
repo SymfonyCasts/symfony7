@@ -1,0 +1,451 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:03.436 align:middle
+Sabemos escribir HTML en nuestras plantillas.
+
+00:00:03.576 --> 00:00:05.696 align:middle
+Y manejamos CSS con Tailwind.
+
+00:00:06.126 --> 00:00:07.226 align:middle
+¿Qué pasa con JavaScript?
+
+00:00:07.686 --> 00:00:13.066 align:middle
+Bueno, como con CSS, hay un archivo
+app.js, y ya está incluido en la página.
+
+00:00:13.066 --> 00:00:16.446 align:middle
+Así que puedes poner aquí
+el JavaScript que quieras.
+
+00:00:17.036 --> 00:00:23.186 align:middle
+Pero te recomiendo encarecidamente que utilices una pequeña,
+pero malvada, biblioteca JavaScript llamada Stimulus.
+
+00:00:23.766 --> 00:00:26.116 align:middle
+Es una de mis cosas favoritas de Internet.
+
+00:00:26.646 --> 00:00:30.176 align:middle
+Tomas una parte de tu HTML
+existente y lo conectas
+
+00:00:30.176 --> 00:00:32.926 align:middle
+a un pequeño archivo
+JavaScript, llamado controlador.
+
+00:00:33.506 --> 00:00:36.896 align:middle
+Esto te permite añadir un comportamiento:
+por ejemplo, cuando pulses este botón,
+
+00:00:37.016 --> 00:00:39.406 align:middle
+se llamará al método greet del controlador.
+
+00:00:39.846 --> 00:00:40.746 align:middle
+¡Y eso es todo!
+
+00:00:41.316 --> 00:00:46.126 align:middle
+Seguro que Stimulus tiene más funciones, pero
+ya entiendes el núcleo de su funcionamiento. A
+
+00:00:46.686 --> 00:00:50.656 align:middle
+pesar de su simplicidad, nos permitirá
+construir cualquier funcionalidad JavaScript
+
+00:00:50.656 --> 00:00:55.156 align:middle
+y de interfaz de usuario que necesitemos,
+de forma fiable y predecible.
+
+00:00:55.156 --> 00:00:57.616 align:middle
+Así que vamos a instalarlo.
+
+00:00:57.616 --> 00:01:02.476 align:middle
+Stimulus es una librería JavaScript, pero
+Symfony tiene un bundle que ayuda a integrarla.
+
+00:01:02.476 --> 00:01:06.906 align:middle
+En tu terminal, si quieres ver lo que
+hace la receta, confirma tus cambios.
+
+00:01:07.226 --> 00:01:08.116 align:middle
+Yo ya lo he hecho.
+
+00:01:08.616 --> 00:01:15.576 align:middle
+Luego ejecuta: composer require
+symfony/stimulus-bundle Cuando esto termine...
+
+00:01:16.926 --> 00:01:18.936 align:middle
+la receta hizo algunos cambios.
+
+00:01:19.236 --> 00:01:20.856 align:middle
+Veamos los más importantes.
+
+00:01:21.366 --> 00:01:24.996 align:middle
+El primero está en app.js: nuestro
+archivo JavaScript principal.
+
+00:01:25.426 --> 00:01:27.256 align:middle
+Ábrelo y ya está.
+
+00:01:27.656 --> 00:01:29.816 align:middle
+Añadió un import en la parte
+superior - ./bootstrap.js
+
+00:01:30.026 --> 00:01:34.766 align:middle
+- a un nuevo archivo que vive
+justo al lado de éste. El
+
+00:01:34.766 --> 00:01:37.936 align:middle
+propósito de este archivo es
+iniciar el motor Stimulus. Además,
+
+00:01:38.626 --> 00:01:45.716 align:middle
+en importmap.php, la receta añadió el
+paquete JavaScript @hotwired/stimulus junto con
+
+00:01:45.716 --> 00:01:48.916 align:middle
+otro archivo que ayuda a arrancar Stimulus
+dentro de Symfony. Por último, la receta
+
+00:01:48.916 --> 00:01:52.996 align:middle
+creó un directorio assets/controllers/. Aquí
+
+00:01:53.456 --> 00:01:55.916 align:middle
+es donde vivirán nuestros
+controladores personalizados. ¡ E
+
+00:01:56.356 --> 00:01:59.246 align:middle
+incluía un controlador de demostración
+para ponernos en marcha! ¡Gracias!
+
+00:01:59.246 --> 00:02:03.696 align:middle
+Estos archivos de controlador tienen una
+importante convención de nomenclatura. Como
+
+00:02:04.066 --> 00:02:09.226 align:middle
+se llama hello_controller.js, para
+conectarlo con un elemento de la página,
+
+00:02:09.416 --> 00:02:12.616 align:middle
+utilizaremos data-controller="hello". Así es
+
+00:02:12.616 --> 00:02:14.416 align:middle
+como funciona. En
+
+00:02:14.776 --> 00:02:19.386 align:middle
+cuanto Stimulus vea un elemento en la
+página con data-controller="hello",
+
+00:02:19.626 --> 00:02:24.406 align:middle
+instanciará una nueva instancia de este controlador y
+llamará al método connect(). Así, este controlador
+
+00:02:24.406 --> 00:02:27.796 align:middle
+hello cambiará automática e
+
+00:02:27.796 --> 00:02:31.526 align:middle
+instantáneamente el contenido
+del elemento al que está unido. Y
+
+00:02:32.036 --> 00:02:34.766 align:middle
+ya podemos verlo. Actualiza
+
+00:02:34.766 --> 00:02:35.746 align:middle
+la página. Stimulus está
+
+00:02:35.746 --> 00:02:38.546 align:middle
+ahora activo en nuestro sitio. Esto
+
+00:02:38.856 --> 00:02:42.406 align:middle
+significa que está buscando
+elementos con data-controller. Hagamos
+
+00:02:43.096 --> 00:02:47.876 align:middle
+algo salvaje: inspecciona los elementos de
+la página, busca cualquier elemento -como
+
+00:02:48.056 --> 00:02:52.056 align:middle
+esta etiqueta de anclaje- y añade
+data-controller="hello". Observa
+
+00:02:52.686 --> 00:02:56.146 align:middle
+lo que ocurre cuando hago clic en
+desactivar para activar este cambio. ¡Pum!
+
+00:02:56.716 --> 00:03:02.226 align:middle
+Stimulus ha visto ese elemento, ha instanciado nuestro
+controlador y ha llamado al método connect(). Y
+
+00:03:02.226 --> 00:03:06.076 align:middle
+puedes hacer esto tantas veces
+como quieras en la página. La
+
+00:03:06.526 --> 00:03:12.316 align:middle
+cuestión es: no importa cómo llegue un elemento
+data-controller a tu página, Stimulus lo ve. Así que
+
+00:03:12.316 --> 00:03:17.296 align:middle
+si hacemos una llamada Ajax que devuelva
+HTML y ponemos eso en la página... sí,
+
+00:03:17.626 --> 00:03:21.756 align:middle
+Stimulus va a verlo y nuestro
+JavaScript va a funcionar. Ésa es
+
+00:03:22.256 --> 00:03:27.576 align:middle
+la clave: cuando escribes JavaScript con
+Stimulus, tu JavaScript siempre funcionará,
+
+00:03:27.756 --> 00:03:31.446 align:middle
+independientemente de cómo y cuándo se
+añada ese HTML a la página. Así que vamos a
+
+00:03:31.446 --> 00:03:34.436 align:middle
+utilizar Stimulus para activar
+nuestro botón de cierre.
+
+00:03:35.116 --> 00:03:38.726 align:middle
+En el directorio assets/controller/,
+duplica hello_controller.js y
+
+00:03:38.726 --> 00:03:41.856 align:middle
+crea uno nuevo llamado closeable_controller.js.
+
+00:03:41.856 --> 00:03:46.576 align:middle
+Borraré casi todo y me limitaré
+a lo más básico: importa
+
+00:03:48.216 --> 00:03:49.856 align:middle
+Controller de Stimulus... y
+
+00:03:50.056 --> 00:03:51.976 align:middle
+crea una clase que lo extienda. Esto no
+
+00:03:52.536 --> 00:03:56.496 align:middle
+hace nada, pero ya podemos adjuntarlo a
+un elemento de la página. Éste es el
+
+00:03:57.166 --> 00:04:01.976 align:middle
+plan: vamos a adjuntar el controlador
+a todo el elemento aside. Luego,
+
+00:04:02.446 --> 00:04:05.676 align:middle
+cuando pulsemos este botón,
+eliminaremos el aside. Ese elemento
+
+00:04:06.466 --> 00:04:11.456 align:middle
+vive en templates/main/_shipStatusAside.html.twig.
+Para adjuntar
+
+00:04:12.266 --> 00:04:16.296 align:middle
+el controlador, añade
+data-controller="closeable".
+
+00:04:16.806 --> 00:04:18.296 align:middle
+¿Ves ese autocompletado? Proviene
+
+00:04:18.486 --> 00:04:21.176 align:middle
+de un plugin de Stimulus para
+PhpStorm. Si nos desplazamos
+
+00:04:21.736 --> 00:04:26.516 align:middle
+y actualizamos, aún no ocurrirá nada:
+el botón de cerrar no funciona. Pero
+
+00:04:26.976 --> 00:04:28.736 align:middle
+abre la consola de tu navegador. ¡Qué bien!
+
+00:04:29.286 --> 00:04:35.026 align:middle
+Stimulus añade útiles mensajes de depuración: que
+se está iniciando y luego - lo que es importante -
+
+00:04:35.096 --> 00:04:38.806 align:middle
+closeable initialize, closeable connect. Esto
+
+00:04:39.286 --> 00:04:43.896 align:middle
+significa que sí vio el elemento data-controller
+e inicializó ese controlador. Así que
+
+00:04:43.896 --> 00:04:47.306 align:middle
+volvamos a nuestro objetivo:
+cuando pulsemos este botón,
+
+00:04:47.396 --> 00:04:52.476 align:middle
+queremos llamar a un código dentro del
+controlador cerrable que elimine el aside. En
+
+00:04:53.166 --> 00:04:58.296 align:middle
+closeable_controller.js, añade un nuevo
+método llamado, qué tal, close(). Dentro,
+
+00:04:58.296 --> 00:05:01.556 align:middle
+digamos this.element.remove(). En
+
+00:05:02.596 --> 00:05:08.416 align:middle
+Stimulus, this.element será siempre el elemento
+al que esté unido tu controlador. Por tanto,
+
+00:05:08.416 --> 00:05:10.916 align:middle
+este elemento aside. Pero
+
+00:05:11.566 --> 00:05:16.446 align:middle
+por lo demás, este código es JavaScript estándar:
+cada Elemento tiene un método remove(). Para
+
+00:05:17.086 --> 00:05:23.696 align:middle
+llamar al método close(), en el botón, añade data-action=""
+luego el nombre de nuestro controlador - closeable
+
+00:05:23.886 --> 00:05:29.156 align:middle
+- un signo #, y el nombre del
+método: close. Y ya está
+
+00:05:29.156 --> 00:05:29.616 align:middle
+Hora de probar
+
+00:05:29.916 --> 00:05:30.756 align:middle
+. ¡Clic!
+
+00:05:31.496 --> 00:05:33.226 align:middle
+¡Ya está! ¡ Pero quiero que sea
+
+00:05:33.746 --> 00:05:35.406 align:middle
+más elegante!
+
+00:05:35.736 --> 00:05:38.746 align:middle
+Quiero que se anime al cerrarse en
+lugar de ser instantáneo. ¿Podemos
+
+00:05:39.156 --> 00:05:40.176 align:middle
+hacerlo? ¡Claro que sí!
+
+00:05:40.586 --> 00:05:42.746 align:middle
+Y no necesitamos mucho JavaScript... porque
+
+00:05:42.816 --> 00:05:45.166 align:middle
+el CSS moderno es increíble.
+
+00:05:45.756 --> 00:05:52.366 align:middle
+Sobre el elemento aside, añade una nueva clase CSS
+-puede ir en cualquier sitio- llamada transition-all. Es
+
+00:05:52.996 --> 00:05:56.326 align:middle
+una clase Tailwind que activa
+las transiciones CSS. Esto
+
+00:05:56.786 --> 00:06:01.766 align:middle
+significa que si cambian ciertas propiedades de
+estilo -como que la anchura se ponga de repente a
+
+00:06:01.766 --> 00:06:06.076 align:middle
+0- hará una transición de ese cambio, en
+lugar de cambiarlo instantáneamente. También
+
+00:06:06.716 --> 00:06:10.606 align:middle
+añade overflow-hidden para
+que, al reducirse la anchura,
+
+00:06:10.796 --> 00:06:12.536 align:middle
+no cree una extraña barra
+de desplazamiento. Si
+
+00:06:13.236 --> 00:06:17.226 align:middle
+probamos esto ahora, se sigue
+cerrando instantáneamente. Eso es
+
+00:06:17.656 --> 00:06:21.866 align:middle
+porque no hay nada que transicionar: no
+estamos cambiando la anchura... sólo
+
+00:06:21.866 --> 00:06:23.216 align:middle
+eliminando el elemento. Pero
+
+00:06:23.216 --> 00:06:25.336 align:middle
+fíjate en esto. Inspecciona
+
+00:06:25.336 --> 00:06:28.416 align:middle
+el elemento y busca el aside:
+aquí está. Cambia manualmente
+
+00:06:28.986 --> 00:06:31.196 align:middle
+la anchura a 0. ¡Genial!
+
+00:06:31.936 --> 00:06:35.916 align:middle
+¡Vas pequeñito, grande,
+pequeñito, grande, pequeñito! El
+
+00:06:36.356 --> 00:06:38.726 align:middle
+lado CSS de las cosas está
+funcionando. De vuelta
+
+00:06:39.456 --> 00:06:44.366 align:middle
+en nuestro controlador, en lugar de eliminar el
+elemento, tenemos que cambiar la anchura a cero,
+
+00:06:44.686 --> 00:06:48.366 align:middle
+esperar a que termine la transición
+CSS y luego eliminar el elemento.
+
+00:06:48.826 --> 00:06:52.706 align:middle
+Podemos hacer lo primero con
+this.element.style.width = 0. La
+
+00:06:53.626 --> 00:06:56.536 align:middle
+parte complicada es esperar a
+que termine la transición CSS
+
+00:06:56.536 --> 00:06:58.856 align:middle
+antes de eliminar el elemento. Para
+
+00:06:59.606 --> 00:07:02.966 align:middle
+ayudarte con eso, voy a pegar un método en
+la parte inferior de nuestro controlador. Si
+
+00:07:02.966 --> 00:07:09.386 align:middle
+no estás familiarizado, el signo # hace que éste sea un
+método privado en JavaScript: un pequeño detalle. Este
+
+00:07:09.386 --> 00:07:15.436 align:middle
+código parece lujoso, pero tiene una función sencilla:
+pedir al elemento que nos diga cuándo han terminado todas
+
+00:07:15.436 --> 00:07:17.276 align:middle
+sus animaciones CSS. Gracias
+
+00:07:17.816 --> 00:07:22.096 align:middle
+a eso, aquí arriba, podemos decir
+await this.#waitForAnimation(). Y
+
+00:07:22.226 --> 00:07:23.436 align:middle
+siempre que
+
+00:07:24.066 --> 00:07:28.666 align:middle
+utilices await, tienes que poner async en
+la función alrededor de esto. No entraré
+
+00:07:28.766 --> 00:07:33.956 align:middle
+en detalles sobre async, pero eso no cambiará el
+funcionamiento de nuestro código. ¡ Comprobemos
+
+00:07:33.956 --> 00:07:34.906 align:middle
+el resultado! Actualiza. Y...
+
+00:07:37.476 --> 00:07:39.876 align:middle
+Me encanta. A continuación,
+
+00:07:40.566 --> 00:07:44.016 align:middle
+todo el mundo quiere una aplicación de
+una sola página, ¿verdad? Un sitio en
+
+00:07:44.386 --> 00:07:47.086 align:middle
+el que no haya refrescos de
+página completa. Pero para
+
+00:07:47.546 --> 00:07:51.776 align:middle
+construir una, ¿no necesitamos utilizar un
+framework JavaScript como React? ¡No! Vamos a
+
+00:07:52.146 --> 00:07:56.686 align:middle
+transformar nuestra aplicación en una
+aplicación de una sola página en... unos 3
+
+00:07:56.926 --> 00:07:59.166 align:middle
+minutos con Turbo.
