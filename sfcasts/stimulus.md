@@ -29,14 +29,24 @@ When this finishes... the recipe *did* make some changes. Let's walk through
 the important ones. The first is in `app.js`: our main JavaScript file. Open that
 up, there we go.
 
+[[[ code('32152b65bd') ]]]
+
 It added an `import` on top - `./bootstrap.js` - to a new file that lives right
-*next* to this. The purpose of this file is to start the Stimulus engine. Also, in
+*next* to this. 
+
+[[[ code('4336a80e93') ]]]
+
+The purpose of this file is to start the Stimulus engine. Also, in
 `importmap.php`, the recipe added the `@hotwired/stimulus` JavaScript package along
 with another file that helps boot up Stimulus inside Symfony.
+
+[[[ code('409fbd94b7') ]]]
 
 Finally, the recipe created an `assets/controllers/` directory. This is where *our*
 custom controllers will live. And it included a demo controller to get us started!
 Thanks!
+
+[[[ code('217e917721') ]]]
 
 These controller files *do* have an important naming convention. Because this is
 called `hello_controller.js`, to connect this with an element on the page, we'll
@@ -72,6 +82,8 @@ directory, duplicate `hello_controller.js` and make a new one called
 I'll clear out almost everything and get down to the absolute basics: import
 `Controller` from stimulus... then create a class that extends it.
 
+[[[ code('c358612891') ]]]
+
 This doesn't *do* anything, but we can already attach it to an element on the page.
 Here's the plan: we're going to attach the controller to the entire `aside` element.
 Then, when we click this button, we'll *remove* the `aside`.
@@ -79,6 +91,8 @@ Then, when we click this button, we'll *remove* the `aside`.
 That element lives over in `templates/main/_shipStatusAside.html.twig`. To attach
 the controller, add `data-controller="closeable"`. Oh, see that autocompletion?
 That comes from a Stimulus plugin for PhpStorm.
+
+[[[ code('0f2eb5ecb1') ]]]
 
 If we move over and refresh, nothing will happen yet: the close button doesn't
 work. But open your browser's console. Nice! Stimulus adds helpful debugging
@@ -92,12 +106,16 @@ So back to our goal: when we click this button, we want to call code inside
 the closeable controller that will remove the `aside`. *In* `closeable_controller.js`,
 add a new method called, how about, `close()`. Inside, say `this.element.remove()`.
 
+[[[ code('33bc901668') ]]]
+
 In Stimulus, `this.element` will always be whatever element your controller is
 attached to. So, this `aside` element. But otherwise, this code is standard
 JavaScript: every Element has a `remove()` method.
 
 To call the `close()` method, on the button, add `data-action=""` then the name
 of our controller - `closeable` - a `#` sign, and the name of the method: `close`.
+
+[[[ code('c1c7a2a870') ]]]
 
 ## Animating the Close
 
@@ -126,9 +144,13 @@ Back in our controller, instead of removing the element, we need to change the w
 to zero, *wait* for the CSS transition to finish, *then* remove the element. We can
 do the first with `this.element.style.width = 0`.
 
+[[[ code('c1c7a2a870') ]]]
+
 The *tricky* part is *waiting* for the CSS transition to finish *before* removing
 the element. To help with that, I'm going to paste a method at the bottom of our
 controller.
+
+[[[ code('b9a70df082') ]]]
 
 If you're not familiar, the `#` sign makes this a private method in JavaScript:
 a small detail. This code looks fancy, but it has a simple job: to
@@ -137,6 +159,8 @@ ask the element to tell us when all of its CSS animations are finished.
 Thanks to that, up here, we can say `await this.#waitForAnimation()`. And whenever
 you use `await`, you need to put `async` on the function around this. I won't go
 into details about `async`, but that won't change how our code works.
+
+[[[ code('81b776d135') ]]]
 
 Let's check the result! Refresh. And... I absolutely *love* that.
 
