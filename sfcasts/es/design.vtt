@@ -1,0 +1,276 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:04.926 align:middle
+Añadir el .value al final del enum para
+imprimirlo funciona a las mil maravillas.
+
+00:00:05.216 --> 00:00:07.796 align:middle
+Pero quiero mostrar otra
+solución más elegante.
+
+00:00:08.506 --> 00:00:13.526 align:middle
+En Starship, probablemente será habitual que queramos
+obtener el estado de la cadena de un Starship.
+
+00:00:13.926 --> 00:00:18.986 align:middle
+Para hacerlo más fácil, ¿por qué no añadir
+aquí un método abreviado llamado getStatusString()?
+
+00:00:19.556 --> 00:00:24.616 align:middle
+Esto devolverá un string, y dentro,
+devolverá $this->status->value.
+
+00:00:25.556 --> 00:00:30.526 align:middle
+Gracias a esto, en la plantilla,
+podemos acortar a ship.statusString.
+
+00:00:31.376 --> 00:00:33.826 align:middle
+Ah, ¡y esto es más inteligencia Twig!
+
+00:00:34.126 --> 00:00:37.946 align:middle
+¡No hay ninguna propiedad
+llamada statusString en Starship!
+
+00:00:38.356 --> 00:00:39.366 align:middle
+Pero a Twig no le importa.
+
+00:00:39.676 --> 00:00:43.516 align:middle
+Ve que hay un método
+getStatusString() y lo llama.
+
+00:00:44.356 --> 00:00:47.986 align:middle
+Observa: cuando actualizamos,
+la página sigue funcionando.
+
+00:00:48.446 --> 00:00:51.476 align:middle
+Me gusta mucho esta solución,
+así que la copiaré...
+
+00:00:51.886 --> 00:00:54.276 align:middle
+y la repetiré aquí arriba
+para el atributo alt.
+
+00:00:54.916 --> 00:00:59.816 align:middle
+Y mientras arreglamos esto, en show.html.twig,
+también imprimimos el estado allí.
+
+00:01:00.456 --> 00:01:02.216 align:middle
+Así que haré ese mismo cambio...
+
+00:01:02.586 --> 00:01:03.806 align:middle
+y luego cerraré esto.
+
+00:01:04.386 --> 00:01:09.696 align:middle
+Bien: terminemos de dinamizar nuestra plantilla de página
+de inicio: a partir de aquí todo es coser y cantar.
+
+00:01:10.206 --> 00:01:16.846 align:middle
+Para el nombre del barco, {{ ship.name
+}}, para el capitán, {{ ship.captain }}.
+
+00:01:17.476 --> 00:01:20.696 align:middle
+Y aquí abajo para la clase, {{ ship.class }}.
+
+00:01:21.506 --> 00:01:25.956 align:middle
+Ah, y rellenemos el enlace: {{ path()
+}} y luego el nombre de la ruta.
+
+00:01:26.336 --> 00:01:30.996 align:middle
+Estamos enlazando con la página del espectáculo
+del barco, así que la ruta es app_starship_show.
+
+00:01:31.836 --> 00:01:36.216 align:middle
+Y como esto tiene un comodín
+id, pasa id ajustado a ship.id.
+
+00:01:36.996 --> 00:01:40.016 align:middle
+Y ahora, ¡mucho mejor!
+
+00:01:40.486 --> 00:01:43.046 align:middle
+Se ve bien y podemos hacer
+clic en estos enlaces.
+
+00:01:43.916 --> 00:01:45.956 align:middle
+Pero... la imagen sigue rota.
+
+00:01:46.716 --> 00:01:49.856 align:middle
+Antes, cuando copiamos las imágenes
+en nuestro directorio assets/,
+
+00:01:50.016 --> 00:01:52.916 align:middle
+incluí tres archivos para los tres estados.
+
+00:01:53.806 --> 00:01:57.726 align:middle
+Aquí arriba, estamos apuntando
+"más o menos" al estado en curso...
+
+00:01:58.056 --> 00:02:01.626 align:middle
+pero ésta no es la forma correcta de hacer
+referencia a las imágenes del directorio assets/.
+
+00:02:02.076 --> 00:02:06.196 align:middle
+En su lugar, di {{ asset()
+}} y pasa la ruta relativa
+
+00:02:06.196 --> 00:02:09.046 align:middle
+al directorio assets/, llamada ruta "lógica".
+
+00:02:10.326 --> 00:02:11.536 align:middle
+Si probamos eso ahora...
+
+00:02:11.856 --> 00:02:13.126 align:middle
+estamos más cerca.
+
+00:02:13.506 --> 00:02:17.066 align:middle
+Pero la parte "en curso" tiene que
+ser dinámica en función del estado.
+
+00:02:17.656 --> 00:02:23.396 align:middle
+Algo que podríamos intentar es la concatenación
+Twig: añadir ship.status a la cadena.
+
+00:02:23.956 --> 00:02:26.716 align:middle
+Eso es posible, aunque es un poco feo.
+
+00:02:27.226 --> 00:02:31.586 align:middle
+En lugar de eso, volvamos a la solución que
+utilizamos hace un momento: hacer que todos los datos
+
+00:02:31.586 --> 00:02:33.896 align:middle
+sobre nuestro Starship sean
+fácilmente accesibles...
+
+00:02:33.986 --> 00:02:35.666 align:middle
+desde la clase Starship.
+
+00:02:36.296 --> 00:02:41.356 align:middle
+Esto es lo que quiero decir: añade un public function
+getStatusImageFilename() que devuelva una cadena.
+
+00:02:42.356 --> 00:02:45.166 align:middle
+Vamos a hacer toda la lógica para
+crear el nombre de archivo aquí mismo.
+
+00:02:45.746 --> 00:02:47.586 align:middle
+Pondré una función match.
+
+00:02:48.486 --> 00:02:53.726 align:middle
+Esto dice: comprueba $this->status y si
+es igual a WAITING, devuelve esta cadena.
+
+00:02:54.226 --> 00:02:57.556 align:middle
+Si es igual a IN_PROGRESS devuelve
+esta cadena y así sucesivamente.
+
+00:02:58.376 --> 00:03:04.006 align:middle
+Y exactamente igual que antes, como tenemos un
+método getStatusImageFilename(), conseguimos,
+
+00:03:04.166 --> 00:03:08.796 align:middle
+en Twig, hacer como si tuviéramos
+una propiedad statusImageFilename.
+
+00:03:09.736 --> 00:03:12.236 align:middle
+Y ahora, ¡ya lo tenemos!
+
+00:03:12.876 --> 00:03:14.056 align:middle
+¡Últimas cosas!
+
+00:03:14.316 --> 00:03:18.216 align:middle
+Rellenemos algunos enlaces que faltan, como este
+logotipo que debería ir a la página de inicio.
+
+00:03:18.626 --> 00:03:19.156 align:middle
+Ahora mismo...
+
+00:03:19.516 --> 00:03:20.916 align:middle
+no va a ninguna parte.
+
+00:03:21.466 --> 00:03:25.756 align:middle
+Recuerda que cuando queremos enlazar a una página,
+tenemos que asegurarnos de que esa ruta tiene un nombre.
+
+00:03:26.176 --> 00:03:28.866 align:middle
+En src/Controller/MainController.php...
+
+00:03:28.866 --> 00:03:30.796 align:middle
+nuestra página de inicio no tiene nombre.
+
+00:03:31.496 --> 00:03:35.426 align:middle
+Vale, tiene un nombre autogenerado,
+pero no queremos confiar en eso.
+
+00:03:35.876 --> 00:03:38.636 align:middle
+Añade name: ajustado a app_homepage.
+
+00:03:39.356 --> 00:03:42.266 align:middle
+O puedes utilizar app_main_homepage.
+
+00:03:42.896 --> 00:03:45.696 align:middle
+Para enlazar el logotipo, en base.html.twig...
+
+00:03:46.086 --> 00:03:46.796 align:middle
+aquí está...
+
+00:03:47.186 --> 00:03:50.446 align:middle
+Utiliza {{ path('app_homepage') }}.
+
+00:03:51.736 --> 00:03:55.166 align:middle
+Cópialo y repítelo a continuación
+para otro enlace de inicio.
+
+00:03:55.986 --> 00:03:58.056 align:middle
+Dejaremos estos otros enlaces
+para un futuro tutorial.
+
+00:03:58.756 --> 00:04:01.196 align:middle
+De vuelta al navegador,
+¡haz clic en ese logotipo!
+
+00:04:01.786 --> 00:04:05.656 align:middle
+Ya está. El último enlace que falta
+está en la página del programa.
+
+00:04:05.986 --> 00:04:08.296 align:middle
+Este enlace "atrás" también
+debería ir a la página de inicio.
+
+00:04:08.726 --> 00:04:10.466 align:middle
+Abre show.html.twig.
+
+00:04:10.816 --> 00:04:14.816 align:middle
+Y arriba -ahí está- pegaré ese mismo enlace.
+
+00:04:15.716 --> 00:04:18.136 align:middle
+Ok equipo, ¡el diseño está hecho!
+
+00:04:18.286 --> 00:04:20.816 align:middle
+¡Enhorabuena! Tómate un té...
+
+00:04:20.816 --> 00:04:21.886 align:middle
+o un café con leche...
+
+00:04:21.886 --> 00:04:25.376 align:middle
+o un donut o un paseo por la
+naturaleza para celebrarlo.
+
+00:04:25.676 --> 00:04:26.766 align:middle
+¡Porque esto es enorme!
+
+00:04:27.026 --> 00:04:29.296 align:middle
+Nuestro sitio parece y se siente real.
+
+00:04:29.576 --> 00:04:30.716 align:middle
+Estoy encantada.
+
+00:04:31.326 --> 00:04:33.266 align:middle
+Ahora podemos centrarnos en
+los detalles más sutiles.
+
+00:04:33.496 --> 00:04:37.056 align:middle
+Por ejemplo, cuando hacemos clic en este
+enlace, la barra lateral debe colapsarse.
+
+00:04:37.646 --> 00:04:42.966 align:middle
+Para ello, quiero presentarte mi herramienta
+favorita para escribir JavaScript: Stimulus.
