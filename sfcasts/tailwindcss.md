@@ -63,6 +63,8 @@ The base Tailwind code did a reset. For example, our `h1` is now tiny!
 Let's try this out for real. Open `templates/main/homepage.html.twig`. Up
 on the `h1`, make this bigger by adding a class: `text-2xl`.
 
+[[[ code('83fd013fdd') ]]]
+
 As soon as we save that, you can see that tailwind *noticed* our change and
 rebuilt the CSS. And when we refresh, it got bigger!
 
@@ -103,6 +105,8 @@ We can take advantage of this immediately. In `homepage.html.twig`, change this 
 `text-4xl`, spin over and... it works! We don't even need to *think* about the
 `tailwind:build` command anymore.
 
+[[[ code('112955d5b6') ]]]
+
 And since we'll be styling with Tailwind, remove the blue background.
 
 ## Copying in Styled Templates
@@ -116,8 +120,17 @@ So let's pretend that someone else has created a design for our site. And they'v
 even given us some HTML with Tailwind classes *for* that design. If you download
 the course code, in a `tutorial/templates/` directory, we have 3 templates.
 One-by-one, I'm going to copy each file and paste it over the original. Don't
-worry, we'll look at what's happening in each of these files. Do
-`homepage.html.twig`... and finally `show.html.twig`.
+worry, we'll look at what's happening in each of these files. 
+
+[[[ code('fdf4754c05') ]]]
+
+Do `homepage.html.twig`... 
+
+[[[ code('1579c9212f') ]]]
+
+and finally `show.html.twig`.
+
+[[[ code('abb920fb7d') ]]]
 
 ***TIP
 If you copy the files (instead of the file contents), Symfony's cache system
@@ -132,6 +145,8 @@ Ok, let's see what this did! Refresh. It looks beautiful! I *love* working insid
 a nice design. But... some parts are broken. In `homepage.html.twig`, this is our ship
 repair queue... which looks nice... but there's no Twig code! The
 status is hardcoded, name is hardcoded and there's no loop.
+
+[[[ code('5f290d953a') ]]]
 
 Next: let's take our new design and make it *dynamic*. We'll also learn how to
 organize things into template partials *and* introduce a PHP enum, which are fun.
