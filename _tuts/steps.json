@@ -36,10 +36,15 @@
             "description": null
         },
         {
-            "id": "httpclient-create-api-page",
-            "name": "HttpClient: Create API page",
+            "id": "httpclient-send-api-request",
+            "name": "HttpClient: Send API request",
+            "description": null
+        },
+        {
+            "id": "httpclient-render-iss-location-in-template",
+            "name": "HttpClient: Render ISS location in template",
             "description": null
         }
     ],
-    "sha": "86a46b4af3f1529655f05cb6fc616a3e6c8570d9"
+    "sha": "7ec218e46b3c39c468e202d918e23d389d575eb2"
 }
