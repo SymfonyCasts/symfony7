@@ -33,6 +33,7 @@ Por último, hay que compilar Tailwind, así que tenemos que ejecutar un comando
 php bin/console tailwind:build -w
 ```
 
+Esto escanea nuestras plantillas y genera el archivo CSS final en segundo plano.
 El `-w` lo pone en modo "vigilar": en lugar de construir una vez y salir, vigila nuestras plantillas en busca de cambios. Cuando detecte alguna actualización, reconstruirá automáticamente el archivo CSS. Lo veremos en un minuto.
 
 Pero ya deberíamos ver una diferencia. Vamos a la página de inicio. ¿Lo has visto? El código base de Tailwind ha hecho un reinicio. Por ejemplo, ¡nuestro `h1` es ahora diminuto!
