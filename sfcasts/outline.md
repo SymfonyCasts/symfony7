@@ -4,22 +4,22 @@
 
 - no matter what you'll do with Symfony, it comes down to services
 - all about services: the things that do the work in your app
-    - and about configuration for those services
-    - and about environments... which are just another way to tweak
-       those services to act differently locally while developing vs
-       on production.
-    - Logger service is a good example
+  - and about configuration for those services
+  - and about environments... which are just another way to tweak
+    those services to act differently locally while developing vs
+    on production.
+  - Logger service is a good example
 - We call this "Fundamentals" because, truly, after this tutorial,
-    everything else is just a variation on these themes.
+  everything else is just a variation on these themes.
 - Download course code!
 
 - Reminder: services are objects that do work
-    - logger, mailer, database connection, even our controller!
-    - juxtaposed with objects that hold data
+  - logger, mailer, database connection, even our controller!
+  - juxtaposed with objects that hold data
 - `debug:container`
-    - The container is responsible for instantiating each service
-    - So it knows the class name and every constructor argument
-    - If you ask for a service multiple times, it only creates it once
+  - The container is responsible for instantiating each service
+  - So it knows the class name and every constructor argument
+  - If you ask for a service multiple times, it only creates it once
 - Where do these come from?
   - Who tells the container "there should be a `logger` service" and its
     class is `Logger` and it should be instantiated with these arguments?
@@ -36,7 +36,7 @@
 
 ## KnpTimeBundle: Install bundle, get service
 
-- Before this tutorial, I added a new `arrivedAt` `DateTime` field to
+- Before this tutorial, I added a new `arrivedAt` `DateTimeImmutable` field to
   `Starship`.
 - Let's print that in `homepage.html.twig`
 - We can't just print the property - you can't print DateTime objects
@@ -49,7 +49,7 @@
 - But maybe there's a bundle that gives us a service that can do this?
 - There is! It's called KnpTimeBundle
 - `composer require knplabs/knp-time-bundle`
-- show `config/bundles.php`
+- Show `config/bundles.php`
 - Remember, bundles give us services
 - `debug:container time` to see a few matches
 - Also `debug:autowiring` to see `DateTimeFormatter`
@@ -84,7 +84,7 @@
     of `HttpClient` and it should be instantiated with these arguments."
 - So where did this service come from?
 - The answer is FrameworkBundle. That's THE most core bundle of Symfony
-   and it's been in our app since the beginning.
+  and it's been in our app since the beginning.
 - It has a special power: it watches for Symfony components that are
   installed and automatically registers their services.
 - So, no big deal... just another way that services will arrive in our app.
@@ -92,9 +92,22 @@
 
 ## Using the HTTP Client
 
-- Let's make a new page that fetches some data from an API.
+- Let's fetch some data from an API on the homepage.
 - We're going to talk to an API that tells us where the ISS is right now.
 - You can see it at https://api.wheretheiss.at/v1/satellites/25544
 - And we'll show this up in the header
 
+## Cache Service and cache Pools
 
+- But executing real API request on every page load is not a good idea,
+  it would be great to cache the result for a moment
+- Let's talk about another service: the cache service
+- Run `debug:autowiring cache` to see if we already have any cache
+  related services - we do!
+- Cache pool is just a unique namespace for cache items
+- Typehint with `CacheItemPoolInterface` to get the cache service
+- Cache the API response for a minute
+- Refresh the page - notice no HTTP client request, but there's a cache icon
+- Show the Cache panel in the profiler
+
+## Bundle / service config
