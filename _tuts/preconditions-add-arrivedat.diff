@@ -1,0 +1,54 @@
+diff --git a/src/Model/Starship.php b/src/Model/Starship.php
+index 72a3787..5aeb16e 100644
+--- a/src/Model/Starship.php
++++ b/src/Model/Starship.php
+@@ -10,6 +10,7 @@ class Starship
+         private string $class,
+         private string $captain,
+         private StarshipStatusEnum $status,
++        private \DateTimeImmutable $arrivedAt,
+     ) {
+     }
+ 
+@@ -51,4 +52,9 @@ class Starship
+             StarshipStatusEnum::COMPLETED => 'images/status-complete.png',
+         };
+     }
++
++    public function getArrivedAt(): \DateTimeImmutable
++    {
++        return $this->arrivedAt;
++    }
+ }
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index 0dd922c..ac1b781 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -25,21 +25,24 @@ class StarshipRepository extends AbstractController
+                 'USS LeafyCruiser (NCC-0001)',
+                 'Garden',
+                 'Jean-Luc Pickles',
+-                StarshipStatusEnum::IN_PROGRESS
++                StarshipStatusEnum::IN_PROGRESS,
++                new \DateTimeImmutable('-1 day'),
+             ),
+             new Starship(
+                 2,
+                 'USS Espresso (NCC-1234-C)',
+                 'Latte',
+                 'James T. Quick!',
+-                StarshipStatusEnum::COMPLETED
++                StarshipStatusEnum::COMPLETED,
++                new \DateTimeImmutable('-1 week'),
+             ),
+             new Starship(
+                 3,
+                 'USS Wanderlust (NCC-2024-W)',
+                 'Delta Tourist',
+                 'Kathryn Journeyway',
+-                StarshipStatusEnum::WAITING
++                StarshipStatusEnum::WAITING,
++                new \DateTimeImmutable('-1 month'),
+             ),
+         ];
+     }

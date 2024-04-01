@@ -1,0 +1,28 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 04a5058..1716198 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -4,8 +4,10 @@ namespace App\Controller;
+ 
+ use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
++use Symfony\Contracts\HttpClient\HttpClientInterface;
+ 
+ class MainController extends AbstractController
+ {
+@@ -20,4 +22,12 @@ class MainController extends AbstractController
+             'ships' => $ships,
+         ]);
+     }
++
++    #[Route('/api/iss', name: 'api_iss')]
++    public function apiIss(HttpClientInterface $client): Response
++    {
++        $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
++
++        dd($response->toArray());
++    }
+ }

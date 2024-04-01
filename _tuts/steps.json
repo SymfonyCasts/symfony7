@@ -1,0 +1,45 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "preconditions-add-arrivedat",
+            "name": "Preconditions: Add arrivedAt",
+            "description": null
+        },
+        {
+            "id": "date-try-to-print-datetime-object",
+            "name": "Date: Try to print DateTime object",
+            "description": null
+        },
+        {
+            "id": "date-use-date-twig-filter",
+            "name": "Date: Use date() Twig filter",
+            "description": null
+        },
+        {
+            "id": "date-install-knptimebundle",
+            "name": "Date: Install KnpTimeBundle",
+            "description": null
+        },
+        {
+            "id": "date-use-ago-twig-filter",
+            "name": "Date: Use ago() Twig filter",
+            "description": null
+        },
+        {
+            "id": "httpclient-install-component",
+            "name": "HttpClient: Install component",
+            "description": null
+        },
+        {
+            "id": "httpclient-create-api-page",
+            "name": "HttpClient: Create API page",
+            "description": null
+        }
+    ],
+    "sha": "86a46b4af3f1529655f05cb6fc616a3e6c8570d9"
+}

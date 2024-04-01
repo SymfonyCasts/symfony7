@@ -1,0 +1,13 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index a0da177..6f626a6 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -28,7 +28,7 @@
+                                     >{{ ship.name }}</a>
+                                 </h4>
+                                 <div>
+-                                    Arrived at: {{ ship.arrivedAt }}
++                                    Arrived at: {{ ship.arrivedAt|date }}
+                                 </div>
+                             </div>
+                         </div>
