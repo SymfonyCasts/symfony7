@@ -44,7 +44,17 @@
             "id": "httpclient-render-iss-location-in-template",
             "name": "HttpClient: Render ISS location in template",
             "description": null
+        },
+        {
+            "id": "httpclient-cache-the-response",
+            "name": "HttpClient: Cache the response",
+            "description": null
+        },
+        {
+            "id": "httpclient-use-custom-cache-pool",
+            "name": "HttpClient: Use custom cache pool",
+            "description": null
         }
     ],
-    "sha": "e142cc415d16b8e8b3b91b306941b3537165c906"
+    "sha": "90405993f56e8c4966b43d644d7dc2308dff42ed"
 }

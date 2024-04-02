@@ -1,0 +1,31 @@
+diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
+index 6899b72..2416e08 100644
+--- a/config/packages/cache.yaml
++++ b/config/packages/cache.yaml
+@@ -15,5 +15,5 @@ framework:
+         #app: cache.adapter.apcu
+ 
+         # Namespaced pools use the above "app" backend by default
+-        #pools:
+-            #my.dedicated.cache: null
++        pools:
++            iss_location_pool: null
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index a209df2..76fd7f2 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -14,12 +14,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
+ class MainController extends AbstractController
+ {
+     #[Route('/', name: 'app_homepage')]
+-    public function homepage(StarshipRepository $starshipRepository, HttpClientInterface $client, CacheInterface $cache): Response
++    public function homepage(StarshipRepository $starshipRepository, HttpClientInterface $client, CacheInterface $issLocationPool): Response
+     {
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+ 
+-        $issData = $cache->get('iss_location_data', function (ItemInterface $item) use ($client): array {
++        $issData = $issLocationPool->get('iss_location_data', function (ItemInterface $item) use ($client): array {
+             $item->expiresAfter(60); // Cache for 1 minute
+ 
+             $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');

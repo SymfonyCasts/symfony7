@@ -1,0 +1,33 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 4d10c30..a209df2 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -7,18 +7,25 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
++use Symfony\Contracts\Cache\CacheInterface;
++use Symfony\Contracts\Cache\ItemInterface;
+ use Symfony\Contracts\HttpClient\HttpClientInterface;
+ 
+ class MainController extends AbstractController
+ {
+     #[Route('/', name: 'app_homepage')]
+-    public function homepage(StarshipRepository $starshipRepository, HttpClientInterface $client): Response
++    public function homepage(StarshipRepository $starshipRepository, HttpClientInterface $client, CacheInterface $cache): Response
+     {
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+ 
+-        $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
+-        $issData = $response->toArray();
++        $issData = $cache->get('iss_location_data', function (ItemInterface $item) use ($client): array {
++            $item->expiresAfter(60); // Cache for 1 minute
++
++            $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
++
++            return $response->toArray();
++        });
+ 
+         return $this->render('main/homepage.html.twig', [
+             'myShip' => $myShip,
