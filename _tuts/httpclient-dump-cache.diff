@@ -1,0 +1,12 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index a209df2..a424b9b 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -16,6 +16,7 @@ class MainController extends AbstractController
+     #[Route('/', name: 'app_homepage')]
+     public function homepage(StarshipRepository $starshipRepository, HttpClientInterface $client, CacheInterface $cache): Response
+     {
++        dd($cache);
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+ 

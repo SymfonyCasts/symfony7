@@ -51,10 +51,20 @@
             "description": null
         },
         {
+            "id": "httpclient-dump-cache",
+            "name": "HttpClient: Dump cache",
+            "description": null
+        },
+        {
+            "id": "httpclient-remove-dd",
+            "name": "HttpClient: remove dd()",
+            "description": null
+        },
+        {
             "id": "httpclient-use-custom-cache-pool",
             "name": "HttpClient: Use custom cache pool",
             "description": null
         }
     ],
-    "sha": "90405993f56e8c4966b43d644d7dc2308dff42ed"
+    "sha": "3f428df8563ebf72b1d9591092f2db8d15ff1f8c"
 }
