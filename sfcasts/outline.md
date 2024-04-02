@@ -96,6 +96,10 @@
 - We'll show this up in the header later
 - Right now we're going to talk to an API that tells us where the ISS is right now.
 - You can see it at https://api.wheretheiss.at/v1/satellites/25544
+- Remember: when we installed the `http-client` component, it gave us a
+    new service, which we can see with `debug:autowiring`
+- *How* do we make requests with this service? Well, we can totally read
+    the docs, but thanks to the type-hint on the argument, we can guess
 - Do the request in `homepage()` and `dump()` the result
 - Refresh the page to see the dump
 - Show the HTTP Client panel in the WDT
@@ -105,6 +109,8 @@
 
 - But executing real API request on every page load is not a good idea,
   it would be great to cache the result for a moment
+  - Ya know, because while the ISS moves super fast, we don't need to
+     be SO exact
 - Let's talk about another service: the cache service
 - Run `debug:autowiring cache` to see if we already have any cache
   related services - we do!
@@ -118,28 +124,55 @@
 
 ## Bundle / service config
 
-- We're controlling how services are instantiated
+- So we know that bundles give us services
+- And when we autowire a service, it means that the bundle that provides
+    it provides all the details about how to instantiate it
+- `dd($cache)` to see the class name
+  - For example, for the cache service, FrameworkBundle tells the
+    service container:
+> Hey! When I ask for the `CacheInterface` service, I want you to
+> instantiate a `Symfony\Component\Cache\Adapter\TraceableAdapter`
+> object with a specific set of arguments.
+- So the question now is: how can we control this?
+- For example, the cache is this TraceableAdapter, but if you look inside,
+    that's just a small wrapper around a filesystem cache. So, apparently,
+    the cache is stored on the filesystem. What if we wanted to store the
+    cache in memory instead? Or in a different place on the filesystem?
 - Show `framework.yaml` config
+  - The important part is the root `framework` key: that means we're passing
+  - configuration to the `FrameworkBundle`. And it'll use that config to 
+  - change how it instantiates its services
+- Call `debug:config framework` - this will show you the current config
+- In order to see the full config - call `config:dump framework`
 - Show `cache.yaml` one
+  - Really still part of the `framework` config, just separated out for
+    organization
 - Set cache provider to `cache.adapter.array`
 - See in action
-- Create a custom cache pool in the `cache.yaml` config
-- Run `debug:autowiring cache` again to see a new service
-- Change to `CacheInterface $issLocationPool`
-- Update the page and see WDT
-- Clear the cache with `cache:pool:clear iss_location_pool`
-- Refresh the page again
-- Call `debug:config framework cache` - this will show you the current config
-- In order to see the full config - call `config:dump framework cache`
-- Let's set `default_lifetime: 5` for our pool in the config
-- Now drop the `expiresAfter(5)` call
-- Probably also show `config:dump twig`
 
 ## Autowiring
 
 - Run `debug:container`
 - Explain how autowiring works
-- Mention service aliases 
+- Mention service aliases
+- So if a service's id is NOT an interface or class name, it
+  is NOT autowirable. And most services are this way on purpose, as they're
+  low-level. That's why `debug:container` has so many more entries than
+  `debug:autowiring`
+- Btw, are there ever times when there are *multiple* services in the
+    container that implement the same class or interface?
+- Create a custom cache pool in the `cache.yaml` config
+- Run `debug:autowiring cache` again to see a new service
+  - So in this case, the config added a totally NEW service
+- Change to `CacheInterface $issLocationPool`
+   - Talk about how this is "named" autowiring
+   - It's rare, but you can also see it with the logger
+- Update the page and see WDT
+- Clear the cache with `cache:pool:clear iss_location_pool`
+- Refresh the page again
+- Let's set `default_lifetime: 5` for our pool in the config
+- Now drop the `expiresAfter(5)` call
+- Probably also show `config:dump twig`
 
 ## Environments
 
@@ -153,7 +186,7 @@
 
 - Set `APP_ENV=prod`
 - Update the page to see that WDT is gone
-- Try to change something in the template - nothing udpated
+- Try to change something in the template - nothing updated
 - Clear the cache with `cache:clear`
 - And update the page again to see changes
 - Mention `cache:clear --env=prod`
@@ -163,9 +196,33 @@
 
 ## Services
 
-TODO
-creating a service
-dependency injection
-php bin/console debug:autowiring --all
-dependencies vs arguments
-how to "get a service" when you need it
+- Maybe we skip this or just review it? We created a service in ep1
+- Actually, for this section, let's talk about `services.yaml`,
+   autoregistration, etc
+- We know that services come from bundles
+  - And every service is the combination of an id, a class and a set of arguments
+- But we can also create our own services. And we have!
+- This all works thanks to the `services.yaml` file
+- Walk through the auto-registration of services
+- And how `_defaults` works and enables autowiring & autoconfigure (which we'll
+   talk about soon).
+- `php bin/console debug:autowiring --all`
+- How non-services (i.e. model classes) are technically registered as services,
+    but removed later because we don't use them.
+- Btw, all these YAML files are "identical". It's the root key like
+    `services` or `framework` that makes them different
+- But you could copy all the config from every YAML file into a single
+    file and it would work the same way
+
+## Parameters
+
+- So far, we've talked about the container being full of service objects
+- That's true: but it holds one more thing: scalar config called "parameters"
+- ... WIP
+
+## Non-Autowireable Args
+
+- ... WIP - probably try to autowire a parameter.
+- Fix with the `Autowire` attribute
+- Maybe also autowire a non-autowireable service, perhaps something
+     silly like the `debug:twig` command object
