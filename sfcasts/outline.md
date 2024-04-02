@@ -110,7 +110,7 @@
   related services - we do!
 - Cache pool is just a unique namespace for cache items
 - Typehint with `CacheInterface` to get the cache service
-- Cache the API response for 1 minute
+- Cache the API response for 5 seconds with `expiresAfter(5)`
 - Refresh the page - notice no HTTP client request, but there's a cache icon
 - Show the Cache panel in the WDT
 - We didn't create a custom pool for it, so default `app` is used, but you can create custom ones
@@ -118,20 +118,54 @@
 
 ## Bundle / service config
 
-- You can control services via configuration
-- Create a custom cache pool in the cache.yaml config
+- We're controlling how services are instantiated
+- Show `framework.yaml` config
+- Show `cache.yaml` one
+- Set cache provider to `cache.adapter.array`
+- See in action
+- Create a custom cache pool in the `cache.yaml` config
 - Run `debug:autowiring cache` again to see a new service
 - Change to `CacheInterface $issLocationPool`
 - Update the page and see WDT
 - Clear the cache with `cache:pool:clear iss_location_pool`
 - Refresh the page again
-- We're controlling how services are instantiated
 - Call `debug:config framework cache` - this will show you the current config
 - In order to see the full config - call `config:dump framework cache`
-- Let's set `default_lifetime: 60` for our pool in the config
-- Now drop the `expiresAfter(60)` call
+- Let's set `default_lifetime: 5` for our pool in the config
+- Now drop the `expiresAfter(5)` call
+- Probably also show `config:dump twig`
 
 ## Autowiring
 
-debug:container
-how autowiring works
+- Run `debug:container`
+- Explain how autowiring works
+- Mention service aliases 
+
+## Environments
+
+- Show `.env`
+- Explain the `APP_ENV` env var
+- Explain `when@test` e.g. on the same `framework.yaml` config file
+- Also mention `config/packages/{env}` dir
+- Show env-specific routing, e.g. `config/routes/web_profiler.yaml`
+
+## prod environment
+
+- Set `APP_ENV=prod`
+- Update the page to see that WDT is gone
+- Try to change something in the template - nothing udpated
+- Clear the cache with `cache:clear`
+- And update the page again to see changes
+- Mention `cache:clear --env=prod`
+- Prod only cache config - set framework cache adapter back to `cache.adapter.filesystem`
+  and keep `cache.adapter.array` only `when@dev`
+- Revert back to `APP_ENV=dev`
+
+## Services
+
+TODO
+creating a service
+dependency injection
+php bin/console debug:autowiring --all
+dependencies vs arguments
+how to "get a service" when you need it
