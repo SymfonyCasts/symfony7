@@ -1,0 +1,215 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:04.076 align:middle
+Dentro del bucle, dinamizar
+las cosas no es nada nuevo...
+
+00:00:04.186 --> 00:00:05.386 align:middle
+¡lo cual es genial!
+
+00:00:05.766 --> 00:00:09.236 align:middle
+Por ejemplo, {{ ship.status }}.
+
+00:00:10.496 --> 00:00:12.696 align:middle
+Cuando actualizamos, ¡se imprime!
+
+00:00:12.986 --> 00:00:14.196 align:middle
+Aunque, ¡caramba!
+
+00:00:14.326 --> 00:00:17.116 align:middle
+Los estados se están quedando sin espacio.
+
+00:00:17.416 --> 00:00:19.226 align:middle
+¡Nuestros datos no coinciden con el diseño!
+
+00:00:19.826 --> 00:00:20.586 align:middle
+¡Giro argumental!
+
+00:00:20.866 --> 00:00:23.356 align:middle
+Alguien cambió los requisitos del proyecto...
+
+00:00:23.526 --> 00:00:24.356 align:middle
+¡justo en medio!
+
+00:00:24.736 --> 00:00:26.116 align:middle
+¡Eso "nunca" ocurre!
+
+00:00:26.606 --> 00:00:31.996 align:middle
+El nuevo plan es éste: cada nave debe tener
+un estado de in progress, waiting, o completed.
+
+00:00:32.566 --> 00:00:37.466 align:middle
+En src/Repository/StarshipRepository.php,
+nuestras naves sí tienen un status -es
+
+00:00:37.566 --> 00:00:41.266 align:middle
+este argumento-, pero es una cadena que
+puede establecerse con cualquier valor.
+
+00:00:41.756 --> 00:00:44.296 align:middle
+Así que tenemos que hacer algunas
+refactorizaciones para adaptarnos al nuevo plan.
+
+00:00:44.776 --> 00:00:48.096 align:middle
+Pensemos: hay exactamente
+tres estados válidos.
+
+00:00:48.486 --> 00:00:50.736 align:middle
+Este es un caso de uso
+perfecto para un enum de PHP.
+
+00:00:50.736 --> 00:00:57.216 align:middle
+Si no estás familiarizado con los enums, son encantadores
+y una forma estupenda de organizar un conjunto
+
+00:00:57.216 --> 00:01:02.196 align:middle
+de estados -como publicado, no publicado
+y borrador- o tamaños -pequeño,
+
+00:01:02.196 --> 00:01:04.336 align:middle
+mediano o grande- o cualquier cosa similar.
+
+00:01:05.186 --> 00:01:07.956 align:middle
+En el directorio Model/ -aunque podría
+estar en cualquier sitio... vamos a
+
+00:01:08.236 --> 00:01:11.026 align:middle
+crear el enum para nuestra
+propia organización -
+
+00:01:11.396 --> 00:01:14.286 align:middle
+crea una nueva clase y
+llámala StarshipStatusEnum.
+
+00:01:14.836 --> 00:01:20.446 align:middle
+En cuanto escribí la palabra enum, PhpStorm
+cambió la plantilla de class a enum.
+
+00:01:21.136 --> 00:01:27.906 align:middle
+Así que no estamos creando una clase, como puedes
+ver, hemos creado un enum Añade un : string al enum
+
+00:01:27.996 --> 00:01:30.486 align:middle
+para hacer lo que se llama un
+"enum respaldado por cadena".
+
+00:01:30.966 --> 00:01:36.386 align:middle
+No profundizaremos demasiado, pero esto nos permite
+definir cada estado, como WAITING y asignarlo
+
+00:01:36.386 --> 00:01:38.626 align:middle
+a una cadena, lo que será útil en un minuto.
+
+00:01:39.396 --> 00:01:44.186 align:middle
+Añade un estado para IN_PROGRESS
+y finalmente uno para COMPLETED.
+
+00:01:46.816 --> 00:01:47.246 align:middle
+Y ya está
+
+00:01:47.396 --> 00:01:52.386 align:middle
+Eso es todo lo que es un enum: un conjunto de
+"estados" que se centralizan en un solo lugar.
+
+00:01:53.146 --> 00:01:55.076 align:middle
+A continuación: abre la clase Starship.
+
+00:01:55.556 --> 00:01:58.096 align:middle
+El último argumento es
+actualmente un estado string.
+
+00:01:58.396 --> 00:02:01.126 align:middle
+Cámbialo para que sea un StarshipStatusEnum.
+
+00:02:01.666 --> 00:02:05.866 align:middle
+Y en la parte inferior, el método getStatus
+devolverá ahora un StarshipStatusEnum.
+
+00:02:06.526 --> 00:02:11.896 align:middle
+Por último, en StarshipRepository donde
+creamos cada Starship, mi editor está enfadado.
+
+00:02:12.166 --> 00:02:13.456 align:middle
+Dice: ¡Eh!
+
+00:02:13.456 --> 00:02:17.506 align:middle
+Este argumento acepta un StarshipStatusEnum,
+¡pero estás pasando una cadena!
+
+00:02:18.086 --> 00:02:19.666 align:middle
+Vamos a calmarlo.
+
+00:02:20.066 --> 00:02:22.976 align:middle
+Cambia esto a StarshipStatusEnum::...
+
+00:02:22.976 --> 00:02:25.616 align:middle
+¡y autocompleta las opciones!
+
+00:02:26.126 --> 00:02:28.236 align:middle
+Hagamos que la primera sea IN_PROGRESS.
+
+00:02:28.736 --> 00:02:32.286 align:middle
+Y eso añadió la declaración use
+para el enum al principio de la clase.
+
+00:02:33.026 --> 00:02:34.626 align:middle
+Para la siguiente, que sea COMPLETED...
+
+00:02:35.886 --> 00:02:37.416 align:middle
+y para la última, WAITING.
+
+00:02:39.216 --> 00:02:40.736 align:middle
+¡Refactorización realizada!
+
+00:02:41.096 --> 00:02:42.126 align:middle
+Bueno... tal vez.
+
+00:02:42.516 --> 00:02:44.856 align:middle
+Cuando actualizamos, ¡arruinado!
+
+00:02:45.186 --> 00:02:49.826 align:middle
+Dice: el objeto de la clase StarshipStatusEnum
+no se ha podido convertir en cadena
+
+00:02:50.416 --> 00:02:53.156 align:middle
+Y viene de la llamada Twig a ship.status.
+
+00:02:53.556 --> 00:02:57.196 align:middle
+Eso tiene sentido: ship.status
+es ahora un enum...
+
+00:02:57.386 --> 00:02:59.996 align:middle
+que no puede imprimirse
+directamente como cadena.
+
+00:03:00.626 --> 00:03:05.446 align:middle
+La solución más fácil, en
+homepage.html.twig, es añadir .value.
+
+00:03:06.176 --> 00:03:11.366 align:middle
+Como hemos hecho que nuestro enum esté respaldado por
+una cadena, tiene una propiedad value, que será la cadena
+
+00:03:11.366 --> 00:03:13.476 align:middle
+que asignamos al estado actual.
+
+00:03:14.486 --> 00:03:15.126 align:middle
+Pruébalo ahora.
+
+00:03:15.816 --> 00:03:17.136 align:middle
+¡Tiene una pinta estupenda!
+
+00:03:17.766 --> 00:03:19.796 align:middle
+En curso, completado, esperando.
+
+00:03:20.546 --> 00:03:24.256 align:middle
+A continuación: vamos a aprender cómo podemos
+hacer este último cambio un poco más elegante
+
+00:03:24.256 --> 00:03:27.456 align:middle
+creando métodos más inteligentes
+en nuestra clase Starship.
+
+00:03:27.906 --> 00:03:29.966 align:middle
+Luego daremos los toques
+finales a nuestro diseño.

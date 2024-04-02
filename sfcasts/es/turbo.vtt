@@ -1,0 +1,271 @@
+WEBVTT
+
+00:00:01.126 --> 00:00:04.566 align:middle
+Cuando construyo una interfaz de usuario,
+quiero que sea bonita, interactiva y fluida.
+
+00:00:05.156 --> 00:00:09.966 align:middle
+Personalmente, elijo no utilizar frameworks
+frontales como React o Vue o Next.
+
+00:00:10.216 --> 00:00:11.236 align:middle
+Pero tú puedes...
+
+00:00:11.356 --> 00:00:14.506 align:middle
+y no tienen nada de malo:
+son herramientas estupendas.
+
+00:00:15.016 --> 00:00:18.016 align:middle
+Además, ¡construir una
+API en Symfony es genial!
+
+00:00:18.526 --> 00:00:22.436 align:middle
+Pero si quieres construir tu HTML en
+Twig -como a mí me encanta hacer-,
+
+00:00:22.686 --> 00:00:27.366 align:middle
+¡podemos tener una interfaz de usuario
+interactiva, receptiva y súper rica!
+
+00:00:27.896 --> 00:00:32.326 align:middle
+Una gran pieza de una interfaz elegante es
+eliminar las recargas de página completa.
+
+00:00:32.796 --> 00:00:38.226 align:middle
+Ahora mismo, cuando hago clic, mira: es
+rápido, pero son recargas de página completa.
+
+00:00:38.656 --> 00:00:41.866 align:middle
+Eso no ocurre si utilizas
+algo como React o Vue.
+
+00:00:42.676 --> 00:00:45.616 align:middle
+Para eliminarlas, vamos a
+utilizar otra biblioteca
+
+00:00:45.616 --> 00:00:48.736 align:middle
+de la misma gente que hizo
+Stimulus, llamada Turbo.
+
+00:00:49.296 --> 00:00:54.646 align:middle
+Turbo puede hacer muchas cosas, pero su función
+principal es eliminar los refrescos de página completa.
+
+00:00:55.246 --> 00:00:57.436 align:middle
+Al igual que Stimulus, es
+una biblioteca de JavaScript.
+
+00:00:57.726 --> 00:01:01.806 align:middle
+Y también como Stimulus, Symfony
+tiene un bundle que ayuda a integrarla.
+
+00:01:02.526 --> 00:01:10.256 align:middle
+Busca tu terminal y ejecuta: composer
+require symfony/ux-turbo Esta vez,
+
+00:01:10.256 --> 00:01:12.596 align:middle
+la receta ha hecho dos cambios interesantes.
+
+00:01:12.806 --> 00:01:13.326 align:middle
+Te los mostraré.
+
+00:01:13.756 --> 00:01:19.896 align:middle
+El primero está en importmap.php: añadió
+el paquete JavaScript @hotwired/turbo.
+
+00:01:20.466 --> 00:01:23.866 align:middle
+El segundo cambio está en
+assets/controllers.json.
+
+00:01:24.296 --> 00:01:28.466 align:middle
+Antes no hablamos de este archivo, pero
+fue añadido por la receta StimulusBundle:
+
+00:01:28.796 --> 00:01:33.706 align:middle
+es una forma de activar los controladores
+Stimulus que viven dentro de paquetes de terceros.
+
+00:01:34.316 --> 00:01:39.566 align:middle
+Así que el paquete PHP symfony/ux-turbo que acabamos
+de instalar tiene dentro un controlador JavaScript
+
+00:01:39.566 --> 00:01:40.996 align:middle
+llamado turbo-core.
+
+00:01:41.626 --> 00:01:47.356 align:middle
+Y como aquí tenemos enabled: true, significa que
+ese controlador está ahora registrado y disponible:
+
+00:01:47.556 --> 00:01:50.696 align:middle
+es como si viviera en nuestro
+directorio assets/controllers/.
+
+00:01:51.346 --> 00:01:54.096 align:middle
+Ahora no vamos a utilizar
+este controlador directamente:
+
+00:01:54.186 --> 00:01:56.366 align:middle
+no vamos a adjuntarlo a un elemento.
+
+00:01:56.796 --> 00:01:58.986 align:middle
+Pero el hecho de que esté cargado y registrado
+
+00:01:58.986 --> 00:02:02.306 align:middle
+en Stimulus es suficiente para
+activar Turbo en nuestro sitio.
+
+00:02:02.986 --> 00:02:04.396 align:middle
+¿Qué diablos significa eso?
+
+00:02:04.786 --> 00:02:08.526 align:middle
+Es como magia: actualiza la página y ¡bam!
+
+00:02:08.796 --> 00:02:10.816 align:middle
+¡Las recargas de página completa desaparecen!
+
+00:02:11.356 --> 00:02:15.366 align:middle
+Mira aquí arriba: cuando vuelva a
+hacer clic, no verás que se recarga.
+
+00:02:16.016 --> 00:02:19.906 align:middle
+¡Pum! Es superrápido y todo
+ocurre a través de Ajax.
+
+00:02:20.866 --> 00:02:22.166 align:middle
+Así es como funciona.
+
+00:02:22.586 --> 00:02:27.866 align:middle
+Cuando hacemos clic en este enlace, Turbo intercepta
+el clic y, en lugar de recargar toda la página,
+
+00:02:28.036 --> 00:02:30.196 align:middle
+hace una llamada Ajax a esa página.
+
+00:02:30.686 --> 00:02:36.326 align:middle
+Esa llamada Ajax devuelve el HTML completo de esa
+página y luego Turbo lo pone en esta página.
+
+00:02:36.916 --> 00:02:41.156 align:middle
+Esa pequeña cosa transforma nuestro proyecto
+en una aplicación de una sola página
+
+00:02:41.386 --> 00:02:44.846 align:middle
+y marca una gran diferencia en
+cuanto a la rapidez de nuestro sitio.
+
+00:02:45.526 --> 00:02:46.626 align:middle
+Pero hay una cosa más.
+
+00:02:47.086 --> 00:02:48.276 align:middle
+Actualizaré para que podamos verlo.
+
+00:02:49.026 --> 00:02:53.976 align:middle
+Cada vez que haces una llamada Ajax en una aplicación Symfony
+- ya sea a través de Turbo o de cualquier otra forma -
+
+00:02:54.356 --> 00:02:56.666 align:middle
+la Barra de Herramientas
+de Depuración Web lo nota.
+
+00:02:57.086 --> 00:02:58.796 align:middle
+Míralo por aquí cuando haga clic.
+
+00:02:59.476 --> 00:03:00.136 align:middle
+¡Fíjate!
+
+00:03:00.626 --> 00:03:04.776 align:middle
+Tenemos una lista en funcionamiento de todas
+las llamadas Ajax realizadas en esta página.
+
+00:03:05.366 --> 00:03:09.676 align:middle
+Y si queremos ver el perfil de cualquiera de esas
+peticiones Ajax, podemos hacer clic en el enlace.
+
+00:03:10.186 --> 00:03:11.096 align:middle
+Y sí...
+
+00:03:11.326 --> 00:03:11.786 align:middle
+aquí está.
+
+00:03:12.226 --> 00:03:14.786 align:middle
+Aquí está la petición Ajax que
+se hizo para la página de inicio.
+
+00:03:15.296 --> 00:03:20.436 align:middle
+Aunque con Turbo, ni siquiera necesitas recurrir
+a este truco porque, a medida que hacemos clic,
+
+00:03:20.626 --> 00:03:24.746 align:middle
+toda esta barra es sustituida por la nueva Barra
+de Herramientas de Depuración Web para la página.
+
+00:03:25.516 --> 00:03:30.566 align:middle
+Ah, y escucha esto: en Turbo 8, que ya está a
+la venta, tu sitio parecerá aún más rápido.
+
+00:03:31.156 --> 00:03:33.746 align:middle
+Eso es gracias a una nueva función llamada
+Clic Instantáneo. Con ella, cuando pasas
+
+00:03:34.156 --> 00:03:36.536 align:middle
+el ratón por encima de un enlace,
+
+00:03:36.766 --> 00:03:40.276 align:middle
+Turbo hace una llamada Ajax a esa
+página antes de que hagas clic.
+
+00:03:40.786 --> 00:03:43.766 align:middle
+Entonces, cuando hagas clic, se
+cargará instantáneamente...
+
+00:03:43.996 --> 00:03:45.506 align:middle
+o al menos tiene una ventaja.
+
+00:03:46.236 --> 00:03:50.596 align:middle
+Turbo tiene muchas otras funciones, y utilizamos
+un montón de ellas en nuestro Tutorial LAST Stack
+
+00:03:50.716 --> 00:03:54.536 align:middle
+, donde construimos un frontend con ventanas emergentes,
+modales, notificaciones tostadas y mucho más.
+
+00:03:55.206 --> 00:03:56.636 align:middle
+Pero una nota sobre Turbo.
+
+00:03:56.996 --> 00:04:00.316 align:middle
+Dado que las recargas de página
+completa ya no existen, tu JavaScript
+
+00:04:00.316 --> 00:04:02.496 align:middle
+debe estar diseñado para gestionarlas.
+
+00:04:03.016 --> 00:04:05.896 align:middle
+Mucho JavaScript espera
+recargas de página completas...
+
+00:04:06.226 --> 00:04:10.876 align:middle
+y si de repente se añade HTML a la
+página sin una recarga, se rompe.
+
+00:04:11.366 --> 00:04:14.496 align:middle
+La buena noticia es que si escribes tu
+JavaScript en Stimulus, todo irá bien.
+
+00:04:14.966 --> 00:04:17.356 align:middle
+Observa. No importa cómo
+lleguemos a la página de inicio,
+
+00:04:17.436 --> 00:04:20.996 align:middle
+nuestro JavaScript para cerrar la
+barra lateral sigue funcionando.
+
+00:04:21.846 --> 00:04:24.166 align:middle
+Muy bien equipo, ¡estamos en la recta final!
+
+00:04:24.456 --> 00:04:28.186 align:middle
+Antes de terminar, quiero hacer un último
+capítulo extra en el que jugaremos
+
+00:04:28.186 --> 00:04:31.236 align:middle
+con la impresionante herramienta de
+generación de Symfony: MakerBundle.
