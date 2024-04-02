@@ -78,7 +78,7 @@ If it's equal to `IN_PROGRESS` return this string and so on.
 And exactly like before, because we have a `getStatusImageFilename()` method, we
 get to, in Twig, *pretend* like we have a `statusImageFilename` property.
 
-[[[ code('c3ca2a3021') ]]]
+[[[ code('d4ee2c4232') ]]]
 
 And now, we got it!
 
