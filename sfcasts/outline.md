@@ -93,9 +93,13 @@
 ## Using the HTTP Client
 
 - Let's fetch some data from an API on the homepage.
-- We're going to talk to an API that tells us where the ISS is right now.
+- We'll show this up in the header later
+- Right now we're going to talk to an API that tells us where the ISS is right now.
 - You can see it at https://api.wheretheiss.at/v1/satellites/25544
-- And we'll show this up in the header
+- Do the request in `homepage()` and `dump()` the result
+- Refresh the page to see the dump
+- Show the HTTP Client panel in the WDT
+- Pass the data in template and render it
 
 ## Cache Service and cache Pools
 
@@ -105,9 +109,29 @@
 - Run `debug:autowiring cache` to see if we already have any cache
   related services - we do!
 - Cache pool is just a unique namespace for cache items
-- Typehint with `CacheItemPoolInterface` to get the cache service
-- Cache the API response for a minute
+- Typehint with `CacheInterface` to get the cache service
+- Cache the API response for 1 minute
 - Refresh the page - notice no HTTP client request, but there's a cache icon
-- Show the Cache panel in the profiler
+- Show the Cache panel in the WDT
+- We didn't create a custom pool for it, so default `app` is used, but you can create custom ones
+- Maybe even show `var/cache/dev/pools/`
 
 ## Bundle / service config
+
+- You can control services via configuration
+- Create a custom cache pool in the cache.yaml config
+- Run `debug:autowiring cache` again to see a new service
+- Change to `CacheInterface $issLocationPool`
+- Update the page and see WDT
+- Clear the cache with `cache:pool:clear iss_location_pool`
+- Refresh the page again
+- We're controlling how services are instantiated
+- Call `debug:config framework cache` - this will show you the current config
+- In order to see the full config - call `config:dump framework cache`
+- Let's set `default_lifetime: 60` for our pool in the config
+- Now drop the `expiresAfter(60)` call
+
+## Autowiring
+
+debug:container
+how autowiring works
