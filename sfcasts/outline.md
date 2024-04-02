@@ -218,7 +218,13 @@
 
 - So far, we've talked about the container being full of service objects
 - That's true: but it holds one more thing: scalar config called "parameters"
-- ... WIP
+- Run `debug:container --parameters`
+- Mention useful `kernel.project_dir` or `kernel.environment` in the output
+- But how to get it from the controller? Dump `getParameter('kernel.project_dir')`
+- But most of the time you need to inject them into services, you can do it
+    with a special `%` syntax, open `config/packages/twig.yaml` to see
+- ? Is there a better example of showing it? Maybe create `iss_location_cache_ttl`?
+    Or `cache_adapter` like we did in Sf6 course?
 
 ## Non-Autowireable Args
 
@@ -226,3 +232,8 @@
 - Fix with the `Autowire` attribute
 - Maybe also autowire a non-autowireable service, perhaps something
      silly like the `debug:twig` command object
+  
+## Non-autowireable services
+
+- ... WIP - the twig.command.debug service?
+
