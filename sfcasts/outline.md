@@ -240,6 +240,7 @@
     just to be different from the old course.
 - Mention that controllers are also services, but kinda special with a super-power
     to autowire arguments in actions, not only in the cosntructor.
+- Show `autowire: true` in `services.yaml`
 - Inject the service into `homepage()` controller - makes sure Symfony shows an error
 - Add PHP attr above the arg: `#[Autowire(service: 'twig.command.debug')]`
 - Refresh the page to see no errors
@@ -255,3 +256,31 @@
 php bin/console debug:dotenv
 env var processors
 secrets vault
+
+## Autoconfiguration
+
+- Install Maker bundle with `com req maker --dev`
+- Explain `--dev`, maybe even show the `composer.json` after
+- TODO Create a new command with `make:command`, how about `TalkToAiCommand`?
+    We could create a token in OpenAI, IIRC it should have some free version right? If
+    no free version available - probably not an option then :/ But it 
+    would help us with an example for env vars, we will inject API token in to a command,
+    or probably better to create a standalone service in the Services section?
+    Of course we can use simple implementation of printing the AI response,
+    i.e. print the whole answer at once instead of complicating with streaming response.
+- TODO Another, simpler than AI, idea - make a command that will allow users to make
+    an appointment at the car... I mean, starship service, since we have StarShop topic :) 
+- Show the bootstrapped command
+- Run the command in CLI to see it works
+- But how command classes are, of course, understood as commands?
+- Is it because of the `Command/` dir?
+- Show `autoconfigure: true` in `services.yaml`
+
+## Customizing the command
+
+- Explain command options/arguments
+- Run the command with `--help`
+- Explain `$input`/`$output` concept
+- Implement the command
+- See it in action
+- TODO Still need a good example with tags
