@@ -196,9 +196,6 @@
 
 ## Services
 
-- Maybe we skip this or just review it? We created a service in ep1
-- Actually, for this section, let's talk about `services.yaml`,
-   autoregistration, etc
 - We know that services come from bundles
   - And every service is the combination of an id, a class and a set of arguments
 - But we can also create our own services. And we have!
@@ -225,13 +222,13 @@
     with a special `%` syntax, open `config/packages/twig.yaml` to see
 - ? Is there a better example of showing it? Maybe create `iss_location_cache_ttl`?
     Or `cache_adapter` like we did in Sf6 course?
-
+   -> Yes, I like this idea. It's not strictly necessary - and we can say that -
+         but it's a good example - but we should show it in the next section
+         about non-autowireable args
 ## Non-Autowireable Args
 
 - ... WIP - probably try to autowire a parameter.
 - Fix with the `Autowire` attribute
-- Maybe also autowire a non-autowireable service, perhaps something
-     silly like the `debug:twig` command object
   
 ## Non-autowireable services
 
@@ -239,8 +236,10 @@
     `twig.command.debug` service?  Probably would be nice to use a different one
     just to be different from the old course.
 - Mention that controllers are also services, but kinda special with a super-power
-    to autowire arguments in actions, not only in the cosntructor.
+    to autowire arguments in actions, not only in the constructor.
 - Show `autowire: true` in `services.yaml`
+  - I don't think we need to mention this - we talk about this in a previous
+    section
 - Inject the service into `homepage()` controller - makes sure Symfony shows an error
 - Add PHP attr above the arg: `#[Autowire(service: 'twig.command.debug')]`
 - Refresh the page to see no errors
@@ -250,37 +249,34 @@
 
 ## Env vars
 
-- ... WIP - .env
-%env()% syntax
-.env.local and others
-php bin/console debug:dotenv
-env var processors
-secrets vault
+- The key about env vars are that they're config that needs to be different
+      on different environments - like dev vs prod.
+  - The most common example is the database connection info
+- You can set real env vars in your OS. But since that's tricky, we also
+    have `.env` files
+- Show `.env` file
+- We can show `env(APP_SECRET)` in `framework.yaml`
+- Then we can convert the `iss_location_cache_ttl` to an env var, with the idea
+      that we might want to change it to be longer on production
+- Mention `.env.local` and how it's special because it's not committed
+- Also mention other, less-common `.env` files like `.env.test` and `.env.prod`
+- php bin/console debug:dotenv
+- env var processors
+- secrets vault - I think just mention this, but not show it.
+  - This is a way to have env vars that you can commit to your repo, but
+  are encrypted.
 
 ## Autoconfiguration
 
 - Install Maker bundle with `com req maker --dev`
-- Explain `--dev`, maybe even show the `composer.json` after
-- TODO Create a new command with `make:command`, how about `TalkToAiCommand`?
-    We could create a token in OpenAI, IIRC it should have some free version right? If
-    no free version available - probably not an option then :/ But it 
-    would help us with an example for env vars, we will inject API token in to a command,
-    or probably better to create a standalone service in the Services section?
-    Of course we can use simple implementation of printing the AI response,
-    i.e. print the whole answer at once instead of complicating with streaming response.
-- TODO Another, simpler than AI, idea - make a command that will allow users to make
-    an appointment at the car... I mean, starship service, since we have StarShop topic :) 
-- Show the bootstrapped command
-- Run the command in CLI to see it works
-- But how command classes are, of course, understood as commands?
-- Is it because of the `Command/` dir?
-- Show `autoconfigure: true` in `services.yaml`
-
-## Customizing the command
-
-- Explain command options/arguments
-- Run the command with `--help`
-- Explain `$input`/`$output` concept
-- Implement the command
-- See it in action
-- TODO Still need a good example with tags
+  - Actually, it's already installed and we talked about `--dev` in ep1
+- TODO: we created a command in the previous course, so how about a Twig extension
+    instead for the ISS location so we can show the data in `base.html.twig`?
+- We would show how the interface causes the "tag" so that Twig is aware
+  - I like the idea of asking "How does Twig know to use this class? Is it the
+    class directory?
+- We can also show our already-created command. And say that sometimes 
+    `autoconfigure` is powered by an interface. But other times, it works,
+    via an attribute, like the command.
+    - In both cases, you create a class, add the interface of attribute...
+         and... bam! Symfony recognizes what you're creating and integrates it
