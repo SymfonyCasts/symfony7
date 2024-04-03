@@ -235,5 +235,23 @@
   
 ## Non-autowireable services
 
-- ... WIP - the twig.command.debug service?
+- Find a service in `debug:container` that is not autowirable, how about
+    `twig.command.debug` service?  Probably would be nice to use a different one
+    just to be different from the old course.
+- Mention that controllers are also services, but kinda special with a super-power
+    to autowire arguments in actions, not only in the cosntructor.
+- Inject the service into `homepage()` controller - makes sure Symfony shows an error
+- Add PHP attr above the arg: `#[Autowire(service: 'twig.command.debug')]`
+- Refresh the page to see no errors
+- Create an output: `$output = new BufferedOutput();`
+- And run the command: `$this->twigDebugCommand->run(new ArrayInput([]), $output);`
+- Dump the output and refresh the page
 
+## Env vars
+
+- ... WIP - .env
+%env()% syntax
+.env.local and others
+php bin/console debug:dotenv
+env var processors
+secrets vault
