@@ -144,6 +144,7 @@
   - change how it instantiates its services
 - Call `debug:config framework` - this will show you the current config
 - In order to see the full config - call `config:dump framework`
+- Mention that you can output the subconfig with `config:dump framework cache`
 - Show `cache.yaml` one
   - Really still part of the `framework` config, just separated out for
     organization
@@ -220,16 +221,25 @@
 - But how to get it from the controller? Dump `getParameter('kernel.project_dir')`
 - But most of the time you need to inject them into services, you can do it
     with a special `%` syntax, open `config/packages/twig.yaml` to see
-- ? Is there a better example of showing it? Maybe create `iss_location_cache_ttl`?
-    Or `cache_adapter` like we did in Sf6 course?
-   -> Yes, I like this idea. It's not strictly necessary - and we can say that -
-         but it's a good example - but we should show it in the next section
-         about non-autowireable args
+
 ## Non-Autowireable Args
 
-- ... WIP - probably try to autowire a parameter.
+- But how to inject non-autowirable args into services?
+- Create `iss_location_cache_ttl` param in `services.yaml`?
+- Let's see how we can inject parameters in services
+- Yes, we already know we can easily get it with `getParameter('iss_location_cache_ttl')`
+    in a controller, but let's try to autowire it in the `homepage()` - that's how
+    you will do it in a service's constructors
+- Update the page to see an error about Symfony cannot autowire that arg
 - Fix with the `Autowire` attribute
-  
+- Dump the value
+- Comment the dumped value in the `homepage()` and use it in the `cache.yaml`
+    as `%iss_location_cache_ttl%` 
+- ? Should we also mention `services._defaults.bind` in addition to the new `Autowire`?
+    It might be a useful thing to autowire something globally in the project and avoid
+    duplicating `Autowire` in several places, but if we don't have a good example for it
+    probably ignore or just mention it?
+
 ## Non-autowireable services
 
 - Find a service in `debug:container` that is not autowirable, how about
@@ -237,15 +247,13 @@
     just to be different from the old course.
 - Mention that controllers are also services, but kinda special with a super-power
     to autowire arguments in actions, not only in the constructor.
-- Show `autowire: true` in `services.yaml`
-  - I don't think we need to mention this - we talk about this in a previous
-    section
 - Inject the service into `homepage()` controller - makes sure Symfony shows an error
 - Add PHP attr above the arg: `#[Autowire(service: 'twig.command.debug')]`
 - Refresh the page to see no errors
 - Create an output: `$output = new BufferedOutput();`
 - And run the command: `$this->twigDebugCommand->run(new ArrayInput([]), $output);`
 - Dump the output and refresh the page
+- Comment out the code to keep it for users 
 
 ## Env vars
 
@@ -253,30 +261,35 @@
       on different environments - like dev vs prod.
   - The most common example is the database connection info
 - You can set real env vars in your OS. But since that's tricky, we also
-    have `.env` files
+    have `.env` files that simplify our life
 - Show `.env` file
-- We can show `env(APP_SECRET)` in `framework.yaml`
-- Then we can convert the `iss_location_cache_ttl` to an env var, with the idea
-      that we might want to change it to be longer on production
 - Mention `.env.local` and how it's special because it's not committed
 - Also mention other, less-common `.env` files like `.env.test` and `.env.prod`
-- php bin/console debug:dotenv
-- env var processors
-- secrets vault - I think just mention this, but not show it.
+- We can show `%env(APP_SECRET)%` in `framework.yaml`
+- Then we can convert the `iss_location_cache_ttl` param to an env var, with the idea
+    that we might want to change it to be longer on production
+- Basically, we will keep `iss_location_cache_ttl` but set it to `%env(ISS_LOCATION_CACHE_TTL)%`
+- The `debug:dotenv` command
+- Env var processors, e.g. we can use `int:` for `ISS_LOCATION_CACHE_TTL`
+- Dump the value again in the `homepage()` see we're working with integer instead of a string
+- Secrets vault - I think just mention this, but not show it.
   - This is a way to have env vars that you can commit to your repo, but
-  are encrypted.
+      are encrypted.
 
 ## Autoconfiguration
 
-- Install Maker bundle with `com req maker --dev`
-  - Actually, it's already installed and we talked about `--dev` in ep1
-- TODO: we created a command in the previous course, so how about a Twig extension
-    instead for the ISS location so we can show the data in `base.html.twig`?
+- We already have Maker bundle - we installed it in the previous course
+- Create a Twig extension so we can show the ISS location data in `base.html.twig`
 - We would show how the interface causes the "tag" so that Twig is aware
   - I like the idea of asking "How does Twig know to use this class? Is it the
     class directory?
 - We can also show our already-created command. And say that sometimes 
     `autoconfigure` is powered by an interface. But other times, it works,
     via an attribute, like the command.
-    - In both cases, you create a class, add the interface of attribute...
-         and... bam! Symfony recognizes what you're creating and integrates it
+    - In both cases, you create a class, add the interface or attribute...
+        and... bam! Symfony recognizes what you're creating and integrates it
+- Create a Twig function
+- Move the logic from the `homepage()` to the Twig function
+- Inject missing dependencies in the Twig extension: HttpClient, Cache, ttl param.
+- Render the data in the header (base template) so its available on any page
+    not only on homepage.
