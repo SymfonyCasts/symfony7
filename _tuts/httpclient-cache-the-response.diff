@@ -1,5 +1,5 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 4eb0c6a..9614ad8 100644
+index 4eb0c6a..e48167e 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
 @@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +23,7 @@ index 4eb0c6a..9614ad8 100644
 -        $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
 -        $issData = $response->toArray();
 +        $issData = $cache->get('iss_location_data', function (ItemInterface $item) use ($client): array {
-+            $item->expiresAfter(60); // Cache for 1 minute
++            $item->expiresAfter(5);
 +
 +            $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
 +

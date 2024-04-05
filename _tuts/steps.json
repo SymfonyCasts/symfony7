@@ -61,15 +61,30 @@
             "description": null
         },
         {
-            "id": "httpclient-remove-dd",
-            "name": "HttpClient: remove dd()",
+            "id": "httpclient-remove-dd-call",
+            "name": "HttpClient: Remove dd() call",
+            "description": null
+        },
+        {
+            "id": "httpclient-change-to-cache-adapter-filesystem",
+            "name": "HttpClient: Change to cache.adapter.filesystem",
             "description": null
         },
         {
             "id": "httpclient-use-custom-cache-pool",
             "name": "HttpClient: Use custom cache pool",
             "description": null
+        },
+        {
+            "id": "httpclient-set-default-lifetime-in-config",
+            "name": "HttpClient: Set default_lifetime in config",
+            "description": null
+        },
+        {
+            "id": "httpclient-comment-out-expiresafter-call",
+            "name": "HttpClient: Comment out expiresAfter() call",
+            "description": null
         }
     ],
-    "sha": "3097f92fbbf47be455d4a69edce26314f33c955c"
+    "sha": "8762b84e422b6d5f8e4338102400f80b187f04cb"
 }

@@ -1,9 +1,9 @@
 diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
-index 7050b11..9069c40 100644
+index 2cbe31f..d1bd9af 100644
 --- a/config/packages/cache.yaml
 +++ b/config/packages/cache.yaml
 @@ -17,5 +17,5 @@ framework:
-         app: cache.adapter.array
+         app: cache.adapter.filesystem
  
          # Namespaced pools use the above "app" backend by default
 -        #pools:
@@ -11,7 +11,7 @@ index 7050b11..9069c40 100644
 +        pools:
 +            iss_location_pool: null
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 9614ad8..f1626cc 100644
+index e48167e..85f7385 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
 @@ -17,12 +17,12 @@ class MainController extends AbstractController
@@ -26,6 +26,6 @@ index 9614ad8..f1626cc 100644
  
 -        $issData = $cache->get('iss_location_data', function (ItemInterface $item) use ($client): array {
 +        $issData = $issLocationPool->get('iss_location_data', function (ItemInterface $item) use ($client): array {
-             $item->expiresAfter(60); // Cache for 1 minute
+             $item->expiresAfter(5);
  
              $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');

@@ -1,0 +1,11 @@
+diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
+index d1bd9af..95616ec 100644
+--- a/config/packages/cache.yaml
++++ b/config/packages/cache.yaml
+@@ -18,4 +18,5 @@ framework:
+ 
+         # Namespaced pools use the above "app" backend by default
+         pools:
+-            iss_location_pool: null
++            iss_location_pool:
++                default_lifetime: 5

@@ -1,0 +1,13 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 85f7385..27ff3f2 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -23,7 +23,7 @@ class MainController extends AbstractController
+         $myShip = $ships[array_rand($ships)];
+ 
+         $issData = $issLocationPool->get('iss_location_data', function (ItemInterface $item) use ($client): array {
+-            $item->expiresAfter(5);
++            //$item->expiresAfter(5);
+ 
+             $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
+ 

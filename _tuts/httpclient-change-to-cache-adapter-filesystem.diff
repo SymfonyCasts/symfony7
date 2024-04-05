@@ -1,0 +1,13 @@
+diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
+index 7050b11..2cbe31f 100644
+--- a/config/packages/cache.yaml
++++ b/config/packages/cache.yaml
+@@ -14,7 +14,7 @@ framework:
+         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
+         #app: cache.adapter.apcu
+ 
+-        app: cache.adapter.array
++        app: cache.adapter.filesystem
+ 
+         # Namespaced pools use the above "app" backend by default
+         #pools:
