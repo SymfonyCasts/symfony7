@@ -273,10 +273,14 @@
 - We can show `%env(APP_SECRET)%` in `framework.yaml`
 - Then we can convert the `iss_location_cache_ttl` param to an env var, with the idea
     that we might want to change it to be longer on production
-- Basically, we will keep `iss_location_cache_ttl` but set it to `%env(ISS_LOCATION_CACHE_TTL)%`
 - The `debug:dotenv` command
-- Env var processors, e.g. we can use `int:` for `ISS_LOCATION_CACHE_TTL`
-- Dump the value again in the `homepage()` see we're working with integer instead of a string
+- Basically, we will keep `iss_location_cache_ttl` but set it to `%env(ISS_LOCATION_CACHE_TTL)%`
+- Uncomment the debug param statement in `homepage()`
+- It's subtle, but you might notice the value is string now
+- All env vars are just simple strings by default, but there's a way to "typcast" them 
+    to a different type
+- Env var processors! Add `int:` for `ISS_LOCATION_CACHE_TTL`
+- Update the page to see the value is int now
 - Secrets vault - I think just mention this, but not show it.
   - This is a way to have env vars that you can commit to your repo, but
       are encrypted.
@@ -285,6 +289,9 @@
 
 - We already have Maker bundle - we installed it in the previous course
 - Create a Twig extension so we can show the ISS location data in `base.html.twig`
+    with `make:twig-extension` command
+- But 2 files were created! Explain Extension & Runtime concept
+- Comment out `getFilters()`
 - We would show how the interface causes the "tag" so that Twig is aware
   - I like the idea of asking "How does Twig know to use this class? Is it the
     class directory?
@@ -295,6 +302,10 @@
         and... bam! Symfony recognizes what you're creating and integrates it
 - Create a Twig function
 - Move the logic from the `homepage()` to the Twig function
-- Inject missing dependencies in the Twig extension: HttpClient, Cache, ttl param.
+- Inject missing dependencies in the Twig extension: HttpClient & Cache.
+- Mention that we would inject that ttl param the same way in the constructor
+- Update the page to see an error
+- Fix homepage template to render the data again
 - Render the data in the header (base template) so its available on any page
     not only on homepage.
+- Make sure it works on other pages too
