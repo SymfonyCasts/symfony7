@@ -149,7 +149,10 @@
   - Really still part of the `framework` config, just separated out for
     organization
 - Set cache provider to `cache.adapter.array`
-- See in action
+- Update to see it in the dump
+- Remove the dump
+- See `cache.adapter.array` in action
+- TODO We need to revert that `cache.adapter.array` somewhere, as it almost means no cache now
 
 ## Autowiring
 
