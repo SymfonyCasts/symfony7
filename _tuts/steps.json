@@ -46,45 +46,50 @@
             "description": null
         },
         {
-            "id": "httpclient-cache-the-response",
-            "name": "HttpClient: Cache the response",
+            "id": "cache-cache-iss-location-data",
+            "name": "Cache: Cache ISS location data",
             "description": null
         },
         {
-            "id": "httpclient-dump-cache",
-            "name": "HttpClient: Dump cache",
+            "id": "cache-dump-cache-service",
+            "name": "Cache: Dump cache service",
             "description": null
         },
         {
-            "id": "httpclient-change-to-cache-adapter-array",
-            "name": "HttpClient: Change to cache.adapter.array",
+            "id": "cache-change-to-cache-adapter-array",
+            "name": "Cache: Change to cache.adapter.array",
             "description": null
         },
         {
-            "id": "httpclient-remove-dd-call",
-            "name": "HttpClient: Remove dd() call",
+            "id": "cache-remove-dd-call",
+            "name": "Cache: Remove dd() call",
             "description": null
         },
         {
-            "id": "httpclient-change-to-cache-adapter-filesystem",
-            "name": "HttpClient: Change to cache.adapter.filesystem",
+            "id": "cache-change-to-cache-adapter-filesystem",
+            "name": "Cache: Change to cache.adapter.filesystem",
             "description": null
         },
         {
-            "id": "httpclient-use-custom-cache-pool",
-            "name": "HttpClient: Use custom cache pool",
+            "id": "autowiring-use-custom-cache-pool",
+            "name": "Autowiring: Use custom cache pool",
             "description": null
         },
         {
-            "id": "httpclient-set-default-lifetime-in-config",
-            "name": "HttpClient: Set default_lifetime in config",
+            "id": "autowiring-set-default-lifetime-in-config",
+            "name": "Autowiring: Set default_lifetime in config",
             "description": null
         },
         {
-            "id": "httpclient-comment-out-expiresafter-call",
-            "name": "HttpClient: Comment out expiresAfter() call",
+            "id": "autowiring-comment-out-expiresafter-call",
+            "name": "Autowiring: Comment out expiresAfter() call",
+            "description": null
+        },
+        {
+            "id": "env-change-app-env-to-prod",
+            "name": "Env: Change APP_ENV to prod",
             "description": null
         }
     ],
-    "sha": "497ca65422dd3f8b18cec04ca3e1fffa45654165"
+    "sha": "280a0b0f8b43d257d056b1d687f9e9240f82d45a"
 }
