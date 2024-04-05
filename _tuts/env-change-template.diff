@@ -1,0 +1,13 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 6f8d044..45b04a0 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -55,7 +55,7 @@
+             <div>
+                 <h2 class="text-4xl font-semibold my-8">ISS Location</h2>
+ 
+-                <p>Time: {{ issData.timestamp|date }}</p>
++                <p>Updated At: {{ issData.timestamp|date }}</p>
+                 <p>Altitude: {{ issData.altitude }}</p>
+                 <p>Latitude: {{ issData.latitude }}</p>
+                 <p>Longitude: {{ issData.longitude }}</p>

@@ -1,0 +1,13 @@
+diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
+index ddfdb6b..117478e 100644
+--- a/config/packages/cache.yaml
++++ b/config/packages/cache.yaml
+@@ -20,3 +20,8 @@ framework:
+         pools:
+             iss_location_pool:
+                 default_lifetime: 5
++
++when@prod:
++    framework:
++        cache:
++            app: cache.adapter.filesystem

@@ -66,8 +66,8 @@
             "description": null
         },
         {
-            "id": "cache-change-to-cache-adapter-filesystem",
-            "name": "Cache: Change to cache.adapter.filesystem",
+            "id": "delete-me-1",
+            "name": "DELETE_ME_1",
             "description": null
         },
         {
@@ -89,7 +89,22 @@
             "id": "env-change-app-env-to-prod",
             "name": "Env: Change APP_ENV to prod",
             "description": null
+        },
+        {
+            "id": "env-change-template",
+            "name": "Env: Change template",
+            "description": null
+        },
+        {
+            "id": "env-set-cache-adapter-filesystem-for-prod",
+            "name": "Env: Set cache.adapter.filesystem for prod",
+            "description": null
+        },
+        {
+            "id": "env-revert-app-env-to-dev",
+            "name": "Env: Revert APP_ENV to dev",
+            "description": null
         }
     ],
-    "sha": "280a0b0f8b43d257d056b1d687f9e9240f82d45a"
+    "sha": "e201a640bec8c0d1bbd5a6d1b34d46bdfe8a86a3"
 }

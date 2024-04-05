@@ -1,9 +1,9 @@
 diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
-index 2cbe31f..d1bd9af 100644
+index 7050b11..9069c40 100644
 --- a/config/packages/cache.yaml
 +++ b/config/packages/cache.yaml
 @@ -17,5 +17,5 @@ framework:
-         app: cache.adapter.filesystem
+         app: cache.adapter.array
  
          # Namespaced pools use the above "app" backend by default
 -        #pools:
