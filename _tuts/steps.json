@@ -86,25 +86,75 @@
             "description": null
         },
         {
-            "id": "env-change-app-env-to-prod",
-            "name": "Env: Change APP_ENV to prod",
+            "id": "prod-env-change-app-env-to-prod",
+            "name": "Prod env: Change APP_ENV to prod",
             "description": null
         },
         {
-            "id": "env-change-template",
-            "name": "Env: Change template",
+            "id": "prod-env-change-template",
+            "name": "Prod env: Change template",
             "description": null
         },
         {
-            "id": "env-set-cache-adapter-filesystem-for-prod",
-            "name": "Env: Set cache.adapter.filesystem for prod",
+            "id": "prod-env-set-cache-adapter-filesystem-for-prod",
+            "name": "Prod env: Set cache.adapter.filesystem for prod",
             "description": null
         },
         {
-            "id": "env-revert-app-env-to-dev",
-            "name": "Env: Revert APP_ENV to dev",
+            "id": "prod-env-revert-app-env-to-dev",
+            "name": "Prod env: Revert APP_ENV to dev",
+            "description": null
+        },
+        {
+            "id": "parameters-get-kernel-project-dir",
+            "name": "Parameters: Get kernel.project_dir",
+            "description": null
+        },
+        {
+            "id": "parameters-create-new-param",
+            "name": "Parameters: Create new param",
+            "description": null
+        },
+        {
+            "id": "parameters-dump-new-param",
+            "name": "Parameters: Dump new param",
+            "description": null
+        },
+        {
+            "id": "parameters-inject-param-into-homepage",
+            "name": "Parameters: Inject param into homepage()",
+            "description": null
+        },
+        {
+            "id": "parameters-add-autowire-attribute",
+            "name": "Parameters: Add Autowire attribute",
+            "description": null
+        },
+        {
+            "id": "parameters-use-param-in-the-config",
+            "name": "Parameters: Use param in the config",
+            "description": null
+        },
+        {
+            "id": "non-autowirable-services-inject-twig-debug-command",
+            "name": "Non-autowirable services: Inject Twig debug command",
+            "description": null
+        },
+        {
+            "id": "non-autowirable-services-add-autowire-attribute",
+            "name": "Non-autowirable services: Add Autowire attribute",
+            "description": null
+        },
+        {
+            "id": "non-autowirable-services-run-the-command-and-dump-the-output",
+            "name": "Non-autowirable services: Run the command and dump the output",
+            "description": null
+        },
+        {
+            "id": "non-autowirable-services-comment-out-the-output",
+            "name": "Non-autowirable services: Comment out the output",
             "description": null
         }
     ],
-    "sha": "dbb02202e3e09d7b25fc28d6ab8bff9ae140614e"
+    "sha": "b71211a7bf340667193f1762cf25ab27d9356e61"
 }

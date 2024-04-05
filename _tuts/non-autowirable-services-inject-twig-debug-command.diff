@@ -1,0 +1,20 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 1343d4d..4a8a659 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -3,6 +3,7 @@
+ namespace App\Controller;
+ 
+ use App\Repository\StarshipRepository;
++use Symfony\Bridge\Twig\Command\DebugCommand;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\DependencyInjection\Attribute\Autowire;
+ use Symfony\Component\HttpFoundation\Request;
+@@ -21,6 +22,7 @@ class MainController extends AbstractController
+         CacheInterface $issLocationPool,
+         #[Autowire('%iss_location_cache_ttl%')]
+         $issLocationCacheTtl,
++        DebugCommand $twigDebugCommand,
+     ): Response {
+         //dd($issLocationCacheTtl);
+         $ships = $starshipRepository->findAll();

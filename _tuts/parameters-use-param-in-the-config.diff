@@ -1,0 +1,26 @@
+diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
+index 117478e..522a0bc 100644
+--- a/config/packages/cache.yaml
++++ b/config/packages/cache.yaml
+@@ -19,7 +19,7 @@ framework:
+         # Namespaced pools use the above "app" backend by default
+         pools:
+             iss_location_pool:
+-                default_lifetime: 5
++                default_lifetime: '%iss_location_cache_ttl%'
+ 
+ when@prod:
+     framework:
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 0463373..1343d4d 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -22,7 +22,7 @@ class MainController extends AbstractController
+         #[Autowire('%iss_location_cache_ttl%')]
+         $issLocationCacheTtl,
+     ): Response {
+-        dd($issLocationCacheTtl);
++        //dd($issLocationCacheTtl);
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+ 

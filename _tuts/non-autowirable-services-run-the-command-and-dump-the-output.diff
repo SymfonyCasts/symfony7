@@ -1,0 +1,27 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index f976f7d..9767994 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -5,6 +5,8 @@ namespace App\Controller;
+ use App\Repository\StarshipRepository;
+ use Symfony\Bridge\Twig\Command\DebugCommand;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\Console\Input\ArrayInput;
++use Symfony\Component\Console\Output\BufferedOutput;
+ use Symfony\Component\DependencyInjection\Attribute\Autowire;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+@@ -26,6 +28,13 @@ class MainController extends AbstractController
+         DebugCommand $twigDebugCommand,
+     ): Response {
+         //dd($issLocationCacheTtl);
++
++        /*
++        $output = new BufferedOutput();
++        $twigDebugCommand->run(new ArrayInput([]), $output);
++        dd($output);
++        */
++
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+ 

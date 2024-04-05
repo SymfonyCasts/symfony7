@@ -1,0 +1,20 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index db4dc18..0463373 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -4,6 +4,7 @@ namespace App\Controller;
+ 
+ use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\DependencyInjection\Attribute\Autowire;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -18,6 +19,7 @@ class MainController extends AbstractController
+         StarshipRepository $starshipRepository,
+         HttpClientInterface $client,
+         CacheInterface $issLocationPool,
++        #[Autowire('%iss_location_cache_ttl%')]
+         $issLocationCacheTtl,
+     ): Response {
+         dd($issLocationCacheTtl);

@@ -1,0 +1,12 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 27ff3f2..d495192 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -19,6 +19,7 @@ class MainController extends AbstractController
+         HttpClientInterface $client,
+         CacheInterface $issLocationPool,
+     ): Response {
++        dd($this->getParameter('kernel.project_dir'));
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+ 
