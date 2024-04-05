@@ -230,8 +230,11 @@
 - Create `iss_location_cache_ttl` param in `services.yaml`?
 - Let's see how we can inject parameters in services
 - Yes, we already know we can easily get it with `getParameter('iss_location_cache_ttl')`
-    in a controller, but let's try to autowire it in the `homepage()` - that's how
-    you will do it in a service's constructors
+    in a controller:
+- Let's dump this instead to see it works too
+- But how we can **inject** it in the `homepage()` - that's how you will do it in
+    a service's constructors
+- Let's just try to add it as an argument
 - Update the page to see an error about Symfony cannot autowire that arg
 - Fix with the `Autowire` attribute
 - Dump the value
@@ -250,12 +253,12 @@
 - Mention that controllers are also services, but kinda special with a super-power
     to autowire arguments in actions, not only in the constructor.
 - Inject the service into `homepage()` controller - makes sure Symfony shows an error
-- Add PHP attr above the arg: `#[Autowire(service: 'twig.command.debug')]`
+- Add PHP attr above the arg: `#[Autowire('@twig.command.debug')]`
 - Refresh the page to see no errors
 - Create an output: `$output = new BufferedOutput();`
 - And run the command: `$this->twigDebugCommand->run(new ArrayInput([]), $output);`
 - Dump the output and refresh the page
-- Comment out the code to keep it for users 
+- Comment out the code to keep it for users just for the reference
 
 ## Env vars
 
