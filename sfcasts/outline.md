@@ -152,7 +152,6 @@
 - Update to see it in the dump
 - Remove the dump
 - See `cache.adapter.array` in action
-- TODO We need to revert that `cache.adapter.array` somewhere, as it almost means no cache now
 
 ## Autowiring
 
@@ -190,7 +189,7 @@
 
 - Set `APP_ENV=prod`
 - Update the page to see that WDT is gone
-- Try to change something in the template - nothing updated
+- Try to change something in the template (Time -> Updated at) - nothing updated
 - Clear the cache with `cache:clear`
 - And update the page again to see changes
 - Mention `cache:clear --env=prod`
