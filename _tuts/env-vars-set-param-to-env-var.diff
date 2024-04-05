@@ -1,0 +1,13 @@
+diff --git a/config/services.yaml b/config/services.yaml
+index b7d853c..3fb35f5 100644
+--- a/config/services.yaml
++++ b/config/services.yaml
+@@ -4,7 +4,7 @@
+ # Put parameters here that don't need to change on each machine where the app is deployed
+ # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+ parameters:
+-    iss_location_cache_ttl: 5
++    iss_location_cache_ttl: '%env(ISS_LOCATION_CACHE_TTL)%'
+ 
+ services:
+     # default configuration for services in *this* file

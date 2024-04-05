@@ -1,0 +1,13 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 9767994..57c9a40 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -27,7 +27,7 @@ class MainController extends AbstractController
+         #[Autowire('@twig.command.debug')]
+         DebugCommand $twigDebugCommand,
+     ): Response {
+-        //dd($issLocationCacheTtl);
++        dd($issLocationCacheTtl);
+ 
+         /*
+         $output = new BufferedOutput();

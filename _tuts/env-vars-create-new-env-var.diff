@@ -1,0 +1,10 @@
+diff --git a/.env b/.env
+index 2e97593..5b5b808 100644
+--- a/.env
++++ b/.env
+@@ -17,3 +17,5 @@
+ ###> symfony/framework-bundle ###
+ APP_ENV=dev
+ APP_SECRET=930f26d714e6fa9188943d7e037a63fa
++
++ISS_LOCATION_CACHE_TTL=5

@@ -1,0 +1,29 @@
+diff --git a/src/Twig/Extension/AppExtension.php b/src/Twig/Extension/AppExtension.php
+index 0525596..769212c 100644
+--- a/src/Twig/Extension/AppExtension.php
++++ b/src/Twig/Extension/AppExtension.php
+@@ -9,15 +9,15 @@ use Twig\TwigFunction;
+ 
+ class AppExtension extends AbstractExtension
+ {
+-    public function getFilters(): array
+-    {
+-        return [
+-            // If your filter generates SAFE HTML, you should add a third
+-            // parameter: ['is_safe' => ['html']]
+-            // Reference: https://twig.symfony.com/doc/3.x/advanced.html#automatic-escaping
+-            new TwigFilter('filter_name', [AppExtensionRuntime::class, 'doSomething']),
+-        ];
+-    }
++//    public function getFilters(): array
++//    {
++//        return [
++//            // If your filter generates SAFE HTML, you should add a third
++//            // parameter: ['is_safe' => ['html']]
++//            // Reference: https://twig.symfony.com/doc/3.x/advanced.html#automatic-escaping
++//            new TwigFilter('filter_name', [AppExtensionRuntime::class, 'doSomething']),
++//        ];
++//    }
+ 
+     public function getFunctions(): array
+     {

@@ -1,0 +1,26 @@
+diff --git a/src/Twig/Extension/AppExtension.php b/src/Twig/Extension/AppExtension.php
+index 769212c..17e2090 100644
+--- a/src/Twig/Extension/AppExtension.php
++++ b/src/Twig/Extension/AppExtension.php
+@@ -22,7 +22,7 @@ class AppExtension extends AbstractExtension
+     public function getFunctions(): array
+     {
+         return [
+-            new TwigFunction('function_name', [AppExtensionRuntime::class, 'doSomething']),
++            new TwigFunction('get_iss_location_data', [AppExtensionRuntime::class, 'getIssLocationData']),
+         ];
+     }
+ }
+diff --git a/src/Twig/Runtime/AppExtensionRuntime.php b/src/Twig/Runtime/AppExtensionRuntime.php
+index eb9e189..9046ab4 100644
+--- a/src/Twig/Runtime/AppExtensionRuntime.php
++++ b/src/Twig/Runtime/AppExtensionRuntime.php
+@@ -11,7 +11,7 @@ class AppExtensionRuntime implements RuntimeExtensionInterface
+         // Inject dependencies if needed
+     }
+ 
+-    public function doSomething($value)
++    public function getIssLocationData($value)
+     {
+         // ...
+     }

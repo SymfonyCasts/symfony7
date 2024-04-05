@@ -1,0 +1,12 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 45b04a0..b1573ba 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -52,6 +52,7 @@
+                 <a href="#" class="underline font-semibold">Browse the {{ ships|length * 10 }} starships for sale!</a>
+             </p>
+ 
++            {% set issData = get_iss_location_data() %}
+             <div>
+                 <h2 class="text-4xl font-semibold my-8">ISS Location</h2>
+ 

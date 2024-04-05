@@ -154,7 +154,67 @@
             "id": "non-autowirable-services-comment-out-the-output",
             "name": "Non-autowirable services: Comment out the output",
             "description": null
+        },
+        {
+            "id": "env-vars-create-new-env-var",
+            "name": "Env vars: Create new env var",
+            "description": null
+        },
+        {
+            "id": "env-vars-set-param-to-env-var",
+            "name": "Env vars: Set param to env var",
+            "description": null
+        },
+        {
+            "id": "env-vars-uncomment-debug-statement-for-isslocationcachettl",
+            "name": "Env vars: Uncomment debug statement for issLocationCacheTtl",
+            "description": null
+        },
+        {
+            "id": "env-vars-add-int-processor",
+            "name": "Env vars: Add int: processor",
+            "description": null
+        },
+        {
+            "id": "env-vars-comment-the-debug-again",
+            "name": "Env vars: Comment the debug again",
+            "description": null
+        },
+        {
+            "id": "autoconfig-create-twig-extension",
+            "name": "Autoconfig: Create Twig extension",
+            "description": null
+        },
+        {
+            "id": "autoconfig-comment-out-filters",
+            "name": "Autoconfig: Comment out filters",
+            "description": null
+        },
+        {
+            "id": "autoconfig-create-getisslocationdata-twig-function",
+            "name": "Autoconfig: Create getIssLocationData Twig function",
+            "description": null
+        },
+        {
+            "id": "autoconfig-implement-getisslocationdata",
+            "name": "Autoconfig: Implement getIssLocationData",
+            "description": null
+        },
+        {
+            "id": "autoconfig-inject-missing-dependecies",
+            "name": "Autoconfig: Inject missing dependecies",
+            "description": null
+        },
+        {
+            "id": "autoconfig-fix-template",
+            "name": "Autoconfig: Fix template",
+            "description": null
+        },
+        {
+            "id": "autoconfig-render-in-template",
+            "name": "Autoconfig: Render in template",
+            "description": null
         }
     ],
-    "sha": "30d0a1944e95b1320f605e646cbe942e056f0cf0"
+    "sha": "ad50bcb2776db22aeece427e3f9b1b626417c07b"
 }
