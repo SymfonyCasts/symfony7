@@ -1,8 +1,8 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 04a5058..48cb2d4 100644
+index 04a5058..cadc655 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
-@@ -4,17 +4,23 @@ namespace App\Controller;
+@@ -4,17 +4,25 @@ namespace App\Controller;
  
  use App\Repository\StarshipRepository;
  use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,8 +15,11 @@ index 04a5058..48cb2d4 100644
  {
      #[Route('/', name: 'app_homepage')]
 -    public function homepage(StarshipRepository $starshipRepository): Response
-+    public function homepage(StarshipRepository $starshipRepository, HttpClientInterface $client): Response
-     {
+-    {
++    public function homepage(
++        StarshipRepository $starshipRepository,
++        HttpClientInterface $client,
++    ): Response {
          $ships = $starshipRepository->findAll();
          $myShip = $ships[array_rand($ships)];
  

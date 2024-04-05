@@ -56,6 +56,11 @@
             "description": null
         },
         {
+            "id": "httpclient-change-to-cache-adapter-array",
+            "name": "HttpClient: Change to cache.adapter.array",
+            "description": null
+        },
+        {
             "id": "httpclient-remove-dd",
             "name": "HttpClient: remove dd()",
             "description": null
@@ -66,5 +71,5 @@
             "description": null
         }
     ],
-    "sha": "3f428df8563ebf72b1d9591092f2db8d15ff1f8c"
+    "sha": "636595d79db3577e3e01c5df0f63d9a98b128949"
 }

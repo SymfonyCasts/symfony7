@@ -1,0 +1,28 @@
+diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
+index 6899b72..7050b11 100644
+--- a/config/packages/cache.yaml
++++ b/config/packages/cache.yaml
+@@ -14,6 +14,8 @@ framework:
+         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
+         #app: cache.adapter.apcu
+ 
++        app: cache.adapter.array
++
+         # Namespaced pools use the above "app" backend by default
+         #pools:
+             #my.dedicated.cache: null
+diff --git a/sfcasts/outline.md b/sfcasts/outline.md
+index 1e21e7c..5366365 100644
+--- a/sfcasts/outline.md
++++ b/sfcasts/outline.md
+@@ -149,7 +149,9 @@
+   - Really still part of the `framework` config, just separated out for
+     organization
+ - Set cache provider to `cache.adapter.array`
+-- See in action
++- Update to see it in the dump
++- Remove the dump
++- See `cache.adapter.array` in action
+ 
+ ## Autowiring
+ 

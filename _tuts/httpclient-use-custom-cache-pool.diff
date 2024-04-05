@@ -1,26 +1,38 @@
 diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
-index 6899b72..2416e08 100644
+index 7050b11..9069c40 100644
 --- a/config/packages/cache.yaml
 +++ b/config/packages/cache.yaml
-@@ -15,5 +15,5 @@ framework:
-         #app: cache.adapter.apcu
+@@ -17,5 +17,5 @@ framework:
+         app: cache.adapter.array
  
          # Namespaced pools use the above "app" backend by default
 -        #pools:
 -            #my.dedicated.cache: null
 +        pools:
 +            iss_location_pool: null
+diff --git a/sfcasts/outline.md b/sfcasts/outline.md
+index 5366365..bbf79b4 100644
+--- a/sfcasts/outline.md
++++ b/sfcasts/outline.md
+@@ -152,6 +152,7 @@
+ - Update to see it in the dump
+ - Remove the dump
+ - See `cache.adapter.array` in action
++- TODO We need to revert that `cache.adapter.array` somewhere, as it almost means no cache now 
+ 
+ ## Autowiring
+ 
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index a209df2..76fd7f2 100644
+index 9614ad8..f1626cc 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
-@@ -14,12 +14,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
- class MainController extends AbstractController
- {
-     #[Route('/', name: 'app_homepage')]
--    public function homepage(StarshipRepository $starshipRepository, HttpClientInterface $client, CacheInterface $cache): Response
-+    public function homepage(StarshipRepository $starshipRepository, HttpClientInterface $client, CacheInterface $issLocationPool): Response
-     {
+@@ -17,12 +17,12 @@ class MainController extends AbstractController
+     public function homepage(
+         StarshipRepository $starshipRepository,
+         HttpClientInterface $client,
+-        CacheInterface $cache,
++        CacheInterface $issLocationPool,
+     ): Response {
          $ships = $starshipRepository->findAll();
          $myShip = $ships[array_rand($ships)];
  
