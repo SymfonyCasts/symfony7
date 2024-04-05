@@ -10,18 +10,6 @@ index 7050b11..9069c40 100644
 -            #my.dedicated.cache: null
 +        pools:
 +            iss_location_pool: null
-diff --git a/sfcasts/outline.md b/sfcasts/outline.md
-index 5366365..bbf79b4 100644
---- a/sfcasts/outline.md
-+++ b/sfcasts/outline.md
-@@ -152,6 +152,7 @@
- - Update to see it in the dump
- - Remove the dump
- - See `cache.adapter.array` in action
-+- TODO We need to revert that `cache.adapter.array` somewhere, as it almost means no cache now 
- 
- ## Autowiring
- 
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
 index 9614ad8..f1626cc 100644
 --- a/src/Controller/MainController.php

@@ -11,18 +11,3 @@ index 6899b72..7050b11 100644
          # Namespaced pools use the above "app" backend by default
          #pools:
              #my.dedicated.cache: null
-diff --git a/sfcasts/outline.md b/sfcasts/outline.md
-index 1e21e7c..5366365 100644
---- a/sfcasts/outline.md
-+++ b/sfcasts/outline.md
-@@ -149,7 +149,9 @@
-   - Really still part of the `framework` config, just separated out for
-     organization
- - Set cache provider to `cache.adapter.array`
--- See in action
-+- Update to see it in the dump
-+- Remove the dump
-+- See `cache.adapter.array` in action
- 
- ## Autowiring
- 
