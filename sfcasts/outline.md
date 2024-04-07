@@ -323,11 +323,22 @@
     - In both cases, you create a class, add the interface or attribute...
         and... bam! Symfony recognizes what you're creating and integrates it
 - Create a Twig function
-- Move the logic from the `homepage()` to the Twig function
+- Copy/paste the logic from the `homepage()` to the Twig function
 - Inject missing dependencies in the Twig extension: HttpClient & Cache.
-- Mention that we would inject that ttl param the same way in the constructor
+    and change the local variables to `$this->` calls
+- Mention that we could inject the ttl param the same way in the constructor
+    using `Autowire` attribute
+- Now, remove the old code from the controller
 - Update the page to see an error
 - Fix homepage template to render the data again
 - Render the data in the header (base template) so its available on any page
     not only on homepage.
 - Make sure it works on other pages too
+
+- That's it! You now know the fundamentals of Symfony: services, config and environments.
+- These power EVERYTHING in Symfony. You're on your way to being unstoppable!
+- In the next tutorial, we'll introduce Doctrine: the industry-standard way to work with databases in PHP.
+- Until then, practice! Go build something... anything! And tell us about it.
+- If you have any questions, thoughts or just want to say hi, we're here for you
+   down in the comments section.
+- Alright friends, See you next time!
