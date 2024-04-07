@@ -1,13 +1,12 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 57c9a40..9767994 100644
+index 520040b..e8d5c4a 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
-@@ -27,7 +27,7 @@ class MainController extends AbstractController
-         #[Autowire('@twig.command.debug')]
-         DebugCommand $twigDebugCommand,
+@@ -23,7 +23,6 @@ class MainController extends AbstractController
+         HttpClientInterface $client,
+         CacheInterface $issLocationPool,
      ): Response {
--        dd($issLocationCacheTtl);
-+        //dd($issLocationCacheTtl);
+-        dd($this->getParameter('iss_location_cache_ttl'));
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
  
-         /*
-         $output = new BufferedOutput();

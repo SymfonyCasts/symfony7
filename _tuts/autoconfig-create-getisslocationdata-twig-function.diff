@@ -1,8 +1,8 @@
 diff --git a/src/Twig/Extension/AppExtension.php b/src/Twig/Extension/AppExtension.php
-index 769212c..17e2090 100644
+index 87ba218..9e417b1 100644
 --- a/src/Twig/Extension/AppExtension.php
 +++ b/src/Twig/Extension/AppExtension.php
-@@ -22,7 +22,7 @@ class AppExtension extends AbstractExtension
+@@ -12,7 +12,7 @@ class AppExtension extends AbstractExtension
      public function getFunctions(): array
      {
          return [

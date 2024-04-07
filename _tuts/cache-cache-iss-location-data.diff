@@ -1,5 +1,5 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 4eb0c6a..e48167e 100644
+index 63ded4d..602834e 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
 @@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,12 +20,12 @@ index 4eb0c6a..e48167e 100644
          $ships = $starshipRepository->findAll();
          $myShip = $ships[array_rand($ships)];
  
--        $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
+-        $response = $client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');
 -        $issData = $response->toArray();
 +        $issData = $cache->get('iss_location_data', function (ItemInterface $item) use ($client): array {
 +            $item->expiresAfter(5);
 +
-+            $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
++            $response = $client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');
 +
 +            return $response->toArray();
 +        });

@@ -1,13 +1,15 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 85f7385..27ff3f2 100644
+index 5738475..605d817 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
-@@ -23,7 +23,7 @@ class MainController extends AbstractController
+@@ -22,9 +22,7 @@ class MainController extends AbstractController
+         $ships = $starshipRepository->findAll();
          $myShip = $ships[array_rand($ships)];
  
-         $issData = $issLocationPool->get('iss_location_data', function (ItemInterface $item) use ($client): array {
+-        $issData = $issLocationPool->get('iss_location_data', function (ItemInterface $item) use ($client): array {
 -            $item->expiresAfter(5);
-+            //$item->expiresAfter(5);
+-
++        $issData = $issLocationPool->get('iss_location_data', function () use ($client): array {
+             $response = $client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');
  
-             $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
- 
+             return $response->toArray();

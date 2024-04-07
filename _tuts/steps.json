@@ -151,8 +151,8 @@
             "description": null
         },
         {
-            "id": "non-autowirable-services-comment-out-the-output",
-            "name": "Non-autowirable services: Comment out the output",
+            "id": "delete-me-2",
+            "name": "delete me 2",
             "description": null
         },
         {
@@ -166,8 +166,8 @@
             "description": null
         },
         {
-            "id": "env-vars-uncomment-debug-statement-for-isslocationcachettl",
-            "name": "Env vars: Uncomment debug statement for issLocationCacheTtl",
+            "id": "delete-me-3",
+            "name": "delete me 3",
             "description": null
         },
         {
@@ -206,6 +206,11 @@
             "description": null
         },
         {
+            "id": "autoconfig-remove-controller-code",
+            "name": "Autoconfig: Remove controller code",
+            "description": null
+        },
+        {
             "id": "autoconfig-fix-template",
             "name": "Autoconfig: Fix template",
             "description": null
@@ -216,5 +221,5 @@
             "description": null
         }
     ],
-    "sha": "31556d6f34ce0e58e890528d318acc8261cd95ac"
+    "sha": "f5a8b24b49d6a06d452c7809d10dd4144be82f8f"
 }

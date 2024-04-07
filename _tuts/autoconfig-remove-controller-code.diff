@@ -1,0 +1,27 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index e8d5c4a..269e747 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -20,22 +20,13 @@ class MainController extends AbstractController
+     #[Route('/', name: 'app_homepage')]
+     public function homepage(
+         StarshipRepository $starshipRepository,
+-        HttpClientInterface $client,
+-        CacheInterface $issLocationPool,
+     ): Response {
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+ 
+-        $issData = $issLocationPool->get('iss_location_data', function () use ($client): array {
+-            $response = $client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');
+-
+-            return $response->toArray();
+-        });
+-
+         return $this->render('main/homepage.html.twig', [
+             'myShip' => $myShip,
+             'ships' => $ships,
+-            'issData' => $issData,
+         ]);
+     }
+ }

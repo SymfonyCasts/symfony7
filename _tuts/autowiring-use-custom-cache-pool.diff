@@ -11,7 +11,7 @@ index 7050b11..9069c40 100644
 +        pools:
 +            iss_location_pool: null
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index e48167e..85f7385 100644
+index 602834e..5738475 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
 @@ -17,12 +17,12 @@ class MainController extends AbstractController
@@ -28,4 +28,4 @@ index e48167e..85f7385 100644
 +        $issData = $issLocationPool->get('iss_location_data', function (ItemInterface $item) use ($client): array {
              $item->expiresAfter(5);
  
-             $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
+             $response = $client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');

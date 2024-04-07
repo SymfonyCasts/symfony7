@@ -1,0 +1,19 @@
+diff --git a/src/Twig/Runtime/AppExtensionRuntime.php b/src/Twig/Runtime/AppExtensionRuntime.php
+index 9046ab4..2fa84a0 100644
+--- a/src/Twig/Runtime/AppExtensionRuntime.php
++++ b/src/Twig/Runtime/AppExtensionRuntime.php
+@@ -11,8 +11,12 @@ class AppExtensionRuntime implements RuntimeExtensionInterface
+         // Inject dependencies if needed
+     }
+ 
+-    public function getIssLocationData($value)
++    public function getIssLocationData()
+     {
+-        // ...
++        return $issLocationPool->get('iss_location_data', function () use ($client): array {
++            $response = $client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');
++
++            return $response->toArray();
++        });
+     }
+ }

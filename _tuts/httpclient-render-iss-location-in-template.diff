@@ -1,10 +1,10 @@
 diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index cadc655..4eb0c6a 100644
+index a4c82c8..63ded4d 100644
 --- a/src/Controller/MainController.php
 +++ b/src/Controller/MainController.php
 @@ -21,11 +21,11 @@ class MainController extends AbstractController
  
-         $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
+         $response = $client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');
          $issData = $response->toArray();
 -        dump($issData);
  

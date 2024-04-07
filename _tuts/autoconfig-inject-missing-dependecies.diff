@@ -1,46 +1,12 @@
-diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
-index 9767994..5fb05e3 100644
---- a/src/Controller/MainController.php
-+++ b/src/Controller/MainController.php
-@@ -20,8 +20,6 @@ class MainController extends AbstractController
-     #[Route('/', name: 'app_homepage')]
-     public function homepage(
-         StarshipRepository $starshipRepository,
--        HttpClientInterface $client,
--        CacheInterface $issLocationPool,
-         #[Autowire('%iss_location_cache_ttl%')]
-         $issLocationCacheTtl,
-         #[Autowire('@twig.command.debug')]
-@@ -38,18 +36,9 @@ class MainController extends AbstractController
-         $ships = $starshipRepository->findAll();
-         $myShip = $ships[array_rand($ships)];
- 
--        $issData = $issLocationPool->get('iss_location_data', function (ItemInterface $item) use ($client): array {
--            //$item->expiresAfter(5);
--
--            $response = $client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
--
--            return $response->toArray();
--        });
--
-         return $this->render('main/homepage.html.twig', [
-             'myShip' => $myShip,
-             'ships' => $ships,
--            'issData' => $issData,
-         ]);
-     }
- }
 diff --git a/src/Twig/Runtime/AppExtensionRuntime.php b/src/Twig/Runtime/AppExtensionRuntime.php
-index 9046ab4..cdb658a 100644
+index 2fa84a0..c8c8499 100644
 --- a/src/Twig/Runtime/AppExtensionRuntime.php
 +++ b/src/Twig/Runtime/AppExtensionRuntime.php
-@@ -2,17 +2,29 @@
+@@ -2,19 +2,22 @@
  
  namespace App\Twig\Runtime;
  
-+use Symfony\Component\HttpFoundation\Request;
 +use Symfony\Contracts\Cache\CacheInterface;
-+use Symfony\Contracts\Cache\ItemInterface;
 +use Symfony\Contracts\HttpClient\HttpClientInterface;
  use Twig\Extension\RuntimeExtensionInterface;
  
@@ -48,23 +14,19 @@ index 9046ab4..cdb658a 100644
  {
 -    public function __construct()
 -    {
+-        // Inject dependencies if needed
 +    public function __construct(
 +        private readonly HttpClientInterface $client,
 +        private readonly CacheInterface $issLocationPool,
 +    ) {
-         // Inject dependencies if needed
      }
  
--    public function getIssLocationData($value)
-+    public function getIssLocationData()
+     public function getIssLocationData()
      {
--        // ...
-+        return $this->issLocationPool->get('iss_location_data', function (ItemInterface $item): array {
-+            //$item->expiresAfter(5);
-+
-+            $response = $this->client->request(Request::METHOD_GET, 'https://api.wheretheiss.at/v1/satellites/25544');
-+
-+            return $response->toArray();
-+        });
-     }
- }
+-        return $issLocationPool->get('iss_location_data', function () use ($client): array {
+-            $response = $client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');
++        return $this->issLocationPool->get('iss_location_data', function (): array {
++            $response = $this->client->request('GET', 'https://api.wheretheiss.at/v1/satellites/25544');
+ 
+             return $response->toArray();
+         });
