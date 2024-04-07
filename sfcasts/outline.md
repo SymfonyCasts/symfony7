@@ -163,12 +163,14 @@
 ## Autowiring
 
 - Run `debug:container`
-- Explain how autowiring works
-- Mention service aliases
+- Explain how autowiring works - any id that happens to be a class or
+    interface name is autowirable.
 - So if a service's id is NOT an interface or class name, it
   is NOT autowirable. And most services are this way on purpose, as they're
   low-level. That's why `debug:container` has so many more entries than
   `debug:autowiring`
+- Mention service aliases - a strategy to make a service, like `logger`,
+      autowirable
 - Btw, are there ever times when there are *multiple* services in the
     container that implement the same class or interface?
 - Create a custom cache pool in the `cache.yaml` config
@@ -190,6 +192,8 @@
 - Explain the `APP_ENV` env var
 - Explain `when@test` e.g. on the same `framework.yaml` config file
 - Also mention `config/packages/{env}` dir
+   and you can see how/why this works in `MicroKernelTrait`, which
+   our `App\Kernel`uses.
 - Show env-specific routing, e.g. `config/routes/web_profiler.yaml`
 
 ## prod environment
@@ -216,6 +220,8 @@
 - `php bin/console debug:autowiring --all`
 - How non-services (i.e. model classes) are technically registered as services,
     but removed later because we don't use them.
+- The point is: to create a service, all we need to do is create a class
+    anywhere in `src/`. And autowiring is automatically enabled for it.
 - Btw, all these YAML files are "identical". It's the root key like
     `services` or `framework` that makes them different
 - But you could copy all the config from every YAML file into a single
@@ -239,10 +245,14 @@
 - Yes, we already know we can easily get it with `getParameter('iss_location_cache_ttl')`
     in a controller:
 - Let's dump this instead to see it works too
-- But how we can **inject** it in the `homepage()` - that's how you will do it in
-    a service's constructors
+- But how could we get this parameter if we were NOT in a controller?
+    Somewhere where there is NOT a `->getParameter()` method?
+- The answer... is to autowire it, just like any other service! This will work
+    in the constructor of any service... or in a controller method... like
+    normal autowiring
 - Let's just try to add it as an argument
 - Update the page to see an error about Symfony cannot autowire that arg
+    - So... we CAN do this, but parameters aren't automatically autowireable
 - Fix with the `Autowire` attribute
 - Dump the value
 - Comment the dumped value in the `homepage()` and use it in the `cache.yaml`
@@ -251,14 +261,19 @@
     It might be a useful thing to autowire something globally in the project and avoid
     duplicating `Autowire` in several places, but if we don't have a good example for it
     probably ignore or just mention it?
+    -> Yes, lets just mention, but not show (like we show the file, but don't
+    actually use it)
 
 ## Non-autowireable services
 
 - Find a service in `debug:container` that is not autowirable, how about
-    `twig.command.debug` service?  Probably would be nice to use a different one
-    just to be different from the old course.
+    `twig.command.debug` service? This is literally the service that powers
+    the `debug:twig` command. And yes! Even though it's a bit odd, we can
+    grab this and use it directly
 - Mention that controllers are also services, but kinda special with a super-power
     to autowire arguments in actions, not only in the constructor.
+  - NOTE: We've already mentioned the above point in tutorial 1, so we probably
+    don't need to mention it again here. Or only briefly.
 - Inject the service into `homepage()` controller - makes sure Symfony shows an error
 - Add PHP attr above the arg: `#[Autowire('@twig.command.debug')]`
 - Refresh the page to see no errors
