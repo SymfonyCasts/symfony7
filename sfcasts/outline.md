@@ -5,17 +5,23 @@
 - no matter what you'll do with Symfony, it comes down to services
 - all about services: the things that do the work in your app
   - and about configuration for those services
-  - and about environments... which are just another way to tweak
+  - and about environments... which is a way to tweak
     those services to act differently locally while developing vs
     on production.
   - Logger service is a good example
 - We call this "Fundamentals" because, truly, after this tutorial,
   everything else is just a variation on these themes.
-- Download course code!
+- Download course code! Unzip to find a `start/` directory with
+     the same code you see here
+- Check out README.md for setup instructions
+- The last step will be to run `symfony server:start` to start the built-in
+  web server
+- Open your browser to `https://localhost:8000` to see our app!
 
 - Reminder: services are objects that do work
   - logger, mailer, database connection, even our controller!
-  - juxtaposed with objects that hold data
+  - compare these with objects that hold data - like `Starship` - those
+    are NOT services
 - `debug:container`
   - The container is responsible for instantiating each service
   - So it knows the class name and every constructor argument
@@ -71,6 +77,7 @@
   we'll install more components.
 - In the last tutorial, we installed the `serializer` component to help us
   serialize objects to JSON.
+  - show the `$this->json()` call in the controller
 - Let's install another component: the `http-client` component.
 - This is good at making external HTTP requests.
 - `composer require symfony/http-client`
