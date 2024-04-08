@@ -51,7 +51,7 @@ then override some blocks! Override `title`... and this time, let's use that
 And for the main content, add the block `body`... `endblock` and put an `h1`
 inside. Print `ship.name` again and... I'll paste in a table with some info.
 
-[[[ code('0988a1b906') ]]]
+[[[ code('50a6a1017a') ]]]
 
 Nothing special here: we're just printing basic ship data.
 
