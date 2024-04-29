@@ -24,7 +24,7 @@ bin/console debug:container
 
 Here you can see a long list of services we can use in our app. But where are these coming from? Who tells the container there should be a `logger` service whose class is `Logger` and it should be instantiated with these arguments? *Some* services are from our code and we'll talk about how those are registered in a bit. But the vast majority comes from bundles. Bundles are just plugins you can add to Symfony applications. They provide a few things, but the most important is services. Each bundle has a config file that says:
 
-`Hey! I want to have a service called "Logger"
+> Hey! I want to have a service called `logger`
 which should be an instance of "Logger", and it
 should be instantiated with these arguments.`
 
