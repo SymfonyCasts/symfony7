@@ -4,3 +4,4 @@ chapters:
     - http-client
     - cache-service
     - bundle-config
+    - autowiring
