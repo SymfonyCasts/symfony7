@@ -5,3 +5,5 @@ chapters:
     - cache-service
     - bundle-config
     - autowiring
+    - environments
+    - prod-environment
