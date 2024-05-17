@@ -4,7 +4,7 @@ I have a secret. When our project was created, it wasn't 15 files. It was...
 *one* file. If you peeked inside the code for the `symfony new` command, you'd
 discover that it's a shortcut for just two things. First, it clones a
 repository called `symfony/skeleton`... which is just *one* file if you ignore the
-license. And second, it runs `composer install`.
+license. And second, it runs `composer install`. 
 
 That's it! But hold on, if that's the case, where in the world did all these other
 files come from? Like, the stuff in `bin/`, `config/` and `src/`?
