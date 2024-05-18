@@ -1,3 +1,25 @@
 # More about Services
 
-So, we already know that services come from bundles and every service is the combination of an ID, a class and a set of arguments that are needed to instantiate it. But we can also create our own services to organize our code for better maintainability. And actually we already created one in the previous episode. Open the repository, a `StarshipRepository` class. We just created it without any configuration and we are able to inject it in `Starship API` controller. But how that was possible? We didn't add any configuration. This all works thanks to the `services.yaml` file. Open it in `config` directory. Below the `services` key we have this part of code that actually makes this work. This code register everything in our `src` directory as a service. But we also exclude some folders like `Dependency Injection`, `ngg` and `kernel.php` file there. That's kinda system file. So this config, including the whole `services.yaml` file, comes with `CoreSymfony` framework bundle. And above we have this `_defaults` key. This is the configuration for all services in this file. And this `auto-wire` key is set to true, that automatically helps to inject dependencies in our service. Also we have this `auto-configure` option also set to true, that automatically registers our services as comments, event subscribers, etc. Head back to your terminal and run `php bin/console debug:autowiring --all`. But this time I will add `--all` option to it, that will show also services that are not a list. Technically non-services, like for example our `Model` class, are registered as services too, but removed later because we don't use them in our code. The point is to create a service all we need to do is create a class somewhere in `src` directory and auto-wiring is automatically enabled for it. By the way, all these `yaml` files are identical, it's the root key like `services` or `framework` etc, that makes them different. That means you could copy all the config from every file into a single `yaml` file and it would work the same way, but we keep them separated for better maintainability. Next, I keep saying that the container holds services, that's true, but it also holds one other thing, a simple configuration called parameters.
+We already know that services come from *bundles*. And every *service* is a combination of an ID, a class, and a set of arguments that are needed to instantiate it. *But*, did you know that we can also create our *own* services to organize our code for better maintainability? Yep! Believe it or not, we already created one in the previous chapter.
+
+Open up `StarshipRepository.php`. We created this *without* configuration and we're still able to use it in `StarshipApiController.php`. But how can we do that? This works thanks to `/config/services.yaml`. Let's open that. Down here, below our `services` key, we see this `App\` section.This code registers everything in our `/src` directory as a *service*. But it also *excludes* some things, like `/DependencyInjection`, `Entity`, and `Kernel.php`. This `services.yaml` file, *including* this config, comes with the core Symfony `FrameworkBundle`.
+
+Up here, we have this `_defaults` key. That's the configuration for *all* of the services in this file. This `autowire` key, set to `true`, *automatically* injects dependencies into our service. We also have this `autoconfigure` key, set to `true`, which automatically registers our services as *comments*, *event subscribers*, etc. Pretty cool!
+
+To see a list of services, at your terminal, run:
+
+```terminal
+bin/console debug:autowiring
+```
+
+But *this time*, let's add
+
+```terminal
+--all
+```
+
+at the end. This will show us *all* of our services - even the ones that aren't aliased. *Technically* non-services like our `Model` class are registered as services too, but they're *removed* later because we're not using them in our code. The point is, to create a service, all we need to do is create a *class* somewhere in our `/src` directory and autowiring is *automatically* enabled for it.
+
+By the way, all these `.yaml` files are *identical*. The *root key*, like `services` or `framework`, is what makes them different. This means you could copy all of the config from every file into a *single* `.yaml` file and it would work the same way. We just keep them separated for maintainability, *and* our sanity.
+
+Next: You've heard me say over and over that the container holds *services*, and that's *true*. But it *also* holds one other thing - a simple configuration called *parameters*.
