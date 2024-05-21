@@ -52,4 +52,4 @@ bin/console debug:twig
 
 and search for `ago`. Here it is! If this `date` looks familiar, that's because it is. That's the one we used before. Let's try the `ago` filter this time. Back over here, replace `date` with `ago`... save, and open the browser. Refresh the homepage and... there it is! We now have this nice "ago" format. *So*, bundles give us *services*, services are *tools*, and tools are *fun*.
 
-Next, let's take a look at a brand new component - HTTP Client.
+Next, let's add even more services by installing new Symfony components.
