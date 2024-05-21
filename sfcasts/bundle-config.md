@@ -28,7 +28,7 @@ That is *a lot* of information. Let's narrow that down. If we want to see the co
 bin/console config:dump framework cache
 ```
 
-*Much* better. Over in `cache.yaml`, we can see that this is still part of the `framework` config - just *separated* for organization. Below this example, let's set `app` to `cache.adapter.array`.
+*Much* better. Over in `cache.yaml`, we can see that this is still part of the `framework` config - just *separated* in different files for organization. Below this example, let's set `app` to `cache.adapter.array`.
 
 Okay, back at the browser, refresh. Awesome! This changed to `ArrayAdapter`. Head over and remove `dd($cache)` so we can see the `cache.array.adapter` in action. Refresh the page again, and... ah! Every time we refresh the page, we're executing the HTTP request, so the cache is *only* live during the request. When we start a new request, the cache invalidates and we see that HTTP request.
 
