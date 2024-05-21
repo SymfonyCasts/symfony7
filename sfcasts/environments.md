@@ -8,7 +8,7 @@ Open `/public/index.php`. This is our front controller, which is executed on eve
 
 That will work, but recently, Symfony introduced a much *cooler* way to do this, using the `when@` syntax. You can see this all over the new configuration. If we open `framework.yaml` for example, down here at the end... here it is - `when@test`! This code will *only* be loaded for the `test` environment.
 
-In our `monolog.yaml` file, we see more of this environment-specific configuration under `when@dev`. This tells Symfony to *only* load this code in our *dev* environment. If we scroll down, we can see configurations for our `test` and `prod` environments as well.
+In our `monolog.yaml` file, we see more of this environment-specific configuration under `when@dev`. This tells Symfony to *only* load this configuration in the *dev* environment. If we scroll down, we can see slightly different configurations for `test` and `prod` environments as well.
 
 If you head back to `MicroKernelTrait`, down here, we can see that the same is true for this `configureRoutes()` method. And in `config/routes/framework.yaml`, we see `when@dev`, meaning we're only importing this set of routes for our `dev` environment. In `web_profiler.yaml`, we have the same thing. So Symfony, by default, has *three* environments (or "modes")  we can use to help with testing: `dev`, `prod` and `test`. You can totally create your own custom environment if needed too, but usually, those three are more than enough to get the job done.
 
