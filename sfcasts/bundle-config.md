@@ -8,7 +8,7 @@ Open the `/config/packages` directory. All of these `.yaml` config files are *au
 > want you to instantiate this `TraceableAdapter`
 > object with a specific set of arguments it needed.
 
-So it looks like our cache is just this `TraceableAdapter`, but if we look *closer*, we can see that it's *actually* a wrapper around a file system, and the cache is stored *inside* the file system. That's cool, but what if we want to store the cache in memory instead? Or somewhere else in the file system? This is where bundle configuration *shines*. Open `framework.yaml` and find this `framework` key. This means we're passing configuration to the `FrameworkBundle`, and it'll *use* that config to change how it instantiates its services. By the way, the file name here isn't important. We *could* call this `pizza.yaml` and it would work just the same.
+So it looks like our cache service is just this `TraceableAdapter`, but if we look *closer*, we can see that it's *actually* a wrapper around a `FilesystemAdapter`, and the cache is stored *inside* the file system. That's cool, but what if we want to store the cache in memory instead? Or somewhere else in the file system? This is where bundle configuration *shines*. Open `framework.yaml` and find this `framework` root key. This means we're passing configuration to the `FrameworkBundle`, and it'll *use* that config to change how it instantiates its services. By the way, the file name here isn't important. We *could* call this `pizza.yaml` and it would work just the same.
 
 Okay, head over to your terminal and run:
 
