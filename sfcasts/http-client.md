@@ -30,7 +30,7 @@ and... there's our `HttpClient`! Now that we have our new service, we can type h
 git status
 ```
 
-you cn see that the only files changed were `composer.json` and `composer.log`. That's okay! What we installed was a *pure* PHP package, and while it *does* contain service classes (which are just classes that do work), it *doesn't* contain any configuration that says:
+you cn see that the only files changed were `composer.json` and `composer.lock`. That's okay! What we installed was a *pure* PHP package, and while it *does* contain service classes (which are just classes that do work), it *doesn't* contain any configuration that says:
 
 `Hey! I want to have a service called "http-client",
 which should be an instance of "HttpClientInterface",
