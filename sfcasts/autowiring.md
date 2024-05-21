@@ -32,6 +32,6 @@ bin/console cache:pool:clear iss_location_pool
 
 That clears the cache for this exact pool without affecting the other pools. Pretty handy!
 
-We can also configure this pool *differently* from other pools. For example, let's set the expiration time for our new pool in the config file. Over in `cache.yaml`, instead of `null`, on a new line, say `default_lifetime: 5`.  The `5` is in *seconds*. This should impact all of the cache items in this pool. Now, in `MainController.php`, we can remove `$item->expiresAfter()`. We can also get rid of this `item` argument altogether. To make sure this is working, over in our browser, refresh the homepage again and... *no errors*. It works! 
+We can also configure this pool *differently* from other pools. For example, let's set the expiration time for our new pool in the config file. Over in `cache.yaml`, instead of `null`, on a new line, say `default_lifetime: 5`.  The `5` is in *seconds*. This should impact all of the cache items in this pool. Now, in `MainController.php`, we can remove `$item->expiresAfter()`. We can also get rid of this `$item` argument altogether. To make sure this is working, over in our browser, refresh the homepage again and... *no errors*. It works! 
 
 Next: Let's talk about *environments* - sets of configurations that help us develop *locally* versus on *production*.
