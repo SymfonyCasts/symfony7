@@ -4,9 +4,9 @@ On our site, customers have a convenient "Ship Repair Queue" that lists all of t
 
 If you forgot which controller is responsible for the homepage, you can always hover over the page info in the web debug toolbar and... boom! It says "MainController :: homepage". Let's open that up - `MainController.php` - and find the `homepage()` action. Down here, we can see that it renders a template: `main/homepage.html.twig`. Open *that*, find the "Ship Repair Queue" and, down here after `{{ ship.name }}`, add a new `<div>` with `Arrived at: {{ ship.arrivedAt }}`. Now, if we head back to the browser and refresh the homepage... ah... an *error*.
 
-`An exception has been thrown during the rendering
-of a template ("Object of class DateTimeImmutable
-could not be converted to string").`
+> An exception has been thrown during the rendering
+> of a template ("Object of class `DateTimeImmutable`
+> could not be converted to string").
 
 That makes sense. PHP can't just print `DateTime` objects because it doesn't know which format we want. How do we fix that? Easy! We can use a Twig filter. Back over here, after `arrivedAt`, say `|date`. If we refresh again... awesome! Here's the date and time in a specific format.
 
