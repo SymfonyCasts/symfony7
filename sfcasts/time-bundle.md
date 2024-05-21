@@ -44,7 +44,7 @@ To see if we can autowire it, let's run another command:
 bin/console debug:autowiring time
 ```
 
-And... we *can*! If we want to use the `ago` format for our date object, this is the typehint we need to use to inject this service in our PHP classes. *But*, since we only want this in our Twig template, there's a better solution. The bundles also come with a Twig integration that provides some nice Twig filters and functions. We can see that if we run
+And... we *can*! If we want to use the `ago` format for our date object, this is the typehint we need to use to inject this service in our PHP classes. *But*, since we only want this in our Twig template, there's a better solution. This bundle also comes with a Twig integration that provides some nice Twig filters and functions. We can see that if we run:
 
 ```terminal
 bin/console debug:twig
