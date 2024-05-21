@@ -4,7 +4,7 @@ Hey, look! It's our favorite command!
 bin/console debug:autowiring
 ```
 
-This shows us a list of some of the services we can autowire in our code. But how does autowiring actually *work*? Let's run another command:
+This shows us a list of the services we can autowire in our code. But how does autowiring actually *work*? Let's run another command:
 
 ```terminal
 bin/console debug:container
