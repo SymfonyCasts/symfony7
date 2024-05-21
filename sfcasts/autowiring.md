@@ -22,7 +22,7 @@ To handle that, back in our code, let's create a custom cache pool. In `config/p
 bin/console debug:autowiring
 ```
 
-And... check it out! This configuration added a brand new service - `iss_location_pool` - which has the *same* `CacheInterface` as `cache.app`. Back over in `src/Controller/MainController.php`, inside `homepage()`, let's change this variable name to `$issLocationPool` and keep the `CacheInterface` typehint the same. Copy that variable name and, down here, paste. This is called "named autowiring" - where our service container looks at the variable name *and* its typehint to implement the correct service. We can also see this with our `logger` service, but it's pretty rare.
+And... check it out! This configuration added a brand new service - `iss_location_pool` - which has the *same* `CacheInterface` as `cache.app`. Back over in `src/Controller/MainController.php`, inside `homepage()`, let's change this variable name to `$issLocationPool` and keep the `CacheInterface` typehint the same. Copy that variable name and, down here, paste. This is called "named autowiring" - where our service container looks at the variable name *and* its typehint to innject the correct service. It's pretty rare, but we can also see this with our `logger` service.
 
 Back at our browser, refresh the page and check the cache profile. Here's our `iss_location_pool` and our `iss_location_data` is written to that pool. If we ever need to *clear* the cache for this pool, over in our terminal, run:
 
