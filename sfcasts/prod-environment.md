@@ -1,3 +1,5 @@
+# The Prod Environment
+
 Open the `.env` file in the root of our project and change this `dev` environment variable to `prod`. To see what changed, back at our browser, refresh. And... hey! Look at that! The web debug toolbar is *gone*. Now, let's try to change something in one of our templates. Open `/templates/main/homepage.html.twig` and, at the bottom, let's change `Time` to `Updated at` so it's more descriptive. If we head back and refresh... *nothing changed*. Why? For performance reasons, templates are *cached*. We made our change *after* the template was cached, so our browser can't see it yet. To fix this, we need to *manually* clear our cache. At your terminal, run:
 
 ```terminal

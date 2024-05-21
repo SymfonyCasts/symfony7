@@ -1,4 +1,50 @@
 # The HTTP Client Service
 
-We know that Symfony is a collection of a ton of independent little PHP libraries, called `components`. We only have a small number installed right now, but as we need more features, we will install more `components`. In the last tutorial, we installed the `Serializer` component to help us serialize objects into JSON format. Open Starship IP Controller, hold a command and click on this `this->json()` method. Here we have `Serializer` component. Let's check if we have this service. We call the `Serialize` method on it. I would like to add some interesting information on the website. How about render real-time location of the ISS, which is International Space Station? Where is the website? Show this information. Check it at whereisiss.ed. This website shows some useful information about the location of the ISS and good news. They also have an API that we can use to fetch ISS coordinates and print on our website. We can copy this URL and open in a new tab to see how it looks like in JSON format. But first, let's check if our application already has an HTTP client, so we could execute some API requests. I switch back to my terminal and run `binconsole debug:autowiring http`. And we do have some HTTP-related services, but nothing looks like an HTTP client. And that's correct, there is no currently any service in our application that can do HTTP requests, but we can install it. Time to install another component, the `http-client` component. This one is good at making external HTTP requests. For this, open run `composer require symfony/http-client`. Where did I get this package name? This is a good question. Well, I just remembered it, but you can easily find it in your browser. Just google for `symfony-http-client`. One of the top results will be a symfony-http-client documentation. And in the installation section, you will see this installation command. It also has some detailed documentation about this component and how to install it. Now let's run `binconsole debug:autowiring http`. And here is our `HttpClient`. This is our new service, and now we can type hinted in our application. But wait, this time no bundles was installed. If you run `git status`, you will see only `composer.json` and `composer.log` files were changed. This is because we just installed a pure PHP package, just a PHP code. So it does contain service classes, which are just classes that do work, but it does not contain any configuration that says, hey, I want to have this service called `http-client`. And it should be an instance of `HttpClient` interface. And it should be instantiated with these specific arguments. So where did this service come from? The answer is a framework bundle. Open `bundles.php` file. And you'll see the first bundle we have is a framework bundle.
-That's the most core bundle of Symfony and it's been in our application since the beginning. It has a special power, it watches for Symfony `components` that are installed and automatically registrates their services. So no big deal, just another way that services will arrive in our application. Next let's put our new service to work. Open main controller and in the `homepage()` action let's type hinted with our new service. I will split this into multiple lines and type `HttpClientInterface` and let's call it `client`. Now below, before the return statement, let's call this `client` and it has some methods and `request` is the one we need. Yes, we want to use `get` method and we want to send this request to this URL. You can copy this link from the page below the video. Let's put this on a variable called `response`. And below call `response` to array that will convert... That is a handy method that decodes JSON into array for us. Let's put the result on an `ISSData` variable. So let's `dump()` this variable. Open the browser and refresh the home page. Now we have a dumped icon from word `dumper` that shows us our data in a plain PHP array. You may also notice another icon that is `HttpClient` icon that shows us total requests that were executed on this page. You may click on the debug to open the Symfony profiler and inspect this on the full page. `HttpClient` is hooked into a web debug toolbar that helps us to show this nice integration and I can see the request that was executed. Now switch back to phpStorm, remove the `dump()` and pass the data to the template. Next open the template and below at the end I will add another view. Let's render all that data. First we need an H2, let's call it `ISSLocationSection`. I will also add some classes. And below I quickly add render some data in a p tag like time. Altitude. Longitude. And let's print visibility, which is `ISSData`, visibility, which is `ISSData`, which is `ISSData`. Let's switch back to the browser and refresh. Here is our ISS location with all the data we just rendered. The only problem I can think about is that now every single time when anybody opens our home page, we are making an HTTP request to the API. And HTTP requests are slow. To fix this, let's leverage another Symfony service, the Cache service.
+We know that Symfony is a collection of *a ton* of independent, teensy tiny PHP libraries, called "components". We only have a small number of them installed right now, but as we need more features, we'll install more components. In the last tutorial, we installed the `serializer` component to help us *serialize* objects into JSON. Head over and open `StarshipApiController.php`. Down here, hold "cmd" or "control" on a Mac and click this `json()` method. Here, we have our `serializer` component. This checks to see if we have this service, and if we *do*, the `serialize()` method is called.
+
+Okay, our site is pretty cool, but wouldn't it be *much cooler* if we... say... rendered the real-time location of the International Space Station (or ISS)? Of course it would! And luckily, a website already exists that shows that information. We'll navigate to `wheretheiss.at` and... check it out! It looks like the ISS is somewhere over the Pacific Ocean at the moment and - *good news* - they also have an API that we can use to fetch the ISS's coordinates and print that on our website. How convenient! You can copy this URL and open it in a new tab to see the JSON.
+
+But *first*, let's check to see if our application already has an HTTP client to help us execute some API requests. Over at your terminal, run:
+
+```terminal
+bin/console debug:autowiring http
+```
+
+And... we *do* have some HTTP-related services, but no HTTP client. And that's right! We *don't* have a service in our app that can do HTTP requests yet, but we *can* install it. To do that, we need the `http-client` component, which, as the name might suggest, is *great* at making external HTTP requests. At your terminal, run:
+
+```terminal
+composer require symfony/http-client
+```
+
+If you're wondering where this package name came from, good question! If you search for "symfony http client" in your browser, one of the top results is this Symfony HTTP Client documentation. Under "Installation", you'll find this terminal command, along with some handy information about the component.
+
+Now, back at our terminal, let's run
+
+```terminal
+bin/console debug:autowiring http
+```
+
+and... there's our `HttpClient`! Now that we have our new service, we can type hint it in our application. But... *wait*... this didn't install any bundles. If you run
+
+```terminal
+git status
+```
+
+you cn see that the only files changed were `composer.json` and `composer.lock`. That's okay! What we installed was a *pure* PHP package, and while it *does* contain service classes (which are just classes that do work), it *doesn't* contain any configuration that says:
+
+> Hey! I want to have a service called "http_client",
+> which should be an instance of `HttpClientInterface`,
+> and it should be instantiated with these specific
+> arguments.
+
+So where did this service come from? The *answer* is FrameworkBundle. Open `config/bundles.php`. The first bundle here is `FrameworkBundle`.
+That's a *core* Symfony bundle, and it has been in our application since the beginning. This bundle's superpower is watching for newly installed Symfony components and automatically registering their services. *Super* convenient.
+
+Now that we have our new `HttpClient`, let's put it to work! Open `MainController.php` and, in `homepage()`, let's type hint our new service. I'll move this onto multiple lines... say `HttpClientInterface`... and call it `$client`. Down here, before the `return` statement, say `$client->`. We have a few methods to choose from, so select `request()`. Inside, say `GET`, and then we need to send a request to this URL. To save you some time, you can copy this link from the page below this video. Over here, add `$response`... and below that, say `$response->toArray()`. That's a handy method that decodes JSON into an array. And finally, we'll add this `$issData` variable. To see if it's working, we can go ahead and `dump($issData)` here.
+
+Over in your browser, refresh the homepage and, down here, if you hover over this icon... *nice*! That's our data! Right beside this is another icon you may have noticed. That's the HTTP Client, and it shows us the total number of requests that were executed on this page. Click this Debug icon to open the Symfony Profiler and inspect it. Our HTTP Client is integrated with the web debug toolbar, and we can see that our request was executed. Awesome!
+
+Back over here, remove the `dump()` and pass that data to the template. In `homepage.html.twig`, down here at the end, add another `<div>`. Inside, add an `<h2>`, and let's call it `ISS Location`. We'll also add some classes to make it look nice. Okay, down here, let's add some `<p>` tags with our data: `Time: {{ issData.timestamp|date }}`, `Altitude: {{ issData.altitude }}`, `Latitude: {{ issData.latitude }}`, `Longitude: {{ issData.longitude }}`, and `Visibility: {{ issData.visibility }}`. Back at our browser, refresh and... here it is! This is the real-time location of the International Space Station with *all* of the data we just rendered! Looking *good*!
+
+As cool as this is, now every time someone navigates to our homepage, we're making an HTTP request to the API, and HTTP requests are *slow*. To fix that, let's leverage *another* Symfony service - the *cache* service.
+
