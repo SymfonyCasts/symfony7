@@ -1,6 +1,6 @@
 # Bundle Config: Configuring the Cache Service
 
-So far, we've learned how to use the HTTP Client and cache services, and we've injected that into the homepage. *But*, we're not responsible for *creating* their objects. We already know that bundles give us services, and when we *autowire* a service, our bundle provides all of the details we need to instantiate it. But if something *else* is responsible for instantiating those objects, how can we control it? The answer is *bundle configuration*.
+So far, we've learned how to use the HTTP Client and cache services, and we've injected that into the `homepage()`. *But*, we're not responsible for *creating* their objects. We already know that bundles give us services, and when we *autowire* a service, our bundle provides all of the details we need to instantiate it. But if something *else* is responsible for instantiating those objects, how can we control it? The answer is *bundle configuration*.
 
 Open the `/config/packages` directory. All of these `.yaml` config files are *automatically* loaded into our Symfony application, and their job is to configure services that each bundle give us. In our `homepage()`, after `Response`, let's `dd($cache)` so we can see the class name of the object we're getting. For example, for the cache service, `FrameworkBundle` tells the service container:
 
