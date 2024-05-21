@@ -13,7 +13,7 @@ That makes sense. PHP can't just print `DateTime` objects because it doesn't kno
 We *can* pass an *optional* `DateTime` format as the first argument to this `|date` filter, but if we skip it, the application's default format will be used. Which one, exactly? Good question! Let's check out the config. At your terminal, run:
 
 ```terminal
-bin/console config:dump twig
+bin/console config:dump-reference twig
 ```
 
 Here, you can see the date format configuration for your application. And if you want to shorten this command instead of typing the full name - `config:dump` - you'll want to do that while you still have a unique name in your application. Otherwise, the console will ask you which command you want to execute.
