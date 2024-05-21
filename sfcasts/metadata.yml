@@ -7,3 +7,9 @@ chapters:
     - autowiring
     - environments
     - prod-environment
+    - services
+    - parameters
+    - non-autowirable-args
+    - non-autowirable-services
+    - environment-variables
+    - autoconfiguration

@@ -1,3 +1,5 @@
+# Symfony Environments
+
 Sometimes, we could really use a set of configurations that help us develop in different scenarios. Luckily, Symfony has just the thing - *environments*.
 
 In the `.env` file (located at the root of our project directory), we have some *environment variables*. These are sets of configurations for our app that we can change depending on which scenario - or *environment* - we're developing in. Symfony reads this file to see which variables we're using and creates that environment.

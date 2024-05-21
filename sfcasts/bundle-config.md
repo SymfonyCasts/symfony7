@@ -1,4 +1,35 @@
 # Bundle Config: Configuring the Cache Service
 
-Configuring the cache services. So far we use HTTP client and cache services. We injected it into the `homepage()`. But we are not responsible for creating their objects. We know that bundles give us services. And when we autowire a service it means that the bundle provides all the details about how to instantiate it. But if something else is responsible for instantiating those objects, how can we control it? And the answer is bundle configuration. Go check `config/packages/` directory. All those yaml config files are loaded automatically into our Symfony application. And their purpose is to configure services that each bundle give us. In the home page right in the beginning let's add `dd($cache)` to see the class name of the object we get. For example, for the cache service `FrameworkBundle` tells the service container Hey, when I ask for the cache interface service, I want you to instantiate this `Symfony TraceableAdapter` object with a specific set of arguments. So the cache is just this `TraceableAdapter`. But if you look inside of it, that's just a small wrapper around a file system. So apparently the cache is stored in the file system. What if we want to store the cache in memory instead? Or in a different place of the file system? The answer is bundles configuration. Open `framework.yaml.config` file. The important part is the root `framework` key. That means we are passing configuration to the `FrameworkBundle`. And it will use that config to change how it instantiates its services. And by the way, the actual file name is not important. I can rename this file to anything like `pizza.yaml` and it still will work exactly the same. Open terminal and call `bin/console debug:config framework`. This will show you the current config. In order to see the full config, call `bin/console config:dump framework`. You can shortify that config list that is pretty huge. And output the subconfig with `config dump framework cache`. To see the configuration that's responsible for cache service only. Now let's open the `cache.yaml` file. As you can see, it's really still part of the `framework` config, just separated for organization. Below the example, let's set our app cache to `cache.adapter.array`. And now switch back to browser and refresh.
-Now you can see that we use `array adapter` for our `app cache`. Let's remove the `dd($cache)` and see the `array cache adapter` in action. Refresh the page again. Actually, every time you refresh the page, we execute the `HTTP request`. So the cache is only live during the request. When I start a new request, cache invalidates and we see that `HTTP` requests.
+So far, we've learned how to use the HTTP Client and cache services, and we've injected that into the `homepage()`. *But*, we're not responsible for *creating* their objects. We already know that bundles give us services, and when we *autowire* a service, our bundle provides all of the details we need to instantiate it. But if something *else* is responsible for instantiating those objects, how can we control it? The answer is *bundle configuration*.
+
+Open the `/config/packages` directory. All of these `.yaml` config files are *automatically* loaded into our Symfony application, and their job is to configure services that each bundle give us. In our `homepage()` method, right in the beginning, let's `dd($cache)` so we can see the class name of the object we're getting. For example, for the cache service, `FrameworkBundle` tells the service container:
+
+> Hey! When I ask for the `CacheInterfaceService`, I
+> want you to instantiate this `TraceableAdapter`
+> object with a specific set of arguments it needed.
+
+So it looks like our cache service is just this `TraceableAdapter`, but if we look *closer*, we can see that it's *actually* a wrapper around a `FilesystemAdapter`, and the cache is stored *inside* the file system. That's cool, but what if we want to store the cache in memory instead? Or somewhere else in the file system? This is where bundle configuration *shines*. Open `framework.yaml` and find this `framework` root key. This means we're passing configuration to the `FrameworkBundle`, and it'll *use* that config to change how it instantiates its services. By the way, the file name here isn't important. We *could* call this `pizza.yaml` and it would work just the same.
+
+Okay, head over to your terminal and run:
+
+```terminal
+bin/console debug:config framework
+```
+
+This shows us the current config. To see the *full* config, run:
+
+```terminal
+bin/console config:dump framework
+```
+
+That is *a lot* of information. Let's narrow that down. If we want to see the configuration that's responsible for the cache service *only*, run:
+
+```terminal
+bin/console config:dump framework cache
+```
+
+*Much* better. Over in `cache.yaml`, we can see that this is still part of the `framework` config - just *separated* in different files for organization. Below this example, let's set `app` to `cache.adapter.array`.
+
+Okay, back at the browser, refresh. Awesome! This changed to `ArrayAdapter`. Head over and remove `dd($cache)` so we can see the `cache.array.adapter` in action. Refresh the page again, and... ah! Every time we refresh the page, we're executing the HTTP request, so the cache is *only* live during the request. When we start a new request, the cache invalidates and we see that HTTP request again.
+
+Next: Let's take a closer look at *autowiring*.
