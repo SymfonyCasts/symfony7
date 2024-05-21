@@ -30,7 +30,7 @@ This installs the bundle, the required dependencies, and it also executes some r
 git status
 ```
 
-check it out! Eevery time we install a new bundle, it changes our `composer.json`, `composer.lock`, `symfony.lock`, and `bundles.php` files. Let's open that. Down here, we can see that `KnpTimeBundle` was added to this array. That's where Symfony activates this bundle in our application. Remember, *bundles* give us *services*, and this one's no exception. But... what services did it give us? We *could* read the docs to learn more about this, but I'm going to be lazy and run:
+check it out! Every time we install a new bundle, it changes our `composer.json`, `composer.lock`, `symfony.lock`, and `bundles.php` files. Let's open that. Down here, we can see that `KnpTimeBundle` was added to this array. That's where Symfony activates this bundle in our application. Remember, *bundles* give us *services*, and this one's no exception. But... what services did it give us? We *could* read the docs to learn more about this, but I'm going to be lazy and run:
 
 ```terminal
 bin/console debug:container time
