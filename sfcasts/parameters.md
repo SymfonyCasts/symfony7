@@ -1,3 +1,21 @@
 # Parameters
 
-So far we have talked about the container being full of service objects. To see it we can leverage the `bin console debug-container` command. But except services it also holds one more thing, scalar config called `Parameters`. We run the same command but add ''parameters'' option to it. These are basically variables that you can reference in your code. Most of these are internal but there are some core parameters that may be very useful for you. For example, the ones start with a `kernel dot`. For example, this `kernel.environment` that is set to the value of `up underscore env` environment variable or this `kernel.project_dir` that is set to the path to the project root directory. So how to get it from the container? Well, in the controller there is a special shortcut method for it. Let's open phpStorm and in the source directory open controller, main controller. And in the home page action right in the beginning let's add `dd` and call this `getParameter` method. In it let's write `kernel.project_dir`. As you can see phpStorm's Symfony plugin already auto-completed for me. Back to the browser, refresh the page to see this dumped path. But most of the time you need to inject parameters into services and you can do it with a special syntax. For example, let's open some configuration files. For example, `config/packages/twig.yaml`. As you can see we have a `tweak default` path that is set to percent `kernel.project_dir` percent and the slash templates. So percent `parameter name` percent is a special syntax to refer a parameter in yaml files. Next let's create a custom parameter and see how we can fetch it in different ways from the service container.
+Earlier, we talked about our container and all the service objects is has. To see them, we can run:
+
+```terminal
+bin/console debug:container
+```
+
+But these services aren't the only important things in our container. It also holds *parameters*. Run the same command as before, but this time, add
+
+```terminal
+--parameters
+```
+
+These are basically just variables that you can reference in your code. Most of these are internal, but there *are* some core parameters that you may find useful. For example, any of these that start with `kernel.`, like `kernel.environment`, which is set to the `app_env` environment variable. *Or* this `kernel.project_dir` that's set to the path to the project root directory.
+
+*So* how do we get this from our container? We actually have a special shortcut method for it in our controller. In the `/src` directory, open `/Controller/MainController.php`. In `homepage()`, after `Response`, say `dd($this->getParameter())`. And inside *that*, say `name: 'kernel.project_dir'`. As you can see Symfony has already autocompleted that for us. *Nice*.
+
+Back at the browser, refresh and... there's our path! Most of the time, we'll need to inject parameters into services and we can do that with a special syntax. I'll show you! Open `/config/packages/twig.yaml`. You can see that we have `twig` `default_path` that's set to `%kernel.project_dir%/templates`. This "%[parameter name]%" is a special syntax used to refer to a parameter in `.yaml` files.
+
+Next: Let's create a *custom* parameter and learn how to fetch it from the service container in different ways.
