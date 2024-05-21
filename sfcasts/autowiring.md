@@ -1,3 +1,5 @@
+# How autowiring works
+
 Hey, look! It's our favorite command!
 
 ```terminal
