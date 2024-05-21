@@ -32,10 +32,10 @@ git status
 
 you cn see that the only files changed were `composer.json` and `composer.lock`. That's okay! What we installed was a *pure* PHP package, and while it *does* contain service classes (which are just classes that do work), it *doesn't* contain any configuration that says:
 
-`Hey! I want to have a service called "http-client",
-which should be an instance of "HttpClientInterface",
-and it should be instantiated with these specific
-arguments.`
+> Hey! I want to have a service called "http_client",
+> which should be an instance of `HttpClientInterface`,
+> and it should be instantiated with these specific
+> arguments.
 
 So where did this service come from? The *answer* is FrameworkBundle. Open `config/bundles.php`. The first bundle here is `FrameworkBundle`.
 That's a *core* Symfony bundle, and it has been in our application since the beginning. This bundle's superpower is watching for newly installed Symfony components and automatically registering their services. *Super* convenient.
