@@ -1,3 +1,32 @@
-# Non-autowireable services
+# Non-Autowireable Services
 
-In the previous video we autowired a non-autowireable argument. Now let's try to autowire a non-autowireable service, but first let's find a service that cannot be autowired. For this, in Terminal run the command `binConsole debug:container`. You may think that this twig service cannot be autowired as it's just an IDE, but if you will find this `twig\Environment` that is an alias for twig service. But, for example, this `twig.command.debug` is a service that cannot be autowireable. This is literally the service that powers the `debug:twig` command we leveraged in previous videos. Let's run it in the terminal to see that it lists all the twig filters and functions registered in the system. So, even though it's a bit odd, we can grab this service and use it directly. OK, back to phpStorm and in the `homepage()` action type hinted with debug-command, the one from twig. And let's name this argument as twig-debug-command. Go to the browser to refresh the page and we see this error that Symfony cannot autowire this argument. You may guess that we need to use the attribute above the argument again as we did with parameters and you are correct, but it will have a slightly different syntax for services. Let's add a php attribute above the arg, sharp square brackets, autowire, and inside parenthesis. We need to write service, colon, and type the service name. I will go to my terminal and just copy this exact name from the list. OK, now let's refresh the home page again to see it was successfully autowired. OK, let's see if we can run that command below in the `homepage()`. Let's call this variable, which is `twigDebugCommand`, arrow, and it has a `run()` method on it. The first argument should be an input, and we can just print new array input. The second argument should be the output that we will need to use below. So, first I will create an output variable above that will equal to new `BufferedOutput()`. And we will going to use this variable as the second argument for `run()` method. OK, phpStorm is happy, and finally below let's `dd()` the output below. Now go to the browser and refresh. And we see an error. OK, yes, so we need to pass an array to this `ArrayInput` class. Just an empty array. And refresh again to see the list of our functions and filters. And now I will revert this silly code in `homepage()`. We need that just for an example. But the key takeaway is that even something is not auto-wireable by default, you can make it auto-wireable with `#[Autowire('@twig.command.debug')]` attribute. No matter if you need a service or a parameter. Next, let's talk about environment variables and the purpose of the `.env` file that we looked at earlier. We can leverage them in our Symfony application to make it behave differently in different environments.
+In the last chapter, we autowired a *non-autowireable* argument. *This time*, let's try to autowire an non-autowireable *service*. But before we do that, we need to *find* a non-autowireable service. To do that, at your terminal, run:
+
+```terminal
+bin/console debug:container
+```
+
+If you think this Twig service can't be autowired since it's just an ID, *think again*. If we scroll up, we see `Twig\Environment`. *This* is an alias for our Twig service. *Conversely*, `twig.command.debug` is *not* autowireable. This is the service that powers the
+
+```terminal
+debug:twig
+```
+
+command we used in previous chapters. When we run that in our terminal,
+
+```terminal silent
+bin/console debug:twig
+```
+
+it gives us a list of all of the Twig filters and functions in our system. That means, even though it's kind of odd, we *can* grab this service and use it directly. Good to know!
+
+Back over here, in `homepage()`, typehint `DebugCommand` (the one from Twig) and let's call this `$twigDebugCommand`. If we head back to our browser and refresh... we get an *error*:
+
+`Cannot autowire argument $twigDebugCommand of
+"App\Controller\MainController::homepage()"`
+
+If you guessed that we'll need to use the attribute above the argument like we did with our parameters, you're *correct*, but the syntax for services looks a little different. Over here, above our `DebugCommand`, add a new attribute - `#[Autowire()`. Inside, we'll say `service` set to the service name. I'll *cheat* and copy the exact service name from the list in our terminal. Okay, if we head back and refresh the homepage again... it was successfully autowired. Nice!
+
+All right, let's see if we can run that command. Below `Response`, say `$twigDebugCommand->run()`. The first argument should be an input, so we can say `new ArrayInput`. The *second* argument should be the output that we'll use below, but before we do that, we need to create an output variable. Above, say `$output = new BufferedOutput()`. Now we can add `$output` as our second argument here. Okay, our editor is happy, so finally, below, let's `dd($output)`. If we head to our browser and refresh... dang... *error*. It looks like we need to pass an empty array to `ArrayInput()` class. If we do that and refresh again... boom! We get a list of functions and filters. It *works*. This was just an example, so we can get rid of that code, but the key thing to remember is that, even if something isn't autowireable by default, you can *make* it autowireable with an `#[Autowire]` attribute, regardless of whether you need a service or a parameter.
+
+Next: Let's talk about environment variables and the purpose of the `.env` file we saw earlier. We'll also see how we can leverage them in our app so it behaves differently in certain environments.
