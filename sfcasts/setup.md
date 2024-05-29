@@ -1,6 +1,6 @@
 # Setup, Services & the Service Container
 
-Hey friends! Welcome back to Episode *2* of our Symfony 7 tutorial. I'm Kevin, and I'll be your guide. No matter what you do with Symfony, the most important thing you'll use are *services* - little yellow minions that do work in your app. We'll talk about *configuration* for those services as well as *environments*.
+Hey friends! Welcome back to Episode *2* of our Symfony 7 tutorial. I’ll be your brave - or maybe foolish guide through topics I absolutely *love*.. No matter what you do with Symfony, the most important thing you'll use are *services* - little yellow minions that do work in your app. We'll talk about *configuration* for those services as well as *environments*.
 
 So what exactly *is* a service? That's easy! It's a plain PHP class that does *work*. For example, a `Logger` that helps you log messages is a service. Or a *mailer* that sends emails to your customers. *Or* a database connection object that you use to execute queries to the database. Those are *all* services. Even the controller that handles requests is a service, but it has *super powers*. We'll talk about that later.
 
