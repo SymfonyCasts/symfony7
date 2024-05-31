@@ -13,10 +13,11 @@ That makes sense. PHP can't just print `DateTime` objects because it doesn't kno
 We *can* pass an *optional* `DateTime` format as the first argument to this `|date` filter, but if we skip it, the application's default format will be used. Which one, exactly? Good question! Let's check out the config. At your terminal, run:
 
 ```terminal
-bin/console config:dump-reference twig
+bin/console config:dump twig
 ```
 
-Here, you can see the date format configuration for your application. And if you want to shorten this command instead of typing the full name - `config:dump` - you'll want to do that while you still have a unique name in your application. Otherwise, the console will ask you which command you want to execute.
+Here, you can see the date format configuration for your application. I actually cheated a bit when running this command. The full command name is `config:dump-reference`. With Symfony
+commands, you can shorten the name as much as you want as long as it's not ambiguous with another command's name. If multiple commands match, the console will ask which one you want to run.
 
 All right, back to the browser. We've printed our date, but it would be *so* much cooler if we could say something like "2 hours ago" instead of this long date. *Unfortunately*, we don't have a service in our app that can do that for us yet. And I certainly don't want to write it myself. I've got more fun things to do like playing board games. But, hm... Is there a bundle with a service that can do this? Yep! It's called "KnpTimeBundle". Let's find it on GitHub. Here it is! Scroll down to the "Installation" section and copy this command. At your terminal, paste that command and run it:
 
@@ -24,13 +25,13 @@ All right, back to the browser. We've printed our date, but it would be *so* muc
 composer require knplabs/knp-time-bundle
 ```
 
-This installs the bundle, the required dependencies, and it also executes some recipes. If we run
+This installs the bundle, the required dependencies, and it also executes some recipes. If we run:
 
 ```terminal
 git status
 ```
 
-check it out! Every time we install a new bundle, it changes our `composer.json`, `composer.lock`, `symfony.lock`, and `bundles.php` files. Let's open that. Down here, we can see that `KnpTimeBundle` was added to this array. That's where Symfony activates this bundle in our application. Remember, *bundles* give us *services*, and this one's no exception. But... what services did it give us? We *could* read the docs to learn more about this, but I'm going to be lazy and run:
+Check it out! Every time we install a new bundle, it changes our `composer.json`, `composer.lock`, `symfony.lock`, and `bundles.php` files. Let's open that. Down here, we can see that `KnpTimeBundle` was added to this array. That's where Symfony activates this bundle in our application. Remember, *bundles* give us *services*, and this one's no exception. But... what services did it give us? We *could* read the docs to learn more about this, but I'm going to be lazy and run:
 
 ```terminal
 bin/console debug:container time
