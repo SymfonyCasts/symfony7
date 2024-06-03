@@ -30,8 +30,8 @@ and... there's our `HttpClient`! Now that we have our new service, we can type h
 git status
 ```
 
-you cn see that the only files changed were `composer.json` and `composer.lock`. That's okay! What we installed was a *pure* PHP package, and while it *does* contain service classes (which are just classes that do work), it *doesn't* contain any configuration that says:
-
+you can see that the only files changed were `composer.json` and `composer.lock`. That's okay! What we installed was a *pure* PHP package, and while it *does* contain service classes (which are just classes that do work), it *doesn't* contain any configuration that says:
+sa
 > Hey! I want to have a service called "http_client",
 > which should be an instance of `HttpClientInterface`,
 > and it should be instantiated with these specific
@@ -40,7 +40,7 @@ you cn see that the only files changed were `composer.json` and `composer.lock`.
 So where did this service come from? The *answer* is FrameworkBundle. Open `config/bundles.php`. The first bundle here is `FrameworkBundle`.
 That's a *core* Symfony bundle, and it has been in our application since the beginning. This bundle's superpower is watching for newly installed Symfony components and automatically registering their services. *Super* convenient.
 
-Now that we have our new `HttpClient`, let's put it to work! Open `MainController.php` and, in `homepage()`, let's type hint our new service. I'll move this onto multiple lines... say `HttpClientInterface`... and call it `$client`. Down here, before the `return` statement, say `$client->`. We have a few methods to choose from, so select `request()`. Inside, say `GET`, and then we need to send a request to this URL. To save you some time, you can copy this link from the page below this video. Over here, add `$response`... and below that, say `$response->toArray()`. That's a handy method that decodes JSON into an array. And finally, we'll add this `$issData` variable. To see if it's working, we can go ahead and `dump($issData)` here.
+Now that we have our new `HttpClient`, let's put it to work! Open `MainController.php` and, in `homepage()`, let's type hint our new service. I'll move this onto multiple lines... write `HttpClientInterface`... and call it `$client`. Down here, before the `return` statement, write `$client->`. We have a few methods to choose from, so select `request()`. Inside, write `GET`, and then we need to send a request to this URL. To save you some time, you can copy this link from the page below this video. Over here, add `$response`... and below that, write `$response->toArray()`. That's a handy method that decodes JSON into an array. And finally, we'll add this `$issData` variable. To see if it's working, we can go ahead and `dump($issData)` here.
 
 Over in your browser, refresh the homepage and, down here, if you hover over this icon... *nice*! That's our data! Right beside this is another icon you may have noticed. That's the HTTP Client, and it shows us the total number of requests that were executed on this page. Click this Debug icon to open the Symfony Profiler and inspect it. Our HTTP Client is integrated with the web debug toolbar, and we can see that our request was executed. Awesome!
 
