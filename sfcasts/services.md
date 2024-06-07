@@ -4,7 +4,7 @@ We already know that services come from *bundles*. And every *service* is a comb
 
 Open up `StarshipRepository.php`. We created this *without* configuration and we're still able to use it in `StarshipApiController.php`. But how can we do that? This works thanks to `config/services.yaml`. Let's open that. Down here, below our `services` key, we see this `App\` section. This code registers everything in our `src/` directory as a *service*. But it also *excludes* some things, like `DependencyInjection`, `Entity`, and `Kernel.php`. This `services.yaml` file, *including* this config, comes with the core `symfony/framework-bundle`.
 
-Up here, we have this `_defaults` key. That's the configuration for *all* of the services in this file. This `autowire` key, set to `true`, *automatically* injects dependencies into our services. We also have this `autoconfigure` key, set to `true`, which automatically registers our services as *comments*, *event subscribers*, etc. Pretty cool! We will talk more about `autoconfigure` later.
+Up here, we have this `_defaults` key. That's the configuration for *all* of the services in this file. This `autowire` key, set to `true`, *automatically* injects dependencies into our services. We also have this `autoconfigure` key, set to `true`, which automatically registers our services as *commands*, *event subscribers*, etc. Pretty cool! We will talk more about `autoconfigure` later.
 
 To see a list of services, at your terminal, run:
 
