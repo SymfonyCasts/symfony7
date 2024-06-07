@@ -16,7 +16,7 @@ This can be helpful when you need to run a command in a specific environment tha
 
 Okay, if we head back over and refresh the page again... *ta da*! We see "Updated at". *Awesome*. If you're ever working in the `prod` environment and you *don't* see changes you've made to your templates, config files, etc. reflected in the browser, you *may* need to manually clear your cache.
 
-Right now, we're using `cache.adapter.array`, which is kind of like a *fake* cache. We can see that in the `config/packages/cache.yaml` file. A fake cache is fine for development, but when we're working in the `prod` environment, we really want to use `cache.adapter.filesystem` instead. Since we now know about the `when@` syntax, let's leverage that. Below, say `when@`, but this time, we need to set it to our `prod` environment with `what@prod:`. Below that, we'll repeat the same structure we see above - `framework`, `cache`, and `app` - followed by `cache.adapter.filesystem`.
+Right now, we're using `cache.adapter.array`, which is kind of like a *fake* cache. We can see that in the `config/packages/cache.yaml` file. A fake cache is fine for development, but when we're working in the `prod` environment, we really want to use `cache.adapter.filesystem` instead. Since we now know about the `when@` syntax, let's leverage that. Below, say `when@`, but this time, we need to set it to our `prod` environment with `when@prod:`. Below that, we'll repeat the same structure we see above - `framework`, `cache`, and `app` - followed by `cache.adapter.filesystem`.
 
 Okay, to see this in action, we need to clear the cache again (since we're still in the `prod` environment) with:
 
