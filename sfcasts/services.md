@@ -1,6 +1,6 @@
 # More about Services
 
-We already know that services come from *bundles*. And every *service* is a combination of an ID, a class, and a set of arguments that are needed to instantiate it. *But*, did you know that we can also create our *own* services to organize our code for better maintainability? Yep! Believe it or not, we already created one in the previous chapter.
+We already know that services come from *bundles*. And every *service* is a combination of an ID, a class, and a set of arguments that are needed to instantiate it. *But*, did you know that we can also create our *own* services to organize our code for better maintainability? Yep! Believe it or not, we already created one in the previous episode.
 
 Open up `StarshipRepository.php`. We created this *without* configuration and we're still able to use it in `StarshipApiController.php`. But how can we do that? This works thanks to `config/services.yaml`. Let's open that. Down here, below our `services` key, we see this `App\` section. This code registers everything in our `src/` directory as a *service*. But it also *excludes* some things, like `DependencyInjection`, `Entity`, and `Kernel.php`. This `services.yaml` file, *including* this config, comes with the core `symfony/framework-bundle`.
 
