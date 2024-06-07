@@ -12,7 +12,7 @@ To see a list of services, at your terminal, run:
 bin/console debug:autowiring
 ```
 
-But *this time*, let's add `--all` at the end:
+But *this time*, let's add the `--all` option at the end:
 
 ```terminal-silent
 bin/console debug:autowiring --all
