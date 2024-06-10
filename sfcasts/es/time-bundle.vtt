@@ -1,0 +1,291 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:05.626 align:middle
+En nuestro sitio, los clientes disponen de una práctica
+"Cola de Reparación de Barcos" que enumera todos los
+
+00:00:05.626 --> 00:00:07.866 align:middle
+barcos que se están reparando y su estado.
+
+00:00:08.466 --> 00:00:11.276 align:middle
+Para este tutorial, hemos
+añadido un nuevo campo $arrivedAt
+
+00:00:11.276 --> 00:00:14.326 align:middle
+a nuestra clase Starship con
+algunos getters y setters.
+
+00:00:14.836 --> 00:00:17.016 align:middle
+Queremos imprimir este campo
+en la página de inicio.
+
+00:00:17.646 --> 00:00:21.776 align:middle
+Si has olvidado qué controlador es responsable de
+la página de inicio, siempre puedes pasar el ratón
+
+00:00:21.776 --> 00:00:25.506 align:middle
+por encima de la información de la página en
+la barra de herramientas de depuración web y...
+
+00:00:25.736 --> 00:00:28.886 align:middle
+¡boom! Dice "ControladorPrincipal
+:: página de inicio".
+
+00:00:29.336 --> 00:00:33.936 align:middle
+Abramos eso - MainController.php -
+y busquemos la acción homepage().
+
+00:00:34.366 --> 00:00:40.226 align:middle
+Aquí abajo, podemos ver que renderiza
+una plantilla: main/homepage.html.twig.
+
+00:00:40.816 --> 00:00:46.396 align:middle
+Ábrela, busca la "Cola de reparación de barcos" y,
+aquí abajo, después de {{ ship.name }} , añade un
+
+00:00:46.926 --> 00:00:51.046 align:middle
+nuevo <div> con Arrived
+at: {{ ship.arrivedAt }}.
+
+00:00:51.696 --> 00:00:54.956 align:middle
+Ahora, si volvemos al navegador y
+actualizamos la página de inicio...
+
+00:00:55.316 --> 00:00:56.666 align:middle
+ah... un error.
+
+00:00:57.146 --> 00:01:00.596 align:middle
+Se ha lanzado una excepción durante la
+representación de una plantilla ("El objeto
+
+00:01:00.596 --> 00:01:03.766 align:middle
+de clase DateTimeImmutable no se
+ha podido convertir a cadena").
+
+00:01:04.386 --> 00:01:05.176 align:middle
+Esto tiene sentido.
+
+00:01:05.556 --> 00:01:10.466 align:middle
+PHP no puede imprimir simplemente objetos
+DateTime porque no sabe qué formato queremos.
+
+00:01:11.116 --> 00:01:11.946 align:middle
+¿Cómo lo arreglamos?
+
+00:01:12.256 --> 00:01:14.476 align:middle
+Muy fácil Podemos utilizar un filtro Twig.
+
+00:01:15.086 --> 00:01:19.186 align:middle
+Aquí detrás, después de
+arrivedAt, digamos |date.
+
+00:01:20.036 --> 00:01:21.096 align:middle
+Si refrescamos de nuevo...
+
+00:01:21.506 --> 00:01:24.966 align:middle
+¡impresionante! Aquí tenemos la fecha
+y la hora en un formato específico.
+
+00:01:25.526 --> 00:01:29.896 align:middle
+Podemos pasar un formato DateTime opcional
+como primer argumento a este filtro |date,
+
+00:01:30.166 --> 00:01:33.946 align:middle
+pero si lo omitimos, se utilizará el
+formato por defecto de la aplicación.
+
+00:01:34.446 --> 00:01:35.436 align:middle
+¿Cuál, exactamente?
+
+00:01:35.956 --> 00:01:36.596 align:middle
+¡Buena pregunta!
+
+00:01:36.866 --> 00:01:38.106 align:middle
+Comprobemos la configuración.
+
+00:01:38.546 --> 00:01:44.366 align:middle
+En tu terminal, ejecuta:
+bin/console config:dump twig Aquí
+
+00:01:44.366 --> 00:01:47.726 align:middle
+puedes ver la configuración del
+formato de fecha de tu aplicación.
+
+00:01:48.336 --> 00:01:50.376 align:middle
+En realidad, he hecho un poco de
+trampa al ejecutar este comando.
+
+00:01:50.686 --> 00:01:53.866 align:middle
+El nombre completo del comando
+es config:dump-reference.
+
+00:01:54.386 --> 00:01:57.976 align:middle
+Con los comandos Symfony, puedes acortar
+el nombre todo lo que quieras siempre
+
+00:01:57.976 --> 00:02:00.666 align:middle
+que no sea ambiguo con el
+nombre de otro comando.
+
+00:02:01.266 --> 00:02:05.096 align:middle
+Si coinciden varios comandos, la consola
+te preguntará cuál quieres ejecutar.
+
+00:02:05.836 --> 00:02:07.466 align:middle
+Bien, volvamos al navegador. Hemos
+
+00:02:07.856 --> 00:02:11.176 align:middle
+impreso nuestra fecha, pero sería mucho
+más guay si pudiéramos decir algo
+
+00:02:11.176 --> 00:02:13.966 align:middle
+como "hace 2 horas" en lugar
+de esta fecha tan larga.
+
+00:02:14.516 --> 00:02:18.376 align:middle
+Por desgracia, aún no tenemos un servicio en
+nuestra aplicación que pueda hacer eso por nosotros.
+
+00:02:18.756 --> 00:02:20.666 align:middle
+Y desde luego no quiero escribirlo yo.
+
+00:02:20.956 --> 00:02:23.666 align:middle
+Tengo cosas más divertidas que
+hacer, como jugar a juegos de mesa.
+
+00:02:24.176 --> 00:02:25.036 align:middle
+Pero...
+
+00:02:25.266 --> 00:02:27.996 align:middle
+¿Existe un bundle con un
+servicio que pueda hacerlo?
+
+00:02:28.626 --> 00:02:31.136 align:middle
+Sí, se llama "KnpTimeBundle".
+
+00:02:31.716 --> 00:02:32.856 align:middle
+Vamos a buscarlo en GitHub.
+
+00:02:34.986 --> 00:02:35.546 align:middle
+Aquí lo tienes
+
+00:02:37.826 --> 00:02:41.276 align:middle
+Desplázate hasta la sección
+"Instalación" y copia este comando.
+
+00:02:42.386 --> 00:02:44.756 align:middle
+En tu terminal, pega ese comando y ejecútalo:
+
+00:02:45.116 --> 00:02:52.916 align:middle
+composer require knplabs/knp-time-bundle Esto
+instala el bundle, las dependencias necesarias
+
+00:02:53.066 --> 00:02:55.146 align:middle
+y también ejecuta algunas recetas.
+
+00:02:55.756 --> 00:02:58.876 align:middle
+Si lo ejecutamos: git status ¡Compruébalo!
+
+00:02:59.206 --> 00:03:04.466 align:middle
+Cada vez que instalamos un nuevo bundle, cambia
+nuestros archivos composer.json, composer.lock
+
+00:03:04.556 --> 00:03:07.836 align:middle
+,symfony.lock, y bundles.php.
+
+00:03:08.376 --> 00:03:09.156 align:middle
+Vamos a abrirlos.
+
+00:03:12.916 --> 00:03:16.826 align:middle
+Aquí abajo, podemos ver que KnpTimeBundle
+se ha añadido a esta matriz.
+
+00:03:17.376 --> 00:03:20.296 align:middle
+Ahí es donde Symfony activa este
+bundle en nuestra aplicación.
+
+00:03:20.896 --> 00:03:24.396 align:middle
+Recuerda, los bundles nos dan
+servicios, y éste no es una excepción.
+
+00:03:25.096 --> 00:03:27.126 align:middle
+Pero... ¿qué servicios nos da?
+
+00:03:27.456 --> 00:03:31.566 align:middle
+Podríamos leer la documentación para saber más
+sobre esto, pero voy a ser perezoso y voy a ejecutar:
+
+00:03:31.916 --> 00:03:37.296 align:middle
+bin/console debug:container time
+Seleccionaré datetime_formatter,
+
+00:03:37.386 --> 00:03:39.696 align:middle
+que es la opción 10, para
+obtener más información.
+
+00:03:40.506 --> 00:03:44.136 align:middle
+¡Genial! Para ver si podemos autocablearlo,
+vamos a ejecutar otro comando:
+
+00:03:44.426 --> 00:03:48.406 align:middle
+bin/console debug:autowiring time Y...
+
+00:03:48.616 --> 00:03:54.976 align:middle
+¡podemos! Si queremos utilizar el formato ago para nuestro
+objeto fecha, éste es el typehint que tenemos que utilizar
+
+00:03:54.976 --> 00:03:57.916 align:middle
+para inyectar este servicio
+en nuestras clases PHP.
+
+00:03:58.326 --> 00:04:02.566 align:middle
+Pero, como sólo queremos esto en nuestra
+plantilla Twig, hay una solución mejor.
+
+00:04:03.116 --> 00:04:06.066 align:middle
+Este bundle también viene
+con una integración Twig
+
+00:04:06.336 --> 00:04:09.216 align:middle
+que proporciona algunos filtros
+y funciones Twig interesantes.
+
+00:04:09.756 --> 00:04:15.496 align:middle
+Podemos verlo si ejecutamos:
+bin/console debug:twig y buscamos ago.
+
+00:04:16.396 --> 00:04:16.986 align:middle
+¡Aquí lo tienes!
+
+00:04:17.736 --> 00:04:20.726 align:middle
+Si este date te resulta
+familiar, es porque lo es.
+
+00:04:20.896 --> 00:04:22.266 align:middle
+Es el que hemos utilizado antes.
+
+00:04:22.266 --> 00:04:24.796 align:middle
+Probemos esta vez con el filtro ago.
+
+00:04:25.566 --> 00:04:29.426 align:middle
+Vuelve aquí, sustituye date por ago...
+
+00:04:29.886 --> 00:04:31.766 align:middle
+guarda y abre el navegador.
+
+00:04:32.656 --> 00:04:34.336 align:middle
+Actualiza la página de inicio y...
+
+00:04:34.856 --> 00:04:35.526 align:middle
+¡ya está!
+
+00:04:35.826 --> 00:04:38.176 align:middle
+Ahora tenemos este bonito formato "hace".
+
+00:04:39.096 --> 00:04:43.736 align:middle
+Así pues, los bundles nos dan servicios, los servicios
+son herramientas y las herramientas son divertidas.
+
+00:04:44.356 --> 00:04:49.206 align:middle
+A continuación, vamos a añadir aún más
+servicios instalando nuevos componentes Symfony.
