@@ -1,12 +1,12 @@
 # Non-Autowireable Arguments
 
-Earlier, we learned that we can fetch parameters from the container with `getParameter()` in our controller. We also saw how easy it is to create our own services. And guess what? What's not the only thing we can customize! We can also create our own *parameters*. How? I'll show you!
+Earlier, we learned that we can fetch parameters from the container with `getParameter()` in our controller. We also saw how easy it is to create our own services. And guess what? That's not the only thing we can customize! We can also create our own *parameters*. How? I'll show you!
 
 Open `config/services.yaml`. Here, we see an empty `parameters` section. Inside, let's create a new parameter - how about `iss_location_cache_ttl` - and let's set it to `5`. We'll use this parameter in the configuration to avoid hard coding anything. But first, head back to `MainController.php`, and instead of dumping `kernel.project_dir`, let's dump our new parameter: `iss_location_cache_ttl`. Over in our browser, refresh and... there it is - 5!
 
 Now, we know we can grab this with `getParameter()` in our controllers. But what do we do if we're not *in* a controller? How can we use parameters in services without this fancy `getParameter()` method? Let's see... If we add a new argument to the homepage - `$issLocationCacheTtl` - and dump *this* instead of `getParameter()`, when we refresh... *error*! Symfony can't autowire that argument. It can autowire *services*, but this isn't a service; It's a parameter. So how do we do this? The answer: *Autowire it*! We can autowire parameters just like services, and it will work in the constructor or controller *just like* normal autowiring. Check it out!
 
-Back in our code, let's add the autowire attribute above the argument. Say `#[Autowire()]` and, inside, `param: 'iss_location_cache_ttl'`. Back at our browser, if we refresh the page... 5! It *works*! Okay, let's remove that and see how we can use our new parameter in our config.
+Back in our code, let's add the autowire attribute above the argument. Write `#[Autowire()]` and, inside, `param: 'iss_location_cache_ttl'`. Back at our browser, if we refresh the page... 5! It *works*! Okay, let's remove that and see how we can use our new parameter in our config.
 
 Open `config/packages/cache.yaml`. Instead of this hard-coded value, say `%iss_location_cache_ttl%`. If we check this in our browser... everything still works! Awesome!
 
