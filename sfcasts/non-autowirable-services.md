@@ -6,15 +6,9 @@ In the last chapter, we autowired a *non-autowireable* argument. *This time*, le
 bin/console debug:container
 ```
 
-If you think this Twig service can't be autowired since it's just an ID, *think again*. If we scroll up, we see `Twig\Environment`. *This* is an alias for our Twig service. *Conversely*, `twig.command.debug` is *not* autowireable. This is the service that powers the
+If you think this Twig service can't be autowired since it's just an ID, *think again*. If we scroll up, we see `Twig\Environment`. *This* is an alias for our Twig service. *Conversely*, `twig.command.debug` is *not* autowireable. This is the service that powers the `debug:twig` command we used in previous chapters. When we run that in our terminal,
 
-```terminal
-debug:twig
-```
-
-command we used in previous chapters. When we run that in our terminal,
-
-```terminal silent
+```terminal-silent
 bin/console debug:twig
 ```
 
@@ -22,8 +16,8 @@ it gives us a list of all of the Twig filters and functions in our system. That 
 
 Back over here, in `homepage()`, typehint `DebugCommand` (the one from Twig) and let's call this `$twigDebugCommand`. If we head back to our browser and refresh... we get an *error*:
 
-`Cannot autowire argument $twigDebugCommand of
-"App\Controller\MainController::homepage()"`
+> Cannot autowire argument `$twigDebugCommand` of
+> `App\Controller\MainController::homepage()`
 
 If you guessed that we'll need to use the attribute above the argument like we did with our parameters, you're *correct*, but the syntax for services looks a little different. Over here, above our `DebugCommand`, add a new attribute - `#[Autowire()`. Inside, we'll say `service` set to the service name. I'll *cheat* and copy the exact service name from the list in our terminal. Okay, if we head back and refresh the homepage again... it was successfully autowired. Nice!
 
