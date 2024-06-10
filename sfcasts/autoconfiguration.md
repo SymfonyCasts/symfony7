@@ -1,14 +1,14 @@
 # Autoconfiguration
 
-This real-time ISS location feature is *cool*, but it would be *even cooler* if we could see this on *every* page, not just the homepage. How can we do that? We *could* pass the data in every action, *but* that's not ideal. Instead, we're going to create a custom Twig function that will return the *actual* data from the template. That way, we can render ISS location data in our `base.html.twig` file without passing it from every controller. Sound good? Let's get started!
+This real-time ISS location feature is *cool*, but it would be *even cooler* if we could see this on *every* page, not just the homepage. How can we do that? We *could* pass the data in every action, *but* that's not ideal. Instead, we're going to create a custom Twig function that will fetch the *actual* data in the template. That way, we can render ISS location data in our `base.html.twig` file without passing it from every controller. Sound good? Let's get started!
 
 First, we need to create a Twig extension. In a previous course, we installed Symfony Maker Bundle. Let's see if that can help generate some boilerplate code. At your terminal, run:
 
 ```terminal
-bin/console make:
+bin/console list make
 ```
 
-This shows us list of all the commands at our disposal that *make* something, and... check it out! We have one that's Twig related - `make:twig-extension`. That's what we're looking for! Run that:
+This shows us a list of all the commands at our disposal that *make* something, and... check it out! We have one that's Twig related - `make:twig-extension`. That's what we're looking for! Run that:
 
 ```terminal silent
 bin/console make:twig-extension
@@ -28,7 +28,7 @@ Down here, let's update this method. This should say `$this->issLocationPool`, `
 
 > Variable "issData" does not exist.
 
-Hm... We removed that from the controller. Open `/templates/main/homepage.html.twig` and, below, let's add our custom Twig function. Say `{% set issData = get_iss_location_data() %}`. If we refresh the page again... our custom function is *working*. But wait... how does Twig know to use this class? We didn't add any configuration from the Twig extension. Is it looking at the `/src/Twig/` directory? *Not exactly*. We could rename this directory and it would still work.
+Hm... We removed that from the controller. Open `/templates/main/homepage.html.twig` and, below, let's add our custom Twig function. Say `{% set issData = get_iss_location_data() %}`. If we refresh the page again... our custom function is *working*. But wait... how does Twig know to use this class? We didn't add any configuration for the Twig extension. Is it looking at the `/src/Twig/` directory? *Not exactly*. We could rename this directory and it would still work.
 
 The reason this works is thanks to the `autoconfigure: true` option in `/config/services.yaml`. Symfony *automatically* configures all of our services, like this Twig extension or even the `ShipReportCommand` we created earlier. When that option is enabled, it basically tells Symfony:
 
@@ -36,7 +36,7 @@ The reason this works is thanks to the `autoconfigure: true` option in `/config/
 > of each service. If that's a command, twig extension,
 > or any other class that should be hooked into a part of
 > Symfony, please go ahead and integrate that
-service into the system for us.
+> service into the system for us.
 
 Yep! Symfony sees that our class extends a base command class and *knows* that it's a command that should be integrated into the system. In our extension's case, it *extends* `AbstractExtension`, so Symfony knows it should be integrated into the Twig system. I *love* this! It means that the only thing we need to care about is creating a PHP class that extends a certain class or implements a specific interface. The documentation will help you navigate this, and autoconfiguration will do the rest.
 
