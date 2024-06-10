@@ -5,10 +5,10 @@ This real-time ISS location feature is *cool*, but it would be *even cooler* if 
 First, we need to create a Twig extension. In a previous course, we installed Symfony Maker Bundle. Let's see if that can help generate some boilerplate code. At your terminal, run:
 
 ```terminal
-bin/console list make
+bin/console make:
 ```
 
-This shows us a list of all the commands at our disposal that *make* something, and... check it out! We have one that's Twig related - `make:twig-extension`. That's what we're looking for! Run that:
+and hit enter. We get an error but this shows us a list of all the commands at our disposal that *make* something, and... check it out! We have one that's Twig related - `make:twig-extension`. That's what we're looking for! Run that:
 
 ```terminal silent
 bin/console make:twig-extension
