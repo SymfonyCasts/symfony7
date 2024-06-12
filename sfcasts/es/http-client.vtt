@@ -1,0 +1,339 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:04.376 align:middle
+Sabemos que Symfony es una colección de un montón
+de minúsculas bibliotecas PHP independientes
+
+00:00:04.426 --> 00:00:07.406 align:middle
+, llamadas "componentes".
+
+00:00:07.826 --> 00:00:10.376 align:middle
+Ahora mismo sólo tenemos instalados
+un pequeño número de ellos,
+
+00:00:10.666 --> 00:00:13.776 align:middle
+pero a medida que necesitemos más
+funciones, instalaremos más componentes.
+
+00:00:14.316 --> 00:00:17.566 align:middle
+En el último tutorial, instalamos
+el componente serializer
+
+00:00:17.696 --> 00:00:20.466 align:middle
+para ayudarnos a serializar objetos en JSON.
+
+00:00:21.086 --> 00:00:24.456 align:middle
+Dirígete y abre StarshipApiController.php.
+
+00:00:24.456 --> 00:00:30.446 align:middle
+Aquí abajo, mantén pulsada la tecla "cmd" o
+"control" en un Mac y haz clic en este método json().
+
+00:00:31.026 --> 00:00:33.306 align:middle
+Aquí tenemos nuestro componente serializer.
+
+00:00:33.726 --> 00:00:38.746 align:middle
+Esto comprueba si tenemos este servicio, y si
+lo tenemos, se llama al método serialize().
+
+00:00:39.926 --> 00:00:44.266 align:middle
+Vale, nuestro sitio es bastante guay,
+pero ¿no sería mucho más guay si...
+
+00:00:44.266 --> 00:00:49.276 align:middle
+digamos... mostráramos la ubicación en tiempo
+real de la Estación Espacial Internacional (o ISS)?
+
+00:00:49.276 --> 00:00:51.016 align:middle
+¡Claro que sí!
+
+00:00:51.356 --> 00:00:54.936 align:middle
+Y por suerte, ya existe un sitio
+web que muestra esa información.
+
+00:00:55.436 --> 00:00:59.976 align:middle
+Navegaremos hasta wheretheiss.at y...
+
+00:01:00.216 --> 00:01:00.816 align:middle
+¡compruébalo! Parece que la ISS está
+
+00:01:01.186 --> 00:01:06.446 align:middle
+en algún lugar sobre el océano Pacífico
+en este momento y -buenas noticias-
+
+00:01:06.706 --> 00:01:08.846 align:middle
+también tienen una API que podemos utilizar
+
+00:01:08.846 --> 00:01:12.946 align:middle
+para obtener las coordenadas de la ISS
+e imprimirlas en nuestro sitio web.
+
+00:01:13.286 --> 00:01:14.326 align:middle
+¡Qué práctico!
+
+00:01:14.876 --> 00:01:18.896 align:middle
+Puedes copiar esta URL y abrirla en
+una nueva pestaña para ver el JSON.
+
+00:01:19.536 --> 00:01:24.316 align:middle
+Pero antes, vamos a comprobar si nuestra
+aplicación ya tiene un cliente HTTP
+
+00:01:24.356 --> 00:01:27.426 align:middle
+que nos ayude a ejecutar
+algunas peticiones a la API.
+
+00:01:27.426 --> 00:01:34.576 align:middle
+En tu terminal, ejecuta: bin/console
+debug:autowiring http Y...
+
+00:01:34.686 --> 00:01:39.896 align:middle
+tenemos algunos servicios relacionados
+con HTTP, pero ningún cliente HTTP.
+
+00:01:39.896 --> 00:01:41.146 align:middle
+¡Y así es!
+
+00:01:41.256 --> 00:01:46.276 align:middle
+Aún no tenemos un servicio en nuestra aplicación que pueda
+hacer peticiones HTTP, pero podemos instalarlo. Para ello
+
+00:01:46.826 --> 00:01:52.536 align:middle
+, necesitamos el componente
+http-client, que, como su nombre indica,
+
+00:01:52.716 --> 00:01:56.006 align:middle
+es ideal para hacer peticiones HTTP externas.
+
+00:01:56.546 --> 00:02:03.006 align:middle
+En tu terminal, ejecuta: composer require
+symfony/http-client Si te preguntas
+
+00:02:03.006 --> 00:02:05.766 align:middle
+de dónde viene el nombre de
+este paquete, ¡buena pregunta!
+
+00:02:06.406 --> 00:02:09.886 align:middle
+Si buscas "symfony http
+client" en tu navegador,
+
+00:02:10.296 --> 00:02:14.606 align:middle
+uno de los primeros resultados es esta
+documentación sobre Symfony HTTP Client.
+
+00:02:15.416 --> 00:02:18.276 align:middle
+En "Instalación", encontrarás
+este comando de terminal, junto
+
+00:02:18.516 --> 00:02:21.176 align:middle
+con información útil sobre el componente.
+
+00:02:21.866 --> 00:02:29.136 align:middle
+Ahora, de vuelta a nuestro terminal, ejecutemos
+bin/console debug:autowiring http y...
+
+00:02:29.386 --> 00:02:30.816 align:middle
+¡ahí está nuestro HttpClient!
+
+00:02:31.396 --> 00:02:35.136 align:middle
+Ahora que tenemos nuestro nuevo servicio,
+podemos teclearlo en nuestra aplicación.
+
+00:02:35.646 --> 00:02:36.436 align:middle
+Pero... espera...
+
+00:02:36.816 --> 00:02:38.606 align:middle
+esto no ha instalado ningún bundle.
+
+00:02:39.026 --> 00:02:45.196 align:middle
+Si ejecutas git status podrás ver que los únicos
+archivos que cambiaron fueron composer.json
+
+00:02:45.196 --> 00:02:46.406 align:middle
+y composer.lock.
+
+00:02:47.026 --> 00:02:47.616 align:middle
+¡No pasa nada!
+
+00:02:47.926 --> 00:02:50.696 align:middle
+Lo que instalamos fue un paquete PHP puro,
+
+00:02:51.026 --> 00:02:55.216 align:middle
+y aunque contiene clases de servicio (que no
+son más que clases que hacen su trabajo),
+
+00:02:55.496 --> 00:02:58.926 align:middle
+no contiene ninguna
+configuración que diga: ¡Eh!
+
+00:02:59.096 --> 00:03:02.636 align:middle
+Quiero tener un servicio llamado
+"http_client", que debería ser una instancia
+
+00:03:02.636 --> 00:03:07.926 align:middle
+de HttpClientInterface, y debería
+instanciarse con estos argumentos específicos.
+
+00:03:08.556 --> 00:03:10.126 align:middle
+Entonces, ¿de dónde viene este servicio?
+
+00:03:10.586 --> 00:03:12.606 align:middle
+La respuesta es FrameworkBundle.
+
+00:03:13.106 --> 00:03:15.416 align:middle
+Abre config/bundles.php.
+
+00:03:16.356 --> 00:03:18.596 align:middle
+El primer bundle es FrameworkBundle.
+
+00:03:18.956 --> 00:03:23.156 align:middle
+Es un bundle básico de Symfony, y ha estado
+en nuestra aplicación desde el principio. El
+
+00:03:23.666 --> 00:03:27.766 align:middle
+superpoder de este bundle es buscar
+componentes Symfony recién instalados
+
+00:03:28.016 --> 00:03:30.586 align:middle
+y registrar automáticamente sus servicios.
+
+00:03:30.866 --> 00:03:32.036 align:middle
+Súper práctico.
+
+00:03:32.796 --> 00:03:36.196 align:middle
+Ahora que tenemos nuestro nuevo
+HttpClient, ¡pongámoslo a trabajar!
+
+00:03:36.866 --> 00:03:42.736 align:middle
+Abre MainController.php y, en homepage(),
+escribamos hint nuestro nuevo servicio.
+
+00:03:43.526 --> 00:03:45.476 align:middle
+Pondré esto en varias líneas...
+
+00:03:46.386 --> 00:03:48.566 align:middle
+escribe HttpClientInterface...
+
+00:03:48.706 --> 00:03:49.836 align:middle
+y lo llamaré $client.
+
+00:03:50.696 --> 00:03:54.866 align:middle
+Aquí abajo, antes de la declaración
+return, escribe $client->.
+
+00:03:55.426 --> 00:03:59.176 align:middle
+Tenemos unos cuantos métodos para
+elegir, así que selecciona request().
+
+00:03:59.846 --> 00:04:04.206 align:middle
+Dentro, escribe GET, y luego tenemos
+que enviar una petición a esta URL.
+
+00:04:04.756 --> 00:04:08.496 align:middle
+Para ahorrarte algo de tiempo, puedes copiar este
+enlace de la página que hay debajo de este vídeo.
+
+00:04:09.156 --> 00:04:11.236 align:middle
+Por aquí, añade $response...
+
+00:04:11.466 --> 00:04:14.896 align:middle
+y debajo, escribe $response->toArray().
+
+00:04:15.556 --> 00:04:18.966 align:middle
+Es un método muy útil que
+descodifica JSON en una matriz.
+
+00:04:19.636 --> 00:04:23.096 align:middle
+Y por último, añadiremos
+esta variable $issData.
+
+00:04:23.826 --> 00:04:27.976 align:middle
+Para ver si funciona, podemos seguir
+adelante y escribir dump($issData) aquí.
+
+00:04:29.016 --> 00:04:34.466 align:middle
+En tu navegador, actualiza la página de inicio y, aquí
+abajo, si pasas el ratón por encima de este icono...
+
+00:04:34.916 --> 00:04:36.506 align:middle
+¡qué bien! ¡Esos son nuestros datos!
+
+00:04:37.116 --> 00:04:39.636 align:middle
+Justo al lado hay otro
+icono que habrás notado. Es
+
+00:04:39.976 --> 00:04:43.316 align:middle
+el Cliente HTTP, y nos muestra el número total
+
+00:04:43.316 --> 00:04:45.696 align:middle
+de peticiones que se han
+ejecutado en esta página.
+
+00:04:46.356 --> 00:04:52.376 align:middle
+Haz clic en este icono de Depuración para
+abrir el Perfilador Symfony e inspeccionarlo.
+
+00:04:52.376 --> 00:04:55.666 align:middle
+Nuestro Cliente HTTP está integrado con la
+barra de herramientas de depuración web,
+
+00:04:55.666 --> 00:04:58.276 align:middle
+y podemos ver que nuestra
+petición se ha ejecutado.
+
+00:04:58.756 --> 00:05:04.806 align:middle
+¡Estupendo! De vuelta por aquí, elimina
+el dump() y pasa esos datos a la plantilla.
+
+00:05:06.086 --> 00:05:11.506 align:middle
+En homepage.html.twig, aquí abajo
+al final, añade otro <div>.
+
+00:05:12.186 --> 00:05:16.706 align:middle
+Dentro, añade un <h2>,
+y llamémoslo ISS Location.
+
+00:05:17.426 --> 00:05:19.986 align:middle
+También añadiremos algunas
+clases para que quede bonito.
+
+00:05:23.986 --> 00:05:32.816 align:middle
+Bien, aquí abajo, añadamos algunas etiquetas <p>
+con nuestros datos: Time: {{ issData.timestamp|date }},
+
+00:05:34.196 --> 00:05:41.676 align:middle
+Altitude: {{ issData.altitude }},
+Latitude: {{ issData.latitude }}, Longitud:
+
+00:05:41.796 --> 00:05:48.276 align:middle
+{{ issData.longitude }}, y
+Visibility: {{ issData.visibility }}.
+
+00:05:48.956 --> 00:05:51.346 align:middle
+De vuelta a nuestro
+navegador, actualizamos y...
+
+00:05:51.856 --> 00:05:52.636 align:middle
+¡aquí está! ¡
+
+00:05:52.986 --> 00:05:56.346 align:middle
+Ésta es la ubicación en tiempo real
+de la Estación Espacial Internacional
+
+00:05:56.496 --> 00:05:58.416 align:middle
+con todos los datos que acabamos de renderizar!
+
+00:05:58.776 --> 00:05:59.546 align:middle
+¡Tiene buena pinta! Por muy
+
+00:06:00.206 --> 00:06:04.216 align:middle
+guay que sea, ahora cada vez que alguien
+navega a nuestra página de inicio,
+
+00:06:04.416 --> 00:06:09.376 align:middle
+estamos haciendo una petición HTTP a la
+API, y las peticiones HTTP son lentas.
+
+00:06:09.986 --> 00:06:14.716 align:middle
+Para solucionarlo, vamos a aprovechar otro
+servicio de Symfony: el servicio de caché.
