@@ -1,0 +1,271 @@
+WEBVTT
+
+00:00:00.096 --> 00:00:03.306 align:middle
+¡Hola amigos!
+
+00:00:03.906 --> 00:00:07.136 align:middle
+Bienvenidos de nuevo al Episodio 2
+de nuestro tutorial de Symfony 7.
+
+00:00:07.456 --> 00:00:11.976 align:middle
+Seré tu valiente - o quizás tonta -
+guía a través de temas que me encantan...
+
+00:00:12.496 --> 00:00:16.726 align:middle
+No importa lo que hagas con Symfony, lo más
+importante que usarás son los servicios -
+
+00:00:16.906 --> 00:00:19.236 align:middle
+pequeños esbirros amarillos que
+hacen el trabajo en tu aplicación.
+
+00:00:19.686 --> 00:00:23.836 align:middle
+Hablaremos de la configuración de esos
+servicios, así como de los entornos.
+
+00:00:23.836 --> 00:00:26.156 align:middle
+¿Qué es exactamente un servicio?
+
+00:00:26.576 --> 00:00:27.166 align:middle
+Muy fácil
+
+00:00:27.286 --> 00:00:29.696 align:middle
+Es una simple clase PHP que hace un trabajo.
+
+00:00:29.696 --> 00:00:34.276 align:middle
+Por ejemplo, un Logger que te ayuda
+a registrar mensajes es un servicio.
+
+00:00:34.276 --> 00:00:36.806 align:middle
+O un mailer que envía correos
+electrónicos a tus clientes.
+
+00:00:37.196 --> 00:00:41.416 align:middle
+O un objeto de conexión a la base de datos que
+utilizas para ejecutar consultas a la base de datos.
+
+00:00:41.796 --> 00:00:43.236 align:middle
+Todos ellos son servicios.
+
+00:00:43.596 --> 00:00:47.746 align:middle
+Incluso el controlador que gestiona las peticiones
+es un servicio, pero tiene superpoderes.
+
+00:00:47.946 --> 00:00:49.276 align:middle
+Hablaremos de ello más adelante.
+
+00:00:49.856 --> 00:00:52.936 align:middle
+Este curso se titula
+"Fundamentos" porque es la base.
+
+00:00:53.266 --> 00:00:56.696 align:middle
+Todo lo que viene después de este tutorial
+no es más que una variación de estos temas.
+
+00:00:56.696 --> 00:01:02.616 align:middle
+Así que, para codificar conmigo, descarga el código
+del curso en esta página, descomprímelo y, dentro,
+
+00:01:02.616 --> 00:01:05.906 align:middle
+encontrarás un directorio start/
+con el mismo código que ves aquí.
+
+00:01:06.456 --> 00:01:09.816 align:middle
+El archivo README.md tiene todo lo que
+necesitas para poner en marcha esta aplicación.
+
+00:01:10.386 --> 00:01:14.496 align:middle
+Ya he completado la mayoría de estos
+pasos, así que voy a pasar al último paso
+
+00:01:14.496 --> 00:01:16.666 align:middle
+y ejecutar el servidor web Symfony incorporado.
+
+00:01:17.276 --> 00:01:19.216 align:middle
+Para ello, abre tu terminal y ejecuta:
+
+00:01:19.216 --> 00:01:25.176 align:middle
+symfony serve -d El -d le dice a
+Symfony que lo inicie en segundo plano.
+
+00:01:25.596 --> 00:01:28.216 align:middle
+Puedes encontrarlo en https://localhost:8000.
+
+00:01:28.756 --> 00:01:31.776 align:middle
+Podría copiar y pegar esto en mi
+navegador, pero voy a hacer trampas.
+
+00:01:32.146 --> 00:01:35.766 align:middle
+Mantén pulsada la tecla "cmd" o "control"
+en un Mac, haz clic en este enlace, y...
+
+00:01:36.086 --> 00:01:39.486 align:middle
+bienvenido de nuevo a Starshop, el
+sitio que creamos en el Episodio 1.
+
+00:01:39.486 --> 00:01:43.946 align:middle
+Así pues, los servicios son objetos que
+funcionan: Logger el servidor de correo,
+
+00:01:43.946 --> 00:01:46.826 align:middle
+nuestra conexión a la base de datos,
+e incluso nuestros controladores.
+
+00:01:47.186 --> 00:01:49.326 align:middle
+¿Cada objeto de nuestra
+aplicación es un servicio?
+
+00:01:49.666 --> 00:01:50.536 align:middle
+En realidad, ¡no!
+
+00:01:50.826 --> 00:01:52.896 align:middle
+También tenemos objetos que contienen datos.
+
+00:01:53.096 --> 00:01:56.816 align:middle
+Por ejemplo, nuestra clase
+Starship no es un servicio.
+
+00:01:56.816 --> 00:01:58.616 align:middle
+Es un simple objeto de datos.
+
+00:01:59.106 --> 00:02:03.046 align:middle
+Cuando necesitamos estos objetos, los
+instanciamos de la forma aburrida habitual.
+
+00:02:03.826 --> 00:02:06.756 align:middle
+Pero los servicios -objetos que
+hacen un trabajo- son diferentes.
+
+00:02:07.156 --> 00:02:09.886 align:middle
+Podríamos instanciarlos
+manualmente, pero en la práctica,
+
+00:02:09.886 --> 00:02:12.636 align:middle
+de eso se encarga otra cosa:
+el contenedor de servicios.
+
+00:02:13.156 --> 00:02:15.056 align:middle
+Es un gran admirador de nuestros servicios.
+
+00:02:15.446 --> 00:02:19.466 align:middle
+Lo sabe todo sobre ellos, desde el nombre de
+la clase hasta cada argumento del constructor.
+
+00:02:19.466 --> 00:02:25.986 align:middle
+Si le pides un servicio, lo instanciará por ti
+y te devolverá un objeto PHP listo para usar.
+
+00:02:26.926 --> 00:02:32.146 align:middle
+Y es inteligente si le pides un servicio
+varias veces, sólo lo crea una vez.
+
+00:02:32.146 --> 00:02:35.506 align:middle
+Por ejemplo, nuestra aplicación sólo
+necesita un registrador. Si pides
+
+00:02:35.506 --> 00:02:40.116 align:middle
+el logger 5 veces, se crea sólo una vez y
+
+00:02:40.116 --> 00:02:42.866 align:middle
+¡se devuelve el mismo objeto cada vez!
+
+00:02:43.546 --> 00:02:44.496 align:middle
+Vale, entonces...
+
+00:02:44.726 --> 00:02:46.476 align:middle
+¿cómo sabemos qué servicios tenemos?
+
+00:02:47.056 --> 00:02:51.386 align:middle
+Para ver la lista de todos los servicios que tenemos
+disponibles, vamos a utilizar un comando especial.
+
+00:02:51.906 --> 00:02:58.186 align:middle
+En tu terminal, ejecuta: bin/console
+debug:container Aquí puedes ver una larga lista
+
+00:02:58.186 --> 00:03:00.066 align:middle
+de servicios que podemos
+utilizar en nuestra aplicación.
+
+00:03:00.066 --> 00:03:01.836 align:middle
+Pero, ¿de dónde vienen?
+
+00:03:02.246 --> 00:03:06.136 align:middle
+¿Quién le dice al contenedor que debe
+haber un servicio logger cuya clase es Logger
+
+00:03:06.316 --> 00:03:08.746 align:middle
+y que debe instanciarse con estos argumentos?
+
+00:03:08.826 --> 00:03:13.676 align:middle
+Algunos servicios proceden de nuestro código y
+hablaremos de cómo se registran dentro de un rato.
+
+00:03:14.146 --> 00:03:16.606 align:middle
+Pero la gran mayoría proceden de bundles.
+
+00:03:17.116 --> 00:03:20.196 align:middle
+Los bundles son plugins que puedes
+añadir a las aplicaciones Symfony.
+
+00:03:20.666 --> 00:03:24.136 align:middle
+Proporcionan algunas cosas, pero la
+más importante son los servicios.
+
+00:03:24.526 --> 00:03:27.366 align:middle
+Cada bundle tiene un archivo de
+configuración que dice: ¡Eh!
+
+00:03:27.526 --> 00:03:31.106 align:middle
+Quiero tener un servicio llamado logger
+que debería ser una instancia de "Logger",
+
+00:03:31.426 --> 00:03:33.866 align:middle
+y debería instanciarse con estos argumentos.
+
+00:03:33.866 --> 00:03:37.736 align:middle
+Así que los servicios son herramientas
+y los bundles nos dan herramientas.
+
+00:03:38.176 --> 00:03:41.276 align:middle
+En nuestro código, abre config/bundles.php.
+
+00:03:41.276 --> 00:03:46.566 align:middle
+Este es el archivo responsable de registrar
+los bundles en nuestra aplicación.
+
+00:03:47.076 --> 00:03:47.746 align:middle
+¡Y fíjate!
+
+00:03:47.966 --> 00:03:49.086 align:middle
+¡Ya tenemos diez!
+
+00:03:49.086 --> 00:03:54.696 align:middle
+Algunos de ellos, como WebProfilerBundle, sólo
+están disponibles para un entorno específico.
+
+00:03:55.186 --> 00:03:58.486 align:middle
+MonologBundle es el que proporciona el
+servicio Logger que estamos utilizando
+
+00:03:58.486 --> 00:04:01.306 align:middle
+en StartshipRepository cuando
+registramos un mensaje.
+
+00:04:03.046 --> 00:04:09.556 align:middle
+O, si eliminamos completamente esta línea
+TwigBundle, el método render() que estamos llamando
+
+00:04:09.556 --> 00:04:11.736 align:middle
+en nuestros controladores dejará de funcionar.
+
+00:04:12.386 --> 00:04:17.456 align:middle
+Esto se debe a que, entre bastidores, se está
+utilizando el servicio twig para generar plantillas.
+
+00:04:17.456 --> 00:04:18.286 align:middle
+Más adelante hablaremos de ello.
+
+00:04:18.286 --> 00:04:24.236 align:middle
+A continuación, vamos a hablar de cómo instalar nuevos
+bundles en tu aplicación para obtener nuevos servicios.
