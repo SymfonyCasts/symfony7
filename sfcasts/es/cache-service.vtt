@@ -1,0 +1,232 @@
+WEBVTT
+
+00:00:01.116 --> 00:00:06.046 align:middle
+Vale, hemos inyectado HttpClientInterface
+y hemos hecho una petición HTTP
+
+00:00:06.046 --> 00:00:09.246 align:middle
+para obtener algunos datos JSON que
+hemos renderizado en nuestro sitio web.
+
+00:00:09.486 --> 00:00:14.446 align:middle
+Pero ejecutar una petición HTTP en cada
+carga de página no es una buena idea.
+
+00:00:14.856 --> 00:00:18.796 align:middle
+Las peticiones HTTP son lentas, y
+ya podemos ver que eso ocurre aquí,
+
+00:00:18.996 --> 00:00:22.236 align:middle
+donde la carga de nuestra página
+de inicio tarda más que antes.
+
+00:00:22.286 --> 00:00:27.856 align:middle
+Y la ISS se mueve rápido, así que no es muy
+eficiente actualizar esta información constantemente.
+
+00:00:28.486 --> 00:00:31.106 align:middle
+¿Existe algún servicio que pueda
+almacenar esos datos en caché?
+
+00:00:31.496 --> 00:00:38.006 align:middle
+¡Pues claro! Abre tu terminal y ejecuta
+bin/console debug:autowiring cache para ver
+
+00:00:38.006 --> 00:00:40.596 align:middle
+si tenemos algún servicio
+relacionado con la caché y...
+
+00:00:40.596 --> 00:00:46.346 align:middle
+¡lo tenemos! Estos alias de cache.app están
+listos para ser utilizados en nuestra aplicación.
+
+00:00:47.656 --> 00:00:50.986 align:middle
+Otra cosa a tener en cuenta es
+esto CacheItemPoolInterface.
+
+00:00:51.446 --> 00:00:55.166 align:middle
+Los pools no son más que espacios de nombres
+únicos para los elementos almacenados en caché.
+
+00:00:55.406 --> 00:00:58.926 align:middle
+Puedes pensar en ellos como "subcarpetas"
+del directorio de caché global.
+
+00:00:59.386 --> 00:01:02.996 align:middle
+Esto significa que puedes borrar un
+grupo de caché sin afectar a los demás.
+
+00:01:03.256 --> 00:01:04.996 align:middle
+Hablaremos de ello más adelante.
+
+00:01:05.066 --> 00:01:09.586 align:middle
+Por ahora, vamos a simplificar las
+cosas y a utilizar CacheInterface. De
+
+00:01:09.586 --> 00:01:14.386 align:middle
+vuelta a nuestro código, dentro de
+homepage(), escribe CacheInterface (el
+
+00:01:14.386 --> 00:01:17.106 align:middle
+de Contratos) y llámalo $cache.
+
+00:01:18.726 --> 00:01:26.476 align:middle
+Ahora, aquí abajo, copia estas dos líneas,
+bórralas y escribe $issData = $cache->get().
+
+00:01:27.566 --> 00:01:31.356 align:middle
+El primer argumento debe ser la
+clave de caché, que llamaremos...
+
+00:01:31.416 --> 00:01:33.186 align:middle
+iss_location_data.
+
+00:01:34.186 --> 00:01:36.616 align:middle
+El segundo argumento debe
+ser un anónimo function ().
+
+00:01:37.386 --> 00:01:40.196 align:middle
+Ahora podemos pegar a continuación las
+dos líneas que hemos copiado antes.
+
+00:01:40.606 --> 00:01:43.696 align:middle
+Pero en lugar de establecer la
+variable, vamos a poner return.
+
+00:01:44.426 --> 00:01:49.526 align:middle
+Pero antes de poder utilizar esta variable $client
+en una función anónima, tenemos que utilizarla.
+
+00:01:50.216 --> 00:01:52.936 align:middle
+Escribe use($client): array.
+
+00:01:56.216 --> 00:01:58.416 align:middle
+Si vamos a nuestro navegador y actualizamos...
+
+00:01:59.836 --> 00:02:06.196 align:middle
+seguimos haciendo la petición del Cliente HTTP y, por
+aquí, ahora tenemos un icono de caché que nos muestra
+
+00:02:06.196 --> 00:02:07.886 align:middle
+si se ha escrito algo en la caché.
+
+00:02:08.276 --> 00:02:09.026 align:middle
+¡Ya lo tenemos!
+
+00:02:09.026 --> 00:02:13.066 align:middle
+Haré clic en este icono de caché
+para abrir el perfilador, y...
+
+00:02:13.166 --> 00:02:14.176 align:middle
+¿no es genial? No hemos
+
+00:02:15.156 --> 00:02:19.036 align:middle
+creado un pool personalizado para esto, así
+que se está utilizando el pool por defecto,
+
+00:02:19.416 --> 00:02:22.526 align:middle
+pero podemos crear pools personalizados
+y lo haremos en un momento.
+
+00:02:22.686 --> 00:02:25.926 align:middle
+Si volvemos a la página
+de inicio y refrescamos...
+
+00:02:26.246 --> 00:02:28.256 align:middle
+la petición HTTP ha desaparecido.
+
+00:02:28.536 --> 00:02:30.726 align:middle
+Y si pasamos el ratón por
+encima del icono de la caché...
+
+00:02:30.896 --> 00:02:31.756 align:middle
+no se ha escrito nada.
+
+00:02:32.486 --> 00:02:35.126 align:middle
+Y ahora, la carga de nuestra página
+es notablemente más rápida. Ahora
+
+00:02:36.346 --> 00:02:41.186 align:middle
+mismo, esos datos se almacenan en caché para siempre a menos
+que borremos la caché, pero por motivos de desarrollo, vamos a
+
+00:02:41.486 --> 00:02:43.576 align:middle
+cambiar eso en nuestra función.
+
+00:02:45.266 --> 00:02:48.686 align:middle
+Añade ItemInterface como primer
+argumento y llámalo $item.
+
+00:02:49.906 --> 00:02:56.446 align:middle
+Dentro, escribe
+$item->expiresAfter() y pasa time: 5.
+
+00:02:56.846 --> 00:03:00.196 align:middle
+Este número está en segundos,
+transcurridos los cuales expirará la caché.
+
+00:03:01.066 --> 00:03:06.086 align:middle
+De vuelta a nuestro navegador, si actualizamos,
+nada cambia porque el valor ya estaba en la caché.
+
+00:03:06.786 --> 00:03:10.546 align:middle
+Para ver nuestros cambios, tenemos que borrarlo
+manualmente para que se vuelva a almacenar en cach é
+
+00:03:10.546 --> 00:03:13.266 align:middle
+con nuestro nuevo plazo de cinco segundos.
+
+00:03:14.026 --> 00:03:18.486 align:middle
+El adaptador de caché por defecto es un sistema de
+archivos, lo que significa que la caché se almacena
+
+00:03:18.486 --> 00:03:21.096 align:middle
+en el directorio var/cache/dev/pools/.
+
+00:03:21.656 --> 00:03:25.366 align:middle
+Aquí podemos ver nuestra carpeta /app,
+que corresponde a nuestra caché app.
+
+00:03:26.016 --> 00:03:29.286 align:middle
+Podríamos eliminar este directorio
+manualmente, pero hay una forma mejor.
+
+00:03:30.006 --> 00:03:36.876 align:middle
+En tu terminal, ejecuta: bin/console
+cache:pool:list Esta es la lista
+
+00:03:36.876 --> 00:03:38.786 align:middle
+de pools disponibles en nuestra aplicación.
+
+00:03:39.356 --> 00:03:42.976 align:middle
+Para borrar el pool cache.app,
+podemos utilizar otro comando:
+
+00:03:43.336 --> 00:03:48.706 align:middle
+bin/console cache:pool:clear cache.app Y...
+
+00:03:48.956 --> 00:03:49.656 align:middle
+¡caché borrada!
+
+00:03:49.656 --> 00:03:55.246 align:middle
+Si volvemos a nuestro navegador y refrescamos
+ahora... aquí está nuestra petición HTTP.
+
+00:03:55.476 --> 00:03:57.026 align:middle
+Si volvemos a actualizar rápidamente...
+
+00:03:57.286 --> 00:03:59.616 align:middle
+ahora los datos que tenemos
+proceden de nuestra caché.
+
+00:04:00.276 --> 00:04:03.516 align:middle
+Si refrescamos una vez más después
+de que hayan pasado cinco segundos...
+
+00:04:04.026 --> 00:04:06.026 align:middle
+¡aquí tenemos de nuevo
+nuestra petición HTTP!
+
+00:04:06.826 --> 00:04:09.946 align:middle
+A continuación: Aprendamos a
+configurar nuestro servicio de caché.
