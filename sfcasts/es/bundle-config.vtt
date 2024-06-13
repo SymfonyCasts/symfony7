@@ -1,0 +1,173 @@
+WEBVTT
+
+00:00:01.096 --> 00:00:05.336 align:middle
+Hasta ahora, hemos aprendido a utilizar
+los servicios Cliente HTTP y Caché,
+
+00:00:05.566 --> 00:00:07.596 align:middle
+y lo hemos inyectado en homepage().
+
+00:00:07.966 --> 00:00:10.786 align:middle
+Pero no somos responsables
+de crear sus objetos.
+
+00:00:11.286 --> 00:00:15.406 align:middle
+Ya sabemos que los bundles nos proporcionan
+servicios, y cuando autoconectamos un servicio,
+
+00:00:15.406 --> 00:00:18.616 align:middle
+nuestro bundle nos proporciona todos los
+detalles que necesitamos para instanciarlo.
+
+00:00:19.026 --> 00:00:20.716 align:middle
+Pero si es otro el responsable
+
+00:00:20.716 --> 00:00:23.686 align:middle
+de instanciar esos objetos,
+¿cómo podemos controlarlo?
+
+00:00:24.386 --> 00:00:26.566 align:middle
+La respuesta es la configuración del bundle.
+
+00:00:26.566 --> 00:00:29.936 align:middle
+Abre el directorio /config/packages.
+
+00:00:30.386 --> 00:00:33.846 align:middle
+Todos estos archivos de configuración
+de .yaml se cargan automáticamente
+
+00:00:33.846 --> 00:00:39.186 align:middle
+en nuestra aplicación Symfony, y su trabajo consiste en
+configurar los servicios que nos proporciona cada bundle.
+
+00:00:39.826 --> 00:00:41.966 align:middle
+En nuestro método homepage(),
+justo al principio,
+
+00:00:42.066 --> 00:00:45.676 align:middle
+vamos a dd($cache) para que podamos ver el nombre
+de la clase del objeto que estamos obteniendo. Por
+
+00:00:45.676 --> 00:00:48.346 align:middle
+ejemplo, para el servicio de caché,
+
+00:00:48.346 --> 00:00:51.426 align:middle
+FrameworkBundle le dice al
+contenedor de servicios: ¡Eh!
+
+00:00:51.666 --> 00:00:56.746 align:middle
+Cuando te pida el CacheInterface, quiero
+que instancies este objeto TraceableAdapter
+
+00:00:56.896 --> 00:00:59.376 align:middle
+con un conjunto específico
+de argumentos que necesita.
+
+00:00:59.376 --> 00:01:04.906 align:middle
+Así que parece que nuestro servicio de caché es sólo
+este TraceableAdapter, pero si miramos más de cerca,
+
+00:01:05.096 --> 00:01:08.396 align:middle
+podemos ver que en realidad es una
+envoltura alrededor de un FilesystemAdapter,
+
+00:01:08.666 --> 00:01:11.296 align:middle
+y la caché se almacena dentro
+del sistema de archivos.
+
+00:01:11.966 --> 00:01:15.256 align:middle
+Eso está bien, pero ¿y si en lugar de eso
+queremos almacenar la caché en la memoria?
+
+00:01:15.566 --> 00:01:17.156 align:middle
+¿O en algún otro lugar
+del sistema de archivos?
+
+00:01:17.826 --> 00:01:20.386 align:middle
+Aquí es donde brilla la
+configuración de bundle.
+
+00:01:21.216 --> 00:01:24.876 align:middle
+Abre framework.yaml y encuentra
+esta clave raíz framework.
+
+00:01:25.526 --> 00:01:30.436 align:middle
+Esto significa que estamos pasando configuración a
+FrameworkBundle, y que utilizará esa configuración
+
+00:01:30.436 --> 00:01:32.946 align:middle
+para cambiar cómo instanciar sus servicios.
+
+00:01:33.576 --> 00:01:35.686 align:middle
+Por cierto, el nombre del
+archivo aquí no es importante.
+
+00:01:36.026 --> 00:01:39.526 align:middle
+Podríamos llamarlo pizza.yaml
+y funcionaría igual.
+
+00:01:40.286 --> 00:01:42.436 align:middle
+Bien, dirígete a tu terminal y ejecuta:
+
+00:01:42.726 --> 00:01:49.286 align:middle
+bin/console debug:config framework Esto
+nos muestra la configuración actual.
+
+00:01:50.616 --> 00:01:55.516 align:middle
+Para ver la configuración completa,
+ejecuta: bin/console config:dump framework
+
+00:01:58.256 --> 00:02:00.066 align:middle
+Eso es mucha información.
+
+00:02:00.556 --> 00:02:01.626 align:middle
+Vamos a reducirla.
+
+00:02:02.296 --> 00:02:07.196 align:middle
+Si queremos ver sólo la configuración
+responsable del servicio de caché, ejecuta::
+
+00:02:07.196 --> 00:02:13.806 align:middle
+bin/console config:dump
+framework cache Mucho mejor. En ,
+
+00:02:14.526 --> 00:02:19.476 align:middle
+cache.yaml podemos ver que esto sigue formando
+parte de la configuración de , framework
+
+00:02:19.816 --> 00:02:22.426 align:middle
+sólo que separada en archivos
+diferentes para organizarla.
+
+00:02:23.166 --> 00:02:28.676 align:middle
+Debajo de este ejemplo, pongamos
+en . app cache.adapter.array
+
+00:02:29.656 --> 00:02:31.956 align:middle
+Bien, de vuelta al navegador, actualiza.
+
+00:02:32.736 --> 00:02:35.226 align:middle
+¡Estupendo! Ha cambiado a . ArrayAdapter
+
+00:02:35.886 --> 00:02:40.946 align:middle
+Dirígete y elimina para que podamos ver
+en acción. dd($cache) cache.array.adapter
+
+00:02:40.946 --> 00:02:43.186 align:middle
+Vuelve a actualizar la página, y...
+
+00:02:43.666 --> 00:02:48.376 align:middle
+¡ah! Cada vez que actualizamos la página,
+estamos ejecutando la petición HTTP, por
+
+00:02:48.836 --> 00:02:52.116 align:middle
+lo que la caché sólo está
+activa durante la petición.
+
+00:02:52.726 --> 00:02:57.496 align:middle
+Cuando iniciamos una nueva petición, la caché
+se invalida y volvemos a ver esa petición HTTP.
+
+00:02:58.316 --> 00:03:01.316 align:middle
+A continuación: Echemos un vistazo
+más de cerca al autocableado.
