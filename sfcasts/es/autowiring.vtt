@@ -1,0 +1,245 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:01.566 align:middle
+Eh, ¡mira!
+
+00:00:01.866 --> 00:00:03.006 align:middle
+¡Es nuestro comando favorito!
+
+00:00:03.326 --> 00:00:07.816 align:middle
+bin/console debug:autowiring
+Nos muestra una lista
+
+00:00:07.816 --> 00:00:10.406 align:middle
+de los servicios que podemos
+autocablear en nuestro código.
+
+00:00:10.856 --> 00:00:12.956 align:middle
+Pero, ¿cómo funciona
+realmente el autocableado?
+
+00:00:13.726 --> 00:00:20.336 align:middle
+Ejecutemos otro comando: bin/console
+debug:container Esto nos da una enorme lista
+
+00:00:20.336 --> 00:00:26.376 align:middle
+de servicios, y cualquier ID de servicio que resulte
+ser un nombre de clase o interfaz es autocableable.
+
+00:00:26.856 --> 00:00:30.016 align:middle
+Esto significa que podemos teclearlo
+en el constructor de nuestro servicio
+
+00:00:30.176 --> 00:00:32.916 align:middle
+y el contenedor de servicios
+inyectará ese servicio.
+
+00:00:33.546 --> 00:00:39.156 align:middle
+Por el contrario, si un ID de servicio no es un
+nombre de interfaz o de clase, no es autowirable.
+
+00:00:39.686 --> 00:00:43.516 align:middle
+Esto es así por diseño, ya que la mayoría de
+los servicios son de bajo nivel y sólo existen
+
+00:00:43.516 --> 00:00:45.766 align:middle
+para ayudar a otros servicios entre bastidores.
+
+00:00:46.396 --> 00:00:49.876 align:middle
+Rara vez necesitaremos utilizar
+directamente esos servicios de bajo nivel,
+
+00:00:50.146 --> 00:00:51.846 align:middle
+y por eso no podemos obtenerlos
+mediante autocableado.
+
+00:00:51.846 --> 00:00:55.286 align:middle
+Y por eso debug:container tiene muchas
+más entradas que debug:autowiring.
+
+00:00:56.016 --> 00:01:01.006 align:middle
+El contenedor de servicios es básicamente una matriz
+gigante en la que cada servicio tiene un nombre único que
+
+00:01:01.006 --> 00:01:03.076 align:middle
+apunta al objeto de servicio
+correspondiente. En el
+
+00:01:03.706 --> 00:01:08.336 align:middle
+caso de twig, por ejemplo, el contenedor
+sabe que para instanciar este servicio,
+
+00:01:08.476 --> 00:01:11.706 align:middle
+necesita crear una instancia
+de esta clase Twig\Environment.
+
+00:01:12.196 --> 00:01:14.466 align:middle
+Y aunque aquí no veamos los argumentos,
+
+00:01:14.596 --> 00:01:17.606 align:middle
+sabe exactamente cuáles debe
+pasar para instanciarlo. Como
+
+00:01:18.316 --> 00:01:22.386 align:middle
+ventaja, si hacemos una petición del
+mismo servicio en más de un sitio,
+
+00:01:22.416 --> 00:01:25.046 align:middle
+el contenedor de servicios
+sólo crea una instancia, por
+
+00:01:25.266 --> 00:01:27.826 align:middle
+lo que tendremos exactamente la
+misma instancia en todas partes.
+
+00:01:28.506 --> 00:01:30.856 align:middle
+También te habrás fijado
+en estas clases de servicio.
+
+00:01:31.166 --> 00:01:36.756 align:middle
+Este CacheInterface, por ejemplo, se utilizó
+antes como alias de nuestro servicio cache.app.
+
+00:01:37.256 --> 00:01:41.076 align:middle
+Esto no es más que una forma de hacer que un
+servicio como cache.app sea autodireccionable. La
+
+00:01:41.796 --> 00:01:45.656 align:middle
+gran mayoría de estos servicios utilizan
+la estrategia de nomenclatura snake case,
+
+00:01:45.826 --> 00:01:50.866 align:middle
+así que para hacerlos autowireables en nuestro código,
+los bundles añaden algunos alias -nombres de clases,
+
+00:01:50.866 --> 00:01:53.446 align:middle
+o interfaces- que podemos
+teclear en nuestro código.
+
+00:01:54.126 --> 00:01:58.566 align:middle
+Así que los alias son básicamente como enlaces
+simbólicos que sólo hacen referencia a otros servicios.
+
+00:01:59.076 --> 00:02:02.726 align:middle
+Sin embargo, puede haber ocasiones en las
+que haya varios servicios en el contenedor
+
+00:02:02.726 --> 00:02:05.116 align:middle
+que implementen la misma clase o interfaz.
+
+00:02:05.626 --> 00:02:09.826 align:middle
+Para ello, volvamos a nuestro código y
+creemos una reserva de caché personalizada.
+
+00:02:10.486 --> 00:02:16.696 align:middle
+En config/packages/cache.yaml, aquí
+abajo, descomenta la clave pools,
+
+00:02:17.726 --> 00:02:22.036 align:middle
+y en lugar de este ejemplo,
+di iss_location_pool: null.
+
+00:02:23.126 --> 00:02:28.666 align:middle
+Ahora, en tu terminal, ejecuta:
+bin/console debug:autowiring Y...
+
+00:02:29.086 --> 00:02:29.636 align:middle
+¡compruébalo!
+
+00:02:29.986 --> 00:02:34.696 align:middle
+Esta configuración ha añadido un
+nuevo servicio - iss_location_pool -
+
+00:02:34.856 --> 00:02:37.676 align:middle
+que tiene el mismo CacheInterfaceque cache.app.
+
+00:02:39.176 --> 00:02:44.406 align:middle
+Volvamos a src/Controller/MainController.php,
+dentro de homepage(),
+
+00:02:44.666 --> 00:02:48.016 align:middle
+cambiemos el nombre de esta
+variable por $issLocationPool
+
+00:02:48.936 --> 00:02:51.366 align:middle
+y mantengamos el mismo typehint CacheInterface.
+
+00:02:52.546 --> 00:02:55.626 align:middle
+Copia ese nombre de variable
+y, aquí abajo, pégalo.
+
+00:02:56.466 --> 00:03:01.146 align:middle
+Esto se llama "autocableado con nombre", en el que nuestro
+contenedor de servicios mira el nombre de la variable
+
+00:03:01.146 --> 00:03:03.626 align:middle
+y su typehint para inyectar
+el servicio correcto.
+
+00:03:04.156 --> 00:03:07.486 align:middle
+Es bastante raro, pero también podemos
+ver esto con nuestro servicio logger.
+
+00:03:08.316 --> 00:03:11.876 align:middle
+De vuelta a nuestro navegador, actualiza
+la página y comprueba el perfil de caché.
+
+00:03:13.516 --> 00:03:18.726 align:middle
+Aquí está nuestro iss_location_pool y nuestro
+iss_location_data está escrito en ese pool.
+
+00:03:19.366 --> 00:03:23.526 align:middle
+Si alguna vez necesitamos borrar la caché
+de este pool, en nuestro terminal, ejecuta:
+
+00:03:23.656 --> 00:03:31.186 align:middle
+bin/console cache:pool:clear iss_location_pool
+Esto borrará la caché de este grupo concreto
+
+00:03:31.186 --> 00:03:32.796 align:middle
+sin afectar a los demás grupos.
+
+00:03:33.176 --> 00:03:33.766 align:middle
+¡Muy útil!
+
+00:03:34.416 --> 00:03:37.426 align:middle
+También podemos configurar este
+pool de forma diferente a los demás.
+
+00:03:37.946 --> 00:03:42.196 align:middle
+Por ejemplo, vamos a establecer el tiempo de caducidad
+de nuestro nuevo pool en el archivo de configuración.
+
+00:03:42.756 --> 00:03:48.726 align:middle
+En cache.yaml, en lugar de null, en una
+nueva línea, escribe default_lifetime: 5.
+
+00:03:49.356 --> 00:03:50.626 align:middle
+El 5 está en segundos.
+
+00:03:51.076 --> 00:03:53.596 align:middle
+Esto debería afectar a todos los
+elementos de caché de esta reserva.
+
+00:03:54.336 --> 00:03:59.136 align:middle
+Ahora, en MainController.php, podemos
+eliminar $item->expiresAfter().
+
+00:04:00.146 --> 00:04:02.856 align:middle
+También podemos deshacernos por
+completo de este argumento $item.
+
+00:04:03.796 --> 00:04:09.606 align:middle
+Para asegurarnos de que esto funciona, en nuestro
+navegador, actualiza de nuevo la página de inicio y...
+
+00:04:10.556 --> 00:04:11.226 align:middle
+no hay errores.
+
+00:04:11.486 --> 00:04:16.516 align:middle
+¡Funciona! Siguiente: Hablemos de los
+entornos: conjuntos de configuraciones
+
+00:04:16.516 --> 00:04:19.206 align:middle
+que nos ayudan a desarrollar
+localmente frente a la producción.
