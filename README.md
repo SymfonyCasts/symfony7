@@ -22,6 +22,14 @@ composer install
 You may alternatively need to run `php composer.phar install`, depending
 on how you installed Composer.
 
+**Build TailwindCSS**
+
+This project uses TailwindCSS, to buil the CSS file run:
+
+```
+php bin/console tailwind:build
+```
+
 **Start the Symfony web server**
 
 You can use Nginx or Apache, but Symfony's local web server
