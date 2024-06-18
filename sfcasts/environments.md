@@ -1,19 +1,74 @@
 # Symfony Environments
 
-Sometimes, we could really use a set of configurations that help us develop in different scenarios. Luckily, Symfony has just the thing - *environments*.
+Sometimes, we could really use a set of configurations that help us develop in
+different scenarios. Luckily, Symfony has just the thing - *environments*.
 
-In the `.env` file (located at the root of our project directory), we have some *environment variables*. These are sets of configurations for our app that we can change depending on which scenario - or *environment* - we're developing in. Symfony reads this file to see which variables we're using and creates that environment.
+In the `.env` file (located at the root of our project directory), we have some
+*environment variables*.
 
-At the moment, we only have a few environment variables here, like this `APP_ENV` variable set to `dev`. This tells Symfony that our application should be loaded in *development* mode. After we deploy our app to *production*, we'll want to change this to `prod`, which is optimized for performance and avoids sensitive data leaking. Where exactly is it used?
+[[[ code('b4056f5cf3') ]]]
 
-Open `/public/index.php`. This is our front controller, which is executed on every request and boots up our application. It creates an instance of `App\Kernel`, and this has some methods on it. Hold "command" and click on `Kernel()` to open that up. This class is pretty empty, aside from this `use MicroKernelTrait;` line, and *that* trait is where most of the code is coming from. If we open this... ah! Here we go! This contains a bunch of methods like, for example, `configureContainer()`, which imports our configuration files. Inside it, below, we have `$this->environment` which, if you dig a little bit, is the value of our `APP_ENV` variable. So if we want to add an environment-specific configuration, we can put this in `config/packages/`, followed by your environment, like `dev` or `prod`, and then the config file name - `framework.yaml` for example.
+These are sets of configurations for our app that we can change depending on
+which scenario - or *environment* - we're developing in. Symfony reads this file to see
+which variables we're using and creates that environment.
 
-That will work, but recently, Symfony introduced a much *cooler* way to do this, using the `when@` syntax. You can see this all over the new configuration. If we open `framework.yaml` for example, down here at the end... here it is - `when@test`! This code will *only* be loaded for the `test` environment.
+At the moment, we only have a few environment variables here, like
+this `APP_ENV` variable set to `dev`. This tells Symfony that our application
+should be loaded in *development* mode. After we deploy our app to *production*,
+we'll want to change this to `prod`, which is optimized for performance and
+avoids sensitive data leaking. Where exactly is it used?
 
-In our `monolog.yaml` file, we see more of this environment-specific configuration under `when@dev`. This tells Symfony to *only* load this configuration in the *dev* environment. If we scroll down, we can see slightly different configurations for `test` and `prod` environments as well.
+Open `/public/index.php`. This is our front controller, which is executed on
+every request and boots up our application. 
 
-If you head back to `MicroKernelTrait`, down here, we can see that the same is true for this `configureRoutes()` method. And in `config/routes/framework.yaml`, we see `when@dev`, meaning we're only importing this set of routes for the `dev` environment. In `web_profiler.yaml`, we have the same thing. So Symfony, by default, has *three* environments (or "modes") we can use in our app: `dev`, `prod` and `test`. You can totally create your own custom environment if needed too, but usually, those three are more than enough to get the job done.
+[[[ code('928e8cff8a') ]]]
 
-Okay, let's open a file we're already familiar with - `config/bundles.php`. This has an array of bundles enabled in our application, where the *key* is the bundle class and the *value* is an array of environments available *for* that bundle. For example, this `WebProfilerBundle` is only available for the `dev` and `test` environments. Meanwhile, `DebugBundle` and `MakerBundle` are only available for the `dev` environment. They're *super* useful while developing, but we *definitely* don't want to use them on production and risk leaking sensitive information.
+It creates an instance of `App\Kernel`, and this has some methods on it. Hold "command" and click
+on `Kernel()` to open that up. This class is pretty empty, aside from
+this `use MicroKernelTrait;` line, and *that* trait is where most of the code is
+coming from.
+
+[[[ code('e41007c7b3') ]]]
+
+If we open this... ah! Here we go! This contains a bunch of methods
+like, for example, `configureContainer()`, which imports our configuration
+files. Inside it, below, we have `$this->environment` which, if you dig a little
+bit, is the value of our `APP_ENV` variable. So if we want to add an
+environment-specific configuration, we can put this in `config/packages/`,
+followed by your environment, like `dev` or `prod`, and then the config file
+name - `framework.yaml` for example.
+
+That will work, but recently, Symfony introduced a much *cooler* way to do this,
+using the `when@` syntax. You can see this all over the new configuration. If we
+open `framework.yaml` for example, down here at the end... here it is - `when@test`!
+This code will *only* be loaded for the `test` environment.
+
+[[[ code('843d8d2006') ]]]
+
+In our `monolog.yaml` file, we see more of this environment-specific
+configuration under `when@dev`. This tells Symfony to *only* load this
+configuration in the *dev* environment. If we scroll down, we can see slightly
+different configurations for `test` and `prod` environments as well.
+
+[[[ code('fb9db28629') ]]]
+
+If you head back to `MicroKernelTrait`, down here, we can see that the same is
+true for this `configureRoutes()` method. And in `config/routes/framework.yaml`,
+we see `when@dev`, meaning we're only importing this set of routes for the `dev`environment.
+In `web_profiler.yaml`, we have the same thing. So Symfony, by default, 
+has *three* environments (or "modes") we can use in our app: `dev`, `prod` and `test`.
+You can totally create your own custom environment if needed too, but usually,
+those three are more than enough to get the job done.
+
+Okay, let's open a file we're already familiar with - `config/bundles.php`.
+
+[[[ code('c062bf4860') ]]]
+
+This has an array of bundles enabled in our application, where the *key* is the
+bundle class and the *value* is an array of environments available *for* that
+bundle. For example, this `WebProfilerBundle` is only available for the `dev`and `test` environments.
+Meanwhile, `DebugBundle` and `MakerBundle` are only available for the `dev` environment.
+They're *super* useful while developing, but we *definitely* don't want to use them
+on production and risk leaking sensitive information.
 
 Next: Let's change it up and try loading our application using the `prod` environment.
