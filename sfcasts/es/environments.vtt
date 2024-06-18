@@ -1,0 +1,213 @@
+WEBVTT
+
+00:00:01.136 --> 00:00:03.896 align:middle
+A veces, nos vendría muy bien
+un conjunto de configuraciones
+
+00:00:03.966 --> 00:00:06.076 align:middle
+que nos ayuden a desarrollar
+en diferentes escenarios.
+
+00:00:06.526 --> 00:00:09.476 align:middle
+Por suerte, Symfony tiene justo
+lo que necesitamos: entornos.
+
+00:00:10.156 --> 00:00:13.866 align:middle
+En el archivo .env (situado en la raíz
+del directorio de nuestro proyecto),
+
+00:00:14.226 --> 00:00:16.116 align:middle
+tenemos algunas variables de entorno.
+
+00:00:16.656 --> 00:00:21.366 align:middle
+Son conjuntos de configuraciones para nuestra
+aplicación que podemos cambiar en función del escenario
+
+00:00:21.426 --> 00:00:23.156 align:middle
+-o entorno- en el que estemos desarrollando.
+
+00:00:23.666 --> 00:00:28.306 align:middle
+Symfony lee este archivo para ver qué variables
+estamos utilizando y crea ese entorno. Por el momento
+
+00:00:28.836 --> 00:00:31.666 align:middle
+, sólo tenemos unas pocas
+variables de entorno aquí,
+
+00:00:31.986 --> 00:00:34.406 align:middle
+como esta variable APP_ENV establecida en dev.
+
+00:00:35.076 --> 00:00:38.666 align:middle
+Esto indica a Symfony que nuestra
+aplicación debe cargarse en modo desarrollo.
+
+00:00:39.316 --> 00:00:43.926 align:middle
+Después de desplegar nuestra aplicación en producción,
+querremos cambiar esto a prod, que está optimizado
+
+00:00:43.926 --> 00:00:46.546 align:middle
+para el rendimiento y evita
+la fuga de datos sensibles.
+
+00:00:47.366 --> 00:00:48.696 align:middle
+¿Dónde se utiliza exactamente?
+
+00:00:48.696 --> 00:00:51.026 align:middle
+Abre /public/index.php.
+
+00:00:51.196 --> 00:00:57.326 align:middle
+Este es nuestro controlador frontal, que se ejecuta
+en cada petición y arranca nuestra aplicación.
+
+00:00:57.916 --> 00:01:01.496 align:middle
+Crea una instancia de App\Kernel,
+y ésta tiene algunos métodos.
+
+00:01:02.156 --> 00:01:04.886 align:middle
+Mantén pulsado "comando" y haz
+clic en Kernel() para abrirlo.
+
+00:01:06.156 --> 00:01:10.156 align:middle
+Esta clase está bastante vacía, aparte
+de esta línea use MicroKernelTrait;,
+
+00:01:10.256 --> 00:01:13.196 align:middle
+y de ese trait es de donde procede
+la mayor parte del código.
+
+00:01:14.016 --> 00:01:14.916 align:middle
+Si abrimos esto...
+
+00:01:15.436 --> 00:01:16.566 align:middle
+¡ah! ¡Ya está!
+
+00:01:16.936 --> 00:01:20.456 align:middle
+Contiene un montón de métodos como,
+por ejemplo, configureContainer(),
+
+00:01:20.646 --> 00:01:22.656 align:middle
+que importa nuestros
+archivos de configuración.
+
+00:01:23.436 --> 00:01:28.026 align:middle
+Dentro de él, abajo, tenemos
+$this->environment que, si escarbas un poco,
+
+00:01:28.286 --> 00:01:30.636 align:middle
+es el valor de nuestra variable APP_ENV.
+
+00:01:31.016 --> 00:01:33.926 align:middle
+Así que si queremos añadir una
+configuración específica de entorno,
+
+00:01:34.236 --> 00:01:40.096 align:middle
+podemos poner esto en config/packages/,
+seguido de tu entorno, como dev o prod,
+
+00:01:40.476 --> 00:01:44.156 align:middle
+y luego el nombre del archivo de
+configuración - framework.yaml por ejemplo.
+
+00:01:45.076 --> 00:01:48.396 align:middle
+Eso funcionará, pero recientemente, Symfony
+ha introducido una forma mucho más genial
+
+00:01:48.396 --> 00:01:51.686 align:middle
+de hacer esto, utilizando la sintaxis when@.
+
+00:01:52.386 --> 00:01:54.856 align:middle
+Puedes ver esto en toda
+la nueva configuración.
+
+00:01:55.456 --> 00:01:59.276 align:middle
+Si abrimos framework.yaml por
+ejemplo, aquí abajo al final...
+
+00:01:59.596 --> 00:02:01.596 align:middle
+¡aquí está - when@test!
+
+00:02:02.126 --> 00:02:04.686 align:middle
+Este código sólo se
+cargará para el entorno test.
+
+00:02:05.316 --> 00:02:07.976 align:middle
+En nuestro archivo monolog.yaml, vemos más
+
+00:02:07.976 --> 00:02:11.636 align:middle
+de esta configuración específica
+del entorno bajo when@dev.
+
+00:02:12.406 --> 00:02:16.296 align:middle
+Esto le dice a Symfony que sólo cargue
+esta configuración en el entorno dev.
+
+00:02:17.206 --> 00:02:20.206 align:middle
+Si nos desplazamos hacia abajo, podemos ver
+también configuraciones ligeramente diferentes
+
+00:02:20.206 --> 00:02:22.376 align:middle
+para los entornos test y prod . Si
+
+00:02:25.486 --> 00:02:30.276 align:middle
+volvemos a MicroKernelTrait, aquí
+abajo, podemos ver lo mismo para
+
+00:02:30.276 --> 00:02:31.886 align:middle
+este método configureRoutes().
+
+00:02:33.756 --> 00:02:40.666 align:middle
+Y en config/routes/framework.yaml, vemos when@dev, lo
+que significa que sólo estamos importando este conjunto
+
+00:02:40.666 --> 00:02:42.456 align:middle
+de rutas para el entorno dev.
+
+00:02:43.556 --> 00:02:46.426 align:middle
+En web_profiler.yaml, tenemos lo mismo.
+
+00:02:47.056 --> 00:02:49.976 align:middle
+Así que Symfony, por defecto,
+tiene tres entornos (o
+
+00:02:49.976 --> 00:02:53.776 align:middle
+"modos") que podemos utilizar
+en nuestra app: dev prod y test.
+
+00:02:54.366 --> 00:02:58.196 align:middle
+También puedes crear tu propio entorno
+personalizado si es necesario, pero normalmente,
+
+00:02:58.256 --> 00:03:00.326 align:middle
+esos tres son más que
+suficientes para hacer el trabajo.
+
+00:03:01.236 --> 00:03:05.476 align:middle
+Bien, abramos un archivo con el que ya
+estamos familiarizados: config/bundles.php.
+
+00:03:05.476 --> 00:03:11.446 align:middle
+Tiene una matriz de bundles habilitados en nuestra
+aplicación, donde la clave es la clase de bundle
+
+00:03:11.706 --> 00:03:14.996 align:middle
+y el valor es una matriz de entornos
+disponibles para ese bundle.
+
+00:03:15.556 --> 00:03:20.796 align:middle
+Por ejemplo, este WebProfilerBundle sólo
+está disponible para los entornos devy test.
+
+00:03:21.706 --> 00:03:26.356 align:middle
+Mientras, DebugBundle y MakerBundle sólo
+están disponibles para el entorno dev. Son
+
+00:03:27.096 --> 00:03:31.456 align:middle
+superútiles mientras desarrollamos, pero
+definitivamente no queremos utilizarlos en producción
+
+00:03:31.456 --> 00:03:33.626 align:middle
+y arriesgarnos a filtrar información sensible.
+
+00:03:34.506 --> 00:03:38.966 align:middle
+A continuación: Cambiemos e intentemos cargar
+nuestra aplicación utilizando el entorno prod.
