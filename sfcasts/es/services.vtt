@@ -1,0 +1,139 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:03.466 align:middle
+Ya sabemos que los servicios
+proceden de bundles.
+
+00:00:03.726 --> 00:00:08.246 align:middle
+Y cada servicio es una combinación de un
+ID, una clase y un conjunto de argumentos
+
+00:00:08.246 --> 00:00:09.696 align:middle
+necesarios para instanciarlo.
+
+00:00:10.206 --> 00:00:12.966 align:middle
+Pero, ¿sabías que también podemos
+crear nuestros propios servicios
+
+00:00:12.966 --> 00:00:15.456 align:middle
+para organizar nuestro
+código y mantenerlo mejor?
+
+00:00:15.846 --> 00:00:19.526 align:middle
+Lo creas o no, ya creamos
+uno en el episodio anterior.
+
+00:00:20.256 --> 00:00:22.696 align:middle
+Abre StarshipRepository.php.
+
+00:00:22.696 --> 00:00:26.356 align:middle
+Lo creamos sin configuración y aún podemos
+
+00:00:26.356 --> 00:00:29.366 align:middle
+utilizarlo en StarshipApiController.php.
+
+00:00:29.366 --> 00:00:30.406 align:middle
+Pero, ¿cómo podemos hacerlo?
+
+00:00:31.026 --> 00:00:33.936 align:middle
+Esto funciona gracias a config/services.yaml.
+
+00:00:34.596 --> 00:00:35.296 align:middle
+Vamos a abrirlo.
+
+00:00:36.536 --> 00:00:40.396 align:middle
+Aquí abajo, debajo de nuestra clave
+services, vemos esta sección App\.
+
+00:00:41.026 --> 00:00:44.726 align:middle
+Este código registra todo lo que hay en
+nuestro directorio src/ como servicio.
+
+00:00:45.266 --> 00:00:50.586 align:middle
+Pero también excluye algunas cosas, como
+DependencyInjection, Entity, y Kernel.php.
+
+00:00:51.536 --> 00:00:57.096 align:middle
+Este archivo services.yaml, incluida esta configuración,
+viene con el núcleo symfony/framework-bundle.
+
+00:00:57.766 --> 00:01:00.536 align:middle
+Aquí arriba, tenemos esta clave _defaults.
+
+00:01:01.036 --> 00:01:03.936 align:middle
+Es la configuración de todos los
+servicios de este archivo. Esta clave
+
+00:01:04.686 --> 00:01:06.816 align:middle
+autowire, configurada como true,
+
+00:01:06.976 --> 00:01:09.886 align:middle
+inyecta automáticamente
+dependencias en nuestros servicios.
+
+00:01:10.466 --> 00:01:15.696 align:middle
+También tenemos esta clave autoconfigure, establecida
+en true, que registra automáticamente nuestros servicios
+
+00:01:15.696 --> 00:01:19.266 align:middle
+como comandos, suscriptores
+de eventos, etc. ¡Muy chulo!
+
+00:01:20.056 --> 00:01:22.136 align:middle
+Hablaremos más sobre
+autoconfigure más adelante.
+
+00:01:22.826 --> 00:01:29.326 align:middle
+Para ver una lista de servicios, en tu terminal,
+ejecuta: bin/console debug:autowiring Pero esta vez,
+
+00:01:29.596 --> 00:01:34.606 align:middle
+añadamos la opción --all al final: Esto
+nos mostrará todos nuestros servicios,
+
+00:01:34.866 --> 00:01:36.576 align:middle
+incluso los que no tienen alias.
+
+00:01:37.316 --> 00:01:41.616 align:middle
+Técnicamente, los que no son servicios, como nuestra
+clase Model, también se registran como servicios,
+
+00:01:42.006 --> 00:01:45.066 align:middle
+pero se eliminan más tarde porque no los
+vamos a utilizar en nuestro código. La
+
+00:01:45.726 --> 00:01:49.976 align:middle
+cuestión es que, para crear un servicio, todo lo que
+tenemos que hacer es crear una clase en algún lugar
+
+00:01:49.976 --> 00:01:54.036 align:middle
+de nuestro directorio src/ y el autocableado
+se activa automáticamente para él.
+
+00:01:54.776 --> 00:01:57.496 align:middle
+Por cierto, todos estos
+archivos .yaml son idénticos.
+
+00:01:57.976 --> 00:02:01.826 align:middle
+La clave raíz, como services o
+framework, es lo que los hace diferentes.
+
+00:02:02.446 --> 00:02:05.186 align:middle
+Esto significa que podrías copiar
+toda la configuración de cada archivo
+
+00:02:05.186 --> 00:02:08.686 align:middle
+en un único archivo .yaml
+y funcionaría igual.
+
+00:02:09.256 --> 00:02:12.506 align:middle
+Nosotros los mantenemos separados por
+razones de mantenimiento y cordura.
+
+00:02:13.456 --> 00:02:18.216 align:middle
+Siguiente: Me has oído decir una y otra vez que
+el contenedor contiene servicios, y es cierto.
+
+00:02:18.666 --> 00:02:23.826 align:middle
+Pero también contiene otra cosa: una
+configuración sencilla llamada parámetros.
