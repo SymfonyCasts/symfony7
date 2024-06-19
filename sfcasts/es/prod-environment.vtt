@@ -1,0 +1,163 @@
+WEBVTT
+
+00:00:01.096 --> 00:00:05.846 align:middle
+Abre el archivo .env en la raíz de nuestro proyecto
+y cambia esta variable de entorno devpor prod.
+
+00:00:06.516 --> 00:00:09.656 align:middle
+Para ver qué ha cambiado, de vuelta
+a nuestro navegador, actualiza.
+
+00:00:10.316 --> 00:00:10.796 align:middle
+Y... ¡eh!
+
+00:00:10.866 --> 00:00:11.416 align:middle
+¡Fíjate!
+
+00:00:11.676 --> 00:00:13.366 align:middle
+La barra de herramientas de
+depuración web ha desaparecido.
+
+00:00:14.116 --> 00:00:16.706 align:middle
+Ahora, intentemos cambiar algo
+en una de nuestras plantillas.
+
+00:00:17.066 --> 00:00:21.596 align:middle
+Abre templates/main/homepage.html.twig
+y, en la parte inferior,
+
+00:00:22.696 --> 00:00:25.956 align:middle
+cambiemos Time por Updated at
+para que sea más descriptivo.
+
+00:00:25.956 --> 00:00:30.266 align:middle
+Si volvemos atrás y
+actualizamos... no ha cambiado nada.
+
+00:00:30.716 --> 00:00:34.116 align:middle
+¿Por qué? Por razones de rendimiento,
+las plantillas se almacenan en caché.
+
+00:00:34.626 --> 00:00:38.676 align:middle
+Hicimos nuestro cambio después de que la plantilla se almacenara
+en caché, por lo que nuestro navegador aún no puede verlo.
+
+00:00:39.316 --> 00:00:42.126 align:middle
+Para solucionarlo, tenemos que
+borrar manualmente la caché.
+
+00:00:42.556 --> 00:00:48.866 align:middle
+En tu terminal, ejecuta: bin/console cache:clear
+Para especificar la caché del entorno que queremos
+
+00:00:48.866 --> 00:00:52.726 align:middle
+borrar, podemos añadir la opción
+--env= con el nombre del entorno
+
+00:00:52.726 --> 00:00:55.716 align:middle
+para el que queremos borrar la
+caché al final de este comando, como
+
+00:00:55.716 --> 00:01:05.176 align:middle
+--env=prod, por ejemplo: Esto puede ser
+útil cuando necesites ejecutar un comando
+
+00:01:05.176 --> 00:01:08.686 align:middle
+en un entorno específico distinto de aquél
+en el que estás trabajando actualmente.
+
+00:01:08.686 --> 00:01:11.816 align:middle
+Como ya estamos desarrollando
+en el entorno prod,
+
+00:01:12.136 --> 00:01:13.916 align:middle
+esta parte del comando no es necesaria.
+
+00:01:13.916 --> 00:01:15.356 align:middle
+Si lo ejecutamos...
+
+00:01:16.116 --> 00:01:19.266 align:middle
+¡bien! La caché del entorno
+prod se ha borrado correctamente.
+
+00:01:20.126 --> 00:01:22.836 align:middle
+Bien, si volvemos y refrescamos
+la página de nuevo...
+
+00:01:23.786 --> 00:01:25.686 align:middle
+¡tachán! Vemos "Actualizado en".
+
+00:01:26.186 --> 00:01:29.276 align:middle
+Estupendo. Si alguna vez
+trabajas en el entorno prod
+
+00:01:29.276 --> 00:01:32.526 align:middle
+y no ves reflejados en el navegador los cambios que has
+hecho en tus plantillas, archivos de configuración,
+
+00:01:32.526 --> 00:01:37.156 align:middle
+etc., puede que necesites
+borrar manualmente la caché.
+
+00:01:37.776 --> 00:01:42.316 align:middle
+Ahora mismo, estamos utilizando cache.adapter.array,
+que es algo así como una caché falsa.
+
+00:01:42.686 --> 00:01:46.176 align:middle
+Podemos verlo en el archivo
+config/packages/cache.yaml.
+
+00:01:46.746 --> 00:01:50.756 align:middle
+Una caché falsa está bien para el desarrollo,
+pero cuando estamos trabajando en el entorno prod,
+
+00:01:50.756 --> 00:01:54.136 align:middle
+realmente queremos utilizar
+cache.adapter.filesystem en su lugar.
+
+00:01:54.436 --> 00:01:58.416 align:middle
+Como ya conocemos la sintaxis
+de when@, aprovechémosla.
+
+00:01:59.106 --> 00:02:05.246 align:middle
+A continuación, digamos when@, pero esta vez, tenemos que
+configurarlo en nuestro entorno prod con when@prod:. Debajo
+
+00:02:05.886 --> 00:02:11.246 align:middle
+, repetiremos la misma estructura que
+vemos arriba - framework, cache, y app -
+
+00:02:11.246 --> 00:02:13.846 align:middle
+seguidos de cache.adapter.filesystem.
+
+00:02:13.846 --> 00:02:19.486 align:middle
+Bien, para ver esto en acción, necesitamos borrar
+la caché de nuevo (ya que aún estamos en el entorno
+
+00:02:19.486 --> 00:02:25.176 align:middle
+prod ) con: bin/console cache:clear
+De vuelta a nuestro navegador,
+
+00:02:25.516 --> 00:02:29.936 align:middle
+si observas atentamente, verás que nuestros datos se
+almacenan en caché durante unos cinco segundos, y luego...
+
+00:02:31.306 --> 00:02:32.976 align:middle
+¡nuevos datos! Funciona.
+
+00:02:34.646 --> 00:02:39.146 align:middle
+En nuestro archivo .env,
+cambiemos APP_ENV=prod por dev.
+
+00:02:39.146 --> 00:02:41.756 align:middle
+Si volvemos y actualizamos de nuevo...
+
+00:02:41.756 --> 00:02:43.436 align:middle
+después de cada actualización...
+
+00:02:43.616 --> 00:02:46.646 align:middle
+veremos una petición HTTP.
+
+00:02:46.646 --> 00:02:48.936 align:middle
+A continuación: Aprendamos
+más sobre los servicios.
