@@ -1,0 +1,98 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:04.916 align:middle
+Antes hemos hablado de nuestro contenedor y
+de todos los objetos de servicio que tiene.
+
+00:00:05.166 --> 00:00:08.476 align:middle
+Para verlos, podemos ejecutar:
+bin/console debug:container
+
+00:00:09.326 --> 00:00:11.966 align:middle
+Pero estos servicios no son lo
+único que hay en nuestro contenedor.
+
+00:00:12.256 --> 00:00:14.186 align:middle
+También contiene parámetros.
+
+00:00:14.546 --> 00:00:16.996 align:middle
+Ejecuta el mismo comando que
+antes, pero esta vez, añade la
+
+00:00:16.996 --> 00:00:26.076 align:middle
+opción--parameters: Básicamente son variables
+a las que puedes hacer referencia en tu código.
+
+00:00:26.456 --> 00:00:30.296 align:middle
+La mayoría son internas, pero hay algunos parámetros
+básicos que pueden resultarte útiles. Por
+
+00:00:30.296 --> 00:00:34.716 align:middle
+ejemplo, cualquiera de éstas que empiece por
+kernel., como kernel.environment , que se establece
+
+00:00:34.796 --> 00:00:37.396 align:middle
+en la variable de entorno APP_ENV.
+
+00:00:37.786 --> 00:00:42.626 align:middle
+O este kernel.project_dir que se establece
+en la ruta al directorio raíz del proyecto.
+
+00:00:43.656 --> 00:00:45.316 align:middle
+¿Y cómo obtenemos esto de nuestro contenedor?
+
+00:00:46.216 --> 00:00:49.326 align:middle
+En realidad tenemos un método abreviado
+especial para ello en nuestro controlador.
+
+00:00:50.016 --> 00:00:54.026 align:middle
+En el directorio /src, abre
+Controller/MainController.php.
+
+00:00:54.026 --> 00:01:02.276 align:middle
+En el método homepage(), justo al principio,
+escribe dd($this->getParameter()).
+
+00:01:03.346 --> 00:01:07.776 align:middle
+Y dentro, escribe el nombre del
+parámetro: 'kernel.project_dir'.
+
+00:01:08.476 --> 00:01:13.696 align:middle
+Como puedes ver, PhpStorm (con el plugin
+Symfony), ya lo ha autocompletado por nosotros.
+
+00:01:14.036 --> 00:01:18.106 align:middle
+Muy bien. De vuelta al
+navegador, actualiza y...
+
+00:01:18.436 --> 00:01:19.246 align:middle
+¡ahí está nuestra ruta! La
+
+00:01:20.066 --> 00:01:23.236 align:middle
+mayoría de las veces, necesitaremos
+inyectar parámetros en los servicios
+
+00:01:23.236 --> 00:01:25.336 align:middle
+y podemos hacerlo con una sintaxis especial.
+
+00:01:25.396 --> 00:01:26.086 align:middle
+¡Te lo enseñaré!
+
+00:01:26.846 --> 00:01:29.366 align:middle
+Abre config/packages/twig.yaml.
+
+00:01:29.816 --> 00:01:37.856 align:middle
+Puedes ver que tenemos twig.default_path que está
+configurado como %kernel.project_dir%/templates.
+
+00:01:38.436 --> 00:01:44.486 align:middle
+Este %[parameter name]% es una sintaxis especial que se
+utiliza para referirse a un parámetro en los archivos .yaml.
+
+00:01:45.476 --> 00:01:48.616 align:middle
+A continuación: Vamos a crear un parámetro
+personalizado y a aprender a obtenerlo
+
+00:01:48.616 --> 00:01:50.856 align:middle
+del contenedor de servicios
+de diferentes maneras.
