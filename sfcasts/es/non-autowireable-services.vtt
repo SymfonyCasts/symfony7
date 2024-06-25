@@ -1,0 +1,171 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:04.696 align:middle
+En el capítulo anterior, autoconectamos
+un argumento no autoconectable.
+
+00:00:05.126 --> 00:00:08.896 align:middle
+Esta vez vamos a intentar autoconectar
+un servicio no autoconectable.
+
+00:00:09.346 --> 00:00:13.246 align:middle
+Pero antes tenemos que encontrar
+un servicio no autoconectable.
+
+00:00:13.696 --> 00:00:17.786 align:middle
+Para ello, en tu terminal, ejecuta:
+bin/console debug:container
+
+00:00:19.796 --> 00:00:24.396 align:middle
+Si crees que este servicio Twig no se puede
+autoconectar porque sólo es un ID, piénsalo otra vez.
+
+00:00:25.186 --> 00:00:28.006 align:middle
+Si nos desplazamos hacia arriba,
+veremos Twig\Environment.
+
+00:00:28.806 --> 00:00:31.346 align:middle
+Se trata de un alias de nuestro servicio Twig.
+
+00:00:31.866 --> 00:00:35.566 align:middle
+Por el contrario, twig.command.debug
+no es autoconectable.
+
+00:00:36.246 --> 00:00:40.666 align:middle
+Es el servicio que alimenta el comando debug:twig
+que utilizamos en capítulos anteriores.
+
+00:00:41.396 --> 00:00:48.476 align:middle
+Cuando lo ejecutamos en nuestro terminal, nos da
+una lista de todos los filtros y funciones Twig
+
+00:00:48.476 --> 00:00:50.266 align:middle
+disponibles en nuestra aplicación.
+
+00:00:50.906 --> 00:00:55.366 align:middle
+Eso significa que, aunque sea un poco raro, podemos
+coger este servicio y utilizarlo directamente.
+
+00:00:55.776 --> 00:00:56.326 align:middle
+¡Es bueno saberlo! De
+
+00:00:56.906 --> 00:01:01.836 align:middle
+vuelta aquí, en homepage(),
+teclea DebugCommand (el de Twig)
+
+00:01:02.406 --> 00:01:04.596 align:middle
+y llamémoslo $twigDebugCommand.
+
+00:01:05.516 --> 00:01:07.536 align:middle
+Si volvemos a nuestro
+navegador y actualizamos...
+
+00:01:08.236 --> 00:01:11.896 align:middle
+obtendremos un error: Cannot
+autowire argument $twigDebugCommand
+
+00:01:11.896 --> 00:01:16.966 align:middle
+of App\Controller\MainController::homepage() Si has
+adivinado que tendremos que utilizar el atributo
+
+00:01:16.966 --> 00:01:19.896 align:middle
+encima del argumento como hicimos con
+nuestros parámetros, estás en lo cierto,
+
+00:01:20.386 --> 00:01:22.736 align:middle
+pero la sintaxis de los
+servicios es un poco diferente.
+
+00:01:23.296 --> 00:01:27.566 align:middle
+Aquí, encima de nuestro DebugCommand,
+añade un nuevo atributo: #[Autowire()].
+
+00:01:28.586 --> 00:01:31.196 align:middle
+Dentro, pondremos service
+al nombre del servicio.
+
+00:01:32.216 --> 00:01:35.646 align:middle
+Haré trampas y copiaré el nombre exacto
+del servicio de la lista en nuestro terminal.
+
+00:01:38.076 --> 00:01:40.866 align:middle
+Bien, si volvemos atrás y actualizamos
+de nuevo la página de inicio...
+
+00:01:41.836 --> 00:01:43.296 align:middle
+se ha autoconectado correctamente.
+
+00:01:43.796 --> 00:01:47.446 align:middle
+Muy bien Muy bien, veamos si
+podemos ejecutar ese comando.
+
+00:01:47.956 --> 00:01:51.936 align:middle
+Debajo de Response, escribe
+$twigDebugCommand->run().
+
+00:01:52.706 --> 00:01:56.506 align:middle
+El primer argumento debe ser una entrada,
+así que podemos decir new ArrayInput.
+
+00:01:57.316 --> 00:02:01.406 align:middle
+El segundo argumento debe ser la salida que
+utilizaremos a continuación, pero antes
+
+00:02:01.686 --> 00:02:03.666 align:middle
+tenemos que crear una variable de salida.
+
+00:02:04.336 --> 00:02:07.566 align:middle
+Arriba, escribe $output = new BufferedOutput().
+
+00:02:08.626 --> 00:02:11.006 align:middle
+Ahora podemos añadir aquí
+$output como segundo argumento.
+
+00:02:11.986 --> 00:02:16.926 align:middle
+Vale, nuestro editor está contento, así que
+finalmente, abajo, escribamos dd($output).
+
+00:02:18.576 --> 00:02:20.656 align:middle
+Si vamos a nuestro navegador y actualizamos...
+
+00:02:20.956 --> 00:02:22.156 align:middle
+dang... error.
+
+00:02:22.636 --> 00:02:26.196 align:middle
+Parece que tenemos que pasar un
+array vacío a la clase ArrayInput().
+
+00:02:26.946 --> 00:02:28.566 align:middle
+Si lo hacemos y volvemos a actualizar...
+
+00:02:29.086 --> 00:02:31.586 align:middle
+¡boom! Obtenemos una lista
+de funciones y filtros.
+
+00:02:31.976 --> 00:02:36.136 align:middle
+Funciona. Esto era sólo un ejemplo, así
+que podemos deshacernos de ese código,
+
+00:02:36.616 --> 00:02:40.736 align:middle
+pero lo fundamental es recordar que, aunque
+algo no sea autoconectable por defecto,
+
+00:02:41.066 --> 00:02:44.076 align:middle
+puedes hacerlo autoconectable
+con un atributo #[Autowire],
+
+00:02:44.296 --> 00:02:47.106 align:middle
+independientemente de si necesitas
+un servicio o un parámetro.
+
+00:02:48.006 --> 00:02:52.986 align:middle
+A continuación: Vamos a hablar de las variables de
+entorno y de la finalidad del archivo .env que vimos antes.
+
+00:02:53.486 --> 00:02:55.756 align:middle
+También veremos cómo podemos
+aprovecharlas en nuestra aplicación
+
+00:02:55.756 --> 00:02:58.676 align:middle
+para que se comporte de forma
+diferente en determinados entornos.
