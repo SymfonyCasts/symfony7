@@ -1,0 +1,261 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:03.796 align:middle
+Las variables de entorno son
+para valores que difieren según
+
+00:00:03.796 --> 00:00:07.296 align:middle
+el entorno en el que estemos desarrollando,
+como localmente frente a producción.
+
+00:00:07.976 --> 00:00:11.696 align:middle
+El ejemplo más común de esto son los
+detalles de conexión a la base de datos.
+
+00:00:12.266 --> 00:00:15.396 align:middle
+Podemos establecer variables de entorno
+reales en nuestro sistema operativo,
+
+00:00:15.726 --> 00:00:19.916 align:middle
+y aunque muchas plataformas de alojamiento en la nube
+hacen que sea súper fácil establecer estas variables,
+
+00:00:20.256 --> 00:00:22.236 align:middle
+no es lo más fácil de hacer localmente.
+
+00:00:22.886 --> 00:00:27.906 align:middle
+Symfony también tiene este archivo .env que ayuda a hacer
+la vida más fácil, especialmente durante el desarrollo.
+
+00:00:28.746 --> 00:00:33.376 align:middle
+Bien, éste es el plan: Queremos que
+nuestro valor iss_location_cache_ttl
+
+00:00:33.556 --> 00:00:35.896 align:middle
+sea diferente localmente que en producción.
+
+00:00:36.536 --> 00:00:41.686 align:middle
+En nuestro entorno prod, queremos que nuestra caché
+dure más que los 5 segundos que tenemos ahora. La
+
+00:00:42.356 --> 00:00:46.846 align:middle
+forma más sencilla de hacerlo sería crear una
+variable de entorno personalizada y establecer
+
+00:00:46.846 --> 00:00:50.516 align:middle
+un valor diferente para
+cada entorno: dev y prod.
+
+00:00:51.406 --> 00:00:58.856 align:middle
+En nuestro archivo .env, aquí abajo, escribe
+ISS_LOCATION_CACHE_TTL en mayúsculas,
+
+00:00:59.156 --> 00:01:01.296 align:middle
+que es lo habitual para
+las variables de entorno.
+
+00:01:02.006 --> 00:01:03.866 align:middle
+Pongámoslo en 5 por defecto.
+
+00:01:04.566 --> 00:01:10.526 align:middle
+Ahora, en services.yaml , vamos a mantener
+el parámetro iss_location_cache_ttl,
+
+00:01:10.856 --> 00:01:14.836 align:middle
+pero en lugar de 5 , vamos a establecerlo en
+la variable de entorno que acabamos de crear.
+
+00:01:15.496 --> 00:01:18.266 align:middle
+Para ello, tenemos que
+aprovechar una sintaxis especial.
+
+00:01:18.666 --> 00:01:24.336 align:middle
+Escribe '%env()' y selecciona nuestra nueva
+variable de entorno ISS_LOCATION_CACHE_TTL.
+
+00:01:24.806 --> 00:01:26.896 align:middle
+¡Qué bien! Para depurar esto,
+
+00:01:26.996 --> 00:01:31.116 align:middle
+en /src/Controller/MainController.php,
+busca homepage().
+
+00:01:31.606 --> 00:01:35.996 align:middle
+Dentro de ella, debajo de Response,
+escribamos dd($this->getParameter())
+
+00:01:36.966 --> 00:01:39.496 align:middle
+y añadamos iss_location_cache_ttl.
+
+00:01:40.386 --> 00:01:41.766 align:middle
+De vuelta al navegador, actualiza.
+
+00:01:42.456 --> 00:01:43.056 align:middle
+Ahí está 5.
+
+00:01:43.726 --> 00:01:47.236 align:middle
+Es sutil, pero ahora te habrás dado
+cuenta de que este valor es una cadena.
+
+00:01:47.896 --> 00:01:52.716 align:middle
+Todos los valores de las variables de entorno son
+simples cadenas por defecto, pero Symfony tiene una forma
+
+00:01:52.716 --> 00:01:54.606 align:middle
+de encasillarlas en un tipo diferente.
+
+00:01:55.116 --> 00:01:57.686 align:middle
+Se llaman "procesadores
+de variables de entorno",
+
+00:01:58.016 --> 00:02:01.206 align:middle
+y uno de ellos puede ayudarnos
+a convertir esto en un entero.
+
+00:02:01.966 --> 00:02:04.526 align:middle
+De vuelta a nuestro
+código, abre services.yaml.
+
+00:02:05.166 --> 00:02:07.656 align:middle
+Antes de la variable de entorno, añade int:.
+
+00:02:07.656 --> 00:02:09.966 align:middle
+Si vamos a actualizar...
+
+00:02:10.986 --> 00:02:12.566 align:middle
+ahora tenemos un entero real 5.
+
+00:02:13.366 --> 00:02:16.476 align:middle
+Si estuviéramos desplegando este proyecto
+en producción, probablemente querríamos
+
+00:02:16.476 --> 00:02:22.226 align:middle
+establecer esta variable ISS_LOCATION_CACHE_TTL
+a algo un poco más largo, como 60 , para que
+
+00:02:22.406 --> 00:02:25.656 align:middle
+almacene en caché los datos durante
+1 minuto en lugar de 5 segundos.
+
+00:02:26.206 --> 00:02:29.966 align:middle
+El plazo más corto es más práctico
+mientras probamos las cosas.
+
+00:02:30.856 --> 00:02:33.886 align:middle
+Ya que estamos aquí, quiero
+hablar de otros archivos .env.
+
+00:02:34.466 --> 00:02:38.266 align:middle
+Este archivo .env está comprometido en tu
+repositorio Git, y como puedes ver aquí,
+
+00:02:38.446 --> 00:02:41.616 align:middle
+cuando hago cambios en él,
+esos cambios se desestabilizan.
+
+00:02:42.266 --> 00:02:45.866 align:middle
+Así que si tienes algunos secretos que no
+quieres confirmar en tu repositorio Git,
+
+00:02:46.176 --> 00:02:51.896 align:middle
+como tokens sensibles, contraseñas, etc.,
+puedes crear un archivo diferente - .env.local.
+
+00:02:52.526 --> 00:02:56.436 align:middle
+Éste es ignorado por Git, lo que podemos
+ver en nuestro archivo .gitignore.
+
+00:02:57.166 --> 00:03:01.426 align:middle
+Cualquier información sensible puede almacenarse
+aquí y no se confirmará en el repositorio.
+
+00:03:02.056 --> 00:03:07.646 align:middle
+Podríamos, por ejemplo, mover esta variable de
+entorno APP_SECRET a nuestro archivo .env.local.
+
+00:03:09.546 --> 00:03:13.856 align:middle
+Dentro de nuestro archivo .env, podemos
+dejarla vacía o ponerle un valor falso. Por lo
+
+00:03:14.536 --> 00:03:18.286 align:middle
+general, es una buena práctica mantener
+las variables de entorno en .env
+
+00:03:18.286 --> 00:03:24.366 align:middle
+para que otros desarrolladores puedan verlas y establecer
+valores reales para ellas en su archivo .env.local.
+
+00:03:25.116 --> 00:03:27.506 align:middle
+Esto era sólo un ejemplo, así
+que podemos volver a cambiarlo.
+
+00:03:28.436 --> 00:03:34.836 align:middle
+Junto con estos dos archivos, también están
+los menos utilizados .env.test y .env.prod.
+
+00:03:35.436 --> 00:03:38.936 align:middle
+Éstos sólo se cargan en los
+entornos test y prod respectivamente.
+
+00:03:39.686 --> 00:03:42.746 align:middle
+También disponemos de un práctico
+comando para depurar variables de entorno.
+
+00:03:43.336 --> 00:03:50.266 align:middle
+En tu terminal, ejecuta: bin/console debug:dotenv Esto puede
+ayudarnos a comprender en qué orden se cargarán esos archivos
+
+00:03:50.266 --> 00:03:52.956 align:middle
+y, como extra,
+
+00:03:53.176 --> 00:03:56.396 align:middle
+enumera todas las variables de entorno
+que encontró en cada archivo. De
+
+00:03:56.856 --> 00:04:00.556 align:middle
+momento, sólo tenemos tres y
+podemos ver sus valores reales
+
+00:04:00.696 --> 00:04:02.906 align:middle
+y en qué archivos están configurados. Si te
+
+00:04:03.826 --> 00:04:08.066 align:middle
+tomas en serio la seguridad de tu información
+sensible, Symfony tiene una herramienta especial
+
+00:04:08.066 --> 00:04:10.026 align:middle
+para ello llamada "Secrets Vault".
+
+00:04:10.536 --> 00:04:14.456 align:middle
+Si buscas en Google "Secretos de Symfony",
+uno de los primeros resultados es "
+
+00:04:14.456 --> 00:04:18.866 align:middle
+Cómo mantener en secreto la información
+sensible", que nos lleva a cierta documentación.
+
+00:04:19.616 --> 00:04:24.096 align:middle
+Con la Bóveda de Secretos, podemos confirmar con
+seguridad variables de entorno en nuestro repositorio Git,
+
+00:04:24.206 --> 00:04:27.626 align:middle
+porque están encriptadas y no se
+pueden leer sin desencriptarlas.
+
+00:04:28.306 --> 00:04:32.166 align:middle
+Si necesitas este nivel de protección de datos,
+te animo a que leas la documentación o ve as
+
+00:04:32.166 --> 00:04:34.466 align:middle
+nuestros vídeos relacionados en SymfonyCasts.
+
+00:04:35.846 --> 00:04:38.966 align:middle
+Revertiré los cambios que hicimos en nuestra
+página de inicio y eliminaré este dd().
+
+00:04:38.966 --> 00:04:40.596 align:middle
+Ya no lo necesitamos.
+
+00:04:41.546 --> 00:04:44.496 align:middle
+A continuación: Hablemos más
+sobre la autoconfiguración.
