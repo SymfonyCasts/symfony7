@@ -45,7 +45,7 @@ this to an integer instead.
 Back in our code, open `services.yaml`. Before the environment variable,
 add `int:`. 
 
-[[[ code(dc10111d2f'') ]]]
+[[[ code('dc10111d2f') ]]]
 
 If we go refresh... now we have a real integer `5`. If we were
 deploying this project to production, we'd probably want to set
