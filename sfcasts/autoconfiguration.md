@@ -28,7 +28,7 @@ Down here, let's update this method. This should be `$this->issLocationPool`, `$
 
 > Variable "issData" does not exist.
 
-Hm... We removed that from the controller. Open `/templates/main/homepage.html.twig` and, below, let's use our custom Twig function. Write `{% set issData = get_iss_location_data() %}`. If we refresh the page again... our custom function is *working*. But wait... how does Twig know to use this class? We didn't add any configuration for the Twig extension. Is it looking at the `/src/Twig/` directory? *Not exactly*. We could rename this directory and it would still work.
+An error. This is because we are no longer injecting this variable from our controller but our template still references it. Open `/templates/main/homepage.html.twig` and, below, let's use our custom Twig function. Write `{% set issData = get_iss_location_data() %}`. If we refresh the page again... our custom function is *working*. But wait... how does Twig know to use this class? We didn't add any configuration for the Twig extension. Is it looking at the `/src/Twig/` directory? *Not exactly*. We could rename this directory and it would still work.
 
 The reason this works is thanks to the `autoconfigure: true` option in `/config/services.yaml`. Symfony *automatically* configures all of our services, like this Twig extension or even the `ShipReportCommand` we created earlier. When that option is enabled, it basically tells Symfony:
 
