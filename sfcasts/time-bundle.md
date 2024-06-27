@@ -8,9 +8,12 @@ field on the homepage.
 [[[ code('257f2fdabf') ]]]
 
 If you forgot which controller is responsible for the homepage, you can always hover
-over the page info in the web debug toolbar and... boom! It says "MainController :: homepage".
+over the page info in the web debug toolbar and... boom! It says "MainController::homepage".
 Let's open that up - `MainController.php` - and find the `homepage()` action.
 Down here, we can see that it renders a template: `main/homepage.html.twig`.
+
+## Printing Dates in Twig Templates
+
 Open *that*, find the "Ship Repair Queue" and, down here after `{{ ship.name }}`,
 add a new `<div>` with `Arrived at: {{ ship.arrivedAt }}`.
 
@@ -41,6 +44,8 @@ I actually cheated a bit when running this command. The full command name
 is `config:dump-reference`. With Symfony commands, you can shorten the name as much as
 you want as long as it's not ambiguous with another command's name. If multiple commands match,
 the console will ask which one you want to run.
+
+## Installing a New Bundle
 
 All right, back to the browser. We've printed our date, but it would be *so* much cooler
 if we could say something like "2 hours ago" instead of this long date. *Unfortunately*,
@@ -85,6 +90,9 @@ bin/console debug:autowiring time
 And... we *can*! If we want to use the `ago` format for our date object, this is the typehint 
 we need to use to inject this service in our PHP classes.
 *But*, since we only want this in our Twig template, there's a better solution.
+
+## Use a Twig filter
+
 This bundle also comes with a Twig integration that provides some nice Twig filters and functions. 
 We can see that if we run:
 
