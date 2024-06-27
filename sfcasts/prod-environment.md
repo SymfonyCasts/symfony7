@@ -1,8 +1,25 @@
 # The Prod Environment
 
-Open the `.env` file in the root of our project and change this `dev`environment variable to `prod`. 
+Open the `.env` file in the root of our project and change this `dev` environment variable to `prod`. 
 
 [[[ code('76ca37e8e8') ]]]
+
+***TIP
+In the `dev` Symfony environment, a listener serves our assets dynamically. But in the `prod`,
+you have to compile them manually by running:
+
+```terminal-silent
+php bin/console asset-map:compile
+```
+
+Usually, you may not need this locally because the browser already cached assets from the `dev`.
+But if you don't see styles in the `prod`, or if you deploy the website to users - that's the solution.
+
+You may also want to delete the `public/assets/` directory when back to the `dev` mode again
+to see changes immediately without recompiling them. See
+[Symfony docs](https://symfony.com/doc/current/frontend/asset_mapper.html#serving-assets-in-dev-vs-prod)
+for more details.
+***
 
 To see what changed, back at our browser, refresh. And... hey! Look at that! 
 The web debug toolbar is *gone*. Now, let's try to change something in one of our templates.
