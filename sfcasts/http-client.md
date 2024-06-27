@@ -18,6 +18,8 @@ news* - they also have an API that we can use to fetch the ISS's coordinates and
 print that on our website. How convenient! You can copy this URL and open it in
 a new tab to see the JSON.
 
+## Installing the HTTP Client Component
+
 But *first*, let's check to see if our application already has an HTTP client to
 help us execute some API requests. Over at your terminal, run:
 
@@ -54,7 +56,7 @@ If you run
 git status
 ```
 
-you can see that the only files changed were `composer.json`
+You can see that the only files changed were `composer.json`
 and `composer.lock`. That's okay! What we installed was a *pure* PHP package,
 and while it *does* contain service classes (which are just classes that do
 work), it *doesn't* contain any configuration that says:
@@ -71,6 +73,8 @@ beginning. This bundle's superpower is watching for newly installed Symfony
 components and automatically registering their services. *Super* convenient.
 
 [[[ code('ba6f99b1ed') ]]]
+
+## Sending an HTTP Request
 
 Now that we have our new `HttpClient`, let's put it to work!
 Open `MainController.php` and, in `homepage()`, let's type hint our new service.
