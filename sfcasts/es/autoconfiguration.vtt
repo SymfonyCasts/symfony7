@@ -1,0 +1,517 @@
+WEBVTT
+
+00:00:01.096 --> 00:00:06.296 align:middle
+Esta función de localización de la ISS en tiempo real
+es genial, pero lo sería aún más si pudiéramos verla
+
+00:00:06.296 --> 00:00:08.596 align:middle
+en todas las páginas, no
+sólo en la página de inicio.
+
+00:00:09.006 --> 00:00:09.886 align:middle
+¿Cómo podemos hacerlo?
+
+00:00:10.496 --> 00:00:13.596 align:middle
+Podríamos pasar los datos en cada
+acción, pero eso no es lo ideal.
+
+00:00:14.116 --> 00:00:16.676 align:middle
+En su lugar, vamos a crear una
+función Twig personalizada
+
+00:00:16.676 --> 00:00:19.246 align:middle
+que obtendrá los datos
+reales en la plantilla. De
+
+00:00:19.626 --> 00:00:24.296 align:middle
+esta forma, podremos mostrar los datos de localización
+de la ISS en nuestro archivo base.html.twig
+
+00:00:24.476 --> 00:00:26.526 align:middle
+sin tener que pasarlos desde cada controlador.
+
+00:00:26.526 --> 00:00:27.596 align:middle
+¿Te parece bien?
+
+00:00:27.596 --> 00:00:28.836 align:middle
+¡Empecemos!
+
+00:00:28.836 --> 00:00:31.496 align:middle
+En primer lugar, tenemos que
+crear una extensión Twig.
+
+00:00:31.956 --> 00:00:34.776 align:middle
+En un curso anterior,
+instalamos Symfony Maker Bundle.
+
+00:00:34.776 --> 00:00:37.826 align:middle
+Veamos si eso puede ayudarnos a
+generar algo de código boilerplate.
+
+00:00:38.296 --> 00:00:43.036 align:middle
+En tu terminal, ejecuta:
+bin/console make: y pulsa intro.
+
+00:00:43.766 --> 00:00:46.806 align:middle
+Aparece un error, pero esto nos
+muestra una lista de todos los comandos
+
+00:00:46.806 --> 00:00:49.676 align:middle
+a nuestra disposición que hacen algo, y...
+
+00:00:49.856 --> 00:00:50.386 align:middle
+¡fíjate!
+
+00:00:50.766 --> 00:00:53.606 align:middle
+Tenemos uno relacionado con
+Twig: make:twig-extension.
+
+00:00:54.006 --> 00:00:55.166 align:middle
+¡Eso es lo que estamos buscando!
+
+00:00:55.366 --> 00:01:02.026 align:middle
+Ejecuta eso: bin/console make:twig-extension
+Nos pide un nombre de clase de extensión Twig.
+
+00:01:02.426 --> 00:01:04.766 align:middle
+Podemos quedarnos con el nombre
+por defecto - AppExtension.
+
+00:01:05.456 --> 00:01:06.566 align:middle
+Y... genial.
+
+00:01:07.026 --> 00:01:13.856 align:middle
+Podemos ver que ha creado dos archivos:
+AppExtension.php y AppExtensionRuntime.php.
+
+00:01:13.856 --> 00:01:19.806 align:middle
+Abramos el primero -
+/src/Twig/Extension/AppExtension.php.
+
+00:01:19.806 --> 00:01:23.106 align:middle
+Ya tiene un par de métodos:
+getFilters() y getFunctions().
+
+00:01:23.626 --> 00:01:25.636 align:middle
+Ahora mismo, sólo nos interesan las funciones,
+
+00:01:25.636 --> 00:01:28.496 align:middle
+así que podemos deshacernos por
+completo del método getFilters().
+
+00:01:29.686 --> 00:01:34.236 align:middle
+Dentro de getFunctions(), sustituyamos la
+demostración function_name por algo más relevante.
+
+00:01:34.616 --> 00:01:36.876 align:middle
+¿Qué te parece get_iss_location_data.
+
+00:01:36.876 --> 00:01:42.196 align:middle
+Este es el nombre real de la función
+Twig que vamos a llamar en las plantillas.
+
+00:01:42.196 --> 00:01:47.126 align:middle
+Aquí podemos ver que se llama a un
+método en AppExtensionRuntime::class.
+
+00:01:47.126 --> 00:01:49.106 align:middle
+Ahora mismo, sólo se llama doSomething.
+
+00:01:49.426 --> 00:01:53.046 align:middle
+Mantén pulsado "comando" (o "control" en un
+Mac) y haz clic en este método para abrirlo.
+
+00:01:53.726 --> 00:01:56.336 align:middle
+Aunque estoy seguro de que este método
+está, de hecho, haciendo algo, vamos a
+
+00:01:56.596 --> 00:01:58.566 align:middle
+cambiarle el nombre para que
+sepamos lo que está haciendo.
+
+00:01:59.136 --> 00:02:02.336 align:middle
+¿Qué te parece getIssLocationData()
+para que coincida con nuestra función?
+
+00:02:03.116 --> 00:02:05.406 align:middle
+También podemos eliminar este
+argumento, ya que no lo necesitamos.
+
+00:02:06.236 --> 00:02:12.836 align:middle
+De vuelta en AppExtension.php, sustituye doSomething por
+el nombre de nuestro nuevo método - getIssLocationData.
+
+00:02:13.366 --> 00:02:16.206 align:middle
+Como puedes ver, PhpStorm
+lo autocompleta por mí.
+
+00:02:16.886 --> 00:02:21.366 align:middle
+Ahora podemos coger el código responsable de
+la obtención de datos de la acción homepage().
+
+00:02:21.696 --> 00:02:22.236 align:middle
+Aquí lo tienes.
+
+00:02:22.806 --> 00:02:26.836 align:middle
+Cópialo, bórralo, y también podemos limpiar
+algo de nuestro código mientras estamos aquí.
+
+00:02:27.326 --> 00:02:30.526 align:middle
+Ya no necesitamos pasar
+este issData a la plantilla,
+
+00:02:30.916 --> 00:02:34.276 align:middle
+y también podemos deshacernos
+de estos dos argumentos.
+
+00:02:34.276 --> 00:02:34.896 align:middle
+¡Mucho mejor!
+
+00:02:35.456 --> 00:02:41.776 align:middle
+Ahora podemos volver a
+AppExtensionRuntime.php y, aquí abajo, pegar.
+
+00:02:42.546 --> 00:02:45.696 align:middle
+No necesitamos una variable para estos
+datos, así que podemos simplemente return.
+
+00:02:46.426 --> 00:02:50.246 align:middle
+Tenemos algunas variables
+indefinidas como $issLocationPool
+
+00:02:50.246 --> 00:02:52.796 align:middle
+y $client; Ésas son nuestras dependencias.
+
+00:02:53.396 --> 00:02:57.046 align:middle
+No podemos inyectarlas directamente en el
+método, como hacemos con nuestros control adores,
+
+00:02:57.336 --> 00:03:00.006 align:middle
+porque la inyección de métodos
+sólo funciona para los controladores.
+
+00:03:00.556 --> 00:03:03.576 align:middle
+Sin embargo, podemos inyectar
+dependencias en nuestro constructor,
+
+00:03:03.836 --> 00:03:08.996 align:middle
+e incluso podemos utilizar una práctica función de PHP
+8 llamada "Promoción de propiedades del constructor".
+
+00:03:09.516 --> 00:03:10.016 align:middle
+¡Compruébalo!
+
+00:03:10.506 --> 00:03:14.846 align:middle
+Aquí arriba, escribe private readonly
+-escribiremos nuestro primer argumento-
+
+00:03:15.126 --> 00:03:18.206 align:middle
+HttpClientInterface, y llámalo $client.
+
+00:03:18.766 --> 00:03:25.176 align:middle
+Debajo, una vez más, escribe private readonly,
+pero esta vez escribe CacheInterface ( el
+
+00:03:25.176 --> 00:03:29.576 align:middle
+de Symfony\Contracts\Cache )
+y llámalo $issLocationPool.
+
+00:03:31.106 --> 00:03:32.846 align:middle
+También podemos deshacernos
+de este comentario aquí.
+
+00:03:34.686 --> 00:03:40.066 align:middle
+Genial. Por cierto, si necesitáramos
+inyectar nuestro issLocationCacheTtl aquí,
+
+00:03:40.416 --> 00:03:44.346 align:middle
+podríamos hacerlo de la misma manera,
+utilizando el atributo PHP #[Autowire].
+
+00:03:44.876 --> 00:03:48.416 align:middle
+No necesitamos hacerlo para este
+ejemplo, pero es bueno tenerlo en cuenta.
+
+00:03:49.346 --> 00:03:51.386 align:middle
+Aquí abajo, vamos a actualizar este método.
+
+00:03:51.766 --> 00:03:59.206 align:middle
+Debería ser $this->issLocationPool,
+$this->client, y como podemos llamarlo directamente
+
+00:03:59.206 --> 00:04:02.636 align:middle
+desde la función anónima, ya no
+necesitamos este use ($client).
+
+00:04:04.026 --> 00:04:06.636 align:middle
+Vale, en el navegador, actualiza para ver...
+
+00:04:07.456 --> 00:04:10.936 align:middle
+un error. La variable "issData" no existe.
+
+00:04:10.936 --> 00:04:15.596 align:middle
+Esto se debe a que ya no estamos inyectando
+esta variable desde nuestro controlador
+
+00:04:15.596 --> 00:04:17.436 align:middle
+, pero nuestra plantilla sigue
+haciendo referencia a ella.
+
+00:04:17.436 --> 00:04:24.866 align:middle
+Abre /templates/main/homepage.html.twig y, a continuación,
+vamos a utilizar nuestra función Twig personalizada.
+
+00:04:25.676 --> 00:04:30.606 align:middle
+Escribe {% set issData =
+get_iss_location_data() %}.
+
+00:04:30.606 --> 00:04:31.996 align:middle
+Si volvemos a actualizar la página...
+
+00:04:32.656 --> 00:04:34.206 align:middle
+nuestra función personalizada funciona.
+
+00:04:34.736 --> 00:04:35.176 align:middle
+Pero espera...
+
+00:04:35.516 --> 00:04:37.606 align:middle
+¿cómo sabe Twig que debe utilizar esta clase?
+
+00:04:37.856 --> 00:04:40.496 align:middle
+No hemos añadido ninguna
+configuración para la extensión Twig.
+
+00:04:40.986 --> 00:04:42.946 align:middle
+¿Busca en el directorio /src/Twig/?
+
+00:04:43.566 --> 00:04:44.406 align:middle
+No exactamente.
+
+00:04:44.916 --> 00:04:47.176 align:middle
+Podríamos cambiar el nombre de este
+directorio y seguiría funcionando.
+
+00:04:48.116 --> 00:04:50.636 align:middle
+La razón por la que funciona es
+gracias a la autoconfiguración :
+
+00:04:50.636 --> 00:04:53.636 align:middle
+true opción en /config/services.yaml.
+
+00:04:53.636 --> 00:04:57.906 align:middle
+Symfony configura automáticamente todos
+nuestros servicios, como esta extensión Twig
+
+00:04:57.906 --> 00:05:00.466 align:middle
+o incluso el ShipReportCommand
+que hemos creado antes.
+
+00:05:01.046 --> 00:05:04.266 align:middle
+Cuando esa opción está activada,
+básicamente le dice a Symfony: ¡Eh!
+
+00:05:04.536 --> 00:05:07.876 align:middle
+Por favor, mira la clase base
+o interfaz de cada servicio.
+
+00:05:07.876 --> 00:05:12.176 align:middle
+Si es un comando, una extensión Twig o cualquier
+otra clase que deba engancharse a una parte
+
+00:05:12.176 --> 00:05:16.816 align:middle
+de Symfony, por favor, sigue adelante e integra
+ese servicio en el sistema por nosotros.
+
+00:05:16.816 --> 00:05:21.866 align:middle
+¡Sí! Symfony ve que nuestra clase extiende
+una clase comando base y sabe que es un comando
+
+00:05:21.866 --> 00:05:23.666 align:middle
+que debe integrarse en el sistema.
+
+00:05:24.406 --> 00:05:27.826 align:middle
+En el caso de nuestra extensión,
+extiende AbstractExtension,
+
+00:05:27.826 --> 00:05:31.066 align:middle
+por lo que Sym fony sabe que debe
+integrarse en el sistema Twig.
+
+00:05:31.566 --> 00:05:32.376 align:middle
+¡Esto me encanta!
+
+00:05:32.626 --> 00:05:36.156 align:middle
+Significa que de lo único que tenemos
+que preocuparnos es de crear una clase PHP
+
+00:05:36.266 --> 00:05:39.916 align:middle
+que extienda una determinada clase o
+implemente una interfaz específica.
+
+00:05:40.446 --> 00:05:44.816 align:middle
+La documentación te ayudará a navegar por
+esto, y la autoconfiguración hará el resto.
+
+00:05:45.466 --> 00:05:49.666 align:middle
+Internamente, la autoconfiguración sólo añade
+una etiqueta especial para nuestros servicios,
+
+00:05:49.666 --> 00:05:52.416 align:middle
+como console.command, que
+ayuda al sistema a notarlo.
+
+00:05:52.846 --> 00:05:56.206 align:middle
+Pero otras veces, funciona mediante
+un atributo, como el comando.
+
+00:05:56.806 --> 00:06:01.646 align:middle
+En ambos casos, creamos una clase, extendemos
+una clase base, implementamos una interfaz,
+
+00:06:01.646 --> 00:06:06.676 align:middle
+o añadimos un atributo especial, y bam - Symfony
+entiende lo que estás haciendo y lo integra.
+
+00:06:07.326 --> 00:06:12.186 align:middle
+Por cierto, si tienes curiosidad por saber para qué
+sirve este AppExtensionRuntime independiente, ¡ojo!
+
+00:06:12.186 --> 00:06:17.106 align:middle
+Los tiempos de ejecución de las extensiones siempre han
+estado en Twig, pero sólo recientemente se han promocionado,
+
+00:06:17.486 --> 00:06:19.036 align:middle
+sobre todo gracias al maker bundle.
+
+00:06:19.696 --> 00:06:24.266 align:middle
+Podríamos inyectar los servicios directamente en
+nuestra extensión Twig y alojar allí toda la lógica,
+
+00:06:24.606 --> 00:06:29.846 align:middle
+pero esto tiene un inconveniente: como las extensiones
+Twig se cargan siempre que se utiliza Twig,
+
+00:06:30.026 --> 00:06:33.086 align:middle
+también se cargan la extensión
+y todas sus dependencias.
+
+00:06:33.386 --> 00:06:36.546 align:middle
+Incluso cuando no se utiliza una determinada
+función o filtro de la extensión.
+
+00:06:37.156 --> 00:06:41.266 align:middle
+Los tiempos de ejecución de las extensiones Twig son una
+forma de hacer que la lógica de la extensión sea perezosa.
+
+00:06:41.856 --> 00:06:45.656 align:middle
+El servicio de tiempo de ejecución sólo
+se instanciará cuando y si es necesario.
+
+00:06:46.186 --> 00:06:50.556 align:middle
+En nuestro ejemplo, en realidad no nos ayuda, ya que
+estamos mostrando los datos de localización de ISS
+
+00:06:50.556 --> 00:06:53.056 align:middle
+en todas las páginas, pero
+puedes imaginar una función
+
+00:06:53.056 --> 00:06:56.086 align:middle
+o filtro que sólo se utilice en unas
+pocas páginas de tu aplicación. Es
+
+00:06:56.086 --> 00:07:00.686 align:middle
+una buena práctica mantener tus extensiones
+Twig tan ligeras como sea posible
+
+00:07:00.686 --> 00:07:06.336 align:middle
+, sin dependencias o con muy pocas, y dejar todo el trabajo
+pesado a los tiempos de ejecución de las extensiones.
+
+00:07:07.096 --> 00:07:15.856 align:middle
+Muy bien, en homepage.html.twig, copia este
+código HTML, bórralo y abre base.html.twig.
+
+00:07:17.336 --> 00:07:21.406 align:middle
+Aquí abajo, debajo de
+nuestro logotipo, pégalo.
+
+00:07:22.096 --> 00:07:25.546 align:middle
+Bien, vamos a simplificar esto un
+poco para hacerlo más compacto.
+
+00:07:25.926 --> 00:07:31.066 align:middle
+Crea un nuevo <div> encima de
+éste y, dentro, escribe ISS Location.
+
+00:07:31.876 --> 00:07:36.136 align:middle
+Después, entre paréntesis,
+escribe {{ issData.visibility }}.
+
+00:07:36.586 --> 00:07:42.176 align:middle
+También daremos a nuestro <div> un title y lo
+estableceremos en esta línea Updated At de abajo.
+
+00:07:44.086 --> 00:07:45.416 align:middle
+Ahora podemos limpiar nuestro código.
+
+00:07:45.846 --> 00:07:50.666 align:middle
+No necesitamos este <h2>, hemos movido
+Updated At por lo que ya no es necesario aquí,
+
+00:07:51.096 --> 00:07:52.966 align:middle
+y también podemos deshacernos de Visibility.
+
+00:07:53.746 --> 00:07:54.436 align:middle
+¡Mucho mejor!
+
+00:07:55.206 --> 00:07:57.316 align:middle
+En nuestro navegador, actualizamos y...
+
+00:07:58.396 --> 00:08:01.306 align:middle
+la información de ISS está en
+una nueva posición en la cabecera.
+
+00:08:01.916 --> 00:08:07.526 align:middle
+Y si abrimos una página diferente, como una de nuestras páginas de
+naves, la información sobre la ubicación de la ISS también está allí.
+
+00:08:07.956 --> 00:08:08.716 align:middle
+Y ya está
+
+00:08:09.016 --> 00:08:13.146 align:middle
+Hemos cubierto los fundamentos de los servicios,
+la configuración y los entornos de Symfony.
+
+00:08:13.396 --> 00:08:14.336 align:middle
+¡Somos poderosos!
+
+00:08:14.586 --> 00:08:16.096 align:middle
+No, imparables.
+
+00:08:16.786 --> 00:08:19.066 align:middle
+En el próximo tutorial,
+presentaremos Doctrine,
+
+00:08:19.376 --> 00:08:23.386 align:middle
+la forma estándar del sector de
+trabajar con bases de datos en PHP.
+
+00:08:23.386 --> 00:08:24.226 align:middle
+Hasta entonces, practica.
+
+00:08:24.226 --> 00:08:27.006 align:middle
+Ve a construir algo -lo
+que sea- y cuéntanoslo.
+
+00:08:27.386 --> 00:08:30.526 align:middle
+Y si tienes alguna pregunta, idea o
+simplemente quieres decir "hola", estamos
+
+00:08:30.846 --> 00:08:32.906 align:middle
+a tu disposición en los comentarios.
+
+00:08:32.906 --> 00:08:33.666 align:middle
+Muy bien, amigos.
+
+00:08:33.666 --> 00:08:34.976 align:middle
+¡Hasta la próxima!
