@@ -7,6 +7,8 @@ their objects. We already know that bundles give us services, and when we
 instantiate it. But if something *else* is responsible for instantiating those
 objects, how can we control it? The answer is *bundle configuration*.
 
+## Bundle Configuration
+
 Open the `/config/packages` directory. All of these `.yaml` config files are
 *automatically* loaded into our Symfony application, and their job is to
 configure services that each bundle gives us. In our `homepage()` method, right
