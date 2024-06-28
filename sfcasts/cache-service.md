@@ -8,6 +8,8 @@ than they were before. And the ISS moves *fast*, so it's not very efficient to
 update this information constantly. Is there a service that can cache that data
 instead? You bet!
 
+## Finding the Cache Service
+
 Open your terminal and run
 
 ```terminal
@@ -36,6 +38,8 @@ we need to *use* it. Write `use($client): array`.
 
 [[[ code('6bae6b469d') ]]]
 
+## Debugging with the Cache Profiler
+
 If we head over to our browser and refresh... we still made the HTTP Client request and, 
 over here, we now have a cache icon that shows us if something was written in the cache. 
 We have one! I'll click on this cache icon to open the profiler, and... how cool is that? We didn't create
@@ -55,6 +59,8 @@ This number is in *seconds*, after which the cache will expire. Back at our brow
 if we refresh, nothing changes because the value was already cached. To see our changes, 
 we need to clear it manually so it can be re-cached with our new time frame of five
 seconds.
+
+## Clearing the Cache
 
 The default cache adapter is a file system, which means the cache is stored in
 the `var/cache/dev/pools/` directory. Here, we can see our `/app` folder which
