@@ -27,6 +27,8 @@ it's more descriptive.
 
 [[[ code('f1e5e01ade') ]]]
 
+## Clearing the prod Cache
+
 If we head back and refresh...*nothing changed*. Why? For performance reasons,
 templates are *cached*. We made our change *after* the template was cached, so our browser 
 can't see it yet. To fix this, we need to *manually* clear our cache.
@@ -53,6 +55,8 @@ Okay, if we head back over and refresh the page again... *ta da*! We see
 "Updated at". *Awesome*. If you're ever working in the `prod` environment and you
 *don't* see changes you've made to your templates, config files, etc. reflected
 in the browser, you *may* need to manually clear your cache.
+
+## Changing the Cache Adapter for prod Only
 
 Right now, we're using `cache.adapter.array`, which is kind of like a *fake*
 cache. We can see that in the `config/packages/cache.yaml` file. A fake cache is
