@@ -26,6 +26,8 @@ let's call this `$twigDebugCommand`.
 
 [[[ code('50bf0e913a') ]]]
 
+## The Autowire Attribute
+
 If we head back to our browser and refresh... we get an *error*:
 
 > Cannot autowire argument `$twigDebugCommand` of
@@ -41,6 +43,8 @@ I'll *cheat* and copy the exact service name from the list in our terminal.
 
 Okay, if we head back and refresh the homepage again... it was successfully
 autowired. Nice!
+
+## Using the Autowired Service
 
 All right, let's see if we can run that command. Below `Response`,
 write `$twigDebugCommand->run()`. The first argument should be an input, so we
