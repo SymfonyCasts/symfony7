@@ -17,6 +17,8 @@ cache to last *longer* than the 5 seconds that we have now.
 The easiest way to do this would be to create a *custom* environment variable and
 set it to a different value for each environment - `dev` and `prod`.
 
+## Creating and Reading Environment Variables
+
 In our `.env` file, down here, write `ISS_LOCATION_CACHE_TTL` in all uppercase
 letters, which is standard for environment variables. Let's set this to `5` by
 default. 
@@ -36,6 +38,8 @@ add `iss_location_cache_ttl`.
 
 [[[ code('85bafcb921') ]]]
 
+## Environment Variable Processors
+
 Back at the browser, refresh. There's `5`. It's subtle, but you may have noticed
 that this value is a string right now. All environment variable values are just
 simple strings by default, but Symfony has a way to *typecast* them to a *different* type.
@@ -53,6 +57,8 @@ this `ISS_LOCATION_CACHE_TTL` variable to something a little longer, like `60`,
 so it will cache the data for *1 minute* instead of 5 seconds. The shorter time
 frame is just more practical while we're testing things out.
 
+## The `.env.local` File
+
 While we're here, I want to talk about some *other* `.env` files. *This* `.env`
 file is committed to your Git repository, and as you see here, when I make
 changes to it, those changes are unstaged. So if you have some *secrets* that
@@ -65,6 +71,8 @@ Inside our `.env` file, we can keep this empty or set it to some fake value.
 It's generally good practice to still keep the environment variables in
 the `.env` so that other developers can see them and set real values for them in
 *their* `.env.local` file. This was just an example, so we can change this back.
+
+## Debugging Environment Variables
 
 Along with these two files, there's also the less commonly used `.env.test`
 and `.env.prod`. Those are only loaded in the `test` and `prod` environments
