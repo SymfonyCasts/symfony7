@@ -3,6 +3,8 @@
 Sometimes, we could really use a set of configurations that help us develop in
 different scenarios. Luckily, Symfony has just the thing - *environments*.
 
+## The `APP_ENV` Variable
+
 In the `.env` file (located at the root of our project directory), we have some
 *environment variables*.
 
@@ -37,6 +39,8 @@ bit, is the value of our `APP_ENV` variable. So if we want to add an
 environment-specific configuration, we can put this in `config/packages/`,
 followed by your environment, like `dev` or `prod`, and then the config file
 name - `framework.yaml` for example.
+
+## The `when@{ENV}` Config
 
 That will work, but recently, Symfony introduced a much *cooler* way to do this,
 using the `when@` syntax. You can see this all over the new configuration. If we
