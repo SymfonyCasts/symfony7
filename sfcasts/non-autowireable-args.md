@@ -5,6 +5,8 @@ with `getParameter()` in our controller. We also saw how easy it is to create
 our own services. And guess what? That's not the only thing we can customize! We
 can also create our own *parameters*. How? I'll show you!
 
+## Create and use Custom Parameters
+
 Open `config/services.yaml`. Here, we see an empty `parameters` section. Inside,
 let's create a new parameter - how about `iss_location_cache_ttl` - and let's
 set it to `5`.
@@ -32,6 +34,8 @@ isn't a service; It's a parameter. So how do we do this? The answer: *Autowire i
 We can autowire parameters just like services, and it will work in the
 constructor or controller *just like* normal autowiring. Check it out!
 
+## `#[Autowire()]` PHP Attribute
+
 Back in our code, let's add the autowire attribute above the argument.
 Write `#[Autowire()]` and, inside, `param: 'iss_location_cache_ttl'`.
 
@@ -45,6 +49,8 @@ Open `config/packages/cache.yaml`. Instead of this hard-coded value, say `%iss_l
 [[[ code('b918d5de36') ]]]
 
 If we check this in our browser... everything still works! Awesome!
+
+## Bind Arguments Globally
 
 Before we continue, I want to show you one more way you can autowire
 parameters: *parameter binding*. Open `services.yaml` and, in `services`, below `_defaults`,
