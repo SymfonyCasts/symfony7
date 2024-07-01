@@ -7,6 +7,8 @@ going to create a custom Twig function that will fetch the *actual* data in the
 template. That way, we can render ISS location data in our `base.html.twig` file
 without passing it from every controller. Sound good? Let's get started!
 
+## Creating a Twig Extension with MakerBundle
+
 First, we need to create a Twig extension. In a previous course, we installed
 Symfony Maker Bundle. Let's see if that can help generate some boilerplate code.
 At your terminal, run:
@@ -31,6 +33,8 @@ one - `/src/Twig/Extension/AppExtension.php`.
 
 [[[ code('f5929bd6b1') ]]]
 
+## Creating a Twig Filter
+
 It already has a couple of methods: `getFilters()` and `getFunctions()`. Right now,
 we're only interested in functions, so we can get rid of the `getFilters()` method completely.
 Inside `getFunctions()`, let's replace the demo `function_name` with something
@@ -40,7 +44,7 @@ function name that we're going to call in templates.
 [[[ code('b341193be5') ]]]
 
 Over here, we can see that a method is called on `AppExtensionRuntime::class`.
-Right now, it's just called `doSomething`. Hold "command" (or "control" on a Mac)
+Right now, it's just called `doSomething`. Hold `Control` (or `Command` on a Mac)
 and click this method to open it. While I'm sure this method *is*, in fact,
 *doing something*, let's rename it so we know *what* it's doing. How
 about `getIssLocationData()` to match our function? We can also delete this
@@ -65,6 +69,8 @@ Much better! Now we can head back over to `AppExtensionRuntime.php` and, down he
 *paste*. We don't need a variable for this data, so we can just `return`.
 
 [[[ code('ed9e745775') ]]]
+
+## Injecting dependencies
 
 We *do* have some undefined variables like `$issLocationPool` and `$client`; Those
 are our dependencies. We can't inject these directly into the method like we do
@@ -94,12 +100,16 @@ Okay, at the browser, *refresh* to see... an *error*.
 
 > Variable "issData" does not exist.
 
+## Calling our Twig Filter from the Template
+
 This is because we are no longer injecting this variable from our controller but
 our template still references it. Open `/templates/main/homepage.html.twig` and,
 below, let's use our custom Twig function.
 Write `{% set issData = get_iss_location_data() %}`. 
 
 [[[ code('42e61a170e') ]]]
+
+## How does this work? The black magic behind.
 
 If we refresh the page again... our custom function is *working*. But wait... how does
 Twig know to use this class? We didn't add any configuration for the Twig extension. Is it
@@ -131,6 +141,8 @@ works via an *attribute*, like the command. In both cases, we create a class,
 extend a base class, implement an interface, or add a special attribute, and
 *bam* - Symfony understands what you're doing and integrates it.
 
+## Why do we need Twig Extension Runtime?
+
 By the way, if you're curious on what this separate `AppExtensionRuntime` is
 for, great eye! *Extension runtimes* have always been in Twig but only recently
 have they been promoted - mostly thanks to the maker bundle. We could inject the
@@ -144,6 +156,8 @@ showing the ISS location data on every page but you can imagine a function or
 filter that's only used on a few pages in your app. It's a best practice to keep
 your Twig extensions as light-weight as possible with none, or very few
 dependencies and push all the heavy-lifting to extension runtimes.
+
+## Rendering the Data on Every Page
 
 All right, in `homepage.html.twig`, copy this HTML code, delete it, and
 open `base.html.twig`. Down here, below our logo, *paste*. Okay, let's simplify
