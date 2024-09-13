@@ -24,7 +24,7 @@ on how you installed Composer.
 
 **Build TailwindCSS**
 
-This project uses TailwindCSS, to buil the CSS file run:
+This project uses TailwindCSS, to build the CSS file run:
 
 ```
 php bin/console tailwind:build
