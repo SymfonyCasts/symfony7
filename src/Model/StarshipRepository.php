@@ -1,13 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace App\Model;
 
-use App\Model\Starship;
-use App\Model\StarshipStatusEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
 
 class StarshipRepository extends AbstractController
 {
