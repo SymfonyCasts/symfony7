@@ -1,0 +1,13 @@
+diff --git a/migrations/Version20241111171351.php b/migrations/Version20241111171351.php
+index 3a15a04..b9fef4a 100644
+--- a/migrations/Version20241111171351.php
++++ b/migrations/Version20241111171351.php
+@@ -14,7 +14,7 @@ final class Version20241111171351 extends AbstractMigration
+ {
+     public function getDescription(): string
+     {
+-        return '';
++        return 'Add starship table';
+     }
+ 
+     public function up(Schema $schema): void

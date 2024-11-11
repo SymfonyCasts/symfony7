@@ -1,0 +1,33 @@
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index bf4904a..17427e0 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -3,6 +3,7 @@
+ namespace App\Repository;
+ 
+ use App\Entity\Starship;
++use App\Entity\StarshipStatusEnum;
+ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+ use Doctrine\Persistence\ManagerRegistry;
+ 
+@@ -16,6 +17,20 @@ class StarshipRepository extends ServiceEntityRepository
+         parent::__construct($registry, Starship::class);
+     }
+ 
++    /**
++     * @return Starship[]
++     */
++    public function findIncomplete(): array
++    {
++        return $this->createQueryBuilder('s')
++            ->where('s.status != :status')
++            ->orderBy('s.arrivedAt', 'DESC')
++            ->setParameter('status', StarshipStatusEnum::COMPLETED)
++            ->getQuery()
++            ->getResult()
++        ;
++    }
++
+     //    /**
+     //     * @return Starship[] Returns an array of Starship objects
+     //     */

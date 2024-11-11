@@ -1,0 +1,15 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index 5fbf9e3..99dc32e 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -32,6 +32,10 @@ class AppFixtures extends Fixture
+         $ship3->setStatus(StarshipStatusEnum::WAITING);
+         $ship3->setArrivedAt(new \DateTimeImmutable('-1 month'));
+ 
++        $manager->persist($ship1);
++        $manager->persist($ship2);
++        $manager->persist($ship3);
++
+         $manager->flush();
+     }
+ }

@@ -1,0 +1,26 @@
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+index 9767e2d..0a977bf 100644
+--- a/src/Controller/StarshipController.php
++++ b/src/Controller/StarshipController.php
+@@ -2,7 +2,8 @@
+ 
+ namespace App\Controller;
+ 
+-use App\Model\StarshipRepository;
++use App\Entity\Starship;
++use Doctrine\ORM\EntityManagerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -10,9 +11,9 @@ use Symfony\Component\Routing\Attribute\Route;
+ class StarshipController extends AbstractController
+ {
+     #[Route('/starships/{id<\d+>}', name: 'app_starship_show')]
+-    public function show(int $id, StarshipRepository $repository): Response
++    public function show(int $id, EntityManagerInterface $em): Response
+     {
+-        $ship = $repository->find($id);
++        $ship = $em->find(Starship::class, $id);
+         if (!$ship) {
+             throw $this->createNotFoundException('Starship not found');
+         }

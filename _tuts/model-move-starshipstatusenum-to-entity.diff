@@ -1,0 +1,65 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index 99dc32e..b13fc93 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -3,7 +3,7 @@
+ namespace App\DataFixtures;
+ 
+ use App\Entity\Starship;
+-use App\Model\StarshipStatusEnum;
++use App\Entity\StarshipStatusEnum;
+ use Doctrine\Bundle\FixturesBundle\Fixture;
+ use Doctrine\Persistence\ObjectManager;
+ 
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index d970e8a..5c1adc0 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -2,7 +2,6 @@
+ 
+ namespace App\Entity;
+ 
+-use App\Model\StarshipStatusEnum;
+ use App\Repository\StarshipRepository;
+ use Doctrine\ORM\Mapping as ORM;
+ 
+diff --git a/src/Model/StarshipStatusEnum.php b/src/Entity/StarshipStatusEnum.php
+similarity index 86%
+rename from src/Model/StarshipStatusEnum.php
+rename to src/Entity/StarshipStatusEnum.php
+index fa381c9..918e81b 100644
+--- a/src/Model/StarshipStatusEnum.php
++++ b/src/Entity/StarshipStatusEnum.php
+@@ -1,6 +1,6 @@
+ <?php
+ 
+-namespace App\Model;
++namespace App\Entity;
+ 
+ enum StarshipStatusEnum: string
+ {
+diff --git a/src/Model/Starship.php b/src/Model/Starship.php
+index 5aeb16e..502fae9 100644
+--- a/src/Model/Starship.php
++++ b/src/Model/Starship.php
+@@ -2,6 +2,8 @@
+ 
+ namespace App\Model;
+ 
++use App\Entity\StarshipStatusEnum;
++
+ class Starship
+ {
+     public function __construct(
+diff --git a/src/Model/StarshipRepository.php b/src/Model/StarshipRepository.php
+index 72ba97a..b652083 100644
+--- a/src/Model/StarshipRepository.php
++++ b/src/Model/StarshipRepository.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Model;
+ 
++use App\Entity\StarshipStatusEnum;
+ use Psr\Log\LoggerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ 

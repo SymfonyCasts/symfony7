@@ -1,0 +1,306 @@
+diff --git a/composer.json b/composer.json
+index 0f678ca..be59ebb 100644
+--- a/composer.json
++++ b/composer.json
+@@ -94,6 +94,7 @@
+         "symfony/debug-bundle": "7.1.*",
+         "symfony/maker-bundle": "^1.52",
+         "symfony/stopwatch": "7.1.*",
+-        "symfony/web-profiler-bundle": "7.1.*"
++        "symfony/web-profiler-bundle": "7.1.*",
++        "zenstruck/foundry": "^2.2"
+     }
+ }
+diff --git a/composer.lock b/composer.lock
+index 7bda22c..aceab3b 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "9a931a5ffa2dc503a2962553512fbd64",
++    "content-hash": "1fd2cf606f3ef25c7ebbac9d88af93a0",
+     "packages": [
+         {
+             "name": "composer/semver",
+@@ -6193,6 +6193,69 @@
+             ],
+             "time": "2024-05-07T07:16:35+00:00"
+         },
++        {
++            "name": "fakerphp/faker",
++            "version": "v1.24.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/FakerPHP/Faker.git",
++                "reference": "a136842a532bac9ecd8a1c723852b09915d7db50"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/FakerPHP/Faker/zipball/a136842a532bac9ecd8a1c723852b09915d7db50",
++                "reference": "a136842a532bac9ecd8a1c723852b09915d7db50",
++                "shasum": ""
++            },
++            "require": {
++                "php": "^7.4 || ^8.0",
++                "psr/container": "^1.0 || ^2.0",
++                "symfony/deprecation-contracts": "^2.2 || ^3.0"
++            },
++            "conflict": {
++                "fzaninotto/faker": "*"
++            },
++            "require-dev": {
++                "bamarni/composer-bin-plugin": "^1.4.1",
++                "doctrine/persistence": "^1.3 || ^2.0",
++                "ext-intl": "*",
++                "phpunit/phpunit": "^9.5.26",
++                "symfony/phpunit-bridge": "^5.4.16"
++            },
++            "suggest": {
++                "doctrine/orm": "Required to use Faker\\ORM\\Doctrine",
++                "ext-curl": "Required by Faker\\Provider\\Image to download images.",
++                "ext-dom": "Required by Faker\\Provider\\HtmlLorem for generating random HTML.",
++                "ext-iconv": "Required by Faker\\Provider\\ru_RU\\Text::realText() for generating real Russian text.",
++                "ext-mbstring": "Required for multibyte Unicode string functionality."
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Faker\\": "src/Faker/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "François Zaninotto"
++                }
++            ],
++            "description": "Faker is a PHP library that generates fake data for you.",
++            "keywords": [
++                "data",
++                "faker",
++                "fixtures"
++            ],
++            "support": {
++                "issues": "https://github.com/FakerPHP/Faker/issues",
++                "source": "https://github.com/FakerPHP/Faker/tree/v1.24.0"
++            },
++            "time": "2024-11-07T15:11:20+00:00"
++        },
+         {
+             "name": "nikic/php-parser",
+             "version": "v5.3.1",
+@@ -6497,6 +6560,166 @@
+                 }
+             ],
+             "time": "2024-11-05T07:52:02+00:00"
++        },
++        {
++            "name": "zenstruck/assert",
++            "version": "v1.5.1",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/zenstruck/assert.git",
++                "reference": "39554ce3a275fbf8c870b251e620101f644e9277"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/zenstruck/assert/zipball/39554ce3a275fbf8c870b251e620101f644e9277",
++                "reference": "39554ce3a275fbf8c870b251e620101f644e9277",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=8.0",
++                "symfony/polyfill-php81": "^1.23",
++                "symfony/var-exporter": "^5.4|^6.0|^7.0"
++            },
++            "require-dev": {
++                "phpstan/phpstan": "^1.4",
++                "phpunit/phpunit": "^9.5.21",
++                "symfony/phpunit-bridge": "^6.3|^7.0"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Zenstruck\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Kevin Bond",
++                    "email": "kevinbond@gmail.com"
++                }
++            ],
++            "description": "Standalone, lightweight, framework agnostic, test assertion library.",
++            "homepage": "https://github.com/zenstruck/assert",
++            "keywords": [
++                "assertion",
++                "phpunit",
++                "test"
++            ],
++            "support": {
++                "issues": "https://github.com/zenstruck/assert/issues",
++                "source": "https://github.com/zenstruck/assert/tree/v1.5.1"
++            },
++            "funding": [
++                {
++                    "url": "https://github.com/kbond",
++                    "type": "github"
++                }
++            ],
++            "time": "2024-10-28T18:08:12+00:00"
++        },
++        {
++            "name": "zenstruck/foundry",
++            "version": "v2.2.2",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/zenstruck/foundry.git",
++                "reference": "44eec45b620fd5419906c387512bd1acdf898647"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/44eec45b620fd5419906c387512bd1acdf898647",
++                "reference": "44eec45b620fd5419906c387512bd1acdf898647",
++                "shasum": ""
++            },
++            "require": {
++                "doctrine/persistence": "^2.0|^3.0",
++                "fakerphp/faker": "^1.23",
++                "php": ">=8.1",
++                "symfony/deprecation-contracts": "^2.2|^3.0",
++                "symfony/framework-bundle": "^6.4|^7.0",
++                "symfony/property-access": "^6.4|^7.0",
++                "symfony/var-exporter": "^6.4.9|~7.0.9|^7.1.2",
++                "zenstruck/assert": "^1.4"
++            },
++            "require-dev": {
++                "bamarni/composer-bin-plugin": "^1.8",
++                "dama/doctrine-test-bundle": "^7.0|^8.0",
++                "doctrine/collections": "^1.7|^2.0",
++                "doctrine/common": "^3.2",
++                "doctrine/doctrine-bundle": "^2.10",
++                "doctrine/doctrine-migrations-bundle": "^2.2|^3.0",
++                "doctrine/mongodb-odm-bundle": "^4.6|^5.0",
++                "doctrine/orm": "^2.16|^3.0",
++                "phpunit/phpunit": "^9.5.0 || ^10.0 || ^11.0",
++                "symfony/console": "^6.4|^7.0",
++                "symfony/dotenv": "^6.4|^7.0",
++                "symfony/maker-bundle": "^1.55",
++                "symfony/phpunit-bridge": "^6.4|^7.0",
++                "symfony/translation-contracts": "^3.4",
++                "symfony/var-dumper": "^6.4|^7.0",
++                "symfony/yaml": "^6.4|^7.0"
++            },
++            "type": "library",
++            "extra": {
++                "bamarni-bin": {
++                    "target-directory": "bin/tools",
++                    "bin-links": true,
++                    "forward-command": false
++                },
++                "psalm": {
++                    "pluginClass": "Zenstruck\\Foundry\\Psalm\\FoundryPlugin"
++                }
++            },
++            "autoload": {
++                "files": [
++                    "src/functions.php",
++                    "src/Persistence/functions.php",
++                    "src/phpunit_helper.php"
++                ],
++                "psr-4": {
++                    "Zenstruck\\Foundry\\": "src/",
++                    "Zenstruck\\Foundry\\Psalm\\": "utils/psalm"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Kevin Bond",
++                    "email": "kevinbond@gmail.com"
++                },
++                {
++                    "name": "Nicolas PHILIPPE",
++                    "email": "nikophil@gmail.com"
++                }
++            ],
++            "description": "A model factory library for creating expressive, auto-completable, on-demand dev/test fixtures with Symfony and Doctrine.",
++            "homepage": "https://github.com/zenstruck/foundry",
++            "keywords": [
++                "Fixture",
++                "dev",
++                "doctrine",
++                "factory",
++                "faker",
++                "symfony",
++                "test"
++            ],
++            "support": {
++                "issues": "https://github.com/zenstruck/foundry/issues",
++                "source": "https://github.com/zenstruck/foundry/tree/v2.2.2"
++            },
++            "funding": [
++                {
++                    "url": "https://github.com/kbond",
++                    "type": "github"
++                }
++            ],
++            "time": "2024-11-05T16:39:17+00:00"
+         }
+     ],
+     "aliases": [],
+diff --git a/config/bundles.php b/config/bundles.php
+index 861ef52..906ec11 100644
+--- a/config/bundles.php
++++ b/config/bundles.php
+@@ -15,4 +15,5 @@ return [
+     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
+     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
+     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
++    Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
+ ];
+diff --git a/config/packages/zenstruck_foundry.yaml b/config/packages/zenstruck_foundry.yaml
+new file mode 100644
+index 0000000..e3ed04b
+--- /dev/null
++++ b/config/packages/zenstruck_foundry.yaml
+@@ -0,0 +1,5 @@
++when@dev: &dev
++    # See full configuration: https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#full-default-bundle-configuration
++    zenstruck_foundry:
++
++when@test: *dev
+diff --git a/symfony.lock b/symfony.lock
+index 08a427f..f0645f1 100644
+--- a/symfony.lock
++++ b/symfony.lock
+@@ -218,5 +218,17 @@
+     },
+     "twig/extra-bundle": {
+         "version": "v3.8.0"
++    },
++    "zenstruck/foundry": {
++        "version": "2.2",
++        "recipe": {
++            "repo": "github.com/symfony/recipes",
++            "branch": "main",
++            "version": "2.0",
++            "ref": "56bc588a1b6d5d218319f70c64c2f0fbebe30ec7"
++        },
++        "files": [
++            "config/packages/zenstruck_foundry.yaml"
++        ]
+     }
+ }

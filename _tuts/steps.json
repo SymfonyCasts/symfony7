@@ -1,0 +1,135 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "install-doctrine",
+            "name": "Install Doctrine",
+            "description": null
+        },
+        {
+            "id": "entity-create",
+            "name": "Entity: create",
+            "description": null
+        },
+        {
+            "id": "entity-modify",
+            "name": "Entity: modify",
+            "description": null
+        },
+        {
+            "id": "entity-create-migration",
+            "name": "Entity: create migration",
+            "description": null
+        },
+        {
+            "id": "entity-migration-description",
+            "name": "Entity: migration description",
+            "description": null
+        },
+        {
+            "id": "fixture-install-orm-fixtures",
+            "name": "Fixture: install orm-fixtures",
+            "description": null
+        },
+        {
+            "id": "fixture-add-starship-fixtures",
+            "name": "Fixture: add Starship fixtures",
+            "description": null
+        },
+        {
+            "id": "fixture-persist-and-flush",
+            "name": "Fixture: persist and flush",
+            "description": null
+        },
+        {
+            "id": "fetch-homepage-dql",
+            "name": "Fetch: homepage DQL",
+            "description": null
+        },
+        {
+            "id": "fetch-homepage-querybuilder",
+            "name": "Fetch homepage QueryBuilder",
+            "description": null
+        },
+        {
+            "id": "fetch-show-em-find",
+            "name": "Fetch: show em find",
+            "description": null
+        },
+        {
+            "id": "model-move-starshipstatusenum-to-entity",
+            "name": "Model: move StarshipStatusEnum to Entity",
+            "description": null
+        },
+        {
+            "id": "model-remove-model-directory",
+            "name": "Model: remove Model directory",
+            "description": null
+        },
+        {
+            "id": "repository-dd-em-getrepository",
+            "name": "Repository: dd em getRepository",
+            "description": null
+        },
+        {
+            "id": "repository-remove-dd-em-getrepository",
+            "name": "Repository: remove dd em getRepository",
+            "description": null
+        },
+        {
+            "id": "repository-inject-starshiprepository",
+            "name": "Repository: inject StarshipRepository",
+            "description": null
+        },
+        {
+            "id": "repository-findincomplete",
+            "name": "Repository: findIncomplete",
+            "description": null
+        },
+        {
+            "id": "repository-homepage-findincomplete",
+            "name": "Repository: homepage findIncomplete",
+            "description": null
+        },
+        {
+            "id": "repository-findmyship",
+            "name": "Repository: findMyShip",
+            "description": null
+        },
+        {
+            "id": "repository-homepage-findmyship",
+            "name": "Repository: homepage findMyShip",
+            "description": null
+        },
+        {
+            "id": "foundry-install",
+            "name": "Foundry: install",
+            "description": null
+        },
+        {
+            "id": "foundry-make-factory",
+            "name": "Foundry: make:factory",
+            "description": null
+        },
+        {
+            "id": "foundry-starshipfactory",
+            "name": "Foundry: StarshipFactory",
+            "description": null
+        },
+        {
+            "id": "foundry-appfixtures",
+            "name": "Foundry: AppFixtures",
+            "description": null
+        },
+        {
+            "id": "foundry-random-fixtures",
+            "name": "Foundry: random fixtures",
+            "description": null
+        }
+    ],
+    "sha": "b4968cd85fe4d5845a8123decd9c91096ed6771b"
+}

@@ -1,0 +1,56 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index a4e9d97..3680c20 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -2,8 +2,7 @@
+ 
+ namespace App\Controller;
+ 
+-use App\Entity\Starship;
+-use Doctrine\ORM\EntityManagerInterface;
++use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -12,13 +11,9 @@ class MainController extends AbstractController
+ {
+     #[Route('/', name: 'app_homepage')]
+     public function homepage(
+-        EntityManagerInterface $em,
++        StarshipRepository $repository,
+     ): Response {
+-        $ships = $em->createQueryBuilder()
+-            ->select('s')
+-            ->from(Starship::class, 's')
+-            ->getQuery()
+-            ->getResult();
++        $ships = $repository->findAll();
+         $myShip = $ships[array_rand($ships)];
+ 
+         return $this->render('main/homepage.html.twig', [
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+index 0a977bf..eec8e63 100644
+--- a/src/Controller/StarshipController.php
++++ b/src/Controller/StarshipController.php
+@@ -2,8 +2,7 @@
+ 
+ namespace App\Controller;
+ 
+-use App\Entity\Starship;
+-use Doctrine\ORM\EntityManagerInterface;
++use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -11,9 +10,9 @@ use Symfony\Component\Routing\Attribute\Route;
+ class StarshipController extends AbstractController
+ {
+     #[Route('/starships/{id<\d+>}', name: 'app_starship_show')]
+-    public function show(int $id, EntityManagerInterface $em): Response
++    public function show(int $id, StarshipRepository $repository): Response
+     {
+-        $ship = $em->find(Starship::class, $id);
++        $ship = $repository->find($id);
+         if (!$ship) {
+             throw $this->createNotFoundException('Starship not found');
+         }

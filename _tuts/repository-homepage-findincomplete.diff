@@ -1,0 +1,13 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 3680c20..e27544d 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -13,7 +13,7 @@ class MainController extends AbstractController
+     public function homepage(
+         StarshipRepository $repository,
+     ): Response {
+-        $ships = $repository->findAll();
++        $ships = $repository->findIncomplete();
+         $myShip = $ships[array_rand($ships)];
+ 
+         return $this->render('main/homepage.html.twig', [

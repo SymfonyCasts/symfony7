@@ -1,0 +1,13 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 0b0bc2e..a4e9d97 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -14,8 +14,6 @@ class MainController extends AbstractController
+     public function homepage(
+         EntityManagerInterface $em,
+     ): Response {
+-        dd($em->getRepository(Starship::class));
+-
+         $ships = $em->createQueryBuilder()
+             ->select('s')
+             ->from(Starship::class, 's')

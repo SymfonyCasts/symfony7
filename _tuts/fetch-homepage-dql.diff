@@ -1,0 +1,25 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 0262020..19e281a 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -2,7 +2,7 @@
+ 
+ namespace App\Controller;
+ 
+-use App\Model\StarshipRepository;
++use Doctrine\ORM\EntityManagerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -11,9 +11,9 @@ class MainController extends AbstractController
+ {
+     #[Route('/', name: 'app_homepage')]
+     public function homepage(
+-        StarshipRepository $starshipRepository,
++        EntityManagerInterface $em,
+     ): Response {
+-        $ships = $starshipRepository->findAll();
++        $ships = $em->createQuery('SELECT s FROM App\Entity\Starship s')->getResult();
+         $myShip = $ships[array_rand($ships)];
+ 
+         return $this->render('main/homepage.html.twig', [

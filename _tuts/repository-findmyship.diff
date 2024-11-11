@@ -1,0 +1,16 @@
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index 17427e0..5db9397 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -31,6 +31,11 @@ class StarshipRepository extends ServiceEntityRepository
+         ;
+     }
+ 
++    public function findMyShip(): Starship
++    {
++        return $this->findAll()[0];
++    }
++
+     //    /**
+     //     * @return Starship[] Returns an array of Starship objects
+     //     */
