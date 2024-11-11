@@ -1,1 +1,9 @@
-chapters: []
+chapters:
+  - installing-doctrine
+  - database-setup
+  - entity
+  - migrations
+  - persisting-fixtures
+  - dql-query-builder-find
+  - entity-repository
+  - foundry-faker
