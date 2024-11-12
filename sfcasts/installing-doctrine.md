@@ -1,26 +1,35 @@
 # Installing Doctrine
 
-Hey friends, welcome to episode 3 of our Symfony 7 series. This one's going to be all
-_engaging_ a database with Doctrine. Like Symfony, Doctrine is a collection of PHP
-packages. They're all about working with databases in PHP. While Doctrine and
+Yo friends! It's time for episode 3 of our Symfony 7 series. And this is an *exciting*
+one because we're bringing our app to life with a database. We don't *need* any new
+libraries to do this, but be because it's awesome and smells like cookies, we'll
+use a library called Doctrine. And while Doctrine and
 Symfony _are_ separate projects, they fit together like quantum entangled particles.
+Spooky action at a distance, baby!
 
-I'm Kevin, and I'll be your starship captain on this journey. Let's get started!
+I'm Kevin, and I'll be your starship captain on this journey. I've always wanted
+to say that. Engage!
 
-To follow along with me, download the course code and follow the setup guide in the
-`README.md` to get going. I've already done this, so let's spin over to our app. It's
-the _Star Shop_ from our previous episodes. We have this "Ship Repair Queue" where
-we list tracked starships. Now, this may look like the data is coming from some kind
-of database, but it's really just built on demand for each page.
+To adventure with me through database space, download the course code and follow the setup guide in
+`README.md`. The last step, which I already did, is to run
 
-We're going to take this app to Warp 9 and make it database-driven!
+```terminal
+symfony serve -d
+```
+
+to start a local web server at https://127.0.0.1. Say hello to
+the _Star Shop_ from our previous episodes. We have a "Ship Repair Queue" where
+we list starships currently docked for repairs. Now, this may look like the data is coming from some kind
+of database, but it's really just hardcoded. Lame!
+
+Time to Warp 9 this app to the world of databases!
 
 ## Requiring Doctrine
 
 First things first: we need to install Doctrine. Pop over to the terminal
 and run:
 
-```bash
+```terminal
 composer require doctrine
 ```
 
@@ -29,48 +38,46 @@ We're being asked if we want to include Docker configuration from recipes. Choos
 to enable this permanently. We'll talk about Docker in the next chapter but don't
 worry, Docker isn't required for this tutorial.
 
-Ok, the command finished. Scroll up a bit to see what happened. The `doctrine` package
-we installed is actually a Flex alias for a Flex pack called `symfony/orm-pack`.
-Remember, Flex packs are commonly used collections of related libraries. The `orm-pack`
-_unpacks_ into all these packages above.
+Scroll up a bit to see what happened. The `doctrine` package
+we installed is actually a Flex alias for a Flex *pack* called `symfony/orm-pack`.
+Remember, Flex packs are just a *collection* of libraries that work well together.
+actually installs multiple Doctrine-related packages. The end result a super 
+robust Doctrine setup.
 
-The first one of note is `doctrine/dbal`. DBAL stands for _DataBase Abstraction Layer_.
+The first interesting package is `doctrine/dbal`. DBAL stands for _Database Abstraction Layer_.
 That's a fancy way of saying it provides a consistent way to work with different
-database platforms. MySQL, PostgreSQL, SQLite, etc.
+database platforms. MySQL, PostgreSQL, SQLite, etc. It's super important, though
+it mostly hides behind the scenes.
 
-The second important package is `doctrine/orm`. ORM stands for _Object Relational Mapper_.
-Again, fancy words for a library that helps us map PHP objects to database tables.
+The second is `doctrine/orm`. ORM stands for _Object Relational Mapper_.
+Fancy words for a library that helps us map PHP objects to database tables.
+We'll dive hard into this.
 
-`symfony/doctrine-bridge` and `doctrine/doctrine-bundle` are the glue that integrates
-Doctrine with Symfony.
+Then there are a few others that tie Doctrine into Symfony and a migrations
+library we'll use to add new tables and stuff like that.
 
-`doctrine/migrations` and `doctrine/doctrine-migrations-bundle` are for working with
-database migrations. We'll talk about these later.
+The rest of these are background support packages for Doctrine and you can ignore
+them.
 
-The rest of these are just support packages for Doctrine.
+But what's *really* interesting is what the Flex recipes for these packages
+did. Run:
 
-To see what was added to our project, run:
-
-```bash
+```terminal
 git status
 ```
 
 The modified files are standard Flex recipe stuff. `.env` was modified with some
-Doctrine-specific environment variables and `config/bundles.php` was updated to enable
+Doctrine-specific environment variables - we'll see those soon - and `config/bundles.php` was updated to enable
 the two bundles we installed.
 
 These _untracked files_ are new files added by the Flex recipes. These `compose*.yaml`
-files are here because we enabled Docker. Again, we'll talk about Docker in the next
-chapter.
+files will help us start a database container in the next chapter.
 
-We can see in `config/packages/` that we have `doctrine.yaml` and `doctrine_migrations.yaml`
-files. These are some default configurations for the two bundles.
+In `config/packages/`, we have 2 new files - `doctrine.yaml` and `doctrine_migrations.yaml`.
+These have good defaults, so we'll just check them out as needed.
 
-There's an empty `migrations/` directory which will house our database migrations.
+The recipes added an empty `migrations/` directory, an empty `src/Entity/` directory,
+and an empty `src/Repository/` directory. We'll dive into all of these one-by-one.
 
-And there's an empty `src/Entity/` directory. This is where the classes that Doctrine
-ORM uses to represent database tables are kept. `src/Repository/` will be where corresponding
-entity repositories are held.
-
-Alright! We have Doctrine installed, so we can talk to databases... but... we don't
-actually have a database yet. Let's add one next!
+Ok! We have Doctrine installed, so we can talk to databases... except that... we don't
+actually have a database server running yet. Let's get one going next!
