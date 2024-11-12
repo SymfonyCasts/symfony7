@@ -2,16 +2,16 @@
 
 Yo friends! It's time for episode 3 of our Symfony 7 series. And this is an *exciting*
 one because we're bringing our app to life with a database. We don't *need* any new
-libraries to do this, but be because it's awesome and smells like cookies, we'll
+libraries to do this, but because it's awesome and smells like cookies, we'll
 use a library called Doctrine. And while Doctrine and
 Symfony _are_ separate projects, they fit together like quantum entangled particles.
 Spooky action at a distance, baby!
 
-I'm Kevin, and I'll be your starship captain on this journey. I've always wanted
-to say that. Engage!
+I'm Kevin, and I'll be your starship captain on this journey. Engage! I've always wanted
+to say that.
 
-To adventure with me through database space, download the course code and follow the setup guide in
-`README.md`. The last step, which I already did, is to run
+To adventure with me through database space, download the course code and follow the setup guide in the
+`README.md`. The last step, which I already did, is to run:
 
 ```terminal
 symfony serve -d
@@ -41,8 +41,7 @@ worry, Docker isn't required for this tutorial.
 Scroll up a bit to see what happened. The `doctrine` package
 we installed is actually a Flex alias for a Flex *pack* called `symfony/orm-pack`.
 Remember, Flex packs are just a *collection* of libraries that work well together.
-actually installs multiple Doctrine-related packages. The end result a super 
-robust Doctrine setup.
+The end result a super robust Doctrine setup.
 
 The first interesting package is `doctrine/dbal`. DBAL stands for _Database Abstraction Layer_.
 That's a fancy way of saying it provides a consistent way to work with different
