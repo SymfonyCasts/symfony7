@@ -1,0 +1,17 @@
+diff --git a/README.md b/README.md
+index c3143bd..6cdf17f 100644
+--- a/README.md
++++ b/README.md
+@@ -53,6 +53,12 @@ symfony console doctrine:database:create
+ symfony console doctrine:schema:create
+ ```
+ 
++**Load the fixtures**
++
++```
++symfony console doctrine:fixtures:load
++```
++
+ **Start the Symfony web server**
+ 
+ You can use Nginx or Apache, but Symfony's local web server

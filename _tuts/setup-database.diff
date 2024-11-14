@@ -1,0 +1,28 @@
+diff --git a/README.md b/README.md
+index b17e546..354e745 100644
+--- a/README.md
++++ b/README.md
+@@ -30,6 +30,23 @@ This project uses TailwindCSS, to build the CSS file run:
+ php bin/console tailwind:build
+ ```
+ 
++**(Optional) Start the Docker database container**
++
++```
++docker compose up -d
++```
++
++If not using Docker, you can skip this step, but you'll need
++to configure `DATABASE_URL` in `.env`.
++
++**Create the database**
++
++If using Docker, the database should already be created.
++
++```
++symfony console doctrine:database:create
++```
++
+ **Start the Symfony web server**
+ 
+ You can use Nginx or Apache, but Symfony's local web server

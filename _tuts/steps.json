@@ -11,6 +11,11 @@
             "description": null
         },
         {
+            "id": "setup-database",
+            "name": "Setup Database",
+            "description": null
+        },
+        {
             "id": "entity-create",
             "name": "Entity: create",
             "description": null
@@ -31,6 +36,11 @@
             "description": null
         },
         {
+            "id": "entity-add-schema-in-readme",
+            "name": "Entity: add schema in readme",
+            "description": null
+        },
+        {
             "id": "fixture-install-orm-fixtures",
             "name": "Fixture: install orm-fixtures",
             "description": null
@@ -43,6 +53,11 @@
         {
             "id": "fixture-persist-and-flush",
             "name": "Fixture: persist and flush",
+            "description": null
+        },
+        {
+            "id": "fixture-load-fixtures-in-readme",
+            "name": "Fixture: load fixtures in readme",
             "description": null
         },
         {
@@ -131,5 +146,5 @@
             "description": null
         }
     ],
-    "sha": "b4968cd85fe4d5845a8123decd9c91096ed6771b"
+    "sha": "65cf8c17bc18b09f6a89e02696f6f28f441d41d1"
 }
