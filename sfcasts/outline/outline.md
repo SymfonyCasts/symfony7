@@ -81,7 +81,7 @@
 - Migrations "version control" you database
 - Create migration
   - `symfony console make:migration`
-  - Database specific SQL
+  - **NOTE**: Database specific SQL - will look different for sqlite
   - Add description: "Add starship table"
   - up/down
 - Pre-status
