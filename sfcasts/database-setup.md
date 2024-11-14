@@ -38,8 +38,7 @@ Open your terminal and run:
 docker compose up -d
 ```
 
-This start the Docker containers and
-`-d` tells Docker to do it all in the background.
+This start the Docker containers and `-d` tells Docker to do it all in the background.
 
 But *where* is the database server running? Like what port? Don't we need to know
 so we can update `DATABASE_URL` to point to it?
@@ -47,7 +46,7 @@ so we can update `DATABASE_URL` to point to it?
 No! The `symfony` CLI binary that's running the web server has some Docker magic!
 Jump over and refresh the app. Down here, hover over "Server". This holds
 details about the Symfony CLI server. This part means that it automatically detected our
-docker containers and setting up the environment variables for us!
+docker containers and set up the environment variables for us!
 
 I'll show you. Pop over to our terminal and run:
 
@@ -66,7 +65,7 @@ use the correct one.
 Now, we're used to running Symfony commands with `bin/console`. But when using the
 Symfony CLI with a Docker database, we need to run the database-specific commands through
 `symfony console` instead. It's the same as `bin/console`, but it gives the
-Symfony CLI a chance to add the env vars.
+Symfony CLI a chance to add the environment variables.
 
 Ok! Database server running in a Docker container and `DATABASE_URL` is pointing to it.
 To create the database, run:
@@ -80,4 +79,4 @@ the server comes with one. But this is good,
 it means we *are* connecting to our database server!
 
 Ok team, we have Doctrine and a database. Now we need a table! We'll do that next
-by jumping lifting off into the world of entities and migrations.
+by jump lifting off into the world of entities and migrations.
