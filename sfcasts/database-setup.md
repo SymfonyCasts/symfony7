@@ -78,5 +78,5 @@ An error?! No worries! The error is telling us the database already exists: appa
 the server comes with one. But this is good,
 it means we *are* connecting to our database server!
 
-Ok team, we have Doctrine and a database. Now we need a table! We'll do that next
+Ok crew, we have Doctrine and a database. Now we need a table! We'll do that next
 by jump lifting off into the world of entities and migrations.
