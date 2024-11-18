@@ -10,8 +10,7 @@ symfony console make:migration
 ```
 
 Success! This didn't add the actual table, but it _did_ create a
-new file in the `migrations/`
-directory. Let's check it out!
+new file in the `migrations/` directory. Let's check it out!
 
 Ooh, it's a PHP class where the `up()` method holds the SQL to create our table.
 What's neat is how this was created: Doctrine compared the current state of our
@@ -25,7 +24,7 @@ One thing to note about the SQL: it's in the format of the database
 platform you're using. In our case, Postgres-specific SQL. If using SQLite,
 you'd see SQLite-specific SQL.
 
-If you went, add notes about what this does in `getDescription()`:
+If you want, add a note about what this does in `getDescription()`:
 `return 'Add starship table'`.
 
 ## Checking the Migration Status
@@ -43,7 +42,7 @@ The status is `not migrated` because we haven't executed it yet. Let's do that!
 symfony console doctrine:migrations:migrate
 ```
 
-Are we sure we want to continue? Yes! Success! Try
+Are we sure we want to continue? Yes! Success! Try:
 
 ```terminal
 symfony console doctrine:migrations:list
@@ -63,10 +62,10 @@ We can see it! Run:
 symfony console doctrine:query:sql 'select * from doctrine_migration_versions'
 ```
 
-Look at that! There's our migration class, when it was executed, and how long it took,
+Look at that! There's our migration class, when it was executed, how long it took,
 and the migration's favorite color! Ok, not that last one.
 
-Does this mean we have a `starship` table? Run another raw SQL query to find out!
+Does this mean we have our `starship` table? Run another raw SQL query to find out!
 
 ```terminal
 symfony console doctrine:query:sql 'select * from starship'

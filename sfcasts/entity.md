@@ -24,9 +24,8 @@ symfony console make:entity
 ```
 
 For the name, use `Starship`. We're not using Symfony UX Turbo, so answer
-`no` to that question. This already created a `Starship` class in the `Entity/` directory
-and a `StarshipRepository` class. We'll talk about
-that later.
+`no` to that question. This already created a `Starship` class in the `Entity/`
+directory and a `StarshipRepository` class. We'll talk about that later.
 
 But we're not done! This command is awesome: it interactively asks what properties -
 or columns if you want to think that way - our entity needs. Jump back to the Starship
@@ -36,7 +35,7 @@ length? `255` is fine. Can this field be null in the database? No, every
 Starship needs a name.
 
 Next is `class`, it'll be the same as `name`... then `captain` is also a simple `string`.
-Next: `status`. Doctrine defaults to a `string` for, but...
+Next: `status`. Doctrine defaults to a `string`, but...
 look at our `Starship` model, `status` is an _enum_. How
 can we map this to a column? Back in the terminal, hit `?` to see all the different
 types we can add. At the bottom... `enum`! Use that. `Enum class`? Use
@@ -45,18 +44,18 @@ the full class name of our enum: `App\Model\StarshipStatusEnum`.
 Can this field store multiple values? No, a Starship can only have one status at a
 time. Can this field be null? Nope!
 
-Finally add `arrivedAt`. Cool! Maker defaults to `datetime_immutable`
+Finally, add `arrivedAt`. Cool! Maker defaults to `datetime_immutable`
 instead of `string`. This is because we suffixed our property name with `At`. Smart!
 Can this field be null? No.
 
-Let's take a look at our newly minted `Starship` entity: in the `src/Entity/`.
+Let's take a look at our newly minted `Starship` entity: in `src/Entity/`.
 
 Notice: this is a standard PHP class with properties... and one special thing: some
 PHP attributes:
 
 The `#[ORM\Entity]` attribute on the class tells Doctrine that this *not* just a
 boring PHP class, but an entity that should be mapped to a table in our
-database. The table name *can* be customized, but use the default which is
+database. The table name *can* be customized, but we'll use the default which is
 the _snake cased_ class name: `starship`.
 
 Check out the properties: each has `#[ORM\Column]`. This tells Doctrine that these
@@ -68,12 +67,11 @@ timestamp type. Nice!
 `id` has a few extra attributes that mark it as the primary key and tells the database
 to auto-generate this as an auto-incrementing integer.
 
-Oh and we can remove the `length` argument from the string columns: this is the default.
+Oh, and we can remove the `length` argument from the string columns: this is the default.
 
-TODO: KEVIN shorten this enum. Main points are: will store a string in the database,
-but the property will hold a `StarshipStatusEnum` object. That's cool!
-We can actually remove this `enumType` argument Doctrine can guess that from the
-property type. Cool!
+The `status` property is a `StarshipStatusEnum` type but Doctrine will
+store this as a string in the database. Cool! We can actually remove
+the `enumType` argument: Doctrine can guess that from the property type too!
 
 Down below, the maker generated getters and setters for all our properties. Our
 old `Starship` model had two extra methods: `getStatusString()` and
