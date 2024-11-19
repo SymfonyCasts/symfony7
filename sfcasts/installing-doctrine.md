@@ -58,6 +58,8 @@ library we'll use to add new tables and stuff like that.
 The rest of these are background support packages for Doctrine and you can ignore
 them.
 
+## Doctrine Flex Recipes
+
 But what's *really* interesting is what the Flex recipes for these packages
 did. Run:
 

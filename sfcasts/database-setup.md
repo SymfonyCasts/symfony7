@@ -3,6 +3,8 @@
 All right, we have Doctrine installed! But now we need, ya know, to get a database
 server running.
 
+## `DATABASE_URL` Environment Variable
+
 Take a look at our `.env` file. When we installed Doctrine,
 the Flex recipe added this *doctrine-bundle* section. The 
 `DATABASE_URL` environment variable is where we tell Doctrine *how* to connect to our database.
@@ -24,6 +26,8 @@ Remember, don't store any sensitive info in this file: it's committed to
 your repo. If you have your own database server locally, create a `.env.local`
 file (this is ignored by git), and set your own `DATABASE_URL` there.
 
+## Starting a Postgres Container with Docker
+
 Ok, so how can we get a Postgres database server running?
 
 Take a look at `compose.yaml`. This was added by a Flex recipe and holds 
@@ -42,6 +46,8 @@ This start the Docker containers and `-d` tells Docker to do it all in the backg
 
 But *where* is the database server running? Like what port? Don't we need to know
 so we can update `DATABASE_URL` to point to it?
+
+## The Symfony CLI is Awesome!
 
 No! The `symfony` CLI binary that's running the web server has some Docker magic!
 Jump over and refresh the app. Down here, hover over "Server". This holds
@@ -62,10 +68,14 @@ the one in `.env` and points to the Postgres database running in Docker.
 That port number will randomly change, but the Symfony CLI will always
 use the correct one.
 
+## `symfony console` vs `bin/console`
+
 Now, we're used to running Symfony commands with `bin/console`. But when using the
 Symfony CLI with a Docker database, we need to run the database-specific commands through
 `symfony console` instead. It's the same as `bin/console`, but it gives the
 Symfony CLI a chance to add the environment variables.
+
+## Creating the Database
 
 Ok! Database server running in a Docker container and `DATABASE_URL` is pointing to it.
 To create the database, run:
