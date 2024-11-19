@@ -1,6 +1,6 @@
 # Fetching with DQL, the QueryBuilder & find()
 
-Now that we have these starships in our database, let's refactor the homepage to
+These starships in our database, let's refactor the homepage to
 fetch them!
 
 First, spin over to your terminal. Remember that raw SQL query we ran to select
