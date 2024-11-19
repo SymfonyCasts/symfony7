@@ -1,66 +1,71 @@
 # Fetching with DQL, the QueryBuilder & find()
 
-These starships in our database, let's refactor the homepage to
-fetch them!
+Our database is now full of shiny, dummy starships! But this homepage is still
+showing the hardcoded ships. Lame! Time to load these from the database. That'll 10x
+the awesomeness of our app!
 
-First, spin over to your terminal. Remember that raw SQL query we ran to select
-all starships?
+Spin over to your terminal. Remember that SQL query to select
+all starships? Run it again:
 
 ```terminal
 symfony console doctrine:query:sql 'select * from starship'
 ```
 
-That's raw SQL but Doctrine ORM has its own query language called DQL: Doctrine Query
-Language - go figure! If SQL is like a query language for tables, DQL is a query
-language for objects. Run the same query as above but as DQL:
+That's raw SQL but Doctrine ORM has its *own* query language called DQL: Doctrine Query
+Language! It's like SQL, but instead of querying from tables, withv DQL you think
+in terms of querying for the entity *objects*. Run the same query as above but as DQL:
+
+## Writing Manual DQL
 
 ```terminal
 symfony console doctrine:query:dql 'select s from App\Entity\Starship s'
 ```
 
-This looks a bit funky but this is PHP dumping our Starship objects - and there's
-three of them, just like the raw SQL query.
+This looks a bit funky, but it's PHP dumping our `Starship` objects - and there's
+three of them, just like the raw query.
 
-We're going to leverage this to refactor our homepage controller. Open
+Let's leverage this in our homepage controller. Open
 `src/Controller/StarshipController.php` and find the `homepage()` method. Instead of
-injecting this `StarshipRepository` (this is the old one from the `Model` directory),
-replace with `EntityManagerInterface $em`.
+injecting *this* `StarshipRepository` (this is the old one from the `Model` directory),
+replace with `EntityManagerInterface $em` from Doctrine.
 
-You might recall in the last chapter, our `AppFixture::load()` method injected an
-`ObjectManager`. `EntityManagerInterface` is also an `ObjectManager` instance but has
-additional, ORM-specific methods. This will be the one we use most and Symfony
-can autowire it.
+In the last chapter, we saw that Doctrine passes an `ObjectManager` to the `AppFixture::load()`
+method. This `EntityManagerInterface` is a *type* of `ObjectManager` and it's what
+we'll use to autowire the Doctrine entity manager.
 
-Below, replace this with
-`$ships = $em->createQuery()`. Here's where we can write the DQL to fetch all
-starships: `SELECT s FROM App\Entity\Starship s`. Finally, call `->getResult()` -
-this actually executes the query and returns an array of Starship objects. Leave the
-rest of the method as is.
+Below, say:
+`$ships = $em->createQuery()` and pass the DQL string:
+`SELECT s FROM App\Entity\Starship s`. Finally, call `->getResult()`.
+This *executes* the query, grabs the data but returns an array of `Starship` objects
+instead of the raw data, which is amazing!
 
-Spin over the app and refresh the homepage. It looks basically the same... that's a good
-sign! Look closely at the web debug toolbar - there's a new "Doctrine" section. Click
-it to open the "Doctrine" profiler panel. This shows all the queries that were executed
-during the last request. We see just one, that makes sense. There's some great debugging
-information here:
+Leave the rest of the method as is.
 
-"View formatted query" shows the query in a more readable format.
+Spin over and refresh the homepage. It's basically the same... that's a good
+sign! Look closely at the web debug toolbar - there's a new "Doctrine" section.
+OooooooOooo. Click to open the "Doctrine" profiler panel. *So* cool. This shows all
+the queries that were executed
+during the last request. We see just one: that makes sense!
 
-"View runnable query": you can copy and paste this into your favourite SQL tool to
-run the exact same query there.
+We can see a formatted query that's more readable, a runnable query that we can copy
+and paste into our favourite SQL tool, an  "Explain query" button to see database-specific
+info about how the query was executed, and a "View query backtrace".
 
-"Explain query": shows database-specific information about how the query was executed.
+This is my favorite! It shows the call stack that led to
+this query. Super useful to track down *what* code triggered the query, in this case,
+our `homepage()` method.
 
-"View query backtrace": this one is my favourite! It shows the call stack that led to
-this query being executed. Super useful for tracking down rogue queries. Look, here's
-our `homepage()` method that caused this query.
+## Using the QueryBuilder
 
-One thing that's a bit of a bummer about DQL is that it's a bit cumbersome to write.
-Luckily, Doctrine has a "query builder" that allows us to write these queries with
-a slick object. Back in our `homepage()` method, replace `$em->createQuery()` with
+One bummer is that DQL isn't *that* pretty!
+Luckily, Doctrine has a "query builder". This thing is awesome: instead of writing
+the DQL string manually, we *build* it with an object.
+Back in our `homepage()` method, replace `$em->createQuery()` with
 `$em->createQueryBuilder()`. Off it, chain `->select('s')`, then 
-`->from(Starship::class, 's')`. Be sure to import `Starship` from `App\Entity`. Look,
-we can use the `class` constant now! That'll help us avoid typos. Finally, before
-`->getResult()`, call `->getQuery()`.
+`->from(Starship::class, 's')` hitting tab add the `use` statement from `App\Entity`.
+Bonus that we can use `Starship::class` instead of the string.
+
+Finally, call `->getQuery()` and `->getResult()`.
 
 Back in the app, refresh the homepage... still works!
 
@@ -68,24 +73,24 @@ We still need to refactor one thing. Click on one of the ships... oh no!
 
 > Starship not found.
 
-Ahh, our `StarshipController::show()` action is still using the old `StarshipRepository`.
-We need to fix that!
+Ahh, our `StarshipController::show()` action is still using the old `StarshipRepository`
+with the hardcoded data. We need to fix that!
 
-Open `src/Controller/StarshipController.php` and find the `show()` method. Replace
-`StarshipRepository $repository` with `EntityManagerInterface $em`. Because we're fetching a
-single entity by its ID, instead of using DQL, we can use `EntityManagerInterface::find()`.
+Open `src/Controller/StarshipController.php` and find the `show()` method. Since
+we need to query for data, replace
+`StarshipRepository $repository` with `EntityManagerInterface $em`. In this case,
+the query is so simple there's a shortcut method.
 
-Replace this with `$ship = $em->find(Starship::class, $id)`.
-Again, be sure to import the `Starship` class from `App\Entity`. The first argument of `find()`
-is the entity class, so Doctrine knows what entity we want to fetch, and the second is the ID.
-Leave the rest of the method as is.
+Say `$ship = $em->find(Starship::class, $id)`.
+The first argument of `find()` is the entity class want to fetch, and the second is the ID.
+Easy!
 
 Back to the app and... refresh. It works! Look at the web debug toolbar - a single query
 was run to fetch the starship.
 
-We are done with our old `Model` directory. Well, almost, the `StarshipStatusEnum` is still
-needed so move it to the `Entity` directory. PhpStorm will handle all the renaming. Now,
+We're done with our old `Model/` directory. Well, almost, the `StarshipStatusEnum` is still
+needed so move it to `Entity/` to keep things organized. PhpStorm will handle all the renaming. Now,
 delete `src\Model` and celebrate! I *love* deleting unused code!
 
-Next, we're going to check out entity repositories as a way to move Doctrine-specific
-querying logic out of our controllers. This will keep our controllers nice and lean!
+Next up! Let's check out entity repositories as a way to move
+querying logic out of our controllers and organized.
