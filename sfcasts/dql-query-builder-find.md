@@ -1,8 +1,8 @@
 # Fetching with DQL, the QueryBuilder & find()
 
 Our database is now full of shiny, dummy starships! But this homepage is still
-showing the hardcoded ships. Lame! Time to load these from the database. That'll 10x
-the awesomeness of our app!
+showing the hardcoded ships. Lame! Time to load these from the database. That'll
+improve the awesomeness of our app x10!
 
 Spin over to your terminal. Remember that SQL query to select
 all starships? Run it again:
@@ -12,7 +12,7 @@ symfony console doctrine:query:sql 'select * from starship'
 ```
 
 That's raw SQL but Doctrine ORM has its *own* query language called DQL: Doctrine Query
-Language! It's like SQL, but instead of querying from tables, withv DQL you think
+Language! It's like SQL, but instead of querying from tables, with DQL you think
 in terms of querying for the entity *objects*. Run the same query as above but as DQL:
 
 ## Writing Manual DQL
@@ -25,7 +25,7 @@ This looks a bit funky, but it's PHP dumping our `Starship` objects - and there'
 three of them, just like the raw query.
 
 Let's leverage this in our homepage controller. Open
-`src/Controller/StarshipController.php` and find the `homepage()` method. Instead of
+`src/Controller/MainController.php` and find the `homepage()` method. Instead of
 injecting *this* `StarshipRepository` (this is the old one from the `Model` directory),
 replace with `EntityManagerInterface $em` from Doctrine.
 
@@ -33,7 +33,7 @@ In the last chapter, we saw that Doctrine passes an `ObjectManager` to the `AppF
 method. This `EntityManagerInterface` is a *type* of `ObjectManager` and it's what
 we'll use to autowire the Doctrine entity manager.
 
-Below, say:
+Below, write:
 `$ships = $em->createQuery()` and pass the DQL string:
 `SELECT s FROM App\Entity\Starship s`. Finally, call `->getResult()`.
 This *executes* the query, grabs the data but returns an array of `Starship` objects
@@ -63,7 +63,7 @@ the DQL string manually, we *build* it with an object.
 Back in our `homepage()` method, replace `$em->createQuery()` with
 `$em->createQueryBuilder()`. Off it, chain `->select('s')`, then 
 `->from(Starship::class, 's')` hitting tab add the `use` statement from `App\Entity`.
-Bonus that we can use `Starship::class` instead of the string.
+Bonus! We can use `Starship::class` instead of the string.
 
 Finally, call `->getQuery()` and `->getResult()`.
 
@@ -79,9 +79,9 @@ with the hardcoded data. We need to fix that!
 Open `src/Controller/StarshipController.php` and find the `show()` method. Since
 we need to query for data, replace
 `StarshipRepository $repository` with `EntityManagerInterface $em`. In this case,
-the query is so simple there's a shortcut method.
+the query is so simple, there's a shortcut method.
 
-Say `$ship = $em->find(Starship::class, $id)`.
+Write `$ship = $em->find(Starship::class, $id)`.
 The first argument of `find()` is the entity class want to fetch, and the second is the ID.
 Easy!
 
@@ -93,4 +93,4 @@ needed so move it to `Entity/` to keep things organized. PhpStorm will handle al
 delete `src\Model` and celebrate! I *love* deleting unused code!
 
 Next up! Let's check out entity repositories as a way to move
-querying logic out of our controllers and organized.
+querying logic out of our controllers.

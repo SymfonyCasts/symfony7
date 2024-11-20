@@ -75,5 +75,5 @@ symfony console doctrine:query:sql 'SELECT * FROM starship'
 We have ships! Awesome!
 
 *Phew*, we now have a database *with* data! Next, we'll refactor our app's controllers
-to pull Starships from database and show them on the page. This will be much easier
+to pull Starships from our database and show them on the page. This will be much easier
 than you might imagine!
