@@ -1,0 +1,228 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:03.266 align:middle
+Muy bien, ¡ya tenemos Doctrine instalado!
+
+00:00:03.586 --> 00:00:06.366 align:middle
+Pero ahora necesitamos, ya sabes, poner
+en marcha un servidor de bases de datos.
+
+00:00:06.996 --> 00:00:08.736 align:middle
+Echa un vistazo a nuestro archivo .env.
+
+00:00:09.406 --> 00:00:13.736 align:middle
+Cuando instalamos Doctrine, la receta de
+Flex añadió esta sección doctrine-bundle.
+
+00:00:14.326 --> 00:00:20.476 align:middle
+La variable de entorno DATABASE_URL es donde le decimos
+a Doctrine cómo conectarse a nuestra base de datos.
+
+00:00:20.476 --> 00:00:25.636 align:middle
+Es una cadena especial con aspecto de URL llamada
+DSN, si quieres un poco de terminología friki.
+
+00:00:26.146 --> 00:00:33.606 align:middle
+Contiene el tipo de base de datos a la que nos
+conectamos - mysql, postgres, sqlite, borgsql, etc,
+
+00:00:34.216 --> 00:00:38.696 align:middle
+un nombre de usuario, una contraseña, un host,
+un puerto y el nombre de la base de datos.
+
+00:00:39.196 --> 00:00:41.276 align:middle
+Cualquier parámetro de consulta
+es una configuración extra.
+
+00:00:42.026 --> 00:00:44.996 align:middle
+Por defecto, DATABASE_URL está
+configurado para conectarse
+
+00:00:44.996 --> 00:00:47.926 align:middle
+a una base de datos Postgres
+y eso es lo que utilizaremos.
+
+00:00:48.426 --> 00:00:50.636 align:middle
+Lo pondremos en marcha muy
+fácilmente con Docker.
+
+00:00:50.636 --> 00:00:53.466 align:middle
+Si no quieres utilizar
+Docker, ¡no hay problema!
+
+00:00:53.946 --> 00:00:57.426 align:middle
+Comenta esta línea y descomenta la de sqlite.
+
+00:00:57.426 --> 00:01:01.796 align:middle
+SQLite no requiere un servidor: es sólo
+un archivo en tu sistema de archivos.
+
+00:01:02.476 --> 00:01:06.016 align:middle
+Como Doctrine abstrae la capa de
+base de datos, en su mayor parte,
+
+00:01:06.086 --> 00:01:08.726 align:middle
+el código que escribamos funcionará
+con cualquier tipo de base de datos.
+
+00:01:09.176 --> 00:01:15.076 align:middle
+¡Genial! Recuerda, no guardes ninguna información sensible
+en este archivo: está comprometido en tu repositorio.
+
+00:01:15.076 --> 00:01:21.496 align:middle
+Si tienes localmente tu propio servidor de bases de
+datos, crea un archivo .env.local ( git lo ignora
+
+00:01:21.496 --> 00:01:24.466 align:middle
+), y establece allí tu propio DATABASE_URL.
+
+00:01:25.226 --> 00:01:28.666 align:middle
+Vale, ¿cómo podemos poner en marcha
+un servidor de base de datos Postgres?
+
+00:01:29.216 --> 00:01:31.196 align:middle
+Echa un vistazo a compose.yaml.
+
+00:01:31.786 --> 00:01:35.236 align:middle
+Esto fue añadido por una receta de Flex
+y contiene la configuración de Docker,
+
+00:01:35.536 --> 00:01:39.026 align:middle
+incluyendo este servicio database para
+poner en marcha un contenedor Postgres.
+
+00:01:39.026 --> 00:01:40.406 align:middle
+¡Fantástico!
+
+00:01:40.956 --> 00:01:44.916 align:middle
+Puedes hacer lo que quieras, pero nosotros sólo
+vamos a utilizar Docker como una forma cómoda
+
+00:01:44.916 --> 00:01:46.766 align:middle
+de ejecutar localmente un
+servidor de base de datos.
+
+00:01:46.766 --> 00:01:49.936 align:middle
+El propio PHP está instalado
+normalmente en mi máquina.
+
+00:01:50.656 --> 00:01:57.006 align:middle
+Abre tu terminal y ejecuta: docker compose
+up -d Esto inicia los contenedores Docker
+
+00:01:57.006 --> 00:02:00.036 align:middle
+y -d le dice a Docker que lo
+haga todo en segundo plano.
+
+00:02:00.356 --> 00:02:02.146 align:middle
+Pero, ¿dónde se ejecuta el
+servidor de bases de datos?
+
+00:02:02.496 --> 00:02:03.316 align:middle
+¿En qué puerto?
+
+00:02:03.826 --> 00:02:07.316 align:middle
+¿No necesitamos saberlo para poder
+actualizar DATABASE_URL para que apunte a él?
+
+00:02:07.846 --> 00:02:13.276 align:middle
+¡No! ¡El binario CLI de symfony que está
+ejecutando el servidor web tiene algo de magia Docker!
+
+00:02:13.846 --> 00:02:15.306 align:middle
+Salta y actualiza la aplicación.
+
+00:02:16.536 --> 00:02:18.606 align:middle
+Aquí abajo, pasa el ratón sobre "Servidor".
+
+00:02:19.116 --> 00:02:22.006 align:middle
+Contiene detalles sobre
+el servidor Symfony CLI.
+
+00:02:22.576 --> 00:02:25.956 align:middle
+Esta parte significa que ha detectado
+automáticamente nuestros contenedores Docker
+
+00:02:26.216 --> 00:02:28.616 align:middle
+y ha configurado las variables
+de entorno por nosotros
+
+00:02:29.096 --> 00:02:29.696 align:middle
+Te lo mostraré.
+
+00:02:30.066 --> 00:02:34.986 align:middle
+Ve a nuestro terminal y
+ejecuta: symfony var:export
+
+00:02:34.986 --> 00:02:40.656 align:middle
+--multiline Esto nos muestra algunas variables de
+entorno extra que el Symfony CLI está configurando
+
+00:02:40.656 --> 00:02:43.336 align:middle
+por nosotros, además de
+las que aparecen en .env.
+
+00:02:43.336 --> 00:02:45.136 align:middle
+Desplázate un poco hacia arriba para ver....
+
+00:02:45.566 --> 00:02:46.846 align:middle
+¡Aquí está!
+
+00:02:47.016 --> 00:02:48.206 align:middle
+DATABASE_URL¡!
+
+00:02:48.646 --> 00:02:53.476 align:middle
+Esta anula la de .env y apunta a la base
+de datos Postgres que se ejecuta en Docker.
+
+00:02:54.096 --> 00:02:58.966 align:middle
+Ese número de puerto cambiará aleatoriamente, pero
+la CLI de Symfony siempre utilizará el correcto.
+
+00:02:59.646 --> 00:03:02.766 align:middle
+Ahora, estamos acostumbrados a ejecutar
+los comandos de Symfony con bin/console.
+
+00:03:03.056 --> 00:03:06.256 align:middle
+Pero cuando utilizamos la CLI de
+Symfony con una base de datos Docker,
+
+00:03:06.546 --> 00:03:11.246 align:middle
+necesitamos ejecutar los comandos específicos de la
+base de datos a través de symfony console en su lugar.
+
+00:03:11.246 --> 00:03:15.776 align:middle
+Es lo mismo que bin/console, pero da
+a la CLI de Symfony la oportunidad
+
+00:03:15.776 --> 00:03:17.526 align:middle
+de añadir las variables de entorno.
+
+00:03:18.326 --> 00:03:23.706 align:middle
+De acuerdo El servidor de base de datos se está ejecutando
+en un contenedor Docker y DATABASE_URL está apuntando a él.
+
+00:03:24.196 --> 00:03:32.306 align:middle
+Para crear la base de datos, ejecuta: symfony
+console doctrine:database:create ¡Un error!
+
+00:03:32.716 --> 00:03:33.316 align:middle
+¡No te preocupes!
+
+00:03:33.536 --> 00:03:38.396 align:middle
+El error nos está diciendo que la base de datos
+ya existe: aparentemente el servidor viene con una.
+
+00:03:38.886 --> 00:03:42.346 align:middle
+Pero esto es bueno, ¡significa que nos estamos
+conectando a nuestro servidor de base de datos!
+
+00:03:43.316 --> 00:03:46.186 align:middle
+Bien, ya tenemos Doctrine y una base de datos.
+
+00:03:46.186 --> 00:03:47.266 align:middle
+¡Ahora necesitamos una tabla!
+
+00:03:47.746 --> 00:03:52.656 align:middle
+Lo haremos a continuación saltando al
+mundo de las entidades y las migraciones.
