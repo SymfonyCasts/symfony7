@@ -1,0 +1,226 @@
+WEBVTT
+
+00:00:00.096 --> 00:00:03.006 align:middle
+¡Hola amigos!
+
+00:00:03.006 --> 00:00:07.306 align:middle
+Es hora del episodio 3 de
+nuestra serie Symfony 7.
+
+00:00:07.566 --> 00:00:11.796 align:middle
+Y éste es emocionante porque vamos a dar vida
+a nuestra aplicación con una base de datos.
+
+00:00:12.276 --> 00:00:17.386 align:middle
+No necesitamos ninguna librería nueva para hacerlo,
+pero como es impresionante y huele a galletas,
+
+00:00:17.596 --> 00:00:19.466 align:middle
+usaremos una librería llamada Doctrine.
+
+00:00:19.966 --> 00:00:22.756 align:middle
+Y aunque Doctrine y Symfony
+son proyectos separados,
+
+00:00:22.986 --> 00:00:25.886 align:middle
+encajan como partículas
+cuánticas entrelazadas.
+
+00:00:26.176 --> 00:00:28.266 align:middle
+¡Espeluznante acción a distancia, nene!
+
+00:00:28.926 --> 00:00:32.036 align:middle
+Soy Kevin, y seré el capitán
+de tu nave estelar en este viaje.
+
+00:00:32.446 --> 00:00:35.176 align:middle
+¡Comprométete! Siempre he querido decir eso.
+
+00:00:35.836 --> 00:00:39.636 align:middle
+Para aventurarte conmigo por el espacio de la
+base de datos, descarga el código del curso
+
+00:00:39.636 --> 00:00:41.706 align:middle
+y sigue la guía de
+configuración en README.md.
+
+00:00:42.256 --> 00:00:44.896 align:middle
+El último paso, que yo
+ya he hecho, es ejecutar
+
+00:00:45.086 --> 00:00:53.336 align:middle
+symfony serve -d para iniciar un
+servidor web local en https://127.0.0.1.
+
+00:00:53.996 --> 00:00:57.146 align:middle
+Saluda a la Tienda Estelar de
+nuestros episodios anteriores.
+
+00:00:57.766 --> 00:01:02.236 align:middle
+Tenemos una "Cola de Reparación de Naves" donde se enumeran
+las naves estelares actualmente atracadas para ser reparadas.
+
+00:01:02.756 --> 00:01:05.246 align:middle
+Puede parecer que los datos
+proceden de algún tipo
+
+00:01:05.246 --> 00:01:07.666 align:middle
+de base de datos, pero en
+realidad están codificados.
+
+00:01:07.986 --> 00:01:12.506 align:middle
+¡Lamentable! Es hora de llevar esta
+aplicación al mundo de las bases de datos
+
+00:01:12.976 --> 00:01:15.766 align:middle
+Lo primero es lo primero:
+tenemos que instalar Doctrine.
+
+00:01:16.316 --> 00:01:18.066 align:middle
+Ve al terminal y ejecuta:
+
+00:01:18.196 --> 00:01:24.616 align:middle
+composer require doctrine ¡Vaya,
+esto ha instalado un montón de cosas!
+
+00:01:24.986 --> 00:01:27.836 align:middle
+Podemos ver que también ha
+configurado algunas recetas de Flex.
+
+00:01:28.426 --> 00:01:32.326 align:middle
+Se nos pregunta si queremos incluir la
+configuración Docker de las recetas.
+
+00:01:32.716 --> 00:01:34.866 align:middle
+Elige p para habilitarlo permanentemente.
+
+00:01:35.626 --> 00:01:38.566 align:middle
+Hablaremos de Docker en el próximo
+capítulo, pero no te preocupes,
+
+00:01:38.756 --> 00:01:40.636 align:middle
+Docker no es necesario para este tutorial.
+
+00:01:41.326 --> 00:01:42.906 align:middle
+Desplázate un poco hacia arriba
+para ver lo que ha ocurrido.
+
+00:01:43.556 --> 00:01:47.266 align:middle
+El paquete doctrine que hemos instalado
+es en realidad un alias de Flex
+
+00:01:47.426 --> 00:01:50.866 align:middle
+para un paquete de Flex
+llamado symfony/orm-pack.
+
+00:01:51.556 --> 00:01:56.106 align:middle
+Recuerda que los paquetes Flex no son más que una
+colección de bibliotecas que funcionan bien juntas.
+
+00:01:56.636 --> 00:01:59.576 align:middle
+El resultado final es una configuración
+de Doctrine súper robusta.
+
+00:02:00.276 --> 00:02:03.206 align:middle
+El primer paquete interesante es doctrine/dbal.
+
+00:02:03.786 --> 00:02:06.806 align:middle
+DBAL son las siglas de Database Abstraction
+Layer (capa de abstracción de base de datos).
+
+00:02:07.266 --> 00:02:10.836 align:middle
+Es una forma elegante de decir que
+proporciona una forma coherente de
+
+00:02:10.836 --> 00:02:12.996 align:middle
+trabajar con diferentes
+plataformas de bases de datos.
+
+00:02:13.346 --> 00:02:18.276 align:middle
+MySQL, PostgreSQL, SQLite,
+etc. Es superimportante,
+
+00:02:18.456 --> 00:02:20.346 align:middle
+aunque la mayoría de las veces
+se esconde entre bastidores.
+
+00:02:21.036 --> 00:02:23.066 align:middle
+La segunda es doctrine/orm.
+
+00:02:23.586 --> 00:02:26.706 align:middle
+ORM son las siglas de Object Relational Mapper.
+
+00:02:27.126 --> 00:02:32.166 align:middle
+Son palabras elegantes para una biblioteca que nos
+ayuda a mapear objetos PHP a tablas de bases de datos.
+
+00:02:32.526 --> 00:02:34.156 align:middle
+Nos meteremos de lleno en esto.
+
+00:02:34.716 --> 00:02:39.846 align:middle
+Luego hay otras que vinculan Doctrine a Symfony
+y una biblioteca de migraciones que utilizaremos
+
+00:02:39.846 --> 00:02:41.936 align:middle
+para añadir nuevas tablas
+y cosas por el estilo.
+
+00:02:42.486 --> 00:02:46.396 align:middle
+El resto son paquetes de soporte de
+fondo para Doctrine y puedes ignorarlos.
+
+00:02:47.206 --> 00:02:51.366 align:middle
+Pero lo realmente interesante es lo que
+hicieron las recetas Flex de estos paquetes.
+
+00:02:51.936 --> 00:02:57.606 align:middle
+Ejecuta: git status Los archivos modificados
+son cosas estándar de las recetas Flex.
+
+00:02:57.906 --> 00:03:03.466 align:middle
+.env se modificó con algunas variables de entorno
+específicas de Doctrine -las veremos pronto-
+
+00:03:03.856 --> 00:03:08.536 align:middle
+y config/bundles.php se actualizó para
+habilitar los dos bundles que instalamos.
+
+00:03:09.226 --> 00:03:12.966 align:middle
+Estos archivos sin seguimiento son archivos
+nuevos añadidos por las recetas Flex.
+
+00:03:13.436 --> 00:03:18.536 align:middle
+Estos archivos de compose*.yaml nos ayudarán a iniciar
+un contenedor de base de datos en el próximo capítulo.
+
+00:03:19.206 --> 00:03:25.506 align:middle
+En config/packages/, tenemos 2 archivos nuevos
+- doctrine.yaml y doctrine_migrations.yaml.
+
+00:03:26.156 --> 00:03:29.106 align:middle
+Éstos tienen buenos valores por defecto, así que
+nos limitaremos a comprobarlos cuando sea necesario.
+
+00:03:29.816 --> 00:03:34.596 align:middle
+Las recetas añaden un directorio
+migrations/ vacío, un directorio src/Entity/
+
+00:03:34.856 --> 00:03:37.166 align:middle
+vacío y un directorio src/Repository/ vacío.
+
+00:03:37.566 --> 00:03:39.796 align:middle
+Nos sumergiremos en todos ellos uno a uno.
+
+00:03:40.556 --> 00:03:44.676 align:middle
+De acuerdo Tenemos Doctrine instalado, así
+que podemos hablar con bases de datos...
+
+00:03:44.906 --> 00:03:45.776 align:middle
+excepto que...
+
+00:03:45.916 --> 00:03:48.536 align:middle
+en realidad aún no tenemos un
+servidor de bases de datos en marcha.
+
+00:03:48.936 --> 00:03:50.346 align:middle
+Pongamos uno en marcha
