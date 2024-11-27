@@ -3,6 +3,8 @@
 We have a `Starship` entity... but no `starship` table!
 The solution? Database migrations!
 
+## `make:migration`
+
 Create our first migration by running:
 
 ```terminal
@@ -17,6 +19,8 @@ What's neat is how this was created: Doctrine compared the current state of our
 entities to the database and generated the SQL needed to make them match.
 Wow!
 
+[[[ code('08456e3596') ]]]
+
 There's also a `down()` method... because migrations can be reversed, but I've
 never done that, so I don't worry about `down()`.
 
@@ -26,6 +30,8 @@ you'd see SQLite-specific SQL.
 
 If you want, add a note about what this does in `getDescription()`:
 `return 'Add starship table'`.
+
+[[[ code('b7872ce8d2') ]]]
 
 ## Checking the Migration Status
 

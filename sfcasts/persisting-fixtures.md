@@ -25,9 +25,13 @@ this `src/DataFixtures` directory. Let's check that out: open
 `src/DataFixtures/AppFixtures.php`. This `load()` method is where we can create
 our fixtures. Delete what's there so we can start fresh.
 
+## Create Entities
+
 To add entities to the database no matter *where* you are, it's refreshingly simple!
 First, create the object like normal:
 `$ship1 = new Starship()` - the one from `App\Entity`.
+
+[[[ code('a55e56fca1') ]]]
 
 In a previous episode, we created this `StarshipRepository` service in `src/Model/`.
 Open that up. We have a `findAll()` method that creates these Starship objects on
@@ -40,22 +44,37 @@ same for `$class`: `$ship1->setClass('Garden')`, `$captain`:
 `$ship1->setStatus(StarshipStatusEnum::IN_PROGRESS)` and don't forget to import the enum.
 Finally, `$arrivedAt`: `$ship1->setArrivedAt(new \DateTimeImmutable('-1 day'))`.
 
+[[[ code('40b5bda087') ]]]
+
 For the other two ships, I'll copy and paste some code from the `tutorial/` directory.
+
+[[[ code('e21d621b7b') ]]]
 
 We now have three ship objects, but nothing has been saved - or *persisted* to the
 database yet. But interesting, Doctrine passes us an `ObjectManager`.
 This is the *heart* of Doctrine. We'll use it to save, fetch, update, and
 delete objects, our entities, from the database. What an overachiever!
 
+## Persist Entities
+
 To use it, after we've created our ship objects, write `$manager->persist($ship1)`,
 `$manager->persist($ship2)`, and `$manager->persist($ship3)`. But `persist()` doesn't
 actually insert them yet: it just *queues* them to be saved.
 
+[[[ code('e21d621b7b') ]]]
+
+## Flush
+
 To execute some INSERT queries and get these ships docked, write `$manager->flush()`.
+
+[[[ code('c8249a651d') ]]]
+
 `flush()` is really cool: it looks at all
 the objects that are queued to be persisted and writes them to the database with an efficient
 SQL query. In this case, it will insert all three Starships in one query.
 Super cool!
+
+## Load Fixtures
 
 Fixtures done! How do we execute this code? Run:
 

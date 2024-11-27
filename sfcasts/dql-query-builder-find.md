@@ -29,13 +29,22 @@ Let's leverage this in our homepage controller. Open
 injecting *this* `StarshipRepository` (this is the old one from the `Model` directory),
 replace with `EntityManagerInterface $em` from Doctrine.
 
+[[[ code('3dea9b9394') ]]]
+
+## `EntityManagerInterface`
+
 In the last chapter, we saw that Doctrine passes an `ObjectManager` to the `AppFixture::load()`
 method. This `EntityManagerInterface` is a *type* of `ObjectManager` and it's what
 we'll use to autowire the Doctrine entity manager.
 
+## Using `createQuery()`
+
 Below, write:
 `$ships = $em->createQuery()` and pass the DQL string:
 `SELECT s FROM App\Entity\Starship s`. Finally, call `->getResult()`.
+
+[[[ code('9162765bb7') ]]]
+
 This *executes* the query, grabs the data but returns an array of `Starship` objects
 instead of the raw data, which is amazing!
 
@@ -43,7 +52,11 @@ Leave the rest of the method as is.
 
 Spin over and refresh the homepage. It's basically the same... that's a good
 sign! Look closely at the web debug toolbar - there's a new "Doctrine" section.
-OooooooOooo. Click to open the "Doctrine" profiler panel. *So* cool. This shows all
+OooooooOooo. 
+
+## Doctrine Profiler
+
+Click to open the "Doctrine" profiler panel. *So* cool. This shows all
 the queries that were executed
 during the last request. We see just one: that makes sense!
 
@@ -67,6 +80,8 @@ Bonus! We can use `Starship::class` instead of the string.
 
 Finally, call `->getQuery()` and `->getResult()`.
 
+[[[ code('fe74a27fec') ]]]
+
 Back in the app, refresh the homepage... still works!
 
 We still need to refactor one thing. Click on one of the ships... oh no!
@@ -78,10 +93,18 @@ with the hardcoded data. We need to fix that!
 
 Open `src/Controller/StarshipController.php` and find the `show()` method. Since
 we need to query for data, replace
-`StarshipRepository $repository` with `EntityManagerInterface $em`. In this case,
-the query is so simple, there's a shortcut method.
+`StarshipRepository $repository` with `EntityManagerInterface $em`.
+
+[[[ code('f2acdd4d13') ]]]
+
+In this case, the query is so simple, there's a shortcut method.
+
+## Using `find()`
 
 Write `$ship = $em->find(Starship::class, $id)`.
+
+[[[ code('da8a26a463') ]]]
+
 The first argument of `find()` is the entity class want to fetch, and the second is the ID.
 Easy!
 

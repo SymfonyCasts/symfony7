@@ -17,6 +17,8 @@ This is *almost* a Doctrine entity: it's just missing some config that helps Doc
 understand how to map this class to a table in the database. We could easily add
 that by hand. But... we have a tool that can do this for us: the MakerBundle!
 
+## `make:entity`
+
 Run:
 
 ```terminal
@@ -48,6 +50,8 @@ Finally, add `arrivedAt`. Cool! Maker defaults to `datetime_immutable`
 instead of `string`. This is because we suffixed our property name with `At`. Smart!
 Can this field be null? No.
 
+## `[ORM\Entity]`
+
 Let's take a look at our newly minted `Starship` entity: in `src/Entity/`.
 
 Notice: this is a standard PHP class with properties... and one special thing: some
@@ -58,27 +62,39 @@ boring PHP class, but an entity that should be mapped to a table in our
 database. The table name *can* be customized, but we'll use the default which is
 the _snake cased_ class name: `starship`.
 
+## `[ORM\Column]`
+
 Check out the properties: each has `#[ORM\Column]`. This tells Doctrine that these
 properties are *columns* in our table. For the type,
 Doctrine is smart and guesses from the type hint. For example, `id`
 will be an integer type, `name` will be a string type, and `arrivedAt` will be a
 timestamp type. Nice!
 
+[[[ code('778782b9e6') ]]]
+
 `id` has a few extra attributes that mark it as the primary key and tells the database
 to auto-generate this as an auto-incrementing integer.
 
 Oh, and we can remove the `length` argument from the string columns: this is the default.
 
+[[[ code('33ac5f1685') ]]]
+
 The `status` property is a `StarshipStatusEnum` type but Doctrine will
 store this as a string in the database. Cool! We can actually remove
 the `enumType` argument: Doctrine can guess that from the property type too!
+
+[[[ code('781f8cde58') ]]]
 
 Down below, the maker generated getters and setters for all our properties. Our
 old `Starship` model had two extra methods: `getStatusString()` and
 `getStatusImageFilename()`. Copy those from the model class... and 
 at the bottom of the entity class, paste!
 
+[[[ code('38830a7cda') ]]]
+
 Entity done! We can even double-check our work. At your terminal, run:
+
+## Schema Validation
 
 ```terminal
 symfony console doctrine:schema:validate
