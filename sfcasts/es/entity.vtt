@@ -1,0 +1,303 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:03.436 align:middle
+Tenemos una base de datos y
+podemos conectarnos a ella pero...
+
+00:00:03.686 --> 00:00:05.116 align:middle
+¡no tiene ninguna tabla!
+
+00:00:05.596 --> 00:00:11.436 align:middle
+El ORM de Doctrine utiliza clases PHP para representar tablas
+en la base de datos, por ejemplo, si necesitas una tabla
+
+00:00:11.436 --> 00:00:13.746 align:middle
+de productos, creas una clase Product.
+
+00:00:14.336 --> 00:00:19.526 align:middle
+Doctrine llama a estas clases "entidades", pero en
+realidad no son más que aburridas clases estándar de PHP.
+
+00:00:19.866 --> 00:00:20.666 align:middle
+¡Me gusta lo aburrido!
+
+00:00:21.496 --> 00:00:24.496 align:middle
+En nuestra aplicación StarShop, necesitamos
+hacer un seguimiento de las naves estelares...
+
+00:00:24.766 --> 00:00:26.296 align:middle
+así que necesitamos una tabla Starship...
+
+00:00:26.516 --> 00:00:28.586 align:middle
+así que necesitamos una
+clase de entidad Starship.
+
+00:00:29.226 --> 00:00:30.566 align:middle
+¿Qué aspecto tiene una nave estelar?
+
+00:00:31.076 --> 00:00:36.066 align:middle
+En el último tutorial, creamos una clase
+modelo Starship en el directorio src/Model.
+
+00:00:36.626 --> 00:00:37.186 align:middle
+Ábrela.
+
+00:00:37.946 --> 00:00:44.876 align:middle
+Decidimos que cada Nave Estelar tiene un id,
+name, class, captain, status, y arrivedAt.
+
+00:00:45.426 --> 00:00:49.216 align:middle
+Esto es casi una entidad Doctrine:
+sólo le falta alguna configuración
+
+00:00:49.216 --> 00:00:53.246 align:middle
+que ayude a Doctrine a entender cómo asignar
+esta clase a una tabla de la base de datos.
+
+00:00:53.856 --> 00:00:55.466 align:middle
+Podríamos añadirlo fácilmente a mano.
+
+00:00:55.786 --> 00:00:59.366 align:middle
+Pero... tenemos una herramienta que puede
+hacerlo por nosotros: ¡el MakerBundle!
+
+00:00:59.966 --> 00:01:05.806 align:middle
+Ejecuta: symfony console make:entity
+Para el nombre, utiliza Starship.
+
+00:01:06.586 --> 00:01:10.096 align:middle
+No estamos utilizando Symfony UX Turbo,
+así que responde no a esa pregunta.
+
+00:01:10.816 --> 00:01:12.816 align:middle
+Esto ya ha creado una clase Starship
+
+00:01:12.816 --> 00:01:16.426 align:middle
+en el directorio Entity/ y
+una clase StarshipRepository.
+
+00:01:16.796 --> 00:01:17.976 align:middle
+Hablaremos de ello más adelante.
+
+00:01:18.486 --> 00:01:19.386 align:middle
+¡Pero no hemos terminado!
+
+00:01:19.806 --> 00:01:25.196 align:middle
+Este comando es impresionante: pregunta interactivamente
+qué propiedades -o columnas, si quieres
+
+00:01:25.196 --> 00:01:27.256 align:middle
+pensar así- necesita nuestra entidad.
+
+00:01:27.786 --> 00:01:30.586 align:middle
+Vuelve al modelo de la Nave Estelar
+para ver lo que necesitamos.
+
+00:01:31.256 --> 00:01:34.736 align:middle
+MakerBundle añadirá id
+automáticamente, así que salta a name.
+
+00:01:35.756 --> 00:01:36.406 align:middle
+¿Tipo de campo?
+
+00:01:36.666 --> 00:01:38.066 align:middle
+Utiliza el predeterminado: string.
+
+00:01:38.596 --> 00:01:39.246 align:middle
+¿Longitud de campo?
+
+00:01:39.246 --> 00:01:40.696 align:middle
+255 está bien.
+
+00:01:41.256 --> 00:01:43.036 align:middle
+¿Este campo puede ser
+nulo en la base de datos?
+
+00:01:43.456 --> 00:01:45.336 align:middle
+No, cada Nave Estelar necesita un nombre.
+
+00:01:46.006 --> 00:01:48.356 align:middle
+El siguiente es class, será igual que name...
+
+00:01:49.656 --> 00:01:51.766 align:middle
+entonces captain es también un simple string.
+
+00:01:52.426 --> 00:01:53.726 align:middle
+El siguiente es status.
+
+00:01:54.216 --> 00:01:56.376 align:middle
+Doctrine tiene por defecto un string, pero...
+
+00:01:56.686 --> 00:01:59.636 align:middle
+mira nuestro modelo
+Starship, status es un enum.
+
+00:02:00.166 --> 00:02:01.866 align:middle
+¿Cómo podemos asignarlo a una columna?
+
+00:02:02.556 --> 00:02:04.266 align:middle
+De vuelta en el terminal, pulsa ?
+
+00:02:04.266 --> 00:02:06.406 align:middle
+para ver los distintos
+tipos que podemos añadir.
+
+00:02:06.956 --> 00:02:07.696 align:middle
+En la parte inferior...
+
+00:02:07.936 --> 00:02:09.236 align:middle
+enum¡! Úsalo.
+
+00:02:10.286 --> 00:02:11.186 align:middle
+Enum class?
+
+00:02:11.526 --> 00:02:16.796 align:middle
+Utiliza el nombre completo de la clase de
+nuestra enum: App\Model\StarshipStatusEnum.
+
+00:02:17.746 --> 00:02:19.736 align:middle
+¿Puede este campo almacenar varios valores?
+
+00:02:20.126 --> 00:02:22.896 align:middle
+No, una Nave Estelar sólo
+puede tener un estado a la vez.
+
+00:02:23.546 --> 00:02:24.666 align:middle
+¿Este campo puede ser nulo?
+
+00:02:25.176 --> 00:02:27.806 align:middle
+No Por último, añade arrivedAt.
+
+00:02:29.056 --> 00:02:32.766 align:middle
+¡Genial! Maker pone por defecto
+datetime_immutable en lugar de string.
+
+00:02:33.226 --> 00:02:35.876 align:middle
+Esto se debe a que hemos añadido el
+sufijo At al nombre de nuestra propiedad.
+
+00:02:36.236 --> 00:02:38.566 align:middle
+¡Qué listo! ¿Este campo puede ser nulo?
+
+00:02:39.026 --> 00:02:44.216 align:middle
+No. Echemos un vistazo a nuestra recién
+creada entidad Starship: en src/Entity/.
+
+00:02:46.246 --> 00:02:49.756 align:middle
+Fíjate: se trata de una clase
+PHP estándar con propiedades...
+
+00:02:50.086 --> 00:02:55.376 align:middle
+y algo especial: algunos atributos
+PHP: El atributo #[ORM\Entity]
+
+00:02:55.376 --> 00:02:59.446 align:middle
+de la clase indica a Doctrine que no se
+trata sólo de una aburrida clase PHP
+
+00:02:59.736 --> 00:03:02.846 align:middle
+, sino de una entidad que debe asignarse
+a una tabla de nuestra base de datos.
+
+00:03:03.406 --> 00:03:06.676 align:middle
+El nombre de la tabla puede personalizarse,
+pero utilizaremos el predeterminado
+
+00:03:06.676 --> 00:03:09.636 align:middle
+, que es el nombre de la clase
+en forma de serpiente: starship.
+
+00:03:10.346 --> 00:03:13.366 align:middle
+Fíjate en las propiedades:
+cada una tiene #[ORM\Column].
+
+00:03:13.906 --> 00:03:17.306 align:middle
+Esto indica a Doctrine que estas
+propiedades son columnas de nuestra tabla.
+
+00:03:17.826 --> 00:03:21.106 align:middle
+En cuanto al tipo, Doctrine es inteligente y
+lo adivina a partir de la sugerencia de tipo.
+
+00:03:21.516 --> 00:03:25.586 align:middle
+Por ejemplo, id será de tipo
+entero, name será de tipo cadena
+
+00:03:25.586 --> 00:03:28.176 align:middle
+y arrivedAt será de tipo sello de tiempo.
+
+00:03:28.586 --> 00:03:34.696 align:middle
+Bien! id tiene unos cuantos atributos extra que lo
+marcan como clave primaria y le dice a la base de datos
+
+00:03:34.696 --> 00:03:37.706 align:middle
+que lo autogenere como un
+entero autoincrementado.
+
+00:03:38.426 --> 00:03:42.686 align:middle
+Ah, y podemos eliminar el argumento length de las
+columnas de cadena: éste es el valor por defecto.
+
+00:03:46.006 --> 00:03:49.096 align:middle
+La propiedad status es de
+tipo StarshipStatusEnum
+
+00:03:49.456 --> 00:03:52.056 align:middle
+, pero Doctrine la almacenará
+como cadena en la base de datos.
+
+00:03:52.486 --> 00:03:55.936 align:middle
+¡Genial! En realidad, podemos
+eliminar el argumento enumType:
+
+00:03:56.216 --> 00:03:58.506 align:middle
+¡Doctrine también puede adivinarlo
+a partir del tipo de propiedad!
+
+00:03:59.716 --> 00:04:03.666 align:middle
+Más abajo, el creador generó getters y
+setters para todas nuestras propiedades.
+
+00:04:04.956 --> 00:04:11.366 align:middle
+Nuestro antiguo modelo Starship tenía dos métodos
+extra: getStatusString() y getStatusImageFilename().
+
+00:04:11.916 --> 00:04:13.536 align:middle
+Cópialos de la clase modelo...
+
+00:04:13.886 --> 00:04:16.306 align:middle
+y en la parte inferior de
+la clase entidad, ¡pega!
+
+00:04:17.686 --> 00:04:18.566 align:middle
+¡Entidad lista!
+
+00:04:18.916 --> 00:04:20.406 align:middle
+Incluso podemos volver a
+comprobar nuestro trabajo.
+
+00:04:20.726 --> 00:04:26.816 align:middle
+En tu terminal, ejecuta: symfony console
+doctrine:schema:validate Esto significa
+
+00:04:26.816 --> 00:04:29.336 align:middle
+que Doctrine ve y puede
+leer nuestros atributos.
+
+00:04:29.626 --> 00:04:31.606 align:middle
+Entonces... ¿nuestra base de
+datos está desincronizada?
+
+00:04:32.246 --> 00:04:33.436 align:middle
+Tenemos una clase de entidad...
+
+00:04:33.676 --> 00:04:37.046 align:middle
+pero en realidad no tenemos la
+tabla starship en la base de datos.
+
+00:04:37.536 --> 00:04:42.366 align:middle
+Hay algunas formas de introducir la tabla en la base
+de datos, pero la mejor forma son las migraciones.
+
+00:04:42.796 --> 00:04:43.536 align:middle
+¡Eso a continuación!
