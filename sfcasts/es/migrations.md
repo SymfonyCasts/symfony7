@@ -16,7 +16,7 @@ Ooh, es una clase PHP en la que el método `up()` contiene el SQL para crear nue
 
 [[[ code('08456e3596') ]]]
 
-También hay un método `down()`... porque las migraciones pueden invertirse, pero yo nunca lo he hecho, así que no me preocupo por `down()`.
+También hay un método `down()`... porque las migraciones pueden invertirse, pero nunca lo he hecho, así que no me preocupa `down()`.
 
 Una cosa a tener en cuenta sobre el SQL: está en el formato de la plataforma de base de datos que estés utilizando. En nuestro caso, SQL específico de Postgres. Si usaras SQLite, verías SQL específico de SQLite.
 
