@@ -1,0 +1,238 @@
+diff --git a/composer.json b/composer.json
+index be59ebb..accdaf7 100644
+--- a/composer.json
++++ b/composer.json
+@@ -7,11 +7,13 @@
+         "php": ">=8.2",
+         "ext-ctype": "*",
+         "ext-iconv": "*",
++        "babdev/pagerfanta-bundle": "^4.5",
+         "doctrine/dbal": "^3",
+         "doctrine/doctrine-bundle": "^2.13",
+         "doctrine/doctrine-migrations-bundle": "^3.3",
+         "doctrine/orm": "^3.3",
+         "knplabs/knp-time-bundle": "^2.2",
++        "pagerfanta/doctrine-orm-adapter": "^4.7",
+         "php-cs-fixer/shim": "^3.46",
+         "phpdocumentor/reflection-docblock": "^5.3",
+         "phpstan/phpdoc-parser": "^1.25",
+diff --git a/composer.lock b/composer.lock
+index aceab3b..067ea91 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,8 +4,95 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "1fd2cf606f3ef25c7ebbac9d88af93a0",
++    "content-hash": "1bb5167dd579ac54652dd4d247232d5a",
+     "packages": [
++        {
++            "name": "babdev/pagerfanta-bundle",
++            "version": "v4.5.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/BabDev/PagerfantaBundle.git",
++                "reference": "838e486e0aad9a4485eeb9d5ea854872ae23dadc"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/BabDev/PagerfantaBundle/zipball/838e486e0aad9a4485eeb9d5ea854872ae23dadc",
++                "reference": "838e486e0aad9a4485eeb9d5ea854872ae23dadc",
++                "shasum": ""
++            },
++            "require": {
++                "pagerfanta/core": "^3.7 || ^4.0",
++                "php": "^8.1",
++                "psr/container": "^1.0 || ^2.0",
++                "symfony/config": "^5.4 || ^6.4 || ^7.1",
++                "symfony/dependency-injection": "^5.4 || ^6.4 || ^7.1",
++                "symfony/http-foundation": "^5.4 || ^6.4 || ^7.1",
++                "symfony/http-kernel": "^5.4 || ^6.4 || ^7.1",
++                "symfony/property-access": "^5.4 || ^6.4 || ^7.1",
++                "symfony/routing": "^5.4 || ^6.4 || ^7.1"
++            },
++            "conflict": {
++                "jms/serializer": "<3.18",
++                "jms/serializer-bundle": "<4.2",
++                "pagerfanta/twig": "<3.7",
++                "symfony/serializer": "<5.4 || >=6.0,<6.4 || >=7.0,<7.1",
++                "symfony/translation": "<5.4 || >=6.0,<6.4 || >=7.0,<7.1",
++                "symfony/twig-bridge": "<5.4 || >=6.0,<6.4 || >=7.0,<7.1",
++                "symfony/twig-bundle": "<5.4 || >=6.0,<6.4 || >=7.0,<7.1",
++                "twig/twig": "<2.13",
++                "white-october/pagerfanta-bundle": "*"
++            },
++            "require-dev": {
++                "jms/serializer": "^3.18",
++                "jms/serializer-bundle": "^4.2 || ^5.0",
++                "matthiasnoback/symfony-dependency-injection-test": "^5.0",
++                "pagerfanta/twig": "^3.7 || ^4.0",
++                "phpstan/extension-installer": "^1.3",
++                "phpstan/phpstan": "1.12.7",
++                "phpstan/phpstan-phpunit": "1.4.0",
++                "phpstan/phpstan-symfony": "1.4.11",
++                "phpunit/phpunit": "9.6.21",
++                "symfony/phpunit-bridge": "^5.4 || ^6.4 || ^7.1",
++                "symfony/serializer": "^5.4 || ^6.4 || ^7.1",
++                "symfony/translation": "^5.4 || ^6.4 || ^7.1",
++                "symfony/twig-bridge": "^5.4 || ^6.4 || ^7.1",
++                "symfony/twig-bundle": "^5.4 || ^6.4 || ^7.1",
++                "twig/twig": "^2.13 || ^3.0"
++            },
++            "suggest": {
++                "jms/serializer-bundle": "To use the Pagerfanta class with the JMS Serializer",
++                "symfony/serializer": "To use the Pagerfanta class with the Symfony Serializer",
++                "symfony/translation": "To use the Twig templates with translation support",
++                "twig/twig": "To integrate Pagerfanta with Twig through extensions"
++            },
++            "type": "symfony-bundle",
++            "autoload": {
++                "psr-4": {
++                    "BabDev\\PagerfantaBundle\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "description": "Bundle integrating Pagerfanta with Symfony",
++            "keywords": [
++                "pagerfanta",
++                "pagination",
++                "symfony"
++            ],
++            "support": {
++                "issues": "https://github.com/BabDev/PagerfantaBundle/issues",
++                "source": "https://github.com/BabDev/PagerfantaBundle/tree/v4.5.0"
++            },
++            "funding": [
++                {
++                    "url": "https://github.com/mbabker",
++                    "type": "github"
++                }
++            ],
++            "time": "2024-11-03T20:23:50+00:00"
++        },
+         {
+             "name": "composer/semver",
+             "version": "3.4.3",
+@@ -1489,6 +1576,96 @@
+             ],
+             "time": "2024-06-28T09:40:51+00:00"
+         },
++        {
++            "name": "pagerfanta/core",
++            "version": "v4.7.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/Pagerfanta/core.git",
++                "reference": "4509db0e1e22baea6678b724f3254609acbaa9cc"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/Pagerfanta/core/zipball/4509db0e1e22baea6678b724f3254609acbaa9cc",
++                "reference": "4509db0e1e22baea6678b724f3254609acbaa9cc",
++                "shasum": ""
++            },
++            "require": {
++                "ext-json": "*",
++                "php": "^8.1"
++            },
++            "require-dev": {
++                "phpunit/phpunit": "^10.5"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Pagerfanta\\": "./"
++                },
++                "exclude-from-classmap": [
++                    "Tests/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "description": "Core Pagerfanta API",
++            "keywords": [
++                "pagerfanta"
++            ],
++            "support": {
++                "source": "https://github.com/Pagerfanta/core/tree/v4.7.0"
++            },
++            "time": "2024-08-13T23:43:44+00:00"
++        },
++        {
++            "name": "pagerfanta/doctrine-orm-adapter",
++            "version": "v4.7.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/Pagerfanta/doctrine-orm-adapter.git",
++                "reference": "c51e5c7b2c704e83442a365604d94ebcdec3d054"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/Pagerfanta/doctrine-orm-adapter/zipball/c51e5c7b2c704e83442a365604d94ebcdec3d054",
++                "reference": "c51e5c7b2c704e83442a365604d94ebcdec3d054",
++                "shasum": ""
++            },
++            "require": {
++                "doctrine/orm": "^2.14 || ^3.0",
++                "pagerfanta/core": "^3.7 || ^4.0",
++                "php": "^8.1"
++            },
++            "require-dev": {
++                "phpunit/phpunit": "^10.5",
++                "symfony/cache": "^5.4 || ^6.3 || ^7.0"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Pagerfanta\\Doctrine\\ORM\\": "./"
++                },
++                "exclude-from-classmap": [
++                    "Tests/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "description": "Pagerfanta adapter for Doctrine ORM",
++            "keywords": [
++                "doctrine",
++                "orm",
++                "pagerfanta"
++            ],
++            "support": {
++                "source": "https://github.com/Pagerfanta/doctrine-orm-adapter/tree/v4.7.0"
++            },
++            "time": "2024-03-06T23:51:47+00:00"
++        },
+         {
+             "name": "php-cs-fixer/shim",
+             "version": "v3.64.0",
+diff --git a/config/bundles.php b/config/bundles.php
+index 906ec11..a151989 100644
+--- a/config/bundles.php
++++ b/config/bundles.php
+@@ -16,4 +16,5 @@ return [
+     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
+     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
+     Zenstruck\Foundry\ZenstruckFoundryBundle::class => ['dev' => true, 'test' => true],
++    BabDev\PagerfantaBundle\BabDevPagerfantaBundle::class => ['all' => true],
+ ];
+diff --git a/symfony.lock b/symfony.lock
+index f0645f1..959ad73 100644
+--- a/symfony.lock
++++ b/symfony.lock
+@@ -1,4 +1,7 @@
+ {
++    "babdev/pagerfanta-bundle": {
++        "version": "v4.5.0"
++    },
+     "doctrine/doctrine-bundle": {
+         "version": "2.13",
+         "recipe": {

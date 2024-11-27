@@ -1,0 +1,13 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 3934a6a..821fc41 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -15,7 +15,7 @@ class MainController extends AbstractController
+     ): Response {
+         $ships = $repository->findIncomplete();
+         $ships->setMaxPerPage(5);
+-        $ships->setCurrentPage(1);
++        $ships->setCurrentPage(2);
+ 
+         $myShip = $repository->findMyShip();
+ 

@@ -1,0 +1,20 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 852b457..2fd8fc8 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -7,10 +7,14 @@
+         {{ include('main/_shipStatusAside.html.twig') }}
+ 
+         <div class="px-12 pt-10 w-full">
+-            <h1 class="text-4xl font-semibold mb-8">
++            <h1 class="text-4xl font-semibold mb-3">
+                 Ship Repair Queue
+             </h1>
+ 
++            <div class="text-slate-400 mb-4">
++                {{ ships.nbResults }} ships (Page {{ ships.currentPage }} of {{ ships.nbPages }})
++            </div>
++
+             <div class="space-y-5">
+                 {% for ship in ships %}
+                     <div class="bg-[#16202A] rounded-2xl pl-5 py-5 pr-11 flex flex-col min-[1174px]:flex-row min-[1174px]:justify-between">

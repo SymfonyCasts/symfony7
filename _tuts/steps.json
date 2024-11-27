@@ -144,7 +144,42 @@
             "id": "foundry-random-fixtures",
             "name": "Foundry: random fixtures",
             "description": null
+        },
+        {
+            "id": "pagination-add-pagerfanta",
+            "name": "Pagination: add pagerfanta",
+            "description": null
+        },
+        {
+            "id": "pagination-findincomplete-paginator",
+            "name": "Pagination: findIncomplete paginator",
+            "description": null
+        },
+        {
+            "id": "pagination-homepage",
+            "name": "Pagination: homepage",
+            "description": null
+        },
+        {
+            "id": "pagination-page-2",
+            "name": "Pagination: page 2",
+            "description": null
+        },
+        {
+            "id": "pagination-request",
+            "name": "Pagination: Request",
+            "description": null
+        },
+        {
+            "id": "pagination-page-info",
+            "name": "Pagination: page info",
+            "description": null
+        },
+        {
+            "id": "pagination-paginator",
+            "name": "Pagination: paginator",
+            "description": null
         }
     ],
-    "sha": "65cf8c17bc18b09f6a89e02696f6f28f441d41d1"
+    "sha": "f45252cd6783359ffa4235acb19335ce8a65ad11"
 }

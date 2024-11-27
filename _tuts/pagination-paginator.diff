@@ -1,0 +1,22 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 2fd8fc8..74a81cb 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -51,6 +51,17 @@
+                 {% endfor %}
+             </div>
+ 
++            {% if ships.haveToPaginate %}
++                <div class="flex justify-around mt-3 underline font-semibold">
++                    {% if ships.hasPreviousPage %}
++                        <a href="{{ path('app_homepage', {page: ships.getPreviousPage}) }}">&lt; Previous</a>
++                    {% endif %}
++                    {% if ships.hasNextPage %}
++                        <a href="{{ path('app_homepage', {page: ships.getNextPage}) }}">Next &gt;</a>
++                    {% endif %}
++                </div>
++            {% endif %}
++
+             <p class="text-lg mt-5 text-center md:text-left">
+                 Looking for your next galactic ride?
+                 <a href="#" class="underline font-semibold">Browse the {{ ships|length * 10 }} starships for sale!</a>
