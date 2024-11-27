@@ -61,7 +61,7 @@ To use it, after we've created our ship objects, write `$manager->persist($ship1
 `$manager->persist($ship2)`, and `$manager->persist($ship3)`. But `persist()` doesn't
 actually insert them yet: it just *queues* them to be saved.
 
-[[[ code('e21d621b7b') ]]]
+[[[ code('bc75e7f648') ]]]
 
 ## Flush
 

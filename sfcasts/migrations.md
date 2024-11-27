@@ -19,7 +19,7 @@ What's neat is how this was created: Doctrine compared the current state of our
 entities to the database and generated the SQL needed to make them match.
 Wow!
 
-[[[ code('08456e3596') ]]]
+[[[ code('e99151a445') ]]]
 
 There's also a `down()` method... because migrations can be reversed, but I've
 never done that, so I don't worry about `down()`.
