@@ -227,16 +227,17 @@
 
 ## Pagination
 
-- `composer require babdev/pagerfanta-bundle pagerfanta/doctrine-orm-adapter pagerfanta/twig`
+- `composer require babdev/pagerfanta-bundle pagerfanta/doctrine-orm-adapter`
 - `StarshipRepository::findAllIncomplete()`
-  - Change return type to `Paginator<Starship>`
+  - Change return type to `Pagerfanta`
+  - Add `->orderBy('s.arrivedAt', 'DESC')` - ordering is important when paginating!
   - Add `$query` variable and remove `->getResult()`
   - Pagerfanta handles creating the query
   - `return new Pagerfanta(new QueryAdapter($query));`
   - Homepage still works but not yet paginated
 - `homepage()`
   - `->setMaxPerPage(5)`
-  - `->setCurrentPage(1)`
+  - `->setCurrentPage(1)` (must come after `->setMaxPerPage()`)
   - Test - 5 ships shown
   - `->setCurrentPage(2)`
   - Test - another 5 ships shown - this is page 2
@@ -244,15 +245,28 @@
   - `->setCurrentPage($request->query->getInt('page', 1))`
 - Need a pagination widget
 - `templates/main/homepage.html.twig`
-  - Add `{{ pagerfanta(ships) }}`
-    - Not styled
-    - !TODO! pagerfanta styling...
+  - Change `h1` to `mb-3`
   - Add pagination info widget (below the `h1`):
     ```twig
-    <div class="mb-4">
+    <div class="text-slate-400 mb-4">
         {{ ships.nbResults }} ships (Page {{ ships.currentPage }} of {{ ships.nbPages }})
     </div>
     ```
+  - Add Basic paginator
+    ```twig
+    {% if ships.haveToPaginate %}
+        <div class="flex justify-around mt-3 underline font-semibold">
+            {% if ships.hasPreviousPage %}
+                <a href="{{ path('app_homepage', {page: ships.getPreviousPage}) }}">&lt; Previous</a>
+            {% endif %}
+            {% if ships.hasNextPage %}
+                <a href="{{ path('app_homepage', {page: ships.getNextPage}) }}">Next &gt;</a>
+            {% endif %}
+        </div>
+    {% endif %}
+    ```
+    - There is `pagerfanta/twig` which contains _full_ paginator templates
+      for different css frameworks
 
 ## Adding Slug and Timestamp Fields
 
