@@ -12,7 +12,7 @@ Por defecto, `DATABASE_URL` está configurado para conectarse a una base de dato
 
 Si no quieres utilizar Docker, ¡no hay problema! Comenta esta línea y descomenta la de`sqlite`. SQLite no requiere un servidor: es sólo un archivo en tu sistema de archivos. Como Doctrine abstrae la capa de base de datos, en su mayor parte, el código que escribamos funcionará con cualquier tipo de base de datos. ¡Genial!
 
-Recuerda, no guardes ninguna información sensible en este archivo: está comprometido en tu repositorio. Si tienes tu propio servidor de base de datos localmente, crea un archivo `.env.local`(git lo ignora), y establece allí tu propio `DATABASE_URL`.
+Recuerda, no guardes ninguna información sensible en este archivo: está comprometido en tu repositorio. Si tienes tu propio servidor de base de datos localmente, crea un archivo `.env.local`(Git lo ignora), y establece allí tu propio `DATABASE_URL`.
 
 ## Iniciar un contenedor Postgres con Docker
 
