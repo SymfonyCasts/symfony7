@@ -1,0 +1,202 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:03.666 align:middle
+Ya tenemos nuestra tabla de base de datos,
+¡pero ahora necesitamos algunos datos!
+
+00:00:04.216 --> 00:00:08.386 align:middle
+Cuando trabajes en tu entorno de desarrollo,
+es útil tener un conjunto de datos falsos
+
+00:00:08.386 --> 00:00:12.036 align:middle
+para sembrar tu base de datos: cosas con
+las que puedas jugar mientras construyes.
+
+00:00:12.536 --> 00:00:14.496 align:middle
+A esto lo llamamos datos fijos.
+
+00:00:15.126 --> 00:00:18.876 align:middle
+En nuestro caso, ¡sería estupendo rellenar
+previamente nuestra tabla con algunas naves estelares!
+
+00:00:19.396 --> 00:00:22.176 align:middle
+Doctrine tiene incluso un paquete
+que añade estos datos falsos
+
+00:00:22.676 --> 00:00:29.336 align:middle
+Ejecuta en tu terminal: composer require
+--dev orm-fixtures Hemos utilizado
+
+00:00:29.426 --> 00:00:32.866 align:middle
+--dev porque sólo necesitamos fixtures
+en nuestro entorno de desarrollo.
+
+00:00:33.566 --> 00:00:35.216 align:middle
+Desplázate hacia arriba para
+ver lo que se ha instalado
+
+00:00:35.656 --> 00:00:39.136 align:middle
+doctrine/data-fixtures y
+doctrine-fixtures-bundle.
+
+00:00:40.316 --> 00:00:43.066 align:middle
+Ejecuta git status para ver
+lo que añadieron las recetas.
+
+00:00:43.576 --> 00:00:48.806 align:middle
+Cosas estándar de Flex, añadió un bundle,
+pero también este directorio src/DataFixtures.
+
+00:00:49.146 --> 00:00:53.936 align:middle
+Vamos a comprobarlo: abre
+src/DataFixtures/AppFixtures.php.
+
+00:00:55.006 --> 00:00:57.796 align:middle
+Este método load() es donde
+podemos crear nuestros accesorios.
+
+00:00:58.126 --> 00:01:00.056 align:middle
+Elimina lo que hay ahí para
+que podamos empezar de cero.
+
+00:01:00.596 --> 00:01:04.866 align:middle
+Para añadir entidades a la base de datos, estés
+donde estés, ¡es refrescantemente sencillo!
+
+00:01:05.336 --> 00:01:11.396 align:middle
+Primero, crea el objeto como de costumbre:
+$ship1 = new Starship() - el de App\Entity.
+
+00:01:12.116 --> 00:01:16.966 align:middle
+En un episodio anterior, creamos este
+servicio StarshipRepository en src/Model/.
+
+00:01:17.366 --> 00:01:18.036 align:middle
+Ábrelo.
+
+00:01:18.586 --> 00:01:22.656 align:middle
+Tenemos un método findAll() que crea
+estos objetos Starship sobre la marcha.
+
+00:01:23.066 --> 00:01:24.996 align:middle
+¡Utilizaremos estos datos
+para nuestros accesorios!
+
+00:01:25.506 --> 00:01:28.826 align:middle
+Copia el segundo argumento de la
+primera Nave Estelar: ése es el nombre.
+
+00:01:29.386 --> 00:01:37.636 align:middle
+De vuelta en AppFixtures, llama a
+$ship1->setName('USS LeafyCruiser (NCC-0001)').
+
+00:01:38.386 --> 00:01:47.026 align:middle
+Haz lo mismo en $class:
+$ship1->setClass('Garden'), $captain:
+
+00:01:47.336 --> 00:01:54.706 align:middle
+$ship1->setCaptain('John
+Luke Pickles'), $status:
+
+00:01:54.946 --> 00:01:59.586 align:middle
+$ship1->setStatus(StarshipStatusEnum::IN_PROGRESS)
+y
+
+00:01:59.866 --> 00:02:01.676 align:middle
+no olvides importar el enum. Por último,
+
+00:02:03.216 --> 00:02:10.086 align:middle
+$arrivedAt: $ship1->setArrivedAt(new
+\DateTimeImmutable('-1 day')). Para
+
+00:02:12.406 --> 00:02:16.126 align:middle
+las otras dos naves, copiaré y pegaré
+algo de código del directorio tutorial/.
+
+00:02:21.896 --> 00:02:26.626 align:middle
+Ahora tenemos tres objetos nave, pero todavía no se ha
+guardado nada, ni se ha persistido en la base de datos. Pero
+
+00:02:27.146 --> 00:02:30.836 align:middle
+interesante, Doctrine nos
+pasa un ObjectManager. Éste
+
+00:02:31.326 --> 00:02:32.836 align:middle
+es el corazón de Doctrine.
+
+00:02:33.356 --> 00:02:39.166 align:middle
+Lo utilizaremos para guardar, recuperar, actualizar y eliminar
+objetos, nuestras entidades, de la base de datos. ¡ Qué
+
+00:02:39.296 --> 00:02:40.556 align:middle
+pasada! Para
+
+00:02:41.316 --> 00:02:47.006 align:middle
+utilizarlo, después de haber creado nuestros objetos nave,
+escribe $manager->persist($ship1), $manager->persist($ship2),
+
+00:02:47.006 --> 00:02:54.496 align:middle
+y $manager->persist($ship3). Pero
+
+00:02:55.196 --> 00:02:59.656 align:middle
+persist() aún no los inserta realmente:
+sólo los pone en cola para guardarlos. Para
+
+00:03:00.276 --> 00:03:05.936 align:middle
+ejecutar algunas consultas INSERT y conseguir que estas
+naves se acoplen, escribe $manager->flush(). flush()
+
+00:03:06.356 --> 00:03:11.166 align:middle
+es realmente genial: mira todos los objetos
+que están en cola para ser persistidos y
+
+00:03:11.446 --> 00:03:14.726 align:middle
+los escribe en la base de datos
+con una consulta SQL eficiente. En
+
+00:03:15.266 --> 00:03:19.166 align:middle
+este caso, insertará las tres naves
+estelares en una sola consulta. ¡ Superguay
+
+00:03:19.466 --> 00:03:20.366 align:middle
+! ¡
+
+00:03:21.056 --> 00:03:21.906 align:middle
+Listo! ¿Cómo
+
+00:03:22.386 --> 00:03:23.666 align:middle
+ejecutamos este código? Ejecuta:
+
+00:03:24.146 --> 00:03:31.076 align:middle
+symfony console doctrine:fixtures:load
+Comprueba dos veces que realmente queremos
+
+00:03:31.076 --> 00:03:34.696 align:middle
+cargar nuestras instalaciones fijas, porque
+también borrará todos los datos existentes.
+
+00:03:35.266 --> 00:03:36.366 align:middle
+Eligeyes y... ¿Éxito?
+
+00:03:36.756 --> 00:03:39.836 align:middle
+Ejecuta de nuevo la consulta
+SQL sin procesar: symfony
+
+00:03:40.356 --> 00:03:47.816 align:middle
+console doctrine:query:sql 'SELECT * FROM
+starship' ¡Tenemos naves! ¡Estupendo!
+
+00:03:48.046 --> 00:03:51.986 align:middle
+Uf, ¡ya tenemos una base de
+datos con datos! A continuación,
+
+00:03:52.656 --> 00:03:55.906 align:middle
+refactorizaremos los controladores de nuestra
+aplicación para extraer naves estelares
+
+00:03:55.906 --> 00:03:58.286 align:middle
+de nuestra base de datos y
+mostrarlas en la página. ¡ Esto
+
+00:03:58.676 --> 00:04:00.836 align:middle
+será mucho más fácil de lo que imaginas!
