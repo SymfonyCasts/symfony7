@@ -24,7 +24,7 @@ for the most part, the code we write will work with any database type. Cool!
 
 Remember, don't store any sensitive info in this file: it's committed to
 your repo. If you have your own database server locally, create a `.env.local`
-file (this is ignored by git), and set your own `DATABASE_URL` there.
+file (this is ignored by Git), and set your own `DATABASE_URL` there.
 
 ## Starting a Postgres Container with Docker
 
