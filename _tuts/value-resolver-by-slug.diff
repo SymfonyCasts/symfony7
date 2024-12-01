@@ -1,0 +1,39 @@
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+index cd12c4f..b925b8f 100644
+--- a/src/Controller/StarshipController.php
++++ b/src/Controller/StarshipController.php
+@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
+ 
+ class StarshipController extends AbstractController
+ {
+-    #[Route('/starships/{id<\d+>}', name: 'app_starship_show')]
++    #[Route('/starships/{slug}', name: 'app_starship_show')]
+     public function show(Starship $ship): Response
+     {
+         return $this->render('starship/show.html.twig', [
+diff --git a/templates/main/_shipStatusAside.html.twig b/templates/main/_shipStatusAside.html.twig
+index aff8de8..2574a6b 100644
+--- a/templates/main/_shipStatusAside.html.twig
++++ b/templates/main/_shipStatusAside.html.twig
+@@ -17,7 +17,7 @@
+             </div>
+             <h3 class="tracking-tight text-[22px] font-semibold">
+                 <a class="hover:underline" href="{{ path('app_starship_show', {
+-                    id: myShip.id
++                    slug: myShip.slug
+                 }) }}">{{ myShip.name }}</a>
+             </h3>
+         </div>
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 74a81cb..b7cd337 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -28,7 +28,7 @@
+                                 <h4 class="text-[22px] pt-1 font-semibold">
+                                     <a
+                                         class="hover:text-slate-200"
+-                                        href="{{ path('app_starship_show', { id: ship.id }) }}"
++                                        href="{{ path('app_starship_show', { slug: ship.slug }) }}"
+                                     >{{ ship.name }}</a>
+                                 </h4>
+                                 <div>

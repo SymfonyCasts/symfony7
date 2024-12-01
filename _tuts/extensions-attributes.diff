@@ -1,0 +1,29 @@
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index c783e85..39d3178 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -4,6 +4,8 @@ namespace App\Entity;
+ 
+ use App\Repository\StarshipRepository;
+ use Doctrine\ORM\Mapping as ORM;
++use Gedmo\Mapping\Annotation\Slug;
++use Gedmo\Mapping\Annotation\Timestampable;
+ 
+ #[ORM\Entity(repositoryClass: StarshipRepository::class)]
+ class Starship
+@@ -29,12 +31,15 @@ class Starship
+     private ?\DateTimeImmutable $arrivedAt = null;
+ 
+     #[ORM\Column(unique: true)]
++    #[Slug(fields: ['name'])]
+     private ?string $slug = null;
+ 
+     #[ORM\Column]
++    #[Timestampable(on: 'create')]
+     private ?\DateTimeImmutable $createdAt = null;
+ 
+     #[ORM\Column]
++    #[Timestampable(on: 'update')]
+     private ?\DateTimeImmutable $updatedAt = null;
+ 
+     public function getId(): ?int

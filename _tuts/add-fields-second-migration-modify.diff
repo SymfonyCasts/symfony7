@@ -1,0 +1,13 @@
+diff --git a/migrations/Version20241201203519.php b/migrations/Version20241201203519.php
+index 6fa6b36..a325667 100644
+--- a/migrations/Version20241201203519.php
++++ b/migrations/Version20241201203519.php
+@@ -19,6 +19,8 @@ final class Version20241201203519 extends AbstractMigration
+ 
+     public function up(Schema $schema): void
+     {
++        $this->addSql('UPDATE starship SET slug = id, created_at = arrived_at, updated_at = arrived_at');
++
+         // this up() migration is auto-generated, please modify it to your needs
+         $this->addSql('ALTER TABLE starship ALTER slug SET NOT NULL');
+         $this->addSql('ALTER TABLE starship ALTER created_at SET NOT NULL');

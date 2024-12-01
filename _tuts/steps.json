@@ -179,7 +179,62 @@
             "id": "pagination-paginator",
             "name": "Pagination: paginator",
             "description": null
+        },
+        {
+            "id": "add-fields-slug-and-timestamps",
+            "name": "Add Fields: slug & timestamps",
+            "description": null
+        },
+        {
+            "id": "add-fields-first-migration",
+            "name": "Add Fields: first migration",
+            "description": null
+        },
+        {
+            "id": "add-fields-non-nullable-and-unique",
+            "name": "Add Fields: non-nullable & unique",
+            "description": null
+        },
+        {
+            "id": "add-fields-second-migration",
+            "name": "Add Fields: second migration",
+            "description": null
+        },
+        {
+            "id": "add-fields-second-migration-modify",
+            "name": "Add Fields: second migration modify",
+            "description": null
+        },
+        {
+            "id": "extensions-add-bundle",
+            "name": "Extensions: add bundle",
+            "description": null
+        },
+        {
+            "id": "extensions-enable-sluggable-timestampable",
+            "name": "Extensions: enable sluggable\/timestampable",
+            "description": null
+        },
+        {
+            "id": "extensions-attributes",
+            "name": "Extensions: attributes",
+            "description": null
+        },
+        {
+            "id": "value-resolver-by-id",
+            "name": "Value Resolver: by id",
+            "description": null
+        },
+        {
+            "id": "value-resolver-by-slug",
+            "name": "Value Resolver: by slug",
+            "description": null
+        },
+        {
+            "id": "value-resolver-mapentity",
+            "name": "Value Resolver: MapEntity",
+            "description": null
         }
     ],
-    "sha": "b049d166c495c7b5b4ccce44706a08cb4c4b0029"
+    "sha": "b6a8fa0ed6f004725c75fc0c999edb239385003b"
 }

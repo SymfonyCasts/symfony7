@@ -1,0 +1,21 @@
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 9f44868..c783e85 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -28,13 +28,13 @@ class Starship
+     #[ORM\Column]
+     private ?\DateTimeImmutable $arrivedAt = null;
+ 
+-    #[ORM\Column(length: 255, nullable: true)]
++    #[ORM\Column(unique: true)]
+     private ?string $slug = null;
+ 
+-    #[ORM\Column(nullable: true)]
++    #[ORM\Column]
+     private ?\DateTimeImmutable $createdAt = null;
+ 
+-    #[ORM\Column(nullable: true)]
++    #[ORM\Column]
+     private ?\DateTimeImmutable $updatedAt = null;
+ 
+     public function getId(): ?int

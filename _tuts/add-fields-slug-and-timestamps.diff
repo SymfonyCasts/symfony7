@@ -1,0 +1,61 @@
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 5c1adc0..9f44868 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -28,6 +28,15 @@ class Starship
+     #[ORM\Column]
+     private ?\DateTimeImmutable $arrivedAt = null;
+ 
++    #[ORM\Column(length: 255, nullable: true)]
++    private ?string $slug = null;
++
++    #[ORM\Column(nullable: true)]
++    private ?\DateTimeImmutable $createdAt = null;
++
++    #[ORM\Column(nullable: true)]
++    private ?\DateTimeImmutable $updatedAt = null;
++
+     public function getId(): ?int
+     {
+         return $this->id;
+@@ -106,4 +115,40 @@ class Starship
+             StarshipStatusEnum::COMPLETED => 'images/status-complete.png',
+         };
+     }
++
++    public function getSlug(): ?string
++    {
++        return $this->slug;
++    }
++
++    public function setSlug(?string $slug): static
++    {
++        $this->slug = $slug;
++
++        return $this;
++    }
++
++    public function getCreatedAt(): ?\DateTimeImmutable
++    {
++        return $this->createdAt;
++    }
++
++    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
++    {
++        $this->createdAt = $createdAt;
++
++        return $this;
++    }
++
++    public function getUpdatedAt(): ?\DateTimeImmutable
++    {
++        return $this->updatedAt;
++    }
++
++    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
++    {
++        $this->updatedAt = $updatedAt;
++
++        return $this;
++    }
+ }
