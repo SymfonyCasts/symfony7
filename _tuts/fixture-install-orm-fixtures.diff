@@ -11,7 +11,7 @@ index eb392e2..0f678ca 100644
          "symfony/maker-bundle": "^1.52",
          "symfony/stopwatch": "7.1.*",
 diff --git a/composer.lock b/composer.lock
-index 0306288..7bda22c 100644
+index 5134ce4..e6de45d 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
@@ -23,7 +23,7 @@ index 0306288..7bda22c 100644
      "packages": [
          {
              "name": "composer/semver",
-@@ -6020,6 +6020,179 @@
+@@ -6023,6 +6023,179 @@
          }
      ],
      "packages-dev": [

@@ -17,7 +17,7 @@ index be59ebb..accdaf7 100644
          "phpdocumentor/reflection-docblock": "^5.3",
          "phpstan/phpdoc-parser": "^1.25",
 diff --git a/composer.lock b/composer.lock
-index aceab3b..067ea91 100644
+index 4e2c899..2142288 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,8 +4,95 @@
@@ -117,9 +117,9 @@ index aceab3b..067ea91 100644
          {
              "name": "composer/semver",
              "version": "3.4.3",
-@@ -1489,6 +1576,96 @@
+@@ -1491,6 +1578,96 @@
              ],
-             "time": "2024-06-28T09:40:51+00:00"
+             "time": "2024-11-12T13:57:08+00:00"
          },
 +        {
 +            "name": "pagerfanta/core",
@@ -213,7 +213,7 @@ index aceab3b..067ea91 100644
 +        },
          {
              "name": "php-cs-fixer/shim",
-             "version": "v3.64.0",
+             "version": "v3.65.0",
 diff --git a/config/bundles.php b/config/bundles.php
 index 906ec11..a151989 100644
 --- a/config/bundles.php
