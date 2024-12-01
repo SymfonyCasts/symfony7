@@ -78,7 +78,7 @@ Back in our `homepage()` method, replace `$em->createQuery()` with
 `->from(Starship::class, 's')` hitting tab add the `use` statement from `App\Entity`.
 Bonus! We can use `Starship::class` instead of the string.
 
-Finally, call `->getQuery()` and `->getResult()`.
+Finally, before `->getResult()`, call `->getQuery()`.
 
 [[[ code('fe74a27fec') ]]]
 

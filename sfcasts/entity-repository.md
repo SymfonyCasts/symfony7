@@ -45,7 +45,7 @@ to only find ships whose status is *not* `completed`: so just `waiting` or `in p
 We need a custom query! But this time, instead of writing it in the controller,
 let's organize it in the repository.
 
-Add a new `public function findIncomplete()` that returns an `array`. Include a
+Add a new `public function findIncomplete()` method that returns an `array`. Include a
 docblock so our IDE knows this will be an array of `Starship` objects.
 
 Inside, `return $this->createQueryBuilder('e')`.
@@ -57,11 +57,11 @@ automatically. All we need to do is add
 entity and `:status` is a *placeholder* for a value. Pass it a value with
 `->setParameter(':status', StarshipStatusEnum::COMPLETED)`.
 
-This silly-looking `:status` the immediate `setParameter(':status', ...)` is
+This silly-looking `:status` and the immediate `setParameter(':status', ...)` is
 important. Never include the actual value in the query for two reasons.
 First, Doctrine can optimize the query performance slightly when using placeholders.
 Second, and more importantly, placeholders prevent SQL injection attacks! If
-you thought the borg was bad, you'll *really* hate SQL injection attacks!
+you thought The Borg was bad, you'll *really* hate SQL injection attacks!
 To finish the query, add `->getQuery()` and `->getResult()`.
 
 Back in the homepage controller, replace `findAll()` with `findIncomplete()`.
@@ -77,7 +77,7 @@ we're faking the idea of "my ship" by just grabbing the first one. It's because,
 whatever the logic is, this should be in the repository so we can find "my ship"
 wherever we need it.
 
-In `StarshipRepository`, add a new `public function findMyShip()`
+In `StarshipRepository`, add a new `public function findMyShip()` method
 that returns a `Starship` object. We can imagine that this method would take a user
 or something to find their ship, but for now, just return `$this->findAll()[0]`
 to get the first ship in the table.
@@ -89,6 +89,6 @@ Look at the profiler: two
 queries! The first finds all the incomplete ships and the second is the `findAll()`
 from `findMyShip()`. Perfect!
 
-Next, let's improve our fixtures and make them 100 times more fun a library called
+Next, let's improve our fixtures and make them 100 times more fun with a library called
 Foundry. This will let us create a whole fleet of Starships as if we had a
 replicator. Let's do it!
