@@ -50,7 +50,7 @@ Podemos ver una consulta formateada que es más legible, una consulta ejecutable
 
 Por suerte, Doctrine tiene un "constructor de consultas". Esta cosa es impresionante: en lugar de escribir la cadena DQL manualmente, la construimos con un objeto. De vuelta a nuestro método `homepage()`, sustituye `$em->createQuery()` por`$em->createQueryBuilder()`. Fuera de él, encadena `->select('s')`, luego`->from(Starship::class, 's')` golpeando la pestaña añade la sentencia `use` de `App\Entity`. ¡Bonus! Podemos utilizar `Starship::class` en lugar de la cadena.
 
-Por último, llama a `->getQuery()` y `->getResult()`.
+Por último, antes de `->getResult()`, llama a `->getQuery()`.
 
 [[[ code('fe74a27fec') ]]]
 
