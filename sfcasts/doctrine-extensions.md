@@ -1,0 +1,3 @@
+# Auto Slug and Timestamps with Doctrine Extensions
+
+Coming soon...

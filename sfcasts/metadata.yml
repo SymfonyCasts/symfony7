@@ -7,3 +7,7 @@ chapters:
   - dql-query-builder-find
   - entity-repository
   - foundry-faker
+  - pagination
+  - add-fields
+  - doctrine-extensions
+  - controller-map-entity

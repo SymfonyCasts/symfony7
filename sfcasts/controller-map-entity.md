@@ -1,0 +1,3 @@
+# Auto-inject Entities into your Controller
+
+Coming soon...
