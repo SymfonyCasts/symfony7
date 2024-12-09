@@ -72,9 +72,9 @@ to specify the `select()` or `from()` like in the controller. It's done
 automatically. All we need to do is add
 `->where('e.status != :status')`. `e.status` is the *property* name on the `Starship`
 entity and `:status` is a *placeholder* for a value. Pass it a value with
-`->setParameter(':status', StarshipStatusEnum::COMPLETED)`.
+`->setParameter('status', StarshipStatusEnum::COMPLETED)`.
 
-This silly-looking `:status` and the immediate `setParameter(':status', ...)` is
+This silly-looking `:status` and the immediate `setParameter('status', ...)` is
 important. Never include the actual value in the query for two reasons.
 First, Doctrine can optimize the query performance slightly when using placeholders.
 Second, and more importantly, placeholders prevent SQL injection attacks! If
