@@ -46,9 +46,9 @@ Añade un nuevo método `public function findIncomplete()` que devuelva un `arra
 
 [[[ code('b47753f4d5') ]]]
 
-Dentro, `return $this->createQueryBuilder('e')`. Esto es sólo un alias para la entidad - lo necesitaremos en un segundo. Lo bueno de crear un constructor de consultas en un repositorio, es que no necesitas especificar el `select()` o `from()` como en el controlador. Se hace automáticamente. Todo lo que tenemos que hacer es añadir`->where('e.status != :status')`. `e.status` es el nombre de la propiedad en la entidad `Starship`y `:status` es un marcador de posición para un valor. Pásale un valor con`->setParameter(':status', StarshipStatusEnum::COMPLETED)`.
+Dentro, `return $this->createQueryBuilder('e')`. Esto es sólo un alias para la entidad - lo necesitaremos en un segundo. Lo bueno de crear un constructor de consultas en un repositorio, es que no necesitas especificar el `select()` o `from()` como en el controlador. Se hace automáticamente. Todo lo que tenemos que hacer es añadir`->where('e.status != :status')`. `e.status` es el nombre de la propiedad en la entidad `Starship`y `:status` es un marcador de posición para un valor. Pásale un valor con`->setParameter('status', StarshipStatusEnum::COMPLETED)`.
 
-Este tonto `:status` y el inmediato `setParameter(':status', ...)` son importantes. Nunca incluyas el valor real en la consulta por dos razones: en primer lugar, Doctrine puede optimizar ligeramente el rendimiento de la consulta cuando se utilizan marcadores de posición; en segundo lugar, y más importante, ¡los marcadores de posición evitan los ataques de inyección SQL! Si pensabas que El Borg era malo, ¡realmente odiarás los ataques de inyección SQL! Para terminar la consulta, añade `->getQuery()` y `->getResult()`:
+Este tonto `:status` y el inmediato `setParameter('status', ...)` son importantes. Nunca incluyas el valor real en la consulta por dos razones: en primer lugar, Doctrine puede optimizar ligeramente el rendimiento de la consulta cuando se utilizan marcadores de posición; en segundo lugar, y más importante, ¡los marcadores de posición evitan los ataques de inyección SQL! Si pensabas que El Borg era malo, ¡realmente odiarás los ataques de inyección SQL! Para terminar la consulta, añade `->getQuery()` y `->getResult()`:
 
 [[[ code('eb3ad8cae4') ]]]
 
@@ -62,7 +62,7 @@ Vuelve a girar. Deberíamos ver desaparecer esta nave completada. ¡Lo hacemos! 
 
 De vuelta en el controlador, no me gusta esta lógica de `$myShip`. Y no es porque estemos falseando la idea de "mi nave" al coger sólo la primera. Es porque, sea cual sea la lógica, ésta debería estar en el repositorio para que podamos encontrar "mi nave" siempre que la necesitemos.
 
-En `StarshipRepository`, añade un nuevo método `public function findMyShip()` que devuelva un objeto `Starship`. Podemos imaginar que este método tomaría un usuario o algo así para encontrar su nave, pero por ahora, sólo devuelve `$this->findAll()[0]`para obtener la primera nave de la tabla:
+En `StarshipRepository`, añade un nuevo método `public function findMyShip()` que devuelva un objeto `Starship`. Podemos imaginar que este método tomaría un usuario o algo para encontrar su nave, pero por ahora, sólo devuelve `$this->findAll()[0]`para obtener la primera nave de la tabla:
 
 [[[ code('011d4e7947') ]]]
 
