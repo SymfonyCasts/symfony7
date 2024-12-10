@@ -1,80 +1,78 @@
-# Better fixtures with Foundry & Faker
+# Alien Tech for Fixtures: Foundry & Faker
 
-In development, we're using this `src/DataFixtures/AppFixtures.php` class to create
-some fake fixture data. This works totally fine, but it can be cumbersome to create
-dozens or more entities this way. Further, coming up with fake data yourself can be
-tedious.
+We're using `src/DataFixtures/AppFixtures.php` to create
+fake fixture data. This *works* fine. But where's the cool and fun? Do we really want to
+write manual code to add dozens or more entities? Points to you if you answered:
+hell no!
 
-We'll use a couple of libraries to help with this! In your terminal, run:
+To take this from tedious to terrific, find your terminal and run:
 
 ```terminal
 composer require --dev foundry
 ```
 
-Scroll up to see what was installed. The important packages are `zenstruck/foundry` which
-gives us a quicker way to create entities, and `fakerphp/faker`, which helps generate
-fake data.
+Scroll up to see what was installed. The important packages are `zenstruck/foundry` -
+as way to create many entities quickly - and `fakerphp/faker` - a library to make
+fake data so we don't need to rely on lorem ipsum and our own lack of creativity.
 
-Run:
+Run
 
 ```terminal
 git status
 ```
 
-To see what the recipes created. A bundle and configuration was added. The
-default config works well out of the box, so we don't need to look at it.
+to see what the recipes did: it enabled a bundle and added a config file.
+That config works well out of the box, so no need to look at it.
 
-With Foundry, every entity can have a *factory* class that helps with generating it.
-It comes with a maker to help create factories. We'll create our first factory by
-running:
+With Foundry, every entity can have a *factory* class.
+To get these going run:
 
 ```terminal
 symfony console make:factory
 ```
 
-This lists all of our entities that don't yet have a factory. Choose `Starship` and...
-success! We see it created a new `src/Factory/StarshipFactory.php` file. Check that out.
-In our IDE, open `src/Factory/StarshipFactory.php`.
+This lists all entities that don't yet have a factory. Choose `Starship` and...
+success! It created a new `StarshipFactory` class. Go check that out:
+`src/Factory/StarshipFactory.php`.
 
 First, look at this `class()` method. This tells Foundry which entity class this factory
-represents. The `defaults()` method is where we can add defaults for fields. Look at this!
-The maker added defaults for our Starship fields! It's best practice to have this method
-return defaults for all the required fields in your entity. We'll see why in a minute.
+is helps with. This class will be really good at creating `Starship` objects - handy
+in case the Borg come back. The `defaults()` is where define default values
+to use when creating starships. I recommend adding defaults for all required fields:
+it'll make life easier.
 
-Check out these `self::faker()` calls. This is how Foundry generates random data. For
-`name`, `captain` and `class`, it's generating random text. For `status`, it's selecting
-a random element from our `StarshipStatusEnum` cases. The `arrivedAt` field is generating
-any random date, but we need to modify this to always generate a date in the past. Time travel
-hasn't been invented yet!
+Hey! Check out these `self::faker()` calls! This is how we generate random data. For
+`name`, `captain` and `class`, it's random text, `status`, is a random
+`StarshipStatusEnum` and `arrivedAt` defaults to any random date
+Since time travel *still* hasn't been invented,
+replace `self::faker()->dateTime()` with `self::faker()->dateTimeBetween('-1 year', 'now')`.
 
-Replace `self::faker()->dateTime()` with `self::faker()->dateTimeBetween('-1 year', 'now')`.
-
-The generated text for `captain`, `class` and `name` will be kind of boring. Let's make it more fun! In the
-`tutorial/` directory, copy these constants and paste them at the top of the factory class.
-
-Now, for `captain`, change from `text()` to `randomElement()` and pass in `self::CAPTAINS`. For
+Faker's `text()` method *will* give us random text, but not necessarily the interesting
+text. Instead of serving under Captain "apple pie breakfast",
+in the `tutorial/` directory, copy these constants and paste them at the top of the factory class.
+Then use `randomElement(self::CAPTAINS)`, For
 `class`, use `randomElement(self::CLASSES)` and for `name`, use `randomElement(self::SHIP_NAMES)`.
 
-Time to use this factory! In `src/DataFixtures/AppFixtures.php`, at the start of the `load()` method,
-write `StarshipFactory::createOne()` with an array properties for the first starship. Copy these
-from the existing code. For the other two, I'll paste them in and remove the old code.
+Time to use this factory! In `src/DataFixtures/AppFixtures.php`, in `load()`,
+write `StarshipFactory::createOne()`. Pass this an array of property values for the
+first ship: copy these
+from the existing code. I'll paste them the other two... and remove the old code.
 
-We no longer need these `persist()` and `flush()` calls - Foundry handles this for us!
+Bonus! Remove the `persist()` and `flush()` calls: Foundry handles that for us!
 
-Reload our fixtures by running:
+Let's see what this does! Reload the fixtures:
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-Choose `yes` and... success! Back in our app, refresh the page and... it looks the same. That's
-a good sign. Now, let's create a whole bunch more starships!
+Choose `yes` and... success! Back over, refresh and... it looks the same. That's
+a good sign! Now, let's create a fleet of ships!
 
-With the first three, we passed an array of all required properties. If we didn't pass one of them,
-the factory would use the default from `StarshipFactory::defaults()`. If we don't pass any,
-it will use all the defaults. Leverage this to create an additional 20 starships with
-`StarshipFactory::createMany(20)`. For each one it creates, it will now use all the defaults and
-because these are using faker, each one will use random data.
+For the first three, we passed an array of values... but we didn't need to do that.
+If we *don't* pass a value, it'll use the `StarshipFactory::defaults()` method.
+Watch how dangerous this makes us: a Borg cube just showed up? Whip up 20 new ships
+with `StarshipFactory::createMany(20)`.
 
 Back in the terminal, load the fixtures again:
 
@@ -82,9 +80,9 @@ Back in the terminal, load the fixtures again:
 symfony console doctrine:fixtures:load
 ```
 
-Back in the app, refresh the page and... check it out! We have a whole fleet of ships here
+And over in the app, refresh and... check it out! A whole fleet of ships here
 now, and yep, they all have random data!
 
-What if this app was running on a huge starbase and we had hundreds or thousands of ships?
-This page would be *huge* and take forever to load. Next, we'll *paginate* these
-results into smaller chunks.
+Now that the fake dats is looking more real, it makes me wonder: what if our app
+was running on a huge star base with hundreds or thousands of ships?
+This would be a *long* page. Next, we'll *paginate* these results into smaller chunks.
