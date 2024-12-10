@@ -1,54 +1,50 @@
-# Mejores dispositivos con Foundry y Faker
+# Tecnología alienígena para accesorios: Fundición y Falsificación
 
-En desarrollo, estamos utilizando esta clase `src/DataFixtures/AppFixtures.php` para crear algunos datos de fixture falsos. Esto funciona perfectamente, pero puede ser engorroso crear docenas o más entidades de esta forma. Además, crear tú mismo los datos falsos puede ser tedioso.
+Estamos utilizando `src/DataFixtures/AppFixtures.php` para crear datos de fixture falsos. Esto funciona bien. Pero, ¿dónde está lo guay y divertido? ¿Realmente queremos escribir código manual para añadir docenas o más entidades? Puntos para ti si has respondido: ¡diablos, no!
 
-Utilizaremos un par de bibliotecas para ayudarte con esto En tu terminal, ejecuta:
+Para que esto pase de tedioso a terrorífico, busca tu terminal y ejecuta:
 
 ```terminal
 composer require --dev foundry
 ```
 
-Desplázate hacia arriba para ver lo que se ha instalado. Los paquetes importantes son `zenstruck/foundry`, que nos proporciona una forma más rápida de crear entidades, y `fakerphp/faker`, que nos ayuda a generar datos falsos.
+Desplázate hacia arriba para ver lo que se ha instalado. Los paquetes importantes son `zenstruck/foundry` -como forma de crear muchas entidades rápidamente- y `fakerphp/faker` -una biblioteca para crear datos falsos de forma que no tengamos que depender de lorem ipsum y de nuestra propia falta de creatividad-.
 
-Ejecuta:
+Ejecuta
 
 ```terminal
 git status
 ```
 
-Para ver lo que crearon las recetas. Se ha añadido un bundle y una configuración. La configuración por defecto funciona bien fuera de la caja, así que no necesitamos mirarla.
+para ver lo que hicieron las recetas: habilitó un bundle y añadió un archivo de configuración. Esa configuración funciona bien nada más sacarla de la caja, así que no hace falta mirarla.
 
-Con Foundry, cada entidad puede tener una clase fábrica que ayude a generarla. Viene con un creador para ayudar a crear fábricas. Crearemos nuestra primera fábrica ejecutando:
+Con Foundry, cada entidad puede tener una clase de fábrica. Para ponerlas en marcha, ejecuta:
 
 ```terminal
 symfony console make:factory
 ```
 
-Esto lista todas nuestras entidades que aún no tienen fábrica. Elige `Starship` y... ¡éxito! Vemos que se ha creado un nuevo archivo `src/Factory/StarshipFactory.php`. Compruébalo. En nuestro IDE, abre `src/Factory/StarshipFactory.php`.
+Esto lista todas las entidades que aún no tienen una fábrica. Elige `Starship` y... ¡éxito! Se ha creado una nueva clase `StarshipFactory`. Ve a comprobarlo:`src/Factory/StarshipFactory.php`.
 
-En primer lugar, mira este método `class()`. Esto indica a Foundry qué clase de entidad representa esta fábrica. El método `defaults()` es donde podemos añadir valores por defecto para los campos. Mira esto: ¡el creador ha añadido valores por defecto para los campos de nuestra nave estelar! Es una buena práctica hacer que este método devuelva valores por defecto para todos los campos obligatorios de tu entidad. Veremos por qué en un minuto.
+Primero, mira este método `class()`. Esto le dice a Foundry con qué clase de entidad ayuda esta fábrica. Esta clase será muy buena para crear objetos `Starship`, muy útil en caso de que vuelvan los Borg. En `defaults()` es donde se definen los valores por defecto que se utilizarán al crear naves estelares. Te recomiendo que añadas valores por defecto para todos los campos obligatorios: te hará la vida más fácil.
 
-Echa un vistazo a estas llamadas a `self::faker()`. Así es como Foundry genera datos aleatorios. Para`name`, `captain` y `class`, está generando texto aleatorio. Para `status`, está seleccionando un elemento aleatorio de nuestros casos `StarshipStatusEnum`. El campo `arrivedAt` está generando cualquier fecha aleatoria, pero tenemos que modificarlo para que genere siempre una fecha en el pasado. ¡Aún no se ha inventado el viaje en el tiempo!
+¡Echa un vistazo a estas llamadas a `self::faker()`! Así es como generamos datos aleatorios. Para`name`, `captain` y `class`, es texto aleatorio, `status`, es un`StarshipStatusEnum` aleatorio y `arrivedAt` por defecto es cualquier fecha aleatoria Dado que aún no se ha inventado el viaje en el tiempo, sustituye `self::faker()->dateTime()` por `self::faker()->dateTimeBetween('-1 year', 'now')`.
 
-Sustituye `self::faker()->dateTime()` por `self::faker()->dateTimeBetween('-1 year', 'now')`.
+El método `text()` de Faker nos dará un texto aleatorio, pero no necesariamente el texto interesante. En lugar de servir bajo el Capitán "desayuno de tarta de manzana", en el directorio `tutorial/`, copia estas constantes y pégalas en la parte superior de la clase fábrica. A continuación, utiliza `randomElement(self::CAPTAINS)`, Para`class`, utiliza `randomElement(self::CLASSES)` y para `name`, utiliza `randomElement(self::SHIP_NAMES)`.
 
-El texto generado para `captain`, `class` y `name` será un poco aburrido. ¡Hagámoslo más divertido! En el directorio`tutorial/`, copia estas constantes y pégalas en la parte superior de la clase fábrica.
+¡Es hora de utilizar esta fábrica! En `src/DataFixtures/AppFixtures.php`, en `load()`, escribe `StarshipFactory::createOne()`. Pásale una matriz de valores de propiedad para la primera nave: cópialos del código existente. Pégalos los otros dos... y elimina el código antiguo.
 
-Ahora, para `captain`, cambia de `text()` a `randomElement()` y pasa `self::CAPTAINS`. Para`class`, utiliza `randomElement(self::CLASSES)` y para `name`, utiliza `randomElement(self::SHIP_NAMES)`.
+¡Bonificación! Elimina las llamadas a `persist()` y `flush()`: ¡Foundry se encarga de eso por nosotros!
 
-¡Es hora de utilizar esta fábrica! En `src/DataFixtures/AppFixtures.php`, al principio del método `load()`, escribe `StarshipFactory::createOne()` con un array de propiedades para la primera nave estelar. Cópialas del código existente. Para las otras dos, pégalas y elimina el código antiguo.
-
-Ya no necesitamos estas llamadas a `persist()` y `flush()` - ¡Foundry se encarga de esto por nosotros!
-
-Recarga nuestros accesorios ejecutando:
+¡Veamos qué hace esto! Recarga los accesorios:
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-Elige `yes` y... ¡éxito! De vuelta en nuestra aplicación, actualiza la página y... parece la misma. Buena señal. Ahora, ¡vamos a crear un montón de naves estelares más!
+Elige `yes` y... ¡éxito! Vuelve atrás, actualiza y... parece lo mismo. ¡Buena señal! Ahora, ¡creemos una flota de naves!
 
-Con las tres primeras, pasamos una matriz con todas las propiedades necesarias. Si no pasábamos ninguna, la fábrica utilizaría la predeterminada de `StarshipFactory::defaults()`. Si no pasábamos ninguna, utilizaría todas las predeterminadas. Aprovecha esto para crear otras 20 naves estelares con`StarshipFactory::createMany(20)`. Para cada una que cree, utilizará ahora todos los valores por defecto y, como éstas están utilizando faker, cada una utilizará datos aleatorios.
+Para las tres primeras, pasamos una matriz de valores... pero no hace falta que lo hagamos. Si no pasamos un valor, utilizará el método `StarshipFactory::defaults()`. Fíjate en lo peligroso que nos resulta: ¿acaba de aparecer un cubo Borg? Prepara 20 naves nuevas con `StarshipFactory::createMany(20)`.
 
 De vuelta en el terminal, carga de nuevo los accesorios:
 
@@ -56,6 +52,6 @@ De vuelta en el terminal, carga de nuevo los accesorios:
 symfony console doctrine:fixtures:load
 ```
 
-De vuelta en la aplicación, actualiza la página y... ¡mira! Ahora tenemos aquí toda una flota de naves, y sí, ¡todas tienen datos aleatorios!
+Y en la aplicación, actualiza y... ¡fíjate! Ahora hay toda una flota de naves, y sí, ¡todas tienen datos aleatorios!
 
-¿Y si esta aplicación funcionara en una base estelar enorme y tuviéramos cientos o miles de naves? Esta página sería enorme y tardaría una eternidad en cargarse. A continuación, paginaremos estos resultados en trozos más pequeños.
+Ahora que los datos falsos parecen más reales, me pregunto: ¿y si nuestra aplicación se ejecutara en una enorme base estelar con cientos o miles de naves? Esto sería una página muy larga. A continuación, paginaremos estos resultados en trozos más pequeños.
