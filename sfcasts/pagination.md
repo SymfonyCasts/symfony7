@@ -1,89 +1,89 @@
 # Pagination
 
-In the last chapter, we added more starships to this list. It's still
-manageable, but if we had thousands of them, we would have performance issues. We
-need to *paginate* these results so we only show a few at a time - or per *page*.
+Foundry helped us add 20 ships. That makes our app look more realistic.
+But on production, we might have thousands of starships. This page would be
+*gigantic* and unusable. It'd probably also take a long time to load, time during
+which we are likely to be assimilated!
+
+The solution? *Paginate* the results: show a few at a time - or per *page*.
 
 To do this, we'll use a library called Pagerfanta - what a cool name! It's a generic pagination library
-but has great Doctrine integration! Install the two required packages:
+but has great Doctrine integration! Add the two required packages:
 
 ```terminal
 composer require babdev/pagerfanta-bundle pagerfanta/doctrine-orm-adapter
 ```
 
-Scroll up to see what was installed. `pagerfanta/doctrine-orm-adapter` is the *glue* between
+Scroll up to see what this installed. `pagerfanta/doctrine-orm-adapter` is the *glue* between
 Pagerfanta and Doctrine.
 
-On our homepage, we're using `findIncomplete()` from our `StarshipRepository` so open
-that up and find that method. We're going to change the return type to `Pagerfanta`
-which has some extra pagination-related functionality. This object *also* iterates
-over our entities, so we can leave the docblock above as is.
+On our homepage, we're using `findIncomplete()` from `StarshipRepository`. Open
+that up and find the method. Change the return type to `Pagerfanta`: an object
+with pagination-related superpowers. But you *can* loop over this object like an
+array, so leave the docblock as is.
 
-Now, a super important thing to always remember when paginating a query is to have a
-predictable order. In our query, add `->orderBy('e.arrivedAt', 'DESC')` to order by
-the `arrivedAt` field in descending order.
+Now, a super important thing to remember when paginating a query is to have a
+predictable order. Add `->orderBy('e.arrivedAt', 'DESC')`.
 
-Instead of returning, add this to a variable called `$query`. We need Pagerfanta to
-be able to manipulate the query, so remove the `getResult()` call.
-
-Now, `return new Pagerfanta(new QueryAdapter($query))` and be sure to import these
+But instead of returning, add this to a variable called `$query`, then remove
+`getResult()`: our job changes from *executing* the query to simpy *building*
+it. Pagerfanta will handle the actual execution. Return
+`new Pagerfanta(new QueryAdapter($query))` and be sure to import these
 two classes.
 
-In our `MainController`'s `homepage()` method, we need to configure the current page
-and the number of items per page. After the `$ships` variable, add `$ships->setMaxPerPage(5)`,
-to show 5 items per page. Then, `$ships->setCurrentPage(1)` to show page 1. It's
-important to note that `setCurrentPage()` *must* be called after `setMaxPerPage()` or
-you'll have funky results.
+Back in `MainController`, `$ship` is now a `Pagerfanta` object. To use it,
+we need to tell it 2 things: how many ships we want on each page - `$ships->setMaxPerPage(5)` -
+and which page the user is currently on: use `$ships->setCurrentPage(1)` for now.
+Oh and make sure to call `setCurrentPage()` *before* `setMaxPerPage()` or
+weird time travel stuff will happen.
 
-Back to our app... refresh... and take a look, we're now only showing 5 items - the first page.
+Move over... refresh... and look! We're only showing 5 items: the first page.
 
-Back in the `homepage()` controller change to `setCurrentPage(2)` and refresh the app.
-We now see a different set of starships - the second page. Take a quick look at the query
-profiler. We see several new queries. These are added by Pagerfanta and Doctrine to create
-an optimized pagination query.
+Back over change to `setCurrentPage(2)` and refresh again.
+Still 5 ships, but *different* ships: the second page. Let's peeks at the query
+There are multiple! One to count the total number of results and another to fetch
+*only* the ones for this page. Pretty darn cool.
 
-Instead of hardcoding the current page number, we'll get it from a `page` query parameter in the URL.
-So `?page=1` shows the first page, `?page=2` shows the second, and so on.
+Instead of hardcoding the page to 1 or 2 - a temporary and lame solution - let's
+read it dynamically from the URL, like with`?page=1` or `?page=2`.
 
-In our `homepage()` controller, inject `Request $request` - the one from `HttpFoundation`
-and change the `setCurrentPage()` argument to `$request->query->getInt('page', 1)`.
-This will default to 1 if this query parameter is not set.
+To do that, autowire `Request $request` - the one from `HttpFoundation` -
+and change the `setCurrentPage()` argument to `$request->query->getInt('page', 1)`
+to read that value and default to 1 if it's missing.
 
-Back in our app and refresh - this is page 1 because no query parameter is set. Add `?page=2`
-to the URL... now we're on page 2.
+Head back over and refresh. This is page 1 because there is no `page` param. Add `?page=2`
+to the URL... we're on page 2!
 
-It'd be nice to show the user some information about the current page: the total number of items, total
-pages and what page we're currently on. Pagerfanta makes this easy!
+Ok, what else would be cool? How about showing the total number of ships,
+total number of pages, and the current page number?
 
-In the `homepage()` controller, Cmd + Click `homepage.html.twig` to open that up.
+Back in the controller, Cmd + Click `homepage.html.twig` to open that up.
 
-We'll put this information right below this `<h1>` so I'll change its bottom margin and add
-a new `<div>` (with a bit of styling). Inside, write `{{ ships.nbResults }}` to show the
-*total number of results*, and in brackets: `Page {{ ships.currentPage }}` to show the current
-page number and then `of {{ ships.nbPages }}` to show the total number of pages.
+Put this info below the `<h1>`. I'll change the bottom margin and add
+a new `<div>` (with a bit of styling). Inside, write `{{ ships.nbResults }}` ships.
+Then: Page `{{ ships.currentPage }}` of `{{ ships.nbPages }}`.
 
-Spin back to our app and refresh. Perfect! We have 14 total results, and we're on page 1 of 3.
-Because of the randomness of the fixture data, you will see different numbers here.
+Spin back over and refresh. Perfect! We have 14 total incomplete ships, and we're on page 1 of 3.
+Your numbers may vary depending on how many of our 20 ships are randomly set to
+an incomplete status.
 
-We need users to be able to navigate between pages, so we'll create a little "previous/next" widget
-below the results.
+Ok! What's missing? How about some links to navigate between pages?
+Below the list, I'm going to paste in some code. First,
+`if ships.haveToPaginate`: no links needed if there is only one page. Then,
+`if ships.hasPreviousPage`, lets add a link to the previous page if one exists,
+there wouldn't be a previous page if we're on page 1. Inside, generate a URL
+to this page: `app_homepage`. But pass a parameter: `page` set to `ships.previousPage`.
+Since `page` isn't defined in the route, it'll be added as a `page`
+query parameter. That's exactly what we want! Say `Previous`, then repeat for
+the `Next` link: if `ships.hasNextPage` and `ships.getNextPage`.
 
-In `homepage.html.twig`, below where we list the starships, I'm going to paste in some code. First,
-`if ships.haveToPaginate`: we only want to show this widget if pagination is required.
-`if ships.hasPreviousPage`: we only show the previous link if there is a previous page to go to.
-Inside, we're generating a url to our `app_homepage` route. Now, we're injecting the `ships.getPreviousPage`
-as a `page` route parameter. Since `page` isn't defined in the route, it will be added as a `page`
-query parameter which is exactly what we want! Inside the link, the text: `Previous`. The exact same thing
-is done for the `Next` link but using `ships.hasNextPage` and `ships.getNextPage`.
+Refresh, scroll down, and sweet! We see a `Next` link! Click it... and now we're on page *2* of 3,
+and the URL has `?page=2`. Below, our widget has both `Previous` and `Next` links. Click `Next` again...
+page 3 of 3, then `Previous`, back to page 2 of 3. Pagination perfection!
 
-Refresh our app, scroll down, and sweet! We see a `Next` link! Click it... and now we're on page *2* of 3.
-The URL shows `?page=2` also. Below, our widget has both `Previous` and `Next` links. Click `Next` again...
-page 3 of 3. Click `Previous`, back to page 2 of 3 - perfect!
+We built these links by hand, which gives us unlimited power to customize. But Pagerfanta
+*does* that can generate this for us. If you want to see how, check out the Pagerfanta docs.
+The downside is that customizing the HTML is a bit more difficult.
 
-Navigation done!
-
-We built this simple widget manually but Pagerfanta does have Twig integration and templates for more
-complex pagination widgets - like listing all page numbers as links, so you can jump to any page quickly.
-
-Next, we'll add more fields to our Starship entity and look at a migration trick to ensure
-existing data is kept valid!
+Next, let's add more fields to our `Starship` entity. The best part? Seeing
+how easy it is to add that column to the database. Let's do it!
