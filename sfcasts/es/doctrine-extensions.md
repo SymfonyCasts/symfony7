@@ -1,6 +1,6 @@
 # Auto Slug y Timestamps con extensiones Doctrine
 
-En el último capítulo, añadimos tres nuevos campos a nuestra entidad `Starship`: `slug`,`updatedAt`, y `createdAt`, pero ya no podemos cargar nuestras fijaciones. Esto se debe a que nuestro `StarshipFactory` no establece estos nuevos campos. Podríamos añadirlos pero... Estos campos requieren cierta lógica: `slug` debe generarse a partir de `name`. `updatedAt`: se establece en la hora actual cuando cambia la entidad y `createdAt`: se establece en la hora actual cuando se crea la entidad.
+En el último capítulo, añadimos tres nuevos campos a nuestra entidad `Starship`: `slug`,`updatedAt`, y `createdAt` pero ya no podemos cargar nuestras fijaciones. Esto se debe a que nuestro `StarshipFactory` no establece estos nuevos campos. Podríamos añadirlos pero... Estos campos requieren cierta lógica: `slug` debe generarse a partir de `name`. `updatedAt`: se establece en la hora actual cuando cambia la entidad y `createdAt`: se establece en la hora actual cuando se crea la entidad.
 
 ¡Existe un paquete que puede manejar esta lógica: `DoctrineExtensions`! En tu terminal, instala el siguiente bundle:
 
