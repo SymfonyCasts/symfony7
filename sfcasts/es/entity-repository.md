@@ -62,7 +62,7 @@ Vuelve a girar. Deberíamos ver desaparecer esta nave completada. ¡Lo hacemos! 
 
 De vuelta en el controlador, no me gusta esta lógica de `$myShip`. Y no es porque estemos falseando la idea de "mi nave" al coger sólo la primera. Es porque, sea cual sea la lógica, ésta debería estar en el repositorio para que podamos encontrar "mi nave" siempre que la necesitemos.
 
-En `StarshipRepository`, añade un nuevo método `public function findMyShip()` que devuelva un objeto `Starship`. Podemos imaginar que este método tomaría un usuario o algo para encontrar su nave, pero por ahora, sólo devuelve `$this->findAll()[0]`para obtener la primera nave de la tabla:
+En `StarshipRepository`, añade un nuevo método `public function findMyShip()` que devuelva un objeto `Starship`. Podemos imaginar que este método tomaría un usuario o algo así para encontrar su nave, pero por ahora, sólo devuelve `$this->findAll()[0]`para obtener la primera nave de la tabla:
 
 [[[ code('011d4e7947') ]]]
 

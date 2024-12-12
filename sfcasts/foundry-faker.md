@@ -35,9 +35,10 @@ This lists all entities that don't yet have a factory. Choose `Starship` and...
 success! It created a new `StarshipFactory` class. Go check that out:
 `src/Factory/StarshipFactory.php`.
 
+This class will be really good at creating `Starship` objects - handy
+in case the Borg come back.
 First, look at this `class()` method. This tells Foundry which entity class this factory
-is helps with. This class will be really good at creating `Starship` objects - handy
-in case the Borg come back. The `defaults()` is where define default values
+helps with.  The `defaults()` is where we define default values
 to use when creating starships. I recommend adding defaults for all required fields:
 it'll make life easier.
 
@@ -47,16 +48,16 @@ Hey! Check out these `self::faker()` calls! This is how we generate random data.
 Since time travel *still* hasn't been invented,
 replace `self::faker()->dateTime()` with `self::faker()->dateTimeBetween('-1 year', 'now')`.
 
-Faker's `text()` method *will* give us random text, but not necessarily the interesting
+Faker's `text()` method *will* give us random text, but not necessarily interesting
 text. Instead of serving under Captain "apple pie breakfast",
 in the `tutorial/` directory, copy these constants and paste them at the top of the factory class.
-Then use `randomElement(self::CAPTAINS)`, For
-`class`, use `randomElement(self::CLASSES)` and for `name`, use `randomElement(self::SHIP_NAMES)`.
+Then, for `captain` use `randomElement(self::CAPTAINS)`. For
+`class`, `randomElement(self::CLASSES)` and for `name`, `randomElement(self::SHIP_NAMES)`.
 
 Time to use this factory! In `src/DataFixtures/AppFixtures.php`, in `load()`,
 write `StarshipFactory::createOne()`. Pass this an array of property values for the
 first ship: copy these
-from the existing code. I'll paste them the other two... and remove the old code.
+from the existing code. I'll paste the other two... and remove the old code.
 
 Bonus! Remove the `persist()` and `flush()` calls: Foundry handles that for us!
 
@@ -83,6 +84,6 @@ symfony console doctrine:fixtures:load
 And over in the app, refresh and... check it out! A whole fleet of ships here
 now, and yep, they all have random data!
 
-Now that the fake dats is looking more real, it makes me wonder: what if our app
+Now that the fake data is looking more real, it makes me wonder: what if our app
 was running on a huge star base with hundreds or thousands of ships?
 This would be a *long* page. Next, we'll *paginate* these results into smaller chunks.
