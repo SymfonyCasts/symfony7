@@ -34,13 +34,13 @@ two classes.
 Back in `MainController`, `$ship` is now a `Pagerfanta` object. To use it,
 we need to tell it 2 things: how many ships we want on each page - `$ships->setMaxPerPage(5)` -
 and which page the user is currently on: use `$ships->setCurrentPage(1)` for now.
-Oh and make sure to call `setCurrentPage()` *before* `setMaxPerPage()` or
+Oh and make sure to call `setCurrentPage()` *after* `setMaxPerPage()` or
 weird time travel stuff will happen.
 
 Move over... refresh... and look! We're only showing 5 items: the first page.
 
 Back over change to `setCurrentPage(2)` and refresh again.
-Still 5 ships, but *different* ships: the second page. Let's peeks at the query
+Still 5 ships, but *different* ships: the second page. Let's peek at the query.
 There are multiple! One to count the total number of results and another to fetch
 *only* the ones for this page. Pretty darn cool.
 
@@ -52,7 +52,7 @@ and change the `setCurrentPage()` argument to `$request->query->getInt('page', 1
 to read that value and default to 1 if it's missing.
 
 Head back over and refresh. This is page 1 because there is no `page` param. Add `?page=2`
-to the URL... we're on page 2!
+to the URL and... we're on page 2!
 
 Ok, what else would be cool? How about showing the total number of ships,
 total number of pages, and the current page number?
@@ -60,11 +60,11 @@ total number of pages, and the current page number?
 Back in the controller, Cmd + Click `homepage.html.twig` to open that up.
 
 Put this info below the `<h1>`. I'll change the bottom margin and add
-a new `<div>` (with a bit of styling). Inside, write `{{ ships.nbResults }}` ships.
+a new `<div>` (with a bit of styling). Inside, write `{{ ships.nbResults }}`.
 Then: Page `{{ ships.currentPage }}` of `{{ ships.nbPages }}`.
 
 Spin back over and refresh. Perfect! We have 14 total incomplete ships, and we're on page 1 of 3.
-Your numbers may vary depending on how many of our 20 ships are randomly set to
+Your numbers may vary depending on how many of your 20 ships are randomly set to
 an incomplete status.
 
 Ok! What's missing? How about some links to navigate between pages?
@@ -72,9 +72,9 @@ Below the list, I'm going to paste in some code. First,
 `if ships.haveToPaginate`: no links needed if there is only one page. Then,
 `if ships.hasPreviousPage`, lets add a link to the previous page if one exists,
 there wouldn't be a previous page if we're on page 1. Inside, generate a URL
-to this page: `app_homepage`. But pass a parameter: `page` set to `ships.previousPage`.
+to this page: `app_homepage`. But pass a parameter: `page` set to `ships.getPreviousPage`.
 Since `page` isn't defined in the route, it'll be added as a `page`
-query parameter. That's exactly what we want! Say `Previous`, then repeat for
+query parameter. That's exactly what we want! Write `Previous`, then repeat for
 the `Next` link: if `ships.hasNextPage` and `ships.getNextPage`.
 
 Refresh, scroll down, and sweet! We see a `Next` link! Click it... and now we're on page *2* of 3,
