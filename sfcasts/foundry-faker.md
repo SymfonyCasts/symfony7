@@ -56,8 +56,10 @@ Then, for `captain` use `randomElement(self::CAPTAINS)`. For
 
 Time to use this factory! In `src/DataFixtures/AppFixtures.php`, in `load()`,
 write `StarshipFactory::createOne()`. Pass this an array of property values for the
-first ship: copy these
-from the existing code. I'll paste the other two... and remove the old code.
+first ship: copy these from the existing code: `name`, `class`, `captain`, `status`
+and `arrivedAt`.
+
+I'll paste the other two... and remove the old code.
 
 Bonus! Remove the `persist()` and `flush()` calls: Foundry handles that for us!
 
