@@ -1,4 +1,4 @@
-# Adding Slug and Timestamp Fields
+# Starship Upgrade: Adding Slug and Timestamp Fields
 
 New requirements have come down from the admirals at Starfleet HQ.
 Instead of seeing the `id` in the URL, like `/starship/1`, they want to see a
@@ -15,7 +15,7 @@ symfony console make:entity Starship
 Instead of creating a new entity, this time we'll add fields to an existing entity.
 Add `slug`, type `string`, length `255`. "Should it be nullable?" - no, but choose
 `yes` for now. Let's add 2 more handy fields: `updatedAt`, `datetime_immutable`, nullable?
-yes `temporarily`, and `createdAt`, `datetime_immutable`, nullable?
+yes, *temporarily*, and `createdAt`, `datetime_immutable`, nullable? yes.
 
 Hit `Enter` to exit the command. Before creating the migration, go check the
 `Starship` entity: `src/Entity/Starship.php`. Cool! And we can even remove
@@ -58,7 +58,7 @@ Open up `Starship`. Above `$slug`, remove `nullable: true`. This now means
 `nullable: false`: that's the default value. In other words, this tells Doctrine
 the column should be required in the database.
 
-Als set `unique: true` to make this a unique column.
+Also set `unique: true` to make this a unique column.
 For `$updatedAt` and `$createdAt`, also remove `nullable: true`.
 
 Once again, we've made changes to our entity that aren't reflected in the database.
@@ -82,7 +82,7 @@ Error! These fields can't be set to `NOT NULL` because they contain `null` value
 Doh! This is a tricky situation where we need to do things in 3 steps: add the new columns,
 give them each a value, and *then* make them `NOT NULL`.
 
-Open the migration again. Most of the time, Doctrine does all the work for us.
+Open the last migration again. Most of the time, Doctrine does all the work for us.
 But we *can* add our own SQL to a migration.
 
 In the `up()` method, before the generated SQL, write
@@ -93,7 +93,7 @@ Because `id` is unique and not null - exactly what we need for the `slug`. We're
 `updated_at` and `created_at` equal to `arrived_at`. We know `arrived_at` is also a timestamp
 and not null.
 
-Back in the terminal, run the migration again:
+Back in the terminal, run the migrations again:
 
 ```terminal
 symfony console doctrine:migrations:migrate
@@ -115,6 +115,6 @@ symfony console doctrine:fixtures:load
 
 Explosion! There's nothing in our fixtures that sets these three required fields.
 
-We could update our `StarshipFactory` to set a default values for these fields... but
+We could update our `StarshipFactory` to set default values for these fields... but
 I want to show a different way: a "doctrine extension" package that can set these
 automatically. It's the best, and it's next!
