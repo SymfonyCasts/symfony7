@@ -32,7 +32,9 @@ Esta clase será muy buena para crear objetos `Starship`, muy útil en caso de q
 
 El método `text()` de Faker nos dará un texto aleatorio, pero no necesariamente interesante. En lugar de servir bajo el capitán "desayuno de tarta de manzana", en el directorio `tutorial/`, copia estas constantes y pégalas en la parte superior de la clase fábrica. Luego, para `captain` utiliza `randomElement(self::CAPTAINS)`. Para`class`, `randomElement(self::CLASSES)` y para `name`, `randomElement(self::SHIP_NAMES)`.
 
-¡Es hora de utilizar esta fábrica! En `src/DataFixtures/AppFixtures.php`, en `load()`, escribe `StarshipFactory::createOne()`. Pásale una matriz de valores de propiedad para la primera nave: cópialos del código existente. Pega los otros dos... y elimina el código antiguo.
+¡Es hora de utilizar esta fábrica! En `src/DataFixtures/AppFixtures.php`, en `load()`, escribe `StarshipFactory::createOne()`. Pásale una matriz de valores de propiedad para la primera nave: copia estos del código existente: `name`, `class`, `captain`, `status`y `arrivedAt`.
+
+Y elimina el código antiguo.
 
 ¡Bonificación! Elimina las llamadas a `persist()` y `flush()`: ¡Foundry se encarga de eso por nosotros!
 
