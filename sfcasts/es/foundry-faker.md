@@ -2,7 +2,9 @@
 
 Estamos utilizando `src/DataFixtures/AppFixtures.php` para crear datos de fixture falsos. Esto funciona bien. Pero, ¿dónde está lo guay y divertido? ¿Realmente queremos escribir código manual para añadir docenas o más entidades? Puntos para ti si has respondido: ¡diablos, no!
 
-Para que esto pase de tedioso a terrorífico, busca tu terminal y ejecuta:
+Para que esto pase de tedioso a terrorífico, busca tu terminal y ejecuta
+
+## Instalar Foundry y Faker
 
 ```terminal
 composer require --dev foundry
@@ -16,9 +18,11 @@ Ejecuta
 git status
 ```
 
-para ver lo que hicieron las recetas: habilitó un bundle y añadió un archivo de configuración. Esa configuración funciona bien nada más sacarla de la caja, así que no hace falta mirarla.
+para ver lo que hicieron las recetas: habilitó un bundle y añadió un archivo de configuración. Esa configuración funciona bien desde el principio, así que no hace falta mirarla.
 
-Con Foundry, cada entidad puede tener una clase de fábrica. Para ponerlas en marcha, ejecuta:
+## Crear una fábrica de naves estelares
+
+Con Foundry, cada entidad puede tener una clase fábrica. Para ponerlas en marcha, ejecuta:
 
 ```terminal
 symfony console make:factory
@@ -28,15 +32,29 @@ Esto lista todas las entidades que aún no tienen una fábrica. Elige `Starship`
 
 Esta clase será muy buena para crear objetos `Starship`, muy útil en caso de que vuelvan los Borg. Primero, mira este método `class()`. Indica a Foundry con qué clase de entidad ayuda esta fábrica.  En `defaults()` es donde definimos los valores por defecto que utilizaremos al crear naves estelares. Te recomiendo que añadas valores por defecto para todos los campos obligatorios: te hará la vida más fácil.
 
-¡Echa un vistazo a estas llamadas a `self::faker()`! Así es como generamos datos aleatorios. Para`name`, `captain` y `class`, es texto aleatorio, `status`, es un`StarshipStatusEnum` aleatorio y `arrivedAt` por defecto es cualquier fecha aleatoria Dado que aún no se ha inventado el viaje en el tiempo, sustituye `self::faker()->dateTime()` por `self::faker()->dateTimeBetween('-1 year', 'now')`.
+¡Echa un vistazo a estas llamadas a `self::faker()`! Así es como generamos datos aleatorios. Para`name`, `captain` y `class`, es texto aleatorio, `status`, es un`StarshipStatusEnum` aleatorio y `arrivedAt` por defecto es cualquier fecha aleatoria Dado que aún no se ha inventado el viaje en el tiempo, sustituye `self::faker()->dateTime()` por `self::faker()->dateTimeBetween('-1 year', 'now')`:
 
-El método `text()` de Faker nos dará un texto aleatorio, pero no necesariamente interesante. En lugar de servir bajo el capitán "desayuno de tarta de manzana", en el directorio `tutorial/`, copia estas constantes y pégalas en la parte superior de la clase fábrica. Luego, para `captain` utiliza `randomElement(self::CAPTAINS)`. Para`class`, `randomElement(self::CLASSES)` y para `name`, `randomElement(self::SHIP_NAMES)`.
+[[[ code('122c66164e') ]]]
 
-¡Es hora de utilizar esta fábrica! En `src/DataFixtures/AppFixtures.php`, en `load()`, escribe `StarshipFactory::createOne()`. Pásale una matriz de valores de propiedad para la primera nave: copia estos del código existente: `name`, `class`, `captain`, `status`y `arrivedAt`.
+El método `text()` de Faker nos dará un texto aleatorio, pero no necesariamente interesante. En lugar de servir bajo el Capitán "desayuno de tarta de manzana", en el directorio `tutorial/`, copia estas constantes y pégalas en la parte superior de la clase fábrica:
 
-Y elimina el código antiguo.
+[[[ code('6af5b85bd7') ]]]
 
-¡Bonificación! Elimina las llamadas a `persist()` y `flush()`: ¡Foundry se encarga de eso por nosotros!
+Entonces, para `captain` utiliza `randomElement(self::CAPTAINS)`. Para`class`, `randomElement(self::CLASSES)` y para `name`, `randomElement(self::SHIP_NAMES)`:
+
+[[[ code('5c3b33fb68') ]]]
+
+## Utilizar la fábrica de naves estelares
+
+¡Es hora de utilizar esta fábrica! En `src/DataFixtures/AppFixtures.php`, en `load()`, escribe `StarshipFactory::createOne()`. Pásale una matriz de valores de propiedades para la primera nave: copia estos del código existente: `name`, `class`, `captain`, `status`y `arrivedAt`:
+
+[[[ code('8b9b282e8b') ]]]
+
+Y elimina el código antiguo:
+
+[[[ code('b782a99432') ]]]
+
+¡Bonus! Elimina las llamadas a `persist()` y `flush()`: ¡Foundry se encarga de eso por nosotros!
 
 ¡Veamos qué hace esto! Recarga los accesorios:
 
@@ -44,9 +62,13 @@ Y elimina el código antiguo.
 symfony console doctrine:fixtures:load
 ```
 
-Elige `yes` y... ¡éxito! Vuelve atrás, actualiza y... parece lo mismo. ¡Buena señal! Ahora, ¡creemos una flota de naves!
+Elige `yes` y... ¡éxito! Vuelve atrás, actualiza y... parece lo mismo. ¡Buena señal! Ahora, ¡vamos a crear una flota de naves!
 
-Para las tres primeras, pasamos una matriz de valores... pero no hace falta que lo hagamos. Si no pasamos un valor, utilizará el método `StarshipFactory::defaults()`. Fíjate en lo peligroso que nos resulta: ¿acaba de aparecer un cubo Borg? Prepara 20 naves nuevas con `StarshipFactory::createMany(20)`.
+## Crear muchas naves estelares
+
+Para las tres primeras, pasamos una matriz de valores... pero no necesitamos hacerlo. Si no pasamos un valor, utilizará el método `StarshipFactory::defaults()`. Fíjate en lo peligroso que nos hace esto: ¿acaba de aparecer un cubo Borg? Prepara 20 naves nuevas con `StarshipFactory::createMany(20)`:
+
+[[[ code('042fd4e2ab') ]]]
 
 De vuelta en el terminal, carga de nuevo los accesorios:
 
