@@ -7,6 +7,8 @@ hell no!
 
 To take this from tedious to terrific, find your terminal and run:
 
+## Installing Foundry and Faker
+
 ```terminal
 composer require --dev foundry
 ```
@@ -23,6 +25,8 @@ git status
 
 to see what the recipes did: it enabled a bundle and added a config file.
 That config works well out of the box, so no need to look at it.
+
+## Creating a Starship Factory
 
 With Foundry, every entity can have a *factory* class.
 To get these going run:
@@ -46,20 +50,33 @@ Hey! Check out these `self::faker()` calls! This is how we generate random data.
 `name`, `captain` and `class`, it's random text, `status`, is a random
 `StarshipStatusEnum` and `arrivedAt` defaults to any random date
 Since time travel *still* hasn't been invented,
-replace `self::faker()->dateTime()` with `self::faker()->dateTimeBetween('-1 year', 'now')`.
+replace `self::faker()->dateTime()` with `self::faker()->dateTimeBetween('-1 year', 'now')`:
+
+[[[ code('122c66164e') ]]]
 
 Faker's `text()` method *will* give us random text, but not necessarily interesting
 text. Instead of serving under Captain "apple pie breakfast",
-in the `tutorial/` directory, copy these constants and paste them at the top of the factory class.
+in the `tutorial/` directory, copy these constants and paste them at the top of the factory class:
+
+[[[ code('6af5b85bd7') ]]]
+
 Then, for `captain` use `randomElement(self::CAPTAINS)`. For
-`class`, `randomElement(self::CLASSES)` and for `name`, `randomElement(self::SHIP_NAMES)`.
+`class`, `randomElement(self::CLASSES)` and for `name`, `randomElement(self::SHIP_NAMES)`:
+
+[[[ code('5c3b33fb68') ]]]
+
+## Using the Starship Factory
 
 Time to use this factory! In `src/DataFixtures/AppFixtures.php`, in `load()`,
 write `StarshipFactory::createOne()`. Pass this an array of property values for the
 first ship: copy these from the existing code: `name`, `class`, `captain`, `status`
-and `arrivedAt`.
+and `arrivedAt`:
 
-I'll paste the other two... and remove the old code.
+[[[ code('8b9b282e8b') ]]]
+
+I'll paste the other two... and remove the old code:
+
+[[[ code('b782a99432') ]]]
 
 Bonus! Remove the `persist()` and `flush()` calls: Foundry handles that for us!
 
@@ -72,10 +89,14 @@ symfony console doctrine:fixtures:load
 Choose `yes` and... success! Back over, refresh and... it looks the same. That's
 a good sign! Now, let's create a fleet of ships!
 
+## Creating Many Starships
+
 For the first three, we passed an array of values... but we didn't need to do that.
 If we *don't* pass a value, it'll use the `StarshipFactory::defaults()` method.
 Watch how dangerous this makes us: a Borg cube just showed up? Whip up 20 new ships
-with `StarshipFactory::createMany(20)`.
+with `StarshipFactory::createMany(20)`:
+
+[[[ code('042fd4e2ab') ]]]
 
 Back in the terminal, load the fixtures again:
 
