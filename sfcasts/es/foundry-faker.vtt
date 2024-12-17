@@ -1,0 +1,222 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:06.276 align:middle
+Estamos utilizando src/DataFixtures/AppFixtures.php
+para crear datos de fijación falsos.
+
+00:00:06.706 --> 00:00:07.566 align:middle
+Esto funciona bien.
+
+00:00:07.796 --> 00:00:09.066 align:middle
+Pero, ¿dónde está lo guay y divertido?
+
+00:00:09.456 --> 00:00:13.556 align:middle
+¿Realmente queremos escribir código manual
+para añadir docenas o más entidades?
+
+00:00:13.996 --> 00:00:15.996 align:middle
+Puntos para ti si has
+respondido: ¡diablos, no!
+
+00:00:16.546 --> 00:00:21.666 align:middle
+Para que esto pase de tedioso a terrorífico,
+busca tu terminal y ejecuta: composer require
+
+00:00:21.926 --> 00:00:28.316 align:middle
+--dev foundry Desplázate hacia arriba
+para ver lo que se ha instalado.
+
+00:00:29.026 --> 00:00:34.296 align:middle
+Los paquetes importantes son zenstruck/foundry
+-como forma de crear muchas entidades rápidamente-
+
+00:00:34.526 --> 00:00:39.826 align:middle
+y fakerphp/faker -una biblioteca para crear datos
+falsos de forma que no tengamos que depender
+
+00:00:39.826 --> 00:00:42.696 align:middle
+de lorem ipsum y de nuestra
+propia falta de creatividad-.
+
+00:00:43.296 --> 00:00:49.166 align:middle
+Ejecuta git status para ver lo que hicieron las recetas:
+habilitó un bundle y añadió un archivo de configuración.
+
+00:00:49.686 --> 00:00:52.846 align:middle
+Esa configuración funciona bien desde el
+principio, así que no hace falta mirarla.
+
+00:00:53.446 --> 00:00:57.246 align:middle
+Con Foundry, cada entidad puede
+tener una clase de fábrica.
+
+00:00:57.776 --> 00:01:04.136 align:middle
+Para ponerlas en marcha, ejecuta: symfony console
+make:factory Esto lista todas las entidades
+
+00:01:04.266 --> 00:01:05.836 align:middle
+que aún no tienen una fábrica.
+
+00:01:06.306 --> 00:01:07.646 align:middle
+Elige Starship y...
+
+00:01:07.646 --> 00:01:11.806 align:middle
+¡éxito! Se ha creado una
+nueva clase StarshipFactory.
+
+00:01:12.096 --> 00:01:17.166 align:middle
+Ve a verla: src/Factory/StarshipFactory.php.
+
+00:01:17.166 --> 00:01:20.146 align:middle
+Esta clase será muy buena
+para crear objetos Starship -
+
+00:01:20.476 --> 00:01:22.576 align:middle
+útil en caso de que vuelvan los Borg.
+
+00:01:22.576 --> 00:01:25.076 align:middle
+Primero, mira este método class().
+
+00:01:25.316 --> 00:01:28.696 align:middle
+Indica a Foundry con qué clase
+de entidad ayuda esta fábrica.
+
+00:01:29.476 --> 00:01:34.206 align:middle
+En defaults() es donde definimos los valores por
+defecto que utilizaremos al crear naves estelares.
+
+00:01:34.816 --> 00:01:39.306 align:middle
+Te recomiendo que añadas valores por defecto para todos
+los campos obligatorios: te hará la vida más fácil.
+
+00:01:39.996 --> 00:01:42.566 align:middle
+¡Echa un vistazo a estas
+llamadas a self::faker()!
+
+00:01:42.896 --> 00:01:44.846 align:middle
+Así es como generamos datos aleatorios.
+
+00:01:44.966 --> 00:01:52.026 align:middle
+Para name, captain y class, es texto aleatorio,
+status, es una fecha aleatoria StarshipStatusEnum
+
+00:01:52.306 --> 00:01:58.266 align:middle
+y arrivedAt por defecto cualquier fecha aleatoria Dado
+que aún no se ha inventado el viaje en el tiempo,
+
+00:01:58.526 --> 00:02:06.856 align:middle
+sustituye self::faker()->dateTime() por
+self::faker()->dateTimeBetween('-1 año',
+
+00:02:07.086 --> 00:02:10.956 align:middle
+'ahora'): El método text() de
+Faker nos dará un texto aleatorio,
+
+00:02:11.016 --> 00:02:13.206 align:middle
+pero no necesariamente interesante.
+
+00:02:13.716 --> 00:02:18.266 align:middle
+En lugar de servir bajo el capitán "desayuno
+de tarta de manzana", en el directorio tutorial/
+
+00:02:18.536 --> 00:02:26.866 align:middle
+, copia estas constantes y pégalas en la
+parte superior de la clase fábrica: Entonces,
+
+00:02:26.866 --> 00:02:31.016 align:middle
+para captain utiliza
+randomElement(self::CAPTAINS).
+
+00:02:31.016 --> 00:02:36.436 align:middle
+Para class, randomElement(self::CLASSES)
+y para name,
+
+00:02:36.796 --> 00:02:41.676 align:middle
+randomElement(self::SHIP_NAMES):
+¡Es hora de utilizar esta fábrica!
+
+00:02:42.236 --> 00:02:49.736 align:middle
+En src/DataFixtures/AppFixtures.php, en
+load(), escribe StarshipFactory::createOne().
+
+00:02:50.416 --> 00:02:55.406 align:middle
+Pásale una matriz de valores de propiedades para
+la primera nave: copia esto del código existente:
+
+00:02:56.336 --> 00:03:13.066 align:middle
+name, class, captain, status y
+arrivedAt: pegaré los otros dos...
+
+00:03:13.166 --> 00:03:16.586 align:middle
+y eliminaré el código antiguo: ¡Bonus!
+
+00:03:16.756 --> 00:03:20.506 align:middle
+Elimina las llamadas a persist() y flush():
+¡Foundry se encarga de eso por nosotros!
+
+00:03:21.196 --> 00:03:22.306 align:middle
+¡Veamos qué hace esto!
+
+00:03:22.536 --> 00:03:29.006 align:middle
+Recarga los accesorios: symfony console
+doctrine:fixtures:load Elige yes y...
+
+00:03:29.006 --> 00:03:32.846 align:middle
+¡éxito! Vuelve atrás, actualiza y...
+
+00:03:33.596 --> 00:03:34.466 align:middle
+se ve igual.
+
+00:03:34.856 --> 00:03:35.706 align:middle
+¡Buena señal!
+
+00:03:36.256 --> 00:03:38.666 align:middle
+Ahora, ¡vamos a crear una flota de naves!
+
+00:03:38.666 --> 00:03:41.926 align:middle
+Para las tres primeras, pasamos
+una matriz de valores...
+
+00:03:42.126 --> 00:03:43.606 align:middle
+pero no hacía falta.
+
+00:03:43.986 --> 00:03:48.646 align:middle
+Si no pasamos un valor, utilizará el
+método StarshipFactory::defaults().
+
+00:03:49.226 --> 00:03:53.006 align:middle
+Fíjate en lo peligrosos que nos hace
+esto: ¿acaba de aparecer un cubo Borg?
+
+00:03:53.406 --> 00:03:57.926 align:middle
+Prepara 20 naves nuevas con
+StarshipFactory::createMany(20):
+
+00:03:58.756 --> 00:04:04.276 align:middle
+De vuelta en el terminal, carga de nuevo los
+accesorios: symfony console doctrine:fixtures:load
+
+00:04:04.866 --> 00:04:07.076 align:middle
+Y en la aplicación, actualiza y...
+
+00:04:07.576 --> 00:04:08.096 align:middle
+¡compruébalo!
+
+00:04:08.096 --> 00:04:12.506 align:middle
+Ahora hay toda una flota de naves, y
+sí, ¡todas tienen datos aleatorios!
+
+00:04:12.506 --> 00:04:18.196 align:middle
+Ahora que los datos falsos parecen más reales, me
+pregunto: ¿y si nuestra aplicación se ejecutara
+
+00:04:18.196 --> 00:04:21.836 align:middle
+en una enorme base estelar
+con cientos o miles de naves?
+
+00:04:22.226 --> 00:04:24.156 align:middle
+Esto sería una página muy larga.
+
+00:04:24.736 --> 00:04:27.946 align:middle
+A continuación, paginaremos estos
+resultados en trozos más pequeños.

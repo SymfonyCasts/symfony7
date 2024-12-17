@@ -2,7 +2,7 @@
 
 Estamos utilizando `src/DataFixtures/AppFixtures.php` para crear datos de fixture falsos. Esto funciona bien. Pero, ¿dónde está lo guay y divertido? ¿Realmente queremos escribir código manual para añadir docenas o más entidades? Puntos para ti si has respondido: ¡diablos, no!
 
-Para que esto pase de tedioso a terrorífico, busca tu terminal y ejecuta
+Para que esto pase de tedioso a terrorífico, busca tu terminal y ejecuta:
 
 ## Instalar Foundry y Faker
 
