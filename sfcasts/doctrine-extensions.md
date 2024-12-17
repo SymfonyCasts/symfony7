@@ -34,14 +34,14 @@ Cool! For this bundle, we *do* need to edit this config to enable the extensions
 where each extension is like a superpower for your entities.
 
 Open `config/packages/stof_doctrine_extensions.yaml`. Below `default_local`
-add a new key: `orm:`, then `default:` and inside that, enable 2 superpowers / extensions:
+add a new key: `orm:`, then `default:` and inside that, enable 2 superpowers, I mean extensions:
 `timestampable: true` and `sluggable: true`.
 
 These are now activated in general, but we need to a bit more config to bring them
-to life for the `Starship` entity.
+to life for the `Starship` entity. Open that up again.
 
 Above the `$slug` property, add a new attribute: `#[Slug]`, importing the class from
-`Gedmo\Mapping\Annotation`. Inside, add a `fields:` set it to an array containing
+`Gedmo\Mapping\Annotation`. Inside, add `fields:` set it to an array containing
 `name`. This tells the extension to generate the slug from the `$name`
 property when the entity is first persisted.
 
@@ -71,6 +71,6 @@ like `Lunar Marauder` here, that have the *same name*. The slug extension is sma
 to detect this, and automatically add a numeric suffix (`-1`, `-2`, etc.) to keep them
 unique. Smart!
 
-Now that we have a unique, human-readable slug for our starships, let's use *it8 instead
+Now that we have a unique, human-readable slug for our starships, let's use *it* instead
 of this ugly `id` in our URLs. We'll also use something called *Controller
 Value Resolvers* to make our controllers high-tech! That's next! 

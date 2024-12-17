@@ -67,7 +67,7 @@ Back to the app and refresh. It's working again, red alert cancelled!
 
 Try putting random text in for the slug and... 404! Perfect!
 
-Now are ship URLs are pretty, human-readable, and SEO-friendly!
+Now our ship URLs are pretty, human-readable, and SEO-friendly!
 
 Flying through space is dangerous business. Sometimes starships experience
 "rapid unscheduled disassemblies"... or in other words, they explode. We need
