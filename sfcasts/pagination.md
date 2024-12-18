@@ -48,7 +48,7 @@ Instead of hardcoding the page to 1 or 2 - a temporary and lame solution - let's
 read it dynamically from the URL, like with`?page=1` or `?page=2`.
 
 To do that, autowire `Request $request` - the one from `HttpFoundation` -
-and change the `setCurrentPage()` argument to `$request->query->getInt('page', 1)`
+and change the `setCurrentPage()` argument to `$request->query->get('page', 1)`
 to read that value and default to 1 if it's missing.
 
 Head back over and refresh. This is page 1 because there is no `page` param. Add `?page=2`
@@ -74,7 +74,7 @@ Below the list, I'm going to paste in some code. First,
 there wouldn't be a previous page if we're on page 1. Inside, generate a URL
 to this page: `app_homepage`. But pass a parameter: `page` set to `ships.getPreviousPage`.
 Since `page` isn't defined in the route, it'll be added as a `page`
-query parameter. That's exactly what we want! Write `Previous`, then repeat for
+query parameter. That's exactly what we want! Repeat for
 the `Next` link: if `ships.hasNextPage` and `ships.getNextPage`.
 
 Refresh, scroll down, and sweet! We see a `Next` link! Click it... and now we're on page *2* of 3,
