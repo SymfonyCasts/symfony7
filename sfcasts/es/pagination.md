@@ -1,51 +1,47 @@
 # Paginación
 
-En el último capítulo, añadimos más naves estelares a esta lista. Sigue siendo manejable, pero si tuviéramos miles de ellas, tendríamos problemas de rendimiento. Necesitamos paginar estos resultados para mostrar sólo unos pocos cada vez, o por página.
+Foundry nos ayudó a añadir 20 naves. Eso hace que nuestra aplicación parezca más realista. Pero en producción, podríamos tener miles de naves estelares. Esta página sería gigantesca e inutilizable. Probablemente también tardaría mucho en cargarse, ¡tiempo durante el cual es probable que nos asimilen!
 
-Para ello, utilizaremos una biblioteca llamada Pagerfanta, ¡qué nombre más chulo! Es una biblioteca de paginación genérica, pero tiene una gran integración con Doctrine Instala los dos paquetes necesarios:
+¿La solución? Paginar los resultados: mostrar unos pocos cada vez, o por página.
+
+Para ello, utilizaremos una biblioteca llamada Pagerfanta -¡qué nombre más chulo! Es una biblioteca de paginación genérica, ¡pero tiene una gran integración con Doctrine! Añade los dos paquetes necesarios:
 
 ```terminal
 composer require babdev/pagerfanta-bundle pagerfanta/doctrine-orm-adapter
 ```
 
-Desplázate hacia arriba para ver lo que se ha instalado. `pagerfanta/doctrine-orm-adapter` es el pegamento entre Pagerfanta y Doctrine.
+Desplázate hacia arriba para ver lo que se instala. `pagerfanta/doctrine-orm-adapter` es el pegamento entre Pagerfanta y Doctrine.
 
-En nuestra página de inicio, estamos utilizando `findIncomplete()` desde nuestro `StarshipRepository` así que ábrelo y busca ese método. Vamos a cambiar el tipo de retorno a `Pagerfanta`que tiene alguna funcionalidad extra relacionada con la paginación. Este objeto también itera sobre nuestras entidades, así que podemos dejar el docblock anterior como está.
+En nuestra página de inicio, estamos utilizando `findIncomplete()` de `StarshipRepository`. Ábrelo y busca el método. Cambia el tipo de retorno a `Pagerfanta`: un objeto con superpoderes relacionados con la paginación. Pero puedes hacer un bucle sobre este objeto como si fuera un array, así que deja el docblock como está.
 
-Ahora bien, una cosa superimportante que hay que recordar siempre al paginar una consulta es tener un orden predecible. En nuestra consulta, añade `->orderBy('e.arrivedAt', 'DESC')` para ordenar por el campo `arrivedAt` en orden descendente.
+Ahora, una cosa superimportante que hay que recordar al paginar una consulta es tener un orden predecible. Añade `->orderBy('e.arrivedAt', 'DESC')`.
 
-En lugar de devolver, añade esto a una variable llamada `$query`. Necesitamos que Pagerfanta pueda manipular la consulta, así que elimina la llamada a `getResult()`.
+Pero en lugar de devolver, añade esto a una variable llamada `$query`, luego elimina`getResult()`: nuestro trabajo cambia de ejecutar la consulta a simplemente construirla. Pagerfanta se encargará de la ejecución real. Devuelve`new Pagerfanta(new QueryAdapter($query))` y asegúrate de importar estas dos clases.
 
-Ahora, `return new Pagerfanta(new QueryAdapter($query))` y asegúrate de importar estas dos clases.
+De vuelta a `MainController`, `$ship` es ahora un objeto `Pagerfanta`. Para utilizarlo, tenemos que decirle 2 cosas: cuántas naves queremos en cada página - `$ships->setMaxPerPage(5)` - y en qué página se encuentra actualmente el usuario: utiliza `$ships->setCurrentPage(1)` por ahora. Ah, y asegúrate de llamar a `setCurrentPage()` después de `setMaxPerPage()` o se producirán extraños viajes en el tiempo.
 
-En el método `homepage()` de `MainController`, necesitamos configurar la página actual y el número de elementos por página. Después de la variable `$ships`, añade `$ships->setMaxPerPage(5)`, para mostrar 5 elementos por página. Después, `$ships->setCurrentPage(1)` para mostrar la página 1. Es importante tener en cuenta que `setCurrentPage()` debe llamarse después de `setMaxPerPage()` o tendrás resultados extraños.
+Muévete... actualiza... ¡y mira! Sólo mostramos 5 elementos: la primera página.
 
-De vuelta a nuestra aplicación... actualiza... y echa un vistazo, ahora sólo mostramos 5 elementos - la primera página.
+Vuelve a cambiar a `setCurrentPage(2)` y actualiza de nuevo. Siguen siendo 5 naves, pero naves diferentes: la segunda página. Echemos un vistazo a la consulta. ¡Hay varias! Una para contar el número total de resultados y otra para obtener sólo los de esta página. Muy chulo.
 
-De vuelta al controlador `homepage()`, cambia a `setCurrentPage(2)` y actualiza la aplicación. Ahora vemos un conjunto diferente de naves estelares: la segunda página. Echa un vistazo rápido al perfil de consultas. Vemos varias consultas nuevas. Éstas han sido añadidas por Pagerfanta y Doctrine para crear una consulta de paginación optimizada.
+En lugar de codificar la página en 1 ó 2 -una solución temporal y poco convincente-, leámosla dinámicamente desde la URL, como con`?page=1` o `?page=2`.
 
-En lugar de codificar el número de página actual, lo obtendremos de un parámetro de consulta `page` en la URL. Así, `?page=1` muestra la primera página, `?page=2` muestra la segunda, y así sucesivamente.
+Para ello, autocodifica `Request $request` -el de `HttpFoundation` - y cambia el argumento `setCurrentPage()` por `$request->query->get('page', 1)`para leer ese valor y poner por defecto 1 si falta.
 
-En nuestro controlador `homepage()`, inyecta `Request $request` - el de `HttpFoundation`y cambia el argumento `setCurrentPage()` por `$request->query->getInt('page', 1)`. Éste será por defecto 1 si no se establece este parámetro de consulta.
+Vuelve y actualiza. Esta es la página 1 porque no hay parámetro `page`. Añade `?page=2`a la URL y... ¡estamos en la página 2!
 
-Vuelve a nuestra aplicación y actualiza - esta es la página 1 porque no se ha establecido ningún parámetro de consulta. Añade `?page=2`a la URL... ahora estamos en la página 2.
+Vale, ¿qué más estaría bien? ¿Qué tal mostrar el número total de naves, el número total de páginas y el número de la página actual?
 
-Estaría bien mostrar al usuario alguna información sobre la página actual: el número total de elementos, el total de páginas y en qué página estamos actualmente. ¡Pagerfanta te lo pone fácil!
+De vuelta al controlador, Cmd + Click `homepage.html.twig` para abrirlo.
 
-En el controlador `homepage()`, haz Cmd + clic en `homepage.html.twig` para abrirlo.
+Pon esta información debajo de `<h1>`. Cambiaré el margen inferior y añadiré un nuevo `<div>` (con un poco de estilo). Dentro, escribe `{{ ships.nbResults }}`. Luego: Página `{{ ships.currentPage }}` de `{{ ships.nbPages }}`.
 
-Pondremos esta información justo debajo de este `<h1>`, así que cambiaré su margen inferior y añadiré un nuevo `<div>` (con un poco de estilo). Dentro, escribe `{{ ships.nbResults }}` para mostrar el número total de resultados, y entre paréntesis: `Page {{ ships.currentPage }}` para mostrar el número de página actual y luego `of {{ ships.nbPages }}` para mostrar el número total de páginas.
+Vuelve a girar y actualiza. ¡Perfecto! Tenemos 14 naves incompletas en total, y estamos en la página 1 de 3. Tus números pueden variar dependiendo de cuántas de tus 20 naves tengan el estado incompleto al azar.
 
-Vuelve a nuestra aplicación y actualiza. ¡Perfecto! Tenemos 14 resultados en total, y estamos en la página 1 de 3. Debido a la aleatoriedad de los datos de fijación, aquí verás números diferentes.
+¡Ok! ¿Qué falta? ¿Qué tal unos enlaces para navegar entre páginas? Debajo de la lista, voy a pegar un código. Primero,`if ships.haveToPaginate`: no se necesitan enlaces si sólo hay una página. Después,`if ships.hasPreviousPage`, vamos a añadir un enlace a la página anterior si existe, no habría página anterior si estamos en la página 1. Dentro, genera una URL a esta página: `app_homepage`. Pero pasa un parámetro: `page` ajustado a `ships.getPreviousPage`. Como `page` no está definido en la ruta, se añadirá como parámetro de consulta `page`. ¡Eso es exactamente lo que queremos! Repítelo para el enlace `Next`: si `ships.hasNextPage` y `ships.getNextPage`.
 
-Necesitamos que los usuarios puedan navegar entre páginas, así que crearemos un pequeño widget "anterior/siguiente" debajo de los resultados.
+Actualiza, desplázate hacia abajo y ¡listo! ¡Vemos un enlace `Next`! Haz clic en él... y ahora estamos en la página 2 de 3, y la URL tiene `?page=2`. Abajo, nuestro widget tiene los enlaces `Previous` y `Next`. Vuelve a hacer clic en `Next`... página 3 de 3, y luego en `Previous`, de vuelta a la página 2 de 3. ¡Perfección de la paginación!
 
-En `homepage.html.twig`, debajo de donde listamos las naves estelares, voy a pegar algo de código. Primero,`if ships.haveToPaginate`: sólo queremos mostrar este widget si se requiere paginación.`if ships.hasPreviousPage`: sólo mostramos el enlace anterior si hay una página anterior a la que ir. Dentro, estamos generando una url a nuestra ruta `app_homepage`. Ahora, estamos inyectando `ships.getPreviousPage`como parámetro de la ruta `page`. Como `page` no está definido en la ruta, se añadirá como parámetro de consulta `page`, ¡que es exactamente lo que queremos! Dentro del enlace, el texto: `Previous`. Se hace exactamente lo mismo con el enlace `Next` pero utilizando `ships.hasNextPage` y `ships.getNextPage`.
+Construimos estos enlaces a mano, lo que nos da un poder de personalización ilimitado. Pero Pagerfanta sí que puede generar esto por nosotros. Si quieres ver cómo, consulta la documentación de Pagerfanta. El inconveniente es que personalizar el HTML es un poco más difícil.
 
-Actualiza nuestra aplicación, desplázate hacia abajo y ¡listo! ¡Vemos un enlace `Next`! Haz clic en él... y ahora estamos en la página 2 de 3. La URL también muestra `?page=2`. Abajo, nuestro widget tiene enlaces `Previous` y `Next`. Haz clic de nuevo en `Next`... página 3 de 3. Haz clic en `Previous`, de vuelta a la página 2 de 3 - ¡perfecto!
-
-¡Navegación hecha!
-
-Hemos creado este sencillo widget manualmente, pero Pagerfanta tiene integración Twig y plantillas para widgets de paginación más complejos, como listar todos los números de página como enlaces, para que puedas saltar a cualquier página rápidamente.
-
-A continuación, añadiremos más campos a nuestra entidad Starship y veremos un truco de migración para garantizar que los datos existentes se mantienen válidos
+A continuación, vamos a añadir más campos a nuestra entidad `Starship`. ¿Lo mejor? Ver lo fácil que es añadir esa columna a la base de datos. ¡Vamos a hacerlo!
