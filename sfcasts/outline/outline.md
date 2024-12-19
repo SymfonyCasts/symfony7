@@ -347,15 +347,84 @@
   - add `#[MapEntity(mapping: ['slug' => 'slug'])]`
 - We're good!
 
-## Updating & Deleting Entities
+## Black Hole: Deleting Entities
 
-- `starship:check-in` update `arrivedAt` by slug
-- `starship:remove` to delete entities by slug
+- starship show page - we want to remove this ship
+- `symfony console make:command`
+  - `app:ship:remove`
+  - Open new file
+  - AsCommand description: "Delete a starship"
+  - One argument: "slug": "The slug of the starship."
+  - Inject `private StarshipRepository $shipRepo`
+  - Inject `private EntityManagerInterface $em`
+  - Repo for querying, Entity Manager for operations (persist/update/delete)
+  - `execute()`
+    - get the arg `$slug = $input->getArgument('slug');`
+    - findOneBy: `$ship = $this->shipRepo->findOneBy(['slug' => $slug]);`
+    - not found? `$io->error('Starship not found.');`, `return Command::FAILURE;`
+    - Nice message `$io->comment(sprintf('Removing starship <info>%s</info>', $ship->getName()));`
+    - Mark for removal (not removed yet) `$this->em->remove($ship);`
+    - Run pending operations: `$this->em->flush();`
+    - `$io->success('Starship removed.');`
+- Back to app, copy ship's slug from URL
+- Terminal `symfony console app:ship:remove <slug>` - success!
+- Run command again - failure!
+- Back to app, refresh, 404 - ship is gone!
+
+## Ship Upgrades: Updating an Entity
+
+- find a "completed" ship: `symfony console doctrine:query:sql 'select slug,status from starship'`
+- open ship show page, we want to see arrivedAt
+- Open `templates/starship/show.html.twig`
+  - Copy `<h4>` and `<p>` from above
+  - Add `Arrived At` and `{{ ship.arrivedAt|ago }}`
+- Refresh page
+- New command: `symfony console make:command`
+  - `app:ship:check-in`
+  - Almost the same logic as our remove command
+  - Description: "Check-in a ship"
+  - `$ship->setArrivedAt(new \DateTimeImmutable('now'));`
+  - `$ship->setStatus(StarshipStatusEnum::WAITING);`
+  - Changes are tracked by Doctrine
+  - `$this->em->flush();` to save changes
+  - `$io->success('Starship checked-in.');`
+- Back to app
+  - note current status/arrived at
+  - copy ship's slug from URL
+- Terminal `symfony console app:ship:check-in <slug>` - success!
+- Refresh page - status/arrivedAt changed!
 
 ## Valid, Rich Entities
 
-- Entities *should* be valid at all times - `new Starship()` is invalid
-  - constructor to add required fields
-  - remove `?` from property/method types
-  - exceptions for `slug` and `id`
 - Add *rich* method: `Starship::checkIn()`
+  - Use method in `app:ship:check-in`
+  - Demo
+- Entities *should* be valid at all times - `new Starship()` is invalid
+  - In `AppFixtures`
+  - `$ship = new Starship();`, persist & flush
+  - return early
+  - reload fixtures
+  - error!
+  - Add constructor
+    ```php
+    public function __construct(
+        string $name,
+        string $class,
+        string $captain,
+        StarshipStatusEnum $status = StarshipStatusEnum::WAITING,
+        \DateTimeImmutable $arrivedAt = new \DateTimeImmutable('now'),
+    ) {
+        $this->name = $name;
+        $this->class = $class;
+        $this->captain = $captain;
+        $this->status = $status;
+        $this->arrivedAt = $arrivedAt;
+    }
+    ```
+  - Back in `AppFixtures`, use constructor
+  - Reload fixtures - success!
+  - Remove code in `AppFixtures`
+  - Reload fixtures again
+  - Foundry uses the constructor!
+  - Caveats: Symfony Forms /w entity validation
+
