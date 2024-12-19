@@ -1,0 +1,3 @@
+# Valid, Rich Entities
+
+Coming soon...

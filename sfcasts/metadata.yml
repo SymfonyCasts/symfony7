@@ -11,3 +11,6 @@ chapters:
   - add-fields
   - doctrine-extensions
   - controller-map-entity
+  - deleting-entities
+  - updating-entities
+  - rich-entities

@@ -1,0 +1,3 @@
+# Ship Upgrades: Updating an Entity
+
+Coming soon...
