@@ -50,7 +50,7 @@ En lugar de codificar la página en 1 ó 2 -una solución temporal y poco convin
 
 Para ello, autocodifica `Request $request` -la de `HttpFoundation` - y cambia el argumento `setCurrentPage()` por `$request->query->get('page', 1)`para leer ese valor y poner por defecto 1 si falta:
 
-[[[ code('50da14271f') ]]]
+[[[ code('d2ad35f6a6') ]]]
 
 Vuelve y actualiza. Esta es la página 1 porque no hay parámetro `page`. Añade `?page=2`a la URL y... ¡estamos en la página 2!
 
