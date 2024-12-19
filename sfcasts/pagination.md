@@ -72,7 +72,7 @@ To do that, autowire `Request $request` - the one from `HttpFoundation` -
 and change the `setCurrentPage()` argument to `$request->query->get('page', 1)`
 to read that value and default to 1 if it's missing:
 
-[[[ code('50da14271f') ]]]
+[[[ code('d2ad35f6a6') ]]]
 
 Head back over and refresh. This is page 1 because there is no `page` param. Add `?page=2`
 to the URL and... we're on page 2!
