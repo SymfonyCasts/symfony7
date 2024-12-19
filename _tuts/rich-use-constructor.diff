@@ -1,0 +1,17 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index 67d07dc..f57dff8 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -12,7 +12,11 @@ class AppFixtures extends Fixture
+ {
+     public function load(ObjectManager $manager): void
+     {
+-        $ship = new Starship();
++        $ship = new Starship(
++            'USS LeafyCruiser (NCC-0001)',
++            'Garden',
++            'Jean-Luc Pickles',
++        );
+ 
+         $manager->persist($ship);
+         $manager->flush();

@@ -234,7 +234,52 @@
             "id": "value-resolver-mapentity",
             "name": "Value Resolver: MapEntity",
             "description": null
+        },
+        {
+            "id": "delete-add-command",
+            "name": "Delete: add command",
+            "description": null
+        },
+        {
+            "id": "update-add-arrivedat",
+            "name": "Update: add arrivedAt",
+            "description": null
+        },
+        {
+            "id": "update-add-command",
+            "name": "Update: add command",
+            "description": null
+        },
+        {
+            "id": "rich-add-checkin",
+            "name": "Rich: add checkIn",
+            "description": null
+        },
+        {
+            "id": "rich-use-checkin",
+            "name": "Rich: use checkIn",
+            "description": null
+        },
+        {
+            "id": "rich-new-starship",
+            "name": "Rich: new starship",
+            "description": null
+        },
+        {
+            "id": "rich-constructor",
+            "name": "Rich: constructor",
+            "description": null
+        },
+        {
+            "id": "rich-use-constructor",
+            "name": "Rich: use constructor",
+            "description": null
+        },
+        {
+            "id": "rich-remove-new-starship",
+            "name": "Rich: remove new starship",
+            "description": null
         }
     ],
-    "sha": "179c824fe0ec2d7ed0f40382778f1c5648366c13"
+    "sha": "43ed2383dcb27029114a0e590934b63e1a76d2e9"
 }

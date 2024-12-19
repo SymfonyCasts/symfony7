@@ -1,0 +1,25 @@
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 1c4e0b6..9c46389 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -42,6 +42,20 @@ class Starship
+     #[Timestampable(on: 'update')]
+     private ?\DateTimeImmutable $updatedAt = null;
+ 
++    public function __construct(
++        string $name,
++        string $class,
++        string $captain,
++        StarshipStatusEnum $status = StarshipStatusEnum::WAITING,
++        \DateTimeImmutable $arrivedAt = new \DateTimeImmutable('now'),
++    ) {
++        $this->name = $name;
++        $this->class = $class;
++        $this->captain = $captain;
++        $this->status = $status;
++        $this->arrivedAt = $arrivedAt;
++    }
++
+     public function getId(): ?int
+     {
+         return $this->id;

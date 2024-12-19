@@ -1,0 +1,22 @@
+diff --git a/src/Command/ShipCheckInCommand.php b/src/Command/ShipCheckInCommand.php
+index 1e62e8f..6ff543b 100644
+--- a/src/Command/ShipCheckInCommand.php
++++ b/src/Command/ShipCheckInCommand.php
+@@ -2,7 +2,6 @@
+ 
+ namespace App\Command;
+ 
+-use App\Entity\StarshipStatusEnum;
+ use App\Repository\StarshipRepository;
+ use Doctrine\ORM\EntityManagerInterface;
+ use Symfony\Component\Console\Attribute\AsCommand;
+@@ -46,8 +45,7 @@ class ShipCheckInCommand extends Command
+ 
+         $io->comment(sprintf('Checking-in starship: %s', $ship->getName()));
+ 
+-        $ship->setArrivedAt(new \DateTimeImmutable('now'));
+-        $ship->setStatus(StarshipStatusEnum::WAITING);
++        $ship->checkIn();
+ 
+         $this->em->flush();
+ 

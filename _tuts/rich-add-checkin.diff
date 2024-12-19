@@ -1,0 +1,17 @@
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 39d3178..1c4e0b6 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -156,4 +156,12 @@ class Starship
+ 
+         return $this;
+     }
++
++    public function checkIn(\DateTimeImmutable $arrivedAt = new \DateTimeImmutable('now')): static
++    {
++        $this->arrivedAt = $arrivedAt;
++        $this->status = StarshipStatusEnum::WAITING;
++
++        return $this;
++    }
+ }

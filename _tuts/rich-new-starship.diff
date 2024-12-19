@@ -1,0 +1,26 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index db4fd60..67d07dc 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\DataFixtures;
+ 
++use App\Entity\Starship;
+ use App\Entity\StarshipStatusEnum;
+ use App\Factory\StarshipFactory;
+ use Doctrine\Bundle\FixturesBundle\Fixture;
+@@ -11,6 +12,13 @@ class AppFixtures extends Fixture
+ {
+     public function load(ObjectManager $manager): void
+     {
++        $ship = new Starship();
++
++        $manager->persist($ship);
++        $manager->flush();
++
++        return;
++
+         StarshipFactory::createOne([
+             'name' => 'USS LeafyCruiser (NCC-0001)',
+             'class' => 'Garden',
