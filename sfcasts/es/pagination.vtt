@@ -1,0 +1,313 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:03.006 align:middle
+Foundry nos ayudó a añadir 20 naves.
+
+00:00:03.366 --> 00:00:05.116 align:middle
+Eso hace que nuestra aplicación
+parezca más realista.
+
+00:00:05.436 --> 00:00:08.216 align:middle
+Pero en producción, podríamos
+tener miles de naves estelares.
+
+00:00:08.556 --> 00:00:11.176 align:middle
+Esta página sería gigantesca e inutilizable.
+
+00:00:11.746 --> 00:00:13.936 align:middle
+Probablemente también
+tardaría mucho en cargarse
+
+00:00:14.176 --> 00:00:16.396 align:middle
+, ¡tiempo durante el cual
+es probable que nos asimilen!
+
+00:00:16.996 --> 00:00:17.646 align:middle
+¿La solución?
+
+00:00:17.936 --> 00:00:22.386 align:middle
+Paginar los resultados: mostrar
+unos pocos cada vez, o por página.
+
+00:00:22.926 --> 00:00:26.836 align:middle
+Para ello, utilizaremos una biblioteca
+llamada Pagerfanta -¡qué nombre más chulo!
+
+00:00:27.326 --> 00:00:31.596 align:middle
+Es una biblioteca de paginación genérica,
+¡pero tiene una gran integración con Doctrine!
+
+00:00:32.216 --> 00:00:37.736 align:middle
+Añade los dos paquetes necesarios:
+composer require babdev/pagerfanta-bundle
+
+00:00:38.086 --> 00:00:44.816 align:middle
+pagerfanta/doctrine-orm-adapter Desplázate
+hacia arriba para ver lo que se instala.
+
+00:00:44.816 --> 00:00:49.826 align:middle
+pagerfanta/doctrine-orm-adapter es el
+pegamento entre Pagerfanta y Doctrine.
+
+00:00:50.446 --> 00:00:54.396 align:middle
+En nuestra página de inicio, estamos utilizando
+findIncomplete() de StarshipRepository.
+
+00:00:54.866 --> 00:00:56.376 align:middle
+Ábrelo y busca el método.
+
+00:00:56.876 --> 00:01:02.316 align:middle
+Cambia el tipo de retorno a Pagerfanta: un objeto
+con superpoderes relacionados con la paginación.
+
+00:01:02.656 --> 00:01:07.996 align:middle
+Pero puedes hacer un bucle sobre este objeto como si fuera
+un array, así que deja el docblock como está: Ahora,
+
+00:01:08.086 --> 00:01:09.666 align:middle
+una cosa superimportante que hay que recordar
+
+00:01:09.666 --> 00:01:12.976 align:middle
+al paginar una consulta es
+tener un orden predecible.
+
+00:01:13.466 --> 00:01:20.226 align:middle
+Añade ->orderBy('e.arrivedAt',
+'DESC'): Pero en lugar de devolver,
+
+00:01:20.546 --> 00:01:24.576 align:middle
+añade esto a una variable llamada
+$query, luego elimina getResult():
+
+00:01:25.546 --> 00:01:29.036 align:middle
+nuestro trabajo pasa de ejecutar la
+consulta a simplemente construirla.
+
+00:01:29.476 --> 00:01:31.896 align:middle
+Pagerfanta se encargará de la ejecución real.
+
+00:01:32.496 --> 00:01:39.856 align:middle
+Devuelve new Pagerfanta(new QueryAdapter($query))
+y asegúrate de importar estas dos clases:
+
+00:01:40.506 --> 00:01:44.446 align:middle
+De vuelta a MainController, $ship
+es ahora un objeto Pagerfanta.
+
+00:01:44.816 --> 00:01:49.576 align:middle
+Para utilizarlo, tenemos que decirle 2 cosas:
+cuántas naves queremos en cada página -
+
+00:01:49.576 --> 00:01:55.496 align:middle
+$ships->setMaxPerPage(5) - y en qué
+página está actualmente el usuario:
+
+00:01:55.886 --> 00:01:59.786 align:middle
+utiliza $ships->setCurrentPage(1) por ahora.
+
+00:02:00.536 --> 00:02:04.526 align:middle
+Ah, y asegúrate de llamar a
+setCurrentPage() después de setMaxPerPage()
+
+00:02:04.716 --> 00:02:08.176 align:middle
+o se producirán extraños
+viajes en el tiempo: Muévete...
+
+00:02:08.346 --> 00:02:08.946 align:middle
+actualiza...
+
+00:02:10.256 --> 00:02:13.836 align:middle
+¡y mira! Sólo mostramos 5
+elementos: la primera página.
+
+00:02:14.406 --> 00:02:18.686 align:middle
+Vuelve a cambiar a setCurrentPage(2):
+y actualiza de nuevo.
+
+00:02:20.566 --> 00:02:24.186 align:middle
+Todavía 5 barcos, pero barcos
+diferentes: la segunda página.
+
+00:02:24.706 --> 00:02:25.776 align:middle
+Echemos un vistazo a la consulta.
+
+00:02:26.326 --> 00:02:27.206 align:middle
+¡Hay varias!
+
+00:02:27.556 --> 00:02:32.826 align:middle
+Una para contar el número total de resultados
+y otra para obtener sólo los de esta página.
+
+00:02:33.156 --> 00:02:34.006 align:middle
+Muy chulo.
+
+00:02:34.876 --> 00:02:39.226 align:middle
+En lugar de codificar la página en 1 ó 2
+-una solución temporal y poco convincente-
+
+00:02:39.596 --> 00:02:45.736 align:middle
+, leámosla dinámicamente desde
+la URL, como con?page=1 o ?page=2.
+
+00:02:45.736 --> 00:02:52.326 align:middle
+Para ello, autocodifica Request
+$request -el de HttpFoundation -
+
+00:02:52.926 --> 00:02:59.866 align:middle
+y cambia el argumento setCurrentPage()
+por $request->query->get ('page',
+
+00:02:59.916 --> 00:03:05.646 align:middle
+1) para leer ese valor y poner por
+defecto 1 si falta: Vuelve y actualiza.
+
+00:03:06.716 --> 00:03:09.266 align:middle
+Esta es la página 1 porque
+no hay parámetro page.
+
+00:03:09.716 --> 00:03:13.166 align:middle
+Añade ?page=2 a la URL y...
+
+00:03:13.596 --> 00:03:14.496 align:middle
+¡estamos en la página 2!
+
+00:03:15.156 --> 00:03:16.536 align:middle
+Vale, ¿qué más estaría bien?
+
+00:03:16.946 --> 00:03:19.036 align:middle
+¿Qué tal mostrar el
+número total de naves, el
+
+00:03:19.306 --> 00:03:22.336 align:middle
+número total de páginas y el
+número de la página actual?
+
+00:03:22.996 --> 00:03:28.186 align:middle
+De vuelta al controlador, Cmd + Click
+homepage.html.twig para abrirlo.
+
+00:03:28.936 --> 00:03:31.226 align:middle
+Pon esta información debajo de <h1>.
+
+00:03:31.226 --> 00:03:35.046 align:middle
+Cambiaré el margen inferior y añadiré un
+nuevo <div> (con un poco de estilo).
+
+00:03:38.196 --> 00:03:41.556 align:middle
+Dentro, escribe {{ ships.nbResults }}.
+
+00:03:41.556 --> 00:03:47.036 align:middle
+A continuación Página {{ ships.currentPage }} de
+{{ ships.nbPages }}: Vuelve a girar y actualiza.
+
+00:03:47.036 --> 00:03:56.556 align:middle
+¡Perfecto! Tenemos 14 naves incompletas
+en total, y estamos en la página 1 de 3.
+
+00:03:56.556 --> 00:03:59.556 align:middle
+Tus números pueden variar
+en función de cuántas
+
+00:03:59.596 --> 00:04:09.366 align:middle
+de tus 20 naves estén al
+azar en estado incompleto.
+
+00:04:10.196 --> 00:04:11.366 align:middle
+¡Ok! ¿Qué falta?
+
+00:04:11.886 --> 00:04:14.606 align:middle
+¿Qué tal unos enlaces
+para navegar entre páginas?
+
+00:04:15.016 --> 00:04:17.186 align:middle
+Debajo de la lista, voy
+a pegar algo de código.
+
+00:04:20.216 --> 00:04:25.976 align:middle
+Primero, if ships.haveToPaginate: no se
+necesitan enlaces si sólo hay una página.
+
+00:04:26.796 --> 00:04:33.776 align:middle
+Después, if ships.hasPreviousPage, vamos a
+añadir un enlace a la página anterior si existe,
+
+00:04:34.066 --> 00:04:36.406 align:middle
+no habría página anterior
+si estamos en la página 1.
+
+00:04:37.026 --> 00:04:41.516 align:middle
+Dentro, genera una URL a
+esta página: app_homepage.
+
+00:04:41.826 --> 00:04:46.836 align:middle
+Pero pasa un parámetro: page
+ajustado a ships.getPreviousPage.
+
+00:04:47.646 --> 00:04:52.406 align:middle
+Como page no está definido en la ruta, se
+añadirá como parámetro de consulta page.
+
+00:04:52.756 --> 00:04:54.146 align:middle
+¡Eso es exactamente lo que queremos!
+
+00:04:54.506 --> 00:04:58.996 align:middle
+Repítelo para el enlace
+Next: si ships.hasNextPage
+
+00:04:59.226 --> 00:05:05.636 align:middle
+y ships.getNextPage: Actualiza,
+desplázate hacia abajo, ¡y dulce!
+
+00:05:06.006 --> 00:05:07.006 align:middle
+¡Vemos un enlace Next!
+
+00:05:07.426 --> 00:05:07.846 align:middle
+Haz clic en él...
+
+00:05:08.256 --> 00:05:13.456 align:middle
+y ahora estamos en la página
+2 de 3, y la URL tiene ?page=2.
+
+00:05:14.146 --> 00:05:17.496 align:middle
+Abajo, nuestro widget tiene
+los enlaces Previous y Next.
+
+00:05:17.886 --> 00:05:18.826 align:middle
+Vuelve a hacer clic en Next...
+
+00:05:19.336 --> 00:05:23.876 align:middle
+página 3 de 3, luego Previous,
+y volvemos a la página 2 de 3.
+
+00:05:24.256 --> 00:05:25.936 align:middle
+¡La perfección de la paginación!
+
+00:05:26.626 --> 00:05:30.386 align:middle
+Construimos estos enlaces a mano, lo que nos
+da un poder de personalización ilimitado.
+
+00:05:30.746 --> 00:05:33.866 align:middle
+Pero Pagerfanta sí que puede
+generar esto por nosotros.
+
+00:05:34.326 --> 00:05:37.226 align:middle
+Si quieres ver cómo, consulta
+los documentos de Pagerfanta.
+
+00:05:37.646 --> 00:05:41.436 align:middle
+El inconveniente es que personalizar
+el HTML es un poco más difícil.
+
+00:05:42.126 --> 00:05:45.096 align:middle
+A continuación, vamos a añadir más
+campos a nuestra entidad Starship.
+
+00:05:45.466 --> 00:05:46.146 align:middle
+¿Lo mejor?
+
+00:05:46.346 --> 00:05:49.506 align:middle
+Ver lo fácil que es añadir
+esa columna a la base de datos.
+
+00:05:49.796 --> 00:05:50.646 align:middle
+¡Vamos a hacerlo!
