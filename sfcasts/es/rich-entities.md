@@ -1,16 +1,18 @@
 # Refactorizador cuántico: Entidades ricas
 
-Echa un vistazo a nuestra entidad `Starship`. Es un montón de propiedades y getters y setters. Un poco aburrido, ¿verdad? ¡No tiene por qué serlo! Como las entidades son clases estándar de PHP, podemos añadir métodos explícitos y significativos que describan nuestra lógica de negocio.`goToWarp(7)` o `enterOrbitAround($millersPlanet)`. Se llaman métodos de entidad enriquecida. 
+Echa un vistazo a nuestra entidad `Starship`. Es un montón de propiedades y getters y setters. Un poco aburrido, ¿verdad? ¡No tiene por qué serlo! Como las entidades son clases PHP estándar, podemos añadir métodos explícitos y significativos que describan nuestra lógica de negocio, como`goToWarp(7)` o `enterOrbitAround($millersPlanet)`. Éstos se denominan métodos de entidad enriquecida. 
 
-¡Vamos a crear uno!
+Probemos esto y exploremos las ventajas.
 
-En el último capítulo, añadimos este comando de facturación de barcos. Nuestra lógica de facturación está aquí, en el método `execute()`. Después de obtener el barco, actualizamos sus `arrivedAt` y `status`. Imagina que, en el futuro, añadimos un controlador de registro. Tendríamos que duplicar esta lógica allí. Además, si esta lógica cambia, como si necesitamos actualizar otro campo, tendríamos que acordarnos de actualizarla en varios sitios. ¡Qué asco!
+Nuestra lógica de registro `Starship` vive actualmente en el método `execute()`. Después de obtener el barco, actualizamos sus `arrivedAt` y `status`. ¿Y si, en el futuro, añadimos un controlador de facturación? Tendríamos que duplicar esta lógica allí. Y si la lógica de "registro" cambiara, por ejemplo, si tuviéramos que actualizar otro campo, tendríamos que acordarnos de cambiarlo en varios sitios. Eso no es ciencia ficción.
 
-La mejor manera es mover, o encapsular, esta lógica de registro en un método de la entidad`Starship`. Abre `src/Entity/Starship.php` y desplázate hasta la parte inferior. Crea un nuevo método: `public function checkIn()`. Haz que acepte un`?\DateTimeImmutable $arrivedAt = null` opcional y que devuelva `static`. Dentro, primero,`return $this`. Arriba, añade nuestra lógica de comprobación: `$this->arrivedAt = $arrivedAt`, y si no se ha pasado, `?? new \DateTimeImmutable('now')` para que por defecto sea la hora actual. A continuación, `$this->status = StarshipStatusEnum::WAITING`.
+Lo mejor es trasladar, o encapsular, esta lógica de registro a un método de la entidad. Abre `src/Entity/Starship.php` y desplázate hasta el final. Crea un nuevo: `public function checkIn()`. Haz que acepte un`?\DateTimeImmutable $arrivedAt = null` opcional y devuelva `static`, que es una forma elegante de decir "devuelve el objeto actual".
 
-Vuelve a `ShipCheckInCommand` y sustituye la lógica por `$ship->checkIn()`. ¡Qué bien!
+`return $this`. Arriba, añade la lógica de comprobación: `$this->arrivedAt = $arrivedAt`, y si no se ha pasado, `?? new \DateTimeImmutable('now')`. A continuación, `$this->status = StarshipStatusEnum::WAITING`.
 
-Para asegurarte de que sigue funcionando, vuelve a la página de inicio de la aplicación y actualízala. Encuentra un barco que no esté "esperando"... Ya está: "Pirata Estelar". Haz clic en él y copia el slug de la URL. De nuevo en tu terminal, Ejecuta:
+Vuelve a `ShipCheckInCommand` y sustituye la lógica por `$ship->checkIn()`. ¡Vaya, está claro! Ahora el comando se lee como una historia: "Encuentra la nave, luego regístrala".
+
+Para asegurarte de que sigue funcionando, vuelve a la página principal y actualízala. Encuentra una nave que no esté "esperando"... Allá vamos: "Pirata Estelar". Haz clic en ella y copia el slug de la URL. De vuelta a tu terminal, Ejecuta:
 
 ```terminal
 symfony console app:ship:check-in
@@ -20,6 +22,6 @@ pega el slug, ¡y ejecuta! ¡Éxito! De vuelta en la aplicación, actualiza. ¡P
 
 Si te encuentras repitiendo operaciones comunes en tus entidades, considera la posibilidad de añadir, y luego utilizar, un método que describa el trabajo que se está realizando. Es una victoria fácil para la legibilidad y la mantenibilidad.
 
-Bien tripulación, ¡eso es todo para este curso de Fundamentos de Doctrine! Si quieres mejorar tus conocimientos de Doctrine, [busca "Doctrine" en SymfonyCasts](https://symfonycasts.com/search?q=doctrine) para encontrar cursos más avanzados. La [documentación de Doctrine](https://www.doctrine-project.org/projects/doctrine-orm/en/3.3/index.html) también es un gran recurso.
+Bien tripulación, ¡eso es todo para este curso de Fundamentos de Doctrine! Si quieres mejorar tus conocimientos de Doctrine, [busca "Doctrine" en SymfonyCasts](https://symfonycasts.com/search?q=doctrine) para encontrar cursos más avanzados. La [documentación de Doctrine](https://www.doctrine-project.org/projects/doctrine-orm/en/3.3/index.html) también es un gran recurso. Y como siempre, si tienes alguna pregunta, estamos a tu disposición en los comentarios.
 
 hasta la próxima, ¡feliz programación!
