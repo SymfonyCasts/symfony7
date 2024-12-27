@@ -1,10 +1,10 @@
 # Black Hole: Deleting Entities
 
-Oh-oh, we've just gotten word that this ship, the USS Leafy Cruiser, has fallen
-into a black hole. Luckily, no one was on board, but this ship is now spaghettified.
+Oh-oh, we just got word that this ship, the USS Leafy Cruiser, has fallen
+into a black hole. Luckily, no long-term, beloved characters were on board, but this ship is now spaghettified.
 Since it no longer exists in this reality, we need to remove it from our database.
 
-We'll create a command to handle this. At your terminal, run:
+Let's create a command to handle this. At your terminal, run:
 
 ```terminal
 symfony console make:command
@@ -12,22 +12,22 @@ symfony console make:command
 
 For the name, use `app:ship:remove`. This created a new command class.
 
-In your IDE, open `src/Command/ShipRemoveCommand.php`. The maker added some
-boilerplate code for us. First, update the description to `Delete a starship`.
-In the constructor, we need to inject two things: `private ShipRepository $shipRepo`
+Open it! `src/Command/ShipRemoveCommand.php`. The maker added some
+boilerplate code for us. Update the description to `Delete a starship`.
+In the constructor, we need to inject two things: `private ShipRepository $shipRepo` 
 and `private EntityManagerInterface $em`. Whenever you need to _find_ or _fetch_ entities,
 use the repository. When you need to _manage_ entities, like persisting, updating,
 or deleting, use the entity manager, or "EM" for short.
 
-In the `configure()` method, remove this `addOption()` call. For `addArgument()`,
+In the `configure()` method,`addOption()`. For `addArgument()`,
 change the name to `slug`, set `InputArgument::REQUIRED`, and update the description
 to `The slug of the starship`.
 
 Down in `execute()`, replace this `$arg1 =` with `$slug = $input->getArgument('slug')`.
 
-Now, we need to find the ship by this slug. Every entity repository has the perfect
-method for this. Write `$ship = $this->shipRepo->findOneBy()`. Inside, pass an array
-where the key is the property to search on and the value is the value to search that field
+Next, we need to find the ship by this slug. Each entityrepository already has the perfect
+method for this. Write `$ship = $this->shipRepo->findOneBy()` passing an array
+where the key is the property to search on and the value is the value to search
 for: `['slug' => $slug]`. When using these out-of-the-box find methods, Doctrine _automatically_
 escapes the values, so you don't need to worry about SQL injection attacks.
 
@@ -53,7 +53,7 @@ symfony console app:ship:remove
 Paste the copied slug and execute. Success! Starship removed. Run the same command
 again.
 
-```terminal
+```terminal-silent
 symfony console app:ship:remove leafy-cruiser-ncc-0001
 ```
 
