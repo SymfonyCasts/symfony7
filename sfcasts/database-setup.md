@@ -54,6 +54,11 @@ Jump over and refresh the app. Down here, hover over "Server". This holds
 details about the Symfony CLI server. This part means that it automatically detected our
 docker containers and set up the environment variables for us!
 
+***TIP
+In order for the automatic detection to work, your local project needs to be a Git repository.
+If following along with the downloaded code, you'll need to initialize one with `git init`.
+***
+
 I'll show you. Pop over to our terminal and run:
 
 ```terminal
