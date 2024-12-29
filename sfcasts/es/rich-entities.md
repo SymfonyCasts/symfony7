@@ -4,7 +4,7 @@ Echa un vistazo a nuestra entidad `Starship`. Es un montón de propiedades y get
 
 Probemos esto y exploremos las ventajas.
 
-Nuestra lógica de registro `Starship` vive actualmente en el método `execute()`. Después de obtener el barco, actualizamos sus `arrivedAt` y `status`. ¿Y si, en el futuro, añadimos un controlador de facturación? Tendríamos que duplicar esta lógica allí. Y si la lógica de "registro" cambiara, por ejemplo, si tuviéramos que actualizar otro campo, tendríamos que acordarnos de cambiarlo en varios sitios. Eso no es ciencia ficción.
+Nuestra lógica de facturación `Starship` vive actualmente en el método `ShipCheckInCommand::execute()`. Después de obtener el barco, actualizamos sus `arrivedAt` y `status`. ¿Y si, en el futuro, añadimos un controlador de facturación? Tendríamos que duplicar esta lógica allí. Y si la lógica de "registro" cambia -por ejemplo, si necesitamos actualizar otro campo-, tendríamos que acordarnos de cambiarla en varios sitios. Eso no es ciencia ficción.
 
 Lo mejor es trasladar, o encapsular, esta lógica de registro a un método de la entidad. Abre `src/Entity/Starship.php` y desplázate hasta el final. Crea un nuevo: `public function checkIn()`. Haz que acepte un`?\DateTimeImmutable $arrivedAt = null` opcional y devuelva `static`, que es una forma elegante de decir "devuelve el objeto actual".
 
