@@ -7,10 +7,10 @@ we can add meaningful, explicit methods that describe our business logic, like
 
 Let's try this out and explore the benefits.
 
-Our `Starship` check-in logic currently lives in the `execute()` method. After we
-fetch the ship, we update its `arrivedAt` and `status`.
+Our `Starship` check-in logic currently lives in the `ShipCheckInCommand::execute()` method.
+After we fetch the ship, we update its `arrivedAt` and `status`.
 What if, in the future, we add a check-in controller. We'd have to duplicate this logic
-there. And the logic for "checking in" changes - like we need to update another field, we'd have
+there. And if the logic for "checking in" changes - like we need to update another field, we'd have
 to remember to change it in multiple places. That is super *not* sci-fi.
 
 The better way is to move, or _encapsulate_, this check-in logic into a method on the

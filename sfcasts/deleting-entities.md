@@ -19,13 +19,13 @@ and `private EntityManagerInterface $em`. Whenever you need to _find_ or _fetch_
 use the repository. When you need to _manage_ entities, like persisting, updating,
 or deleting, use the entity manager, or "EM" for short.
 
-In the `configure()` method,`addOption()`. For `addArgument()`,
+In the `configure()` method, remove `addOption()`. For `addArgument()`,
 change the name to `slug`, set `InputArgument::REQUIRED`, and update the description
 to `The slug of the starship`.
 
 Down in `execute()`, replace this `$arg1 =` with `$slug = $input->getArgument('slug')`.
 
-Next, we need to find the ship by this slug. Each entityrepository already has the perfect
+Next, we need to find the ship by this slug. Each `EntityRepository` already has the perfect
 method for this. Write `$ship = $this->shipRepo->findOneBy()` passing an array
 where the key is the property to search on and the value is the value to search
 for: `['slug' => $slug]`. When using these out-of-the-box find methods, Doctrine _automatically_

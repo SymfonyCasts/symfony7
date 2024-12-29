@@ -26,7 +26,8 @@ To check in a ship when it arrives, let's create another command. At your termin
 symfony console make:command
 ```
 
-For the name, use `app:ship:check-in`. Open then new command class: `src/Command/ShipCheckInCommand.php`. Update the description - `Check-in ship` - and
+For the name, use `app:ship:check-in`. Open the new command class: `src/Command/ShipCheckInCommand.php`.
+Update the description - `Check-in ship` - and
 for the constructor, we need the same things as the remove command. Open that,
 copy the constructor, and paste it over `ShipCheckInCommand::__construct()`. We'll also
 find the ship by slug, so copy the `configure()` method from `ShipRemoveCommand` and
@@ -39,7 +40,6 @@ Time for the actual "check-in" logic. First, update the arrived at date to the c
 time with `$ship->setArrivedAt(new \DateTimeImmutable('now'))`. Then set the status to
 "waiting" with `$ship->setStatus(StarshipStatusEnum::WAITING)`. These fields have been
 updated on the object, but not *yet* in the database. To execute the `UPDATE` query, below,
-
 call, you guessed it, `$this->em->flush()`.
 
 Wait, wait, wait! When we persist or remove an entity, we had to call a method - like `persist` or `remove` on
@@ -63,5 +63,3 @@ now marked as "waiting" and arrived 9 seconds ago. It worked!
 Jump back to the check-in logic inside `ShipCheckInCommand`. We're calling setters
 to update two fields. Next, let's _encapsulate_ this logic into a method on the
 `Starship` entity.
-
-TODO: re-add teaser for rich entities.
