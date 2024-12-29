@@ -34,13 +34,17 @@ Pero, ¿dónde se ejecuta el servidor de bases de datos? ¿En qué puerto? ¿No 
 
 No! El binario CLI de `symfony` que está ejecutando el servidor web tiene algo de magia Docker! Salta y actualiza la aplicación. Aquí abajo, pasa el ratón sobre "Servidor". Contiene detalles sobre el servidor Symfony CLI. Esta parte significa que ha detectado automáticamente nuestros contenedores Docker y ha configurado las variables de entorno por nosotros
 
+***TIP
+Para que la detección automática funcione, tu proyecto local tiene que ser un repositorio Git. Si sigues el código descargado, tendrás que inicializar uno con `git init`.
+***
+
 Te lo mostraré. Ve a nuestro terminal y ejecuta:
 
 ```terminal
 symfony var:export --multiline
 ```
 
-Esto nos muestra algunas variables de entorno extra que el Symfony CLI está configurando por nosotros, además de las que están en `.env`. 
+Esto nos muestra algunas variables de entorno adicionales que la CLI de Symfony está configurando para nosotros, además de las que aparecen en `.env`. 
 
 Desplázate un poco hacia arriba para ver.... ¡Aquí está! `DATABASE_URL` ¡! Esto anula la que está en `.env` y apunta a la base de datos Postgres que se ejecuta en Docker. Ese número de puerto cambiará aleatoriamente, pero la CLI de Symfony siempre utilizará el correcto.
 
