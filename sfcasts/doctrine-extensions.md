@@ -8,6 +8,8 @@ automatically generated from the `name`, `updatedAt`:
 set to the current time when the entity changes and `createdAt`: set to the current
 time when the entity is created.
 
+## DoctrineExtensions
+
 And there's a package that can do this `DoctrineExtensions`! In your terminal,
 run:
 
@@ -23,7 +25,7 @@ Scroll up to see what we have. The most important packages are `gedmo/doctrine-e
 which contains the real logic, and `stof/doctrine-extensions-bundle`, that
 integrates that with Symfony. No need to worry about the other stuff.
 
-Run
+Run:
 
 ```terminal
 git status
@@ -33,21 +35,38 @@ to see what the recipe added. It configured the bundle and added a new config fi
 Cool! For this bundle, we *do* need to edit this config to enable the extensions
 where each extension is like a superpower for your entities.
 
+## Enabling Extensions
+
 Open `config/packages/stof_doctrine_extensions.yaml`. Below `default_local`
 add a new key: `orm:`, then `default:` and inside that, enable 2 superpowers, I mean extensions:
-`timestampable: true` and `sluggable: true`.
+`timestampable: true` and `sluggable: true`:
+
+[[[ code('b6789ad642') ]]]
 
 These are now activated in general, but we need to a bit more config to bring them
 to life for the `Starship` entity. Open that up again.
 
+## Using Extensions
+
 Above the `$slug` property, add a new attribute: `#[Slug]`, importing the class from
 `Gedmo\Mapping\Annotation`. Inside, add `fields:` set it to an array containing
-`name`. This tells the extension to generate the slug from the `$name`
-property when the entity is first persisted.
+`name`:
+
+[[[ code('739d2afd4f') ]]]
+
+This tells the extension to generate the slug from the `$name` property when the entity
+is first persisted.
 
 Above `$updatedAt`, add `#[Timestampable]` with `on: 'update'` so it knows to
-set this field to the current time *on entity update*. Same for
-`$createdAt`, but with `on: 'create'`.
+set this field to the current time *on entity update*:
+
+[[[ code('d3aaa7e760') ]]]
+
+Same for `$createdAt`, but with `on: 'create'`:
+
+[[[ code('55bf8b6edb') ]]]
+
+## Reloading the Fixtures
 
 Let's try it! At your terminal, run:
 
@@ -64,6 +83,8 @@ symfony console doctrine:query:sql 'SELECT name, slug, updated_at, created_at FR
 Yeah! Our `slug` is generated from the `name`, and `updatedAt` and `createdAt` are set
 to the timestamp of when the entity was created. Doctrine considers the
 initial save also as an update: that's why `updatedAt` and `createdAt` have the same value.
+
+## Slugs are Kept Unique
 
 Scroll down a bit. Notice these slugs are suffixed with `-1`? What's that about?
 This is because our `slug` field is unique but our `name` is not. We have some starships,

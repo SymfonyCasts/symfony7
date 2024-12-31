@@ -12,9 +12,15 @@ First though, I want to show you something super cool. Open
 parameter and the `StarshipRepository` service to find the ship *from* this ID.
 Then we have logic to throw a 404 if the ship isn't found.
 
+## Inject `Starship` Directly
+
 Replace all the arguments with just `Starship $ship`, then, delete all this
-finding and not found logic. This is one slim controller now - I love it. If you're
-saying "but Starship isn't a service", you're right, but bear with me.
+finding and not found logic:
+
+[[[ code('c2355c43aa') ]]]
+
+This is one slim controller now - I love it. If you're saying "but Starship isn't a service",
+you're right, but bear with me.
 
 Back in the app, we're on the Starship show page. Refresh... and... it still works!
 Let's try visiting a ship we know doesn't exist: one with ID 999. We get a 404 error.
@@ -24,6 +30,8 @@ Entities are not services... that's still, and always, true. Look in our
 `MainController::homepage()` controller. We are injecting the `Request` object. This
 also isn't a service. If you tried to autowire this into a service's constructor, you'd
 get an error.
+
+## Controller Value Resolvers
 
 Controllers are special. When Symfony calls a controller method, it first looks at
 all the arguments and passes them through something called "controller value resolvers".
@@ -37,15 +45,25 @@ a valid Doctrine entity, and we have an `id` route parameter. Since every entity
 an `id`, the resolver automatically queries for the entity then passes it to us.
 If the entity isn't found, it throws a 404. I *love* this!
 
+## Using `slug` in the URL
+
 Back to our mission: to use the Starship `slug` in the URL instead of the ID.
-First, update the `#[Route]` attribute to `/starship/{slug}`. Next, we need to update
-all the places where we generate the URL for this route. Don't worry, there are
-only 2.
+First, update the `#[Route]` attribute to `/starship/{slug}`:
+
+[[[ code('730e52c5e5') ]]]
+
+Next, we need to update all the places where we generate the URL for this route.
+Don't worry, there are only 2.
 
 Start with `templates/main/homepage.html.twig`. Search for "show" - here we go.
-In the `path` function, replace `id: ship.id` with `slug: ship.slug`. Now, open
-`templates/main/_shipStatusAside.html.twig`, find "show", and in this `path`
-replace `id: myShip.id` with `slug: myShip.slug`.
+In the `path` function, replace `id: ship.id` with `slug: ship.slug`:
+
+[[[ code('b9b79dc92a') ]]]
+
+Now, open `templates/main/_shipStatusAside.html.twig`, find "show", and in this `path`
+replace `id: myShip.id` with `slug: myShip.slug`:
+
+[[[ code('cec9cc3c07') ]]]
 
 Jump back to our app and click "Back" to go to the homepage. Hover over a ship link
 and look the URL. It's much prettier! Click the link.
@@ -58,10 +76,14 @@ The problem is that when there is no route wildcard called `id`, it reverts
 back to trying to autowire `Starship` like a service. When the route wildcard is
 *not* called `id`, we need to help it a bit.
 
+## `#[MapEntity]` Attribute
+
 Back in `StarshipController::show()`, move `Starship $ship` to its own line
 to give us some room. Above it, add an attribute: `#[MapEntity]` with an array
 with a key of `slug` - this is the route parameter name and
-a value of also `slug` - this is the property name it should query on.
+a value of also `slug` - this is the property name it should query on:
+
+[[[ code('46d5a9374a') ]]]
 
 Back to the app and refresh. It's working again, red alert cancelled!
 

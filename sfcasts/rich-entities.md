@@ -7,6 +7,8 @@ we can add meaningful, explicit methods that describe our business logic, like
 
 Let's try this out and explore the benefits.
 
+## Adding a `Starship::checkIn()` Method
+
 Our `Starship` check-in logic currently lives in the `ShipCheckInCommand::execute()` method.
 After we fetch the ship, we update its `arrivedAt` and `status`.
 What if, in the future, we add a check-in controller. We'd have to duplicate this logic
@@ -22,6 +24,8 @@ new: `public function checkIn()`. Have it accept an optional
 `return $this`. Above, add the check-in logic: `$this->arrivedAt = $arrivedAt`, and
 if it wasn't passed, `?? new \DateTimeImmutable('now')`.
 Next, `$this->status = StarshipStatusEnum::WAITING`.
+
+## Using the `Starship::checkIn()` Method
 
 Jump back to the `ShipCheckInCommand` and replace the logic with `$ship->checkIn()`.
 Wow, that's clear! The command now reads like a story: "Find the ship, then check it in".
