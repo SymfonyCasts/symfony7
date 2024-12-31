@@ -2,15 +2,33 @@
 
 Echa un vistazo a nuestra entidad `Starship`. Es un montón de propiedades y getters y setters. Un poco aburrido, ¿verdad? ¡No tiene por qué serlo! Como las entidades son clases PHP estándar, podemos añadir métodos explícitos y significativos que describan nuestra lógica de negocio, como`goToWarp(7)` o `enterOrbitAround($millersPlanet)`. Éstos se denominan métodos de entidad enriquecida. 
 
-Probemos esto y exploremos las ventajas.
+Vamos a probarlo y explorar sus ventajas.
+
+## Reduce la duplicación
 
 Nuestra lógica de facturación `Starship` vive actualmente en el método `ShipCheckInCommand::execute()`. Después de obtener el barco, actualizamos sus `arrivedAt` y `status`. ¿Y si, en el futuro, añadimos un controlador de facturación? Tendríamos que duplicar esta lógica allí. Y si la lógica de "registro" cambia -por ejemplo, si necesitamos actualizar otro campo-, tendríamos que acordarnos de cambiarla en varios sitios. Eso no es ciencia ficción.
 
-Lo mejor es trasladar, o encapsular, esta lógica de registro a un método de la entidad. Abre `src/Entity/Starship.php` y desplázate hasta el final. Crea un nuevo: `public function checkIn()`. Haz que acepte un`?\DateTimeImmutable $arrivedAt = null` opcional y devuelva `static`, que es una forma elegante de decir "devuelve el objeto actual".
+## Añadir un método `Starship::checkIn()` 
 
-`return $this`. Arriba, añade la lógica de comprobación: `$this->arrivedAt = $arrivedAt`, y si no se ha pasado, `?? new \DateTimeImmutable('now')`. A continuación, `$this->status = StarshipStatusEnum::WAITING`.
+La mejor manera es trasladar, o encapsular, esta lógica de registro a un método de la entidad. Abre `src/Entity/Starship.php` y desplázate hasta el final. Crea un nuevo: `public function checkIn()`. Haz que acepte un`?\DateTimeImmutable $arrivedAt = null` opcional y que devuelva `static`, que es una forma elegante de decir "devuelve el objeto actual":
 
-Vuelve a `ShipCheckInCommand` y sustituye la lógica por `$ship->checkIn()`. ¡Vaya, está claro! Ahora el comando se lee como una historia: "Encuentra la nave, luego regístrala".
+[[[ code('789c20c081') ]]]
+
+`return $this`:
+
+[[[ code('0763caad07') ]]]
+
+Arriba, añade la lógica de comprobación: `$this->arrivedAt = $arrivedAt`, y si no se ha pasado, `?? new \DateTimeImmutable('now')`. A continuación, `$this->status = StarshipStatusEnum::WAITING`:
+
+[[[ code('0763caad07') ]]]
+
+## Utilizando el método `Starship::checkIn()` 
+
+Vuelve a `ShipCheckInCommand` y sustituye la lógica por `$ship->checkIn()`:
+
+[[[ code('9eca260808') ]]]
+
+Vaya, ¡está claro! Ahora el comando se lee como una historia: "Encuentra la nave y regístrala".
 
 Para asegurarte de que sigue funcionando, vuelve a la página principal y actualízala. Encuentra una nave que no esté "esperando"... Allá vamos: "Pirata Estelar". Haz clic en ella y copia el slug de la URL. De vuelta a tu terminal, Ejecuta:
 
