@@ -7,7 +7,7 @@ we can add meaningful, explicit methods that describe our business logic, like
 
 Let's try this out and explore the benefits.
 
-## Adding a `Starship::checkIn()` Method
+## Reduce Duplication
 
 Our `Starship` check-in logic currently lives in the `ShipCheckInCommand::execute()` method.
 After we fetch the ship, we update its `arrivedAt` and `status`.
@@ -15,19 +15,32 @@ What if, in the future, we add a check-in controller. We'd have to duplicate thi
 there. And if the logic for "checking in" changes - like we need to update another field, we'd have
 to remember to change it in multiple places. That is super *not* sci-fi.
 
+## Adding a `Starship::checkIn()` Method
+
 The better way is to move, or _encapsulate_, this check-in logic into a method on the
 entity. Open `src/Entity/Starship.php` and scroll to the bottom. Create a
 new: `public function checkIn()`. Have it accept an optional
 `?\DateTimeImmutable $arrivedAt = null` and return `static`, which is a fancy way of saying
-"return the current object".
+"return the current object":
 
-`return $this`. Above, add the check-in logic: `$this->arrivedAt = $arrivedAt`, and
+[[[ code('789c20c081') ]]]
+
+`return $this`:
+
+[[[ code('0763caad07') ]]]
+
+Above, add the check-in logic: `$this->arrivedAt = $arrivedAt`, and
 if it wasn't passed, `?? new \DateTimeImmutable('now')`.
-Next, `$this->status = StarshipStatusEnum::WAITING`.
+Next, `$this->status = StarshipStatusEnum::WAITING`:
+
+[[[ code('0763caad07') ]]]
 
 ## Using the `Starship::checkIn()` Method
 
-Jump back to the `ShipCheckInCommand` and replace the logic with `$ship->checkIn()`.
+Jump back to the `ShipCheckInCommand` and replace the logic with `$ship->checkIn()`:
+
+[[[ code('9eca260808') ]]]
+
 Wow, that's clear! The command now reads like a story: "Find the ship, then check it in".
 
 To make sure it still works, head back to the homepage and refresh. Find a ship that's
