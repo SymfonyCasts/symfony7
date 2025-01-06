@@ -97,5 +97,5 @@ symfony console app:ship:remove leafy-cruiser-ncc-0001
 "Starship not found." Perfect! Back in the app, refresh the page. 404. The ship is gone
 from the database!
 
-We've seen _persisting_ and _removing_ entities. Next, we'll see how to _update_ the starship
+Okay! We've seen _persisting_ and _removing_ entities. Next, we'll see how to _update_ the starship
 entity.
