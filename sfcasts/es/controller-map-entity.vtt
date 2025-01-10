@@ -1,0 +1,260 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:04.576 align:middle
+Cuando entramos en una nave desde nuestra página
+de inicio y vemos su página de presentación,
+
+00:00:04.866 --> 00:00:07.236 align:middle
+esta URL no es muy bonita ni memorable.
+
+00:00:07.506 --> 00:00:08.936 align:middle
+Es sólo la identificación de la nave.
+
+00:00:09.226 --> 00:00:14.566 align:middle
+Imagínate que Jean-Luc Picard anunciara que era
+el capitán del USS 43 en lugar del Enterprise.
+
+00:00:14.856 --> 00:00:18.496 align:middle
+¡Penoso! Cambiemos esto para utilizar
+en su lugar nuestro nuevo campo slug.
+
+00:00:19.016 --> 00:00:23.246 align:middle
+Al igual que id, es único, por lo que podemos utilizarlo
+para encontrar un único barco en la base de datos.
+
+00:00:23.756 --> 00:00:26.166 align:middle
+Pero antes quiero enseñarte algo superguay.
+
+00:00:26.626 --> 00:00:28.436 align:middle
+Abre StarshipController::show().
+
+00:00:28.966 --> 00:00:31.596 align:middle
+Estamos inyectando el $id de
+nuestro parámetro de ruta
+
+00:00:31.786 --> 00:00:35.796 align:middle
+y el servicio StarshipRepository para
+encontrar el barco a partir de este ID.
+
+00:00:36.376 --> 00:00:39.436 align:middle
+Luego tenemos la lógica para lanzar
+un 404 si no se encuentra el barco.
+
+00:00:39.996 --> 00:00:45.226 align:middle
+Sustituye todos los argumentos por sólo Starship
+$ship, luego, elimina toda esta lógica de encontrar
+
+00:00:45.226 --> 00:00:49.866 align:middle
+y no encontrar: Esto sí que es un
+controlador delgado: me encanta.
+
+00:00:50.436 --> 00:00:54.496 align:middle
+Si estás diciendo "pero Starship no es un
+servicio", tienes razón, pero ten paciencia conmigo.
+
+00:00:55.216 --> 00:00:57.726 align:middle
+De vuelta en la aplicación, estamos en
+la página de presentación de Starship.
+
+00:00:58.066 --> 00:00:58.646 align:middle
+Actualiza...
+
+00:00:58.646 --> 00:01:00.556 align:middle
+y... ¡sigue funcionando!
+
+00:01:01.026 --> 00:01:06.026 align:middle
+Intentemos visitar una nave que
+sabemos que no existe: una con ID 999.
+
+00:01:06.626 --> 00:01:07.956 align:middle
+Obtenemos un error 404.
+
+00:01:08.446 --> 00:01:10.466 align:middle
+Seguimos teniendo la misma lógica que antes...
+
+00:01:10.756 --> 00:01:13.546 align:middle
+¿Cómo? Las entidades no son servicios...
+
+00:01:13.736 --> 00:01:15.416 align:middle
+eso sigue siendo, y siempre, cierto.
+
+00:01:16.036 --> 00:01:18.566 align:middle
+Mira en nuestro controlador
+MainController::homepage().
+
+00:01:18.916 --> 00:01:20.746 align:middle
+Estamos inyectando el objeto Request.
+
+00:01:21.076 --> 00:01:22.616 align:middle
+Esto tampoco es un servicio.
+
+00:01:22.886 --> 00:01:26.906 align:middle
+Si intentaras autoconectar esto en el
+constructor de un servicio, obtendrías un error.
+
+00:01:27.416 --> 00:01:28.636 align:middle
+Los controladores son especiales.
+
+00:01:28.986 --> 00:01:33.796 align:middle
+Cuando Symfony llama a un método de controlador,
+primero mira todos los argumentos y los pasa
+
+00:01:33.796 --> 00:01:37.066 align:middle
+a través de algo llamado "resolvedores
+de valores de controlador".
+
+00:01:37.526 --> 00:01:40.826 align:middle
+Hay varios, y ya hemos utilizado
+unos cuantos, aunque no lo sabíamos.
+
+00:01:41.256 --> 00:01:46.826 align:middle
+Hay un RequestValueResolver para inyectar
+el objeto Request y un ServiceValueResolver
+
+00:01:46.986 --> 00:01:49.256 align:middle
+si un argumento tiene un tipo de servicio.
+
+00:01:49.856 --> 00:01:53.566 align:middle
+La integración con Doctrine de Symfony
+proporciona un EntityValueResolver.
+
+00:01:53.956 --> 00:01:56.296 align:middle
+Así es como podemos
+inyectar la entidad Starship.
+
+00:01:56.716 --> 00:02:00.496 align:middle
+Funciona porque hemos indicado
+Starship, una entidad Doctrine válida
+
+00:02:00.896 --> 00:02:02.836 align:middle
+, y tenemos un parámetro de ruta id.
+
+00:02:03.226 --> 00:02:07.486 align:middle
+Como toda entidad tiene un id, el
+resolver busca automáticamente
+
+00:02:07.486 --> 00:02:09.896 align:middle
+la entidad y nos la pasa.
+
+00:02:10.206 --> 00:02:12.886 align:middle
+Si no se encuentra la entidad, lanza un 404.
+
+00:02:13.246 --> 00:02:14.236 align:middle
+¡Me encanta!
+
+00:02:14.816 --> 00:02:19.126 align:middle
+Volvamos a nuestra misión: utilizar
+la nave slug en la URL en lugar del ID.
+
+00:02:19.426 --> 00:02:24.866 align:middle
+En primer lugar, actualiza el atributo
+#[Route] a /starship/{slug}: A continuación
+
+00:02:24.866 --> 00:02:30.956 align:middle
+, tenemos que actualizar todos los lugares
+donde generamos la URL para esta ruta.
+
+00:02:31.276 --> 00:02:32.676 align:middle
+No te preocupes, sólo hay 2.
+
+00:02:33.356 --> 00:02:37.116 align:middle
+Empieza por templates/main/homepage.html.twig.
+
+00:02:38.566 --> 00:02:41.096 align:middle
+Busca "show" y ya está.
+
+00:02:41.526 --> 00:02:48.616 align:middle
+En la función path, sustituye id:
+ship.id por slug: ship.slug: Ahora,
+
+00:02:48.666 --> 00:02:57.986 align:middle
+abre templates/main/_shipStatusAside.html.twig,
+busca "show", y en este path sustituye id:
+
+00:02:58.086 --> 00:03:05.626 align:middle
+myShip.id por slug: myShip.slug: Vuelve a nuestra aplicación
+y haz clic en "Atrás" para ir a la página de inicio.
+
+00:03:06.246 --> 00:03:08.426 align:middle
+Pasa el ratón por encima del
+enlace de un barco y mira la URL.
+
+00:03:08.816 --> 00:03:09.896 align:middle
+¡Es mucho más bonita!
+
+00:03:10.486 --> 00:03:11.096 align:middle
+Haz clic en el enlace.
+
+00:03:11.726 --> 00:03:12.466 align:middle
+¡Alerta roja!
+
+00:03:12.736 --> 00:03:16.116 align:middle
+No se puede autocablear el
+argumento $nave...". El problema es
+
+00:03:16.116 --> 00:03:20.826 align:middle
+que cuando no hay un comodín
+de ruta llamado id, vuelve a
+
+00:03:20.826 --> 00:03:22.916 align:middle
+intentar autoconectar Starship
+como si fuera un servicio.
+
+00:03:23.466 --> 00:03:27.026 align:middle
+Cuando el comodín de ruta no se llama
+id, tenemos que ayudarle un poco.
+
+00:03:27.706 --> 00:03:30.966 align:middle
+De vuelta a StarshipController::show(),
+mueve Starship $ship
+
+00:03:30.966 --> 00:03:32.846 align:middle
+a su propia línea para
+dejarnos algo de espacio.
+
+00:03:36.626 --> 00:03:42.696 align:middle
+Encima de él, añade un atributo:
+#[MapEntity] con un array con una clave de slug
+
+00:03:42.906 --> 00:03:46.496 align:middle
+-este es el nombre del parámetro
+de ruta- y un valor también de slug
+
+00:03:46.756 --> 00:03:51.036 align:middle
+-este es el nombre de la propiedad sobre la que debe
+consultar-: Vuelve a la aplicación y actualiza.
+
+00:03:51.856 --> 00:03:54.226 align:middle
+Vuelve a funcionar, ¡alerta roja cancelada!
+
+00:03:54.826 --> 00:03:57.336 align:middle
+Prueba a poner texto
+aleatorio para el slug y...
+
+00:03:58.496 --> 00:04:00.146 align:middle
+¡404! ¡Perfecto!
+
+00:04:00.976 --> 00:04:04.766 align:middle
+Ahora las URL de nuestras naves son
+bonitas, legibles y aptas para el SEO
+
+00:04:05.586 --> 00:04:07.726 align:middle
+Volar por el espacio es peligroso.
+
+00:04:08.006 --> 00:04:12.246 align:middle
+A veces las naves estelares sufren
+"desmontajes rápidos no programados"...
+
+00:04:12.546 --> 00:04:14.296 align:middle
+o lo que es lo mismo, explotan.
+
+00:04:14.886 --> 00:04:18.066 align:middle
+Necesitamos una forma de eliminar de
+nuestra base de datos las naves que ya no...
+
+00:04:18.336 --> 00:04:19.806 align:middle
+existen.
+
+00:04:20.446 --> 00:04:22.836 align:middle
+A continuación, veremos cómo
+eliminar entidades con Doctrine.
