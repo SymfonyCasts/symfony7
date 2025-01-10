@@ -1,0 +1,187 @@
+WEBVTT
+
+00:00:00.066 --> 00:00:04.776 align:middle
+Nuestro plan de reparación de naves
+estelares, ejem, ¡negocio va bien!
+
+00:00:05.146 --> 00:00:08.816 align:middle
+Ahora tenemos algunos clientes que repiten
+y quieren algunas mejoras de postventa.
+
+00:00:09.156 --> 00:00:13.236 align:middle
+Necesitamos una forma de registrar una nave
+estelar existente cuyo estado sea completada.
+
+00:00:13.836 --> 00:00:18.566 align:middle
+La lista de nuestra página de inicio sólo muestra las naves
+incompletas, así que tenemos que encontrar una completada.
+
+00:00:19.086 --> 00:00:24.836 align:middle
+Ejecuta en tu terminal: symfony console
+doctrine:query:sql 'SELECT slug,
+
+00:00:24.836 --> 00:00:31.306 align:middle
+status FROM starship' lunar-marauder-1
+es una nave completada.
+
+00:00:31.686 --> 00:00:36.616 align:middle
+Copia la babosa, y de vuelta en la aplicación,
+visita /starships/lunar-marauder-1.
+
+00:00:37.276 --> 00:00:42.186 align:middle
+Ya está. Para ver mejor la actualización, vamos a
+mostrar la fecha arrivedAt en la página de presentación.
+
+00:00:42.836 --> 00:00:49.176 align:middle
+En templates/starship/show.html.twig,
+copia estas etiquetas h4 y p.
+
+00:00:50.846 --> 00:00:51.666 align:middle
+Pégalas a continuación.
+
+00:00:52.526 --> 00:01:01.736 align:middle
+Actualiza el contenido de h4 a Arrived
+At y el de p a {{ ship.arrivedAt|ago }}:
+
+00:01:01.736 --> 00:01:06.936 align:middle
+Vuelve a la aplicación, actualiza y ¡listo!
+
+00:01:07.206 --> 00:01:09.726 align:middle
+Esta nave está completada y llegó hace 1 mes.
+
+00:01:10.356 --> 00:01:13.216 align:middle
+Para registrar una nave cuando
+llega, vamos a crear otro comando.
+
+00:01:13.596 --> 00:01:17.126 align:middle
+En tu terminal, ejecuta:
+symfony console make:command
+
+00:01:17.126 --> 00:01:20.736 align:middle
+Para el nombre, utiliza app:ship:check-in.
+
+00:01:21.926 --> 00:01:27.616 align:middle
+Abre la nueva clase de comando:
+src/Command/ShipCheckInCommand.php.
+
+00:01:27.616 --> 00:01:32.636 align:middle
+Actualiza la descripción: Check-in
+ship: y para el constructor,
+
+00:01:32.836 --> 00:01:34.876 align:middle
+necesitamos lo mismo que
+para el comando eliminar.
+
+00:01:35.256 --> 00:01:40.256 align:middle
+Ábrelo, copia el constructor y pégalo
+sobre ShipCheckInCommand::__construct():
+
+00:01:41.586 --> 00:01:46.136 align:middle
+También encontraremos la nave por slug, así que
+copia el método configure() de ShipRemoveCommand
+
+00:01:46.136 --> 00:01:53.896 align:middle
+y pégalo también: La primera parte de execute(),
+encontrar la nave por slug, también es la misma.
+
+00:01:54.316 --> 00:01:55.526 align:middle
+Cópiala y pégala.
+
+00:01:59.746 --> 00:02:03.106 align:middle
+Actualiza el comentario IO a
+"Comprobando nave estelar...":
+
+00:02:03.936 --> 00:02:05.746 align:middle
+Es hora de la lógica real de "registro".
+
+00:02:05.746 --> 00:02:09.176 align:middle
+Primero, actualiza la fecha
+de llegada a la hora actual
+
+00:02:09.176 --> 00:02:13.836 align:middle
+con $ship->setArrivedAt(new
+\DateTimeImmutable('now')).
+
+00:02:14.796 --> 00:02:21.406 align:middle
+A continuación, establece el estado en "esperando"
+con $ship->setStatus(StarshipStatusEnum::WAITING):
+
+00:02:22.206 --> 00:02:25.866 align:middle
+Estos campos se han actualizado en el
+objeto, pero aún no en la base de datos.
+
+00:02:26.216 --> 00:02:29.616 align:middle
+Para ejecutar la consulta UPDATE, a
+continuación, llama, lo has adivinado, a
+
+00:02:29.816 --> 00:02:33.676 align:middle
+$this->em->flush():
+¡Espera, espera, espera!
+
+00:02:34.006 --> 00:02:39.046 align:middle
+Cuando persistimos o eliminamos una entidad, teníamos
+que llamar a un método -como persist o remove
+
+00:02:39.046 --> 00:02:41.806 align:middle
+en el gestor de entidades- para que
+Doctrine conociera nuestra intención.
+
+00:02:42.156 --> 00:02:43.276 align:middle
+¿Aquí no?
+
+00:02:43.886 --> 00:02:45.876 align:middle
+¡No! Doctrine es superinteligente.
+
+00:02:46.156 --> 00:02:49.706 align:middle
+Arriba, cuando encontramos la entidad,
+Doctrine empezó a rastrearla.
+
+00:02:50.026 --> 00:02:52.606 align:middle
+Cuando llamamos a flush(),
+ve que ha sido modificada
+
+00:02:52.606 --> 00:02:55.596 align:middle
+y determina el mejor SQL para
+actualizar la base de datos.
+
+00:02:55.846 --> 00:02:56.726 align:middle
+¡Asombroso!
+
+00:02:56.726 --> 00:03:02.606 align:middle
+Por último, añade un mensaje de éxito "Nave
+estelar registrada": De vuelta a nuestra aplicación,
+
+00:03:02.606 --> 00:03:04.336 align:middle
+ésta es la nave que queremos registrar.
+
+00:03:04.746 --> 00:03:06.236 align:middle
+Copia el slug de la url.
+
+00:03:06.916 --> 00:03:08.956 align:middle
+En tu terminal, ejecuta el nuevo comando con:
+
+00:03:09.226 --> 00:03:14.036 align:middle
+symfony console app:ship:check-in
+pega el slug y ¡ejecuta!
+
+00:03:14.036 --> 00:03:17.386 align:middle
+¡Éxito! De vuelta en la app, actualiza.
+
+00:03:18.846 --> 00:03:22.396 align:middle
+La nave está ahora marcada como
+"esperando" y ha llegado hace 9 segundos.
+
+00:03:22.846 --> 00:03:23.446 align:middle
+¡Ha funcionado!
+
+00:03:24.276 --> 00:03:27.486 align:middle
+Vuelve a la lógica de registro
+dentro de ShipCheckInCommand.
+
+00:03:28.096 --> 00:03:30.376 align:middle
+Estamos llamando a setters
+para actualizar dos campos.
+
+00:03:30.746 --> 00:03:35.146 align:middle
+A continuación, vamos a encapsular esta
+lógica en un método de la entidad Starship.
