@@ -1,0 +1,202 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:05.626 align:middle
+Hemos añadido tres nuevos campos a
+Starship: slug, updatedAt, y createdAt.
+
+00:00:06.036 --> 00:00:07.436 align:middle
+¡Pero ahora nuestros accesorios no se cargan!
+
+00:00:07.896 --> 00:00:11.656 align:middle
+La razón es sencilla: los 3 campos
+son obligatorios en la base de datos,
+
+00:00:11.966 --> 00:00:13.966 align:middle
+pero StarshipFactory no los establece.
+
+00:00:14.496 --> 00:00:16.716 align:middle
+Podríamos añadirlos, pero no
+deberíamos tener que hacerlo.
+
+00:00:17.086 --> 00:00:21.906 align:middle
+En un mundo perfecto slug se generaría
+automáticamente a partir de los campos name, updatedAt:
+
+00:00:21.906 --> 00:00:25.576 align:middle
+ajustado a la hora actual cuando
+cambia la entidad y createdAt:
+
+00:00:25.746 --> 00:00:28.206 align:middle
+se ajustaría a la hora actual
+cuando se creara la entidad.
+
+00:00:28.206 --> 00:00:31.786 align:middle
+¡Y existe un paquete que puede
+hacer esto DoctrineExtensions!
+
+00:00:32.356 --> 00:00:40.596 align:middle
+En tu terminal, ejecuta: composer require
+stof/doctrine-extensions-bundle Este bundle
+
+00:00:40.596 --> 00:00:41.196 align:middle
+tiene una receta...
+
+00:00:41.426 --> 00:00:42.796 align:middle
+pero no se considera oficial.
+
+00:00:43.226 --> 00:00:45.966 align:middle
+Es una receta de terceros, o contrib.
+
+00:00:46.506 --> 00:00:51.126 align:middle
+Normalmente están bien, pero ten en cuenta que
+las recetas contrib son añadidas por la comunidad
+
+00:00:51.126 --> 00:00:53.126 align:middle
+y no controladas por el
+equipo central de Symfony.
+
+00:00:53.576 --> 00:00:54.906 align:middle
+Desplázate hacia arriba
+para ver lo que tenemos.
+
+00:00:55.616 --> 00:00:58.826 align:middle
+Los paquetes más importantes
+son gedmo/doctrine-extensions,
+
+00:00:59.196 --> 00:01:03.096 align:middle
+que contiene la lógica real, y
+stof/doctrine-extensions-bundle,
+
+00:01:03.266 --> 00:01:04.666 align:middle
+que la integra con Symfony.
+
+00:01:05.116 --> 00:01:06.606 align:middle
+No hace falta que te preocupes por lo demás.
+
+00:01:07.326 --> 00:01:10.276 align:middle
+Ejecuta: git status para ver
+lo que ha añadido la receta.
+
+00:01:10.826 --> 00:01:13.566 align:middle
+Ha configurado el bundle y ha añadido
+un nuevo archivo de configuración.
+
+00:01:14.026 --> 00:01:18.996 align:middle
+¡Genial! Para este bundle, necesitamos editar
+esta configuración para habilitar las extensiones
+
+00:01:19.146 --> 00:01:22.096 align:middle
+, donde cada extensión es como
+un superpoder para tus entidades.
+
+00:01:22.666 --> 00:01:27.126 align:middle
+Abre
+config/packages/stof_doctrine_extensions.yaml.
+
+00:01:27.586 --> 00:01:35.166 align:middle
+Debajo de default_local añade una nueva clave: orm:,
+luego default: y dentro de ésta, habilita 2 superpoderes,
+
+00:01:35.266 --> 00:01:41.736 align:middle
+quiero decir extensiones: timestampable: true y
+sluggable: true: Éstas están ahora activadas
+
+00:01:41.736 --> 00:01:46.396 align:middle
+en general, pero necesitamos un poco más de
+configuración para darles vida para la entidad Starship.
+
+00:01:46.846 --> 00:01:47.596 align:middle
+Vuelve a abrirla.
+
+00:01:47.596 --> 00:01:51.946 align:middle
+Sobre la propiedad $slug, añade
+un nuevo atributo: #[Slug],
+
+00:01:52.406 --> 00:01:55.756 align:middle
+importando la clase de
+Gedmo\Mapping\Annotation.
+
+00:01:56.456 --> 00:02:02.456 align:middle
+Dentro, añade fields: y establécelo en un array
+que contenga name: Esto indica a la extensión
+
+00:02:02.456 --> 00:02:06.536 align:middle
+que genere el slug a partir de la propiedad $name
+cuando se persista la entidad por primera vez. Encima
+
+00:02:07.236 --> 00:02:13.396 align:middle
+de $updatedAt, añade #[Timestampable] con on:
+'update' para que sepa que debe establecer este campo
+
+00:02:13.396 --> 00:02:20.106 align:middle
+con la hora actual al actualizar la entidad: Lo mismo para
+$createdAt, pero con on: 'create': ¡Vamos a probarlo!
+
+00:02:20.446 --> 00:02:26.256 align:middle
+En tu terminal, ejecuta: symfony
+console doctrine:fixtures:load Y...
+
+00:02:26.886 --> 00:02:27.506 align:middle
+¡funcionó!
+
+00:02:27.916 --> 00:02:31.006 align:middle
+Ejecuta nuestra consulta SQL
+para ver los valores: ¡Sí!
+
+00:02:31.146 --> 00:02:39.486 align:middle
+Nuestro slug se genera a partir
+del name, y updatedAt y createdAt
+
+00:02:41.286 --> 00:02:46.236 align:middle
+se establecen con la marca de tiempo
+de cuando se creó la entidad.
+
+00:02:46.236 --> 00:02:53.326 align:middle
+Doctrine considera el guardado inicial también
+como una actualización: por eso updatedAt
+
+00:02:53.326 --> 00:02:55.096 align:middle
+y createdAt tienen el mismo valor.
+
+00:02:55.736 --> 00:02:56.536 align:middle
+Desplázate un poco hacia abajo.
+
+00:02:57.186 --> 00:02:59.566 align:middle
+Fíjate en que estos slugs llevan el sufijo -1?
+
+00:02:59.796 --> 00:03:00.506 align:middle
+¿A qué se debe?
+
+00:03:01.026 --> 00:03:04.696 align:middle
+Se debe a que nuestro campo slug es
+único, pero nuestro name no lo es.
+
+00:03:05.246 --> 00:03:09.696 align:middle
+Tenemos algunos campos estelares, como Lunar
+Marauder aquí, que tienen el mismo nombre.
+
+00:03:10.216 --> 00:03:12.596 align:middle
+La extensión slug es lo suficientemente
+inteligente como para detectar esto,
+
+00:03:12.596 --> 00:03:17.226 align:middle
+y añadir automáticamente un
+sufijo numérico (-1, -2, etc.)
+
+00:03:17.476 --> 00:03:18.446 align:middle
+para mantenerlos únicos.
+
+00:03:18.846 --> 00:03:23.486 align:middle
+¡Inteligente! Ahora que tenemos un slug único y
+legible por humanos para nuestras naves estelares, vamos
+
+00:03:23.706 --> 00:03:26.936 align:middle
+a utilizarlo en lugar de
+este feo id en nuestras URL.
+
+00:03:27.416 --> 00:03:32.526 align:middle
+¡También utilizaremos algo llamado Resolvedores de valores de
+controlador para hacer que nuestros controladores sean de alta tecnología!
+
+00:03:33.016 --> 00:03:33.686 align:middle
+¡Eso a continuación!
