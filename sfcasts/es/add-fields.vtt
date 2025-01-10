@@ -1,0 +1,274 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.476 align:middle
+Los almirantes del Cuartel General de la Flota
+Estelar han impuesto nuevos requisitos. En
+
+00:00:04.476 --> 00:00:09.436 align:middle
+lugar de ver el id en la URL, como /starship/1,
+
+00:00:09.756 --> 00:00:13.836 align:middle
+quieren ver un nombre legible por
+humanos, como /starship/enterprise.
+
+00:00:14.256 --> 00:00:15.276 align:middle
+Esto se denomina "slug".
+
+00:00:15.926 --> 00:00:19.446 align:middle
+Para conseguirlo, tenemos que añadir un
+nuevo campo a nuestra entidad Starship.
+
+00:00:20.086 --> 00:00:24.316 align:middle
+Podríamos añadirlo a mano, superfácilmente:
+añadir la propiedad, el getter, el
+
+00:00:24.316 --> 00:00:27.166 align:middle
+setter y el atributo #[ORM\Column].
+
+00:00:27.546 --> 00:00:28.506 align:middle
+¡O podemos hacer trampas!
+
+00:00:28.926 --> 00:00:34.956 align:middle
+Ejecuta: symfony console make:entity
+Starship En lugar de crear una nueva entidad,
+
+00:00:35.186 --> 00:00:38.006 align:middle
+esta vez añadiremos campos
+a una entidad existente.
+
+00:00:38.646 --> 00:00:43.006 align:middle
+Añade slug, tipo string, longitud 255.
+
+00:00:43.006 --> 00:00:43.996 align:middle
+"¿Debería ser anulable?"
+
+00:00:44.286 --> 00:00:46.136 align:middle
+- no, pero elige yes por ahora.
+
+00:00:46.726 --> 00:00:51.936 align:middle
+Añadamos otros 2 campos útiles:
+updatedAt datetime_immutable , ¿anulable?
+
+00:00:52.116 --> 00:00:57.066 align:middle
+sí, temporalmente, y createdAt,
+datetime_immutable, ¿anulable?
+
+00:00:57.126 --> 00:00:59.716 align:middle
+sí. Pulsa Enter para salir del comando.
+
+00:01:00.266 --> 00:01:07.566 align:middle
+Antes de crear la migración, ve a comprobar la
+entidad Starship: src/Entity/Starship.php: ¡Genial!
+
+00:01:08.226 --> 00:01:10.946 align:middle
+E incluso podemos eliminar
+length: 255 por $slug.
+
+00:01:11.186 --> 00:01:12.116 align:middle
+Eso es por defecto.
+
+00:01:12.876 --> 00:01:14.176 align:middle
+Nuevo campo, ¡comprobado!
+
+00:01:14.556 --> 00:01:16.716 align:middle
+Pero, ¿existe la nueva
+columna en la base de datos?
+
+00:01:17.066 --> 00:01:19.296 align:middle
+¡No! Eso es tarea para una migración.
+
+00:01:19.996 --> 00:01:21.766 align:middle
+En tu terminal, crea una con:
+
+00:01:22.116 --> 00:01:27.246 align:middle
+symfony console make:migration Abre
+el nuevo archivo de migración.
+
+00:01:29.316 --> 00:01:30.156 align:middle
+Esto me encanta.
+
+00:01:30.626 --> 00:01:35.646 align:middle
+Recuerda que las migraciones se generan comparando
+la base de datos con la clase de entidad.
+
+00:01:35.646 --> 00:01:40.836 align:middle
+Doctrine ve los nuevos campos en la clase, no
+ve las columnas correspondientes en la tabla,
+
+00:01:41.206 --> 00:01:46.476 align:middle
+genera el SQL para arreglar eso y lo anida
+con seguridad en el método up(): Es opcional,
+
+00:01:46.516 --> 00:01:52.496 align:middle
+pero añadamos una descripción: "Añadir
+slug y timestamps a starship": En tu terminal,
+
+00:01:52.566 --> 00:01:59.306 align:middle
+ejecuta la migración: symfony console
+doctrine:migrations:migrate ¡Éxito!
+
+00:01:59.576 --> 00:02:00.816 align:middle
+Se han añadido las nuevas columnas.
+
+00:02:01.166 --> 00:02:08.336 align:middle
+Pruébalo ejecutando: symfony console
+doctrine:query:sql 'SELECT name, slug,
+
+00:02:08.716 --> 00:02:13.716 align:middle
+updated_at, created_at FROM starship' ¡Sí!
+
+00:02:13.786 --> 00:02:15.906 align:middle
+Las columnas están ahí, pero aún vacías.
+
+00:02:16.416 --> 00:02:20.256 align:middle
+Con el tiempo, configuraremos Doctrine para que
+establezca automáticamente estos campos por nosotros.
+
+00:02:20.616 --> 00:02:24.556 align:middle
+Pero antes, todas estas columnas deben
+ser obligatorias en la base de datos, lo
+
+00:02:24.556 --> 00:02:26.736 align:middle
+que en Doctrine se conoce como nullable: false.
+
+00:02:27.496 --> 00:02:28.506 align:middle
+Abre Starship.
+
+00:02:28.956 --> 00:02:31.476 align:middle
+Encima de $slug, quita nullable: true.
+
+00:02:32.036 --> 00:02:35.286 align:middle
+Esto significa ahora nullable:
+false: ése es el valor por defecto.
+
+00:02:35.976 --> 00:02:40.216 align:middle
+En otras palabras, esto le dice a Doctrine que la
+columna debe ser obligatoria en la base de datos.
+
+00:02:41.016 --> 00:02:44.316 align:middle
+Establece también unique: true
+para que sea una columna única.
+
+00:02:44.316 --> 00:02:47.896 align:middle
+Para $updatedAt y $createdAt,
+elimina también nullable: true.
+
+00:02:48.986 --> 00:02:53.066 align:middle
+Una vez más, hemos realizado cambios en nuestra
+entidad que no se reflejan en la base de datos.
+
+00:02:53.436 --> 00:02:54.466 align:middle
+¡Hora de migrar!
+
+00:02:54.856 --> 00:03:00.036 align:middle
+Ejecuta: symfony console make:migration
+Abre la nueva migración.
+
+00:03:01.026 --> 00:03:05.606 align:middle
+¡Genial! En el método up(), altera las
+tres columnas para convertirlas en NOT NULL
+
+00:03:05.646 --> 00:03:10.946 align:middle
+y crea un índice único en la columna slug:
+Añade una descripción: "Hacer que slug
+
+00:03:10.946 --> 00:03:15.346 align:middle
+y timestamps no sean anulables":
+¡Ejecútalo en el terminal!
+
+00:03:15.346 --> 00:03:20.206 align:middle
+symfony console
+doctrine:migrations:migrate ¡Error!
+
+00:03:20.446 --> 00:03:24.456 align:middle
+Estos campos no se pueden establecer en
+NOT NULL porque contienen valores de null.
+
+00:03:24.456 --> 00:03:29.996 align:middle
+¡Error! Esta es una situación complicada en la que tenemos
+que hacer las cosas en 3 pasos: añadir las nuevas columnas,
+
+00:03:30.216 --> 00:03:33.066 align:middle
+darles un valor a cada una
+y luego hacerlas NOT NULL.
+
+00:03:33.846 --> 00:03:35.326 align:middle
+Vuelve a abrir la última migración.
+
+00:03:35.756 --> 00:03:38.576 align:middle
+La mayoría de las veces, Doctrine
+hace todo el trabajo por nosotros.
+
+00:03:38.816 --> 00:03:41.566 align:middle
+Pero podemos añadir nuestro
+propio SQL a una migración.
+
+00:03:42.206 --> 00:03:44.966 align:middle
+En el método up(), antes del SQL generado,
+
+00:03:45.216 --> 00:03:54.216 align:middle
+escribe $this->addSql ('UPDATE starship
+SET slug = id, updated_at = arrived_at,
+
+00:03:54.796 --> 00:03:58.166 align:middle
+created_at = arrived_at'):
+Vamos a descomprimir esto.
+
+00:03:58.556 --> 00:04:02.176 align:middle
+Estamos actualizando la tabla starship,
+estableciendo slug igual a id.
+
+00:04:02.616 --> 00:04:07.706 align:middle
+¿Por qué? Porque id es único y no nulo,
+exactamente lo que necesitamos para slug.
+
+00:04:08.196 --> 00:04:12.016 align:middle
+También estamos igualando
+updated_at y created_at a arrived_at.
+
+00:04:12.426 --> 00:04:15.606 align:middle
+Sabemos que arrived_at también
+es una marca de tiempo y no nula.
+
+00:04:16.376 --> 00:04:18.726 align:middle
+De nuevo en el terminal, vuelve
+a ejecutar las migraciones:
+
+00:04:18.726 --> 00:04:23.646 align:middle
+symfony console doctrine:migrations:migrate
+¡Ha funcionado!
+
+00:04:23.976 --> 00:04:31.576 align:middle
+Ejecuta de nuevo la consulta para ver los datos:
+symfony console doctrine:query:sql 'SELECT name, slug,
+
+00:04:31.726 --> 00:04:36.556 align:middle
+updated_at, created_at FROM starship' ¡Mira!
+
+00:04:36.556 --> 00:04:38.976 align:middle
+Tres nuevos campos rellenados con datos.
+
+00:04:39.556 --> 00:04:40.866 align:middle
+Pero ahora tenemos un problema.
+
+00:04:41.286 --> 00:04:49.266 align:middle
+¡Maldición! Recarga los accesorios: ¡Explosión!
+symfony console doctrine:fixtures:load
+
+00:04:49.396 --> 00:04:53.056 align:middle
+No hay nada en nuestros dispositivos que
+establezca estos tres campos obligatorios.
+
+00:04:53.486 --> 00:04:57.996 align:middle
+Podríamos actualizar nuestro para establecer valores
+por defecto para estos campos... StarshipFactory
+
+00:04:58.256 --> 00:05:01.756 align:middle
+pero quiero mostrarte una forma diferente:
+un paquete de "extensión de doctrina
+
+00:05:01.756 --> 00:05:03.516 align:middle
+" que puede establecerlos automáticamente.
+
+00:05:03.516 --> 00:05:05.746 align:middle
+Es lo mejor, ¡y es lo siguiente!
