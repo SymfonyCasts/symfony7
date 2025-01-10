@@ -1,0 +1,162 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:06.796 align:middle
+Oh-oh, acabamos de enterarnos de que esta nave, el
+USS Leafy Cruiser, ha caído en un agujero negro.
+
+00:00:07.196 --> 00:00:12.676 align:middle
+Por suerte, no había a bordo ningún personaje querido
+a largo plazo, pero esta nave está ahora espaguetizada.
+
+00:00:13.296 --> 00:00:17.586 align:middle
+Como ya no existe en esta realidad, tenemos
+que eliminarla de nuestra base de datos.
+
+00:00:18.096 --> 00:00:19.856 align:middle
+Creemos un comando para ello.
+
+00:00:20.226 --> 00:00:27.396 align:middle
+En tu terminal, ejecuta: symfony console
+make:command Para el nombre, utiliza app:ship:remove.
+
+00:00:28.116 --> 00:00:29.846 align:middle
+Esto ha creado una nueva clase de comando.
+
+00:00:30.136 --> 00:00:33.946 align:middle
+¡Ábrela! src/Command/ShipRemoveCommand.php.
+
+00:00:34.556 --> 00:00:36.796 align:middle
+El creador añadió algo de
+código repetitivo para nosotros.
+
+00:00:37.196 --> 00:00:43.046 align:middle
+Actualiza la descripción a Delete a starship: En
+el constructor, necesitamos inyectar dos cosas:
+
+00:00:45.116 --> 00:00:51.396 align:middle
+private ShipRepository $shipRepo y
+private EntityManagerInterface $em:
+
+00:00:52.006 --> 00:00:56.106 align:middle
+Cuando necesites encontrar o recuperar
+entidades, utiliza el repositorio.
+
+00:00:56.506 --> 00:01:00.686 align:middle
+Cuando necesites gestionar entidades,
+como persistir, actualizar o eliminar,
+
+00:01:00.976 --> 00:01:03.716 align:middle
+utiliza el gestor de entidades,
+o "EM" para abreviar.
+
+00:01:04.766 --> 00:01:07.366 align:middle
+En el método configure(), elimina addOption().
+
+00:01:08.716 --> 00:01:14.036 align:middle
+En addArgument(), cambia el nombre
+a slug, pon InputArgument::REQUIRED,
+
+00:01:14.376 --> 00:01:19.376 align:middle
+y actualiza la descripción a The slug
+of the starship: Abajo, en execute(),
+
+00:01:19.716 --> 00:01:28.186 align:middle
+sustituye este $arg1 = por $slug =
+$input->getArgument('slug'): A continuación,
+
+00:01:28.186 --> 00:01:30.146 align:middle
+tenemos que encontrar la nave por esta babosa.
+
+00:01:30.706 --> 00:01:34.396 align:middle
+Cada EntityRepository ya tiene
+el método perfecto para esto.
+
+00:01:34.786 --> 00:01:43.236 align:middle
+Escribe $ship = $this->shipRepo->findOneBy()
+pasando un array donde la clave es la propiedad
+
+00:01:43.236 --> 00:01:48.616 align:middle
+a buscar y el valor es el valor
+a buscar: ['slug' => $slug]:
+
+00:01:49.416 --> 00:01:53.866 align:middle
+Al utilizar estos métodos de búsqueda preconfigurados,
+Doctrine escapa automáticamente los valores,
+
+00:01:53.866 --> 00:01:56.926 align:middle
+por lo que no tienes que preocuparte
+por los ataques de inyección SQL.
+
+00:01:57.756 --> 00:02:00.196 align:middle
+Ajusta esta sentencia if para que if (!$ship).
+
+00:02:00.966 --> 00:02:03.936 align:middle
+findOneBy() devuelve null si no
+se ha encontrado una entidad.
+
+00:02:04.406 --> 00:02:11.376 align:middle
+Dentro, escribe $io->error('Starship
+not found.') y devuelve Command::FAILURE:
+
+00:02:12.326 --> 00:02:15.636 align:middle
+Escribe un comentario para que el usuario sepa
+que estamos a punto de eliminar la nave estelar.
+
+00:02:16.126 --> 00:02:23.666 align:middle
+$io->comment(sprintf('Removing
+starship %s', $ship->getName())):
+
+00:02:24.456 --> 00:02:30.166 align:middle
+Elimina esta repetición adicional y
+escribe $this->em->remove($ship).
+
+00:02:31.146 --> 00:02:34.666 align:middle
+Al igual que con persist(), remove() en realidad
+no elimina la entidad directamente, sino
+
+00:02:34.956 --> 00:02:41.276 align:middle
+que la añade a una cola de entidades que se
+eliminarán cuando llamemos a $this->em->flush():
+
+00:02:41.996 --> 00:02:48.236 align:middle
+Añade un mensaje de éxito con $io->success('Starship
+removed.'): ¡Comando realizado!
+
+00:02:48.816 --> 00:02:52.636 align:middle
+Vuelve a nuestra aplicación y actualiza la
+página para asegurarte de que la nave sigue ahí.
+
+00:02:53.316 --> 00:02:55.336 align:middle
+Ahora, copia el slug de la URL.
+
+00:02:56.126 --> 00:03:02.716 align:middle
+De nuevo en tu terminal, Ejecuta: symfony
+console app:ship:remove Pega el slug copiado
+
+00:03:02.716 --> 00:03:03.466 align:middle
+y ejecuta.
+
+00:03:04.016 --> 00:03:06.146 align:middle
+Ya está Nave estelar eliminada.
+
+00:03:06.706 --> 00:03:08.036 align:middle
+Ejecuta de nuevo el mismo comando.
+
+00:03:08.696 --> 00:03:10.076 align:middle
+"Nave estelar no encontrada"
+
+00:03:10.226 --> 00:03:13.546 align:middle
+¡Perfecto! De nuevo en la
+aplicación, actualiza la página.
+
+00:03:14.256 --> 00:03:17.326 align:middle
+404. ¡La nave ha desaparecido
+de la base de datos!
+
+00:03:17.996 --> 00:03:21.116 align:middle
+¡Muy bien! Hemos visto cómo
+persistir y eliminar entidades.
+
+00:03:21.566 --> 00:03:24.136 align:middle
+A continuación, veremos cómo
+actualizar la entidad nave estelar.
