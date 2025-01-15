@@ -20,7 +20,7 @@ La mejor manera es trasladar, o encapsular, esta lógica de registro a un métod
 
 Arriba, añade la lógica de comprobación: `$this->arrivedAt = $arrivedAt`, y si no se ha pasado, `?? new \DateTimeImmutable('now')`. A continuación, `$this->status = StarshipStatusEnum::WAITING`:
 
-[[[ code('0763caad07') ]]]
+[[[ code('76a6069436') ]]]
 
 ## Utilizando el método `Starship::checkIn()` 
 
