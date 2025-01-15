@@ -1,0 +1,158 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:02.496 align:middle
+Echa un vistazo a nuestra entidad Starship.
+
+00:00:02.796 --> 00:00:05.036 align:middle
+Es un montón de propiedades
+y getters y setters.
+
+00:00:05.326 --> 00:00:06.206 align:middle
+Un poco aburrido, ¿verdad?
+
+00:00:06.206 --> 00:00:07.596 align:middle
+¡No tiene por qué serlo!
+
+00:00:08.096 --> 00:00:11.906 align:middle
+Como las entidades son clases PHP estándar, podemos
+añadir métodos explícitos y significativos
+
+00:00:11.906 --> 00:00:16.866 align:middle
+que describan nuestra lógica
+de negocio, como goToWarp(7)
+
+00:00:16.866 --> 00:00:19.336 align:middle
+o enterOrbitAround($millersPlanet).
+
+00:00:19.836 --> 00:00:21.896 align:middle
+Son los llamados métodos ricos de entidad.
+
+00:00:22.456 --> 00:00:24.426 align:middle
+Probemos esto y exploremos las ventajas.
+
+00:00:24.816 --> 00:00:29.736 align:middle
+Nuestra lógica de registro Starship vive actualmente
+en el método ShipCheckInCommand::execute().
+
+00:00:30.236 --> 00:00:33.756 align:middle
+Después de obtener el barco,
+actualizamos sus arrivedAt y status.
+
+00:00:34.266 --> 00:00:37.066 align:middle
+¿Y si, en el futuro, añadimos
+un controlador de registro?
+
+00:00:37.496 --> 00:00:39.266 align:middle
+Tendríamos que duplicar esta lógica allí.
+
+00:00:39.636 --> 00:00:43.656 align:middle
+Y si la lógica de "registro" cambia -por
+ejemplo, si necesitamos actualizar otro campo-,
+
+00:00:43.896 --> 00:00:46.406 align:middle
+tendríamos que acordarnos de
+cambiarla en varios sitios.
+
+00:00:46.856 --> 00:00:48.616 align:middle
+Eso no es ciencia ficción.
+
+00:00:49.416 --> 00:00:54.526 align:middle
+Lo mejor es trasladar, o encapsular, esta
+lógica de registro a un método de la entidad.
+
+00:00:55.036 --> 00:00:58.926 align:middle
+Abre src/Entity/Starship.php
+y desplázate hasta el final.
+
+00:00:59.686 --> 00:01:01.796 align:middle
+Crea un nuevo: public function checkIn().
+
+00:01:01.796 --> 00:01:08.376 align:middle
+Haz que acepte un ?\DateTimeImmutable $arrivedAt
+= null opcional y que devuelva static,
+
+00:01:08.556 --> 00:01:14.166 align:middle
+que es una forma elegante de decir "devuelve
+el objeto actual": return $this: Arriba
+
+00:01:14.386 --> 00:01:21.736 align:middle
+, añade la lógica de comprobación: $this->arrivedAt
+= $arrivedAt, y si no se ha pasado, ??
+
+00:01:21.886 --> 00:01:24.096 align:middle
+new \DateTimeImmutable('ahora').
+
+00:01:25.386 --> 00:01:29.826 align:middle
+A continuación, $this->status
+= StarshipStatusEnum::WAITING:
+
+00:01:30.756 --> 00:01:33.506 align:middle
+Vuelve a ShipCheckInCommand
+y sustituye la lógica
+
+00:01:33.506 --> 00:01:37.726 align:middle
+por $ship->checkIn(): ¡Vaya, está claro!
+
+00:01:38.216 --> 00:01:41.656 align:middle
+Ahora el comando se lee como una historia
+"Encuentra la nave, luego regístrala".
+
+00:01:42.356 --> 00:01:45.516 align:middle
+Para asegurarte de que sigue funcionando,
+vuelve a la página principal y actualízala.
+
+00:01:46.056 --> 00:01:47.596 align:middle
+Encuentra una nave que no esté "esperando"...
+
+00:01:48.056 --> 00:01:49.866 align:middle
+Allá vamos: "Pirata Estelar".
+
+00:01:50.256 --> 00:01:52.636 align:middle
+Haz clic en ella y copia el slug de la URL.
+
+00:01:53.266 --> 00:01:59.736 align:middle
+De vuelta a tu terminal, ejecuta: symfony console
+app:ship:check-in pega el slug, ¡y ejecuta!
+
+00:02:00.326 --> 00:02:03.526 align:middle
+¡Éxito! De vuelta en la
+aplicación, actualiza.
+
+00:02:04.616 --> 00:02:08.836 align:middle
+¡Perfecto! La nave está ahora marcada como
+"esperando" y ha llegado hace 6 segundos.
+
+00:02:09.526 --> 00:02:14.686 align:middle
+Si te encuentras repitiendo operaciones comunes en tus
+entidades, considera la posibilidad de añadir, y luego utilizar,
+
+00:02:14.686 --> 00:02:16.826 align:middle
+un método que describa el
+trabajo que se está realizando.
+
+00:02:17.216 --> 00:02:20.126 align:middle
+Es una victoria fácil para la
+legibilidad y la mantenibilidad.
+
+00:02:21.016 --> 00:02:24.226 align:middle
+Bien tripulación, ¡eso es todo para
+este curso de Fundamentos de Doctrine!
+
+00:02:24.556 --> 00:02:27.716 align:middle
+Si quieres actualizar tus conocimientos
+sobre Doctrine, busca "Doctrine"
+
+00:02:27.716 --> 00:02:30.626 align:middle
+en SymfonyCasts para encontrar
+cursos más avanzados.
+
+00:02:31.196 --> 00:02:33.866 align:middle
+La documentación de Doctrine
+también es un gran recurso.
+
+00:02:34.346 --> 00:02:37.956 align:middle
+Y como siempre, si tienes alguna pregunta,
+estamos a tu disposición en los comentarios.
+
+00:02:38.366 --> 00:02:40.236 align:middle
+hasta la próxima, ¡feliz programación!
