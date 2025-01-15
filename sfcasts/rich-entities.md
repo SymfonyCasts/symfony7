@@ -33,7 +33,7 @@ Above, add the check-in logic: `$this->arrivedAt = $arrivedAt`, and
 if it wasn't passed, `?? new \DateTimeImmutable('now')`.
 Next, `$this->status = StarshipStatusEnum::WAITING`:
 
-[[[ code('0763caad07') ]]]
+[[[ code('76a6069436') ]]]
 
 ## Using the `Starship::checkIn()` Method
 

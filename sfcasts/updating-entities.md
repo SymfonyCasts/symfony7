@@ -41,12 +41,12 @@ For the name, use `app:ship:check-in`.
 
 Open the new command class: `src/Command/ShipCheckInCommand.php`. Update the description - `Check-in ship`:
 
-[[[ code('ee6f31badc') ]]]
+[[[ code('9a2d044273') ]]]
 
 and for the constructor, we need the same things as the remove command. Open that,
 copy the constructor, and paste it over `ShipCheckInCommand::__construct()`:
 
-[[[ code('ee6f31badc') ]]]
+[[[ code('07d2247385') ]]]
 
 We'll also find the ship by slug, so copy the `configure()` method from `ShipRemoveCommand` and
 paste it too:
