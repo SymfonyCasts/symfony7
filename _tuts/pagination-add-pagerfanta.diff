@@ -1,5 +1,5 @@
 diff --git a/composer.json b/composer.json
-index be59ebb..accdaf7 100644
+index 5e9db43..744f4bd 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -7,11 +7,13 @@
@@ -17,15 +17,15 @@ index be59ebb..accdaf7 100644
          "phpdocumentor/reflection-docblock": "^5.3",
          "phpstan/phpdoc-parser": "^1.25",
 diff --git a/composer.lock b/composer.lock
-index 4e2c899..2142288 100644
+index b0e7358..730108e 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,8 +4,95 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "1fd2cf606f3ef25c7ebbac9d88af93a0",
-+    "content-hash": "1bb5167dd579ac54652dd4d247232d5a",
+-    "content-hash": "39f7f33909d2a06cc7c58fdfa98da2be",
++    "content-hash": "df266eefc6dc879953fc41ec26c16c86",
      "packages": [
 +        {
 +            "name": "babdev/pagerfanta-bundle",
@@ -117,22 +117,22 @@ index 4e2c899..2142288 100644
          {
              "name": "composer/semver",
              "version": "3.4.3",
-@@ -1491,6 +1578,96 @@
+@@ -1481,6 +1568,96 @@
              ],
              "time": "2024-11-12T13:57:08+00:00"
          },
 +        {
 +            "name": "pagerfanta/core",
-+            "version": "v4.7.0",
++            "version": "v4.7.1",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/Pagerfanta/core.git",
-+                "reference": "4509db0e1e22baea6678b724f3254609acbaa9cc"
++                "reference": "829eaa9737b3cfae1406f67a4e9ee36e0e37caf9"
 +            },
 +            "dist": {
 +                "type": "zip",
-+                "url": "https://api.github.com/repos/Pagerfanta/core/zipball/4509db0e1e22baea6678b724f3254609acbaa9cc",
-+                "reference": "4509db0e1e22baea6678b724f3254609acbaa9cc",
++                "url": "https://api.github.com/repos/Pagerfanta/core/zipball/829eaa9737b3cfae1406f67a4e9ee36e0e37caf9",
++                "reference": "829eaa9737b3cfae1406f67a4e9ee36e0e37caf9",
 +                "shasum": ""
 +            },
 +            "require": {
@@ -160,22 +160,22 @@ index 4e2c899..2142288 100644
 +                "pagerfanta"
 +            ],
 +            "support": {
-+                "source": "https://github.com/Pagerfanta/core/tree/v4.7.0"
++                "source": "https://github.com/Pagerfanta/core/tree/v4.7.1"
 +            },
-+            "time": "2024-08-13T23:43:44+00:00"
++            "time": "2024-12-13T15:05:37+00:00"
 +        },
 +        {
 +            "name": "pagerfanta/doctrine-orm-adapter",
-+            "version": "v4.7.0",
++            "version": "v4.7.1",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/Pagerfanta/doctrine-orm-adapter.git",
-+                "reference": "c51e5c7b2c704e83442a365604d94ebcdec3d054"
++                "reference": "b3be49948e84b67c023c820abc54ea574a100d5d"
 +            },
 +            "dist": {
 +                "type": "zip",
-+                "url": "https://api.github.com/repos/Pagerfanta/doctrine-orm-adapter/zipball/c51e5c7b2c704e83442a365604d94ebcdec3d054",
-+                "reference": "c51e5c7b2c704e83442a365604d94ebcdec3d054",
++                "url": "https://api.github.com/repos/Pagerfanta/doctrine-orm-adapter/zipball/b3be49948e84b67c023c820abc54ea574a100d5d",
++                "reference": "b3be49948e84b67c023c820abc54ea574a100d5d",
 +                "shasum": ""
 +            },
 +            "require": {
@@ -207,9 +207,9 @@ index 4e2c899..2142288 100644
 +                "pagerfanta"
 +            ],
 +            "support": {
-+                "source": "https://github.com/Pagerfanta/doctrine-orm-adapter/tree/v4.7.0"
++                "source": "https://github.com/Pagerfanta/doctrine-orm-adapter/tree/v4.7.1"
 +            },
-+            "time": "2024-03-06T23:51:47+00:00"
++            "time": "2024-11-30T19:18:10+00:00"
 +        },
          {
              "name": "php-cs-fixer/shim",

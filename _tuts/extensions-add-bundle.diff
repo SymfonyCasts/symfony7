@@ -1,5 +1,5 @@
 diff --git a/composer.json b/composer.json
-index accdaf7..1967e4a 100644
+index 744f4bd..3af514b 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -17,6 +17,7 @@
@@ -11,15 +11,15 @@ index accdaf7..1967e4a 100644
          "symfony/asset-mapper": "7.1.*",
          "symfony/console": "7.1.*",
 diff --git a/composer.lock b/composer.lock
-index 2142288..fa45be8 100644
+index 730108e..866dd04 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "1bb5167dd579ac54652dd4d247232d5a",
-+    "content-hash": "276a13a02aeef233383fa97929e0f3b0",
+-    "content-hash": "df266eefc6dc879953fc41ec26c16c86",
++    "content-hash": "9b7555863b0e06c24d6018b892c505e1",
      "packages": [
          {
              "name": "babdev/pagerfanta-bundle",
@@ -85,20 +85,20 @@ index 2142288..fa45be8 100644
          },
 +        {
 +            "name": "doctrine/common",
-+            "version": "3.4.5",
++            "version": "3.5.0",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/doctrine/common.git",
-+                "reference": "6c8fef961f67b8bc802ce3e32e3ebd1022907286"
++                "reference": "d9ea4a54ca2586db781f0265d36bea731ac66ec5"
 +            },
 +            "dist": {
 +                "type": "zip",
-+                "url": "https://api.github.com/repos/doctrine/common/zipball/6c8fef961f67b8bc802ce3e32e3ebd1022907286",
-+                "reference": "6c8fef961f67b8bc802ce3e32e3ebd1022907286",
++                "url": "https://api.github.com/repos/doctrine/common/zipball/d9ea4a54ca2586db781f0265d36bea731ac66ec5",
++                "reference": "d9ea4a54ca2586db781f0265d36bea731ac66ec5",
 +                "shasum": ""
 +            },
 +            "require": {
-+                "doctrine/persistence": "^2.0 || ^3.0",
++                "doctrine/persistence": "^2.0 || ^3.0 || ^4.0",
 +                "php": "^7.1 || ^8.0"
 +            },
 +            "require-dev": {
@@ -156,7 +156,7 @@ index 2142288..fa45be8 100644
 +            ],
 +            "support": {
 +                "issues": "https://github.com/doctrine/common/issues",
-+                "source": "https://github.com/doctrine/common/tree/3.4.5"
++                "source": "https://github.com/doctrine/common/tree/3.5.0"
 +            },
 +            "funding": [
 +                {
@@ -172,14 +172,14 @@ index 2142288..fa45be8 100644
 +                    "type": "tidelift"
 +                }
 +            ],
-+            "time": "2024-10-08T15:53:43+00:00"
++            "time": "2025-01-01T22:12:03+00:00"
 +        },
          {
              "name": "doctrine/dbal",
-             "version": "3.9.3",
-@@ -1400,6 +1540,136 @@
+             "version": "3.9.4",
+@@ -1390,6 +1530,136 @@
              },
-             "time": "2024-10-21T18:21:57+00:00"
+             "time": "2025-01-24T11:45:48+00:00"
          },
 +        {
 +            "name": "gedmo/doctrine-extensions",
@@ -314,7 +314,7 @@ index 2142288..fa45be8 100644
          {
              "name": "knplabs/knp-time-bundle",
              "version": "v2.4.0",
-@@ -1991,6 +2261,54 @@
+@@ -1981,6 +2251,54 @@
              },
              "time": "2021-02-03T23:26:27+00:00"
          },
@@ -369,22 +369,22 @@ index 2142288..fa45be8 100644
          {
              "name": "psr/container",
              "version": "2.0.2",
-@@ -2144,6 +2462,86 @@
+@@ -2134,6 +2452,86 @@
              },
              "time": "2024-09-11T13:17:53+00:00"
          },
 +        {
 +            "name": "stof/doctrine-extensions-bundle",
-+            "version": "v1.12.0",
++            "version": "v1.13.0",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/stof/StofDoctrineExtensionsBundle.git",
-+                "reference": "473ae65598fa4160654c350e139e20ee75d9a91a"
++                "reference": "bf00701bff3f2b7c4bf6d963101c9ea6968d694f"
 +            },
 +            "dist": {
 +                "type": "zip",
-+                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/473ae65598fa4160654c350e139e20ee75d9a91a",
-+                "reference": "473ae65598fa4160654c350e139e20ee75d9a91a",
++                "url": "https://api.github.com/repos/stof/StofDoctrineExtensionsBundle/zipball/bf00701bff3f2b7c4bf6d963101c9ea6968d694f",
++                "reference": "bf00701bff3f2b7c4bf6d963101c9ea6968d694f",
 +                "shasum": ""
 +            },
 +            "require": {
@@ -449,31 +449,13 @@ index 2142288..fa45be8 100644
 +            ],
 +            "support": {
 +                "issues": "https://github.com/stof/StofDoctrineExtensionsBundle/issues",
-+                "source": "https://github.com/stof/StofDoctrineExtensionsBundle/tree/v1.12.0"
++                "source": "https://github.com/stof/StofDoctrineExtensionsBundle/tree/v1.13.0"
 +            },
-+            "time": "2024-06-10T12:27:27+00:00"
++            "time": "2025-01-07T08:10:54+00:00"
 +        },
          {
              "name": "symfony/asset",
              "version": "v7.1.6",
-@@ -6901,7 +7299,7 @@
-     ],
-     "aliases": [],
-     "minimum-stability": "stable",
--    "stability-flags": {},
-+    "stability-flags": [],
-     "prefer-stable": true,
-     "prefer-lowest": false,
-     "platform": {
-@@ -6909,7 +7307,7 @@
-         "ext-ctype": "*",
-         "ext-iconv": "*"
-     },
--    "platform-dev": {},
-+    "platform-dev": [],
-     "platform-overrides": {
-         "php": "8.3"
-     },
 diff --git a/config/bundles.php b/config/bundles.php
 index a151989..963dce8 100644
 --- a/config/bundles.php

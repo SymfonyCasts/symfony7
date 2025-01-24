@@ -1,5 +1,5 @@
 diff --git a/composer.json b/composer.json
-index 0f678ca..be59ebb 100644
+index 233e0a0..5e9db43 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -94,6 +94,7 @@
@@ -12,232 +12,22 @@ index 0f678ca..be59ebb 100644
      }
  }
 diff --git a/composer.lock b/composer.lock
-index e6de45d..4e2c899 100644
+index 5ca18b8..b0e7358 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "9a931a5ffa2dc503a2962553512fbd64",
-+    "content-hash": "1fd2cf606f3ef25c7ebbac9d88af93a0",
+-    "content-hash": "5494c1121fe02b29f7debcc17000aa8c",
++    "content-hash": "39f7f33909d2a06cc7c58fdfa98da2be",
      "packages": [
          {
              "name": "composer/semver",
-@@ -428,16 +428,16 @@
+@@ -6183,6 +6183,69 @@
+             ],
+             "time": "2024-12-03T17:07:51+00:00"
          },
-         {
-             "name": "doctrine/doctrine-bundle",
--            "version": "2.13.0",
-+            "version": "2.13.1",
-             "source": {
-                 "type": "git",
-                 "url": "https://github.com/doctrine/DoctrineBundle.git",
--                "reference": "ca59d84b8e63143ce1aed90cdb333ba329d71563"
-+                "reference": "2740ad8b8739b39ab37d409c972b092f632b025a"
-             },
-             "dist": {
-                 "type": "zip",
--                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/ca59d84b8e63143ce1aed90cdb333ba329d71563",
--                "reference": "ca59d84b8e63143ce1aed90cdb333ba329d71563",
-+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/2740ad8b8739b39ab37d409c972b092f632b025a",
-+                "reference": "2740ad8b8739b39ab37d409c972b092f632b025a",
-                 "shasum": ""
-             },
-             "require": {
-@@ -451,7 +451,7 @@
-                 "symfony/console": "^5.4 || ^6.0 || ^7.0",
-                 "symfony/dependency-injection": "^5.4 || ^6.0 || ^7.0",
-                 "symfony/deprecation-contracts": "^2.1 || ^3",
--                "symfony/doctrine-bridge": "^5.4.19 || ^6.0.7 || ^7.0",
-+                "symfony/doctrine-bridge": "^5.4.46 || ^6.4.3 || ^7.0.3",
-                 "symfony/framework-bundle": "^5.4 || ^6.0 || ^7.0",
-                 "symfony/polyfill-php80": "^1.15",
-                 "symfony/service-contracts": "^1.1.1 || ^2.0 || ^3"
-@@ -528,7 +528,7 @@
-             ],
-             "support": {
-                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
--                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.13.0"
-+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.13.1"
-             },
-             "funding": [
-                 {
-@@ -544,7 +544,7 @@
-                     "type": "tidelift"
-                 }
-             ],
--            "time": "2024-09-01T09:46:40+00:00"
-+            "time": "2024-11-08T23:27:54+00:00"
-         },
-         {
-             "name": "doctrine/doctrine-migrations-bundle",
-@@ -2605,16 +2605,16 @@
-         },
-         {
-             "name": "symfony/doctrine-bridge",
--            "version": "v7.1.6",
-+            "version": "v7.1.9",
-             "source": {
-                 "type": "git",
-                 "url": "https://github.com/symfony/doctrine-bridge.git",
--                "reference": "3fcfb37b738def92757b6ac5365a3147b2e2dd36"
-+                "reference": "893cc4fa0f218d6e88efbe58397e2b42167648e1"
-             },
-             "dist": {
-                 "type": "zip",
--                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/3fcfb37b738def92757b6ac5365a3147b2e2dd36",
--                "reference": "3fcfb37b738def92757b6ac5365a3147b2e2dd36",
-+                "url": "https://api.github.com/repos/symfony/doctrine-bridge/zipball/893cc4fa0f218d6e88efbe58397e2b42167648e1",
-+                "reference": "893cc4fa0f218d6e88efbe58397e2b42167648e1",
-                 "shasum": ""
-             },
-             "require": {
-@@ -2644,7 +2644,7 @@
-             },
-             "require-dev": {
-                 "doctrine/collections": "^1.0|^2.0",
--                "doctrine/data-fixtures": "^1.1",
-+                "doctrine/data-fixtures": "^1.1|^2",
-                 "doctrine/dbal": "^3.6|^4",
-                 "doctrine/orm": "^2.15|^3",
-                 "psr/log": "^1|^2|^3",
-@@ -2693,7 +2693,7 @@
-             "description": "Provides integration for Doctrine with various Symfony components",
-             "homepage": "https://symfony.com",
-             "support": {
--                "source": "https://github.com/symfony/doctrine-bridge/tree/v7.1.6"
-+                "source": "https://github.com/symfony/doctrine-bridge/tree/v7.1.9"
-             },
-             "funding": [
-                 {
-@@ -2709,7 +2709,7 @@
-                     "type": "tidelift"
-                 }
-             ],
--            "time": "2024-10-18T09:42:06+00:00"
-+            "time": "2024-11-25T12:02:18+00:00"
-         },
-         {
-             "name": "symfony/dotenv",
-@@ -6025,23 +6025,22 @@
-     "packages-dev": [
-         {
-             "name": "doctrine/data-fixtures",
--            "version": "1.8.0",
-+            "version": "2.0.0",
-             "source": {
-                 "type": "git",
-                 "url": "https://github.com/doctrine/data-fixtures.git",
--                "reference": "d2ff5046b263868baf6e9b06cf4918f60096c0d0"
-+                "reference": "eddc4c37beff550a9172a449ab285f4511573dc8"
-             },
-             "dist": {
-                 "type": "zip",
--                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/d2ff5046b263868baf6e9b06cf4918f60096c0d0",
--                "reference": "d2ff5046b263868baf6e9b06cf4918f60096c0d0",
-+                "url": "https://api.github.com/repos/doctrine/data-fixtures/zipball/eddc4c37beff550a9172a449ab285f4511573dc8",
-+                "reference": "eddc4c37beff550a9172a449ab285f4511573dc8",
-                 "shasum": ""
-             },
-             "require": {
--                "doctrine/deprecations": "^0.5.3 || ^1.0",
--                "doctrine/persistence": "^2.0 || ^3.0",
--                "php": "^7.4 || ^8.0",
--                "symfony/polyfill-php80": "^1"
-+                "doctrine/persistence": "^3.1",
-+                "php": "^8.1",
-+                "psr/log": "^1.1 || ^2 || ^3"
-             },
-             "conflict": {
-                 "doctrine/dbal": "<3.5 || >=5",
-@@ -6049,7 +6048,6 @@
-                 "doctrine/phpcr-odm": "<1.3.0"
-             },
-             "require-dev": {
--                "doctrine/annotations": "^1.12 || ^2",
-                 "doctrine/coding-standard": "^12",
-                 "doctrine/dbal": "^3.5 || ^4",
-                 "doctrine/mongodb-odm": "^1.3.0 || ^2.0.0",
-@@ -6057,10 +6055,9 @@
-                 "ext-sqlite3": "*",
-                 "fig/log-test": "^1",
-                 "phpstan/phpstan": "^1.10",
--                "phpunit/phpunit": "^9.6.13 || ^10.4.2",
--                "psr/log": "^1.1 || ^2 || ^3",
--                "symfony/cache": "^5.4 || ^6.3 || ^7",
--                "symfony/var-exporter": "^5.4 || ^6.3 || ^7"
-+                "phpunit/phpunit": "^10.5.3",
-+                "symfony/cache": "^6.4 || ^7",
-+                "symfony/var-exporter": "^6.4 || ^7"
-             },
-             "suggest": {
-                 "alcaeus/mongo-php-adapter": "For using MongoDB ODM 1.3 with PHP 7 (deprecated)",
-@@ -6091,7 +6088,7 @@
-             ],
-             "support": {
-                 "issues": "https://github.com/doctrine/data-fixtures/issues",
--                "source": "https://github.com/doctrine/data-fixtures/tree/1.8.0"
-+                "source": "https://github.com/doctrine/data-fixtures/tree/2.0.0"
-             },
-             "funding": [
-                 {
-@@ -6107,24 +6104,24 @@
-                     "type": "tidelift"
-                 }
-             ],
--            "time": "2024-11-04T22:36:12+00:00"
-+            "time": "2024-11-06T07:58:24+00:00"
-         },
-         {
-             "name": "doctrine/doctrine-fixtures-bundle",
--            "version": "3.6.1",
-+            "version": "3.7.0",
-             "source": {
-                 "type": "git",
-                 "url": "https://github.com/doctrine/DoctrineFixturesBundle.git",
--                "reference": "d13a08ebf244f74c8adb8ff15aa55d01c404e534"
-+                "reference": "3004c9b3ac3d2a8f484597416ae1882040b3ef3b"
-             },
-             "dist": {
-                 "type": "zip",
--                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/d13a08ebf244f74c8adb8ff15aa55d01c404e534",
--                "reference": "d13a08ebf244f74c8adb8ff15aa55d01c404e534",
-+                "url": "https://api.github.com/repos/doctrine/DoctrineFixturesBundle/zipball/3004c9b3ac3d2a8f484597416ae1882040b3ef3b",
-+                "reference": "3004c9b3ac3d2a8f484597416ae1882040b3ef3b",
-                 "shasum": ""
-             },
-             "require": {
--                "doctrine/data-fixtures": "^1.3",
-+                "doctrine/data-fixtures": "^1.5|^2.0",
-                 "doctrine/doctrine-bundle": "^2.2",
-                 "doctrine/orm": "^2.14.0 || ^3.0",
-                 "doctrine/persistence": "^2.4|^3.0",
-@@ -6133,7 +6130,7 @@
-                 "symfony/console": "^5.4|^6.0|^7.0",
-                 "symfony/dependency-injection": "^5.4|^6.0|^7.0",
-                 "symfony/deprecation-contracts": "^2.1|^3",
--                "symfony/doctrine-bridge": "^5.4|^6.0|^7.0",
-+                "symfony/doctrine-bridge": "^5.4.48|^6.4.16|^7.1.9",
-                 "symfony/http-kernel": "^5.4|^6.0|^7.0"
-             },
-             "conflict": {
-@@ -6178,7 +6175,7 @@
-             ],
-             "support": {
-                 "issues": "https://github.com/doctrine/DoctrineFixturesBundle/issues",
--                "source": "https://github.com/doctrine/DoctrineFixturesBundle/tree/3.6.1"
-+                "source": "https://github.com/doctrine/DoctrineFixturesBundle/tree/3.7.0"
-             },
-             "funding": [
-                 {
-@@ -6194,7 +6191,70 @@
-                     "type": "tidelift"
-                 }
-             ],
--            "time": "2024-05-07T07:16:35+00:00"
-+            "time": "2024-11-28T07:19:21+00:00"
-+        },
 +        {
 +            "name": "fakerphp/faker",
 +            "version": "v1.24.1",
@@ -300,10 +90,11 @@ index e6de45d..4e2c899 100644
 +                "source": "https://github.com/FakerPHP/Faker/tree/v1.24.1"
 +            },
 +            "time": "2024-11-21T13:46:39+00:00"
-         },
++        },
          {
              "name": "nikic/php-parser",
-@@ -6500,11 +6560,171 @@
+             "version": "v5.3.1",
+@@ -6487,6 +6550,168 @@
                  }
              ],
              "time": "2024-11-19T10:11:44+00:00"
@@ -369,16 +160,16 @@ index e6de45d..4e2c899 100644
 +        },
 +        {
 +            "name": "zenstruck/foundry",
-+            "version": "v2.2.2",
++            "version": "v2.3.1",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/zenstruck/foundry.git",
-+                "reference": "44eec45b620fd5419906c387512bd1acdf898647"
++                "reference": "6f744b05706c1780e61368f23bf77e18c83d8fcd"
 +            },
 +            "dist": {
 +                "type": "zip",
-+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/44eec45b620fd5419906c387512bd1acdf898647",
-+                "reference": "44eec45b620fd5419906c387512bd1acdf898647",
++                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/6f744b05706c1780e61368f23bf77e18c83d8fcd",
++                "reference": "6f744b05706c1780e61368f23bf77e18c83d8fcd",
 +                "shasum": ""
 +            },
 +            "require": {
@@ -393,6 +184,7 @@ index e6de45d..4e2c899 100644
 +            },
 +            "require-dev": {
 +                "bamarni/composer-bin-plugin": "^1.8",
++                "brianium/paratest": "^6|^7",
 +                "dama/doctrine-test-bundle": "^7.0|^8.0",
 +                "doctrine/collections": "^1.7|^2.0",
 +                "doctrine/common": "^3.2",
@@ -405,26 +197,27 @@ index e6de45d..4e2c899 100644
 +                "symfony/dotenv": "^6.4|^7.0",
 +                "symfony/maker-bundle": "^1.55",
 +                "symfony/phpunit-bridge": "^6.4|^7.0",
++                "symfony/runtime": "^6.4|^7.0",
 +                "symfony/translation-contracts": "^3.4",
 +                "symfony/var-dumper": "^6.4|^7.0",
 +                "symfony/yaml": "^6.4|^7.0"
 +            },
 +            "type": "library",
 +            "extra": {
-+                "bamarni-bin": {
-+                    "target-directory": "bin/tools",
-+                    "bin-links": true,
-+                    "forward-command": false
-+                },
 +                "psalm": {
 +                    "pluginClass": "Zenstruck\\Foundry\\Psalm\\FoundryPlugin"
++                },
++                "bamarni-bin": {
++                    "bin-links": true,
++                    "forward-command": false,
++                    "target-directory": "bin/tools"
 +                }
 +            },
 +            "autoload": {
 +                "files": [
 +                    "src/functions.php",
 +                    "src/Persistence/functions.php",
-+                    "src/phpunit_helper.php"
++                    "src/symfony_console.php"
 +                ],
 +                "psr-4": {
 +                    "Zenstruck\\Foundry\\": "src/",
@@ -458,7 +251,7 @@ index e6de45d..4e2c899 100644
 +            ],
 +            "support": {
 +                "issues": "https://github.com/zenstruck/foundry/issues",
-+                "source": "https://github.com/zenstruck/foundry/tree/v2.2.2"
++                "source": "https://github.com/zenstruck/foundry/tree/v2.3.1"
 +            },
 +            "funding": [
 +                {
@@ -466,25 +259,10 @@ index e6de45d..4e2c899 100644
 +                    "type": "github"
 +                }
 +            ],
-+            "time": "2024-11-05T16:39:17+00:00"
++            "time": "2024-12-12T09:03:06+00:00"
          }
      ],
      "aliases": [],
-     "minimum-stability": "stable",
--    "stability-flags": [],
-+    "stability-flags": {},
-     "prefer-stable": true,
-     "prefer-lowest": false,
-     "platform": {
-@@ -6512,7 +6732,7 @@
-         "ext-ctype": "*",
-         "ext-iconv": "*"
-     },
--    "platform-dev": [],
-+    "platform-dev": {},
-     "platform-overrides": {
-         "php": "8.3"
-     },
 diff --git a/config/bundles.php b/config/bundles.php
 index 861ef52..906ec11 100644
 --- a/config/bundles.php
