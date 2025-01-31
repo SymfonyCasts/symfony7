@@ -1,5 +1,5 @@
 diff --git a/composer.json b/composer.json
-index be47002..df8fffe 100644
+index 958a01c..bdffc8d 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -7,6 +7,7 @@
@@ -11,15 +11,15 @@ index be47002..df8fffe 100644
          "phpdocumentor/reflection-docblock": "^5.3",
          "phpstan/phpdoc-parser": "^1.25",
 diff --git a/composer.lock b/composer.lock
-index 2829bf6..40d8795 100644
+index 46a1aa5..92f9f27 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "0534b84bde4b02ba14766cbf770d364b",
-+    "content-hash": "3aebe5a2f81b8c51d53426513cbd16eb",
+-    "content-hash": "4ac9116bfe9ed44dd75b7bf4dfc3be13",
++    "content-hash": "4677a4eefb32d6c62e99fccad9f70cf9",
      "packages": [
          {
              "name": "composer/semver",
@@ -29,16 +29,16 @@ index 2829bf6..40d8795 100644
          },
 +        {
 +            "name": "knplabs/knp-time-bundle",
-+            "version": "v2.2.0",
++            "version": "v2.4.0",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/KnpLabs/KnpTimeBundle.git",
-+                "reference": "69cb36a9f22ac8432e8532c9ae84e92d46820d96"
++                "reference": "93e9528415b28a19872d74b28e816045c0fd217b"
 +            },
 +            "dist": {
 +                "type": "zip",
-+                "url": "https://api.github.com/repos/KnpLabs/KnpTimeBundle/zipball/69cb36a9f22ac8432e8532c9ae84e92d46820d96",
-+                "reference": "69cb36a9f22ac8432e8532c9ae84e92d46820d96",
++                "url": "https://api.github.com/repos/KnpLabs/KnpTimeBundle/zipball/93e9528415b28a19872d74b28e816045c0fd217b",
++                "reference": "93e9528415b28a19872d74b28e816045c0fd217b",
 +                "shasum": ""
 +            },
 +            "require": {
@@ -98,9 +98,9 @@ index 2829bf6..40d8795 100644
 +            ],
 +            "support": {
 +                "issues": "https://github.com/KnpLabs/KnpTimeBundle/issues",
-+                "source": "https://github.com/KnpLabs/KnpTimeBundle/tree/v2.2.0"
++                "source": "https://github.com/KnpLabs/KnpTimeBundle/tree/v2.4.0"
 +            },
-+            "time": "2023-11-13T19:38:34+00:00"
++            "time": "2024-06-11T09:38:28+00:00"
 +        },
          {
              "name": "monolog/monolog",
@@ -111,16 +111,16 @@ index 2829bf6..40d8795 100644
          },
 +        {
 +            "name": "symfony/translation",
-+            "version": "v7.0.4",
++            "version": "v7.0.10",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/symfony/translation.git",
-+                "reference": "5b75e872f7d135d7abb4613809fadc8d9f3d30a0"
++                "reference": "480fc1b9f44d9104239eb36de1e1151814c8a8d8"
 +            },
 +            "dist": {
 +                "type": "zip",
-+                "url": "https://api.github.com/repos/symfony/translation/zipball/5b75e872f7d135d7abb4613809fadc8d9f3d30a0",
-+                "reference": "5b75e872f7d135d7abb4613809fadc8d9f3d30a0",
++                "url": "https://api.github.com/repos/symfony/translation/zipball/480fc1b9f44d9104239eb36de1e1151814c8a8d8",
++                "reference": "480fc1b9f44d9104239eb36de1e1151814c8a8d8",
 +                "shasum": ""
 +            },
 +            "require": {
@@ -185,7 +185,7 @@ index 2829bf6..40d8795 100644
 +            "description": "Provides tools to internationalize your application",
 +            "homepage": "https://symfony.com",
 +            "support": {
-+                "source": "https://github.com/symfony/translation/tree/v7.0.4"
++                "source": "https://github.com/symfony/translation/tree/v7.0.10"
 +            },
 +            "funding": [
 +                {
@@ -201,7 +201,7 @@ index 2829bf6..40d8795 100644
 +                    "type": "tidelift"
 +                }
 +            ],
-+            "time": "2024-02-22T20:27:20+00:00"
++            "time": "2024-07-26T12:31:22+00:00"
 +        },
          {
              "name": "symfony/translation-contracts",
