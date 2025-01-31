@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0534b84bde4b02ba14766cbf770d364b",
+    "content-hash": "4ac9116bfe9ed44dd75b7bf4dfc3be13",
     "packages": [
         {
             "name": "composer/semver",
@@ -4135,30 +4135,31 @@
         },
         {
             "name": "symfonycasts/tailwind-bundle",
-            "version": "v0.5.0",
+            "version": "v0.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/tailwind-bundle.git",
-                "reference": "f313019da18d6e938f7557319ee4fcadc26f0baa"
+                "reference": "81c9e6ff2bb1a95e67fc6af04ca87fccdcf55aa4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/tailwind-bundle/zipball/f313019da18d6e938f7557319ee4fcadc26f0baa",
-                "reference": "f313019da18d6e938f7557319ee4fcadc26f0baa",
+                "url": "https://api.github.com/repos/SymfonyCasts/tailwind-bundle/zipball/81c9e6ff2bb1a95e67fc6af04ca87fccdcf55aa4",
+                "reference": "81c9e6ff2bb1a95e67fc6af04ca87fccdcf55aa4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
                 "symfony/asset-mapper": "^6.3|^7.0",
+                "symfony/cache": "^6.3|^7.0",
                 "symfony/console": "^5.4|^6.3|^7.0",
                 "symfony/http-client": "^5.4|^6.3|^7.0",
                 "symfony/process": "^5.4|^6.3|^7.0"
             },
             "require-dev": {
-                "phpstan/phpstan": "1.11.x-dev",
+                "phpunit/phpunit": "^9.6",
                 "symfony/filesystem": "^6.3|^7.0",
                 "symfony/framework-bundle": "^6.3|^7.0",
-                "symfony/phpunit-bridge": "^6.3|^7.0"
+                "symfony/phpunit-bridge": "^6.3.9|^7.0"
             },
             "type": "library",
             "autoload": {
@@ -4183,9 +4184,9 @@
             ],
             "support": {
                 "issues": "https://github.com/SymfonyCasts/tailwind-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/tailwind-bundle/tree/v0.5.0"
+                "source": "https://github.com/SymfonyCasts/tailwind-bundle/tree/v0.7.1"
             },
-            "time": "2023-12-18T16:55:43+00:00"
+            "time": "2025-01-23T14:54:07+00:00"
         },
         {
             "name": "twig/extra-bundle",
@@ -4852,7 +4853,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
@@ -4860,7 +4861,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "platform-overrides": {
         "php": "8.3"
     },
