@@ -1,5 +1,5 @@
 diff --git a/composer.json b/composer.json
-index 1d79880..be47002 100644
+index a4d6811..958a01c 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -84,6 +84,7 @@
@@ -11,19 +11,19 @@ index 1d79880..be47002 100644
          "symfony/web-profiler-bundle": "7.0.*"
      }
 diff --git a/composer.lock b/composer.lock
-index 6a371cb..2829bf6 100644
+index 1a70f3a..46a1aa5 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "9aeb8be9d13bf45870c4f16d24917c91",
-+    "content-hash": "0534b84bde4b02ba14766cbf770d364b",
+-    "content-hash": "0770bbc82483a464d9848f58e7491ddb",
++    "content-hash": "4ac9116bfe9ed44dd75b7bf4dfc3be13",
      "packages": [
          {
              "name": "composer/semver",
-@@ -4393,6 +4393,153 @@
+@@ -4394,6 +4394,153 @@
          }
      ],
      "packages-dev": [
@@ -177,7 +177,7 @@ index 6a371cb..2829bf6 100644
          {
              "name": "symfony/debug-bundle",
              "version": "v7.0.0",
-@@ -4467,6 +4614,98 @@
+@@ -4468,6 +4615,98 @@
              ],
              "time": "2023-11-07T10:26:03+00:00"
          },

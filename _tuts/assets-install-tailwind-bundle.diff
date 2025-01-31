@@ -1,17 +1,17 @@
 diff --git a/composer.json b/composer.json
-index 0adce38..db7fa31 100644
+index 0adce38..c5f3086 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -23,6 +23,7 @@
          "symfony/serializer": "7.0.*",
          "symfony/twig-bundle": "7.0.*",
          "symfony/yaml": "7.0.*",
-+        "symfonycasts/tailwind-bundle": "^0.5.0",
++        "symfonycasts/tailwind-bundle": "^0.7.1",
          "twig/extra-bundle": "^2.12|^3.0",
          "twig/twig": "^2.12|^3.0"
      },
 diff --git a/composer.lock b/composer.lock
-index 95fb63a..8dff8d6 100644
+index 95fb63a..e71abda 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
@@ -19,7 +19,7 @@ index 95fb63a..8dff8d6 100644
          "This file is @generated automatically"
      ],
 -    "content-hash": "aa313327f9864cc45bf1c587fd61978f",
-+    "content-hash": "cfd2eeac94477d5967eff4f92b5ed21c",
++    "content-hash": "82c3a2ac072af684daac2ac6d4e6ef70",
      "packages": [
          {
              "name": "composer/semver",
@@ -91,36 +91,37 @@ index 95fb63a..8dff8d6 100644
          {
              "name": "symfony/property-access",
              "version": "v7.0.0",
-@@ -3907,6 +3968,60 @@
+@@ -3907,6 +3968,61 @@
              ],
              "time": "2023-11-07T10:26:03+00:00"
          },
 +        {
 +            "name": "symfonycasts/tailwind-bundle",
-+            "version": "v0.5.0",
++            "version": "v0.7.1",
 +            "source": {
 +                "type": "git",
 +                "url": "https://github.com/SymfonyCasts/tailwind-bundle.git",
-+                "reference": "f313019da18d6e938f7557319ee4fcadc26f0baa"
++                "reference": "81c9e6ff2bb1a95e67fc6af04ca87fccdcf55aa4"
 +            },
 +            "dist": {
 +                "type": "zip",
-+                "url": "https://api.github.com/repos/SymfonyCasts/tailwind-bundle/zipball/f313019da18d6e938f7557319ee4fcadc26f0baa",
-+                "reference": "f313019da18d6e938f7557319ee4fcadc26f0baa",
++                "url": "https://api.github.com/repos/SymfonyCasts/tailwind-bundle/zipball/81c9e6ff2bb1a95e67fc6af04ca87fccdcf55aa4",
++                "reference": "81c9e6ff2bb1a95e67fc6af04ca87fccdcf55aa4",
 +                "shasum": ""
 +            },
 +            "require": {
 +                "php": ">=8.1",
 +                "symfony/asset-mapper": "^6.3|^7.0",
++                "symfony/cache": "^6.3|^7.0",
 +                "symfony/console": "^5.4|^6.3|^7.0",
 +                "symfony/http-client": "^5.4|^6.3|^7.0",
 +                "symfony/process": "^5.4|^6.3|^7.0"
 +            },
 +            "require-dev": {
-+                "phpstan/phpstan": "1.11.x-dev",
++                "phpunit/phpunit": "^9.6",
 +                "symfony/filesystem": "^6.3|^7.0",
 +                "symfony/framework-bundle": "^6.3|^7.0",
-+                "symfony/phpunit-bridge": "^6.3|^7.0"
++                "symfony/phpunit-bridge": "^6.3.9|^7.0"
 +            },
 +            "type": "library",
 +            "autoload": {
@@ -145,13 +146,31 @@ index 95fb63a..8dff8d6 100644
 +            ],
 +            "support": {
 +                "issues": "https://github.com/SymfonyCasts/tailwind-bundle/issues",
-+                "source": "https://github.com/SymfonyCasts/tailwind-bundle/tree/v0.5.0"
++                "source": "https://github.com/SymfonyCasts/tailwind-bundle/tree/v0.7.1"
 +            },
-+            "time": "2023-12-18T16:55:43+00:00"
++            "time": "2025-01-23T14:54:07+00:00"
 +        },
          {
              "name": "twig/extra-bundle",
              "version": "v3.8.0",
+@@ -4333,7 +4449,7 @@
+     ],
+     "aliases": [],
+     "minimum-stability": "stable",
+-    "stability-flags": [],
++    "stability-flags": {},
+     "prefer-stable": true,
+     "prefer-lowest": false,
+     "platform": {
+@@ -4341,7 +4457,7 @@
+         "ext-ctype": "*",
+         "ext-iconv": "*"
+     },
+-    "platform-dev": [],
++    "platform-dev": {},
+     "platform-overrides": {
+         "php": "8.3"
+     },
 diff --git a/config/bundles.php b/config/bundles.php
 index 8be0b00..f6b8cf2 100644
 --- a/config/bundles.php

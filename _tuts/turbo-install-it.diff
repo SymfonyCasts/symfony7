@@ -20,7 +20,7 @@ index a1c6e90..29ea244 100644
      "entrypoints": []
  }
 diff --git a/composer.json b/composer.json
-index 2322016..1d79880 100644
+index dca24a9..a4d6811 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -23,6 +23,7 @@
@@ -29,18 +29,18 @@ index 2322016..1d79880 100644
          "symfony/twig-bundle": "7.0.*",
 +        "symfony/ux-turbo": "^2.13",
          "symfony/yaml": "7.0.*",
-         "symfonycasts/tailwind-bundle": "^0.5.0",
+         "symfonycasts/tailwind-bundle": "^0.7.1",
          "twig/extra-bundle": "^2.12|^3.0",
 diff --git a/composer.lock b/composer.lock
-index 43ae31a..6a371cb 100644
+index 010d2dc..1a70f3a 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "b6ed3b4612d949009eab4d10e1d8a3a0",
-+    "content-hash": "9aeb8be9d13bf45870c4f16d24917c91",
+-    "content-hash": "9e544eed8b8511d39a800b160848f19e",
++    "content-hash": "0770bbc82483a464d9848f58e7491ddb",
      "packages": [
          {
              "name": "composer/semver",
