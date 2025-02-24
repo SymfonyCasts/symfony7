@@ -1,8 +1,58 @@
-# Cosmic Coding with Symfony 7
+# Symfony, Doctrine Relations & Warp Drive Basics
 
 Well hi there! This repository holds the code and script for the
-[Cosmic Coding with Symfony 7](https://symfonycasts.com/screencast/symfony7)
+[Symfony, Doctrine Relations & Warp Drive Basics](https://symfonycasts.com/screencast/symfony7-doctrine-relations)
 course on SymfonyCasts.
+
+## Setup
+
+If you've just downloaded the code, congratulations!!
+
+To get it working, follow these steps:
+
+**Download Composer dependencies**
+
+Make sure you have [Composer installed](https://getcomposer.org/download/)
+and then run:
+
+```
+composer install
+```
+
+You may alternatively need to run `php composer.phar install`, depending
+on how you installed Composer.
+
+**Build TailwindCSS**
+
+This project uses TailwindCSS, to build the CSS file run:
+
+```
+php bin/console tailwind:build
+```
+
+**Start the Symfony web server**
+
+You can use Nginx or Apache, but Symfony's local web server
+works even better.
+
+To install the Symfony local web server, follow
+"Downloading the Symfony client" instructions found
+here: https://symfony.com/download - you only need to do this
+once on your system.
+
+Then, to start the web server, open a terminal, move into the
+project, and run:
+
+```
+symfony serve
+```
+
+(If this is your first time using this command, you may see an
+error that you need to run `symfony server:ca:install` first).
+
+Now check out the site at `https://localhost:8000`
+
+Have fun!
 
 ## Have Ideas, Feedback or an Issue?
 
