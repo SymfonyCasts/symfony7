@@ -45,6 +45,10 @@ symfony console doctrine:fixtures:load
 
 This project uses TailwindCSS, to build the CSS file run:
 
+If you're using the `symfony serve` command to run the site, you're done!
+The `tailwind:build` command is already running thanks to the `workers` config
+in `symfony.yaml`.
+
 ```
 php bin/console tailwind:build
 ```
