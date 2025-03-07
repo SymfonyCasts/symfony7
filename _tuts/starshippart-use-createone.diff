@@ -1,0 +1,13 @@
+diff --git a/src/Factory/StarshipPartFactory.php b/src/Factory/StarshipPartFactory.php
+index df19810..f4249c5 100644
+--- a/src/Factory/StarshipPartFactory.php
++++ b/src/Factory/StarshipPartFactory.php
+@@ -51,7 +51,7 @@ final class StarshipPartFactory extends PersistentProxyObjectFactory
+             'name' => $randomPart[0],
+             'notes' => $randomPart[1],
+             'price' => self::faker()->randomNumber(5),
+-            'starship' => StarshipFactory::randomOrCreate()
++            'starship' => StarshipFactory::createOne(),
+         ];
+     }
+ 

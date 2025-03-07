@@ -14,7 +14,67 @@
             "id": "starshippart-make-migration",
             "name": "StarshipPart: make:migration",
             "description": null
+        },
+        {
+            "id": "starshippart-add-timestampableentity",
+            "name": "StarshipPart: Add TimestampableEntity",
+            "description": null
+        },
+        {
+            "id": "starshippart-make-factory",
+            "name": "StarshipPart: make:factory",
+            "description": null
+        },
+        {
+            "id": "starshippart-tweak-factory",
+            "name": "StarshipPart: tweak factory",
+            "description": null
+        },
+        {
+            "id": "starshippart-add-relation",
+            "name": "StarshipPart: add relation",
+            "description": null
+        },
+        {
+            "id": "starshippart-create-in-fixtures",
+            "name": "StarshipPart: create in fixtures",
+            "description": null
+        },
+        {
+            "id": "starshippart-set-relation-in-fixtures",
+            "name": "StarshipPart: set relation in fixtures",
+            "description": null
+        },
+        {
+            "id": "starshippart-createmany-in-fixtures",
+            "name": "StarshipPart: createMany() in fixtures",
+            "description": null
+        },
+        {
+            "id": "starshippart-set-ship-using-randomorcreate",
+            "name": "StarshipPart: set ship using randomOrCreate",
+            "description": null
+        },
+        {
+            "id": "starshippart-set-explicit-ship-in-fixtures",
+            "name": "StarshipPart: Set explicit ship in fixtures",
+            "description": null
+        },
+        {
+            "id": "starshippart-use-createone",
+            "name": "StarshipPart: use createOne()",
+            "description": null
+        },
+        {
+            "id": "starshippart-change-to-new",
+            "name": "StarshipPart: Change to new()",
+            "description": null
+        },
+        {
+            "id": "starshippart-set-status-in-new",
+            "name": "StarshipPart: Set status in new()",
+            "description": null
         }
     ],
-    "sha": "3c7163b1e441bfa49f45e678cc43314cc70c6c38"
+    "sha": "e14b8e666b091391d96f402a5921322bcf09c38a"
 }

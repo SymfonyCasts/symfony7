@@ -1,0 +1,12 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index 3705e64..bf63256 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -33,6 +33,7 @@ class AppFixtures extends Fixture
+         $part->setNotes('There\'s no air drag in space, but it looks cool.');
+         $part->setPrice(500);
+         $manager->persist($part);
++        $part->setStarship($starship);
+         $manager->flush();
+ 
+         StarshipFactory::createOne([

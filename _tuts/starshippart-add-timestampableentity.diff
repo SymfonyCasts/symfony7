@@ -1,0 +1,57 @@
+diff --git a/migrations/Version20250306160247.php b/migrations/Version20250306160247.php
+new file mode 100644
+index 0000000..39aaa7b
+--- /dev/null
++++ b/migrations/Version20250306160247.php
+@@ -0,0 +1,33 @@
++<?php
++
++declare(strict_types=1);
++
++namespace DoctrineMigrations;
++
++use Doctrine\DBAL\Schema\Schema;
++use Doctrine\Migrations\AbstractMigration;
++
++/**
++ * Auto-generated Migration: Please modify to your needs!
++ */
++final class Version20250306160247 extends AbstractMigration
++{
++    public function getDescription(): string
++    {
++        return '';
++    }
++
++    public function up(Schema $schema): void
++    {
++        // this up() migration is auto-generated, please modify it to your needs
++        $this->addSql('ALTER TABLE starship_part ADD created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL');
++        $this->addSql('ALTER TABLE starship_part ADD updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL');
++    }
++
++    public function down(Schema $schema): void
++    {
++        // this down() migration is auto-generated, please modify it to your needs
++        $this->addSql('ALTER TABLE starship_part DROP created_at');
++        $this->addSql('ALTER TABLE starship_part DROP updated_at');
++    }
++}
+diff --git a/src/Entity/StarshipPart.php b/src/Entity/StarshipPart.php
+index 662df52..c80f321 100644
+--- a/src/Entity/StarshipPart.php
++++ b/src/Entity/StarshipPart.php
+@@ -5,10 +5,13 @@ namespace App\Entity;
+ use App\Repository\StarshipPartRepository;
+ use Doctrine\DBAL\Types\Types;
+ use Doctrine\ORM\Mapping as ORM;
++use Gedmo\Timestampable\Traits\TimestampableEntity;
+ 
+ #[ORM\Entity(repositoryClass: StarshipPartRepository::class)]
+ class StarshipPart
+ {
++    use TimestampableEntity;
++
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
