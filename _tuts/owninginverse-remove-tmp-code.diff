@@ -1,0 +1,33 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index 1bd2f25..a6f8c7e 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -2,7 +2,6 @@
+ 
+ namespace App\DataFixtures;
+ 
+-use App\Entity\StarshipPart;
+ use App\Entity\StarshipStatusEnum;
+ use App\Factory\StarshipFactory;
+ use App\Factory\StarshipPartFactory;
+@@ -13,20 +12,6 @@ class AppFixtures extends Fixture
+ {
+     public function load(ObjectManager $manager): void
+     {
+-        $starship = StarshipFactory::createOne()->_real();
+-        $part1 = new StarshipPart();
+-        $part1->setName('Warp Core');
+-        $part1->setPrice(1000);
+-        $part2 = new StarshipPart();
+-        $part2->setName('Phaser Array');
+-        $part2->setPrice(500);
+-        $manager->persist($part1);
+-        $manager->persist($part2);
+-
+-        $starship->addPart($part1);
+-        $starship->addPart($part2);
+-
+-        $manager->flush();
+         StarshipFactory::createOne([
+             'name' => 'USS LeafyCruiser (NCC-0001)',
+             'class' => 'Garden',

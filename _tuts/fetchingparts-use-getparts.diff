@@ -1,0 +1,13 @@
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+index c9f0af3..45e844c 100644
+--- a/src/Controller/StarshipController.php
++++ b/src/Controller/StarshipController.php
+@@ -19,7 +19,7 @@ class StarshipController extends AbstractController
+         StarshipPartRepository $partRepository,
+     ): Response {
+         $parts = $partRepository->findBy(['starship' => $ship]);
+-        dd($parts);
++        dd($ship->getParts());
+         return $this->render('starship/show.html.twig', [
+             'ship' => $ship,
+         ]);

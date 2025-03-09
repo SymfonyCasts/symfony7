@@ -1,0 +1,49 @@
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+index 79579d7..746904a 100644
+--- a/src/Controller/StarshipController.php
++++ b/src/Controller/StarshipController.php
+@@ -18,14 +18,9 @@ class StarshipController extends AbstractController
+         Starship $ship,
+         StarshipPartRepository $partRepository,
+     ): Response {
+-        $parts = $partRepository->findBy(['starship' => $ship]);
+-
+-        foreach ($parts as $part) {
+-            dump($part);
+-        }
+-
+         return $this->render('starship/show.html.twig', [
+             'ship' => $ship,
++            'parts' => $partRepository->findBy(['starship' => $ship]),
+         ]);
+     }
+ }
+diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
+index 7083434..6e4434e 100644
+--- a/templates/starship/show.html.twig
++++ b/templates/starship/show.html.twig
+@@ -60,14 +60,16 @@
+                         Parts
+                     </h4>
+                     <ul class="text-sm font-medium text-slate-400 tracking-wide">
+-                        <li class="border-b border-slate-600 py-2">
+-                        <span class="block text-white font-semibold">
+-                            Steering Wheel
+-                        </span>
+-                            <span class="text-xs text-slate-500 italic">
+-                            Honk honk
+-                        </span>
+-                        </li>
++                        {% for part in parts %}
++                            <li class="border-b border-slate-600 py-2">
++                                <span class="block text-white font-semibold">
++                                    {{ part.name }}
++                                </span>
++                                <span class="text-xs text-slate-500 italic">
++                                    {{ part.notes }}
++                                </span>
++                            </li>
++                        {% endfor %}
+                     </ul>
+                 </div>
+             </div>

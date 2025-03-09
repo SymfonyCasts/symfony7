@@ -74,7 +74,62 @@
             "id": "starshippart-set-status-in-new",
             "name": "StarshipPart: Set status in new()",
             "description": null
+        },
+        {
+            "id": "starshippart-remove-ship-override",
+            "name": "StarshipPart: Remove ship override",
+            "description": null
+        },
+        {
+            "id": "fetchingparts-use-findby",
+            "name": "FetchingParts: Use findBy()",
+            "description": null
+        },
+        {
+            "id": "fetchingparts-use-getparts",
+            "name": "FetchingParts: use ->getParts()",
+            "description": null
+        },
+        {
+            "id": "fetchingparts-loop-and-dump",
+            "name": "FetchingParts: Loop and dump()",
+            "description": null
+        },
+        {
+            "id": "template-rendering-parts-variable",
+            "name": "Template: Rendering parts variable",
+            "description": null
+        },
+        {
+            "id": "template-loop-over-ship-parts",
+            "name": "Template: Loop over ship.parts",
+            "description": null
+        },
+        {
+            "id": "template-count-the-parts",
+            "name": "Template: Count the parts",
+            "description": null
+        },
+        {
+            "id": "owninginverse-create-ship-and-2-parts-in-fixtures",
+            "name": "OwningInverse: Create Ship & 2 parts in fixtures",
+            "description": null
+        },
+        {
+            "id": "owninginverse-use-real",
+            "name": "OwningInverse: Use _real()",
+            "description": null
+        },
+        {
+            "id": "owninginverse-set-inverse-side",
+            "name": "OwningInverse: set inverse side",
+            "description": null
+        },
+        {
+            "id": "owninginverse-remove-tmp-code",
+            "name": "OwningInverse: Remove tmp code",
+            "description": null
         }
     ],
-    "sha": "e14b8e666b091391d96f402a5921322bcf09c38a"
+    "sha": "a436a969b67db1b522fb710cda7d0a45a12ed05f"
 }

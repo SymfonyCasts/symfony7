@@ -40,7 +40,7 @@ index 0000000..5637a13
 +    }
 +}
 diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
-index cf67944..b29dfa4 100644
+index 323ca40..d150913 100644
 --- a/src/Entity/Starship.php
 +++ b/src/Entity/Starship.php
 @@ -3,6 +3,8 @@
@@ -52,9 +52,9 @@ index cf67944..b29dfa4 100644
  use Doctrine\ORM\Mapping as ORM;
  use Gedmo\Mapping\Annotation\Slug;
  use Gedmo\Mapping\Annotation\Timestampable;
-@@ -42,6 +44,17 @@ class Starship
-     #[Timestampable(on: 'update')]
-     private ?\DateTimeImmutable $updatedAt = null;
+@@ -37,6 +39,17 @@ class Starship
+     #[Slug(fields: ['name'])]
+     private ?string $slug = null;
  
 +    /**
 +     * @var Collection<int, StarshipPart>
@@ -70,7 +70,7 @@ index cf67944..b29dfa4 100644
      public function getId(): ?int
      {
          return $this->id;
-@@ -164,4 +177,34 @@ class Starship
+@@ -135,4 +148,34 @@ class Starship
  
          return $this;
      }

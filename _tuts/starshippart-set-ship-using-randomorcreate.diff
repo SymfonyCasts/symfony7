@@ -1,12 +1,20 @@
 diff --git a/src/Factory/StarshipPartFactory.php b/src/Factory/StarshipPartFactory.php
-index 8c1da12..df19810 100644
+index 8c1da12..1e035f0 100644
 --- a/src/Factory/StarshipPartFactory.php
 +++ b/src/Factory/StarshipPartFactory.php
-@@ -51,6 +51,7 @@ final class StarshipPartFactory extends PersistentProxyObjectFactory
+@@ -3,6 +3,7 @@
+ namespace App\Factory;
+ 
+ use App\Entity\StarshipPart;
++use App\Entity\StarshipStatusEnum;
+ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+ 
+ /**
+@@ -51,6 +52,7 @@ final class StarshipPartFactory extends PersistentProxyObjectFactory
              'name' => $randomPart[0],
              'notes' => $randomPart[1],
              'price' => self::faker()->randomNumber(5),
-+            'starship' => StarshipFactory::randomOrCreate()
++            'starship' => StarshipFactory::randomOrCreate(['status' => StarshipStatusEnum::IN_PROGRESS]),
          ];
      }
  

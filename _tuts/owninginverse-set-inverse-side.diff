@@ -1,0 +1,14 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index 1176afa..1bd2f25 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -23,6 +23,9 @@ class AppFixtures extends Fixture
+         $manager->persist($part1);
+         $manager->persist($part2);
+ 
++        $starship->addPart($part1);
++        $starship->addPart($part2);
++
+         $manager->flush();
+         StarshipFactory::createOne([
+             'name' => 'USS LeafyCruiser (NCC-0001)',
