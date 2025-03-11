@@ -1,0 +1,12 @@
+diff --git a/src/Repository/StarshipPartRepository.php b/src/Repository/StarshipPartRepository.php
+index d46a12d..c8b54d5 100644
+--- a/src/Repository/StarshipPartRepository.php
++++ b/src/Repository/StarshipPartRepository.php
+@@ -42,6 +42,7 @@ class StarshipPartRepository extends ServiceEntityRepository
+     {
+         return $this->createQueryBuilder('sp')
+             ->orderBy('sp.price', 'DESC')
++            ->innerJoin('sp.starship', 's')
+             ->getQuery()
+             ->getResult();
+     }

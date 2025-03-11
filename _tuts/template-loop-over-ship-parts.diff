@@ -1,8 +1,12 @@
 diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
-index 746904a..8a05b7b 100644
+index 746904a..a588e79 100644
 --- a/src/Controller/StarshipController.php
 +++ b/src/Controller/StarshipController.php
-@@ -20,7 +20,6 @@ class StarshipController extends AbstractController
+@@ -16,11 +16,9 @@ class StarshipController extends AbstractController
+     public function show(
+         #[MapEntity(mapping: ['slug' => 'slug'])]
+         Starship $ship,
+-        StarshipPartRepository $partRepository,
      ): Response {
          return $this->render('starship/show.html.twig', [
              'ship' => $ship,
@@ -11,7 +15,7 @@ index 746904a..8a05b7b 100644
      }
  }
 diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
-index 6e4434e..15df632 100644
+index bff4668..81e05e5 100644
 --- a/templates/starship/show.html.twig
 +++ b/templates/starship/show.html.twig
 @@ -60,7 +60,7 @@
@@ -22,4 +26,4 @@ index 6e4434e..15df632 100644
 +                        {% for part in ship.parts %}
                              <li class="border-b border-slate-600 py-2">
                                  <span class="block text-white font-semibold">
-                                     {{ part.name }}
+                                     {{ part.name }} (✦ {{ part.price }})

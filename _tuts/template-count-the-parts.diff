@@ -11,7 +11,7 @@ index 55ac651..ef1da9d 100644
  use App\Entity\StarshipStatusEnum;
  use App\Factory\StarshipFactory;
 diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
-index 15df632..6f7a0ac 100644
+index 81e05e5..3c67407 100644
 --- a/templates/starship/show.html.twig
 +++ b/templates/starship/show.html.twig
 @@ -57,7 +57,7 @@

@@ -1,0 +1,44 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index a6f8c7e..6e6432f 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\DataFixtures;
+ 
++use App\Entity\Droid;
+ use App\Entity\StarshipStatusEnum;
+ use App\Factory\StarshipFactory;
+ use App\Factory\StarshipPartFactory;
+@@ -12,13 +13,30 @@ class AppFixtures extends Fixture
+ {
+     public function load(ObjectManager $manager): void
+     {
+-        StarshipFactory::createOne([
++        $starship = StarshipFactory::createOne([
+             'name' => 'USS LeafyCruiser (NCC-0001)',
+             'class' => 'Garden',
+             'captain' => 'Jean-Luc Pickles',
+             'status' => StarshipStatusEnum::IN_PROGRESS,
+             'arrivedAt' => new \DateTimeImmutable('-1 day'),
+         ]);
++        $droid1 = new Droid();
++        $droid1->setName('IHOP-123');
++        $droid1->setPrimaryFunction('Pancake chef');
++        $starship->addDroid($droid1);
++        $manager->persist($droid1);
++
++        $droid2 = new Droid();
++        $droid2->setName('D-3P0');
++        $droid2->setPrimaryFunction('C-3PO\'s voice coach');
++        $manager->persist($droid2);
++        $starship->addDroid($droid2);
++
++        $droid3 = new Droid();
++        $droid3->setName('BONK-5000');
++        $droid3->setPrimaryFunction('Comedy sidekick');
++        $manager->persist($droid3);
++        $manager->flush();
+ 
+         StarshipFactory::createOne([
+             'name' => 'USS Espresso (NCC-1234-C)',

@@ -1,0 +1,43 @@
+diff --git a/src/Controller/PartController.php b/src/Controller/PartController.php
+index 7ea36c7..3e53e66 100644
+--- a/src/Controller/PartController.php
++++ b/src/Controller/PartController.php
+@@ -14,9 +14,8 @@ final class PartController extends AbstractController
+     public function index(StarshipPartRepository $repository, Request $request,): Response
+     {
+         $query = $request->query->get('query');
+-        dd($query);
+ 
+-        $parts = $repository->findAllOrderedByPrice();
++        $parts = $repository->findAllOrderedByPrice($query);
+ 
+         return $this->render('part/index.html.twig', [
+             'parts' => $parts,
+diff --git a/src/Repository/StarshipPartRepository.php b/src/Repository/StarshipPartRepository.php
+index 679e3c0..a836f3d 100644
+--- a/src/Repository/StarshipPartRepository.php
++++ b/src/Repository/StarshipPartRepository.php
+@@ -38,13 +38,20 @@ class StarshipPartRepository extends ServiceEntityRepository
+     /**
+      * @return array<StarshipPart>
+      */
+-    public function findAllOrderedByPrice(): array
++    public function findAllOrderedByPrice(string $search = ''): array
+     {
+-        return $this->createQueryBuilder('sp')
++        $qb = $this->createQueryBuilder('sp')
+             ->orderBy('sp.price', 'DESC')
+             ->innerJoin('sp.starship', 's')
+             ->addSelect('s')
+-            ->getQuery()
++        ;
++
++        if ($search) {
++            $qb->andWhere('sp.name LIKE :search')
++                ->setParameter('search', '%'.$search.'%');
++        }
++
++        return $qb->getQuery()
+             ->getResult();
+     }
+ }

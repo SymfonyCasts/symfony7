@@ -129,7 +129,147 @@
             "id": "owninginverse-remove-tmp-code",
             "name": "OwningInverse: Remove tmp code",
             "description": null
+        },
+        {
+            "id": "orderby-add-name-asc",
+            "name": "OrderBy: Add name ASC",
+            "description": null
+        },
+        {
+            "id": "onetomany-fetch-print-ship-count-on-homepage",
+            "name": "OneToMany.fetch: print ship count on homepage",
+            "description": null
+        },
+        {
+            "id": "onetomany-fetch-extra-lazy",
+            "name": "OneToMany.fetch: EXTRA_LAZY",
+            "description": null
+        },
+        {
+            "id": "criteria-add-getexpensiveparts",
+            "name": "Criteria: Add getExpensiveParts()",
+            "description": null
+        },
+        {
+            "id": "criteria-use-filter",
+            "name": "Criteria: Use filter()",
+            "description": null
+        },
+        {
+            "id": "criteria-use-criteria",
+            "name": "Criteria: Use Criteria",
+            "description": null
+        },
+        {
+            "id": "criteria-move-into-repo-method",
+            "name": "Criteria: Move into repo method",
+            "description": null
+        },
+        {
+            "id": "criteria-add-getexpensiveparts-method",
+            "name": "Criteria: Add getExpensiveParts() method",
+            "description": null
+        },
+        {
+            "id": "part-make-controller",
+            "name": "Part: make:controller",
+            "description": null
+        },
+        {
+            "id": "part-tweak-and-link",
+            "name": "Part: Tweak & link",
+            "description": null
+        },
+        {
+            "id": "part-query-for-parts-and-render",
+            "name": "Part: Query for parts & render",
+            "description": null
+        },
+        {
+            "id": "n-1-render-ship-name",
+            "name": "N+1: Render ship name",
+            "description": null
+        },
+        {
+            "id": "n-1-custom-repo-ordered-by-price",
+            "name": "N+1: Custom repo ordered by price",
+            "description": null
+        },
+        {
+            "id": "n-1-add-join",
+            "name": "N+1: add join",
+            "description": null
+        },
+        {
+            "id": "n-1-addselect",
+            "name": "N+1: addSelect()",
+            "description": null
+        },
+        {
+            "id": "search-add-search-input",
+            "name": "Search: Add search input",
+            "description": null
+        },
+        {
+            "id": "search-add-form-element",
+            "name": "Search: Add form element",
+            "description": null
+        },
+        {
+            "id": "search-read-query-param-from-request",
+            "name": "Search: Read query param from Request",
+            "description": null
+        },
+        {
+            "id": "search-query-builder-with-fuzzy-search",
+            "name": "Search: Query builder with fuzzy search",
+            "description": null
+        },
+        {
+            "id": "search-use-lower",
+            "name": "Search: Use LOWER",
+            "description": null
+        },
+        {
+            "id": "search-value-on-input",
+            "name": "Search: value=\"\" on input",
+            "description": null
+        },
+        {
+            "id": "search-or-logic",
+            "name": "Search: OR logic",
+            "description": null
+        },
+        {
+            "id": "manytomany-make-entity-droid",
+            "name": "ManyToMany: make:entity Droid",
+            "description": null
+        },
+        {
+            "id": "manytomany-make-factory-droid",
+            "name": "ManyToMany: make:factory Droid",
+            "description": null
+        },
+        {
+            "id": "manytomany-tweak-factory",
+            "name": "ManyToMany: tweak factory",
+            "description": null
+        },
+        {
+            "id": "manytomany-add-starship-droids",
+            "name": "ManyToMany: add Starship.droids",
+            "description": null
+        },
+        {
+            "id": "manytomany-migration",
+            "name": "ManyToMany: Migration",
+            "description": null
+        },
+        {
+            "id": "manytomany-set-in-fixtures",
+            "name": "ManyToMany: Set in fixtures",
+            "description": null
         }
     ],
-    "sha": "a436a969b67db1b522fb710cda7d0a45a12ed05f"
+    "sha": "5e5b93bbfbea86df3bcd96e50989581bdabbdfd0"
 }

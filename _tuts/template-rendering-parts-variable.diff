@@ -19,7 +19,7 @@ index 79579d7..746904a 100644
      }
  }
 diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
-index 7083434..6e4434e 100644
+index 739fcb3..bff4668 100644
 --- a/templates/starship/show.html.twig
 +++ b/templates/starship/show.html.twig
 @@ -60,14 +60,16 @@
@@ -28,7 +28,7 @@ index 7083434..6e4434e 100644
                      <ul class="text-sm font-medium text-slate-400 tracking-wide">
 -                        <li class="border-b border-slate-600 py-2">
 -                        <span class="block text-white font-semibold">
--                            Steering Wheel
+-                            Steering Wheel (✦ 25)
 -                        </span>
 -                            <span class="text-xs text-slate-500 italic">
 -                            Honk honk
@@ -37,7 +37,7 @@ index 7083434..6e4434e 100644
 +                        {% for part in parts %}
 +                            <li class="border-b border-slate-600 py-2">
 +                                <span class="block text-white font-semibold">
-+                                    {{ part.name }}
++                                    {{ part.name }} (✦ {{ part.price }})
 +                                </span>
 +                                <span class="text-xs text-slate-500 italic">
 +                                    {{ part.notes }}
