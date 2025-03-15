@@ -1,0 +1,13 @@
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index cd6d895..3a985e8 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -27,6 +27,8 @@ class StarshipRepository extends ServiceEntityRepository
+         $query = $this->createQueryBuilder('s')
+             ->where('s.status != :status')
+             ->orderBy('s.arrivedAt', 'DESC')
++            ->leftJoin('s.droids', 'droids')
++            ->groupBy('s.id')
+             ->setParameter('status', StarshipStatusEnum::COMPLETED)
+             ->getQuery()
+         ;

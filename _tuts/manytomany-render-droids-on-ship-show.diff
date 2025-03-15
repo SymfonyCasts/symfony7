@@ -1,0 +1,22 @@
+diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
+index 50bd21e..698f7ff 100644
+--- a/templates/starship/show.html.twig
++++ b/templates/starship/show.html.twig
+@@ -56,6 +56,17 @@
+                     </h4>
+                     <p class="text-[22px] font-semibold">{{ ship.arrivedAt|ago }}</p>
+ 
++                    <h4 class="text-xs text-slate-300 font-semibold mt-2 uppercase">
++                        Droids
++                    </h4>
++                    <p class="text-[22px] font-semibold">
++                        {% for droid in ship.droids %}
++                                {{ droid.name }}{% if not loop.last %}, {% endif %}
++                            {% else %}
++                                No droids on board (clean up your own mess)
++                        {% endfor %}
++                    </p>
++
+                     <h4 class="text-xs text-slate-300 font-semibold mt-2 uppercase">
+                         Expensive Parts ({{ ship.expensiveParts|length }})
+                     </h4>

@@ -1,0 +1,25 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index d38c5ba..e1aeef8 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -4,6 +4,7 @@ namespace App\DataFixtures;
+ 
+ use App\Entity\Droid;
+ use App\Entity\StarshipStatusEnum;
++use App\Factory\DroidFactory;
+ use App\Factory\StarshipFactory;
+ use App\Factory\StarshipPartFactory;
+ use Doctrine\Bundle\FixturesBundle\Fixture;
+@@ -37,7 +38,11 @@ class AppFixtures extends Fixture
+             'arrivedAt' => new \DateTimeImmutable('-1 month'),
+         ]);
+ 
+-        StarshipFactory::createMany(20);
++        DroidFactory::createMany(100);
++
++        StarshipFactory::createMany(100, [
++            'droids' => DroidFactory::randomRange(1, 5),
++        ]);
+         StarshipPartFactory::createMany(100);
+     }
+ }
