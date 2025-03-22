@@ -1,0 +1,15 @@
+diff --git a/templates/starship/show.html.twig b/templates/starship/show.html.twig
+index 698f7ff..e9feeaa 100644
+--- a/templates/starship/show.html.twig
++++ b/templates/starship/show.html.twig
+@@ -60,8 +60,8 @@
+                         Droids
+                     </h4>
+                     <p class="text-[22px] font-semibold">
+-                        {% for droid in ship.droids %}
+-                                {{ droid.name }}{% if not loop.last %}, {% endif %}
++                        {% for starshipDroid in ship.starshipDroids %}
++                                {{ starshipDroid.droid.name }} (assigned {{ starshipDroid.assignedAt|ago }} {% if not loop.last %}, {% endif %}
+                             {% else %}
+                                 No droids on board (clean up your own mess)
+                         {% endfor %}

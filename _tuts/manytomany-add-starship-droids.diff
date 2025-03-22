@@ -62,7 +62,7 @@ index e91393d..3a1cad3 100644
 +    }
  }
 diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
-index c7ec3ac..513ec03 100644
+index da0d78f..88b190a 100644
 --- a/src/Entity/Starship.php
 +++ b/src/Entity/Starship.php
 @@ -48,9 +48,16 @@ class Starship

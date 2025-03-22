@@ -1,0 +1,18 @@
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 74dcbb6..0e06c84 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -207,8 +207,11 @@ class Starship
+ 
+     public function addDroid(Droid $droid): static
+     {
+-        if (!$this->droids->contains($droid)) {
+-            $this->droids->add($droid);
++        if (!$this->getDroids()->contains($droid)) {
++            $starshipDroid = new StarshipDroid();
++            $starshipDroid->setDroid($droid);
++            $starshipDroid->setStarship($this);
++            $this->starshipDroids->add($starshipDroid);
+         }
+ 
+         return $this;

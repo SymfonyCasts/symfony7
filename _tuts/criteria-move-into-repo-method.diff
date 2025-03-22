@@ -1,5 +1,5 @@
 diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
-index 0027864..c7ec3ac 100644
+index e860b07..da0d78f 100644
 --- a/src/Entity/Starship.php
 +++ b/src/Entity/Starship.php
 @@ -2,6 +2,7 @@

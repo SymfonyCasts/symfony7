@@ -1,0 +1,13 @@
+diff --git a/src/Entity/Droid.php b/src/Entity/Droid.php
+index 29ae32f..da9768d 100644
+--- a/src/Entity/Droid.php
++++ b/src/Entity/Droid.php
+@@ -66,7 +66,7 @@ class Droid
+      */
+     public function getStarships(): Collection
+     {
+-        return $this->starships;
++        return $this->starshipDroids->map(fn (StarshipDroid $starshipDroid) => $starshipDroid->getStarship());
+     }
+ 
+     public function addStarship(Starship $starship): static

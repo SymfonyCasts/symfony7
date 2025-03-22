@@ -1,5 +1,5 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index cf21c0d..1bfbdcc 100644
+index ffc5ce2..7a0f973 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -3,6 +3,7 @@
@@ -10,7 +10,7 @@ index cf21c0d..1bfbdcc 100644
  use App\Entity\StarshipStatusEnum;
  use App\Factory\DroidFactory;
  use App\Factory\StarshipFactory;
-@@ -47,6 +48,10 @@ class AppFixtures extends Fixture
+@@ -55,6 +56,10 @@ class AppFixtures extends Fixture
  
          $ship = StarshipFactory::random()->_real();
          $droid = DroidFactory::random()->_real();

@@ -1,0 +1,18 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index a6f8c7e..c7ad514 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -36,6 +36,13 @@ class AppFixtures extends Fixture
+             'arrivedAt' => new \DateTimeImmutable('-1 month'),
+         ]);
+ 
++        StarshipPartFactory::createMany(100);
++        $starshipPart = StarshipPartFactory::createOne([
++            'name' => 'Toilet Paper',
++            'starship' => $ship,
++        ]);
++        dump($starshipPart);
++
+         StarshipFactory::createMany(20);
+         StarshipPartFactory::createMany(100);
+     }

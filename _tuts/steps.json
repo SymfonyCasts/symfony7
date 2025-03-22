@@ -131,6 +131,36 @@
             "description": null
         },
         {
+            "id": "orphanremoval-save-ship-and-part-in-fixtures",
+            "name": "orphanRemoval: save ship & part in fixtures",
+            "description": null
+        },
+        {
+            "id": "orphanremoval-use-real-objects",
+            "name": "orphanRemoval: Use _real() objects",
+            "description": null
+        },
+        {
+            "id": "orphanremoval-removepart-from-ship",
+            "name": "orphanRemoval: removePart() from ship",
+            "description": null
+        },
+        {
+            "id": "orphanremoval-add-orphanremoval-and-dump",
+            "name": "orphanRemoval: add orphanRemoval & dump()",
+            "description": null
+        },
+        {
+            "id": "orphanremoval-remove-dump",
+            "name": "orphanRemoval: remove dump()",
+            "description": null
+        },
+        {
+            "id": "delete-me-3",
+            "name": "delete me 3",
+            "description": null
+        },
+        {
             "id": "orderby-add-name-asc",
             "name": "OrderBy: Add name ASC",
             "description": null
@@ -354,7 +384,57 @@
             "id": "manytomanyextra-use-starshipdroid-in-fixtures",
             "name": "ManyToManyExtra: Use StarshipDroid in fixtures",
             "description": null
+        },
+        {
+            "id": "manytomanyextra-fix-query",
+            "name": "ManyToManyExtra: fix query",
+            "description": null
+        },
+        {
+            "id": "manytomanyextra-fix-getdroidnames",
+            "name": "ManyToManyExtra: fix getDroidNames()",
+            "description": null
+        },
+        {
+            "id": "manytomanyextra-fix-starship-getdroids",
+            "name": "ManyToManyExtra: Fix Starship::getDroids()",
+            "description": null
+        },
+        {
+            "id": "manytomanyextra-fix-droid-getstarships",
+            "name": "ManyToManyExtra: Fix Droid::getStarships()",
+            "description": null
+        },
+        {
+            "id": "manytomanyextrafancy-use-adddroid-in-fixtures",
+            "name": "ManyToManyExtraFancy: use addDroid() in fixtures",
+            "description": null
+        },
+        {
+            "id": "manytomanyextrafancy-fix-starship-adddroid",
+            "name": "ManyToManyExtraFancy: Fix Starship::addDroid()",
+            "description": null
+        },
+        {
+            "id": "manytomanyextrafancy-add-cascade-persist",
+            "name": "ManyToManyExtraFancy: Add cascade persist",
+            "description": null
+        },
+        {
+            "id": "manytomanyextrafancy-use-droids-again-in-fixtures",
+            "name": "ManyToManyExtraFancy: Use droids again in fixtures",
+            "description": null
+        },
+        {
+            "id": "manytomanyextrafancy-assignedat-arg",
+            "name": "ManyToManyExtraFancy: assignedAt arg",
+            "description": null
+        },
+        {
+            "id": "manytomanyextrafancy-print-assignedat",
+            "name": "ManyToManyExtraFancy: print assignedAt",
+            "description": null
         }
     ],
-    "sha": "b61123ce969f4859deda2c61b318d1bb3602d362"
+    "sha": "99bcd475b6d4b7add0129e68f4ff847eb58e7120"
 }

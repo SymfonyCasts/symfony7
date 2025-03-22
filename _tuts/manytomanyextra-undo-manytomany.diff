@@ -19,7 +19,7 @@ index 3a1cad3..da39b5e 100644
  
      public function getId(): ?int
 diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
-index 5ec52bc..88c1393 100644
+index 339a4ee..36209a3 100644
 --- a/src/Entity/Starship.php
 +++ b/src/Entity/Starship.php
 @@ -48,16 +48,9 @@ class Starship

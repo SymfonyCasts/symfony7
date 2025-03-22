@@ -1,0 +1,20 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index c7ad514..86988d5 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -34,13 +34,13 @@ class AppFixtures extends Fixture
+             'captain' => 'Kathryn Journeyway',
+             'status' => StarshipStatusEnum::WAITING,
+             'arrivedAt' => new \DateTimeImmutable('-1 month'),
+-        ]);
++        ])->_real();
+ 
+         StarshipPartFactory::createMany(100);
+         $starshipPart = StarshipPartFactory::createOne([
+             'name' => 'Toilet Paper',
+             'starship' => $ship,
+-        ]);
++        ])->_real();
+         dump($starshipPart);
+ 
+         StarshipFactory::createMany(20);

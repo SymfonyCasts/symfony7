@@ -53,9 +53,65 @@ index da39b5e..29ae32f 100644
 +        return $this;
 +    }
  }
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 36209a3..1d725e4 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -48,9 +48,16 @@ class Starship
+     #[ORM\OrderBy(['name' => 'ASC'])]
+     private Collection $parts;
+ 
++    /**
++     * @var Collection<int, StarshipDroid>
++     */
++    #[ORM\OneToMany(targetEntity: StarshipDroid::class, mappedBy: 'starship')]
++    private Collection $starshipDroids;
++
+     public function __construct()
+     {
+         $this->parts = new ArrayCollection();
++        $this->starshipDroids = new ArrayCollection();
+     }
+ 
+     public function getId(): ?int
+@@ -218,4 +225,34 @@ class Starship
+     {
+         return implode(', ', $this->droids->map(fn(Droid $droid) => $droid->getName())->toArray());
+     }
++
++    /**
++     * @return Collection<int, StarshipDroid>
++     */
++    public function getStarshipDroids(): Collection
++    {
++        return $this->starshipDroids;
++    }
++
++    public function addStarshipDroid(StarshipDroid $starshipDroid): static
++    {
++        if (!$this->starshipDroids->contains($starshipDroid)) {
++            $this->starshipDroids->add($starshipDroid);
++            $starshipDroid->setStarship($this);
++        }
++
++        return $this;
++    }
++
++    public function removeStarshipDroid(StarshipDroid $starshipDroid): static
++    {
++        if ($this->starshipDroids->removeElement($starshipDroid)) {
++            // set the owning side to null (unless already changed)
++            if ($starshipDroid->getStarship() === $this) {
++                $starshipDroid->setStarship(null);
++            }
++        }
++
++        return $this;
++    }
+ }
 diff --git a/src/Entity/StarshipDroid.php b/src/Entity/StarshipDroid.php
 new file mode 100644
-index 0000000..cad80cc
+index 0000000..0b427a3
 --- /dev/null
 +++ b/src/Entity/StarshipDroid.php
 @@ -0,0 +1,67 @@
@@ -81,7 +137,7 @@ index 0000000..cad80cc
 +    #[ORM\JoinColumn(nullable: false)]
 +    private ?Droid $droid = null;
 +
-+    #[ORM\ManyToOne]
++    #[ORM\ManyToOne(inversedBy: 'starshipDroids')]
 +    #[ORM\JoinColumn(nullable: false)]
 +    private ?Starship $starship = null;
 +
