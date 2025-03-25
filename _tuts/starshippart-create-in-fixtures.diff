@@ -1,5 +1,5 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 9112f6b..d8760ae 100644
+index 9112f6b..312ee70 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -2,6 +2,8 @@
@@ -32,3 +32,10 @@ index 9112f6b..d8760ae 100644
          StarshipFactory::createOne([
              'name' => 'USS Espresso (NCC-1234-C)',
              'class' => 'Latte',
+@@ -37,6 +53,5 @@ class AppFixtures extends Fixture
+         ]);
+ 
+         StarshipFactory::createMany(20);
+-        StarshipPartFactory::createMany(50);
+     }
+ }
