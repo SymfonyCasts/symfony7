@@ -31,6 +31,11 @@
             "description": null
         },
         {
+            "id": "starshippart-use-factory-in-fixtures",
+            "name": "StarshipPart: Use factory in fixtures",
+            "description": null
+        },
+        {
             "id": "starshippart-add-relation",
             "name": "StarshipPart: add relation",
             "description": null
@@ -436,5 +441,5 @@
             "description": null
         }
     ],
-    "sha": "99bcd475b6d4b7add0129e68f4ff847eb58e7120"
+    "sha": "4b4fc76702843bf5b7c966ea2b66c7c19783803e"
 }

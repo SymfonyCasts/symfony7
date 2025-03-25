@@ -1,5 +1,5 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index db4fd60..3705e64 100644
+index 9112f6b..d8760ae 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -2,6 +2,8 @@
@@ -10,8 +10,8 @@ index db4fd60..3705e64 100644
 +use App\Entity\StarshipPart;
  use App\Entity\StarshipStatusEnum;
  use App\Factory\StarshipFactory;
- use Doctrine\Bundle\FixturesBundle\Fixture;
-@@ -19,6 +21,20 @@ class AppFixtures extends Fixture
+ use App\Factory\StarshipPartFactory;
+@@ -20,6 +22,20 @@ class AppFixtures extends Fixture
              'arrivedAt' => new \DateTimeImmutable('-1 day'),
          ]);
  

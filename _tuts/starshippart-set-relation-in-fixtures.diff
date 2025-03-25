@@ -1,8 +1,8 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 3705e64..bf63256 100644
+index d8760ae..838743a 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
-@@ -33,6 +33,7 @@ class AppFixtures extends Fixture
+@@ -34,6 +34,7 @@ class AppFixtures extends Fixture
          $part->setNotes('There\'s no air drag in space, but it looks cool.');
          $part->setPrice(500);
          $manager->persist($part);

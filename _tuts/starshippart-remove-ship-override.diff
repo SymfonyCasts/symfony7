@@ -1,15 +1,15 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index a793a77..55ac651 100644
+index 462850f..cfed561 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -39,8 +39,6 @@ class AppFixtures extends Fixture
          ]);
  
          StarshipFactory::createMany(20);
--        StarshipPartFactory::createMany(100, [
+-        StarshipPartFactory::createMany(50, [
 -            'starship' => $ship,
 -        ]);
-+        StarshipPartFactory::createMany(100);
++        StarshipPartFactory::createMany(50);
      }
  }
 diff --git a/src/Factory/StarshipPartFactory.php b/src/Factory/StarshipPartFactory.php

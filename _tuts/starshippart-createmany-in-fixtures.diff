@@ -1,16 +1,8 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index bf63256..354e723 100644
+index 838743a..9baa463 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
-@@ -6,6 +6,7 @@ use App\Entity\Starship;
- use App\Entity\StarshipPart;
- use App\Entity\StarshipStatusEnum;
- use App\Factory\StarshipFactory;
-+use App\Factory\StarshipPartFactory;
- use Doctrine\Bundle\FixturesBundle\Fixture;
- use Doctrine\Persistence\ObjectManager;
- 
-@@ -21,21 +22,6 @@ class AppFixtures extends Fixture
+@@ -22,21 +22,6 @@ class AppFixtures extends Fixture
              'arrivedAt' => new \DateTimeImmutable('-1 day'),
          ]);
  
@@ -32,10 +24,3 @@ index bf63256..354e723 100644
          StarshipFactory::createOne([
              'name' => 'USS Espresso (NCC-1234-C)',
              'class' => 'Latte',
-@@ -53,5 +39,6 @@ class AppFixtures extends Fixture
-         ]);
- 
-         StarshipFactory::createMany(20);
-+        StarshipPartFactory::createMany(100);
-     }
- }
