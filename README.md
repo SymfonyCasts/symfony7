@@ -41,18 +41,6 @@ symfony console doctrine:schema:create
 symfony console doctrine:fixtures:load
 ```
 
-**Build TailwindCSS**
-
-This project uses TailwindCSS, to build the CSS file run:
-
-If you're using the `symfony serve` command to run the site, you're done!
-The `tailwind:build` command is already running thanks to the `workers` config
-in `symfony.yaml`.
-
-```
-php bin/console tailwind:build
-```
-
 **Start the Symfony web server**
 
 You can use Nginx or Apache, but Symfony's local web server
@@ -72,6 +60,18 @@ symfony serve
 
 (If this is your first time using this command, you may see an
 error that you need to run `symfony server:ca:install` first).
+
+**Build TailwindCSS**
+
+This project uses TailwindCSS, to build the CSS file run:
+
+If you're using the `symfony serve` command to run the site, you're done!
+The `tailwind:build` command is already running thanks to the `workers` config
+in `symfony.yaml`.
+
+```
+php bin/console tailwind:build
+```
 
 Now check out the site at `https://localhost:8000`
 
