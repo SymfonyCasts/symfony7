@@ -1,5 +1,5 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 93bdf5d..fad25ce 100644
+index 688a45e..d661bb4 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -50,13 +50,8 @@ class AppFixtures extends Fixture
@@ -9,7 +9,7 @@ index 93bdf5d..fad25ce 100644
 -            //'droids' => DroidFactory::randomRange(1, 5),
 +            'droids' => DroidFactory::randomRange(1, 5),
          ]);
-         StarshipPartFactory::createMany(50);
+         StarshipPartFactory::createMany(100);
 -
 -        $ship = StarshipFactory::random()->_real();
 -        $droid = DroidFactory::random()->_real();

@@ -1,5 +1,5 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 660f14b..22f7a20 100644
+index a6f8c7e..c7ad514 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -36,6 +36,13 @@ class AppFixtures extends Fixture
@@ -14,5 +14,5 @@ index 660f14b..22f7a20 100644
 +        dump($starshipPart);
 +
          StarshipFactory::createMany(20);
-         StarshipPartFactory::createMany(50);
+         StarshipPartFactory::createMany(100);
      }

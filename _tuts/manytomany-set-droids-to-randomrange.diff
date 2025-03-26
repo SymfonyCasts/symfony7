@@ -1,5 +1,5 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 2a109b6..78578f4 100644
+index 45c9549..29a5e16 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -4,6 +4,7 @@ namespace App\DataFixtures;
@@ -20,6 +20,6 @@ index 2a109b6..78578f4 100644
 +        StarshipFactory::createMany(100, [
 +            'droids' => DroidFactory::randomRange(1, 5),
 +        ]);
-         StarshipPartFactory::createMany(50);
+         StarshipPartFactory::createMany(100);
      }
  }
