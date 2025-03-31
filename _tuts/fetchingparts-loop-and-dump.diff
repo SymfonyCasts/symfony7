@@ -1,5 +1,5 @@
 diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
-index 45e844c..79579d7 100644
+index 45e844c..5a305fc 100644
 --- a/src/Controller/StarshipController.php
 +++ b/src/Controller/StarshipController.php
 @@ -19,7 +19,11 @@ class StarshipController extends AbstractController
@@ -8,7 +8,7 @@ index 45e844c..79579d7 100644
          $parts = $partRepository->findBy(['starship' => $ship]);
 -        dd($ship->getParts());
 +
-+        foreach ($parts as $part) {
++        foreach ($ship->getParts() as $part) {
 +            dump($part);
 +        }
 +

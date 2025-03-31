@@ -1,5 +1,5 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 45c9549..29a5e16 100644
+index f4273f7..b1ec0ac 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -4,6 +4,7 @@ namespace App\DataFixtures;
@@ -10,7 +10,7 @@ index 45c9549..29a5e16 100644
  use App\Factory\StarshipFactory;
  use App\Factory\StarshipPartFactory;
  use Doctrine\Bundle\FixturesBundle\Fixture;
-@@ -45,7 +46,11 @@ class AppFixtures extends Fixture
+@@ -47,7 +48,11 @@ class AppFixtures extends Fixture
          $ship->removePart($starshipPart);
          $manager->flush();
  

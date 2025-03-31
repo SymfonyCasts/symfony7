@@ -1,8 +1,8 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index d683e13..710577a 100644
+index 817af2d..c6b3d6d 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
-@@ -43,7 +43,6 @@ class AppFixtures extends Fixture
+@@ -42,7 +42,6 @@ class AppFixtures extends Fixture
          ])->_real();
          $ship->removePart($starshipPart);
          $manager->flush();

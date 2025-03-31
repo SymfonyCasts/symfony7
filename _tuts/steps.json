@@ -76,8 +76,8 @@
             "description": null
         },
         {
-            "id": "starshippart-set-status-in-new",
-            "name": "StarshipPart: Set status in new()",
+            "id": "delete-me-5",
+            "name": "delete me 5",
             "description": null
         },
         {
@@ -301,8 +301,18 @@
             "description": null
         },
         {
-            "id": "manytomany-set-in-fixtures",
-            "name": "ManyToMany: Set in fixtures",
+            "id": "manytomany-manually-create-in-fixtures",
+            "name": "ManyToMany: Manually create in fixtures",
+            "description": null
+        },
+        {
+            "id": "manytomany-relate-in-fixtures",
+            "name": "ManyToMany: Relate in fixtures",
+            "description": null
+        },
+        {
+            "id": "manytomany-remove-droid",
+            "name": "ManyToMany: Remove droid",
             "description": null
         },
         {
@@ -441,5 +451,5 @@
             "description": null
         }
     ],
-    "sha": "db9f6233cc37d271dd1a184d094d98e5279ba8c9"
+    "sha": "a52ce5f13dfbde52440be4a7a7444f4a577bd54d"
 }

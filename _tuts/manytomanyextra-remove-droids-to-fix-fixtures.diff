@@ -1,8 +1,8 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 5ad1948..a0d0683 100644
+index 34bcde4..6d8913c 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
-@@ -49,7 +49,7 @@ class AppFixtures extends Fixture
+@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
          DroidFactory::createMany(100);
  
          StarshipFactory::createMany(100, fn() => [

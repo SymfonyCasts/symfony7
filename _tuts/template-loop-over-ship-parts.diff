@@ -1,16 +1,12 @@
 diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
-index 746904a..a588e79 100644
+index 440af2f..a588e79 100644
 --- a/src/Controller/StarshipController.php
 +++ b/src/Controller/StarshipController.php
-@@ -16,11 +16,9 @@ class StarshipController extends AbstractController
-     public function show(
-         #[MapEntity(mapping: ['slug' => 'slug'])]
-         Starship $ship,
--        StarshipPartRepository $partRepository,
+@@ -19,7 +19,6 @@ class StarshipController extends AbstractController
      ): Response {
          return $this->render('starship/show.html.twig', [
              'ship' => $ship,
--            'parts' => $partRepository->findBy(['starship' => $ship]),
+-            'parts' => $ship->getParts(),
          ]);
      }
  }

@@ -1,0 +1,13 @@
+diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
+index c93eb82..817af2d 100644
+--- a/src/DataFixtures/AppFixtures.php
++++ b/src/DataFixtures/AppFixtures.php
+@@ -40,6 +40,8 @@ class AppFixtures extends Fixture
+             'name' => 'Toilet Paper',
+             'starship' => $ship,
+         ])->_real();
++        $ship->removePart($starshipPart);
++        $manager->flush();
+         dump($starshipPart);
+ 
+         StarshipFactory::createMany(20);

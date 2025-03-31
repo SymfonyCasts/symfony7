@@ -1,5 +1,5 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 710577a..ad5d5b4 100644
+index c6b3d6d..35426b1 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -2,6 +2,7 @@
@@ -10,7 +10,7 @@ index 710577a..ad5d5b4 100644
  use App\Entity\StarshipStatusEnum;
  use App\Factory\StarshipFactory;
  use App\Factory\StarshipPartFactory;
-@@ -12,13 +13,30 @@ class AppFixtures extends Fixture
+@@ -12,13 +13,28 @@ class AppFixtures extends Fixture
  {
      public function load(ObjectManager $manager): void
      {
@@ -25,14 +25,12 @@ index 710577a..ad5d5b4 100644
 +        $droid1 = new Droid();
 +        $droid1->setName('IHOP-123');
 +        $droid1->setPrimaryFunction('Pancake chef');
-+        $starship->addDroid($droid1);
 +        $manager->persist($droid1);
 +
 +        $droid2 = new Droid();
 +        $droid2->setName('D-3P0');
 +        $droid2->setPrimaryFunction('C-3PO\'s voice coach');
 +        $manager->persist($droid2);
-+        $starship->addDroid($droid2);
 +
 +        $droid3 = new Droid();
 +        $droid3->setName('BONK-5000');
