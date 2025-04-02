@@ -25,7 +25,7 @@ class StarshipRepository extends ServiceEntityRepository
     public function findIncomplete(): Pagerfanta
     {
         $query = $this->createQueryBuilder('s')
-            ->where('s.status != :status')
+            ->andWhere('s.status != :status')
             ->orderBy('s.arrivedAt', 'DESC')
             ->setParameter('status', StarshipStatusEnum::COMPLETED)
             ->getQuery()
