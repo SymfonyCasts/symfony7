@@ -13,7 +13,7 @@ index 88b190a..339a4ee 100644
 +    }
  }
 diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
-index 367be19..5b3fffd 100644
+index 367be19..08cee84 100644
 --- a/templates/main/homepage.html.twig
 +++ b/templates/main/homepage.html.twig
 @@ -35,7 +35,9 @@
@@ -23,7 +23,7 @@ index 367be19..5b3fffd 100644
 -                                    Parts: {{ ship.parts|length }}
 +                                    Parts: {{ ship.parts|length }}</div>
 +                                <div>
-+                                    Droids: {{ ship.droidNames }}
++                                    Droids: {{ ship.droidNames ?: 'none' }}
                                  </div>
                              </div>
                          </div>
