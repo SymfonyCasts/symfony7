@@ -1,11 +1,11 @@
 diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
-index 45072b4..bc28a6e 100644
+index 948b8ea..edc4c1f 100644
 --- a/src/Repository/StarshipRepository.php
 +++ b/src/Repository/StarshipRepository.php
 @@ -26,8 +26,8 @@ class StarshipRepository extends ServiceEntityRepository
      {
          $query = $this->createQueryBuilder('s')
-             ->where('s.status != :status')
+             ->andWhere('s.status != :status')
 -            ->orderBy('COUNT(droid)', 'ASC')
 -            ->leftJoin('s.droids', 'droid')
 +            ->orderBy('COUNT(starshipDroid)', 'ASC')

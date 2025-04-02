@@ -1,5 +1,5 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 34bcde4..6d8913c 100644
+index 1040ebe..83a3506 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
 @@ -51,7 +51,7 @@ class AppFixtures extends Fixture
