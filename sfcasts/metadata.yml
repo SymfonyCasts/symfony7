@@ -1,7 +1,4 @@
 chapters:
-    cascade:
-        tutsFirstStep: manytomanyextrafancy-add-cascade-persist
-        tutsLastStep: manytomanyextrafancy-print-assignedat
     setup:
         tutsFirstStep: start
         tutsLastStep: start
@@ -71,3 +68,6 @@ chapters:
     add-droid:
         tutsFirstStep: manytomanyextrafancy-use-adddroid-in-fixtures
         tutsLastStep: manytomanyextrafancy-fix-starship-adddroid
+    cascade:
+        tutsFirstStep: manytomanyextrafancy-add-cascade-persist
+        tutsLastStep: manytomanyextrafancy-print-assignedat
