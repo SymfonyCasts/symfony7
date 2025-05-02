@@ -2,33 +2,78 @@
 
 Coming soon...
 
+From the homepage, head into one of the starships that actually is in
+progress. One of  the starships that has some parts. So in
+`templates/starship/show.html.twig`, we get these parts by saying `for part
+in ship.parts`. So we're basically calling `ship->getParts()`  to get
+these. Now the only problem is that we can't guarantee the order of these
+parts.  So right now they're just kind of coming out of the database in
+whatever order they want. What I'd like to do is order these by name. Does
+that mean we can't use our cool  `ship.parts` anymore? Fortunately not. We
+do have some control over this, over how these come out of the database. To
+do that, find the `Starship` entity and go to the `parts`  property. Right
+above `parts`, we're going to add a new attribute here. There we go. 
+`#[ORM\OrderBy(['name' => 'ASC'])]`. Except we don't have a position
+property. We are  going to order by our `name` property. `Name` ascending. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
+Let's refresh the page. And it's alphabetical. Now if you're confused why T
+is coming  after R, that's because Postgres is a case sensitive database.
+And so the capital T is  actually alphabetically before the lowercase C. So
+it is ordering alphabetically. 
 
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
+Check out the query for this page. How many of you formatted a query?
+Perfect. So you can  see we're querying from `starship.part`, where
+`starship ID` equals our `ID`, order by  `name` ascending. So it's exactly
+the query that we want. 
 
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
+Head to the home page, and open up the template for this, which is going to
+be  `templates/main/homepage.html.twig`. Down here, right after arrived,
+let's add a new div.  We'll say parts. And we're just going to print out
+how many parts there are. So this is  easy, right? `Ship.parts|length`.
+Love it. 
 
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
+Back on the home page, it works fine. Let's check out the queries for this
+page. They  look a little crazy because of our pagination. That does some
+wild stuff. But basically,  we have one query up here for the starship. And
+then if we query for `starship.part`, if  we search for `starship.part`,
+you'll find that we have about five extra queries here for  the starship
+parts for each of the starships. 
 
-```terminal
-symfony console doctrine:fixtures:load
-```
+So basically, what happens here is we grab the `Starship` at the very
+beginning. And  then as soon as we try to count the `ship.parts`, it
+doesn't have that data yet. So one  by one for each ship, it grabs all of
+the parts for that ship. And then it counts them. 
 
-Cool, no errors. Let's see what actually happened in the database. 
+This idea of having one query for the ship and then one extra query for
+every single part  is called the N+1 problem. It's a small performance
+problem that we're going to tackle  later. It's caused by Doctrine's really
+cool lazy loading. The problem here is even  crazier. We're querying for
+all of the data for every `starship.part` just to count them. We don't
+actually need the part data, we just need to know how many parts there are.
 
-```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
-```
 
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
+Again, this is a minor performance issue, unless you have a ship with a lot
+of parts. To  fix this, back in `Starship`, above on our one to many,
+doesn't actually matter where,  but to keep my editor happy, right here,
+I'm going to add a little... I'll fetch and  we're going to call this extra
+lazy. `#[ORM\OneToMany(targetEntity: StarshipPart::class,  mappedBy:
+'starship', fetch: 'EXTRA_LAZY', orphanRemoval: true)]`
 
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
+Spin back over. Just before we had, let's see here, nine queries, we go to
+home page now  and refresh, we still have nine queries. The difference is
+not less queries, but check  out most of the parts queries. It's now just
+`SELECT COUNT(*)`. So Doctrine is smart  enough to see that all we really
+want is just the count of the parts. So instead of  querying for all of
+their data, it just counts to see how many there are. Much more  efficient.
+So you might be wondering, why don't we always use `fetch="EXTRA_LAZY"`? 
 
-```terminal
-symfony console doctrine:fixtures:load
-```
+The first answer to that is that this is a tiny performance optimization
+that I wouldn't  worry about unless a ship can have a lot of parts and you
+just want to count them. Second, there are some cases where this can cause
+an extra query. Again, this is a minor  performance issue, but that's why
+it's not the default. 
 
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
-
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+Next, what if instead of getting all the related parts for a ship, we only
+want the  related parts that cost above a certain price? Can we still use
+the `ship.parts` shortcut  or do we need to do a custom query? Let's learn
+about the criteria system next.

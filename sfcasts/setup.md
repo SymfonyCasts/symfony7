@@ -1,35 +1,28 @@
 # Setup
 
-Welcome back, my friends! In the last tutorial about Doctrine, we
-accomplished some things that, honestly, I'm pretty darn proud of. We created an
-entity, migrations, fixtures, wrote custom queries and with a little bit more
-time I could've taught you how to bake sourdough bread. However, we can't really build
-the app of our dreams without talking about database relationships. For example,
-that slice of sourdough bread belongs to me, or I have
-many slices of sourdough bread.
+Coming soon...
 
-## Project Setup
-
-As usual, to fully relate to what I'm doing, you
-should download the course code from this page. After you unzip the file,
-you should have a `start/` directory with the same code that you see here.
-Follow this nifty `README.md` file for all the setup details. The last
-step is to open a terminal, move into your project, and run
-
-```terminal
-symfony serve
-```
-
-Sometimes I run this with a `-d`, to run in the background as a
-daemon. This time, I'll run it in the foreground. One of the
-cool things is we can see all these logs down here: these are the
-server logs. Notice that we're using
-Tailwind: we can see it downloading Tailwind and building in the
-background. When that's done, scroll up and click this link
-to open up our app: Starshop! It's all about repairing ships. All these Starships
-are coming from the database... cause we're awesome. As a
-reminder, in `src/Entity/` we have one entity: `Starship`.
-Boring. In this tutorial, we need to track which parts we've ordered for each ship
-and how much they cost. A part belongs to a ship and a ship has many parts...
-see where we're going with this? By the end, we'll have some pretty serious relationships
-that *will* let you build that dream app. Let's get that started next.
+Welcome back, my friends! In our last tutorial about Doctrine, we did some
+stuff that I'm pretty darn proud of. We created an entity, migrations,
+fixtures, all kinds of good stuff. However, you can't really build anything
+that's that impressive without talking about database relationships. For
+example, that slice of pizza belongs to me, or I have many slices of pizza.
+As usual, to fully relate to what I'm doing, you should download the course
+code from this page. After you unzip the file, you should have a start
+directory with the same code that you see here. Follow this nifty readme.md
+file for all the setup instructions. The last step will be to open a
+terminal, move into your project, and run `symfony serve`. Sometimes you
+run this with a "-d", to run in the background of the daemon. This time,
+I'm going to run it in the foreground. One of the cool things is you'll see
+all these logs coming from here. These are the server logs. One important
+one down here is you'll see we're using Tailwind. You can actually see it
+downloading Tailwind and building in the background. When that's done, I'm
+going to scroll up and click this link to open up Starshop, our
+application. It's all about repairing ships at Repairing Ships. All these
+Starships are coming from the database. As a reminder, if you go to Source
+Entity, we only have one entity, `Starship`. Kind of boring. Snooze. In
+this tutorial, we're going to start tracking the parts of a ship. As we're
+repairing a ship, we're going to keep track of which parts we've ordered
+for the ship and how much they cost. By the end, we're going to have some
+pretty serious relationship set up that is going to unlock you to build
+whatever is in your dreams. Let's get that started next.

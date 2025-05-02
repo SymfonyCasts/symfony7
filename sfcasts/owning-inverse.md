@@ -2,33 +2,77 @@
 
 Coming soon...
 
+We know that every relation can be seen from two different sides.
+`Starship` has many parts, so it's a `OneToMany`. But seen from the
+`StarshipPart` side of  things, it is a `ManyToOne`. One side is known as
+the owning side, and the other is the inverse side. This mostly doesn't
+matter, but give me three minutes to  explain so it doesn't bite you later.
+Bonus, you can entertain your friends at parties with small talk about
+owning and inverse sides. You're welcome. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
+First, which side is the owning side? For `ManyToOne`, it's simple.
+`ManyToOne` is always the owning side. It's the side that has the foreign
+key in the  database. `StarshipPart` has a `starship_id` column, so it's
+the owning side. But second, why do we care? Two reasons. First, the
+`JoinColumn` can only go  above the owning side. And that makes sense. This
+controls the foreign key column, so of course it would be on the side where
+the foreign key column exists.  And second, you can only set this
+relationship via the owning side. Let me show you that. 
 
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
-
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
-
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
+Open up `src/DataFixtures/AppFixtures.php`. And on top, I'm going to create
+a couple of objects by hand. Start by saying `$starship =
+StarshipFactory::createOne();`.  That's almost right. It's not called
+create anymore. It's called `createOne()`. And below this, I'm just going
+to paste in some code here that creates two-part  objects per system and
+flushes them. But it does not relate the part to that starship yet. Let's
+try loading the fixtures anyways. 
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-Cool, no errors. Let's see what actually happened in the database. 
+And we get our very, very familiar error. `Starship_id` cannot be null,
+which makes perfect sense. Now, as I mentioned, you can only set the owning
+side of a  relationship when you're relating a part to a ship. Now, to show
+off what's going on here, I want you to actually add an `_real` to end of
+this. So when you  create an entity via foundry, it actually wraps that in
+what's called a proxy object. This almost never matters, but in some cases
+like this one, it's going to  kind of confuse things. So we're going to
+call it `real`, and that's going to give us back the actual `Starship`
+object itself without that proxy. 
 
-```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
-```
+All right. Let's relate these parts to this starship. We would normally do
+this by saying something like `$part->setStarship($ship)`, which would set
+the owning  side of the relationship. This time, let's try setting the
+other side of the relationship. So that would be `$ship->addPart($part)`.
+We'll have a `setParts()`  method, `$part1`, and `$ship->addPart($part2)`.
+Now, based on what I just told you, this should not work because we are
+setting only the inverse side of the  relationship, the `OneToMany` side.
+Spin over and try the fixtures anyways. And they work. Just to be extra
+sure, let's query for `StarshipPart` and all the  way up on top. Yep. Sure
+enough, there are two new parts, and they are related to a starship. So it
+gives. We just set the inverse side of relationship only,  and it did save
+the database. Am I lying to you for the sake of learning? Kind of. 
 
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
+Open the `Starship` entity and find the `addPart()` method. Oh, so inside
+of this method actually calls `$part->setStarship($this)`. It sets the
+owning side.  So when we set the inverse side in our own code generated by
+the `make:entity` command, it also sets the owning side. That's why this
+works. We are setting  the owning side. Here's the takeaway. Every relation
+has an owning side and an inverse side. The inverse side is optional, but
+`make:entity` asked us if we  wanted the inverse side, which we said yes to
+because it gives us the really convenient `$ship->getParts()` method. And
+you can technically only set the  relationship from the owning side. So
+`StarshipPart->setShip()`. But in practice, you can set it from either
+side, thanks to our own code that synchronizes  both sides of the
+relationship. So go while your friends with your new knowledge, then forget
+about it. It's not that important. 
 
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
+Let's remove our temporary code here. And then freshen things up by
+reloading fixtures to freshen things up. 
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
-
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+All right, next up, we're gonna talk about something.

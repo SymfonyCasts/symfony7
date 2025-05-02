@@ -2,33 +2,70 @@
 
 Coming soon...
 
+Okay, we know that calling `$ship->getParts()` is going to return all the
+parts related to this ship. What if we only want to return expensive parts,
+like parts that cost more than 50,000 credits? We could do a fresh query in
+our controller for all `Starship` parts related to the ship and where the
+price is greater than 50,000. But lame, I still want to use these cool
+`$ship->getParts()` methods because they're so easy. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
+So fortunately, we can do this. In `Starship`, search for the `getParts()`
+method, though it doesn't matter where you put this. I'm going to copy that
+method and right below it, I'm going to paste and rename this to
+`getExpensiveParts()`. But for now, we're just going to return all the
+parts.
 
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
+```php /** * @return Collection<int, StarshipPart> */ public function
+getExpensiveParts(): Collection { return $this->parts; } ```
 
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
+Alright, on our show template, let's go ahead and use this. So I'll change
+parts here to `expensiveParts` and then `ship.expensiveParts`. So we know
+even though there's not an `expensiveParts` property, that's going to call
+the `getExpensiveParts()` method that we just created.
 
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
+```twig Expensive Parts ({{ ship.expensiveParts|length }}) {% for part in
+ship.expensiveParts %} ```
 
-```terminal
-symfony console doctrine:fixtures:load
+Now, how do we make our new method return only the expensive parts?
+Remember, `parts` is not an array, it's a special collection object that
+has a couple of nice tricks on it. One of them is a `filter()` method.
+
+```php return $this->parts->filter(function (StarshipPart $part) { return
+$part->getPrice() > 50000; }); ```
+
+This isn't particularly efficient. In our queries, we're still querying for
+every single part that relates to this starship and then we filter that in
+PHP. What we really want to do is change the query itself. We want to
+change the query so that Doctrine grabs all the parts related to the
+starship and where the price is greater than 50,000. We can do that with a
+powerful thing called a `Criteria` object.
+
+```php use Doctrine\Common\Collections\Criteria; $criteria =
+Criteria::create()->andWhere(Criteria::expr()->gt('price', 50000)); return
+$this->parts->matching($criteria); ```
+
+For organization, we can have the best of both worlds by moving this
+`Criteria` logic into our repository. In our `StarshipPartRepository`, we
+can add a public static function called `createExpensiveCriteria()` that
+returns a `Criteria` object.
+
+```php use App\Repository\StarshipPartRepository; return
+$this->parts->matching(StarshipPartRepository::createExpensiveCriteria());
 ```
 
-Cool, no errors. Let's see what actually happened in the database. 
+```php /src/Repository/StarshipPartRepository.php public static function
+createExpensiveCriteria(): Criteria { return
+Criteria::create()->andWhere(Criteria::expr()->gt('price', 50000)); } ```
 
-```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
-```
+Let's create one more method here to combine `Criteria` with Query
+Builders. Let's pretend we have some controller where we want to get a list
+of all of the expensive parts. Let's do that.
 
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
+```php use Doctrine\Common\Collections\Collection; /** * @return
+Collection<StarshipPart> */ public function getExpensiveParts(int $limit =
+10): Collection { return $this->createQueryBuilder('sp')
+->addCriteria(self::createExpensiveCriteria()) ->setMaxResults($limit)
+->getQuery() ->getResult(); } ```
 
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
-
-```terminal
-symfony console doctrine:fixtures:load
-```
-
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
-
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+This is a very powerful concept: combining `Criteria` with Query Builders.
+Now, let's do something totally different.

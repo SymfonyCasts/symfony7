@@ -2,33 +2,95 @@
 
 Coming soon...
 
+What we're going to talk about next, I admit, is a bit unrelated to
+Doctrine Relationships. But  it's good stuff, I promise. So inside of this
+page here, let's add a search bar. Let's open up a  template for this. So,
+`index.html.twig`. And right on top here, let's paste in a search input. 
+Now, there's nothing special here, it's just `input type="text"`,
+`placeholder="search"`, and  then a bunch of classes and an SVG to make it
+look cool. And there we go. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
+Now to make this actually something we can submit, we need to surround it
+with a form tag. So  let's say `form`, and for the action, let's have this
+submit right back to the same spot. So let's  copy that route name, we'll
+say `{{ path('') }}`, we'll paste in the route name. Also, because  this is
+a search form, we want any of our fields that show up in the URL. So we're
+going to say  `method="get"`. Let's move this closing form tag here and
+move it down right after the SVG. And  then so that Ryan keeps his sanity,
+let's indent these to keep everything looking nice. 
 
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
+And the last thing here is we need to give this input a name so we can find
+its value on the  server. So let's say `name="query"`, or we can call it
+search if you want. Perfect. So over here,  if we refresh, let's look for
+holodeck. And of course, it doesn't work yet, but you can see the 
+`?query=holodeck` up on the URL. 
 
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
+So the question now is how do we read this? So this is part of the URL, and
+so it means it's part  of the request. So if you're looking for IP address,
+request headers, these are all things that  are part of the request itself.
+And when you need information from the request, there's a special  way to
+get a request object. That is you can add it as an argument to your
+controller. So far, we  know that you can auto-wire services. And while the
+request object is not technically a service,  there's a special case in
+there that allows it to be auto-wired. 
 
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
+So grab the one from HD Foundation, and you can call this anything, but
+`request` is probably a  pretty good name. So let's say `query =
+$request->query->get('query');`. And just to see if this is  working, let's
+`dd($query);`. And got it. It's the string `holodeck`. 
 
-```terminal
-symfony console doctrine:fixtures:load
-```
+Next up, let's enhance our `findAllOrderByPrice()` to allow for a search.
+Let's get rid of the  `dd`, and pass in our `query`. And run into that
+method, `StarshipPartRepository::findAllOrderByPrice()`,  and we'll give
+this a string `search`. We can make it optional by saying `= ''`. 
 
-Cool, no errors. Let's see what actually happened in the database. 
+All right, and this time, we're going to have to break this into multiple
+lines, so we can have an  if statement. So change this return to `qb =`, so
+`queryBuilder =`, then get rid of the `getQuery()`  and `getResults()`,
+because we just want the `queryBuilder` for now. And down here, we're going
+to  say, if we have a `search`, `if ($search)`, then it's going to be
+similar to that, `qb->andWhere()`,  instead of `s.name`, it's going to be
+`sp.name`, because we're using `sp` up here, like `search`.  And for that
+parameter, we're going to fill in the `search` parameter, and here is where
+we do our  fuzzies, `%$search%`. I know it looks a little funny, but that's
+the way you do it. 
 
-```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
-```
+And down here in the bottom, this is where we'll say, `return
+$qb->getQuery()->getResult();`.  All right, cool, let's head over here and
+try this. And it works. So check this out. If I do an  uppercase holodeck,
+it doesn't work, and this is actually something special to Postgres.
+Postgres  is a case-sensitive database, so `holodeck` with an uppercase H
+does not match `holodeck` with  lowercase. So to handle this, we can just
+make our query a little fancier. We can say `LOWER(sp.name)  LIKE :search`.
+And now, that's a bit more how we expect it to work. 
 
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
+And while we're here, notice we kind of lose the value. We don't see
+`holodeck` in there. So let's  fix that. Let's move over in our template.
+So this is pretty easy. So we're going to add a `value="{{
+app.request.query.get('query') }}"`. 
 
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
+The answer is, Twig gives you one global variable called `app`. It has a
+bunch of useful things on  it. One of the most useful is `app.request`, and
+then we say `.query.get('query')`. So nothing  complicated, I just want to
+show you how you can get the request object from inside the template.  And
+refresh, there it goes. 
 
-```terminal
-symfony console doctrine:fixtures:load
-```
+So what I want to do next is actually allow for us to also search on the
+notes. So right now, if I  search for controls, you can see nothing shows
+up. So I want to search on the notes, but also on  the name. So it's going
+to be an or logic. So head into our repository, and we're going to add an 
+`or` here. And one way you might expect to do this is saying `orWhere`, but
+I never use `orWhere`.  And the reason is, you can't control where the
+logical parentheses go. 
 
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
+So instead, what you can do is you can use `andWhere` and put the `or`
+right inside. So `andWhere`  `LOWER(sp.name) LIKE :search`, and right here,
+I'm going to say `or LOWER(sp.notes) LIKE :search`,  which we're already
+filling in down here with the percents on, with the fuzziness. Perfect. So 
+let's refresh now. Perfect. So we can search from controls, search on the
+name, or we can search  on the notes, or we can search on the name. 
 
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+So the takeaway there is when you do an `orWhere`, embed it inside the
+`andWhere`, and then you  can control kind of like where the parentheses go
+and where the logical parentheses go. All right,  next up, we're going to
+talk about the final relationship type, many to many.

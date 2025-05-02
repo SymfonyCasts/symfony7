@@ -2,33 +2,91 @@
 
 Coming soon...
 
+There are a few parts and a few ships, but to make our data really
+realistic and help us  develop our app, I want to create lots of parts and
+lots of ships. This is a perfect job  for Foundry. Start by creating our
+manual code here that created that part and that  starship and related them
+to each other. Let's start from scratch. It doesn't really matter  where
+I'm going. I'm going to go down to the bottom. I'm going to say 
+`StarshipPartFactory::createMany(100);` and let's go crazy and create 100
+parts. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
-
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
-
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
-
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
-
-```terminal
-symfony console doctrine:fixtures:load
-```
-
-Cool, no errors. Let's see what actually happened in the database. 
+Stop right here and spin over and try the fixtures. 
 
 ```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
+Symfony Console, Doctrine, Fixtures, Load.
 ```
 
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
+We see a familiar error here. It says `starship_id` cannot be null in
+Starship Part.  This goes all the way back to our `StarshipPartFactory`.
+Down here in `getDefaults()`,  this is the only data that's going to be
+passed to our `StarshipPart` when it's created. 
 
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
+The best practice here is to make `getDefaults()` return a key for every
+required property  on this object. Right now, we're obviously missing the
+`Starship` property, so let's add  that. Let's say `starship` key, not
+`starship_id`, definitely not that, and set this to a  really cool method
+called `Starship::randomOrCreate()` and pass this in an array. 
 
-```terminal
-symfony console doctrine:fixtures:load
-```
+The only ships that we're showing on the homepage are either in progress or
+waiting, so  to make sure that these parts actually show up on our
+homepage, set the status to  `StarshipStatusEnum::IN_PROGRESS`. 
 
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
+This is a really cool, really powerful method because it's going to look in
+the database  first to see if it can find a `Starship` that matches this
+criteria. If it can, it's  going to use that. If it can't, it will create
+one with that status. 
 
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+All right, try the fixtures now. Awesome, no errors. Let's query
+from—let's grab all the  Starship parts. This actually looks perfect. If
+you look closely, there are 100 parts and  they're each related to a random
+`Starship`, which should be a `Starship` that's in a  in progress status. 
+
+What if we wanted more control over this? What if we wanted to assign all
+100 of these  parts to the same one ship? I know that sounds kind of weird,
+and it is, but it's going  to help us explain a few important things about
+foundry and relationships. Up here, let's  first start by getting a ship
+variable, so `ship = StarshipFactory::createOne([])`. 
+
+Down here in `StarshipPartFactory`, we can pass a second argument and say,
+hey, we want  `starship` to be set to this specific ship. 
+
+All right, try the fixtures again and query once again for the parts.
+Perfect. They're all  related to the same one ship. Also over here, query
+for the Starships themselves. Inside  of here, if you look closely, we have
+23 ships, which is the correct amount because we  create—let's see here.
+That fixture should create 20 in the bottom, and we also have 1, 2,  and 3,
+so 23 in total, so everything is looking right. 
+
+Here's where things get kind of interesting. In `StarshipPartFactory`,
+instead of saying  `randomOrCreate()`, use `createOne()`. Just trust me on
+this. All right, I'll go over and  load the fixtures again, then query for
+all the ships. What the fringy? There are now  tons of ships. 
+
+If you look closely, there's 123 ships. Here's the problem, for each part,
+`getDefaults()`  is called for each part. For all 100 parts, it's calling
+this line right here, and that's  creating and saving a `Starship`, even
+though we're never going to use that `Starship`  because we override it a
+second later. 
+
+The solution is to change this to `StarshipFactory::new([])`. That actually
+creates a new  instance of that factory, not an object in the database.
+Let's try that. Reload the  fixtures, then query for the ships. Perfect. We
+are back to our 23 ships. 
+
+These factory instances, they act like recipes for creating objects. This
+doesn't actually  create an object in the database, it's just a recipe for
+one. When you pass a factory  instance like here, Foundry is going to delay
+creating this object until and if it's  needed. Only if the `Starship` is
+not overridden will it create a new `Starship` and save  it. It's a best
+practice when you're setting relationships to set them to a factory 
+instance for this exact reason. 
+
+Looking at fixtures, let's remove this override. We don't really need that.
+Change the  factory, change back to `randomOrCreate()` because that was
+actually working pretty well.  I like that. 
+
+Let's reload the fixtures one last time to make sure we didn't mess
+anything up. Looks  good. All right, next. It's time to fetch all of the
+parts for our ship. When we do that,  we're going to enjoy some sweet
+doctrine magic.

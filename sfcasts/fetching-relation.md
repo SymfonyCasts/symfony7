@@ -2,33 +2,99 @@
 
 Coming soon...
 
+On the homepage, click into one of the ships that has the `In Progress`
+status, because these  are the ones we assign parts to in our fixtures.
+Down here, you can already see that we are  listing the parts, but this is
+actually just hard-coded. So for the first time, we need to  query for the
+parts that are related to this specific Starship. To do that, head over to
+the  source controller, `StarshipController`, and normally, if we want to
+query for Starship parts,  we're going to auto-wire that repository. So
+let's start that same way here. Say  `StarshipPartRepository`, then I'm
+going to call this `PartRepository`. Then below this, let's  say `parts`
+equals. This is actually perfect. `PartRepository`, arrow, `findBy()`. So
+normally,  if you want to query where some property equals some value, you
+can use `findBy()` with this  array here. And for relationship, it's
+actually no different. We're going to query for the  Starship property. So
+notice, we're not doing `Starship ID` or anything like that. We don't  need
+to worry about IDs. So `Starship` property. The other kind of interesting
+thing here is  that we're going to pass it the entire `ship` object. You
+actually can pass just the `getID()`  here if you want to, but in the
+spirit of doctrine and relationships and thinking about  objects, I'm going
+to pass the entire `ship` object. And below this, let's `dd($parts)` and 
+see what happens. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
+All right, spin over, refresh, and got it. 10, an array of 10
+`StarshipPart` objects, all  related to this Starship. That is awesome. But
+there is an easier way. In the `dd()`, instead  of saying, replace the
+`parts` with `ship->getParts()`. That's nice. Here's the interesting 
+thing, though. Instead of an array of `StarshipPart` objects, we get some
+sort of doctrine  collection. And inside the collection, best we can tell,
+it actually looks empty. So two things  here. First, when you're working
+with a relationship like this, this is never actually going  to be a true
+array. It's either going to be an `ArrayCollection` or what's called a 
+`PersistentCollection`. In both cases, we don't really care because this
+object looks and acts  like an array. So it's not really a detail that we
+need to think about. The bigger mystery is,  why does this seem like it's
+empty? And the answer is because doctrine is awesome. 
 
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
+It doesn't actually query for the parts for this ship until we need them.
+So check this out.  I'm back in our controller. Get rid of the `dd()`
+instead. I'm going to say `foreach part as  part`. Instead of here, we're
+going to `dump()` that. So even though parts look like an empty 
+collection, when we loop over it, suddenly we'd see the 10 `StarshipPart`
+objects. 
 
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
+What's really cool here is we can see that there are two queries. I'm going
+to say view  formatted queries. The first query is just the one for the
+Starship. And the second query is the  one for all the Starship parts for
+this Starship. So the first one is coming from right here,  when Symfony
+queries for the Starship for us based on the slug. The second query happens
+ actually right at this moment here. As soon as we `foreach` over the
+parts, at that moment,  doctrine says, oh, I need to go actually query for
+those parts, and it does it. That is  amazing. So let's undo the `foreach`.
+I'm actually going to get rid of the `parts` variable  entirely. We can
+even celebrate by getting rid of the `StarshipPart` imposter. That's all
+way  too much work. Instead, down here, as in a `parts` variable, and we'll
+say `ship->getParts()`. 
 
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
+All right, so now that we have a new `parts` variable, we can loop over
+that in our template.  So let's open up
+`templates/starship/show.html.twig`. And here is our one hard coded part
+right  here. So outside of the `li`, start our loop, which is nothing
+special for `part in parts`. And  down here, very end, we'll do our end.
+And for anything inside of here is just really normal  logic. So `part` is
+a `StarshipPart` object. So we can just print things like normal, like 
+curly curly. `Part.name`. This is my cool universal credits symbol. So
+replace the 25 here with  curly curly. `Part.price`. And finally, down here
+for a Hong Kong, that is going to be curly  curly `part.notes`. 
 
-```terminal
-symfony console doctrine:fixtures:load
-```
+So nothing special here once we're inside the `for` loop. Let's give it a
+try. 
 
-Cool, no errors. Let's see what actually happened in the database. 
+Actually, for my own sanity, I'm also going to indent these spans. 
 
-```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
-```
+All right, head over and I'm going to click and go back to our page. And
+look at that. God,  it's all 10 of our related parts, all without making a
+real query because we're using the  shortcut `ship->getParts()`. But even
+this is too much work. Head back to your controller. And  get rid of the
+`parts` of variable entirely. I know we're getting crazy because in 
+`show.html.twig`, we already have a `ship` variable. Because in
+`show.html.twig`, we already  have a `ship` variable. So we just loop over
+for `part in ship.parts`. We know this is going to  call the `getParts()`
+method. So that's going to be the same, really the same code that we had a 
+second ago in our controller. Can we try that? It still works. 
 
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
+All right, as a little bonus, let's also run to the number of parts we have
+on this page. So  `show.html.twig`. We're gonna have to run `parts`. A
+little parentheses. Let's say curly curly.  That's really cool thing. It's
+a `ship.parts`, which is gonna be that collection of parts. And  we just
+pipe that into twigs `length` column `length` filter. What I want you to do
+is we have  two queries currently, and one refresh, there's the parts nine.
+And we still have two queries  because it's smart enough that it knows that
+we already queried for all of the `Starship parts`.  So when we count them,
+we don't need to like make another account query and just use this the 
+information already has. 
 
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
-
-```terminal
-symfony console doctrine:fixtures:load
-```
-
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
-
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+All right, next up, we need to talk about something really, really
+important concept inside of  doctrine called the owning versus inverse side
+of a relationship.

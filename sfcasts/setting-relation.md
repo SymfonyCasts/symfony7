@@ -2,33 +2,79 @@
 
 Coming soon...
 
+So the question now is, how can I indicate that a specific `StarshipPart`
+belongs to a  specific `Starship`? So far, we've been creating all of our
+data inside of our `AppFixtures`, which is just a really handy way to work
+with objects directly, so we're going to stick  with that. But instead of
+using Foundry here, we're going to create some objects by hand,  just to
+make everything as clear as possible. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
+So, I'm going to type in `Starship`, but I'm not going to use Foundry here.
+We're just  going to use the good old-fashioned `new Starship()`. Then, to
+save just a little bit of  time, I'm going to paste some code below that to
+make sure that all the required properties  on `Starship` are set. Now,
+because we're creating these objects by hand and not through  Foundry, we
+need to remember to type `manager->persist($starship)`. 
 
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
+Right below this, let's create a `StarshipPart` with `$part = new
+StarshipPart()`. And  same as before, I'm going to go grab a bit of code
+here so that we can fill in all the  properties. Paste that and we are good
+to go. 
 
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
+Let's finish this down here with `$manager->persist($part)`. Then finally,
+we'll do  `$manager->flush()`. The reason we need to do `persist` and
+`flush` here is because  normally Foundry does that in the background for
+us, but in this case, since we're doing  everything manually, we're also
+going to call `persist` and `flush` manually. 
 
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
+We have a new `Starship` and a new `StarshipPart`. They're not related yet,
+but let's try  to load the fixtures anyway. 
+
+Find your terminal and run:
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-Cool, no errors. Let's see what actually happened in the database. 
+And boom! We get an error: "Starship ID cannot be null on the
+`StarshipPart` table". This  is because when we ran `make:entity`, we made
+the ship required. You can see that in  `StarshipPart`. Right above the
+`Starship` property, there's the `@ManyToOne`, but there's  also a
+`@JoinColumn`. This is optional, but it allows us to control the foreign
+key column  in the database. And since we have `nullable=false`, it means
+that every `StarshipPart`  must have a `Starship`, which is what we want. 
+
+So then, how do we say that this part belongs to this `Starship`? The
+answer is  beautifully simple. Anywhere before `flush`, we're going to say
+`$part->setStarship($ship)`.  That's it. 
+
+Now, notice that we're not setting some `Starship` ID property. We're not
+even passing an  ID, like `Starship->getID()`. This is the magic of
+Doctrine relations. Doctrine knows how  to save this relationship. It will
+first save the `Starship` object, and then use its ID  to set the
+`starship_id` column on the `StarshipPart` table. 
+
+Let's only create `StarshipPart` manually so that everything is really
+clear. Now, let's  reload those fixtures. This time, no errors. 
+
+To prove this is working, let's run:
 
 ```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
+symfony console doctrine:query:sql
 ```
 
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
+We'll say `SELECT * FROM starship_part`. Yes, check this out. There's our
+one part, and  it's related to `starship_id` 75. Let's look that up. We'll
+take this query. We'll say  `SELECT * FROM starship WHERE id = 75`.
+Perfect. There's our `Starship` that we created  up here. We can see that
+those are now related in the database. 
 
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
+Here's the big takeaway. When you're working with Doctrine relationships,
+you're working  with objects. You're setting objects, relating objects to
+each other. You're not working  with IDs. Doctrine handles the boring
+details of saving those objects and the relationships  in the database. 
 
-```terminal
-symfony console doctrine:fixtures:load
-```
-
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
-
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+The only problem I see right now is we are doing a lot of work here just to
+create one  `Starship` and one `StarshipPart` and relate them. Next, let's
+use Foundry to create a  bunch of ships and parts and relate them all at
+once. This is an area where Foundry really  shines.

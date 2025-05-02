@@ -2,33 +2,66 @@
 
 Coming soon...
 
+Okay, we've seen a couple different relationship types at this point. We
+know there's a `ManyToOne`. We also know that there is a `OneToMany`. If we
+scroll up here in Starship, there is a `OneToMany`. But as we learned
+earlier, `ManyToOne` and `OneToMany` are really the same one type of
+relationship just seen from two different sides. So, so far there's really
+only one relationship type that we've thought about. There's also a
+`OneToOne` relationship, but that's really the same as a `ManyToOne`, where
+it restricts a Starship part, where it only allows one Starship part, where
+it only allows a Starship to be related to one Starship part. So
+`ManyToOne`, `OneToMany`, and `OneToOne` are really the same type of
+relationship in the database. So really, so far we only have that one
+relationship type. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
+Now listen, space repair is dangerous work. Due to that darn vacuum that
+tends to try to kill humans, this is perfect work for droids. In fact, we
+have an army of droids, where each droid is assigned to multiple ships, and
+each ship has multiple droids. That's our second and final relationship
+type, `ManyToMany`. 
 
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
+To get things started, let's create a droid entity. Run:
 
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
+```terminal
+symfony console make:entity Droid
+```
 
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
+Say no to broadcasting. Perfect, give this just a couple of properties. How
+about `name`? The defaults are all fine. `primaryFunction`, and
+`primaryFunction`. And the defaults are also fine. 
+
+And that's it. And then of course, once we made that change, as it
+suggests, let's make our migration. So I'll copy that, because I'm lazy.
+Perfect, and let's go check that out. So in the migrations directory, let's
+open this new one down here. And absolutely no surprise, create table
+`droid`, with all the fields on there, with all the fields. So nothing
+surprising. 
+
+To run the migration, use:
+
+```terminal
+symfony console doctrine:migrations:migrate
+```
+
+Perfect, we have a fresh new `droid` table in the database. No relationship
+yet to ship, but at least we have that new table. 
+
+And before we set up the relationship, let's get ourselves some nice data
+for droids. Let's run Symfony Console again. This time I'm going to
+backspace and say, `make:fatory`. So you can make a Foundry factory. Create
+one for `droid`. And perfect, let's open that up. `src/factory`, `droid
+factory`. And it gives us some nice defaults at the bottom, so we can use
+this immediately, but I want to get some defaults that are a little bit
+more fun. So I'm going to remove this array down here and paste in a little
+bit of code here, just to give us some more interesting droids. 
+
+All right, let's reload the fixtures. Run:
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-Cool, no errors. Let's see what actually happened in the database. 
-
-```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
-```
-
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
-
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
-
-```terminal
-symfony console doctrine:fixtures:load
-```
-
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
-
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+Perfect, so now I have a droid table. It's loaded up some cool fixtures,
+but the droids are not yet related to starships. So let's do that next with
+our final type of relationship, a `ManyToMany`.

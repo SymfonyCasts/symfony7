@@ -2,33 +2,71 @@
 
 Coming soon...
 
+Okay, team, we have our `parts` table. The next thing you want to do is
+order this by the price in descending order. This is simple enough. You
+will use a custom query for this, which means you need to go into your
+`PartRepository`. Navigate to `src/Repository/StarshipPartRepository.php`.
+Let's create a new method here. You can copy this stubbed method. Uncomment
+that because you already have some good PHP doc up here. Now clean up down
+here by removing the last stub method. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
+Let's name this method `findAllOrderedByPrice()`. You don't need the
+`value` anymore. The query builder will be very straightforward. Call the
+`StarshipPart` as `sp`. You don't need `andWhere` or the `setParameter()`
+below that. You do want to keep `orderBy()`, though you're going to tweak
+it a bit. So use `orderBy('sp.price', 'DESC')`. Get rid of
+`setMaxResults()` as well. 
 
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
+This is a very straightforward custom query. Copy the name of this method.
+Now, head over to your `PartController`. You'll use
+`findAllOrderedByPrice()` instead of `findAll()`. 
 
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
+Now what you really want to look at here are the queries for this page. You
+will notice there are nine database queries. The first one is what you'd
+expect. It's querying for all the `StarshipPart`s with a price in
+descending order. But what are all these other queries? 
 
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
+You actually have one query per `Starship`. Here you're querying for the
+`Starship`. So what's happening here is you query for all the parts. Then
+when you're in the `index.html.twig` template looping over the parts, at
+this moment, you print out `{{ part.starship.name }}`. So at this moment,
+Doctrine says, oh no, I have the `part` data, but I don't have the
+`Starship` data for this `part`. So I better go query for it. 
 
-```terminal
-symfony console doctrine:fixtures:load
-```
+So you get one query for the parts. Then you get one extra query for the
+`Starship` for every single `part` in there. This is called the N plus one
+problem. So if you have 10 parts, you're going to end up with one query for
+the parts and then 10 extra queries, one query for the `Starship` for each
+of those parts. And again, this is just a performance problem and it's
+maybe not even that big of a deal, but it's something to be aware of.
 
-Cool, no errors. Let's see what actually happened in the database. 
+ And the way you fix it is with a join. So in `StarshipPartRepository.php`,
+you're going to make your `findAllOrderedByPrice()` method a little bit
+fancier. Use `innerJoin('sp.starship', 's')`. The important thing here is
+that you are not worried about like the foreign key columns and joining
+like `starship_id` to `id`. All you have to do is join on the property. So
+you're just joining on `StarshipPart.starship` or joining on the `starship`
+property. You're aliasing the entire `Starship` table over to `s`. 
 
-```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
-```
+Now, before you had nine database queries. Now you still have nine database
+queries. Why? There are two reasons to do a join. The first is to avoid the
+N plus one problem. And the second is to do a `where` or `orderBy()` on the
+join table. We're going to talk about that second reason really soon. 
 
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
+For the N plus one problem, in addition to the join, you need to select the
+data over on `Starship`. To do that, it's really simple. You're going to
+say `addSelect('s')`. So it's really cool. You're aliasing the entire
+`Starship` table to `s`. Then with `addSelect()`, you don't select
+individual columns. You just say, hey, I just want to select the whole darn
+thing. 
 
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
+So now you have nine database queries. Let's refresh. And you're down to
+one. That's incredible. You can see here, you are selecting from
+`StarshipPart`. You're grabbing all the data from both `Starship` and
+`StarshipPart`. And you have the `innerJoin` right there. Again, you don't
+have to worry about the details of joining on which columns. All you have
+to do is just do the join on the property. And Doctrine is going to take
+care of all those boring details for you. 
 
-```terminal
-symfony console doctrine:fixtures:load
-```
-
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
-
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+Next, let's add a search to our page. And when you do that, you're going to
+see the second use of a join.

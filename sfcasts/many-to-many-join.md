@@ -2,29 +2,46 @@
 
 Coming soon...
 
+Over on the home page, could we order these ships by their droid count? So
+like the  ships that have the most droids would appear on top? Sure. First,
+open up  `/src/Controller/MainController.php`. The query for this right now
+is  `$ships = $repository->findIncomplete()`. Click into that real quick.
+Rename this to be  `findIncompleteOrderedByDroidCount()`. Copy that, back
+on the controller, use that new  method name. 
 
-Welcome back, my friends! In our last tutorial about Doctrine, we accomplished quite a
-bit. We created an entity, migrations, fixtures, and more. But, you can't really build
-anything impressive without understanding database relationships. For example, that slice
-of pizza belongs to me, or I have many slices of pizza. 
+Awesome, we haven't changed anything yet, so when we refresh we see the
+exact same results  as before. That's good. It's nice to not break
+anything. Now let's think about this, in  order to order these by the
+droids, we're going to need to join across that join table all  the way
+over to `droid`, group by `starship`, and then count the droids. 
 
-To follow along with what I'm doing, download the course code from this page. After 
-unzipping the file, you should see a start directory containing the same code that's 
-displayed here. Follow the instructions in the readme.md file for setup. 
+Let's start with the join. So in `StarshipRepository`, add a left join. The
+really cool  part about this is that, again, we're not going to think about
+the join table or the  database at all. We're just going to think about the
+relationships in Docker. So we're going  to join across `s`, which is going
+to be our `starship`, dot `droids`, and I'll alias that  entire class or
+table, however you want to think about it, as `droid`. 
 
-The last step is to open a terminal, navigate to your project, and run `symfony serve`. 
-Sometimes, you might run this with a "-d" to run it in the background as a daemon. This 
-time, I'm running it in the foreground. 
+Now in order to count these, we are going to need to group by, so I'm going
+to add a group  by, `groupBy('s.id')`. Group them by `starship`, and
+that'll allow us to then count the  droids here in a second. Let's do that.
+Let's use this `orderBy()` up here, because we  don't want to add another
+one, or we can only have one. Replace the `orderBy()` now that we  have
+currently with `orderBy('COUNT(droid)', 'ASC')`. 
 
-One of the cool features is that you'll see all the server logs appear here. These include 
-important ones like the logs showing we're using Tailwind, as well as it downloading and
-building in the background. When that's done, scroll up and click this link to open up 
-Starshop, our application. 
+Refresh the page, and good, it looks like `droids` none at the beginning.
+As we kind of go  further down, we see more and more droids. If we go a
+couple pages ahead, you'll start to  see things that have two to three or
+four droids assigned to the `starship`. The point here  is there's nothing
+special about this join at all. We just join across the property, like  any
+other join in Doctrine, and Doctrine takes care of the details. 
 
-Starshop is all about repairing ships. All these Starships, the only entity we have 
-currently in Source Entity, are coming from the database. But that's kind of boring. So, 
-in this tutorial, we're going to start tracking the parts of a ship. As we repair a ship, 
-we'll keep track of which parts we've ordered for the ship and their cost. 
-
-By the end, we'll have established some pretty serious relationships that will empower you 
-to build whatever you can dream of. Let's get started with that next.
+Now, if we look at the query on this page, it is taking care of all those
+details for us. If  you search on the query page for `starship_droid`,
+you'll find the query down here. It's a  little hard to look at, but if you
+format a query, what we see here is it's selecting from  `starship`. It's
+taking care of that join over to the join table for us, joining again over 
+to `droid`, and then allowing us to eventually count order by the count on
+that `droid`  table. Pretty darn cool way of taking care of all those joins
+for us behind the scenes.  That's it. The takeaway is that there's nothing
+special going on here. It's just like any  other join inside of Doctrine.

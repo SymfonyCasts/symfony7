@@ -2,33 +2,96 @@
 
 Coming soon...
 
+"We are already listing ships that we're working on on our home page. This
+is thanks to our handy-dandy `Starship` entity that we created  in the last
+tutorial. But now we gotta level things up here. We need to start keeping
+track of the parts that are used in each Starship.  I think you can see
+where this is going. Each part is going to belong to exactly one Starship,
+and each Starship will have many parts. 
 
-Okay, let's tackle the last part of many to many. We have our `Starship` entity, which is many to many over to our `Droid` entity. We saw that in the migration, this creates a join table, which is how we're gonna manage which droids are related to which ships. The question now is how do we actually assign a droid to a ship? And once again, we're gonna do this inside our `AppFixtures` so we can see exactly how to do it manually.
+But before we start thinking about relationships, the first thing we need
+is simpler. We need a new entity to keep track of the parts.  So go over to
+your terminal and open a new tab, since that one's running our server, and
+run 
 
-To start up here, it doesn't really matter where, I'm gonna paste in some code that adds three droids to our system. I'll hit option enter right here and the import `Droid` class at that use statement. So nothing fancy here. Create a new droid, setting the required properties, persisting and then flushing down here.
+```terminal
+symfony console make:entity
+```
 
-The question now is how do we assign this droid to this starship? First, I'll set that starship to a variable. So we'll say `Starship = StarshipFactory::createOne([]);`. The answer to how we relate these two things is delightfully simple. And it's gonna remind you exactly of our one to many relationship. I bet you can even guess. So down here, anywhere before the flush. So anywhere up here. We're gonna say `$starship->addDroid($droid1);`. Just that simple. Down here, we'll do the same thing. `$starship->addDroid($droid2);`. And finally down here right before the flush, so it saves. `$starship->addDroid($droid3);`. And that is it.
+We'll call this one `StarshipPart`. My creativity amazes me. All right, say
+no to broadcasting. We don't need to worry about that.  And give this just
+a couple of fields. How about `name`? String's fine. That's fine. And then
+say no to nullable, since every part  should have a `name`. And then we'll
+add `price`. This will be an integer, because it'll be in credits. Not
+null. And then finally,  we'll have a `notes` field. We'll make this text
+so it can be longer, and say yes to nullable. And then hit, and that's it. 
 
-The question now is how do we assign the droid to the ship? Because the crew is getting hungry for pancakes. All right, let's try the fixtures. 
+Now, we just created a new entity, so we need to have a migration for it.
+So copy `symfony console make:migration` and paste that.  And let's go
+check that out. So over here, in migrations, you can see the new migration.
+And actually, I cleaned up all of our old  migrations from the previous
+project, so this is just our `StarshipPart`. Perfect. And let's migrate
+that by saying 
+
+```terminal
+symfony console doctrine:migrations:migrate
+```
+
+Perfect. And we now have that table in our database. But one thing I'd like
+to add to pretty much all of my entities is a `created_at`  and
+`updated_at`. You can see I have it inside of `Starship` here with this
+`TimestampableEntity`. I'm actually going to copy that.  I'll close this.
+Let's go into `StarshipPart`. And we're just going to paste that right on
+top. This comes from a library that we  installed in the last tutorial. And
+it just has a `created_at` and `updated_at` properties that will
+automatically be set. 
+
+And since we did just add two new properties, run `make:migration` again.
+And inside of here. Perfect. It's all just the table to add  `created_at`
+and `updated_at`. So run 
+
+```terminal
+symfony console doctrine:migrations:migrate
+```
+
+And those fields are there. Now, in the last tutorial, we inside of our
+fixtures, `src/DataFixtures/AppFixtures`, we use a really cool  library
+called `Foundry` to help us create a bunch of dummy objects really, really
+quickly, we're gonna do the same thing for `StarshipPart`.  And the first
+step to doing that is generating a factory for that entity. So 
+
+```terminal
+symfony console make:factory
+```
+
+That's all we need. It sees our `StarshipPart`, it sees that it doesn't
+have a factory yet. So we're going to set zero. And there we go,  created
+`src/Factories/StarshipPartFactory`. And it even included some very, very
+boring defaults for each of the fields. I think we can  do better than
+that. If we're going to go to this project, let's have some fun. 
+
+So at the top of `StarshipPartFactory`, paste in some code with some
+example parts. You can grab this code from the code block on this page. 
+I'm also going to go down here into defaults and replace this return with
+some code that uses the random data that we have up here. 
+
+And finally, let's actually use this factory inside of our fixtures. So
+anywhere in here, but I'll go to the bottom, I'm going to say 
+`StarshipPartFactory::createMany`. And I don't know, let's create 50 of
+these. All right, spin back over to terminal. Let's run 
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-Cool, no errors. Let's see what actually happened in the database. 
+Say yes. And let's check those out over here. So how about 
 
 ```terminal
-symfony console doctrine:query:sql 'SELECT * FROM droid'
+doctrine:query:sql
 ```
 
-Because remember, we created three droids. So we see three rows inside of that table. Nothing fancy there. Now let's look at the join table. It's called `starship_droid`. And check that out, three there, because each of our three droids is assigned to this starship. So once again, the awesome thing is that in doctrine, all we need to think about is relating objects, relating this droid to this starship. Doctrine entirely handles inserting and deleting rows into the join table.
-
-Okay, so check this out. At this point here, once we call this flush, we're gonna have three rows in that join table for our three droids. So let's try something after the flush. So after we have those three rows in the join table, let's call `$starship->removeDroid($droid1);`.
-
-```terminal
-symfony console doctrine:fixtures:load
-```
-
-And let's check out our join table. And sweet, you can see there are two rows in there. So if we could have froze right here, what we would have seen is three rows, and then a second later, it actually deleted one of the rows if there's only two at the end. So once again, doctrine is handling all of that for us, which is absolutely magical.
-
-Now, one last thing I wanna touch on here with many to many is earlier, we talked about owning versus inverse sides of a relationship. And this mostly doesn't matter because as we can see here, our methods here actually synchronize the other side of the relationship. So it actually adds the, when you call `addDroid()`, it actually adds it to the other side. So mostly owning versus inverse side doesn't matter. Now, in a many to many, either side of the relationship can be the owning side. The way you figure it out is by this `inverseBy`. So notice it says `ManyToMany` and `inverseBy` starships. So it's actually pointing over at the `Droid` `starships` property and saying that is the owning side, that's the map side. It's actually saying that's the inverse side. So that means this is the inverse side of the relationship and `starship_droids` is the map side. Now this, again, this mostly doesn't matter because you can set either side. The only reason I bring it up is that if you want to control what the join table's name is, you can add annotation here called `joinTable`, but it has to go on the owning side. So it has to go on this, it has to go right here, basically right on this line. Other than that, forget I said anything because it's not a big deal.
+And then we'll say `select * from starship_part`. And check that out with
+just a couple lines of code here, we have 50 random and awesome  parts in
+our database. Next up, let's create our first relationship. Next up, we'll
+create our first relationship to start relating these  parts to their
+ships."
