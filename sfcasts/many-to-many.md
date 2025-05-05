@@ -2,68 +2,85 @@
 
 Coming soon...
 
-Okay team, we now have a `Starship` entity and a `Droid` entity. The
-question is, how do we connect them? So if you think about it, each
-`Starship` should have many `Droids` and each `Droid` should belong to many
-`Starships`. So don't think about the database, just think about the
-objects. And if you think about the objects in your classes, you can kind
-of see how a `Droid` is going to need a `Starship` property that's going to
-hold an array of `Starship` objects. 
+## Tying the Knot between Starships and Droids
 
-So that's what we're going to focus on first. We're going to go back to our
-Symfony console, `make:entity`, and we are going to modify the `Starship`
-class, `Starship` entity. In this case, we're going to add a `Droids`
-property, which is going to be an array of `Droid` objects or collection of
-`Droid` objects. 
+Alrighty, my Symfony stars, we've got our `Starship` entity and our `Droid`
+entity all set up and ready to mingle. But, just like a good space opera,
+we've got to answer that age-old question: "How do we get these two
+entities to connect?" 
 
-Let's go back to our relation type, that nice little wizard. So this is
-going to be related to a `Droid` entity. If you check out the menu here,
-`ManyToMany` is what we want this time. So each `Starship` can relate to
-many, can have many `Droid` objects, and each `Droid` can relate to many
-`Starship` objects. That's exactly what we want. So we'll type
-`ManyToMany`. 
+Picture it this way: Each `Starship` is like a high-tech party bus, and
+it's going to need a crew of `Droids` to keep things running smoothly. And
+each `Droid`, in turn, should be able to serve on many `Starships`. Forget
+about the database for a second, and just focus on the objects. Our `Droid`
+is going to need a `Starship` property that's going to hold an array of all
+the `Starship` party buses it can hop on to. 
 
-Then it asks us if we want to map the inverse side of the relationship,
-which basically means do we want the ability to say `$droid->getShips()`?
-That sounds handy. So let's say yes. And then the new field name inside a
-`Droid` `ships` is fine. And so we'll enter one more time to exit this. 
-
-You can see updated both the `Starship` and `Droid` entities. Let's go
-check out the changes in each of those entities. So in `Starship`, it added
-a new `Droids` property, which is a `ManyToMany`. It also initialized
-`Droids` to the `ArrayCollection`. And added a `getDroids()` method, an
-`addDroid()` method, and a `removeDroid()` method. So you're thinking,
-"Hey, this looks a lot like a `OneToMany` relationship." You are absolutely
-correct. 
-
-Over in `Droid`, it's very similar. So down here, we have a `Starships`
-property, which is a `ManyToMany`. It's initialized in the constructor. We
-have the same `getStarships()`, `addStarship()`, and `removeStarship()`.
-All right, we're all set. 
-
-Let's generate the migration for this. 
+So let's dive in. Head back to your Symfony console and run this:
 
 ```terminal
-symfony console make:migration
+make:entity
 ```
 
-Perfect, and go check this thing out. This is fascinating. So open up the
-new one, and look what it did. It created a new table called
-`starship_droid`, which is a `starship_id` foreign key and a `droid_id`
-foreign key. So it turns out in the database, this is how you structure a
-`ManyToMany` relationship with a join table. 
+## Creating a Galactic Social Network
 
-The really cool thing with Doctrine is that we all need to think about
-objects. A `Starship` object has many `Droid` objects, and a `Droid` object
-has many `Starship` objects. Doctrine is going to take care of all the
-boring details of saving that relationship to the database. 
+We're about to give our `Starship` entity a social upgrade. We're going to
+add a `droids` property, which is going to be an array of `Droid` objects,
+or a whole collection of `Droid` party-goers, if you will. Back to our
+friendly little wizard, the relation type. This time, we're going to opt
+for a `ManyToMany` relationship. Just like a good space opera, each
+`Starship` can have many `Droids`, and each `Droid` can serve on many
+`Starships`. It's exactly the kind of interstellar networking we're after,
+so type `ManyToMany`. 
 
-All right, before I keep going, let's run that migration. 
+Next, it'll ask us if we want to map the inverse side of the relationship.
+This is basically asking if we want to give our `Droids` the ability to
+list all the `Starships` they're connected to – `$droid->getShips()`.
+Sounds useful, right? Let's go ahead and say yes. For the new field name
+inside a `Droid`, `ships` will do just fine. 
+
+Once that's done, you'll notice it's updated both the `Starship` and
+`Droid` entities. Let's take a gander at the changes in each of those
+entities.
+
+## The 'ManyToMany' Magic
+
+In `Starship`, we now have a new `droids` property, which is a
+`ManyToMany`. It's also initialized `droids` to the `ArrayCollection` and
+added `getDroids()`, `addDroid()`, and `removeDroid()` methods. If you're
+thinking this looks a lot like a `OneToMany` relationship, give yourself a
+pat on the back. You're spot on!
+
+Over in `Droid`, it's a similar story. We have a `ships` property, which is
+a `ManyToMany`, and it's initialized in the constructor. We have the same
+`getStarships()`, `addStarship()`, and `removeStarship()`. 
+
+Alrighty, let's go ahead and generate the migration for this. So, back to
+the Symfony console, and let's run:
 
 ```terminal
-Doctrine migrations:migrate
+make:migration
 ```
 
-And yes, we have that new join table. All right, the next question is, how
-do we actually relate `Droids` to `Starship` objects? We're going to handle
-that next and see how this all saves into the database.
+## Unveiling the Join Table
+
+Marvelous! Now, let's take a peek at what we've created. It's quite
+fascinating. We've got a new table called `starship_droid`, which features
+a `starship_id` foreign key and a `droid_id` foreign key. This is how you
+structure a `ManyToMany` relationship in the database, with a join table.
+The real magic of Doctrine is that we only need to think about objects. A
+`Starship` object has many `Droid` objects, and a `Droid` object has many
+`Starship` objects. Doctrine is like our own personal droid, taking care of
+all the tedious details of saving that relationship to the database.
+
+Before we move on, let's run that migration. Back to the Symfony console,
+and let's run:
+
+```terminal
+doctrine migrations:migrate
+```
+
+And voila, we have our shiny new join table. Now, the burning question: How
+do we actually relate `Droids` to `Starship` objects? Well, my friends,
+that's the adventure we're about to embark on next. Let's see how this all
+saves into the database.

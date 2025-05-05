@@ -2,77 +2,99 @@
 
 Coming soon...
 
-So when you try to load the fixtures now, you're met with this humongous
-error. This is  actually a really common error in Doctrine. It says, "an
-entity was found through the  relationship `starshipDroids` that was not
-configured to cascade persist operations for  entity `StarshipDroid`". What
-this is basically saying is, hey, look, you're persisting  this `Starship`,
-and this `Starship` has a `StarshipDroid` attached to it on one of the 
-relationships, but nobody ever called `persist()` on this `StarshipDroid`.
-So Doctrine's  like, okay, you're persisting `Starship`, it's connected to
-`StarshipDroid`, but you  never told me to persist this. So what do you
-want me to do? 
+## Tackling the Doctrine Beast
 
-Now the problem here is that inside of our `Starship` entity, we don't have
-access to  the entity manager. So we can't call
-`manager->persist(StarshipDroid)`. Fortunately, we  can use something
-called `cascade={"persist"}`. So scroll all the way up to find the 
-`starshipDroids` property, find the one-to-many. And on here, we're in a
-new option here  called cascade. Type it manually because it gives us way
-more than we need. Then an  array, and we're gonna say `persist`. 
+Alright, folks. Picture this scenario: you're loading up your fixtures and
+suddenly, WHAM! You're hit head-on by the most colossal error message. It's
+a classic one, straight out of the Doctrine playbook. The culprit? Our dear
+friends `starship droids` and `cascade persist`. 
 
-That's it. So that does what the name sounds like. It says if somebody
-persists this  `Starship`, I want to cascade that persist down onto any of
-the properties. Now be  careful with this because it does kind of make
-things automatic that are not normally  automatic. And that can, in some
-cases, make a code a little bit less predictable. But  in this case, it's
-exactly what we want. So try those fixtures again. And it works. 
+The error bleats out, "An entity was found through the relationship
+`starship droids` that was not configured to `cascade persist` operations
+for entity `starship droid`." It sounds like an alien language, right? 
 
-What this means now is that we can once again use `ship->addDroid()`. But
-instead of  just creating, relating one droid to one ship, I want to get
-back to creating a bunch  of ships and relating them to a bunch of droids.
-So to do that, we can get rid of all  of our manual code we added. And then
-uncomment out the `droids` property that was  passing into
-`starshipFactory`. 
+Well, let me translate for you. The error is crying out in despair, saying,
+"Hey, you're saving this `starship` and it's got a `starship droid`
+hitching a ride. But, you've ghosted me on saving the `starship droid`. I'm
+left hanging here! What's the deal?" 
 
-Try the fixtures again. And they work. That's amazing. It works because
-behind the  scenes, Foundry calls `addDroid()` on each `Starship` for each
-`Droid`. And we just  proved that `addDroid()` once again works. But there
-are some limitations.
+The snag we've hit is that in our `starship` entity, we're cut off from the
+entity manager. So, we can't just call up `manager->persist(starship
+droid)`. What a pickle, right? 
 
- What if we want to add a droid to a `Starship` and control the
-`assignedAt` property?  So one way to do that is going to `Starship`, look
-for `addDroid()`, and add an  argument for that. So add a
-`DateTimeImmutable` called `assignedAt`. Make that optional.  That'll make
-it much easier to create these objects. Of course, after we create the 
-`StarshipDroid`, we'll say, hey, if `assignedAt` is passed in, then let's
-set that on  the `StarshipDroid`. 
+## Harnessing the Power of `cascade persist`
 
-The only problem here is there's not gonna be a way using Foundry to
-control that  `assignedAt` field. We just don't have that much flexibility.
-So in that case, you  would need to kind of take control of things manually
-here if you wanted to create a  couple of droids with a specific
-`assignedAt` property. 
+But fear not, my fellow coders! We've got a secret weapon at our disposal:
+`cascade persist`. 
 
-The last thing I want to do is render that `assignedAt` somewhere on our
-site. So to  do that, open up `template/starship/show.html.twig`, and right
-here I want to render  the `assignedAt`. The tricky thing is when we call
-`ship.droids`, this gives us the  `Droid` object, but what we really need
-here is the `StarshipDroid` join entity object. 
+So, summon your inner Jedi, scroll up until you locate the `starship
+droids` property, and seek out the `OneToMany`. We're going to add a new
+option here called `cascade`. I'll type it in manually - it's like we're
+doing our own stunts. Then, we'll create an array and say `persist`.
 
-So no problem, we just need to do a little bit more work for
-`StarshipDroid` object.  In `ship.starshipDroids`. So let's loop over the
-join entity. This is one case where  we're purposely not using our shortcut
-method. And now we just need to say
+```terminal
+OneToMany(cascade={"persist"})
+```
 
-`starshipDroid.droid.name`. And that's it. And then for the `assignedAt`,
-we'll kind of  sneak it in right here. I'll say assigned. This one is
-`starshipDroid.assignedAt`.  `StarshipDroid.assignedAt`. I'll pipe that
-into our ago filter to make it look extra  fancy. 
+What we're doing here is setting up a sort of domino effect. If anyone
+saves this `starship`, we're going to cascade that save down to any
+attached properties. 
 
-So find one of these ships that actually has a droid. Click into it and
-perfect.  R2D2 assigned four minutes ago. 
+A word of caution though: use this power wisely. It's a bit like installing
+an automatic pilot. It can make your code a bit unpredictable, but in our
+case, it's exactly the fix we need. 
 
-So that's it. We have touched on every corner of Doctrine relationships,
-including the  very tricky many-to-many with extra fields. As usual, if you
-have any questions, we are  here for you down in the comment section.
+Let's give those fixtures another whirl. And voila! It works like a charm. 
+
+## Back to Adding Droids
+
+Now, we're back in business. We can use `ship->addDroid()` once more. But,
+let's not rest on our laurels. I want to create a fleet of `ships` and
+assign them a bunch of `droids`. 
+
+We're going to turf all the manual code we added and bring back the
+`droids` property into the `starship factory`. 
+
+Let's fire up the fixtures again. And guess what? They work. It's like a
+magic trick, isn't it? 
+
+Behind the scenes, Foundry is calling `addDroid()` on each `starship` for
+each `droid`. And we just proved that `addDroid()` is back in action. 
+
+## Finer Control with `assignedAt`
+
+But, what if you want to add a `droid` to a `starship` and control the
+`assignedAt` property? The solution is to add an argument for `assignedAt`
+in `starship`, like a `DateTimeImmutable`. 
+
+```terminal
+addDroid(Droid $droid, ?\DateTimeImmutable $assignedAt = null)
+```
+
+We'll make it optional to keep things flexible. Then, after creating the
+`starship droid`, we'll set the `assignedAt` if it's provided. 
+
+It's a smooth move, but there's a slight issue. Foundry won't let us
+control the `assignedAt` field. So, if you want to assign some `droids` at
+a specific time, you'll need to take the wheel manually. 
+
+## Displaying `assignedAt`
+
+Finally, let's make that `assignedAt` visible on our site. We'll need the
+`starship droid` join entity object to do that. A bit more work, sure, but
+we're not afraid of that, are we? 
+
+With our `starshipDroid.droid.name` and `starshipDroid.assignedAt` in
+place, we'll sneak in our `assignedAt` and pipe it into our `ago` filter
+for a touch of flair. 
+
+```terminal
+starshipDroid.assignedAt|ago
+```
+
+And there you have it! You can now see when our `droids` were assigned. 
+
+That's all she wrote, folks! We've explored the deepest corners of Doctrine
+relationships, even the elusive many-to-many with extra fields. As always,
+if you have questions, drop them in the comments below. We're all in this
+together!

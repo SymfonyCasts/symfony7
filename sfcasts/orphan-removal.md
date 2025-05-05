@@ -2,74 +2,83 @@
 
 Coming soon...
 
-I'm going to show you a really interesting and fairly common situation. So
-in our fixtures, let's  scroll down a little bit and create a new
-`StarshipPart`. 
+## Introduction: Going Galactic with Symfony
 
-```php $starshipPart = StarshipPartFactory::createOne([ 'name' => 'Toilet
-Paper', 'starship' => $ship, ]); ```
+Let's embark on a bit of an interstellar adventure with Symfony. We're
+tackling a fun, yet common scenario within the realm of fixtures. Let's
+dive right in. We'll be creating a new `StarshipPart` using the line
+`$starshipPart = StarshipPartFactory::createOne()`. To make it stand out,
+I'll christen it with a name that's crucial for any space voyage: "Toilet
+Paper." Yes, you heard me right! A cheeky nod to our pandemic times.
 
-But to make it easy to see, I gave this one a specific name of one of the
-most important things  never to forget when you take off on a trip on a
-spaceship. Toilet paper. Yes, we all remember the  pandemic. Then I'm also
-going to assign this part specifically to the Starship above. Set that to 
-`ship` and I actually forgot to assign that variable up here so I'll say 
+Now, I'll assign this part to the `Starship` above. Let's set that to
+`ship` (I overlooked this assignment earlier, my bad!). You might say,
+"Houston, we have a solution!" because we'll ensure this part is tied to
+that specific `Starship`. 
 
-```php $ship = StarshipFactory::createOne(); ```
+```terminal
+ship = StarshipFactory::createOne
+```
 
-And down here we're making sure that this part is related to that specific
-`Starship`. And then  below this, I'm going to dump our `StarshipPart`. 
+After that, let's dump our `StarshipPart`. So far, so good. Nothing fancy,
+right? But hold on to your space helmets. Let's try reloading our fixtures.
+There are no errors, and voila! For the first time, we're introduced to
+that proxy object I've been teasing you about. 
 
-```php dump($starshipPart); ```
+## Unveiling the Proxy Object
 
-Perfect. So nothing fancy at all yet but let's try reloading our fixtures.
-No errors and for the  first time, we can actually see that proxy object I
-was talking about. When you create an object  through Foundry, it actually
-passes you back your new object but it's wrapped in this thing called a 
-proxy. Now most of the time, that doesn't matter. We don't care. But in
-order to show you as clearly  as possible our situation, up here on the
-ship, I'm going to get the real object by saying 
+When you create an object via Foundry, it hands you back your shiny new
+object, but it's bundled up in this thingamabob called a proxy. Most of the
+time, it's not a big deal. But because I want to make things crystal clear,
+we'll extract the real object from both `ship` and `StarshipPart` using
+`_real`. 
 
-```php ->_real(); ```
+```terminal
+_real
+```
 
-We're going to do the same thing down here for `StarshipPart` by calling 
+Let's run the fixtures again, and they're operating smoothly. This time
+without the proxy, we can confirm that our `StarshipPart` is indeed tied to
+the correct `Starship`, the USS Espresso, which we created earlier. So far,
+it's all systems go!
 
-```php ->_real(); ```
+## Deleting a Starship Part: The Plot Thickens
 
-All right, try the fixtures again and they work fine. This time without
-that proxy and we can see  that our `StarshipPart` is in fact related to
-the correct `Starship`, the USS Espresso, which is  what we created right
-above here. So so far, everything is looking and feeling good. 
+But what if we wish to delete a `StarshipPart`? Normally, it's a cakewalk.
+We'd say `manager->remove($starshipPart)`, then `manager->flush()` to save
+that to the database. But let's stir things up. What if we want to remove
+this part from the ship? In this case, we'd use
+`ship->removePart($starshipPart)`. 
 
-Now what happens if we want to delete a `StarshipPart`? Now that's usually
-pretty easy because  we're going to say `manager->remove($starshipPart)`
-and of course you'd say `manager->flush()` to  actually save that to the
-database. 
+```terminal
+ship->removePart($starshipPart)
+```
 
-What if you wanted to do this slightly differently? What if you wanted to
-say, I want to remove this  part from this ship? So what I might do in that
-case is say something like
+Let's find out what happens when we reload the fixtures. Boom! It blows up
+with our favorite error that `starship_id` cannot be null. 
 
- ```php $ship->removePart($starshipPart); ```
+## Fixing the Null Error
 
-Kind of cool, right? So let's see what happens now when we reload the
-fixtures. It explodes with our  favorite error that `starship_id` cannot be
-null and that makes sense. When we call `removePart()`,  we actually set
-the `starship` to `null` but we said that that's not allowed. So what's the
-solution? 
+Why did this happen? When we call `removePart()`, it sets the `Starship` to
+null, but we've forbidden that. So, how do we fix this? In some scenarios,
+you might want to allow parts to become orphaned when removed from the
+ship. This change requires setting `nullable` to true in `StarshipPart`,
+generating a migration, and then running it. 
 
-In some cases, you may want to allow the parts to be removed from the ship
-to become orphaned, which  means setting the `JoinColumn` to allow this
-change, we'd go to `StarshipPart`, change this nullable  to true, generate
-a migration and then run that migration. 
+Alternatively, if a part should always belong to a ship and is suddenly
+removed, we might want to obliterate that part entirely. To do this, head
+to `Starship` and add `orphanRemoval: true` to the `OneToMany`. 
 
-Alternatively, if a part should always belong to a ship and suddenly one is
-removed from a ship,  we may want to delete that part entirely. To allow
-this, go in `Starship` to the `OneToMany` and add  `orphanRemoval=true`. 
+```terminal
+orphanRemoval: true
+```
 
-All right, now let's spin over, reload the fixtures, and no error, and
-check this out. The ID of our  part is now null because it was deleted
-entirely from the database. So you can see `orphanRemoval`  basically says,
-hey, if any of these parts become orphaned, go ahead and remove it from the
-database  entirely. So a super handy thing to have in your back pocket. All
-right, next let's talk about  something else.
+Let's whirl back, reload the fixtures, and voila! No errors in sight.
+Notice how the ID of our part is now null because it was entirely ejected
+from the database. In other words, `orphanRemoval` essentially states:
+"Hey, if any of these parts become orphaned, go ahead and toss them into
+the cosmic void of the database." 
+
+And there you have it, a nifty trick to have in your developer's toolkit,
+just like a Swiss army knife in an astronaut's pocket. Next, we'll venture
+into another fascinating topic. So, stay tuned, space cadets!

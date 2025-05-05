@@ -2,99 +2,121 @@
 
 Coming soon...
 
-On the homepage, click into one of the ships that has the `In Progress`
-status, because these  are the ones we assign parts to in our fixtures.
-Down here, you can already see that we are  listing the parts, but this is
-actually just hard-coded. So for the first time, we need to  query for the
-parts that are related to this specific Starship. To do that, head over to
-the  source controller, `StarshipController`, and normally, if we want to
-query for Starship parts,  we're going to auto-wire that repository. So
-let's start that same way here. Say  `StarshipPartRepository`, then I'm
-going to call this `PartRepository`. Then below this, let's  say `parts`
-equals. This is actually perfect. `PartRepository`, arrow, `findBy()`. So
-normally,  if you want to query where some property equals some value, you
-can use `findBy()` with this  array here. And for relationship, it's
-actually no different. We're going to query for the  Starship property. So
-notice, we're not doing `Starship ID` or anything like that. We don't  need
-to worry about IDs. So `Starship` property. The other kind of interesting
-thing here is  that we're going to pass it the entire `ship` object. You
-actually can pass just the `getID()`  here if you want to, but in the
-spirit of doctrine and relationships and thinking about  objects, I'm going
-to pass the entire `ship` object. And below this, let's `dd($parts)` and 
-see what happens. 
+# Welcome Back to the World of Symfony!
 
-All right, spin over, refresh, and got it. 10, an array of 10
-`StarshipPart` objects, all  related to this Starship. That is awesome. But
-there is an easier way. In the `dd()`, instead  of saying, replace the
-`parts` with `ship->getParts()`. That's nice. Here's the interesting 
-thing, though. Instead of an array of `StarshipPart` objects, we get some
-sort of doctrine  collection. And inside the collection, best we can tell,
-it actually looks empty. So two things  here. First, when you're working
-with a relationship like this, this is never actually going  to be a true
-array. It's either going to be an `ArrayCollection` or what's called a 
-`PersistentCollection`. In both cases, we don't really care because this
-object looks and acts  like an array. So it's not really a detail that we
-need to think about. The bigger mystery is,  why does this seem like it's
-empty? And the answer is because doctrine is awesome. 
+Oh, hello there, fellow Symfony enthusiast! We're going to dive straight
+into the action today, and I promise you'll be up to your elbows in code
+before you know it. 
 
-It doesn't actually query for the parts for this ship until we need them.
-So check this out.  I'm back in our controller. Get rid of the `dd()`
-instead. I'm going to say `foreach part as  part`. Instead of here, we're
-going to `dump()` that. So even though parts look like an empty 
-collection, when we loop over it, suddenly we'd see the 10 `StarshipPart`
-objects. 
+## Let's Get Started!
 
-What's really cool here is we can see that there are two queries. I'm going
-to say view  formatted queries. The first query is just the one for the
-Starship. And the second query is the  one for all the Starship parts for
-this Starship. So the first one is coming from right here,  when Symfony
-queries for the Starship for us based on the slug. The second query happens
- actually right at this moment here. As soon as we `foreach` over the
-parts, at that moment,  doctrine says, oh, I need to go actually query for
-those parts, and it does it. That is  amazing. So let's undo the `foreach`.
-I'm actually going to get rid of the `parts` variable  entirely. We can
-even celebrate by getting rid of the `StarshipPart` imposter. That's all
-way  too much work. Instead, down here, as in a `parts` variable, and we'll
-say `ship->getParts()`. 
+First off, navigate to our homepage and click on any of the starships
+showcasing an 'In Progress' status. These are our little lab rats that we
+assign parts to in our fixtures. While we're here, you might notice we're
+already listing the parts. But don't let that fool you - it's all
+hard-coded at the moment. 
 
-All right, so now that we have a new `parts` variable, we can loop over
-that in our template.  So let's open up
-`templates/starship/show.html.twig`. And here is our one hard coded part
-right  here. So outside of the `li`, start our loop, which is nothing
-special for `part in parts`. And  down here, very end, we'll do our end.
-And for anything inside of here is just really normal  logic. So `part` is
-a `StarshipPart` object. So we can just print things like normal, like 
-curly curly. `Part.name`. This is my cool universal credits symbol. So
-replace the 25 here with  curly curly. `Part.price`. And finally, down here
-for a Hong Kong, that is going to be curly  curly `part.notes`. 
+Now, we're about to get our hands dirty by querying for the parts that are
+linked to a specific starship. 
 
-So nothing special here once we're inside the `for` loop. Let's give it a
-try. 
+```terminal
+cd src/Controller/StarshipController.php
+```
 
-Actually, for my own sanity, I'm also going to indent these spans. 
+## Say Hello to Auto-wiring
 
-All right, head over and I'm going to click and go back to our page. And
-look at that. God,  it's all 10 of our related parts, all without making a
-real query because we're using the  shortcut `ship->getParts()`. But even
-this is too much work. Head back to your controller. And  get rid of the
-`parts` of variable entirely. I know we're getting crazy because in 
-`show.html.twig`, we already have a `ship` variable. Because in
-`show.html.twig`, we already  have a `ship` variable. So we just loop over
-for `part in ship.parts`. We know this is going to  call the `getParts()`
-method. So that's going to be the same, really the same code that we had a 
-second ago in our controller. Can we try that? It still works. 
+Remember how we usually query for `StarshipPart` by auto-wiring that
+repository? Well, we're doing the same dance here. 
 
-All right, as a little bonus, let's also run to the number of parts we have
-on this page. So  `show.html.twig`. We're gonna have to run `parts`. A
-little parentheses. Let's say curly curly.  That's really cool thing. It's
-a `ship.parts`, which is gonna be that collection of parts. And  we just
-pipe that into twigs `length` column `length` filter. What I want you to do
-is we have  two queries currently, and one refresh, there's the parts nine.
-And we still have two queries  because it's smart enough that it knows that
-we already queried for all of the `Starship parts`.  So when we count them,
-we don't need to like make another account query and just use this the 
-information already has. 
+```php StarshipPartRepository $partRepository ```
 
-All right, next up, we need to talk about something really, really
-important concept inside of  doctrine called the owning versus inverse side
-of a relationship.
+Next, let's declare a variable, `parts`, and make it equal to our
+`$partRepository->findBy`. 
+
+This is pretty standard stuff, really. You know the drill - if you want to
+query where some property equals some value, you just use `findBy`. When it
+comes to relationships, we're keeping it simple, querying for the
+`Starship` property. 
+
+And no, we're not doing `Starship ID` or anything of the sort. We're
+keeping IDs out of this - they need their beauty sleep. Instead, we're
+going to pass the entire `ship` object. You could just pass the `getID` if
+you're feeling lazy, but in the spirit of doctrine, relationships, and
+thinking about objects, we're going full steam ahead with the `ship`
+object. 
+
+## Debugging and Celebrating
+
+Now, let's debug and see what we've got. 
+
+```php dd($parts) ```
+
+Hit refresh, and voila! We've got an array of 10 `StarshipPart` objects,
+all related to this `Starship`. That's pretty awesome, right? But hold onto
+your seats because we can make it even easier. 
+
+Replace `parts` with `ship->getParts()`. Now, here's the fun part: instead
+of an array of `StarshipPart` objects, we get a `PersistentCollection`. And
+even though it looks empty, that's just Doctrine playing hard to get. It's
+never going to be a true array, but more an `ArrayCollection` or a
+`PersistentCollection`. The important thing is it looks and acts like an
+array, so we're happy. 
+
+## Doctrine's Little Secret
+
+Why does it seem empty, you ask? Well, that's because Doctrine is a sneaky
+little thing. It doesn't actually query for the parts until we need them. 
+
+```php foreach ($ship->getParts() as $part) {     dump($part); } ```
+
+Even though `parts` appears as an empty `PersistentCollection`, once we
+loop over it, we magically see the 10 `StarshipPart` objects. 
+
+## Hello, Queries!
+
+We've got two queries at play here. The first one is for the `Starship`,
+and the second one is for all the `StarshipPart`s. The first one comes from
+Symfony querying for the `Starship` based on the slug. The second query
+happens the moment we `foreach` over the `parts`. At that moment, Doctrine
+says, "Oh, I need to go actually query for those parts," and does it. 
+
+Isn't that just amazing? Makes me want to throw a party for Doctrine. 
+
+## Tidying Up and Looping Over Parts
+
+Let's go and get rid of the `parts` variable entirely. We can celebrate by
+getting rid of the `StarshipPart` imposter - that was way too much work.
+Instead, let's assign a `parts` variable and say `ship->getParts()`. 
+
+```php $parts = $ship->getParts() ```
+
+Now that we've got our shiny new `parts` variable, we can loop over that in
+our template. Open up `templates/starship/show.html.twig` and replace the
+hard-coded part with our loop. 
+
+```twig {% for part in parts %} {{ part.name }} {{ part.price }} {{
+part.notes }} {% endfor %} ```
+
+## Wrapping Up
+
+And there you have it! We've managed to display all 10 of our related
+parts, all without making a real query because we're using the shortcut
+`ship->getParts()`. 
+
+But you know what? Even this is too much work. Let's get rid of the `parts`
+variable entirely. 
+
+```twig {% for part in ship.parts %} ```
+
+We're running wild here, I know. But wait, it still works! Now, just for
+kicks, let's also display the number of parts we have on this page. 
+
+```twig {{ ship.parts|length }} ```
+
+We still have two queries, but Doctrine is smart. It knows we've already
+queried for all the `StarshipPart`s, so when we count them, we don't need
+to make another count query.
+
+Well, folks, that wraps it up for now. Stay tuned for our next exciting
+episode where we'll delve into the mysterious world of Doctrine's owning
+versus inverse side of a relationship!

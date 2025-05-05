@@ -2,91 +2,112 @@
 
 Coming soon...
 
-There are a few parts and a few ships, but to make our data really
-realistic and help us  develop our app, I want to create lots of parts and
-lots of ships. This is a perfect job  for Foundry. Start by creating our
-manual code here that created that part and that  starship and related them
-to each other. Let's start from scratch. It doesn't really matter  where
-I'm going. I'm going to go down to the bottom. I'm going to say 
-`StarshipPartFactory::createMany(100);` and let's go crazy and create 100
-parts. 
+## Step into My Symfony Workshop
 
-Stop right here and spin over and try the fixtures. 
+We've got a couple of parts and a few starships, but to really deck out our
+data playground — and make our app development a blast — we need a lot
+more stuff. This is a job perfectly suited for our trusty helper, Foundry.
+Let's start by dusting off our manual code that created a part and a
+starship and introduced them to each other. You ready? Let's dive in.
+
+## Flexing the Foundry Factory
+
+We're going to start fresh. It doesn't really matter where we're headed, so
+let's scroll down to the bottom of our code. Let's flex our fingers and say
+`StarshipPartFactory::createMany(100);`. That's right, we're going all in
+and creating a whopping 100 parts. But let's not get ahead of ourselves, we
+need to test our fixtures. 
 
 ```terminal
-Symfony Console, Doctrine, Fixtures, Load.
-```
+symfony console doctrine:fixtures:load
+``` Uh-oh, we've hit a
+familiar snag. Our error message reads `starship_id` cannot be null in
+`StarshipPart`. This all traces back to our `StarshipPartFactory`. Down in
+the `getDefaults()` function, this is the only data passed to our
+`StarshipPart` when it's created. The golden rule here is to make
+`getDefaults()` return a key for every required property on this object.
+Right now, we're obviously missing the `starship` property, so let's
+quickly add that. It's `starship` key, not `starship_id`. We'll set this to
+a nifty method called `Starship::randomOrCreate()` and pass this in an
+array. 
 
-We see a familiar error here. It says `starship_id` cannot be null in
-Starship Part.  This goes all the way back to our `StarshipPartFactory`.
-Down here in `getDefaults()`,  this is the only data that's going to be
-passed to our `StarshipPart` when it's created. 
+## Setting the Stage for Starship Parts
 
-The best practice here is to make `getDefaults()` return a key for every
-required property  on this object. Right now, we're obviously missing the
-`Starship` property, so let's add  that. Let's say `starship` key, not
-`starship_id`, definitely not that, and set this to a  really cool method
-called `Starship::randomOrCreate()` and pass this in an array. 
+Let's make sure these parts actually show up on our homepage, where we're
+only displaying starships with 'in progress' or 'waiting' status. Let's set
+the status to `StarshipStatusEnum::IN_PROGRESS`. This is an impressive,
+powerful method because it will first look in the database to find a
+`Starship` that matches this criteria. If it finds one, it uses that. If it
+doesn't, it creates one with that status. Alright, let's try those fixtures
+now.
 
-The only ships that we're showing on the homepage are either in progress or
-waiting, so  to make sure that these parts actually show up on our
-homepage, set the status to  `StarshipStatusEnum::IN_PROGRESS`. 
+```terminal
+symfony console doctrine:fixtures:load
+``` Great, no errors!
+Let's grab all the `StarshipPart`s. 
 
-This is a really cool, really powerful method because it's going to look in
-the database  first to see if it can find a `Starship` that matches this
-criteria. If it can, it's  going to use that. If it can't, it will create
-one with that status. 
+```terminal
+SELECT * FROM starship_part
+``` This is looking perfect. Look
+closely, we've got 100 parts each tied to a random `Starship`, which should
+be a `Starship` with an 'in progress' status.
 
-All right, try the fixtures now. Awesome, no errors. Let's query
-from—let's grab all the  Starship parts. This actually looks perfect. If
-you look closely, there are 100 parts and  they're each related to a random
-`Starship`, which should be a `Starship` that's in a  in progress status. 
+## Taking Control in Foundry
 
-What if we wanted more control over this? What if we wanted to assign all
-100 of these  parts to the same one ship? I know that sounds kind of weird,
-and it is, but it's going  to help us explain a few important things about
-foundry and relationships. Up here, let's  first start by getting a ship
-variable, so `ship = StarshipFactory::createOne([])`. 
+But what if we want more control? What if we want to assign all 100 of
+these parts to the same ship? I know it sounds a bit eccentric, but trust
+me, it'll help us explain Foundry and relationships. 
 
-Down here in `StarshipPartFactory`, we can pass a second argument and say,
-hey, we want  `starship` to be set to this specific ship. 
+Let's start by getting a ship variable, so `ship = Starship::createOne()`.
+Then, in `StarshipPartFactory::createMany()`, we can pass a second argument
+to specify that we want `starship` to be set to this specific ship. 
 
-All right, try the fixtures again and query once again for the parts.
-Perfect. They're all  related to the same one ship. Also over here, query
-for the Starships themselves. Inside  of here, if you look closely, we have
-23 ships, which is the correct amount because we  create—let's see here.
-That fixture should create 20 in the bottom, and we also have 1, 2,  and 3,
-so 23 in total, so everything is looking right. 
+```terminal
+symfony console doctrine:fixtures:load
+``` And voila! All parts
+are now related to the same ship. Also, if we query the `Starship`s, you'll
+see we have 23 ships, which is correct because our fixture creates 20 at
+the bottom, plus the extra 3 we added. Everything's coming together.
 
-Here's where things get kind of interesting. In `StarshipPartFactory`,
-instead of saying  `randomOrCreate()`, use `createOne()`. Just trust me on
-this. All right, I'll go over and  load the fixtures again, then query for
-all the ships. What the fringy? There are now  tons of ships. 
+## The Foundry Plot Twist
 
-If you look closely, there's 123 ships. Here's the problem, for each part,
-`getDefaults()`  is called for each part. For all 100 parts, it's calling
-this line right here, and that's  creating and saving a `Starship`, even
-though we're never going to use that `Starship`  because we override it a
-second later. 
+Now, here's where things get interesting. In `StarshipPartFactory`, instead
+of using `randomOrCreate()`, let's switch to `createOne()`. Trust me on
+this one, you'll thank me later. Let's load the fixtures and query for all
+the ships. Whoa, we suddenly have a fleet! 123 ships to be exact. 
 
-The solution is to change this to `StarshipFactory::new([])`. That actually
-creates a new  instance of that factory, not an object in the database.
-Let's try that. Reload the  fixtures, then query for the ships. Perfect. We
-are back to our 23 ships. 
+The catch is, for each part, `getDefaults()` is called. So for all 100
+parts, it's triggering this line, creating and saving a `Starship`, even
+though we never use that specific `Starship` because we override it moments
+later. The solution? Change this to `Starship::new()`. This is the secret
+sauce — it creates a new instance of the factory, not an object in the
+database.
 
-These factory instances, they act like recipes for creating objects. This
-doesn't actually  create an object in the database, it's just a recipe for
-one. When you pass a factory  instance like here, Foundry is going to delay
-creating this object until and if it's  needed. Only if the `Starship` is
-not overridden will it create a new `Starship` and save  it. It's a best
-practice when you're setting relationships to set them to a factory 
-instance for this exact reason. 
+```terminal
+symfony console doctrine:fixtures:load
+``` Now let's query the
+ships. Perfect! We're back to our 23 ships. 
 
-Looking at fixtures, let's remove this override. We don't really need that.
-Change the  factory, change back to `randomOrCreate()` because that was
-actually working pretty well.  I like that. 
+## The Factory Recipe
 
-Let's reload the fixtures one last time to make sure we didn't mess
-anything up. Looks  good. All right, next. It's time to fetch all of the
-parts for our ship. When we do that,  we're going to enjoy some sweet
-doctrine magic.
+These factory instances act like secret recipes for creating objects.
+`Starship::new(['status' => StarshipStatusEnum::STATUS_IN_PROGRESS])`
+doesn't actually create an object in the database, it's just a blueprint
+for one. When you pass a factory instance, Foundry delays creating the
+object until it's needed. Only if the `Starship` isn't overridden will it
+create a new `Starship` and save it. This is a best practice when setting
+relationships — set them to a factory instance.
+
+Let's clean up our fixtures by removing this override. We'll switch back to
+`randomOrCreate()` because, let's be honest, it's a pretty cool method.
+
+```terminal
+symfony console doctrine:fixtures:load
+``` Let's reload the
+fixtures one last time to make sure we didn't break anything. Everything's
+looking good. 
+
+## Time for a Magic Show
+
+Next up, we're going to fetch all of the parts for our ship and witness
+some sweet doctrine magic. Get ready to be amazed!

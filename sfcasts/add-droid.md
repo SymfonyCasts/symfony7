@@ -2,36 +2,53 @@
 
 Coming soon...
 
-Creating a `StarshipDroid` object every time we want to relate a `Droid` to
-a `Starship` is fine. It's a bit more work, but it's really clear. Let's
-make the `starship->addDroid()` method work again. I want to be able to do
-here is just say`$ship->addDroid($droid)` and have that work just like
-before. But let's try it. Run the fixtures. It fails with `Undefined
-property: App\Entity\Starship::$droids` coming from `Starship`. No big
-surprise here because in `addDroid()`, we referenced the old `droids`
-property. Let's refactor this to create our join entity. First, we're
-checking if this `Starship` already has this `Droid`. To get that to work,
-we need to do is change the property to use the `getDroids()` method.
-Instead of `$this->getDroids()->add`, which isn't going to work anymore.
-We're going to need to create that join entity here. `$starshipDroid = new
-StarshipDroid();` `$starshipDroid->setDroid($droid);`
-`$starshipDroid->setStarship($this);` And the last thing here is we need to
-set the `StarshipDroid` onto this object.
-`$this->starshipDroids->add($starshipDroid)`, because this is the owning
-side of the relationship. We need to make sure that this is set.
+## StarshipDroid: Your Ticket to Interstellar Travel
 
-Let's try the fixtures again.
+Now, you might be thinking: "Hold up, do I really need to create a
+`StarshipDroid` object every time I want a droid to hop aboard a starship?"
+Well, sure. It's a bit more elbow grease, but it's also as clear as a
+summer's day on Tatooine. But hey, let's kick things up a notch, shall we?
+How about we get the `starship->add()`, `ship->addDroid()` method back in
+the game? 
+
+That's right. I'm talking about tossing out the old, and getting back to
+using `ship->addDroid(droid)` just like the good ol' days. Now, this might
+not work right off the bat, but let's give it a shot. Load up the fixtures.
+Ouch! We're hit with an 'Undefined property:
+`App\Entity\Starship::$droids`' straight from `Starship`. Not exactly a
+surprise, considering we called upon the long-gone `droids` property in
+`addDroid()`.
+
+## Refactoring: It's Like Spring Cleaning, But for Code
+
+So, what now? It's refactoring time! The first thing on our list is to
+check if our `Starship` already has a ticket for the droid in question. To
+make this happen, we need to switch the property to use the `getDroids()`
+method. But wait, `$this->getDroids()->add()` isn't going to cut it.
+Instead, we're going to roll up our sleeves and create the join entity
+right here. 
 
 ```terminal
-symfony console doctrine:fixtures:load
+StarshipDroid = new StarshipDroid();
+StarshipDroid->setDroid(droid); StarshipDroid->setStarship(this);
 ```
 
-We've moved on to the next error, which is a common error in Doctrine. The
-error says "a new entity was found through the relationship
-'App\Entity\Starship#starshipDroids' that was not configured to cascade
-persist for the entity StarshipDroid". We've created a new `StarshipDroid`
-object and we've told Doctrine to persist this `Starship`. We never told it
-to persist this `StarshipDroid`. The problem is that we don't have access
-to the entity manager. So we can't just say
-`entityManager->persist($starshipDroid)`. Instead, we're going to rely on
-something called `cascade={"persist"}`, which we'll talk about next.
+Now we need to get our `starships` and `StarshipDroid` on board this
+object. So, `$this->starshipDroids->add(starshipDroid)`, because this is the
+captain of the ship, the owning side of the relationship. We need to make
+sure that this is set. Let's give the fixtures another whirl.
+
+## The Doctrine of Errors
+
+Ah ha, a new error. This one's a frequent flyer in Doctrine: 'A new entity
+was found through the relationship `App\Entity\Starship#starshipDroids`
+that was not configured to cascade persist for the entity `StarshipDroid`'.
+This is just a fancy way of saying we've created a new `StarshipDroid`
+object and told Doctrine to keep this `Starship` in its records. But we
+forgot to mention the `StarshipDroid`. 
+
+Here's the rub: we don't have access to the entity manager. So we can't
+just tell it `entityManager->persist(starshipDroid)`. Instead, we're going
+to lean on something called `cascade={"persist"}`, which I'll dive into in
+just a moment. Hang tight, we're about to make the Kessel Run in less than
+twelve parsecs!

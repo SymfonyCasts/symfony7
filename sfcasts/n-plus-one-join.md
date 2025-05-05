@@ -2,71 +2,87 @@
 
 Coming soon...
 
-Okay, team, we have our `parts` table. The next thing you want to do is
-order this by the price in descending order. This is simple enough. You
-will use a custom query for this, which means you need to go into your
-`PartRepository`. Navigate to `src/Repository/StarshipPartRepository.php`.
-Let's create a new method here. You can copy this stubbed method. Uncomment
-that because you already have some good PHP doc up here. Now clean up down
-here by removing the last stub method. 
+## Let's Level Up Our `parts` Table
 
-Let's name this method `findAllOrderedByPrice()`. You don't need the
-`value` anymore. The query builder will be very straightforward. Call the
-`StarshipPart` as `sp`. You don't need `andWhere` or the `setParameter()`
-below that. You do want to keep `orderBy()`, though you're going to tweak
-it a bit. So use `orderBy('sp.price', 'DESC')`. Get rid of
-`setMaxResults()` as well. 
+Alright, fellow code warriors, we've got our `parts` table all set up and
+ready for action. But now we want to rank our parts by `price` in a
+descending order, because who doesn't love a good bargain hunt, right? This
+is a fairly simple task, but we're going to make it a bit more exciting by
+crafting a custom query. To do this, we'll have to dive deep into our
+`PartRepository`.
 
-This is a very straightforward custom query. Copy the name of this method.
-Now, head over to your `PartController`. You'll use
-`findAllOrderedByPrice()` instead of `findAll()`. 
+## Introducing the `PartRepository`
 
-Now what you really want to look at here are the queries for this page. You
-will notice there are nine database queries. The first one is what you'd
-expect. It's querying for all the `StarshipPart`s with a price in
-descending order. But what are all these other queries? 
+So, buckle up and navigate your way to
+`src/Repository/StarshipPartRepository.php`. Once we've landed, we're going
+to forge a new method. You see that stubbed method over there? Go ahead and
+copy it, then uncomment it since we already have a handy PHP doc right
+above. Give your code a little spring clean by removing the last stub
+method. Let's christen our new method `findAllOrderedByPrice()`. The
+`value` here is excess baggage we won't be needing, so let's toss that out.
 
-You actually have one query per `Starship`. Here you're querying for the
-`Starship`. So what's happening here is you query for all the parts. Then
-when you're in the `index.html.twig` template looping over the parts, at
-this moment, you print out `{{ part.starship.name }}`. So at this moment,
-Doctrine says, oh no, I have the `part` data, but I don't have the
-`Starship` data for this `part`. So I better go query for it. 
+Now, we're going to build a simple query. You can call `sp` for
+`StarshipPart`. We can ditch the `andWhere` and the `setParameter` below
+that. We do, however, need the `orderBy`, but let's give it a little twist
+as `orderBy('sp.price', 'DESC')`. The `setMaxResults` can also take a hike.
+And voila, we've got a snazzy custom query. Let's copy the name of this
+method and jet off to our `PartController`. We'll use our shiny new method
+instead of the old `findAll()`.
 
-So you get one query for the parts. Then you get one extra query for the
-`Starship` for every single `part` in there. This is called the N plus one
-problem. So if you have 10 parts, you're going to end up with one query for
-the parts and then 10 extra queries, one query for the `Starship` for each
-of those parts. And again, this is just a performance problem and it's
-maybe not even that big of a deal, but it's something to be aware of.
+## Examining Our Queries
 
- And the way you fix it is with a join. So in `StarshipPartRepository.php`,
-you're going to make your `findAllOrderedByPrice()` method a little bit
-fancier. Use `innerJoin('sp.starship', 's')`. The important thing here is
-that you are not worried about like the foreign key columns and joining
-like `starship_id` to `id`. All you have to do is join on the property. So
-you're just joining on `StarshipPart.starship` or joining on the `starship`
-property. You're aliasing the entire `Starship` table over to `s`. 
+Let's take a moment to examine the queries for this page. You'll notice
+that there are nine database queries. The first one is exactly what we
+predicted — it's querying for all the `StarshipPart`s with a price
+descending. But wait, what are all these other queries? We actually have
+one query per `Starship`. So, we're querying for the `Starship` here.
 
-Now, before you had nine database queries. Now you still have nine database
-queries. Why? There are two reasons to do a join. The first is to avoid the
-N plus one problem. And the second is to do a `where` or `orderBy()` on the
-join table. We're going to talk about that second reason really soon. 
+## The Mystery of the N Plus One Problem
 
-For the N plus one problem, in addition to the join, you need to select the
-data over on `Starship`. To do that, it's really simple. You're going to
-say `addSelect('s')`. So it's really cool. You're aliasing the entire
-`Starship` table to `s`. Then with `addSelect()`, you don't select
-individual columns. You just say, hey, I just want to select the whole darn
-thing. 
+Here's the plot twist: we query for all the parts, and then when we're in
+the template looping over the parts, the moment we print out
+`part.starship`, Doctrine has a light bulb moment. It realises it has the
+`part` data, but it's missing the `Starship` data for this `part`. So it
+needs to query for it. We end up with one query for the parts, and then an
+extra query for the `Starship` for each part in there. This is a notorious
+villain known as the N plus one problem.
 
-So now you have nine database queries. Let's refresh. And you're down to
-one. That's incredible. You can see here, you are selecting from
-`StarshipPart`. You're grabbing all the data from both `Starship` and
-`StarshipPart`. And you have the `innerJoin` right there. Again, you don't
-have to worry about the details of joining on which columns. All you have
-to do is just do the join on the property. And Doctrine is going to take
-care of all those boring details for you. 
+Think of it this way: if we have 10 parts, we're going to end up with one
+query for the parts and then 10 extra queries, one for the `Starship` for
+each of those parts. This is a performance problem. It might not seem like
+a big deal, but it's something we should keep an eye on. And the secret
+weapon to defeat this is a `join`.
 
-Next, let's add a search to our page. And when you do that, you're going to
-see the second use of a join.
+## The Power of `join`
+
+Back in our `StarshipPartRepository`, we're going to power up our
+`findAllOrderedByPrice()` with a `join`. We'll add
+`innerJoin('sp.starship', 's')`. All we have to do is join on the property.
+We're joining on `StarshipPart.starship` or joining on the `starship`
+property. We're aliasing the entire `starship` table over to `s`.
+
+Previously, we had nine database queries. Let's refresh. And... we still
+have nine database queries. Now, you might be scratching your head and
+wondering why. Well, there are two reasons to use a `join`. The first is to
+avoid the N plus one problem, and the second is to do a `where` or
+`orderBy` on the join table. We'll explore that second reason soon.
+
+To solve the N plus one problem, in addition to the `join`, we need to
+select the data on `Starship`. It's as simple as saying `addSelect('s')`.
+So we're aliasing the entire `Starship` table to `s`. Then with
+`addSelect()`, we don't bother with individual columns. We just say, "Hey,
+I want the whole shebang".
+
+## The Magic of `join` and `addSelect()`
+
+We're now down to one database query from nine. That's some serious magic
+right there. As you can see, we're selecting from `StarshipPart`, grabbing
+all the data from both `Starship` and `StarshipPart`, with the `innerJoin`
+sitting pretty right there. And the best part? We don't have to sweat the
+details of joining on which columns. All we have to do is just perform the
+`join` on the property, and Doctrine takes care of the boring details for
+us.
+
+Stay tuned, because next up, we're going to add a search function to our
+page. And when we do that, we're going to see the second use of a `join`.
+It's going to be a wild ride, so hang on tight!
