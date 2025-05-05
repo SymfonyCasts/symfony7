@@ -1,8 +1,4 @@
-# Setting Relation
-
-Coming soon...
-
-## Starship and StarshipPart: A Galactic Romance
+# Setting the Relation
 
 So, you're probably scratching your head and wondering, "How in the world
 does a particular `StarshipPart` know it belongs to a specific `Starship`?"
