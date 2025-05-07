@@ -6,7 +6,7 @@ in `AppFixtures` with Foundry. We'll come back to Foundry in a
 bit, but let's go old school for a minute to see how this all works.
 
 Start with `new Starship()`... then I'll paste in some code to set the
-required properties then add `$manager->persist($starship)`.
+required properties. Then add `$manager->persist($starship)`.
 Next create a new `StarshipPart` and just like before,
 I'll paste code to fill in the properties. Then make sure this *saves*
 with `$manager->persist($part)`, and
@@ -41,13 +41,15 @@ passing an ID, like `$starship->getId()`. Nope! We set *objects*. Doctrine
 handles the boring details of inserting this: first saving the `Starship`,
 then using its new `id` to set the `starship_id` column on the `starship_part` table. 
 
+Smart!
+
 Try the fixtures again:
 
-```terminal
+```terminal-silent
 symfony console doctrine:fixtures:load
 ```
 
-Error-free! Let's check things out:
+Error-free! Check things out:
 
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM starship_part'
@@ -59,6 +61,7 @@ happily linked to `Starship` id 75. Look that up:
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM starship WHERE id = 75'
 ```
+
 There it is: `Starship` id 75 has a `StarshipPart` id 1. We're awesome!
 
 ## Doctrine: work with Objects, Not IDs
@@ -69,5 +72,5 @@ part for you. You set the object, and Doctrine does the rest.
 
 But ugh, this is a lot of work in `AppFixtures` to create a single
 `Starship` and a single `StarshipPart`. So next, let's bring Foundry
-back to create a *fleet* of ships a *pile* of parts and link them all
+back to create a *fleet* of ships a *pile* of parts *and* link them all
 in one fell swoop. This is where Foundry really shines.
