@@ -1,70 +1,80 @@
 # The Two Sides of a Relation: Owning vs Inverse
 
-Here's a fun fact that's bound to make you the life of any party: Every
-relationship in Symfony can be viewed from two different angles. Let's take
-our `Starship` as an example. A `Starship` has multiple parts, making it a
+Fun fact for your next party: Every
+relationship can be viewed from two different sides. Take
+`Starship` as an example: it has multiple parts, making it a
 one-to-many relationship from the `Starship` perspective. But, flip the
 telescope around and look from the `StarshipPart` end, and you'll find a
-many-to-one relationship. One of these perspectives is known as the owning
-side, and the other, the inverse side. 
+many-to-one relationship. One of these perspectives is always known as the
+owning side, and the other, the inverse side. 
 
-Now, you might be thinking, "Why should I care about which side owns and
-which side inverses?" Well, stick with me for a three-minute dive into this
-concept, and I promise it'll save you from a potential headache down the
-road. Plus, you'll have a new bit of trivia to impress your friends with at
-your next social gathering. You can thank me later.
+Now, you might be thinking, "Why do I care about this?"
+Well, stick with me for a three-minute dive: it might just save you from a big
+headache down the road. Plus, you'll have a new bit of trivia to impress your family
+with at your next family holiday. You can thank me later.
 
 ## The Owning Side Unveiled
 
-First off, how do we identify the owning side? For a many-to-one
-relationship, it's pretty straightforward. The owning side is always the
-party with the foreign key in the database. In this case, `StarshipPart`
-has a `starship_id` column, making it the proud owner.
+First off, which side is the owning side? For a many-to-one: it's
+always the side that has the `ManyToOne` attribute, which is on the
+entity that will have the foreign key column. In our case, that's
+`StarshipPart`.
 
 ## The Importance of Ownership
 
-But why does this matter? There are two main reasons. Firstly, the
-`JoinColumn` can only cozy up with the owning side. This makes sense
-because it controls the foreign key column, so naturally, it should reside
-where the foreign key column exists. Secondly, you can only set this
-relationship via the owning side. 
+But why does this *matter*? Two reasons. First, the
+`JoinColumn` can only live on the owning side. That makes sense:
+it controls the foreign key column.
+Second, you can only set the *owning side* of the relationship. 
+Let me show you:
 
-Let's see this in action. Pop open `src/DataFixtures/AppFixtures.php`.
-Here, I'm going to handcraft a couple of objects. We'll start with
-`$starship = StarshipFactory::createOne();`. That's almost right. It's not
-called create anymore. It's now `createOne`. Below this, I'll sprinkle in
-some code that creates two `StarshipPart` objects per system and flushes
-them. However, at this point, the part and the starship don't have any
-relationship yet. Let's try loading the fixtures anyways. Run:
+Pop open `src/DataFixtures/AppFixtures.php` and let's play a bit:
+`$starship = StarshipFactory::createOne();`. My AI overlord
+was *almost* right. Below this, I'll sprinkle in
+code that creates two `StarshipPart` objects, persist & flush
+them. I haven't set any relations yet, but let's recklessly load the fixtures anyway:
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-And voilà, our favorite error pops up. `Starship_id` cannot be null, which
-is totally expected.
+And voilà, our favorite error pops up. `starship_id` cannot be null.
+Totally expected.
 
-## The Owning Side in Action
+## The Owning vs Inverse Side in Action
 
-Now, to demonstrate the concept of the owning side more clearly, let's add
-`_real` to the end of `$starship`. When you create an entity via foundry,
+To demonstrate the owning vs inverse issue, add
+`_real()` to the end of `$starship`. When you create an entity via foundry,
 it actually wraps that in a little gift called a proxy object. This is
-usually inconsequential, but there are occasions, like this one, where it
-can cause some confusion. So, by calling `_real`, we can unwrap the actual
-`Starship` object itself from the proxy. 
+usually inconsequential, but occasionally, it
+can cause some confusion. By calling `_real()`, we can unwrap the
+proxy and get the *real* `Starship` object.
 
-Alright, time to connect these parts to this starship. Normally, we'd do
-this by saying `$part1->setStarship($starship);`, which sets the owning
-side of the relationship. But, for a change, let's try setting the inverse
-side of the relationship. That would be `$starship->addPart($part1);` and
-`$starship->addPart($part2);`. 
+Ok: time to connect these parts to this starship. Normally, we'd say
+`$part1->setStarship($starship);`, which sets the *owning*
+side. This time try setting the inverse side. That would be
+`$starship->addPart($part1);` and `$starship->addPart($part2);`. 
 
 Now, based on what I just explained, this should not work because we are
-setting only the inverse side of the relationship. But let's roll the dice
-and try loading the fixtures anyways. And surprise, surprise, they work! 
+*only* setting the inverse side. But let's roll the dice
+and load the fixtures anyway:
 
-To double check, let's query for `StarshipPart`. Sure enough, there are two
-new parts, and they are related to a starship. So, what gives? We just set
+```terminal
+symfony console doctrine:fixtures:load
+```
+
+But surprise, surprise! No errors. In fact, if you check the database:
+
+```terminal
+symfony console doctrine:query:sql "SELECT * FROM starship_part"
+```
+
+Sure enough, there are two
+new parts each related to a starship.
+
+----->HERE<-----
+
+So, what gives? We just set
 the inverse side of the relationship, and it still saved to the database.
 Have I been pulling your leg this entire time? Well, not entirely.
 
