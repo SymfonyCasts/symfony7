@@ -1,8 +1,4 @@
-# Owning Inverse
-
-Coming soon...
-
-## The Two Sides of Relationships: Owning and Inverse
+# The Two Sides of a Relation: Owning vs Inverse
 
 Here's a fun fact that's bound to make you the life of any party: Every
 relationship in Symfony can be viewed from two different angles. Let's take

@@ -1,122 +1,99 @@
-# Fetching Relation
+# Fetching a Relation's Data
 
-Coming soon...
+Navigate to our homepage and click on any of the starships
+showcasing an 'In Progress' status. These are the ships from our
+fixtures. 
 
-# Welcome Back to the World of Symfony!
+You might notice that we're
+already listing the parts. But don't let that fool you: these
+parts are all hard-coded.
 
-Oh, hello there, fellow Symfony enthusiast! We're going to dive straight
-into the action today, and I promise you'll be up to your elbows in code
-before you know it. 
+Now, how *do* we get the parts that are related to this ship?
 
-## Let's Get Started!
-
-First off, navigate to our homepage and click on any of the starships
-showcasing an 'In Progress' status. These are our little lab rats that we
-assign parts to in our fixtures. While we're here, you might notice we're
-already listing the parts. But don't let that fool you - it's all
-hard-coded at the moment. 
-
-Now, we're about to get our hands dirty by querying for the parts that are
-linked to a specific starship. 
-
-```terminal
-cd src/Controller/StarshipController.php
-```
+Open the controller for this page:
+`src/Controller/StarshipController.php`
 
 ## Say Hello to Auto-wiring
 
-Remember how we usually query for `StarshipPart` by auto-wiring that
-repository? Well, we're doing the same dance here. 
+To query for parts, we typically by autowire the `StarshipPartRepository`.
+Start the same way here with a `StarshipPartRepository $partRepository`
+argument.
 
-```php StarshipPartRepository $partRepository ```
+Next, set `$parts`, to
+`$partRepository->findBy()`. 
 
-Next, let's declare a variable, `parts`, and make it equal to our
-`$partRepository->findBy`. 
-
-This is pretty standard stuff, really. You know the drill - if you want to
-query where some property equals some value, you just use `findBy`. When it
-comes to relationships, we're keeping it simple, querying for the
-`Starship` property. 
+This is pretty standard stuff: if you want to
+query where some property equals a value, you  use `findBy()` and pass
+the property name and the value. When it
+comes to relationships, it's the same darn thing.
+`$parts = $partRepository->findBy(['starship' => $ship])`.
 
 And no, we're not doing `Starship ID` or anything of the sort. We're
-keeping IDs out of this - they need their beauty sleep. Instead, we're
-going to pass the entire `ship` object. You could just pass the `getID` if
-you're feeling lazy, but in the spirit of doctrine, relationships, and
-thinking about objects, we're going full steam ahead with the `ship`
-object. 
+keeping IDs out of this. Instead, we pass the `Starship` object itself.
+going to pass the entire `ship` object. You *could* actually just
+pass the `id` if you're feeling lazy, but in the spirit of doctrine, relationships, and
+thinking about objects, passing the entire `Starship` object is the way to go.
 
 ## Debugging and Celebrating
 
-Now, let's debug and see what we've got. 
+Let's debug and see what we've got. `dd($parts)`.
 
-```php dd($parts) ```
+Refresh, and voila! An array of 10 `StarshipPart` objects,
+all related to this `Starship`. Pretty awesome, right? If you think so,
+hold onto your pants.
 
-Hit refresh, and voila! We've got an array of 10 `StarshipPart` objects,
-all related to this `Starship`. That's pretty awesome, right? But hold onto
-your seats because we can make it even easier. 
+Replace `$parts =` with `ship->getParts()`. 
+Refresh! Instead of an array of `StarshipPart` objects, we get a
+`PersistentCollection`. *object* that looks... empty
+of an array of `StarshipPart` objects, we get a `PersistentCollection`.
+Remember the `ArrayCollection` that `make:entity` added to our
+`Starship` constructor? `PersistentCollection` and `ArrayCollection` are
+all part of the same collection family. They're objects but they
+act like arrays. Ok, but why does this collection look empty?
+That's because Doctrine is smart: It doesn't query for the parts until we
+need them. Loop over `$ship->getParts()` and dump `$part`
 
-Replace `parts` with `ship->getParts()`. Now, here's the fun part: instead
-of an array of `StarshipPart` objects, we get a `PersistentCollection`. And
-even though it looks empty, that's just Doctrine playing hard to get. It's
-never going to be a true array, but more an `ArrayCollection` or a
-`PersistentCollection`. The important thing is it looks and acts like an
-array, so we're happy. 
 
-## Doctrine's Little Secret
+Suddenly that empty-looking collection is full of the 10 `StarshipPart` objects. 
+Magic!
 
-Why does it seem empty, you ask? Well, that's because Doctrine is a sneaky
-little thing. It doesn't actually query for the parts until we need them. 
+## Lazy Relation Queries
 
-```php foreach ($ship->getParts() as $part) {     dump($part); } ```
+There are two queries at play here. The first one is for the `Starship`,
+and the second one is for all the `StarshipPart`s. The first comes from
+Symfony querying for the `Starship` based on the slug. The second
+happens the moment we `foreach` over the `parts`. At *that* moment, Doctrine
+says:
 
-Even though `parts` appears as an empty `PersistentCollection`, once we
-loop over it, we magically see the 10 `StarshipPart` objects. 
-
-## Hello, Queries!
-
-We've got two queries at play here. The first one is for the `Starship`,
-and the second one is for all the `StarshipPart`s. The first one comes from
-Symfony querying for the `Starship` based on the slug. The second query
-happens the moment we `foreach` over the `parts`. At that moment, Doctrine
-says, "Oh, I need to go actually query for those parts," and does it. 
+> I just remembered: I don't actually have the `StarshipPart`s data for this
+> `Starship`. Let me go and get that for you.
 
 Isn't that just amazing? Makes me want to throw a party for Doctrine. 
 
 ## Tidying Up and Looping Over Parts
 
-Let's go and get rid of the `parts` variable entirely. We can celebrate by
-getting rid of the `StarshipPart` imposter - that was way too much work.
-Instead, let's assign a `parts` variable and say `ship->getParts()`. 
+Get rid of the `parts` variable entirely... and remove `StarshipPartRepository`: 
+that was way too much work. Instead, set a `parts` variable to `$ship->getParts()`.
 
-```php $parts = $ship->getParts() ```
+Now that we've got our shiny new `parts` variable, Loop over *that* in
+the template. Open up `templates/starship/show.html.twig` and replace the
+hard-coded part with our loop: `for part in parts %`, `part.name`, `part.price`,
+`part.notes`, `endfor`
 
-Now that we've got our shiny new `parts` variable, we can loop over that in
-our template. Open up `templates/starship/show.html.twig` and replace the
-hard-coded part with our loop. 
+## Still too much Work?
 
-```twig {% for part in parts %} {{ part.name }} {{ part.price }} {{
-part.notes }} {% endfor %} ```
+And we've done it! We've managed to display all 10 of our related
+parts, without doing any serious work thanks to `$ship->getParts()`.
 
-## Wrapping Up
+But you know what? Even this is too much work. Get rid of the `parts`
+variable entirely: `for part in ship.parts`.
 
-And there you have it! We've managed to display all 10 of our related
-parts, all without making a real query because we're using the shortcut
-`ship->getParts()`. 
-
-But you know what? Even this is too much work. Let's get rid of the `parts`
-variable entirely. 
-
-```twig {% for part in ship.parts %} ```
-
-We're running wild here, I know. But wait, it still works! Now, just for
-kicks, let's also display the number of parts we have on this page. 
-
-```twig {{ ship.parts|length }} ```
+And... *still* not broken! For kicks and giggles, let's also display the number 
+of for this ship. `ship.parts|length`
 
 We still have two queries, but Doctrine is smart. It knows we've already
 queried for all the `StarshipPart`s, so when we count them, we don't need
 to make another count query.
 
-Well, folks, that wraps it up for now. Stay tuned for our next exciting
-episode where we'll delve into the mysterious world of Doctrine's owning
-versus inverse side of a relationship!
+Next up: we'll talk about an often-misunderstood topic in Doctrine relations:
+the owning vs inverse side of each relationship.
