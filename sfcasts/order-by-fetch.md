@@ -1,95 +1,81 @@
-# Order By Fetch
+# Ordering a Relation and "fetch" type
 
-Coming soon...
+Click into an "in progress" starship. Then open:
+`templates/starship/show.html.twig`.
+To list the parts, use `for part in ship.parts`.
 
-## Starting With Starships
+This will work like a charm. But with a catch: the order of the parts isn't
+guaranteed. They pop out of the database in whatever order they fancy.
 
-Alright folks, let's dive into one of our starships that's not just sitting
-idle, but is a work in progress. You know, the kind of starship that's got
-some parts to play with. So, let's go to
-`templates/starship/show.html.twig` and say `for part in ship.parts`.
-Basically, what we're doing here is calling `ship.getParts()` to get our
-hands on these parts. 
+I'd rather have these ordered by name. Does this mean we need to 
+write a custom query... and can't use our handy `ship.parts` anymore? Fear
 
-But hang on, there's a hitch. We can't quite guarantee the order these
-parts show up in. They're pretty much just popping out of the database in
-whatever order they fancy. I'd rather have these parts lined up by their
-names. But does this mean we can't use our handy `ship.parts` anymore? Fear
-not, my friends. We still have control over this. 
+Fear not, friends. We *do* have a few tricks up our sleeves.
 
 ## Rearranging the Parts
 
-So, to tame these parts, head over to the `Starship` entity and find the
-`parts` property. Just above `parts`, we're going to plant a new attribute.
-Voila! `#[ORM\OrderBy(['name' => 'ASC'])]`. But wait, we don't have a
-position property. So, we're going to order by our `name` property instead.
-Ascending order, because that's how we roll. Refresh the page, and there
-you have it - ordered alphabetically. 
+Head over to the `Starship` entity and find the `parts` property.
+Above `parts`, add a new attribute: `#[ORM\OrderBy(['name' => 'ASC'])]`,
+not `position`. Refresh the page, and got it!
 
-Now, if you're scratching your head wondering why T is coming after R,
-don't worry, you haven't forgotten your ABCs. It's just that Postgres is a
-case sensitive database. So the uppercase T actually comes before lowercase
+If you're scratching your head wondering why T is coming after R,
+don't worry: you haven't forgotten your ABCs. It's just that Postgres is a
+case-sensitive database. So the uppercase T actually comes before lowercase
 C in the alphabetical order.
 
-## Querying Like a Pro
+## Smart Queries
 
-Now, how about we check the query for this page? How many of you have ever
-formatted a query? Perfect, let's delve into it. As you can see, we're
-querying from `starship.part`, where `starship ID` equals our ID, ordered
-by `name` ascending. Just the query we wanted.
-
-## Coming Home to More Parts
-
-Now, let's head back to the homepage and open up the template for it,
-`templates/main/homepage.html.twig`. After 'arrived', let's add a new div
-to display the parts. And we're simply going to print out the number of
-parts. Easy peasy, right? `ship.parts|length`. 
-
-And voila, back on the homepage, it works like a charm. The queries for
-this page look a bit wild because of our pagination, which can be pretty
-adventurous. Essentially, we have one query for the starship, and if we
-search for `starship.part`, we find about five extra queries here for the
-starship parts for each of the starships. 
+Check the queries for this page and view the formatted SQL.
+As you can see, it queries from `starship_part`, where `starship_id` equals
+our ID, ordered by `name` ascending: it's exactly the query we want!
 
 ## The N+1 Problem
 
-What's happening here is that we grab the starship at the start and then,
-as soon as we try to count the `ship.parts`, it realises it doesn't have
-that data yet. So it fetches all of the parts for each ship one by one and
-counts them. This quirky situation, where we have one query for the ship
-and then one extra query for every single part, is known as the N+1
-problem. It's a minor performance problem that we're going to tackle later.
-This is a byproduct of Doctrine's cool lazy loading feature. 
+Head back to the homepage and open up its template:
+`templates/main/homepage.html.twig`. After "arrived", add a div
+then print out the part count: `ship.parts|length`. 
+
+Back on the homepage, it works like a charm. Check out the queries for
+this page, they're interesting.
+Some of these look a bit wild because of our pagination, but essentially,
+we have one query for the starship, and if we
+search for `starship_part`, there are 5 extra queries for the parts for each of
+the starships.
+
+Here's what's happening: we grab the starships, then
+as soon as we count `ship.parts`, Doctrine realizes it doesn't have
+that data yet. So it fetches all the parts for each ship one by one and
+counts them. This is a common situation: we have one query for the ships
+and then one extra query for the parts of *each* ship. It's known as the N+1:
+1 query for the starships, and N queries for the parts of each ship. It's a minor
+performance problem that we're going to tackle later.
 
 ## Efficient Querying
 
-The issue here is that we're querying all the data for every
-`starship.part` just to count them. We really don't need the part data, we
-just need to know how many parts we've got. That's a bit like asking for
-the life history of every fish in the sea when you just want to know how
-many there are. A minor issue, unless you have a ship with a ton of parts. 
+But there's a bigger performance issue here: we query for every
+`starship_part` just to *count* them. We don't need the part data, we
+just need to know how *many* we've got. It's a minor issue, until you have a ship
+with a *ton* of parts. 
 
-To fix this, in our `OneToMany` in the Starship entity, we're going to add
-something called `fetch` and we're going to call this `EXTRA_LAZY`. This is
-Doctrine's way of saying "Hey, I'll only fetch the data when I absolutely
-need it". Thus, making our process more efficient. 
+To fix this, in the `OneToMany` in the `Starship` entity, add
+a `fetch` option set to `EXTRA_LAZY`. Let's go see what that did!
 
 ## Counting the Parts
 
-Let's head back to our homepage. Earlier, we had nine queries, but now,
-even though we still have nine, the parts queries have changed. Instead of
-querying for all their data, it just counts how many parts there are. Much
+Head back to the homepage. Earlier, we had nine queries... Now???
+*Still* nine queries, but the query for the parts changed. Instead of
+querying for all their data, it just *counts* the parts. Much
 smarter, right?
 
-You might be wondering, why don't we use `fetch="EXTRA_LAZY"` all the time?
-Well, first, this is a small performance optimization that you don't need
-to worry about unless you have a ship full of parts and just want to count
-them. Second, there are some cases where this might lead to an extra query,
-which is a minor performance issue.
+You might be wondering - I certainly did - why we don't use `fetch="EXTRA_LAZY"`
+all the time? First, this is a small performance optimization that you don't need
+to worry about unless you have a ship *full* of parts and you just want to count
+them. More importantly, depending on if you count or loop over the parts first,
+it could cause an *extra* query.
 
 ## The Criteria System
 
-Now, onto our next challenge! What if we only want the related parts for a
+Onto our next challenge! What if we only want the related parts for a
 ship that cost above a certain price? Can we still use the `ship.parts`
 shortcut or do we need to do a custom query? Stay tuned, we're going to
-explore the criteria system next. Buckle up!
+explore the criteria system next.
