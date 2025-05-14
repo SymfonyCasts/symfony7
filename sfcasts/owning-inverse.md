@@ -1,17 +1,16 @@
 # The Two Sides of a Relation: Owning vs Inverse
 
-Fun fact for your next party: Every
+Fun fact for your upcoming Doctrine taco party: Every
 relationship can be viewed from two different sides. Take
-`Starship` as an example: it has multiple parts, making it a
+`Starship`: it has multiple parts, making it a
 one-to-many relationship from the `Starship` perspective. But, flip the
 telescope around and look from the `StarshipPart` end, and you'll find a
 many-to-one relationship. One of these perspectives is always known as the
-owning side, and the other, the inverse side. 
+"owning" side, and the other, the "inverse" side. 
 
-Now, you might be thinking, "Why do I care about this?"
-Well, stick with me for a three-minute dive: it might just save you from a big
-headache down the road. Plus, you'll have a new bit of trivia to impress your family
-with at your next family holiday. You can thank me later.
+Now, you might be thinking, "Why do I care how the sides are
+named? I need to go feed my cat!" Tell Mittens to chill for three minutes: this might
+just save you from a big headache down the road... and a completely missed meal.
 
 ## The Owning Side Unveiled
 
@@ -23,43 +22,42 @@ entity that will have the foreign key column. In our case, that's
 ## The Importance of Ownership
 
 But why does this *matter*? Two reasons. First, the
-`JoinColumn` can only live on the owning side. That makes sense:
+`JoinColumn` can only live on the owning side. And that makes sense:
 it controls the foreign key column.
-Second, you can only set the *owning side* of the relationship. 
+Second, you can only *set* the *owning side* of the relationship. 
 Let me show you:
 
 Pop open `src/DataFixtures/AppFixtures.php` and let's play a bit:
 `$starship = StarshipFactory::createOne();`. My AI overlord
 was *almost* right. Below this, I'll sprinkle in
-code that creates two `StarshipPart` objects, persist & flush
+code that creates two `StarshipPart` objects, persists & flushes
 them. I haven't set any relations yet, but let's recklessly load the fixtures anyway:
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-And voilà, our favorite error pops up. `starship_id` cannot be null.
-Totally expected.
+Our favorite error pops up. `starship_id` cannot be null. Totally expected.
 
 ## The Owning vs Inverse Side in Action
 
 To demonstrate the owning vs inverse issue, add
 `_real()` to the end of `$starship`. When you create an entity via foundry,
-it actually wraps that in a little gift called a proxy object. This is
-usually inconsequential, but occasionally, it
-can cause some confusion. By calling `_real()`, we can unwrap the
+it actually wraps it in a little gift called a proxy object. This usually
+doesn't matter, but occasionally, it
+can cause some confusion. By calling `_real()`, we unwrap the
 proxy and get the *real* `Starship` object.
 
-Ok: time to connect these parts to this starship. Normally, we'd say
+Time to connect these parts to this starship. Normally, we'd say
 `$part1->setStarship($starship);`, which sets the *owning*
 side. This time try setting the inverse side. That would be
 `$starship->addPart($part1);` and `$starship->addPart($part2);`. 
 
-Now, based on what I just explained, this should not work because we are
+Based on what I just explained, this should not work because we are
 *only* setting the inverse side. But let's roll the dice
 and load the fixtures anyway:
 
-```terminal
+```terminal-silent
 symfony console doctrine:fixtures:load
 ```
 
@@ -69,11 +67,11 @@ But surprise, surprise! No errors. In fact, if you check the database:
 symfony console doctrine:query:sql "SELECT * FROM starship_part"
 ```
 
-Sure enough, there are two new parts each related to a starship.
+Sure enough, we have two new parts each related to a starship.
 
 So, what gives? We just set
 the *inverse* side of the relationship, and it *still* saved to the database.
-That is the opposite of what I just told you!
+That's the opposite of what I just told you!
 
 ## The Plot Twist: Inverse Side Setting the Owning Side
 
@@ -90,7 +88,7 @@ generate the inverse side, and we said yes. That gave us the super convenient
 `$ship->getParts()` method. 
 
 So yes, technically, you can only set the relationship from the owning side (i.e.,
-`$starshipPart->setShip();`), but in practice, you can set it from either
+`$starshipPart->setShip()`), but in practice, you can set it from either
 side thanks to our *own* code that synchronizes *both* sides. So go astound your friends
 with your newfound knowledge, then promptly forget about it: it's not critical
 in practice.

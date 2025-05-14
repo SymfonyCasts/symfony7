@@ -2,14 +2,14 @@
 
 We have a couple of parts and a few starships, but to fill our testing
 data fleet: I want a *lot* more. This is a job perfectly suited for our good
-friend, Foundry. Remove the manual code, then anywhere, say:
-`StarshipPartFactory::createMany(100)` and try the fixtures:
+friend: Foundry. Remove the manual code, then anywhere, say:
+`StarshipPartFactory::createMany(100)`... and try the fixtures:
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-Uh-oh, we hit a snag!
+Uh-oh!
 
 > `starship_id` cannot be null in `starship_part`. 
 
@@ -18,21 +18,20 @@ the `defaults()` method. This is the data passed to each new `StarshipPart`
 when it's created. The golden rule is to make
 `defaults()` return a key for every *required* property on the object.
 Right now, we're obviously missing the `starship` property, so let's
-add that. Set `starship`, *not* `starship_id` to
+add that. Set `starship`, *not* `starship_id`, to
 a nifty method called `Starship::randomOrCreate()` and pass an
 array. 
 
 ## Setting the Stage for Starship Parts
 
-On the homepage, where we're
+On the homepage, we're
 only listing starships with 'in progress' or 'waiting' status. To make sure
-our parts are related to a ship with 'in progress' status,
-add a `status` key to the array set to `StarshipStatusEnum::IN_PROGRESS`.
+these parts are related to a ship with 'in progress' status,
+add a `status` key in the array set to `StarshipStatusEnum::IN_PROGRESS`.
 
-This is
-an impressive method: it first looks in the database to find a
-`Starship` that matches this criteria (an "in progress" ship"). If it finds one,
-it uses that. If it does *not*, it creates one *with* that status.
+This `randomOrCreate()` is an impressive method: it first looks in the database
+to find a `Starship` that matches this criteria (an "in progress" ship"). If it
+finds one, it uses that. If it does *not*, it creates one *with* that status.
 
 Try the fixtures now.
 
@@ -40,16 +39,15 @@ Try the fixtures now.
 symfony console doctrine:fixtures:load
 ```
 
-No errors!
+No errors! Check the database:
 
-Check the database:
 ```terminal
 symfony console doctrine:query:sql "SELECT * FROM starship_part"
 ```
 
-Look closely: we have 100 parts each tied to a random `Starship`, which should
-be a `Starship` with an 'in progress' status. Wow! That's my most
-productive day ever!
+Ok! we have 100 parts each tied to a random `Starship`, which should
+be a `Starship` with an 'in progress' status. I think that was my most
+productive 5 minutes ever!
 
 ## Taking Control in Foundry
 
@@ -67,7 +65,7 @@ Load up those fixtures again.
 symfony console doctrine:fixtures:load
 ```
 
-And voila! All parts are now related to the same *one* ship. And if we query
+And done! All parts are now related to the same *one* ship. And if we query
 the `Starship`s, we have 23: the 20 at the bottom, plus the extra 3 we added.
 Everything's coming together!
 
@@ -91,7 +89,7 @@ symfony console doctrine:query:sql "SELECT * FROM starship"
 Whoa, we suddenly have a fleet! 123 ships to be exact. 
 What happened?
 
-For each part, `defaults()` is called. So for all 100
+For *each* part, `defaults()` is called. So for all 100
 parts, it's triggering this line, which creates and saves a `Starship`, even
 though we never use that `Starship` because we override it moments
 later.
@@ -104,22 +102,25 @@ database. Try it:
 symfony console doctrine:fixtures:load
 ```
 
-Query the ships. Perfect! We're back to 23. 
+Query the ships.
 
 ```terminal-silent
 symfony console doctrine:query:sql "SELECT * FROM starship"
 ```
 
+Perfect! We're back to 23. 
+
 ## Factories are Object Recipes
 
 Fun fact! We can use these factory instances like *recipes* for creating objects.
-`Starship::new(['status' => StarshipStatusEnum::STATUS_IN_PROGRESS])`
-doesn't actually create an object in the database. Nope: `new()` means a new
-instance of the factory, not a new object in the database. And when you pass a
-*factory* for a property, Foundry delays creating the
-object until and if it's needed. Only if the `Starship` is *not* overridden will it
-create a new `Starship` with status "in progress" and save it. This is the best-practice
-when setting relationships in Foundry: set them to a factory instance.
+`StarshipFactory::new(['status' => StarshipStatusEnum::STATUS_IN_PROGRESS])`
+does *not* create an object in the database. Nope: `new()` means a new
+instance of the factory. And when you pass a
+*factory* for a property, Foundry delays creating that
+object until and if it's needed. So, only if the `Starship` is *not* overridden
+will it create a new `Starship` with status "in progress" and save it. This is
+actually the best-practice when setting relationships in Foundry: set them to a
+factory instance.
 
 Clean up our fixtures by removing the override and... switch back to
 `randomOrCreate()` because, let's be honest, it's a pretty useful method.
