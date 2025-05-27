@@ -64,4 +64,4 @@ time, I'm not using `ship.part`, but the *other* side of the relationship,
 `part.ship.name`. Oops, my bad, it should be `part.starship.name`. And...
 got it! 
 
-Next up, we'll be talking about joins. So, join me! Sorry, I couldn't resist.
+Next up, we'll be talking about joins. Join me! Sorry: couldn't resist.
