@@ -1,46 +1,43 @@
-# Criteria
+# The Clever Criteria System
 
-Coming soon...
-
-## Finding the Pricey Parts: An Adventure in Methods
-
-Alright, my fellow code-wranglers, let's imagine we're whizzing through
-space in our trusty starship. We've got this super handy
-`$ship->getParts()` method that gives us the low-down on every piece of kit
-on our vessel. But what if we're not interested in the cheap nuts and
-bolts? What if we want to know about the high-end stuff, the parts that
-cost more than 50,000 credits?
+We've got this super handy
+`$ship->getParts()` method that gives us a way to find *every* part
+for our starship. But the fiscal year is coming to a close, and we need to
+plan our budget. *Boring*, but necessary: our Ferengi bosses demand it!
+Most parts on our ship are cheap, like the nuts and bolts and duct tape that hold
+everything together. We're not really worried about those.
+Instead I want to quickly return all of our ship's parts that
+cost more than 50,000 credits.
 
 Sure, we could do a fresh query in our controller for all the starship
 parts related to the ship where the price is greater than 50,000. But
-where's the fun in that? Let's stick with our trusty `$ship->getParts()`
-methods. They're as easy as pie, and I do love me some pie. 
+where's the fun in that? I wanto to stick with our easy `$ship->getParts()`
+shortcut. Is that possible?
 
-## The Birth of getExpensiveParts() 
+## Adding getExpensiveParts() 
 
-Jump into the `Starship` class and look for the `getParts` method. I'm
-going to copy that method, paste it right below, and rename it to
-`getExpensiveParts()`. For now, let's have it return all the parts. 
+Jump into the `Starship` class and look for the `getParts()` method.
+Copy that method, paste it below, and rename it to
+`getExpensiveParts()`. For now, return all the parts. 
 
-Back on our show template, let's take this baby for a spin. Change 'parts'
-to 'expensive parts' and then call `$ship->getExpensiveParts()`. Even
-though there's no `expensiveParts` property, it's going to call the
-`getExpensiveParts()` method we just crafted. 
+Back in our show template, let's take this baby for a spin. Change `parts`
+to `expensiveParts`. There's no`expensiveParts` property, but this will
+call the `getExpensiveParts()` method we just crafted. 
 
-## Filtering Out the Cheap Stuff
+## Filtering Out the Cheap Stuff:
 
-Now let's make our new method return only the expensive parts. Remember,
-`$this->parts` isn't an array – it's a special collection object with a
-few tricks up its sleeve. One of these is the `filter()` method. This nifty
-little function calls a callback for every single part. If we return true,
+Time to make our method return only the expensive parts. Remember:
+`$this->parts` isn't an array – it's a special Collection object with a
+few tricks up its sleeve. One of these is the `filter()` method. This executes
+a callback for every part. If we return true,
 it includes that part in the final collection. If we return false, it
 filters it out. So we can just say `return $part->getPrice() > 50000;`.
 
-However, this isn't the most efficient way to do things. We're still
-querying for every single part that relates to our starship, then filtering
-that in PHP. That's like trying to find a diamond in a coal mine. What we
-really want to do is change the query itself, so Doctrine grabs only the
-parts related to the starship where the price is greater than 50,000. 
+Done! Except... this is super inefficient. We're still
+querying for *every* part related to our starship, then filtering
+that in PHP. What a waste! Could we ask Doctrine to change the query itself, so
+it only grabs the parts related to the starship where the price is greater than
+50,000?
 
 ## The Power of the Criteria Object
 

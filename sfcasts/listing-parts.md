@@ -1,97 +1,67 @@
 # Listing Parts
 
-Coming soon...
+New mission: we need a page that lists *all* the parts available.
+Our Ferengi sales team will use this for som classic upselling. You know,
+the usual: "Hey, you just bought a starship, how about some shiny new
+dilithium crystal organizers or cupholder stabilizers?"
 
-## Lights, Camera, Action: Creating a New Page
-
-Alright my coding comrades, time to roll up our sleeves and dive in. Our
-mission? Creating a brand new Parts List page. Now, we're going to be a
-little sneaky about this — we're going to use `MakerBundle` to give us a
-little head start. It's like having a cheat code in a video game, but don't
-worry, we've got the skills to back it up. So, find a console and run
-`Trident Terminal`, then run `Symfony Console`. And we'll let `Make
-Controller` do its thing.
+Let's use MakerBundle to give us a head start. Find your terminal and run
 
 ```terminal
-Symfony Console Make Controller
+symfony console make:controller
 ```
 
-Our new controller is going to be the big shot, let's call it
-`PartController`. And just to keep things focused, we'll say no to tests
-for this tutorial. We're all about the action today!
+Call it... wait for it... `PartController`. Brilliant!
+To keep things focused, say no to tests.
 
-## A Quick Peek at Our New Class
+Voila! One class and one template. So far, so good. Take a peek at
+the new `PartController`. Not much to see: it renders a template.
 
-Voila! One class and one template. So far, so good. Let's go take a peek at
-our new `PartController`. Right now, there's not much to see, just a simple
-template rendering. But we're about to jazz this up. 
+Change the URL to `/parts`, and rename it to `app_part_index`.
+Copy the route name so we can link to it... and open up
+`base.html.twig`.
 
-Let's change the URL to be `/parts`, and rename it to `App Part Index`.
-This is going to be our go-to page for all things parts related. Copy that
-route name because we're going to add a shiny new link to this in our
-header.
+## Linking to the Parts Page
 
-## Sprucing up Our Header
-
-Alright, brace yourself, it's time to transform `base.html.twig`. Remember
-that about link that's just sitting there doing nothing? Let's commandeer
-that and turn it into our fabulous new parts link. And of course, the href
-is going to be `{{ path('app_part_index') }}`.
-
-```terminal
-base.html.twig {{ path('app_part_index') }}
-```
+Remember that "about" link that's sitting there doing nothing? Commandeer
+that and turn it into a "Parts" link. Set the `href` to 
+`{{ path('app_part_index') }}`. 
 
 Head to the homepage, click our newly minted link, and... well, it's not
-the prettiest sight, but it works! 
+the prettiest sight, but it works!
 
-## The Power of a Good Title
-
-Let's not celebrate just yet though, we need to change the title from the
-rather uninspiring `Hello PartController`. So, let's open up templates,
-`PartIndex.html.twig`. We're already overriding the title block, so let's
-make it something much sexier — let's call it 'parts'. Ah, much better.
-
-```terminal
-PartIndex.html.twig
-```
+Before we celebrate, we should change the title from the
+rather uninspiring `Hello PartController`. Open up `templates/part/index.html.twig`
+We're already overriding the `title` block, so let's make it
+something exciting like `Parts`.
 
 ## Adding Some Substance: Looping Over Parts
 
-Now, we're going to need to loop over all the parts and print them out. So,
-instead of `PartController`, we're going to need a query for all the parts.
+To loop over the parts, we need to fetch them from the database.
+In `PartController`, we're going to need a query for all the parts.
 
- For this, we'll need the `Starship Part Repository`. Let's add a
-`StarshipPartRepository` argument here and auto-wire that in. Let's call it
-repository for short. And to get all the parts — it's super simple:
-`parts = repository->findAll()`. 
+`StarshipPartRepository` argument here to auto-wire that in. Call it
+whatever you want, like `$leeroyJenkins` or `$repository`. To get all the parts — it's
+simple: `$parts = repository->findAll()`.
 
-```terminal
-StarshipPartRepository parts = repository->findAll()
-```
+## Printing Parts in the Template
 
-## Making it Look Nice
+Now that we have this `parts` variable in our template, we can loop over it.
+To spice things up, I'll paste in this template: it's just a bunch of stuff to make
+it look nice. You can get this code from the code block on this page.
 
-Now that we have this parts variable in our template, we can loop over it
-and start printing out information. To spice things up, I'm going to paste
-in this template, it's just a bunch of stuff to make it look nice. 
-
-Refresh, and voila, much better! 
+Refresh, and... so much better! 
 
 ## A Little Trick: Using the Cycle Function
 
-One interesting thing I'm using here is the `cycle` function. I wanted to
-give each gear a random color to make it look more appealing. The `cycle`
-function lets you pass a bunch of strings, and then `loop.index 0` cycles
-through them, giving us a nice effect of having different gear icons for
-each of the parts. It's a small touch, but adds a little bit of flair.
+One interesting thing I'm using here is the `cycle()` function. I wanted to
+give each gear a random color to make it look more appealing. The `cycle()`
+function lets us pass a bunch of strings, and then `loop.index 0` cycles
+through them, It's a small touch, but adds a little bit of flair.
 
-## Wrapping Up
-
-Lastly, let's replace `assign to ship name` with `{{ part.ship }}`. This
-time, I'm not using `ship.part`, but the other side of the relationship,
+Lastly, replace `ASSIGNED TO SHIP NAME` with `{{ part.ship }}` - this
+time, I'm not using `ship.part`, but the *other* side of the relationship,
 `part.ship.name`. Oops, my bad, it should be `part.starship.name`. And...
 got it! 
 
-Alright, that's it for now. Next up, we'll be talking about joins. So, stay
-tuned!
+Next up, we'll be talking about joins. So, join me! Sorry, I couldn't resist.
