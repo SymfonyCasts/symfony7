@@ -1,46 +1,40 @@
-# Request Search
+# Adding a Search + the Request Object
 
-Coming soon...
-
-## The Joy of Search Bars
-
-Alright, let's take a fun detour away from Doctrine Relationships. I know,
+Let's take a quick, but useful, detour away from Doctrine Relationships. I know,
 I know, you're wondering why we would ever want to leave such a thrilling
 topic. Well, we're going to spice things up by adding a search bar to our
 page. Just trust me on this one, it's going to be good.
 
-First, let's pop open our `index.html.twig` template. Right at the top, I'm
-going to paste in a search input. Nothing too fancy here, just an `input
-type equals text, placeholder equals search`, and then a smattering of
-classes and a swanky SVG to make it look all pretty and professional. 
+First, pop open the `index.html.twig` template. Right at the top, I'm
+going to paste in a search input. Nothing too fancy here, just an 
+`<input type="text" "placeholder="search"`, and then a smattering of
+classes and a swanky SVG to make it look all pretty. 
 
-```html <input type="text" placeholder="search" class="..."> ```
-
-Now, to actually let this bad boy submit, we need to wrap it in a form tag.
-So, we'll go with `form equals`, and for the action, we're going to have
-this submit right back to this page. We'll use `{{ path('app_part_index')
-}}` for that. Also, let's add a `name="query"`. And because this is a
-search form, we want any of our fields to show up in the URL. So, we're
-going to say `method equals git`.
+To let this bad boy submit, we need to wrap it in a `form` tag.
+For the action, have it submit right back to this page:
+`{{ path('app_part_index') }}`. Also, add a `name="query"` and
+method="get" to the form. This way, when we submit the form, it will
+append the search query to the URL as a query parameter.
 
 ## Getting the Request
 
-Now let's head over to our `PartController.php` and add the `Request`
-object as an argument to your controller. You might remember that you can
-auto-wire services. While the `Request` object is not technically a
-service, Symfony is cool enough to let it be auto-wired anyway. So, grab
-the one from `Symfony\Component\HttpFoundation\Request`, and you can call
-this anything, but let's stick with `Request` because, well, it's pretty
-self-explanatory. 
+Next, head over to `PartController`. How do we read the `name`
+query parameter from the URL? Well, that is information from the request,
+just like request headers or POST data. Symfony packages all of that
+up in a `Request` object. How do we get that? In a controller, it's
+super easy. Add a `Request` argument to your controller method.
 
-```php $query = $request->query->get('query'); ```
+You probably remember that you can autowire services like this. The `Request`
+object isn't *technically* a service, but Symfony is cool enough to let it be
+autowired anyway. Grab the one from `Symfony\Component\HttpFoundation\Request`.
+You can call it anything, but to stay sane, let's call it `$request`.
 
-Just to make sure this is working, let's `dd($query);` and see what we got.
-Ah, look at that! It's the string 'holodeck'. 
+To make sure this is working, `dd($query)`. Spin over and try it out.
+Look at that! It's the string 'holodeck'. 
 
 ## Enhancing the Search
 
-Next, we're going to pimp our `findAllOrderedByPrice` function to allow for
+Next, we're going to improve our `findAllOrderedByPrice` function to allow for
 a search. We can get rid of our `dd($query);` and pass the query right into
 our method. 
 
