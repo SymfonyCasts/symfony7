@@ -34,56 +34,45 @@ Look at that! It's the string 'holodeck'.
 
 ## Enhancing the Search
 
-Next, we're going to improve our `findAllOrderedByPrice` function to allow for
-a search. We can get rid of our `dd($query);` and pass the query right into
-our method. 
+Next, let's improve the `findAllOrderedByPrice` method to allow for
+a search. Remove the `dd($query);` and pass it into
+the method. 
 
-```php StarshipPartRepository::findAllOrderedByPrice($query) ```
+Break this into multiple lines and add an `if`
+statement. Also going to change the return to `$qb = $this->createQueryBuilder('sp');`
+and get rid of the `getQuery()` and
+`getResuls()`: we only want the `QueryBuilder` for now.
 
-We're going to have to break this into multiple lines and add an `if`
-statement. We're also going to change the return to `$qb =
-$this->createQueryBuilder('sp');` and get rid of the `getQuery()` and
-`getResults()`, because we only want the `QueryBuilder` for now.
-
-Now the magic happens. If we have a search, we're going to add a `andWhere`
+Now for the magic. If we have a search, add an `andWhere()`
 clause that checks if the lower case name of our Starship part is like our
-search. I know it looks a bit funky, but bear with me, that's how it's
-done. 
+search. I know it looks a bit funky, but that's because PostgreSQL is
+case-sensitive.
 
-```php if ($search) {     $qb->andWhere('LOWER(sp.name) LIKE
-:search')->setParameter('search', '%'.strtolower($search).'%'); } ```
-
-Finally, we'll return our query results. 
-
-```php return $qb->getQuery()->getResult(); ```
+Finally, we'll return the query result. 
 
 ## Preserving the Search Value
 
-One thing you might notice is that we kind of lose our search value after a
+You might notice is that we kind of lose our search value after a
 search. We don't see 'holodeck' in there anymore, and that's just rude.
-Let's fix that. Back in our template, we're going to add a `value="{{
-app.request.query.get('query') }}"`. 
+Let's fix that. Back in our template, add a
+`value="{{ app.request.query.get('query') }}"`. 
 
 ## Searching on Multiple Fields
 
 Now, wouldn't it be great to also search on the notes? Let's say I search
 for 'controls'. Right now, nothing shows up. So, I want to search on the
-notes but also on the name. 
+name *and* the notes.
 
-We're going to need to use some `or` logic here. Back in our repository,
-we're going to add an `or` to our `andWhere` clause. You might be tempted
-to use `orWhere`, but let's not do that. It can get a bit confusing with
-the logical parentheses. Trust me, you'll thank me later. Instead, we can
-use `andWhere` and put the `or` right inside.
-
-```php $qb->andWhere('LOWER(sp.name) LIKE :search OR LOWER(sp.notes) LIKE
-:search') ```
+We need to use some `OR` logic. Back in our repository,
+add an `OR` to the `andWhere()` clause. You might be tempted
+to use `orWhere()`, but that's a trap! You can't guarantee where
+the logical parentheses will be. Trust me, you'll thank me later. Instead,
+use `andWhere()` and put the `OR` right inside.
 
 And there we have it! We can now search on the notes, on the name, or both.
-The key takeaway here is when you want to use `orWhere`, embed it inside an
-`andWhere`, and you'll have full control over where the logical parentheses
+The takeaway is when you want to use `orWhere()`, don't: embed the `OR`
+inside an `andWhere()`, and you'll have full control over where the logical parentheses
 go.
 
 Alright, with that exciting detour complete, let's head back on track and
-talk about the final relationship type, many to many. Strap in, it's going
-to be a wild ride!
+talk about the final relationship type, many to many.
