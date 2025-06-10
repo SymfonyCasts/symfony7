@@ -5,7 +5,7 @@ corner, we have the `Starship` entity, which is linked via a
 `ManyToMany` relationship with the `Droid` entity. This
 relationship gives us an extra table called a "join table"
 keeping track of which droids have hitched a ride on which starships. But
-how do we assign a `Droid` to a `Starship`? Jump into our `AppFixtures`.
+how do we assign a `Droid` to a `Starship`? Jump into `AppFixtures`.
 
 ## Adding some droids
 
@@ -22,37 +22,42 @@ relate these two entities is surprisingly simple, and it's going to feel
 like a déjà vu from our `OneToMany` relationship. I bet you can even
 guess!
 
-Before the `flush()` add: `$starship->addDroid($droid1)`.
-Easy, right? Do the same for the other two droids — `$tarship->addDroid($droid2)` and
+Before the `flush()` it's: `$starship->addDroid($droid1)`.
+Do the same for the other two droids — `$starship->addDroid($droid2)` and
 `$starship->addDroid($droid3)`.
 
-We've done it! The crew is ready for their droid pancakes, so let's try this!
+The crew is ready for their droid-made pancakes, so let's try this!
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-Cool, no errors. To see if it's really working, run:
+No errors. To see if it's really working, run:
 
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM droid'
 ```
 
-As expected, we have three rows, one for each droid we created.
-Now, peek at that join table, `starship_droid`. Woot! Three rows, one for
-each droid assignment.
+As expected: three rows, one for each droid we created.
+Now, peek at that join table, `starship_droid`.
+
+```terminal-silent
+symfony console doctrine:query:sql 'SELECT * FROM starship_droid'
+```
+
+Woot! Three rows, one for each droid to ship assignment.
 
 ## The Magic of Doctrine
 
-The real magic is that with `Doctrine`, all we need to worry about is
-relating a `Droid` object to a `Starship` object. Doctrine takes care of the rest,
-handling the adding *and* deletion of rows in the join table. 
+The real magic is that with Doctrine, all we need to worry about is
+relating a `Droid` object to a `Starship` object. Then, it takes care
+of the rest, handling the inserting *and* deleting of rows in the join table. 
 
 After the flush, we know we have three rows in the join table.
-*Now*, after the flush, removing an assignment:
+*Now*, after the flush, remove an assignment:
 `$starship->removeDroid($droid1)`. 
 
-Reload the fixtures and check out our join table.
+Reload the fixtures and check out the join table.
 
 ```terminal-silent
 symfony console doctrine:query:sql 'SELECT * FROM droid'
@@ -64,17 +69,17 @@ Only two rows remain! Doctrine *removed* the row for our removed droid.
 
 One final touch on `ManyToMany` — remember when we discussed owning
 versus inverse sides of a relationship? As we saw, our methods synchronize
-the other side of the relationship, adding the `Droid` when we call
-`addDroid()`. So the owning side doesn't matter much.
+the other side of the relationship, adding the `Droid` to the `Starship`
+when we call `addDroid()`. So the owning side doesn't matter much.
 
 But which side *is* the owning side? In a `ManyToMany`, either side
 *could* be the owning side. 
 
-To figure out who's the boss, look at the `inverseBy`
-option. It says `ManyToMany` and `inverseBy: starships`, which means
+To figure out who's the boss, look at the `inversedBy`
+option. It says `ManyToMany` and `inversedBy: starships`, which means
 that the `Droid.starships` property is the *inverse* side. 
 
-Now, this is mostly trivia, but if you're a control freak and want to
+Now, this is mostly trivial, but if you're a control freak and want to
 dictate the name of the join table, you can add a `JoinTable` attribute.
 But remember, it has to go on the owning side. Other than that, don't sweat
 it: no big deal.

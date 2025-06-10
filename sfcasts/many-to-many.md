@@ -1,60 +1,55 @@
 # Many-To-Many Relationship
 
 Alrighty, we've got a `Starship` entity and a `Droid`
-entity set up and ready to mingle. But how do we get these two
+entity set up and ready to mingle. How do we get these two
 entities to connect?
 
 Picture it this way: Each `Starship` is going to need a crew of `Droids` to keep
 things running smoothly... and for the occasional comic relief.
 Each `Droid`, in turn, should be able to serve on many `Starships`. Forget
-about the database for a second, and just focus on the objects. Our `Starship`
+about the database and just focus on the objects. Our `Starship`
 entity needs a `droids` property that holds a collection of all
 the `Droid`s assigned to it.
 
-Head back to your Symfony console and run:
+Cool! Head back to your terminal and run:
 
 ```terminal
 symfony console make:entity
 ```
 
-## Creating a Galactic Social Network
-
 Update `Starship` and add a `droids` property. Use "relation" to get into
-our handy wizard. This time, we need a `ManyToMany` relationship:
+the handy wizard. This time, we need a `ManyToMany` relationship:
 each `Starship` can have many `Droids`, and each `Droid` can serve on many
 `Starships`. That sounds perfect!
 
-Next, it'll ask us if we want to map the inverse side of the relationship.
-This is basically asking if we want to give our `Droids` the ability to
-list all the `Starships` they're connected to – `$droid->getShips()`.
-Sounds useful, right? Let's go ahead and say yes. For the new field name
-inside a `Droid`, `ships` will do just fine. 
+Next, it asks us if we want to map the *inverse* side of the relationship.
+This is asking if we want to give our `Droids` the ability to
+list all the `Starships` they're connected to: `$droid->getShips()`.
+That sounds useful. So let's say yes. For the new field name
+inside `Droid`, `ships` will do just fine. 
 
-Notice it's updated *both* the `Starship` and
-`Droid` entities. Take a peek at the changes in each.
+Notice it's updated *both* `Starship` and
+`Droid`. Take a peek at the changes in each.
 
 ## The 'ManyToMany' Magic
 
 In `Starship`, we now have a new `droids` property, which is a
 `ManyToMany`. It also initialized `droids` to the `ArrayCollection` and
 added `getDroids()`, `addDroid()`, and `removeDroid()` methods. If you're
-thinking this looks a lot like a `OneToMany` relationship, give yourself a
-pat on the back. You're spot on!
+thinking this looks a lot like a `OneToMany` relationship, ding, ding! Order
+yourself a pizza! Because it totally is!
 
 Over in `Droid`, it's a similar story. We have a `ships` property, which is
 a `ManyToMany`, and it's initialized in the constructor. Then we have the same
 `getStarships()`, `addStarship()`, and `removeStarship()`. 
 
-Go ahead and generate the migration for this. Back to the console
-and run:
+Generate the migration for this. Go back to the terminal and run:
 
 ```terminal
 symfony console make:migration
 ```
 
 ## Unveiling the Join Table
-
-HERE
 
 Marvelous! Take a peek at what it generated: it's fascinating. We have a new
 table called `starship_droid`! It features a `starship_id` foreign key to
@@ -65,13 +60,12 @@ The real magic of Doctrine is that we only need to think about objects. A
 `Starship` objects. Doctrine handles the tedious details of saving that relationship
 to the database.
 
-Before we move on, run that migration. Spin back to the terminal,
-run:
+Before we move on, run that migration. Spin back to the terminal and do it:
 
 ```terminal
 symfony console doctrine:migrations:migrate
 ```
 
-And voilà, we have our shiny new join table. Cool, but how
+Cool! We now have a shiny new join table. Ok... but how
 do we *relate* `Droid` objects to `Starship` objects? That's
 next... and you're gonna love it!
