@@ -56,23 +56,22 @@ symfony console make:migration
 
 HERE
 
-Marvelous! Take a peek at what it generated: it's fascinating. We've got a new
-table called `starship_droid`, which features
-a `starship_id` foreign key and a `droid_id` foreign key. This is how you
-structure a `ManyToMany` relationship in the database, with a join table.
+Marvelous! Take a peek at what it generated: it's fascinating. We have a new
+table called `starship_droid`! It features a `starship_id` foreign key to
+`starship` and a `droid_id` foreign key to `droid`. This is how you
+structure a `ManyToMany` relationship in the database: with a join table.
 The real magic of Doctrine is that we only need to think about objects. A
 `Starship` object has many `Droid` objects, and a `Droid` object has many
-`Starship` objects. Doctrine is like our own personal droid, taking care of
-all the tedious details of saving that relationship to the database.
+`Starship` objects. Doctrine handles the tedious details of saving that relationship
+to the database.
 
-Before we move on, let's run that migration. Back to the Symfony console,
-and let's run:
+Before we move on, run that migration. Spin back to the terminal,
+run:
 
 ```terminal
-doctrine migrations:migrate
+symfony console doctrine:migrations:migrate
 ```
 
-And voila, we have our shiny new join table. Now, the burning question: How
-do we actually relate `Droids` to `Starship` objects? Well, my friends,
-that's the adventure we're about to embark on next. Let's see how this all
-saves into the database.
+And voilà, we have our shiny new join table. Cool, but how
+do we *relate* `Droid` objects to `Starship` objects? That's
+next... and you're gonna love it!
