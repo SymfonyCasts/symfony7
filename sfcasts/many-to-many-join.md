@@ -1,10 +1,10 @@
 # Joining Across a Many-to-Many Relationship
 
-Ever wondered which starship in your fleet is crawling with the most
+Ever wondered which starship in our fleet is crawling with the most
 droids? Me too! So let's find out! I want to list every ship in descending
 order based on their droid count.
 
-Dive into `src/Controller/MainController.php`. Our query is:
+Dive into `src/Controller/MainController.php`. The query is:
 
 ```terminal
 $ships = $repository->findIncomplete()
@@ -23,7 +23,7 @@ join across the join table all the way to `droid`, group by
 nice!
 
 In `StarshipRepository`, add a left join. But we're not going to think about
-the join table or database. Nope, focus only on the *relationships* in Doctrine.
+the join table or the database. Nope, focus only on the *relationships* in Doctrine.
 So we're joining across `s`, which is our starship, and `droids`, the property
 that has the ManyToMany relationship to `Droid`. Finally, we alias
 those droids as `droid`.
@@ -35,18 +35,18 @@ To order replace the existing `orderBy` with
 
 After that, hit refresh and boom! At the top, you'll see `droids none`. But
 as you scroll down, the droid count increases. If you're brave enough to
-venture a couple of pages ahead, you'll start seeing starships with two,
+venture a few pages ahead, we start to see starships with two,
 three, or even four droids!
 
-The key here? There's nothing special about this join. We join across the
-property and Doctrine handles the rest.
+The key? There's nothing special about this join. We join across the
+*property* and Doctrine handles the rest.
 
 If you peek at the query on this page, you'll see it's
 handling all the details. Search for `starship_droid` to find the query. 
-This is ugly, but if you format the query, we see that it selects from `starship`,
+This is ugly, but if you format the query, it selects from `starship`,
 taking care of the join over to the
-join table, joining again over to `droid`, and allowing us to count and
-order by the count *on* that `droid` table. Impressive Doctrine, impressive.
+join table and joining again over to `droid`, That allows us to count and
+order by that count *on* that `droid` table. Impressive Doctrine, impressive.
 
 That's *technically* it for ManyToMany! But next we're going to handle
 a more advanced, but still common, use case: adding data to the join

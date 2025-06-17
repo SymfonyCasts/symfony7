@@ -1,8 +1,6 @@
-# Join Entity
+# Many-to-Many but with Extra Data
 
 Coming soon...
-
-## The Intricacies of Many-to-Many Relationships in Doctrine
 
 Let's dive into the unique world of many-to-many relationships in Doctrine.
 Imagine we have a table in our database, say `StarshipDroid`. Now, here's
