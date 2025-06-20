@@ -56,31 +56,29 @@ symfony console doctrine:query:sql "SELECT * from starship_droid"
 ```
 
 We're selecting from that join table and yes! One entry
-for the one `Starship`, and the one `droid`. So far, so good. Refresh the
-homepage. Oh dear, another error! It's `[Semantical Error] line 0, col 55
-near 'droids WHERE': Error: Class App\Entity\Starship has no association
+for the one `Starship`, and the one `Droid`. So far, so good. Refresh the
+homepage. Another error! `[Semantical Error] line 0, col 55
+near 'droids WHERE': Class App\Entity\Starship has no association
 named droids`. Looks like we've got a query issue on our hands.
 
 ## Fixing the Query Issue
 
 Time to roll up our sleeves and dive into
-`src/repository/StarshipRepository`. Our join here is having a bit of a
-meltdown. We're joining at `s.droids`, but `droids` property has left the
-building. We need to join on `StarshipDroids`. So let's change `s.droids`
-to `s.starship. StarshipDroids`. And for clarity, let's call it
-`StarshipDroid`, because that's what it really is. I like to keep things
-singular, so we'll stick with `StarshipDroid` and simply count them instead
+`src/Repository/StarshipRepository`. Our join is having a bit of a
+meltdown. We're joining on `s.droids`, but the `droids` property has left the
+building. We need to join on `starshipDroids`. Change `s.droids`
+to `s.starshipDroids`. And for clarity, call it
+`starshipDroid`, because that's what it really is. Now count *them* instead
 of the nonexistent `droids`.
 
-With that sorted, we'll refresh the homepage and... we've got another
-error. It's `Warning: Undefined property: App\Entity\Starship::$droids`.
-This is coming from our `ship.droidNames` in the homepage template. We know
-that when we call `ship.droidNames`, it's calling
-`StarshipArrowGetDroidNames` and we're still referencing the ghost of the
+With that sorted, we'll refresh the homepage and... *another()
+error! It's `Warning: Undefined property: App\Entity\Starship::$droids`.
+This is coming from `ship.droidNames` in the homepage template. We know
+that when we call `ship.droidNames`, it calls
+`$starship->getDroidNames()` and we're still referencing the
 `droids` property.
 
 ## Making Magic Happen
 
-Now, let's sprinkle some Symfony magic dust. We'll fix this in a way where
-we only have to make changes in one file, and the rest of our application
-will just start working. Now that's what I call coding magic!
+Next, we're going to *hide* the join entity and make this work exactly
+like the ManyToMany relationship we had before. Magic!
