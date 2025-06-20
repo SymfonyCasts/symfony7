@@ -1,56 +1,62 @@
-# Persist Join Entity
+# Persisting the More Complex Many-to-Many Relationship
 
-Coming soon...
+We refactored our many-to-many relationship to include a join entity
+called `StarshipDroid`, instead of relying on Doctrine to create
+the join table for us. Reload our fixtures, but hold on to your
+hats:
 
-## Fixing the Error Caused by Refactoring
+```terminal-silent
+symfony console doctrine:fixtures:load
+```
 
-Alrighty folks, our Symfony journey continues! After we've dutifully
-refactored our many-to-many relationship to include a join entity called
-`StarshipDroid`, we're going to reload our fixtures. Hold onto your hats,
-here comes an error! We're greeted with an `Undefined property:
-App\Entity\Starship::$droids` message. This error is being spat out from
-`StarshipLine205`. The culprit? It's our `getDroids()` method. 
+Error!
 
-You might be wondering, "Why is that?" Well, let me shed some light on it.
-Think of our `Starship` as a spaceship carrier that's trying to figure out
-how many droids it has. When we're linking the droids to the `Starship` in
-the fixtures, `StarshipArrow getDroids()` gets called behind the scenes.
-It's like a roll call for droids. But, we've still got a reference to a
-phantom property which no longer exists, so naturally, it's going to trip
-up. The quick fix? We're going to comment it out and huzzah! The fixtures
-are back in action.
+> Undefined property: `App\Entity\Starship::$droids`
 
-## Creating Objects by Hand
+This error is being spat out from`Starship` line 205. The culprit? Our
+`getDroids()` method. Well duh, we just removed the `droids` property!
+The quick fix, duh again, just comment it out. And huzzah! The fixtures
+are back in action:
 
-Now, to really drive home what changed here and what's causing our problem,
-I'm going to create a couple of objects by hand. It's like digital origami.
-We'll start by declaring `ship` equals `StarshipVector`. We could use
-`crate1`, but let's mix things up and grab a random one. And just to keep
-things crystal clear, we're going to use the underscore real trick so we
-have the real McCoy, not some shadowy proxy. We'll rinse and repeat to grab
-a droid with `droid` equals `droidFactory`, grabbing a random one again and
-calling `real()` on that.
+```terminal-silent
+symfony console doctrine:fixtures:load
+```
 
-## Highlighting the Key Change
+## Creating the Join Entity
 
-Here's where the plot thickens. Previously, we could use `shipArrow
-addDroidDroid` with no issues. Now, it's as useful as a chocolate teapot.
-Why? Because it's referencing the obsolete `droids` property. It's now
-called `StarshipDroids`, and as you might've guessed, it's just a join
-entity. This means we need to get a little more hands-on. It's like
-swapping out an auto-pilot for a manual control stick. We'll ditch
-`shipArrow addDroid` and instead declare `StarshipDroid` equals new
-`StarshipDroid`, then `StarshipDroidArrowSetDroid`, not `ship` but `droid`.
-Next, we'll set `StarshipDroidArrowSetStarship` to `ship`. We're manually
-creating this entity and setting up those many-to-one relationships. And
-finally, since we're assembling these by hand, we need to persist and flush
-them using `managerArrow persist StarshipDroid`, and `managerArrow flush`.
+To discover the right fix, let's do a few things manually:
+`$ship = StarshipFactory`, we could use `createOne()`, but let's
+grab a random one instead. Also use the `_real()` trick to get
+grab the actual object, not a proxy. Then we'll do the same for
+`$droid = DroidFactory`, again grabbing a random one and calling
+`_real()` on that.
 
-Sure, it's a bit of work, but think of it as a simple, somewhat dull, but
-necessary pit stop on our Symfony road trip. Give the fixtures a spin and
-let's peek at the database with `doctrine query SQL`, `select star from
-StarshipDroid`. We're selecting from that join table and voila! One entry
-for one `Starship`, and one `droid`. So far, so good. Let's refresh the
+## Relating via the Join Entity
+
+Previously, we could use `$ship->addDroid($droid)` to add a droid to a
+But not anymore! It's referencing the obsolete `droids` property.
+It's now called `starshipDroids`, and as you might've guessed, it's a
+collection of `StarshipDroid` entities. Ditch
+`$ship->addDroid()` and instead say `$starshipDroid` equals new
+`new StarshipDroid()`, then `$starshipDroid->setDroid()`, not `$ship` but `$droid`.
+And set `$starshipDroid->setStarship($ship)`.
+We're manually creating the entity and setting those many-to-one relationships.
+Finally, because we're assembling these by hand, we need to persist and flush
+them using `$manager->persist($starshipDroid)`, and `$manager->flush()`.
+
+It's definitely more work, but it's simple enough. Give the fixtures a spin:
+```terminal-silent
+symfony console doctrine:fixtures:load
+```
+
+And peek at the database with:
+
+```terminal-silent
+symfony console doctrine:query:sql "SELECT * from starship_droid"
+```
+
+We're selecting from that join table and yes! One entry
+for the one `Starship`, and the one `droid`. So far, so good. Refresh the
 homepage. Oh dear, another error! It's `[Semantical Error] line 0, col 55
 near 'droids WHERE': Error: Class App\Entity\Starship has no association
 named droids`. Looks like we've got a query issue on our hands.
