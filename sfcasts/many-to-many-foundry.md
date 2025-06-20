@@ -13,13 +13,13 @@ Zoom to the bottom where we create `starships` and
 `DroidFactory::createMany(100)`. 
 
 Below, set `droids` to `DroidFactory::randomRange(1, 5)`. This will assign
-anywhere between 1 to 5 random `droids` to each `Starship`.
+anywhere between 1 and 5 random `droids` to each `Starship`.
 
 ## The Magic of Symfony
 
 Maybe you noticed something: we're setting a `droids` property here, but in
 `Starship`, we do *not* have a `setDroids()` method! Normally,
-this would trigger an angry error message. But it *will* work!
+this would trigger an angry error. But it *will* work!
 Foundry sees that we have an `addDroid()` method, and it calls *that* instead,
 one-by-one for each `Droid`.
 
@@ -49,7 +49,7 @@ It should look like there's a random set of droids assigned to each `starship`
 
 But wait a minute. These "random" droids - could you sense my 
 sarcastic air quotes? - aren't random at all! They're the 3 same droids
-over and over again. The problem is that `randomRange(1, 5)` function is only
+over and over again. The problem is that `randomRange(1, 5)` is only
 called *once*: so it's assigning the same 1 to 5 random droids to every
 `Starship`. Not quite the variety we were hoping for.
 

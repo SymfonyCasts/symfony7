@@ -6,7 +6,7 @@ then you're going to love this!
 
 Open the template for the `Starship` show page:
 `templates/starship/show.html.twig`. I'll steal the `h4` and `p` tag for
-`arrived at`, paste them below, and change the `h4` to `Droids`
+`arrived at`, paste them below, and change the `h4` to `Droids`.
 Clear out `arrived at` ... and break that line up.
 
 We have a `ship` variable, which is a `Starship` object. And remember,
@@ -19,16 +19,16 @@ So we can say `{{ droid.name }}`.
 
 I want commas, but not an extra comma at the end. Say: 
 `{% if not loop.last %}, {% endif %}`. There are fancier ways to do this,
-keep it simple for now.
+but keep it simple for now.
 
 If there aren't any droids, use an `else` tag and say
-`No droids on board (clean up your own mess)`. How rude!
+`No droids on board (clean up your own mess)`. Rude!
 
 ## Droids on the Homepage
 
 On the homepage, we want to show off the droids here too. Open
-up the template for this: `templates/main/homepage.html.twig`. Right after
-`parts`, add another div and say `Droids: {{ ship.droidNames ?: 'none' }}`.
+up the template: `templates/main/homepage.html.twig`. Right after
+`parts`, add another div with `Droids: {{ ship.droidNames ?: 'none' }}`.
 
 ## The Smart Method
 

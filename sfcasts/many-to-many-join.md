@@ -1,7 +1,7 @@
 # Joining Across a Many-to-Many Relationship
 
-Ever wondered which starship in our fleet is crawling with the most
-droids? Me too! So let's find out! I want to list every ship in descending
+Ever wondered which starship in the fleet is crawling with the most
+droids? Me too! Let's list every ship in ascending
 order based on their droid count.
 
 Dive into `src/Controller/MainController.php`. The query is:
@@ -12,7 +12,7 @@ $ships = $repository->findIncomplete()
 
 Click into that method and give it a new, snazzy name:
 `findIncompleteOrderedByDroidCount()`. Copy that, swing back to the
-controller, and replace the old method name with the new one. 
+controller, and replace the old method with the new one. 
 
 We've changed nothing yet, so a quick refresh gives us
 the same stuff.
@@ -50,4 +50,4 @@ order by that count *on* that `droid` table. Impressive Doctrine, impressive.
 
 That's *technically* it for ManyToMany! But next we're going to handle
 a more advanced, but still common, use case: adding data to the join
-table, like a date when the droid joined the starship.
+table, like the date when the droid joined the starship.
