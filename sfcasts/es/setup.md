@@ -18,6 +18,8 @@ Un efecto secundario útil de la ejecución en primer plano es que podemos ver t
 
 Starshop se dedica a reparar naves, una solución integral para todos tus problemas con las naves espaciales, porque nadie quiere flotar por el espacio intergaláctico con una ducha rota. Qué asco. Todas estas naves espaciales proceden directamente de la base de datos. Si navegas hasta `src/Entity/`, encontrarás nuestra única entidad brillante: `Starship`.
 
+[[[ code('bc4c539663') ]]]
+
 ## Pasos siguientes: Seguimiento de piezas de naves
 
 Es hora de animar las cosas rastreando las piezas de una nave y su coste. Luego asignaremos cada pieza a una nave de la base de datos.
