@@ -1,0 +1,125 @@
+WEBVTT
+
+00:00:00.096 --> 00:00:03.596 align:middle
+¡Hola amigos!
+
+00:00:03.756 --> 00:00:05.076 align:middle
+¡Bienvenidos de nuevo!
+
+00:00:05.326 --> 00:00:07.826 align:middle
+Y bienvenidos de nuevo a mí, si
+se me permite el atrevimiento.
+
+00:00:08.286 --> 00:00:12.456 align:middle
+Vuelvo de mis "vacaciones" de
+14 meses de cáncer cerebral.
+
+00:00:13.046 --> 00:00:18.046 align:middle
+Por desgracia, no estoy del todo mejor y claro,
+tecleo con una mano, como un pirata de Symfony.
+
+00:00:18.426 --> 00:00:21.166 align:middle
+Pero, caray, os echaba de menos a
+todos y echaba de menos Symfony.
+
+00:00:21.696 --> 00:00:22.886 align:middle
+Y hoy es un buen día.
+
+00:00:23.456 --> 00:00:25.566 align:middle
+Gracias por el apoyo, el
+cariño y la paciencia.
+
+00:00:26.156 --> 00:00:27.796 align:middle
+Ahora, ¡a trabajar!
+
+00:00:28.136 --> 00:00:31.696 align:middle
+En el tutorial anterior,
+hicimos cosas impresionantes.
+
+00:00:32.096 --> 00:00:38.506 align:middle
+Creamos una entidad, configuramos migraciones, creamos
+fixtures y realizamos consultas como nerds de SQL.
+
+00:00:39.026 --> 00:00:43.026 align:middle
+Pero admitámoslo, no podemos construir nada que
+impresione a nuestros amigos o a nuestra abuela
+
+00:00:43.186 --> 00:00:45.556 align:middle
+sin entender las relaciones
+de la base de datos.
+
+00:00:46.086 --> 00:00:51.396 align:middle
+Por ejemplo, "esta porción de pizza me
+pertenece" o "tengo muchas porciones de pizza"
+
+00:00:51.876 --> 00:00:53.156 align:middle
+Mmm, me gusta la pizza.
+
+00:00:53.986 --> 00:00:58.226 align:middle
+Para deformar completamente tu juego de relaciones,
+descarga el código del curso de esta página.
+
+00:00:58.626 --> 00:01:03.136 align:middle
+Una vez que lo hayas descomprimido, encontrarás
+un directorio start/ con el código que ves aquí.
+
+00:01:03.566 --> 00:01:07.216 align:middle
+Echa un vistazo al práctico archivo README.md
+para ver todos los detalles de la configuración.
+
+00:01:07.726 --> 00:01:09.916 align:middle
+El último paso será encender un terminal,
+
+00:01:10.166 --> 00:01:12.926 align:middle
+navegar hasta el proyecto
+y ejecutar: symfony serve.
+
+00:01:13.566 --> 00:01:17.046 align:middle
+A veces lo ejecuto con -d, para
+que haga lo suyo en segundo plano.
+
+00:01:17.356 --> 00:01:20.226 align:middle
+Pero hoy lo ejecutaré en primer plano.
+
+00:01:20.226 --> 00:01:24.116 align:middle
+symfony serve Un efecto secundario útil
+de ejecutarlo en primer plano es que
+
+00:01:24.116 --> 00:01:28.836 align:middle
+podemos ver todos los registros, aunque puedes verlos
+en cualquier momento ejecutando symfony server:log.
+
+00:01:29.706 --> 00:01:34.156 align:middle
+Este proyecto utiliza Tailwind CSS
+y puedes verlo descargando Tailwind
+
+00:01:34.156 --> 00:01:35.396 align:middle
+y construyéndose en segundo plano.
+
+00:01:35.956 --> 00:01:41.206 align:middle
+Una vez hecho esto, voy a desplazarme hacia arriba y hacer
+clic en el enlace para lanzar nuestra aplicación: ¡Starshop!
+
+00:01:42.016 --> 00:01:47.396 align:middle
+Starshop se dedica a reparar naves, una solución
+integral para todos tus problemas con las naves espaciales
+
+00:01:47.786 --> 00:01:51.996 align:middle
+, porque nadie quiere flotar por el
+espacio intergaláctico con una ducha rota.
+
+00:01:52.366 --> 00:01:55.936 align:middle
+Qué asco. Todas estas naves espaciales
+proceden directamente de la base de datos.
+
+00:01:56.446 --> 00:02:01.716 align:middle
+Si navegas hasta src/Entity/, encontrarás
+nuestra única entidad brillante: Starship.
+
+00:02:02.296 --> 00:02:06.106 align:middle
+Es hora de animar las cosas rastreando
+las piezas de una nave y su coste.
+
+00:02:06.586 --> 00:02:09.676 align:middle
+Luego asignaremos cada pieza a
+una nave de la base de datos.

@@ -42,6 +42,8 @@ All these starships are coming straight from
 the database. If you navigate to `src/Entity/`, you'll
 find our *one* shiny entity: `Starship`.
 
+[[[ code('bc4c539663') ]]]
+
 ## Next Steps: Tracking Ship Parts
 
 It's time to spice things up by tracking the *parts* of a ship & their cost.

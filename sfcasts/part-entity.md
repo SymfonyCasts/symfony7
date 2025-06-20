@@ -25,6 +25,9 @@ create a new migration for the entity by copying and pasting
 
 Now, if you check out your migrations, you'll see just the new one we
 created: I cleaned up the old migrations from the last course.
+
+[[[ code('0ded265acf') ]]]
+
 So this one is all about `StarshipPart`. Run it with:
 
 ```terminal
@@ -34,6 +37,9 @@ symfony console doctrine:migrations:migrate
 The table is in the database! But there are two fields that I
 like to add to *all* my entities: `createdAt` and `updatedAt`.
 You can see these inside of `Starship`, under `TimestampableEntity`.
+
+[[[ code('026a51f1be') ]]]
+
 Copy that, and paste right on top of `StarshipPart`. Both properties
 are automatically set thanks to a library we installed in the last
 tutorial. And because we added two new fields, we need a migration!
@@ -64,9 +70,16 @@ It added some defaults for each field, but *we* can make it more
 interesting. At the top of `StarshipPartFactory`, I'll paste in some code
 with example parts (you can grab this from the code block on this page).
 Also replace the return in `defaults()` with code that uses that
-data. Finally, use this in the fixtures.
-At the bottom, create 50 random parts using
-`StarshipPartFactory::createMany(50)`. Back in the terminal, run:
+data. 
+
+[[[ code('68657d878e') ]]]
+
+Finally, use this in the fixtures. At the bottom, create 50 random parts using
+`StarshipPartFactory::createMany(50)`. 
+
+[[[ code('01ee7a226f') ]]]
+
+Back in the terminal, run:
 
 ```terminal
 symfony console doctrine:fixtures:load
