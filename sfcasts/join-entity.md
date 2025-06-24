@@ -1,23 +1,23 @@
 # Many-to-Many but with Extra Data
 
 ManyToMany relations are the *one* place in Doctrine where we have a
-table in our database - `starship_droid`, but no corresponding
+table in our database - `starship_droid` - but no corresponding
 entity in our project.
 
-But there's a catch: we can't add extra columns to that join table, like
-an `assignedAt` column to track when a droid was assigned to a starship.
+But there's a catch: we can't add extra *columns* to that join table. Like,
+what if we wanted to track *when* a droid was assigned to a starship? To do
+that our join table would need an `assignedAt` column. But we can't!
 
 ## When Many-to-Many Becomes Too Much 
 
-As soon as you need extra data on the join table, you're going to have to
-roll up your sleeves and start handling things more manually.
+The solution is to roll up our sleeves and start handling things more manually.
 
-You'll stop using the many-to-many relationship entirely. Instead, we're
-going to generate a new entity that represents the join table. First
+We'll *stop* using the many-to-many relationship entirely. Instead, we're
+going to generate a new entity that represents the join table. First,
 undo the many-to-many relationship (but only worry
 about the properties, not the methods). In `Starship`, wave goodbye to the
 `droids` property, and over in `Droid`, do the same for the `starships`
-many-to-many property. Clear out the constructor code in both.
+many-to-many property. Clear out the constructor in both.
 
 Find your terminal and run:
 
@@ -27,7 +27,6 @@ symfony console doctrine:schema:update --dump-sql
 
 This shows you what your migration *would* look like if you generated
 it right now. It's what we expect: no more `starship_droid` table.
-
 
 ## Creating a New Join Entity
 
@@ -45,7 +44,7 @@ relationship.
 Add a few properties, like `assignedAt` along with two more properties to create
 relationships from this join table to `Starship` and `Droid`. 
 
-These are going to be `ManyToOne` relationships and they'll connect
+These are going to be `ManyToOne` relationships, and they'll connect
 `StarshipDroid` to `Starship` and `Droid`.
 
 ## The Migration that Does Nothing
@@ -55,12 +54,12 @@ These are going to be `ManyToOne` relationships and they'll connect
 ```terminal
 symfony console make:migration
 ```
-... and check it out. It might look like there are a lot of changes, but look
+... and check it out. It might seem like there are a lot of changes, but look
 closely: it's just dropping the foreign key constraints, adding a
 primary key, and recreating the foreign key. So, in the end, this
 migration doesn't change anything *real* in the database. 
 
-Run the migration with
+Run it with:
 
 ```terminal
 symfony console doctrine:migrations:migrate
@@ -77,7 +76,7 @@ migration manually to say `DEFAULT NOW() NOT NULL`.
 ## The Finishing Touches
 
 Let's add a final touch to `StarshipDroid`. This `assignedAt` isn't really
-something we should have to worry about. Create a constructor and set this
+something we should have to worry about. Create a constructor and set it
 automatically: `$this->assignedAt = new \DateTimeImmutable();`. 
 
 Hold up, because this is huge! We now have the *exact* same relationship

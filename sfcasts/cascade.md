@@ -1,100 +1,97 @@
-# Cascade
+# Cascade Persist
 
-Coming soon...
+Check out this error: it's a doozy!
 
-## Tackling the Doctrine Beast
+> An entity was found through the relationship
+`Starship.droids` that was not configured to "cascade persist" operations
+for entity `StarshipDroid`.
 
-Alright, folks. Picture this scenario: you're loading up your fixtures and
-suddenly, WHAM! You're hit head-on by the most colossal error message. It's
-a classic one, straight out of the Doctrine playbook. The culprit? Our dear
-friends `starship droids` and `cascade persist`. 
+Let me translate for you:
 
-The error bleats out, "An entity was found through the relationship
-`starship droids` that was not configured to `cascade persist` operations
-for entity `starship droid`." It sounds like an alien language, right? 
+> Hey, you're saving this `Starship` and it's got a `StarshipDroid`
+> attached to it. That's great, but you forgot to tell me to save the
+> `StarshipDroid`. What do you want me to do?
 
-Well, let me translate for you. The error is crying out in despair, saying,
-"Hey, you're saving this `starship` and it's got a `starship droid`
-hitching a ride. But, you've ghosted me on saving the `starship droid`. I'm
-left hanging here! What's the deal?" 
-
-The snag we've hit is that in our `starship` entity, we're cut off from the
-entity manager. So, we can't just call up `manager->persist(starship
-droid)`. What a pickle, right? 
+But again, from inside `Starship`, we can't get the entity manager
+to say `$manager->persist($starshipDroid)`. 
 
 ## Harnessing the Power of `cascade persist`
 
-But fear not, my fellow coders! We've got a secret weapon at our disposal:
-`cascade persist`. 
+The solution is to use something called "cascade persist". 
 
-So, summon your inner Jedi, scroll up until you locate the `starship
-droids` property, and seek out the `OneToMany`. We're going to add a new
-option here called `cascade`. I'll type it in manually - it's like we're
-doing our own stunts. Then, we'll create an array and say `persist`.
+Scroll up to the `$starshipDroids` property, and find the `OneToMany`. Add a new
+option here called `cascade`. I'll type it in manually. Set it to an array with
+`persist` inside:
 
-```terminal
-OneToMany(cascade={"persist"})
-```
-
-What we're doing here is setting up a sort of domino effect. If anyone
+We're setting up a sort of domino effect. If anyone
 saves this `starship`, we're going to cascade that save down to any
-attached properties. 
+attached relationships. 
 
-A word of caution though: use this power wisely. It's a bit like installing
-an automatic pilot. It can make your code a bit unpredictable, but in our
-case, it's exactly the fix we need. 
+A word of caution though: use this power wisely. It makes your code
+more automatic, which is great, but it can also make it harder to
+spot bugs.
 
-Let's give those fixtures another whirl. And voila! It works like a charm. 
+But in this case, it's exactly the fix we need.
+
+Give those fixtures another whirl:
+
+```terminal-silent
+symfony console doctrine:fixtures:load
+```
 
 ## Back to Adding Droids
 
-Now, we're back in business. We can use `ship->addDroid()` once more. But,
-let's not rest on our laurels. I want to create a fleet of `ships` and
-assign them a bunch of `droids`. 
+We're back in business. We can use `ship->addDroid()` once more. But
+I still want to create a fleetof `starships` with `droids` attached to
+them.
 
-We're going to turf all the manual code we added and bring back the
-`droids` property into the `starship factory`. 
+Remove all the manual code and bring back the
+`droids` property on the `StarshipFactory`. 
 
-Let's fire up the fixtures again. And guess what? They work. It's like a
-magic trick, isn't it? 
+Fire up the fixtures again:
 
-Behind the scenes, Foundry is calling `addDroid()` on each `starship` for
-each `droid`. And we just proved that `addDroid()` is back in action. 
+```terminal-silent
+symfony console doctrine:fixtures:load
+```
+
+Guess what? They work! 
+
+Behind the scenes, Foundry is calling `addDroid()` on each `Starship` for
+each `droid`. And we just proved that `addDroid()` is back in action.
+
+The creation of the `StarshipDroid` join entity is now hidden
+from our entire codebase!
 
 ## Finer Control with `assignedAt`
 
 But, what if you want to add a `droid` to a `starship` and control the
-`assignedAt` property? The solution is to add an argument for `assignedAt`
-in `starship`, like a `DateTimeImmutable`. 
+`assignedAt` property? Add an argument for `assignedAt`
+in `Starship`: a `DateTimeImmutable`. 
 
 ```terminal
 addDroid(Droid $droid, ?\DateTimeImmutable $assignedAt = null)
 ```
 
-We'll make it optional to keep things flexible. Then, after creating the
-`starship droid`, we'll set the `assignedAt` if it's provided. 
+Make it optional to keep things flexible. Then, after creating the
+`StarshipDroid`, set the `assignedAt` if we passed it in:
 
-It's a smooth move, but there's a slight issue. Foundry won't let us
+Cool... but there's a slight issue. Foundry won't let us
 control the `assignedAt` field. So, if you want to assign some `droids` at
 a specific time, you'll need to take the wheel manually. 
 
 ## Displaying `assignedAt`
 
 Finally, let's make that `assignedAt` visible on our site. We'll need the
-`starship droid` join entity object to do that. A bit more work, sure, but
-we're not afraid of that, are we? 
+`StarshipDroid` join entity object to do that. It's a bit more work,
+but totally doable.
 
-With our `starshipDroid.droid.name` and `starshipDroid.assignedAt` in
-place, we'll sneak in our `assignedAt` and pipe it into our `ago` filter
-for a touch of flair. 
+Change the loop to `for starshipDroid in ship.starshipDroids`. Then
+`starshipDroid.droid.name` and `starshipDroid.assignedAt` with the `ago`
+filter for flair.
 
-```terminal
-starshipDroid.assignedAt|ago
-```
+Refresh and... we can now see when each `droid` was assigned. 
 
-And there you have it! You can now see when our `droids` were assigned. 
-
-That's all she wrote, folks! We've explored the deepest corners of Doctrine
+That's it, friends! We've explored the deepest corners of Doctrine
 relationships, even the elusive many-to-many with extra fields. As always,
 if you have questions, drop them in the comments below. We're all in this
 together!
