@@ -2,13 +2,13 @@
 
 ManyToMany relations are the *one* place in Doctrine where we have a
 table in our database - `starship_droid` - but no corresponding
-entity in our project.
+entity in our app.
 
 But there's a catch: we can't add extra *columns* to that join table. Like,
 what if we wanted to track *when* a droid was assigned to a starship? To do
-that our join table would need an `assignedAt` column. But we can't!
+that our join table would need an `assignedAt` column. But we can't add that!
 
-## When Many-to-Many Becomes Too Much 
+## When Many-to-Many isn't Enough
 
 The solution is to roll up our sleeves and start handling things more manually.
 
@@ -37,11 +37,11 @@ but now we need to create an entity to represent it. Run:
 symfony console make:entity StarshipDroid
 ```
 
-Sure, `DroidAssignment` might be a more fitting name, but `StarshipDroid`
+`DroidAssignment` might be a more fitting name, but `StarshipDroid`
 helps us visualize what we're doing: recreating the same exact database
-relationship. 
+relationship via two `ManyToOne`s
 
-Add a few properties, like `assignedAt` along with two more properties to create
+Add `assignedAt` along with two more properties to create
 relationships from this join table to `Starship` and `Droid`. 
 
 These are going to be `ManyToOne` relationships, and they'll connect
@@ -54,6 +54,7 @@ These are going to be `ManyToOne` relationships, and they'll connect
 ```terminal
 symfony console make:migration
 ```
+
 ... and check it out. It might seem like there are a lot of changes, but look
 closely: it's just dropping the foreign key constraints, adding a
 primary key, and recreating the foreign key. So, in the end, this

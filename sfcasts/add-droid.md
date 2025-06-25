@@ -5,13 +5,12 @@ You might be asking yourself: "Hold up, do I really need to create a
 I think that's too much work. Could we get back to the good old days
 when we could just call `$ship->addDroid($droid)`?
 
-Yes! This won't work yet, but that's never stopped us before. Load up the fixtures.
+Yes! This won't work yet, but that's never stopped us before! Load up the fixtures.
 Ouch! 
 
 > Undefined property: `App\Entity\Starship::$droids`
->
 
-Not exactly a surprise, considering we call upon the long-gone `droids` property
+Not exactly a surprise, as we're calling the long-dead `droids` property
 in `addDroid()`.
 
 ## Remaking addDroid()
@@ -27,7 +26,7 @@ right here: `$starshipDroid = new StarshipDroid()`
 We've set the owning side of the relationship, but let's
 sync up the other side too. We can do this by calling
 `$droid->starshipDroids->add($starshipDroid)`. 
-Let's give the fixtures another whirl:
+Give the fixtures another whirl:
 
 ```terminal-silent
 symfony console doctrine:fixtures:load
@@ -41,11 +40,11 @@ though not always easy to understand:
 > A new entity was found through the relationship `Starship#starshipDroids`
 > that was not configured to cascade persist for the entity `StarshipDroid`.
 
-This is just a fancy way of saying we've created a new `StarshipDroid`
+This is a very fancy way of saying we've created a new `StarshipDroid`
 object and told Doctrine to persist its related `Starship`. But we
 never told Doctrine to persist the `StarshipDroid` object itself.
 
 Here's the rub: we don't have access to the entity manager. So we can't
-just say `$entityManager->persist(starshipDroid)`. Instead, we're going
-to lean on something called `cascade={"persist"}`, which I'll dive into that
+just say `$entityManager->persist($starshipDroid)`. Instead, we're going
+to lean on something called `cascade=["persist"]`, which I'll dive into that
 right now.

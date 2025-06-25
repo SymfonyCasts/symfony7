@@ -13,7 +13,7 @@ Error!
 
 > Undefined property: `App\Entity\Starship::$droids`
 
-This error is being spat out from`Starship` line 205. The culprit? Our
+This error is being spat out from `Starship` line 205. The culprit? Our
 `getDroids()` method. Well duh, we just removed the `droids` property!
 The quick fix, duh again, just comment it out. And huzzah! The fixtures
 are back in action:
@@ -27,17 +27,17 @@ symfony console doctrine:fixtures:load
 To discover the right fix, let's do a few things manually:
 `$ship = StarshipFactory`, we could use `createOne()`, but let's
 grab a random one instead. Also use the `_real()` trick to get
-grab the actual object, not a proxy. Then we'll do the same for
+the actual object, not a proxy. Then do the same for
 `$droid = DroidFactory`, again grabbing a random one and calling
 `_real()` on that.
 
 ## Relating via the Join Entity
 
-Previously, we could use `$ship->addDroid($droid)` to add a droid to a
-But not anymore! It's referencing the obsolete `droids` property.
+Previously, we could used `$ship->addDroid($droid)` to add a droid to a
+`Starship`. But not anymore! It's referencing the obsolete `droids` property.
 It's now called `starshipDroids`, and as you might've guessed, it's a
 collection of `StarshipDroid` entities. Ditch
-`$ship->addDroid()` and instead say `$starshipDroid` equals new
+`$ship->addDroid()` and instead say `$starshipDroid` equals
 `new StarshipDroid()`, then `$starshipDroid->setDroid()`, not `$ship` but `$droid`.
 And set `$starshipDroid->setStarship($ship)`.
 We're manually creating the entity and setting those many-to-one relationships.
@@ -45,13 +45,14 @@ Finally, because we're assembling these by hand, we need to persist and flush
 them using `$manager->persist($starshipDroid)`, and `$manager->flush()`.
 
 It's definitely more work, but it's simple enough. Give the fixtures a spin:
+
 ```terminal-silent
 symfony console doctrine:fixtures:load
 ```
 
 And peek at the database with:
 
-```terminal-silent
+```terminal
 symfony console doctrine:query:sql "SELECT * from starship_droid"
 ```
 
@@ -71,14 +72,17 @@ to `s.starshipDroids`. And for clarity, call it
 `starshipDroid`, because that's what it really is. Now count *them* instead
 of the nonexistent `droids`.
 
-With that sorted, we'll refresh the homepage and... *another()
-error! It's `Warning: Undefined property: App\Entity\Starship::$droids`.
+With that sorted, we'll refresh the homepage and... *another*
+error! It's 
+
+> Warning: Undefined property: `App\Entity\Starship::$droids`.
+
 This is coming from `ship.droidNames` in the homepage template. We know
 that when we call `ship.droidNames`, it calls
 `$starship->getDroidNames()` and we're still referencing the
 `droids` property.
 
-## Making Magic Happen
+## Hide that Join Entity
 
 Next, we're going to *hide* the join entity and make this work exactly
 like the ManyToMany relationship we had before. Magic!

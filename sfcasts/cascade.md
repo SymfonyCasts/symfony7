@@ -9,7 +9,7 @@ for entity `StarshipDroid`.
 Let me translate for you:
 
 > Hey, you're saving this `Starship` and it's got a `StarshipDroid`
-> attached to it. That's great, but you forgot to tell me to save the
+> attached to it. That's great, but you forgot to tell me to persist the
 > `StarshipDroid`. What do you want me to do?
 
 But again, from inside `Starship`, we can't get the entity manager
@@ -20,11 +20,11 @@ to say `$manager->persist($starshipDroid)`.
 The solution is to use something called "cascade persist". 
 
 Scroll up to the `$starshipDroids` property, and find the `OneToMany`. Add a new
-option here called `cascade`. I'll type it in manually. Set it to an array with
-`persist` inside:
+option: `cascade`. I'll type it in manually. Set it to an array with
+`persist` inside.
 
 We're setting up a sort of domino effect. If anyone
-saves this `starship`, we're going to cascade that save down to any
+persists this `starship`, we're going to cascade that persist down to any
 attached relationships. 
 
 A word of caution though: use this power wisely. It makes your code
@@ -42,7 +42,7 @@ symfony console doctrine:fixtures:load
 ## Back to Adding Droids
 
 We're back in business. We can use `ship->addDroid()` once more. But
-I still want to create a fleetof `starships` with `droids` attached to
+I still want to create a fleet of `starships` with `droids` attached to
 them.
 
 Remove all the manual code and bring back the
@@ -65,15 +65,11 @@ from our entire codebase!
 ## Finer Control with `assignedAt`
 
 But, what if you want to add a `droid` to a `starship` and control the
-`assignedAt` property? Add an argument for `assignedAt`
-in `Starship`: a `DateTimeImmutable`. 
-
-```terminal
-addDroid(Droid $droid, ?\DateTimeImmutable $assignedAt = null)
-```
+`assignedAt` property? Add an argument for `addDroid()`
+in `Starship`: a `DateTimeImmutable`.
 
 Make it optional to keep things flexible. Then, after creating the
-`StarshipDroid`, set the `assignedAt` if we passed it in:
+`StarshipDroid`, set the `assignedAt` if we passed it in.
 
 Cool... but there's a slight issue. Foundry won't let us
 control the `assignedAt` field. So, if you want to assign some `droids` at
