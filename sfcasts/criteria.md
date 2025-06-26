@@ -71,12 +71,13 @@ Everything still works like a charm, so let's go a step further and flex our
 developer muscles. Let's create a method that combines `Criteria` with
 Query Builders. 
 
-Say we want to get a list of all the expensive parts for *any* `Starship`. Copy the
-`getExpensiveParts()` method from `Starship`. Paste that in `StarshipPartRepository`. 
-
-To combine this with a `Criteria`, say
-`addCriteria(self::createExpensiveCriteria())`. Now that we're in a Query
-Builder, we can do the normal stuff, like `setMaxResults($limit)`. Want
+Say we want to get a list of all the expensive parts for *any* `Starship`. Start
+by copying the
+`getExpensiveParts()` method from `Starship`. Paste that in `StarshipPartRepository`.
+Then return `$this->createQueryBuilder('sp')`. Add a `$limit` argument, defaulting
+to 10. To combine this with a
+`Criteria`, say `addCriteria(self::createExpensiveCriteria())`. Now that we're
+in a `QueryBuilder`, we can do the normal stuff, like `setMaxResults($limit)`. Want
 to do an `orderBy` or an `andWhere`? Go for it. And of course, you can
 finish this with `getQuery()->getResult()`. 
 
