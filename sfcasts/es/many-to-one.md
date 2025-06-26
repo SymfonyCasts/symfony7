@@ -1,6 +1,6 @@
 # Muchos a uno: el rey de las relaciones
 
-Muy bien, amigos, hemos construido con éxito las entidades `Starship` y `StarshipPart`, y... están bien asentadas en la base de datos. Pero he aquí el enigma: ¿cómo unimos estas piezas a sus respectivas naves estelares? ¿Cómo damos a cada `StarshipPart` su legítimo hogar `Starship`? Ahí es donde nuestro fiel comando `make:entity` vuelve a entrar en juego. Qué fanfarrón. Busca tu terminal y ejecútalo:
+Muy bien, amigos, hemos construido con éxito las entidades `Starship` y `StarshipPart`, y... están bien asentadas en la base de datos. Pero he aquí el enigma: ¿cómo unimos estas piezas a sus respectivas naves estelares? ¿Cómo damos a cada `StarshipPart` su legítimo hogar `Starship`? Aquí es donde entra en juego nuestro fiel comando `make:entity`. Qué fanfarrón. Busca tu terminal y ejecútalo:
 
 ```terminal
 symfony console make:entity
