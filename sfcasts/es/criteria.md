@@ -10,7 +10,7 @@ Entra en la clase `Starship` y busca el método `getParts()`. Cópialo, pégalo 
 
 [[[ code('ebc7bb43bc') ]]]
 
-De vuelta a nuestra plantilla del programa, dale una vuelta a esto. Cambia `parts`por `expensiveParts`:
+De vuelta a nuestra plantilla de programa, dale una vuelta a esto. Cambia `parts`por `expensiveParts`:
 
 [[[ code('3e88506435') ]]]
 
@@ -24,7 +24,7 @@ Es hora de hacer que nuestro método devuelva sólo las partes caras. Recuerda:`
 
 ¡Listo! Excepto que... esto es súper ineficiente. Seguimos buscando todas las piezas relacionadas con nuestra nave estelar y filtrándolas en PHP. Imagina que tuviéramos 50.000 piezas, pero sólo 10 de ellas costaran más de 50.000. ¡Menudo despilfarro! ¿Podemos pedirle a Doctrine que cambie la consulta para que sólo coja las piezas relacionadas con la nave estelar cuyo precio sea superior a 50.000?
 
-## El poder del objeto Criterios
+## El poder del objeto Criterio
 
 Entra en el objeto `Criteria`. Esta cosa es poderosa. Aunque, lo admito, también un poco críptico. Elimina nuestra lógica y utiliza en su lugar `$criteria` igual a`Criteria::create()->andWhere(Criteria::expr()->gt('price', 50000))`. Para utilizar esto, `return $this->parts->matching($criteria);`:
 
