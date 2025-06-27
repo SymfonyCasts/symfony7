@@ -2,7 +2,7 @@
 
 Cuando utilizamos `make:entity` para añadir una relación, nos preguntó por`orphanRemoval`. Es hora de averiguar qué es y cuándo utilizarlo.
 
-En los accesorios, empieza con `$starshipPart = StarshipPartFactory::createOne()`. Para que destaque, haré que sea un elemento crucial para cualquier viaje espacial: "Papel higiénico" Sí, un guiño descarado a los tiempos de la pandemia. ¡Qué asco!
+En los accesorios, empieza con `$starshipPart = StarshipPartFactory::createOne()`. Para que destaque, lo convertiré en un elemento crucial para cualquier viaje espacial: "Papel higiénico" Sí, un guiño descarado a los tiempos de la pandemia. ¡Qué asco!
 
 Asigna esta parte al `Starship` anterior (añade el `$ship =` que falta) y luego vierte `$starshipPart`:
 
