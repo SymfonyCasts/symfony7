@@ -1,10 +1,9 @@
 # Droid Entity for the ManyToMany Relationship
 
 We've had a good taste of relationship types by now. We've seen
-`ManyToOne` and `OneToMany`, which are really
-the *same* relationship type, viewed from different sides.
-So, in reality, we've only explored *one* type of relationship so far:
-`ManyToOne`.
+`ManyToOne` and `OneToMany`, which are really the *same* relationship type,
+viewed from different sides. So, in reality, we've only explored *one* type
+of relationship so far: `ManyToOne`.
 
 What about that `OneToOne` relationship you've maybe heard about? Well...
 surprise! It's just a `ManyToOne` in disguise: the database looks like
@@ -64,8 +63,10 @@ Before we set that up, let's manufacture some droids! Run:
 symfony console make:factory Droid
 ```
 
-Open up `src/Factory/DroidFactory.php`. It's ready to go, 
-but they lack personality. I'll replace the array with more interesting data.
+Open up `src/Factory/DroidFactory.php`. It's ready to go, but they lack personality.
+I'll replace the array with more interesting data:
+
+[[[ code('7d04c9335b') ]]]
 
 Reload the fixtures with:
 
