@@ -1,0 +1,170 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:03.706 align:middle
+Ya hemos probado bien los tipos de relación.
+
+00:00:04.146 --> 00:00:06.056 align:middle
+Hemos visto ManyToOne y OneToMany,
+
+00:00:06.396 --> 00:00:10.046 align:middle
+que en realidad son el mismo tipo de
+relación, visto desde lados diferentes.
+
+00:00:10.046 --> 00:00:15.256 align:middle
+Así que, en realidad, hasta ahora sólo hemos
+explorado un tipo de relación: ManyToOne.
+
+00:00:15.256 --> 00:00:19.446 align:middle
+¿Qué hay de esa relación OneToOne
+de la que tal vez hayas oído hablar?
+
+00:00:19.856 --> 00:00:20.756 align:middle
+Pues... ¡sorpresa!
+
+00:00:20.946 --> 00:00:24.516 align:middle
+No es más que un ManyToOne
+disfrazado: la base de datos
+
+00:00:24.516 --> 00:00:28.736 align:middle
+se parece a un ManyToOne, salvo que tiene una
+restricción única en la clave externa para asegurarse
+
+00:00:28.736 --> 00:00:31.816 align:middle
+de que cada lado de la relación
+sólo puede referirse a un elemento.
+
+00:00:32.456 --> 00:00:37.146 align:middle
+La cuestión es que ManyToOne OneToMany
+y OneToOne son todas, efectivamente,
+
+00:00:37.146 --> 00:00:39.116 align:middle
+del mismo tipo de relación.
+
+00:00:39.886 --> 00:00:41.766 align:middle
+Vale, hablemos de la reparación del espacio.
+
+00:00:41.766 --> 00:00:45.146 align:middle
+Para nosotros, los humanos sacos de
+carne, ¡es un trabajo peligroso!
+
+00:00:45.656 --> 00:00:48.026 align:middle
+Está el vacío del espacio, el frío,
+
+00:00:48.026 --> 00:00:52.616 align:middle
+la falta de oxígeno, las lluvias ocasionales
+de asteroides y el vacío infinito.
+
+00:00:53.176 --> 00:00:56.796 align:middle
+Eso sin mencionar cuando Bob se
+olvidó de asegurar su arnés
+
+00:00:56.796 --> 00:00:59.426 align:middle
+y se fue flotando hacia
+su propia frontera final.
+
+00:00:59.786 --> 00:01:01.296 align:middle
+Tardaron horas en encontrarle.
+
+00:01:01.726 --> 00:01:03.346 align:middle
+Nunca volvió a ser el
+mismo después de aquello.
+
+00:01:03.346 --> 00:01:07.356 align:middle
+Entonces, ¿quién mejor para abordar
+esto que nuestros fieles droides?
+
+00:01:08.056 --> 00:01:12.356 align:middle
+Diriges un ejército de droides, cada
+uno está asignado a varias naves
+
+00:01:12.356 --> 00:01:14.276 align:middle
+estelares y cada nave
+estelar tiene varios droides.
+
+00:01:14.276 --> 00:01:19.336 align:middle
+Aquí es donde entra en juego el segundo
+y último tipo de relación: ManyToMany.
+
+00:01:20.016 --> 00:01:22.366 align:middle
+Para preparar el escenario,
+necesitamos una entidad Droid.
+
+00:01:22.796 --> 00:01:26.346 align:middle
+A estas alturas, ya sabes lo que hay que
+hacer: symfony console make:entity Droid
+
+00:01:26.726 --> 00:01:28.646 align:middle
+Y así de fácil, ya estamos en marcha.
+
+00:01:29.066 --> 00:01:32.336 align:middle
+Esto sólo necesita unas pocas
+propiedades: name y primaryFunction.
+
+00:01:32.846 --> 00:01:34.136 align:middle
+Con las predeterminadas bastará.
+
+00:01:34.386 --> 00:01:36.516 align:middle
+Eso es todo, muy fácil.
+
+00:01:36.516 --> 00:01:38.466 align:middle
+Pero el trabajo de un
+desarrollador nunca termina.
+
+00:01:38.466 --> 00:01:41.316 align:middle
+Como somos desarrolladores
+eficientes, no vagos,
+
+00:01:41.686 --> 00:01:46.186 align:middle
+copia el comando para generar la
+migración y ejecútalo: Echa un vistazo.
+
+00:01:48.286 --> 00:01:49.426 align:middle
+Aquí no hay sorpresas.
+
+00:01:50.016 --> 00:01:55.276 align:middle
+Entonces... ejecútalo: symfony console
+doctrine:migrations:migrate Y...
+
+00:01:55.276 --> 00:01:57.826 align:middle
+tenemos una nueva y reluciente
+tabla droid en la base de datos.
+
+00:01:58.366 --> 00:02:03.006 align:middle
+Todavía no está relacionada con ship, pero bueno,
+toda relación tiene que empezar por algún sitio.
+
+00:02:03.656 --> 00:02:06.676 align:middle
+Antes de establecerla, ¡vamos
+a fabricar algunos droides!
+
+00:02:07.056 --> 00:02:13.356 align:middle
+Ejecuta: symfony console make:factory
+Droid Abre src/Factory/DroidFactory.php.
+
+00:02:14.916 --> 00:02:17.346 align:middle
+Está listo para funcionar,
+pero les falta personalidad.
+
+00:02:17.886 --> 00:02:22.846 align:middle
+Sustituiré la matriz por datos más
+interesantes: Recarga los accesorios con:
+
+00:02:22.846 --> 00:02:27.186 align:middle
+symfony console doctrine:fixtures:load
+¡Y ahí lo tienes!
+
+00:02:27.596 --> 00:02:30.776 align:middle
+Una mesa droid llena hasta los
+topes de droides dispuestos a ayudar
+
+00:02:30.966 --> 00:02:33.486 align:middle
+y no a morir en el solitario
+vacío del espacio.
+
+00:02:33.486 --> 00:02:36.146 align:middle
+Pero todavía no se puede
+asignar un droide a una nave.
+
+00:02:36.636 --> 00:02:40.346 align:middle
+Cambiemos eso con nuestro último
+tipo de relación: ManyToMany.
