@@ -1,6 +1,6 @@
 # Añadir una búsqueda + el objeto de petición
 
-Es hora de desviarse un poco de las Relaciones Doctrine. Ya sé que las Relaciones Doctrine molan, ¡pero esto también! Quiero añadir una barra de búsqueda a nuestra página. Confía en mí, esto va a ser bueno.
+Es hora de desviarse un poco de las Relaciones Doctrine. Sé que las Relaciones Doctrine molan, ¡pero esto también! Quiero añadir una barra de búsqueda a nuestra página. Confía en mí, esto va a ser bueno.
 
 Abre la plantilla `index.html.twig`. Justo en la parte superior, pegaré una entrada de búsqueda:
 
