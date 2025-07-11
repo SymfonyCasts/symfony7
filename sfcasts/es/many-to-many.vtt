@@ -1,0 +1,173 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:05.996 align:middle
+Muy bien, tenemos una entidad Starship y una
+entidad Droid configuradas y listas para mezclarse.
+
+00:00:06.566 --> 00:00:08.836 align:middle
+¿Cómo conseguimos que estas
+dos entidades se conecten?
+
+00:00:09.536 --> 00:00:13.346 align:middle
+Imagínatelo así: Cada Starship
+va a necesitar un equipo de Droids
+
+00:00:13.346 --> 00:00:14.726 align:middle
+para que las cosas funcionen sin problemas...
+
+00:00:15.196 --> 00:00:17.126 align:middle
+y para el alivio cómico ocasional.
+
+00:00:17.866 --> 00:00:21.476 align:middle
+Cada Droid, a su vez, debería
+poder servir a muchos Starships.
+
+00:00:22.106 --> 00:00:24.856 align:middle
+Olvídate de la base de datos
+y céntrate en los objetos.
+
+00:00:25.416 --> 00:00:29.346 align:middle
+Nuestra entidad Starship necesita una
+propiedad droids que contenga una colección
+
+00:00:29.346 --> 00:00:30.886 align:middle
+de todos los Droid s que tiene asignados.
+
+00:00:31.686 --> 00:00:34.166 align:middle
+¡Genial! Vuelve a tu terminal y ejecuta:
+
+00:00:34.166 --> 00:00:39.026 align:middle
+symfony console make:entity Actualiza
+Starship y añade una propiedad droids.
+
+00:00:39.816 --> 00:00:42.176 align:middle
+Utiliza "relación" para entrar
+en el práctico asistente.
+
+00:00:42.896 --> 00:00:47.756 align:middle
+Esta vez, necesitamos una relación ManyToMany:
+Cada Starship puede tener muchos Droids,
+
+00:00:47.996 --> 00:00:50.066 align:middle
+y cada Droid puede servir a muchos Starships.
+
+00:00:50.456 --> 00:00:51.796 align:middle
+¡Suena perfecto!
+
+00:00:52.566 --> 00:00:56.416 align:middle
+A continuación, nos pregunta si queremos
+mapear el lado inverso de la relación.
+
+00:00:57.156 --> 00:01:00.046 align:middle
+Esto es preguntarnos si queremos
+dar a nuestro Droids la capacidad
+
+00:01:00.046 --> 00:01:04.176 align:middle
+de listar todos los Starships a los que
+está conectado: $droid->getShips().
+
+00:01:04.706 --> 00:01:05.736 align:middle
+Eso suena útil.
+
+00:01:05.836 --> 00:01:06.716 align:middle
+Así que digamos "sí".
+
+00:01:06.716 --> 00:01:10.956 align:middle
+Para el nuevo nombre de campo dentro
+de Droid, ships servirá perfectamente.
+
+00:01:11.556 --> 00:01:14.196 align:middle
+Observa que ha actualizado
+tanto Starship como Droid.
+
+00:01:15.016 --> 00:01:16.866 align:middle
+Echa un vistazo a los cambios en cada uno.
+
+00:01:17.276 --> 00:01:20.926 align:middle
+En Starship, ahora tenemos una nueva
+propiedad droids, que es una ManyToMany.
+
+00:01:21.406 --> 00:01:25.616 align:middle
+También ha inicializado droids en ArrayCollection
+y ha añadido los métodos getDroids()
+
+00:01:25.616 --> 00:01:29.566 align:middle
+,addDroid() y removeDroid(): Si estás
+pensando que esto se parece mucho a
+
+00:01:29.566 --> 00:01:32.326 align:middle
+una relación OneToMany, ¡ding, ding!
+
+00:01:32.536 --> 00:01:33.786 align:middle
+¡Pídete una pizza!
+
+00:01:34.086 --> 00:01:35.506 align:middle
+¡Porque lo es!
+
+00:01:36.036 --> 00:01:38.076 align:middle
+En Droid, la historia es parecida.
+
+00:01:38.076 --> 00:01:43.036 align:middle
+Tenemos una propiedad ships, que es una
+ManyToMany, y se inicializa en el constructor.
+
+00:01:43.666 --> 00:01:46.066 align:middle
+Luego tenemos las mismas
+getStarships(), addStarship(),
+
+00:01:46.066 --> 00:01:49.066 align:middle
+y removeStarship(): Genera
+la migración para esto.
+
+00:01:49.486 --> 00:01:54.176 align:middle
+Vuelve al terminal y ejecuta: symfony
+console make:migration ¡Maravilloso!
+
+00:01:54.726 --> 00:01:57.596 align:middle
+Echa un vistazo a lo que
+ha generado: es fascinante.
+
+00:01:58.156 --> 00:02:00.766 align:middle
+¡Tenemos una nueva tabla
+llamada starship_droid!
+
+00:02:01.316 --> 00:02:06.536 align:middle
+Tiene una clave ajena starship_id para
+starship y una clave ajena droid_id para droid:
+
+00:02:07.226 --> 00:02:11.536 align:middle
+Así es como se estructura una relación
+ManyToMany en la base de datos: con una tabla join.
+
+00:02:12.156 --> 00:02:15.726 align:middle
+La verdadera magia de Doctrine es que
+sólo tenemos que pensar en objetos.
+
+00:02:15.726 --> 00:02:20.896 align:middle
+Un objeto Starship tiene muchos objetos Droid,
+y un objeto Droid tiene muchos objetos Starship.
+
+00:02:21.416 --> 00:02:25.346 align:middle
+Doctrine se encarga de los tediosos detalles
+de guardar esa relación en la base de datos.
+
+00:02:26.156 --> 00:02:28.226 align:middle
+Antes de continuar, ejecuta esa migración.
+
+00:02:28.556 --> 00:02:35.166 align:middle
+Vuelve al terminal y hazlo: symfony console
+doctrine:migrations:migrate ¡Genial!
+
+00:02:35.396 --> 00:02:37.396 align:middle
+Ya tenemos una nueva y
+reluciente tabla de unión.
+
+00:02:38.016 --> 00:02:42.076 align:middle
+Vale... ¿pero cómo relacionamos los
+objetos Droid con los objetos Starship?
+
+00:02:42.636 --> 00:02:43.226 align:middle
+Eso a continuación...
+
+00:02:43.286 --> 00:02:44.646 align:middle
+¡y te va a encantar!
