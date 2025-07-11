@@ -16,7 +16,7 @@ Esto asignará entre 1 y 5 `droids` aleatorios a cada `Starship`.
 
 ## La magia de Symfony
 
-Quizá te hayas dado cuenta de algo: aquí estamos estableciendo una propiedad `droids`, ¡pero en`Starship`, no tenemos un método `setDroids()`! Normalmente, esto provocaría un error furioso. Pero funcionará! Foundry ve que tenemos un método `addDroid()`, y lo llama en su lugar, uno a uno para cada `Droid`.
+Tal vez te hayas dado cuenta de algo: aquí estamos estableciendo una propiedad `droids`, ¡pero en`Starship`, no tenemos un método `setDroids()`! Normalmente, esto provocaría un error furioso. Pero funcionará! Foundry ve que tenemos un método `addDroid()`, y lo llama en su lugar, uno a uno para cada `Droid`.
 
 ## Ejecuta la prueba
 
