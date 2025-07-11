@@ -12,7 +12,7 @@ Y... ¡ya tenemos droides! Nada del otro mundo: crear un nuevo`Droid`, establece
 
 ## Asignación de droides a naves estelares
 
-Ahora, pasemos a la parte divertida: asignar un `Droid` a un `Starship`. Crea una variable `Starship` y prepárate para la magia:
+Ahora pasemos a la parte divertida: asignar un `Droid` a un `Starship`. Crea una variable `Starship` y prepárate para la magia:
 
 [[[ code('7a0cd0d073') ]]]
 
