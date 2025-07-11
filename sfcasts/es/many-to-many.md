@@ -15,7 +15,7 @@ Actualiza `Starship` y añade una propiedad `droids`. Utiliza "relación" para e
 > Cada `Starship` puede tener muchos `Droids`, y cada `Droid` puede servir en muchos
 > `Starships`. ¡Suena perfecto!
 
-A continuación, nos pregunta si queremos mapear el lado inverso de la relación. Esto es preguntarnos si queremos dar a nuestro `Droids` la capacidad de listar todos los `Starships` a los que está conectado: `$droid->getShips()` eso suena útil. Así que digamos "sí". Para el nuevo nombre de campo dentro de `Droid`, `ships` servirá perfectamente. 
+A continuación, nos pregunta si queremos mapear el lado inverso de la relación. Esto es preguntarnos si queremos dar a nuestro `Droids` la capacidad de listar todos los `Starships` a los que está conectado: `$droid->getShips()` eso suena útil. Así que digamos "sí". Para el nuevo nombre de campo dentro de `Droid`, `starships` servirá perfectamente. 
 
 Observa que ha actualizado tanto `Starship` como `Droid`. Echa un vistazo a los cambios en cada uno.
 
@@ -27,7 +27,7 @@ En `Starship`, ahora tenemos una nueva propiedad `droids`, que es una`ManyToMany
 
 Si estás pensando que esto se parece mucho a una relación `OneToMany`, ¡ding, ding! ¡Pídete una pizza! ¡Porque lo es!
 
-En `Droid`, la historia es parecida. Tenemos una propiedad `ships`, que es una `ManyToMany`, y se inicializa en el constructor. Luego tenemos las mismas`getStarships()`, `addStarship()`, y `removeStarship()`:
+En `Droid`, la historia es parecida. Tenemos una propiedad `starships`, que es una `ManyToMany`, y se inicializa en el constructor. Luego tenemos las mismas`getStarships()`, `addStarship()`, y `removeStarship()`:
 
 [[[ code('bac832adec') ]]]
 
