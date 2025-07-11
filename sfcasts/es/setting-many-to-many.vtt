@@ -1,0 +1,191 @@
+WEBVTT
+
+00:00:00.996 --> 00:00:03.436 align:middle
+Muy bien, vamos a sumergirnos
+en la parte final de ManyToMany.
+
+00:00:03.946 --> 00:00:06.426 align:middle
+En una esquina, tenemos la entidad Starship
+
+00:00:06.426 --> 00:00:10.066 align:middle
+, que está vinculada mediante una
+relación ManyToMany con la entidad Droid.
+
+00:00:10.446 --> 00:00:14.176 align:middle
+Esta relación nos proporciona una tabla adicional
+llamada "tabla de unión" que lleva la cuenta
+
+00:00:14.176 --> 00:00:16.916 align:middle
+de los droides que se han
+subido a cada nave estelar.
+
+00:00:17.246 --> 00:00:19.476 align:middle
+Pero, ¿cómo asignamos un Droid a un Starship?
+
+00:00:19.956 --> 00:00:21.506 align:middle
+Salta a AppFixtures.
+
+00:00:21.506 --> 00:00:25.136 align:middle
+En primer lugar, vamos a añadir
+unos cuantos droides a la mezcla.
+
+00:00:25.136 --> 00:00:26.946 align:middle
+Añadiré código que construya tres droides.
+
+00:00:28.916 --> 00:00:32.726 align:middle
+Importa la clase con una opción
+rápida o Alt + Enter: Y...
+
+00:00:32.726 --> 00:00:33.906 align:middle
+¡tenemos droides!
+
+00:00:34.496 --> 00:00:36.776 align:middle
+Nada del otro mundo: crear un nuevo Droid,
+
+00:00:36.776 --> 00:00:39.116 align:middle
+establecer las propiedades
+necesarias, persistir y vaciar.
+
+00:00:39.116 --> 00:00:43.286 align:middle
+Ahora, pasemos a la parte divertida:
+asignar un Droid a un Starship.
+
+00:00:44.916 --> 00:00:47.856 align:middle
+Crea una variable Starship
+y prepárate para la magia:
+
+00:00:49.026 --> 00:00:53.746 align:middle
+La forma de relacionar estas dos entidades
+es sorprendentemente sencilla, y te parecerá
+
+00:00:53.746 --> 00:00:56.146 align:middle
+un déjà vu de nuestra relación OneToMany.
+
+00:00:56.486 --> 00:00:59.126 align:middle
+¡Apuesto a que incluso puedes adivinarlo!
+
+00:00:59.126 --> 00:01:02.436 align:middle
+Antes del flush() es:
+$starship->addDroid($droid1).
+
+00:01:03.056 --> 00:01:07.646 align:middle
+Haz lo mismo con los otros dos droides
+- $starship->addDroid($droid2)
+
+00:01:07.646 --> 00:01:12.636 align:middle
+y $starship->addDroid($droid3):
+La tripulación está lista
+
+00:01:12.636 --> 00:01:15.766 align:middle
+para sus tortitas hechas con droides,
+¡así que vamos a intentarlo!
+
+00:01:15.926 --> 00:01:20.136 align:middle
+symfony console
+doctrine:fixtures:load Sin errores.
+
+00:01:20.496 --> 00:01:25.606 align:middle
+Para ver si realmente funciona, ejecuta: symfony
+console doctrine:query:sql 'SELECT * FROM droid'
+
+00:01:27.216 --> 00:01:30.546 align:middle
+Como esperábamos: tres filas, una
+por cada droide que hemos creado.
+
+00:01:31.186 --> 00:01:33.576 align:middle
+Ahora, echa un vistazo a la
+tabla de unión, starship_droid.
+
+00:01:35.586 --> 00:01:39.736 align:middle
+¡Guau! Tres filas, una por cada
+asignación de droide a envío.
+
+00:01:40.416 --> 00:01:43.916 align:middle
+La verdadera magia es que, con
+Doctrine, sólo tenemos que preocuparnos
+
+00:01:43.916 --> 00:01:46.906 align:middle
+de relacionar un objeto
+Droid con un objeto Starship.
+
+00:01:46.906 --> 00:01:49.776 align:middle
+Luego, se encarga del resto,
+gestionando la inserción
+
+00:01:49.776 --> 00:01:51.846 align:middle
+y eliminación de filas en la tabla de unión.
+
+00:01:51.846 --> 00:01:55.866 align:middle
+Después de la descarga, sabemos que
+tenemos tres filas en la tabla de unión.
+
+00:01:56.656 --> 00:02:01.976 align:middle
+Ahora, tras la descarga, elimina una
+asignación: $starship->removeDroid($droid1):
+
+00:02:04.116 --> 00:02:06.256 align:middle
+Recarga los accesorios y
+comprueba la tabla de unión.
+
+00:02:09.206 --> 00:02:11.006 align:middle
+¡Sólo quedan dos filas!
+
+00:02:11.586 --> 00:02:14.306 align:middle
+Doctrine ha eliminado la fila
+correspondiente a nuestro droide eliminado.
+
+00:02:14.306 --> 00:02:19.436 align:middle
+Un toque final en ManyToMany: ¿recuerdas
+cuando hablamos de los lados propio
+
+00:02:19.436 --> 00:02:21.736 align:middle
+e inverso de una relación?
+
+00:02:22.026 --> 00:02:25.816 align:middle
+Como vimos, nuestros métodos
+sincronizan el otro lado de la relación,
+
+00:02:28.116 --> 00:02:30.956 align:middle
+añadiendo el Droid al Starship
+cuando llamamos a addDroid():
+
+00:02:31.096 --> 00:02:33.266 align:middle
+Así que el lado propio no importa mucho.
+
+00:02:33.266 --> 00:02:35.516 align:middle
+Pero, ¿cuál es el lado propietario?
+
+00:02:36.156 --> 00:02:39.226 align:middle
+En un ManyToMany, cualquiera de los dos
+lados podría ser el lado propietario.
+
+00:02:39.226 --> 00:02:42.926 align:middle
+Para averiguar quién es el
+propietario, mira la opción inversedBy.
+
+00:02:43.686 --> 00:02:47.776 align:middle
+Dice ManyToMany y inversedBy: starships,
+
+00:02:47.776 --> 00:02:51.746 align:middle
+lo que significa que la propiedad
+Droid.starships es el lado inverso.
+
+00:02:53.346 --> 00:02:58.136 align:middle
+Ahora bien, esto es casi trivial, pero si eres un
+maniático del control y quieres dictar el nombre
+
+00:02:58.136 --> 00:03:01.246 align:middle
+de la tabla de unión, puedes
+añadir un atributo JoinTable.
+
+00:03:01.386 --> 00:03:04.186 align:middle
+Pero recuerda que tiene que
+ir en el lado propietario.
+
+00:03:04.786 --> 00:03:07.386 align:middle
+Aparte de eso, no te
+preocupes: no es gran cosa.
+
+00:03:07.516 --> 00:03:11.956 align:middle
+A continuación, vamos a utilizar la nueva relación
+para representar los droides asignados a cada nave.
