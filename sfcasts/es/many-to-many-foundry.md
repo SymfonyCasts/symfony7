@@ -10,7 +10,7 @@ Acércate a la parte inferior donde creamos `starships` y `parts`. Ahora tambié
 
 A continuación, asigna `droids` a `DroidFactory::randomRange(1, 5)`:
 
-[[[ code('2078487b4c') ]]]
+[[[ code('4f4394bf8f') ]]]
 
 Esto asignará entre 1 y 5 `droids` aleatorios a cada `Starship`.
 
