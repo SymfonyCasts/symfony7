@@ -1,19 +1,21 @@
 # Many To Many with Foundry
 
 Remember back in `AppFixtures` when we manually assigned a `Droid` to a
-`Starship`? That was fun! But now, I want to create an *army* of `droids`, a fleet of
-`starships` and assign them all at once.
+`Starship`? That was fun! But now, I want to create an *army* of `droids`,
+a fleet of `starships` and assign them all at once.
 
 Get rid of those manual `Droid` and `Starship` assignments in `AppFixtures`.
 
 ## Creating the Droid Army and Starship Fleet
 
-Zoom to the bottom where we create `starships` and
-`parts`. We also now need a bunch of `droids`:
-`DroidFactory::createMany(100)`. 
+Zoom to the bottom where we create `starships` and `parts`. We also now
+need a bunch of `droids`:`DroidFactory::createMany(100)`. 
 
-Below, set `droids` to `DroidFactory::randomRange(1, 5)`. This will assign
-anywhere between 1 and 5 random `droids` to each `Starship`.
+Below, set `droids` to `DroidFactory::randomRange(1, 5)`:
+
+[[[ code('2078487b4c') ]]]
+
+This will assign anywhere between 1 and 5 random `droids` to each `Starship`.
 
 ## The Magic of Symfony
 
@@ -56,7 +58,9 @@ called *once*: so it's assigning the same 1 to 5 random droids to every
 ## Closures & Foundry
 
 Fix this by passing a closure: `StarshipFactory::createMany()`, 100,
-`fn() => [ 'droids' => DroidFactory::randomRange(1, 5)])`
+`fn() => [ 'droids' => DroidFactory::randomRange(1, 5)])`:
+
+[[[ code('cec7afa4d8') ]]]
 
 Foundry will execute the callback for all 100 starships. This means `randomRange(1, 5)`
 will be called 100 times, giving us a truly random range for each ship. 
@@ -68,8 +72,7 @@ symfony console doctrine:fixtures:load
 symfony console doctrine:query:sql 'SELECT * FROM starship_droid'
 ```
 
-Then bask in the glory of a truly random set of droids assigned to
-starships.
+Then bask in the glory of a truly random set of droids assigned to starships.
 
 We could have also fixed this by moving the `droids` key into
 `StarshipFactory` down in the `defaults()` method. But I like to keep

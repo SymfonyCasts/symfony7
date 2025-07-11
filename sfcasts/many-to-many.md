@@ -27,7 +27,7 @@ Next, it asks us if we want to map the *inverse* side of the relationship.
 This is asking if we want to give our `Droids` the ability to
 list all the `Starships` they're connected to: `$droid->getShips()`.
 That sounds useful. So let's say "yes". For the new field name
-inside `Droid`, `ships` will do just fine. 
+inside `Droid`, `starships` will do just fine. 
 
 Notice it's updated *both* `Starship` and `Droid`. Take a peek at the changes
 in each.
@@ -43,7 +43,7 @@ added `getDroids()`, `addDroid()`, and `removeDroid()` methods:
 If you're thinking this looks a lot like a `OneToMany` relationship, ding, ding!
 Order yourself a pizza! Because it totally is!
 
-Over in `Droid`, it's a similar story. We have a `ships` property, which is
+Over in `Droid`, it's a similar story. We have a `starships` property, which is
 a `ManyToMany`, and it's initialized in the constructor. Then we have the same
 `getStarships()`, `addStarship()`, and `removeStarship()`:
 
