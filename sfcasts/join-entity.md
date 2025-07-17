@@ -4,7 +4,7 @@ ManyToMany relations are the *one* place in Doctrine where we have a
 table in our database - `starship_droid` - but no corresponding
 entity in our app.
 
-But there's a catch: we can't add extra *columns* to that join table. Like,
+But there's a catch: we *can't* add extra *columns* to that join table. Like,
 what if we wanted to track *when* a droid was assigned to a starship? To do
 that our join table would need an `assignedAt` column. But we can't add that!
 
@@ -16,8 +16,15 @@ We'll *stop* using the many-to-many relationship entirely. Instead, we're
 going to generate a new entity that represents the join table. First,
 undo the many-to-many relationship (but only worry
 about the properties, not the methods). In `Starship`, wave goodbye to the
-`droids` property, and over in `Droid`, do the same for the `starships`
-many-to-many property. Clear out the constructor in both.
+`droids` property:
+
+[[[ code('08ca1145f3') ]]]
+
+And over in `Droid`, do the same for the `starships` many-to-many property:
+
+[[[ code('30fee2522b') ]]]
+
+Clear out the constructor in both.
 
 Find your terminal and run:
 
@@ -55,10 +62,13 @@ These are going to be `ManyToOne` relationships, and they'll connect
 symfony console make:migration
 ```
 
-... and check it out. It might seem like there are a lot of changes, but look
+And check it out. It might seem like there are a lot of changes, but look
 closely: it's just dropping the foreign key constraints, adding a
-primary key, and recreating the foreign key. So, in the end, this
-migration doesn't change anything *real* in the database. 
+primary key, and recreating the foreign key:
+
+[[[ code('ab36b5fa82') ]]]
+
+So, in the end, this migration doesn't change anything *real* in the database. 
 
 Run it with:
 
@@ -72,13 +82,20 @@ And boom!
 
 Doctrine is throwing a tantrum because of the existing rows in the
 `starship_droid` table. We can pacify it with a default value. Update the
-migration manually to say `DEFAULT NOW() NOT NULL`. 
+migration manually to say `DEFAULT NOW() NOT NULL`:
+
+[[[ code('da05bc25ab') ]]]
 
 ## The Finishing Touches
 
-Let's add a final touch to `StarshipDroid`. This `assignedAt` isn't really
-something we should have to worry about. Create a constructor and set it
-automatically: `$this->assignedAt = new \DateTimeImmutable();`. 
+Let's add a final touch to `StarshipDroid`:
+
+[[[ code('c28ba6cf5b') ]]]
+
+This `assignedAt` isn't really something we should have to worry about.
+Create a constructor and set it automatically: `$this->assignedAt = new \DateTimeImmutable();`:
+
+[[[ code('740c1d4a35') ]]]
 
 Hold up, because this is huge! We now have the *exact* same relationship
 in the database as before. But since we've taken control of the join entity,

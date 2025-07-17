@@ -17,13 +17,18 @@ my friend, absolutely.
 
 ## Fixing the getDroids() Method
 
-Use `$this->starshipDroids->map()` to transform each item in the
-`StarshipDroid` collection into a `Droid` object. We now
-have a `getDroids()` method that once again returns a collection of
-`Droid` objects. We rock!
+Use `$this->starshipDroids->map()` to transform each item in the `StarshipDroid`
+collection into a `Droid` object:
 
- Now that we have this method, down here in `getDroidNames()`. Instead of
-using the `droids` property, switch to the `getDroids()` method.
+[[[ code('bf9d77485f') ]]]
+
+We now have a `getDroids()` method that once again returns a collection of `Droid`
+objects. We rock!
+
+Now that we have this method, down here in `getDroidNames()`. Instead of
+using the `droids` property, switch to the `getDroids()` method:
+
+[[[ code('3a007fda38') ]]]
 
 Head back to the homepage template and refresh. Success! Fetching the droids for
 a ship is still easy. And the rest of our code didn't need to change.
@@ -32,9 +37,10 @@ a ship is still easy. And the rest of our code didn't need to change.
 
 Open up the `Droid` entity and find `getStarships()`. We haven't used
 this method yet, but let's fix it up too. This should return a
-collection of `Starship` objects. Use the same
-`map()` trick to transform the `StarshipDroid` collection into a
-collection of `Starship` objects.
+collection of `Starship` objects. Use the same `map()` trick to transform
+the `StarshipDroid` collection into a collection of `Starship` objects:
+
+[[[ code('0a0a4fc660') ]]]
 
 ## Hiding the Join Entity When We Create the Relationship
 
