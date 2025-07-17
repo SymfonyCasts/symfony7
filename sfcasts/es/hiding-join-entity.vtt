@@ -1,0 +1,116 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:02.836 align:middle
+Actualiza la página de inicio y...
+
+00:00:02.916 --> 00:00:07.426 align:middle
+¡pillado! En la plantilla de la página de
+inicio, hacemos referencia a ship.droidNames.
+
+00:00:07.966 --> 00:00:11.096 align:middle
+Sabemos que esto llama a
+$starship->getDroidNames().
+
+00:00:11.456 --> 00:00:14.766 align:middle
+Pero eso sigue intentando utilizar la
+propiedad droids que acabamos de eliminar.
+
+00:00:15.136 --> 00:00:16.166 align:middle
+Arreglemos eso primero.
+
+00:00:16.166 --> 00:00:20.246 align:middle
+Podríamos arreglarlo haciendo un
+bucle sobre $ship->starshipDroids
+
+00:00:20.246 --> 00:00:21.886 align:middle
+y cogiendo el nombre de cada uno de ellos.
+
+00:00:21.886 --> 00:00:23.146 align:middle
+Pero, ¡espera!
+
+00:00:23.486 --> 00:00:24.896 align:middle
+Ignora este método durante un minuto.
+
+00:00:25.356 --> 00:00:29.606 align:middle
+Si alejas el zoom, esto sigue siendo
+una relación entre Starship y Droid.
+
+00:00:30.186 --> 00:00:33.596 align:middle
+Así que, ¿no estaría bien que pudiéramos
+seguir llamando a $ship->getDroids()
+
+00:00:33.706 --> 00:00:35.926 align:middle
+y que nos devolviera una
+colección de objetos Droid?
+
+00:00:36.496 --> 00:00:37.276 align:middle
+¿Es posible?
+
+00:00:37.676 --> 00:00:40.066 align:middle
+Absolutamente, amigo mío, absolutamente.
+
+00:00:40.556 --> 00:00:45.656 align:middle
+Utiliza $this->starshipDroids->map() para
+transformar cada elemento de la colección StarshipDroid
+
+00:00:45.656 --> 00:00:49.076 align:middle
+en un objeto Droid: Ahora
+tenemos un método getDroids()
+
+00:00:49.076 --> 00:00:51.686 align:middle
+que devuelve de nuevo una
+colección de objetos Droid.
+
+00:00:52.126 --> 00:00:56.316 align:middle
+¡Estupendo! Ahora que tenemos este
+método, aquí abajo en getDroidNames().
+
+00:00:56.726 --> 00:00:59.896 align:middle
+En lugar de utilizar la propiedad
+droids, cambia al método getDroids():
+
+00:01:00.696 --> 00:01:02.596 align:middle
+Vuelve a la plantilla de la
+página de inicio y actualízala.
+
+00:01:03.186 --> 00:01:06.336 align:middle
+¡Ya está! Obtener los droides
+de una nave sigue siendo fácil.
+
+00:01:06.606 --> 00:01:08.476 align:middle
+Y el resto de nuestro código
+no ha tenido que cambiar.
+
+00:01:09.286 --> 00:01:11.526 align:middle
+Abre la entidad Droid y busca getStarships().
+
+00:01:11.956 --> 00:01:14.616 align:middle
+Aún no hemos utilizado este método,
+pero vamos a arreglarlo también.
+
+00:01:15.226 --> 00:01:17.516 align:middle
+Esto debería devolver una
+colección de objetos Starship.
+
+00:01:18.026 --> 00:01:22.086 align:middle
+Utiliza el mismo truco de map() para transformar
+la colección StarshipDroid en una colección
+
+00:01:22.086 --> 00:01:26.056 align:middle
+de objetos Starship: Hay una última
+cosa de la que tenemos que ocuparnos.
+
+00:01:26.636 --> 00:01:29.296 align:middle
+Cuando creamos la relación,
+todavía tenemos que hacer un poco
+
+00:01:29.296 --> 00:01:31.596 align:middle
+de trabajo pesado creando
+esta entidad de unión.
+
+00:01:32.146 --> 00:01:34.966 align:middle
+No es tan sencillo como
+$ship->addDroid($droid).
+
+00:01:35.476 --> 00:01:37.096 align:middle
+Lo abordaremos en el próximo capítulo.
