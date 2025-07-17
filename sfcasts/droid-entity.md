@@ -71,9 +71,6 @@ I'll replace the array with more interesting data:
 ***NOTE
 To get this to work, also update `AppFixtures` to include:
 
-
-***NOTE
-
 ```php
 DroidFactory::createMany(100)
 ```
