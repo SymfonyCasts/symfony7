@@ -1,6 +1,6 @@
 # Unir a través de una relación de muchos a muchos
 
-¿Alguna vez te has preguntado en qué nave de la flota hay más droides? Yo también Hagamos una lista de todas las naves en orden ascendente según su número de droides.
+¿Te has preguntado alguna vez en qué nave de la flota hay más droides? Yo también Hagamos una lista de todas las naves en orden ascendente según su número de droides.
 
 Sumérgete en `src/Controller/MainController.php`. La consulta es:`$ships = $repository->findIncomplete();`.
 
@@ -22,9 +22,9 @@ Para contar los droides, añade un `groupBy('s.id')`.
 
 Para ordenar sustituye el `orderBy()` existente por `orderBy('COUNT(droid)', 'ASC')`:
 
-[[[ code('4f2e62b665') ]]]
+[[[ code('3e71144b97') ]]]
 
-Después, pulsa actualizar y ¡boom! En la parte superior, verás `droids none`. Pero a medida que te desplazas hacia abajo, el recuento de droides aumenta. Si eres lo bastante valiente como para aventurarte unas páginas más adelante, ¡empezaremos a ver naves estelares con dos, tres o incluso cuatro droides!
+Después, pulsa actualizar y ¡boom! En la parte superior, verás `droids none`. Pero a medida que te desplazas hacia abajo, el recuento de droides aumenta. Si eres lo suficientemente valiente como para aventurarte unas páginas más adelante, ¡empezaremos a ver naves estelares con dos, tres o incluso cuatro droides!
 
 ¿La clave? No hay nada especial en esta unión. Nos unimos a través de la propiedad y Doctrine se encarga del resto.
 
