@@ -2,7 +2,6 @@
 
 Refresh the homepage and... busted! In the homepage template,
 we're referencing `ship.droidNames`. *We* know that this calls
-
 `$starship->getDroidNames()`. But that's still trying to use the
 `droids` property that we just deleted. Let's fix that first.
 

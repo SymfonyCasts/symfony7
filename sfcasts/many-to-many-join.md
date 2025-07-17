@@ -34,7 +34,7 @@ To count the droids, add a `groupBy('s.id')`.
 
 To order replace the existing `orderBy()` with `orderBy('COUNT(droid)', 'ASC')`:
 
-[[[ code('4f2e62b665') ]]]
+[[[ code('3e71144b97') ]]]
 
 After that, hit refresh and boom! At the top, you'll see `droids none`. But
 as you scroll down, the droid count increases. If you're brave enough to
