@@ -68,7 +68,14 @@ I'll replace the array with more interesting data:
 
 [[[ code('7d04c9335b') ]]]
 
-Reload the fixtures with:
+***NOTE
+To get this to work, also update `AppFixtures` to include:
+
+```php
+DroidFactory::createMay(100)
+***
+
+We'll do this a bit later. Reload the fixtures with:
 
 ```terminal
 symfony console doctrine:fixtures:load
