@@ -48,10 +48,16 @@ Abre `src/Factory/DroidFactory.php`. Ya está listo, pero les falta personalidad
 
 [[[ code('7d04c9335b') ]]]
 
-Recarga los accesorios con:
+***NOTE
+Para que esto funcione, actualiza también `AppFixtures` para incluir```php
+DroidFactory::createMay(100)
+```
+***
+
+Lo haremos un poco más tarde. Recarga los accesorios con:
 
 ```terminal
 symfony console doctrine:fixtures:load
 ```
 
-¡Y ahí lo tienes! Una tabla `droid` llena hasta los topes de droides dispuestos a ayudar y no a morir en el solitario vacío del espacio. Pero un droide aún no puede asignarse a una nave. Cambiemos eso con nuestro último tipo de relación: `ManyToMany`.
+¡Y ahí lo tienes! Una tabla `droid` llena hasta los topes de droides dispuestos a ayudar y no a morir en el solitario vacío del espacio. Pero todavía no se puede asignar un droide a una nave. Cambiemos eso con nuestro último tipo de relación: `ManyToMany`.
