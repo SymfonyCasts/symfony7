@@ -1,8 +1,6 @@
 # Ocultar la Entidad de Unión
 
-Actualiza la página de inicio y... ¡arruinado! En la plantilla de la página de inicio, estamos haciendo referencia a `ship.droidNames`. Sabemos que esto llama a
-
-`$starship->getDroidNames()`. Pero eso sigue intentando utilizar la propiedad`droids` que acabamos de eliminar. Arreglemos eso primero.
+Actualiza la página de inicio y... ¡arruinado! En la plantilla de la página de inicio, hacemos referencia a `ship.droidNames`. Sabemos que esto llama a`$starship->getDroidNames()`. Pero eso sigue intentando utilizar la propiedad`droids` que acabamos de eliminar. Arreglemos eso primero.
 
 ## ¿No sigue siendo una relación entre Starship y Droide?
 
