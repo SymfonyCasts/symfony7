@@ -49,11 +49,9 @@ Abre `src/Factory/DroidFactory.php`. Ya está listo, pero les falta personalidad
 [[[ code('7d04c9335b') ]]]
 
 ***NOTE
-Para que esto funcione, actualiza también `AppFixtures` para incluir***NOTE
-```php
+Para que esto funcione, actualiza también `AppFixtures` para incluir```php
 DroidFactory::createMany(100)
 ```
-***
 ***
 
 Lo haremos un poco más tarde. Recarga los accesorios con:
