@@ -8,7 +8,15 @@ Pero hay un problema: no podemos añadir columnas adicionales a esa tabla de uni
 
 La solución es arremangarnos y empezar a manejar las cosas de forma más manual.
 
-Dejaremos de utilizar la relación muchos-a-muchos por completo. En su lugar, vamos a generar una nueva entidad que represente la tabla de unión. Primero, deshaz la relación muchos-a-muchos (pero preocúpate sólo de las propiedades, no de los métodos). En `Starship`, despídete de la propiedad`droids`, y en `Droid`, haz lo mismo con la propiedad `starships`muchos-a-muchos. Elimina el constructor en ambos.
+Dejaremos de utilizar la relación muchos-a-muchos por completo. En su lugar, vamos a generar una nueva entidad que represente la tabla de unión. Primero, deshaz la relación muchos-a-muchos (pero preocúpate sólo de las propiedades, no de los métodos). En `Starship`, despídete de la propiedad`droids`:
+
+[[[ code('08ca1145f3') ]]]
+
+Y en `Droid`, haz lo mismo con la propiedad muchos-a-muchos `starships`:
+
+[[[ code('30fee2522b') ]]]
+
+Borra el constructor en ambos.
 
 Busca tu terminal y ejecuta:
 
@@ -40,7 +48,11 @@ Ahora, genera esa migración:
 symfony console make:migration
 ```
 
-... y compruébalo. Puede parecer que hay muchos cambios, pero fíjate bien: sólo se eliminan las restricciones de clave foránea, se añade una clave primaria y se vuelve a crear la clave foránea. Así que, al final, esta migración no cambia nada real en la base de datos. 
+Y compruébalo. Puede parecer que hay muchos cambios, pero fíjate bien: sólo se eliminan las restricciones de clave foránea, se añade una clave primaria y se vuelve a crear la clave foránea:
+
+[[[ code('ab36b5fa82') ]]]
+
+Así que, al final, esta migración no cambia nada real en la base de datos. 
 
 Ejecútala con:
 
@@ -52,10 +64,18 @@ Y ¡boom!
 
 > La columna `assignedAt` no puede contener valores `null`. 
 
-Doctrine está cogiendo una rabieta debido a las filas existentes en la tabla`starship_droid`. Podemos apaciguarlo con un valor por defecto. Actualiza manualmente la migración a, por ejemplo, `DEFAULT NOW() NOT NULL`. 
+Doctrine está haciendo un berrinche debido a las filas existentes en la tabla`starship_droid`. Podemos apaciguarlo con un valor por defecto. Actualiza manualmente la migración a, por ejemplo, `DEFAULT NOW() NOT NULL`:
+
+[[[ code('da05bc25ab') ]]]
 
 ## Los toques finales
 
-Vamos a añadir un toque final a `StarshipDroid`. Este `assignedAt` no es realmente algo de lo que debamos preocuparnos. Crea un constructor y configúralo automáticamente: `$this->assignedAt = new \DateTimeImmutable();`. 
+Vamos a añadir un toque final a `StarshipDroid`:
 
-Espera, ¡porque esto es enorme! Ahora tenemos exactamente la misma relación en la base de datos que antes. Pero como hemos tomado el control de la entidad join, podemos añadirle nuevos campos. A continuación, veremos cómo asignar droides a naves estelares con esta nueva configuración de entidades. Y finalmente, ¡nos pondremos elegantes y ocultaremos por completo este detalle de la implementación!
+[[[ code('c28ba6cf5b') ]]]
+
+Este `assignedAt` no es realmente algo de lo que debamos preocuparnos. Crea un constructor y configúralo automáticamente: `$this->assignedAt = new \DateTimeImmutable();`:
+
+[[[ code('740c1d4a35') ]]]
+
+Espera, ¡porque esto es enorme! Ahora tenemos exactamente la misma relación en la base de datos que antes. Pero como hemos tomado el control de la entidad join, podemos añadirle nuevos campos. A continuación, veremos cómo asignar droides a naves estelares con esta nueva configuración de entidades. Y, finalmente, ¡nos pondremos elegantes y ocultaremos por completo este detalle de la implementación!
