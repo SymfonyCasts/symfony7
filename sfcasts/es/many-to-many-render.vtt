@@ -132,12 +132,12 @@ podemos decir {{ ship.droidNames ?: 'none'
 Ya está!
 
 00:02:37.886 --> 00:02:40.136 align:middle
-Actualiza... y disfruta de los
-nombres de los droides en la
+Actualiza... y disfruta de los nombres
+de los droides en la página de inicio. 
 
 00:02:40.956 --> 00:02:44.836 align:middle
-página de inicio. A continuación: utilicemos
-Foundry para establecer la relación ManyToMany en los
+A continuación: utilicemos Foundry
+para establecer la relación ManyToMany en los accesorios.
 
 00:02:45.186 --> 00:02:47.066 align:middle
-accesorios. Otro lugar Foundry
+¡Otro lugar en el que brilla Foundry!
