@@ -1,0 +1,160 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:05.646 align:middle
+Las relaciones ManyToMany son el único lugar de Doctrine
+donde tenemos una tabla en nuestra base de datos -
+
+00:00:05.836 --> 00:00:09.406 align:middle
+starship_droid - pero ninguna entidad
+correspondiente en nuestra aplicación.
+
+00:00:09.846 --> 00:00:13.396 align:middle
+Pero hay una pega: no podemos añadir
+columnas adicionales a esa tabla de unión.
+
+00:00:14.006 --> 00:00:17.376 align:middle
+Por ejemplo, ¿qué pasaría si quisiéramos saber
+cuándo se asigna un droide a una nave estelar?
+
+00:00:17.816 --> 00:00:20.766 align:middle
+Para ello, nuestra tabla de unión
+necesitaría una columna assignedAt.
+
+00:00:21.226 --> 00:00:22.416 align:middle
+Pero no podemos añadirla
+
+00:00:22.976 --> 00:00:26.666 align:middle
+La solución es arremangarnos y empezar
+a manejar las cosas de forma más manual.
+
+00:00:27.216 --> 00:00:30.106 align:middle
+Dejaremos de utilizar la relación
+muchos-a-muchos por completo.
+
+00:00:30.666 --> 00:00:33.916 align:middle
+En su lugar, vamos a generar una nueva
+entidad que represente la tabla de unión.
+
+00:00:34.586 --> 00:00:37.386 align:middle
+Primero, deshaz la relación
+muchos-a-muchos (pero preocúpate sólo
+
+00:00:37.386 --> 00:00:38.946 align:middle
+de las propiedades, no de los métodos).
+
+00:00:39.556 --> 00:00:44.336 align:middle
+En Starship, despídete de la
+propiedad droids: Y en Droid,
+
+00:00:44.556 --> 00:00:49.916 align:middle
+haz lo mismo con la propiedad muchos-a-muchos
+starships: Borra el constructor en ambos.
+
+00:00:55.366 --> 00:00:58.766 align:middle
+Busca tu terminal y ejecuta: symfony
+console doctrine:schema:update
+
+00:00:59.016 --> 00:01:05.666 align:middle
+--dump-sql Esto te muestra el aspecto que tendría
+tu migración si la generaras ahora mismo.
+
+00:01:06.226 --> 00:01:09.596 align:middle
+Es lo que esperamos: no
+más tabla starship_droid.
+
+00:01:10.156 --> 00:01:12.366 align:middle
+Pero ¡no generes todavía esa migración!
+
+00:01:12.686 --> 00:01:16.746 align:middle
+Sí queremos la tabla de unión, pero ahora
+tenemos que crear una entidad que la represente.
+
+00:01:17.386 --> 00:01:22.136 align:middle
+Ejecuta: symfony console make:entity StarshipDroid
+DroidAssignment podría ser un nombre más adecuado,
+
+00:01:22.366 --> 00:01:25.136 align:middle
+pero StarshipDroid nos ayuda a
+visualizar lo que estamos haciendo:
+
+00:01:25.386 --> 00:01:31.176 align:middle
+recrear exactamente la misma relación de base de
+datos mediante dos ManyToOne s Añadir assignedAt
+
+00:01:31.176 --> 00:01:36.096 align:middle
+junto con dos propiedades más para crear relaciones
+desde esta tabla de unión a Starship y Droid.
+
+00:01:36.566 --> 00:01:38.386 align:middle
+Éstas serán relaciones ManyToOne
+
+00:01:38.386 --> 00:01:41.906 align:middle
+, y conectarán StarshipDroid
+con Starship y Droid.
+
+00:01:42.796 --> 00:01:48.556 align:middle
+Ahora, genera esa migración: symfony
+console make:migration Y compruébalo.
+
+00:01:51.086 --> 00:01:53.896 align:middle
+Puede parecer que hay muchos
+cambios, pero fíjate bien:
+
+00:01:54.366 --> 00:01:57.796 align:middle
+sólo se trata de eliminar las restricciones
+de clave ajena, añadir una clave primaria
+
+00:01:57.796 --> 00:02:00.246 align:middle
+y volver a crear la clave
+ajena: Así que, al final,
+
+00:02:00.246 --> 00:02:02.796 align:middle
+esta migración no cambia
+nada real en la base de datos.
+
+00:02:03.406 --> 00:02:10.046 align:middle
+Ejecútala con: symfony console
+doctrine:migrations:migrate Y ¡boom!
+
+00:02:10.416 --> 00:02:12.706 align:middle
+La columna assignedAt no
+puede contener valores null.
+
+00:02:13.306 --> 00:02:17.496 align:middle
+Doctrine está haciendo un berrinche debido a
+las filas existentes en la tabla starship_droid.
+
+00:02:18.256 --> 00:02:20.226 align:middle
+Podemos apaciguarlo con un valor por defecto.
+
+00:02:21.156 --> 00:02:26.646 align:middle
+Actualiza la migración manualmente para que
+diga DEFAULT NOW() NOT NULL: Añadamos un toque
+
+00:02:26.646 --> 00:02:31.476 align:middle
+final a StarshipDroid: Este assignedAt no es
+realmente algo de lo que debamos preocuparnos.
+
+00:02:32.756 --> 00:02:34.566 align:middle
+Crea un constructor y
+configúralo automáticamente:
+
+00:02:35.676 --> 00:02:41.386 align:middle
+$this->assignedAt = new \DateTimeImmutable();:
+Espera, ¡porque esto es enorme!
+
+00:02:41.846 --> 00:02:45.116 align:middle
+Ahora tenemos exactamente la misma
+relación en la base de datos que antes.
+
+00:02:45.726 --> 00:02:49.566 align:middle
+Pero como hemos tomado el control de la
+entidad join, podemos añadirle nuevos campos.
+
+00:02:50.246 --> 00:02:53.996 align:middle
+A continuación, veremos cómo asignar droides a naves
+estelares con esta nueva configuración de entidades.
+
+00:02:54.516 --> 00:02:58.536 align:middle
+Y finalmente, ¡nos pondremos elegantes y ocultaremos
+por completo este detalle de la implementación!
