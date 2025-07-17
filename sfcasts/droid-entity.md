@@ -71,8 +71,12 @@ I'll replace the array with more interesting data:
 ***NOTE
 To get this to work, also update `AppFixtures` to include:
 
+
+***NOTE
+
 ```php
-DroidFactory::createMay(100)
+DroidFactory::createMany(100)
+```
 ***
 
 We'll do this a bit later. Reload the fixtures with:
