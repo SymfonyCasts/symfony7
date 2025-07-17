@@ -2,8 +2,8 @@
 
 Nueva misión: necesitamos una página que enumere todas las piezas disponibles. Nuestro equipo de ventas ferengi la utilizará para el clásico upselling. Ya sabes, lo de siempre:
 
-> Oye, acabas de comprar una nave estelar, ¿qué tal unos nuevos y brillantes organizadores de cristal de dilitio o estabilizadores de portavasos?
-> organizadores o estabilizadores de portavasos?
+> Oye, acabas de comprar una nave estelar, ¿qué tal unos nuevos y relucientes organizadores de cristal de dilitio o
+> estabilizadores de portavasos?
 
 Utilicemos MakerBundle para adelantarnos. Busca tu terminal y ejecuta:
 
