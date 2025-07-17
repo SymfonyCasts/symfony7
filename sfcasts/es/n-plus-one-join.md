@@ -16,7 +16,7 @@ Consulta personalizada, ¡comprobado! Copia el nombre del método y dirígete a`
 
 ## Examinar nuestras consultas
 
-Echa un vistazo a las consultas de esta página: hay 9. La primera es exactamente lo que habíamos previsto: busca todas las `starship_part`ordenadas por precio de forma descendente. Pero espera, ¿qué son todas estas otras consultas? Hay una consulta más por nave estelar, ¿a qué se debe?
+Echa un vistazo a las consultas de esta página: hay 9. La primera es exactamente lo que habíamos previsto: busca todas las `starship_part`ordenadas por precio de forma descendente. Pero espera, ¿qué son todas estas otras consultas? Hay una consulta más por nave. ¿Por qué?
 
 ## El problema N + 1
 
