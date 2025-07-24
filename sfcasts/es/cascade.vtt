@@ -1,0 +1,183 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:03.466 align:middle
+Echa un vistazo a este error: ¡es una pasada!
+
+00:00:03.886 --> 00:00:08.466 align:middle
+Se encontró una entidad a través de la relación
+Starship.droids que no estaba configurada
+
+00:00:08.466 --> 00:00:11.976 align:middle
+para operaciones de "persistencia en
+cascada" para la entidad StarshipDroid.
+
+00:00:12.556 --> 00:00:16.076 align:middle
+Déjame que te lo traduzca: Oye,
+estás guardando este Starship
+
+00:00:16.266 --> 00:00:18.316 align:middle
+y tiene un StarshipDroid adjunto.
+
+00:00:18.626 --> 00:00:22.096 align:middle
+Eso está muy bien, pero te has olvidado
+de decirme que persista el StarshipDroid.
+
+00:00:22.486 --> 00:00:23.286 align:middle
+¿Qué quieres que haga?
+
+00:00:23.286 --> 00:00:27.186 align:middle
+Pero, de nuevo, desde dentro de Starship,
+no podemos hacer que el gestor de entidades
+
+00:00:27.186 --> 00:00:29.766 align:middle
+diga $manager->persist($starshipDroid).
+
+00:00:30.486 --> 00:00:33.346 align:middle
+La solución es utilizar algo
+llamado persistir en cascada.
+
+00:00:33.986 --> 00:00:37.336 align:middle
+Desplázate hasta la propiedad
+$starshipDroids, y busca la opción OneToMany.
+
+00:00:37.876 --> 00:00:39.696 align:middle
+Añade una nueva opción: cascade.
+
+00:00:39.996 --> 00:00:41.126 align:middle
+La escribiré manualmente.
+
+00:00:41.746 --> 00:00:46.636 align:middle
+Establécela como una matriz con persist dentro:
+Estamos creando una especie de efecto dominó.
+
+00:00:47.106 --> 00:00:50.566 align:middle
+Si alguien persiste en este starship,
+vamos a enviar en cascada esa persistencia
+
+00:00:50.566 --> 00:00:52.436 align:middle
+a todas las relaciones adjuntas.
+
+00:00:53.016 --> 00:00:56.006 align:middle
+Una advertencia: utiliza
+este poder con prudencia.
+
+00:00:56.386 --> 00:00:58.576 align:middle
+Hace que tu código sea más
+automático, lo cual es estupendo,
+
+00:00:58.896 --> 00:01:00.736 align:middle
+pero también puede dificultar
+la detección de errores.
+
+00:01:01.156 --> 00:01:03.346 align:middle
+Pero en este caso, es exactamente
+la solución que necesitamos.
+
+00:01:03.916 --> 00:01:08.466 align:middle
+Dale otra vuelta a esas
+fijaciones: Ya estamos de vuelta.
+
+00:01:08.786 --> 00:01:11.046 align:middle
+Podemos volver a utilizar ship->addDroid().
+
+00:01:11.786 --> 00:01:15.326 align:middle
+Pero aún quiero crear una flota de
+starships con droids unido a ellos.
+
+00:01:15.696 --> 00:01:19.666 align:middle
+Elimina todo el código manual y vuelve a
+poner la propiedad droids en StarshipFactory:
+
+00:01:20.546 --> 00:01:23.646 align:middle
+Vuelve a encender los
+dispositivos: ¿Adivina qué?
+
+00:01:23.886 --> 00:01:24.596 align:middle
+¡Funcionan!
+
+00:01:25.236 --> 00:01:29.636 align:middle
+Entre bastidores, Foundry está llamando a
+addDroid() en cada Starship para cada droid.
+
+00:01:29.986 --> 00:01:32.526 align:middle
+Y acabamos de comprobar que
+addDroid() vuelve a funcionar.
+
+00:01:33.116 --> 00:01:37.496 align:middle
+¡La creación de la entidad de unión StarshipDroid
+está ahora oculta a toda nuestra base de código!
+
+00:01:37.496 --> 00:01:42.166 align:middle
+Pero, ¿y si quieres añadir un droid a un
+starship y controlar la propiedad assignedAt?
+
+00:01:42.896 --> 00:01:47.236 align:middle
+Añade un argumento para addDroid()
+en Starship: un DateTimeImmutable.
+
+00:01:47.786 --> 00:01:49.636 align:middle
+Que sea opcional para mantener la flexibilidad.
+
+00:01:50.356 --> 00:01:56.156 align:middle
+Entonces, después de crear el StarshipDroid,
+establece el $assignedAt si lo hemos pasado: Genial...
+
+00:01:56.286 --> 00:01:57.436 align:middle
+pero hay un pequeño problema.
+
+00:01:57.976 --> 00:02:00.396 align:middle
+Foundry no nos permite
+controlar el campo assignedAt.
+
+00:02:00.756 --> 00:02:03.126 align:middle
+Así que, si quieres asignar algún
+droids en un momento concreto,
+
+00:02:03.446 --> 00:02:04.956 align:middle
+tendrás que coger el volante manualmente.
+
+00:02:05.586 --> 00:02:08.366 align:middle
+Por último, hagamos que ese assignedAt
+sea visible en nuestro sitio.
+
+00:02:08.826 --> 00:02:11.566 align:middle
+Para ello necesitaremos el objeto
+de entidad de unión StarshipDroid.
+
+00:02:11.996 --> 00:02:13.836 align:middle
+Es un poco más de trabajo,
+pero totalmente factible.
+
+00:02:14.356 --> 00:02:18.356 align:middle
+Cambia el bucle a for starshipDroid
+in ship.starshipDroids.
+
+00:02:19.756 --> 00:02:24.016 align:middle
+A continuación, starshipDroid.droid.name
+y starshipDroid.assignedAt
+
+00:02:25.816 --> 00:02:32.176 align:middle
+con el filtro ago para darle
+estilo: Actualizar y...
+
+00:02:32.176 --> 00:02:35.346 align:middle
+ahora podemos ver cuándo
+se asignó cada droid.
+
+00:02:36.756 --> 00:02:37.476 align:middle
+¡Eso es todo, amigos!
+
+00:02:37.786 --> 00:02:40.856 align:middle
+Hemos explorado los rincones más
+profundos de las relaciones Doctrine,
+
+00:02:41.256 --> 00:02:44.036 align:middle
+incluso las esquivas muchos-a-muchos
+con campos adicionales.
+
+00:02:44.666 --> 00:02:47.606 align:middle
+Como siempre, si tienes alguna pregunta,
+déjala en los comentarios a continuación.
+
+00:02:48.156 --> 00:02:49.376 align:middle
+¡Estamos todos juntos en esto!
