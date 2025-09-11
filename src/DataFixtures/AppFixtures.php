@@ -30,7 +30,7 @@ class AppFixtures extends Fixture
             'arrivedAt' => new \DateTimeImmutable('-1 week'),
         ]);
 
-        StarshipFactory::createOne([
+        $ship = StarshipFactory::createOne([
             'name' => 'USS Wanderlust (NCC-2024-W)',
             'class' => 'Delta Tourist',
             'captain' => 'Kathryn Journeyway',
@@ -39,6 +39,8 @@ class AppFixtures extends Fixture
         ]);
 
         StarshipFactory::createMany(20);
-        StarshipPartFactory::createMany(100);
+        StarshipPartFactory::createMany(100, [
+            'starship' => $ship,
+        ]);
     }
 }
