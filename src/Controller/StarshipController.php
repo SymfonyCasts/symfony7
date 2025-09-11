@@ -19,7 +19,6 @@ class StarshipController extends AbstractController
     ): Response {
         return $this->render('starship/show.html.twig', [
             'ship' => $ship,
-            'parts' => $ship->getParts(),
         ]);
     }
 }
