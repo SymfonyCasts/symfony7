@@ -13,7 +13,7 @@ need a bunch of `droids`:`DroidFactory::createMany(100)`.
 
 Below, set `droids` to `DroidFactory::randomRange(1, 5)`:
 
-[[[ code('4f4394bf8f') ]]]
+[[[ code('3d67ea2ef7') ]]]
 
 This will assign anywhere between 1 and 5 random `droids` to each `Starship`.
 
