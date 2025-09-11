@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Droid;
 use App\Entity\StarshipStatusEnum;
+use App\Factory\DroidFactory;
 use App\Factory\StarshipFactory;
 use App\Factory\StarshipPartFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -44,7 +45,11 @@ class AppFixtures extends Fixture
         $ship->removePart($starshipPart);
         $manager->flush();
 
-        StarshipFactory::createMany(20);
+        DroidFactory::createMany(100);
+
+        StarshipFactory::createMany(100, [
+            'droids' => DroidFactory::randomRange(1, 5),
+        ]);
         StarshipPartFactory::createMany(100);
     }
 }
