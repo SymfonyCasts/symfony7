@@ -26,6 +26,10 @@ class StarshipPart
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $notes = null;
 
+    #[ORM\ManyToOne(inversedBy: 'parts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Starship $starship = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -63,6 +67,18 @@ class StarshipPart
     public function setNotes(?string $notes): static
     {
         $this->notes = $notes;
+
+        return $this;
+    }
+
+    public function getStarship(): ?Starship
+    {
+        return $this->starship;
+    }
+
+    public function setStarship(?Starship $starship): static
+    {
+        $this->starship = $starship;
 
         return $this;
     }
