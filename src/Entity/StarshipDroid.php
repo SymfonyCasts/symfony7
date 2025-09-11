@@ -24,6 +24,11 @@ class StarshipDroid
     #[ORM\JoinColumn(nullable: false)]
     private ?Starship $starship = null;
 
+    public function __construct()
+    {
+        $this->assignedAt = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
