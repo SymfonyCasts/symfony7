@@ -16,16 +16,10 @@ class StarshipController extends AbstractController
     public function show(
         #[MapEntity(mapping: ['slug' => 'slug'])]
         Starship $ship,
-        StarshipPartRepository $partRepository,
     ): Response {
-        $parts = $partRepository->findBy(['starship' => $ship]);
-
-        foreach ($ship->getParts() as $part) {
-            dump($part);
-        }
-
         return $this->render('starship/show.html.twig', [
             'ship' => $ship,
+            'parts' => $ship->getParts(),
         ]);
     }
 }
