@@ -39,6 +39,9 @@ class AppFixtures extends Fixture
         $manager->persist($droid3);
         $manager->flush();
 
+        $starship->removeDroid($droid1);
+        $manager->flush();
+
         StarshipFactory::createOne([
             'name' => 'USS Espresso (NCC-1234-C)',
             'class' => 'Latte',
