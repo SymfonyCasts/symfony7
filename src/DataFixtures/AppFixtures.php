@@ -23,16 +23,19 @@ class AppFixtures extends Fixture
         $droid1 = new Droid();
         $droid1->setName('IHOP-123');
         $droid1->setPrimaryFunction('Pancake chef');
+        $starship->addDroid($droid1);
         $manager->persist($droid1);
 
         $droid2 = new Droid();
         $droid2->setName('D-3P0');
         $droid2->setPrimaryFunction('C-3PO\'s voice coach');
+        $starship->addDroid($droid2);
         $manager->persist($droid2);
 
         $droid3 = new Droid();
         $droid3->setName('BONK-5000');
         $droid3->setPrimaryFunction('Comedy sidekick');
+        $starship->addDroid($droid3);
         $manager->persist($droid3);
         $manager->flush();
 
