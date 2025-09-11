@@ -19,7 +19,11 @@ class StarshipController extends AbstractController
         StarshipPartRepository $partRepository,
     ): Response {
         $parts = $partRepository->findBy(['starship' => $ship]);
-        dd($ship->getParts());
+
+        foreach ($ship->getParts() as $part) {
+            dump($part);
+        }
+
         return $this->render('starship/show.html.twig', [
             'ship' => $ship,
         ]);
