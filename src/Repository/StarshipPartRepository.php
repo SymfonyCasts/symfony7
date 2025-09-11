@@ -47,8 +47,8 @@ class StarshipPartRepository extends ServiceEntityRepository
         ;
 
         if ($search) {
-            $qb->andWhere('LOWER(sp.name) LIKE :search')
-                ->setParameter('search', '%'.strtolower($search).'%');
+            $qb->andWhere('LOWER(sp.name) LIKE :search OR LOWER(sp.notes) LIKE :search')
+                ->setParameter('search', '%'.$search.'%');
         }
 
         return $qb->getQuery()
