@@ -36,6 +36,12 @@ class AppFixtures extends Fixture
             'arrivedAt' => new \DateTimeImmutable('-1 month'),
         ]);
 
+        $starshipPart = StarshipPartFactory::createOne([
+            'name' => 'Toilet Paper',
+            'starship' => $ship,
+        ]);
+        dump($starshipPart);
+
         StarshipFactory::createMany(20);
         StarshipPartFactory::createMany(100);
     }
