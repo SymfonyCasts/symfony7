@@ -205,12 +205,15 @@ class Starship
         return $this->starshipDroids->map(fn (StarshipDroid $starshipDroid) => $starshipDroid->getDroid());
     }
 
-    public function addDroid(Droid $droid): static
+    public function addDroid(Droid $droid, \DateTimeImmutable $assignedAt = null): static
     {
         if (!$this->getDroids()->contains($droid)) {
             $starshipDroid = new StarshipDroid();
             $starshipDroid->setDroid($droid);
             $starshipDroid->setStarship($this);
+            if ($assignedAt) {
+                $starshipDroid->setAssignedAt($assignedAt);
+            }
             $this->starshipDroids->add($starshipDroid);
         }
 
