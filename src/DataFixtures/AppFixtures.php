@@ -42,7 +42,6 @@ class AppFixtures extends Fixture
         ])->_real();
         $ship->removePart($starshipPart);
         $manager->flush();
-        dump($starshipPart);
 
         StarshipFactory::createMany(20);
         StarshipPartFactory::createMany(100);
