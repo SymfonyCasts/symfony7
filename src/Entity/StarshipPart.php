@@ -6,6 +6,7 @@ use App\Repository\StarshipPartRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StarshipPartRepository::class)]
 class StarshipPart
@@ -13,13 +14,16 @@ class StarshipPart
     use TimestampableEntity;
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\Generated]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Every part should have a name!')]
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[Assert\NotBlank(message: 'You forgot to set the price!')]
+    #[Assert\GreaterThan(value: 0, message: 'Starship part cannot be free')]
     #[ORM\Column]
     private ?int $price = null;
 

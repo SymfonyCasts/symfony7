@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{#{% form_theme form 'tailwind_2_layout.html.twig' %}#}
+
+{% block title %}Admin : New Shartship Part{% endblock %}
+
+{% block body %}
+    TODO
+
+    {{ form_start(form, {
+        'attr': {
+            'data-turbo': 'false',
+        },
+    }) }}
+        {{ form_widget(form) }}
+
+        <button formnovalidate type="submit" class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Create and close</button>
+    {{ form_end(form) }}
+{% endblock %}
