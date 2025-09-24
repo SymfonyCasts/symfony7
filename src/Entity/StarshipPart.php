@@ -14,7 +14,7 @@ class StarshipPart
     use TimestampableEntity;
 
     #[ORM\Id]
-    #[ORM\Generated]
+    #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
