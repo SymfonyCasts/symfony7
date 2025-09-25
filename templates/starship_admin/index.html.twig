@@ -3,47 +3,54 @@
 {% block title %}Starship index{% endblock %}
 
 {% block body %}
-    <h1>Starship index</h1>
+    <div class="px-5 max-w-7xl mx-auto">
+    <div class="flex justify-between">
+        <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Starship index</h1>
+        <a class="bg-blue-500 hover:bg-blue-600 text-white self-center py-2 px-2.5 rounded-xl" href="{{ path('app_starship_admin_new') }}">Create new</a>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Class</th>
-                <th>Captain</th>
-                <th>Status</th>
-                <th>ArrivedAt</th>
-                <th>Slug</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for starship in starships %}
-            <tr>
-                <td>{{ starship.id }}</td>
-                <td>{{ starship.name }}</td>
-                <td>{{ starship.class }}</td>
-                <td>{{ starship.captain }}</td>
-                <td>{{ starship.status.value }}</td>
-                <td>{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ starship.slug }}</td>
-                <td>{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ starship.updatedAt ? starship.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_starship_admin_show', {'id': starship.id}) }}">show</a>
-                    <a href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_starship_admin_new') }}">Create new</a>
+        <div class="overflow-x-auto">
+            <table class="table-fixed border-collapse border border-gray-400">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th class="p-4 text-left font-semibold text-gray-200">Id</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Name</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Class</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Captain</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Status</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">ArrivedAt</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Slug</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Created</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Updated</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for starship in starships %}
+                    <tr>
+                        <td class="border-b p-4 pl-8 border-gray-700 text-gray-400">{{ starship.id }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.name }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.class }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.captain }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.status.value }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.slug }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.updatedAt ? starship.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                        <td class="border-b p-4 border-gray-700 text-white">
+                            <div class="flex gap-2">
+                                <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_starship_admin_show', {'id': starship.id}) }}">show</a>
+                                <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="10">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}
