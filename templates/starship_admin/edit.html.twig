@@ -3,11 +3,14 @@
 {% block title %}Edit Starship{% endblock %}
 
 {% block body %}
-    <h1>Edit Starship</h1>
-
-    {{ include('starship_admin/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_starship_admin_index') }}">back to list</a>
-
-    {{ include('starship_admin/_delete_form.html.twig') }}
+    <div class="px-5 max-w-7xl mx-auto mt-4">
+        <a class="hover:text-gray-400 underline" href="{{ path('app_starship_admin_index') }}"> << back to list</a>
+        <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Edit Starship</h1>
+        
+            {{ include('starship_admin/_form.html.twig', {'button_label': 'Update'}) }}
+        <div class="flex justify-end">
+            {{ include('starship_admin/_delete_form.html.twig') }}
+        </div>
+        
+    </div>
 {% endblock %}

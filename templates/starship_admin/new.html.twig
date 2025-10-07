@@ -3,9 +3,11 @@
 {% block title %}New Starship{% endblock %}
 
 {% block body %}
-    <h1>Create new Starship</h1>
+    <div class="px-5 max-w-7xl mx-auto mt-4">
+    <a class="hover:text-gray-400 underline" href="{{ path('app_starship_admin_index') }}"> << back to list</a>
+        <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Create new Starship</h1>
 
-    {{ include('starship_admin/_form.html.twig') }}
+        {{ include('starship_admin/_form.html.twig') }}
 
-    <a href="{{ path('app_starship_admin_index') }}">back to list</a>
+    </div>
 {% endblock %}

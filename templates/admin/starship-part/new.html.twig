@@ -5,15 +5,17 @@
 {% block title %}Admin : New Shartship Part{% endblock %}
 
 {% block body %}
-    TODO
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Register a New Ship</h1>
 
-    {{ form_start(form, {
-        'attr': {
-            'data-turbo': 'false',
-        },
-    }) }}
-        {{ form_widget(form) }}
+        {{ form_start(form, {
+            'attr': {
+                'data-turbo': 'false',
+            },
+        }) }}
+            {{ form_widget(form) }}
 
-        <button formnovalidate type="submit" class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Create and close</button>
-    {{ form_end(form) }}
+            <button formnovalidate type="submit" class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Create and close</button>
+        {{ form_end(form) }}
+    </div>
 {% endblock %}
