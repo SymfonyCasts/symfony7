@@ -37,6 +37,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_part_index');
         }
 
+        //dd($form);
         return $this->render('admin/starship-part/new.html.twig', [
             'form' => $form,
         ]);

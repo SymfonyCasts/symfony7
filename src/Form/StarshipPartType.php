@@ -23,8 +23,9 @@ class StarshipPartType extends AbstractType
 //                    new NotBlank([], 'Every part should have a name!'),
 //                ],
             ])
-            ->add('price')
-            ->add('notes')
+            ->add('price', null, [
+                'help' => 'We don\'t allow free parts! Set up a price',
+            ])
 //            ->add('createdAt', null, [
 //                'widget' => 'single_text',
 //            ])
@@ -33,6 +34,7 @@ class StarshipPartType extends AbstractType
 //            ])
             ->add('starship', EntityType::class, [
                 'class' => Starship::class,
+                'priority' => 10,
                 //'choice_label' => 'id',
                 //'choice_label' => 'name',
                 'choice_label' => function (Starship $starship) {
@@ -47,6 +49,7 @@ class StarshipPartType extends AbstractType
                         ->orderBy('starship.name', Order::Ascending->value);
                 },
             ])
+            ->add('notes')
             ->add('createAndAddNew', SubmitType::class, [
                 'attr' => [
                     'class' => 'text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer',

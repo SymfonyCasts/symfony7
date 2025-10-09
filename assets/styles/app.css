@@ -1,8 +1,14 @@
-@plugin "@tailwindcss/forms";
 @import "tailwindcss";
+@plugin "@tailwindcss/forms";
 
-@source inline("text-red-700 border-red-700");
+/* Tailwind CSS safelist */
+@source inline("text-red-700 text-gray-600 border-red-700 mt-1");
 
 input, textarea, select {
     background-color: inherit;
+}
+
+label.required::after {
+    content: " *";
+    color: #c10007;
 }
