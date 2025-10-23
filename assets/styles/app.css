@@ -2,7 +2,7 @@
 @plugin "@tailwindcss/forms";
 
 /* Tailwind CSS safelist */
-@source inline("text-red-700 text-gray-600 border-red-700 mt-1");
+@source "./../../vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig";
 
 input, textarea, select {
     background-color: inherit;

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\StarshipPart;
 use App\Form\StarshipPartType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,8 +21,11 @@ class AdminController extends AbstractController
     ): Response {
         $form = $this->createForm(StarshipPartType::class);
         $form->handleRequest($request);
+//        if ($form->isSubmitted()) {
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var StarshipPart $part */
             $part = $form->getData();
+            //dd($part);
             $entityManager->persist($part);
             $entityManager->flush();
 
