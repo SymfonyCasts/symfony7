@@ -32,8 +32,16 @@ final class DroidFactory extends PersistentProxyObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'name' => self::faker()->text(255),
-            'primaryFunction' => self::faker()->text(255),
+            'name' => self::faker()->randomElement([
+                'R2-D2', 'C-3PO', 'BB-8', 'ZZZ-123',
+            ]),
+            'primaryFunction' => self::faker()->randomElement([
+                'astromech',
+                'protocol',
+                'astromech',
+                'assassin',
+                'sleeper',
+            ]),
         ];
     }
 
