@@ -34,12 +34,12 @@ class AppFixtures extends Fixture
             'captain' => 'Kathryn Journeyway',
             'status' => StarshipStatusEnum::WAITING,
             'arrivedAt' => new \DateTimeImmutable('-1 month'),
-        ]);
+        ])->_real();
 
         $starshipPart = StarshipPartFactory::createOne([
             'name' => 'Toilet Paper',
             'starship' => $ship,
-        ]);
+        ])->_real();
         dump($starshipPart);
 
         StarshipFactory::createMany(20);
