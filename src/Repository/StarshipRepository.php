@@ -36,9 +36,11 @@ class StarshipRepository extends ServiceEntityRepository
         return new Pagerfanta(new QueryAdapter($query));
     }
 
-    public function findMyShip(): Starship
+    public function findMyShip(): ?Starship
     {
-        return $this->findAll()[0];
+        $ships = $this->findAll();
+
+        return empty($ships) ? null : $ships[0];
     }
 
     //    /**

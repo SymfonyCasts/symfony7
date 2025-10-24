@@ -4,7 +4,9 @@
 
 {% block body %}
     <main class="flex flex-col lg:flex-row">
-        {{ include('main/_shipStatusAside.html.twig') }}
+        {% if myShip %}
+            {{ include('main/_shipStatusAside.html.twig') }}
+        {% endif %}
 
         <div class="px-12 pt-10 w-full">
             <h1 class="text-4xl font-semibold mb-3">
