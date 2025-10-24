@@ -158,6 +158,14 @@ class Starship
         return $this->parts;
     }
 
+    /**
+     * @return Collection<int, StarshipPart>
+     */
+    public function getExpensiveParts(): Collection
+    {
+        return $this->parts;
+    }
+
     public function addPart(StarshipPart $part): static
     {
         if (!$this->parts->contains($part)) {
