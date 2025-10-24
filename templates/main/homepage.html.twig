@@ -35,7 +35,9 @@
                                     Arrived: {{ ship.arrivedAt|ago }}
                                 </div>
                                 <div>
-                                    Parts: {{ ship.parts|length }}
+                                    Parts: {{ ship.parts|length }}</div>
+                                <div>
+                                    Droids: {{ ship.droidNames ?: 'none' }}
                                 </div>
                             </div>
                         </div>
