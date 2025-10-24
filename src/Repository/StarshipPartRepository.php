@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\StarshipPart;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -20,6 +21,18 @@ class StarshipPartRepository extends ServiceEntityRepository
     public static function createExpensiveCriteria(): Criteria
     {
         return Criteria::create()->andWhere(Criteria::expr()->gt('price', 50000));
+    }
+
+    /**
+     * @return Collection<StarshipPart>
+     */
+    public function getExpensiveParts(int $limit = 10): Collection
+    {
+        return $this->createQueryBuilder('sp')
+            ->addCriteria(self::createExpensiveCriteria())
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 
 //    /**
