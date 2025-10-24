@@ -21,15 +21,8 @@ class Droid
     #[ORM\Column(length: 255)]
     private ?string $primaryFunction = null;
 
-    /**
-     * @var Collection<int, Starship>
-     */
-    #[ORM\ManyToMany(targetEntity: Starship::class, mappedBy: 'droids')]
-    private Collection $starships;
-
     public function __construct()
     {
-        $this->starships = new ArrayCollection();
     }
 
     public function getId(): ?int
