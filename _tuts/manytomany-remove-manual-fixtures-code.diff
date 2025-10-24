@@ -1,8 +1,8 @@
 diff --git a/src/DataFixtures/AppFixtures.php b/src/DataFixtures/AppFixtures.php
-index 85d3cbf..a8ef4c0 100644
+index 85d3cbf..36ab887 100644
 --- a/src/DataFixtures/AppFixtures.php
 +++ b/src/DataFixtures/AppFixtures.php
-@@ -13,31 +13,13 @@ class AppFixtures extends Fixture
+@@ -13,34 +13,13 @@ class AppFixtures extends Fixture
  {
      public function load(ObjectManager $manager): void
      {
@@ -32,6 +32,9 @@ index 85d3cbf..a8ef4c0 100644
 -        $starship->addDroid($droid3);
 -        $manager->persist($droid3);
 -        $manager->flush();
+-
+-        $starship->removeDroid($droid1);
+-        $manager->flush();
  
-         $starship->removeDroid($droid1);
-         $manager->flush();
+         StarshipFactory::createOne([
+             'name' => 'USS Espresso (NCC-1234-C)',
