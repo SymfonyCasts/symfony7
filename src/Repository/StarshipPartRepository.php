@@ -43,6 +43,7 @@ class StarshipPartRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('sp')
             ->orderBy('sp.price', 'DESC')
             ->innerJoin('sp.starship', 's')
+            ->addSelect('s')
             ->getQuery()
             ->getResult();
     }
