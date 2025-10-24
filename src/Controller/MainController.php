@@ -15,7 +15,7 @@ class MainController extends AbstractController
         StarshipRepository $repository,
         Request $request,
     ): Response {
-        $ships = $repository->findIncomplete();
+        $ships = $repository->findIncompleteOrderedByDroidCount();
         $ships->setMaxPerPage(5);
         $ships->setCurrentPage($request->query->get('page', 1));
 
