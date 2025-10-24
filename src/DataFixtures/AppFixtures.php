@@ -13,7 +13,7 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $starship = StarshipFactory::createOne();
+        $starship = StarshipFactory::createOne()->_real();
         $part1 = new StarshipPart();
         $part1->setName('Warp Core');
         $part1->setPrice(1000);
