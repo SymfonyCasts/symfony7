@@ -207,8 +207,11 @@ class Starship
 
     public function addDroid(Droid $droid): static
     {
-        if (!$this->droids->contains($droid)) {
-            $this->droids->add($droid);
+        if (!$this->getDroids()->contains($droid)) {
+            $starshipDroid = new StarshipDroid();
+            $starshipDroid->setDroid($droid);
+            $starshipDroid->setStarship($this);
+            $this->starshipDroids->add($starshipDroid);
         }
 
         return $this;
