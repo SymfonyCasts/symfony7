@@ -1,79 +1,75 @@
-# Symfony, Doctrine Relations & Warp Drive Basics
+# Symfony 7 Forms
 
 Well hi there! This repository holds the code and script for the
-[Symfony, Doctrine Relations & Warp Drive Basics](https://symfonycasts.com/screencast/symfony7-doctrine-relations)
+[Symfony 7 Forms](https://symfonycasts.com/screencast/symfony7-forms)
 course on SymfonyCasts.
 
 ## Setup
 
-If you've just downloaded the code, congratulations!!
+If you've just downloaded the code, congratulations!
 
 To get it working, follow these steps:
 
-**Download Composer dependencies**
+### Download Symfony CLI
 
-Make sure you have [Composer installed](https://getcomposer.org/download/)
-and then run:
+https://symfony.com/download
 
+Make sure you have [Symfony CLI installed](https://symfony.com/download).
+You only need to install it once on your system.
+
+Symfony CLI is a developer tool to help you build, run, and manage
+your Symfony applications directly from your terminal.
+
+### Download Composer dependencies
+
+Make sure you have [Composer installed](https://getcomposer.org/download/).
+You only need to install it once on your system.
+
+Install Composer dependencies with:
+
+```bash
+symfony composer install
 ```
-composer install
-```
 
-You may alternatively need to run `php composer.phar install`, depending
-on how you installed Composer.
+> NOTE: You may alternatively need to run `symfony php composer.phar install`,
+> depending on how you installed Composer.
 
-**(Optional) Start the Docker database container**
+### Setup the Database
 
-```
-docker compose up -d
-```
+Create the database (SQLite by default, but if you want to go with
+a different DB server - configure the `DATABASE_URL` env var in the `.env`
+file first), then generate a migration, migrate, and load the fixtures:
 
-If not using Docker, you can skip this step, but you'll need
-to configure `DATABASE_URL` in `.env`.
-
-**Create the database, Schema (Tables) & Load Fixtures**
-
-If using Docker, the database should already be created.
-
-```
-symfony console doctrine:database:create --if-not-exists
-symfony console doctrine:schema:create
+```bash
+symfony console doctrine:database:create
+symfony console doctrine:migrations:migrate
 symfony console doctrine:fixtures:load
 ```
 
-**Start the Symfony web server**
+### Build Tailwind CSS
 
-You can use Nginx or Apache, but Symfony's local web server
-works even better.
-
-To install the Symfony local web server, follow
-"Downloading the Symfony client" instructions found
-here: https://symfony.com/download - you only need to do this
-once on your system.
-
-Then, to start the web server, open a terminal, move into the
-project, and run:
-
-```
-symfony serve
+```bash
+symfony console tailwind:build
 ```
 
-(If this is your first time using this command, you may see an
-error that you need to run `symfony server:ca:install` first).
+> NOTE: If you use Symfony Web Server below, it will start
+> a worker for you that will watch your Tailwind CSS assets.
 
-**Build TailwindCSS**
+### Start the Symfony Web Server
 
-This project uses TailwindCSS, to build the CSS file run:
+You can use Nginx or Apache, but Symfony's local web server works
+even better.
 
-If you're using the `symfony serve` command to run the site, you're done!
-The `tailwind:build` command is already running thanks to the `workers` config
-in `symfony.yaml`.
+Open a terminal, move into the project dir, and start the web server:
 
+```bash
+symfony serve -d
 ```
-php bin/console tailwind:build
-```
 
-Now check out the site at `https://localhost:8000`
+> NOTE: If this is your first time using this command, you may see an
+> error that you need to run `symfony server:ca:install` first.
+
+Now check out the site at `https://localhost:8000`.
 
 Have fun!
 
