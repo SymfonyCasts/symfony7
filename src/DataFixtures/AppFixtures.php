@@ -34,6 +34,7 @@ class AppFixtures extends Fixture
         $part->setNotes('There\'s no air drag in space, but it looks cool.');
         $part->setPrice(500);
         $manager->persist($part);
+        $part->setStarship($starship);
         $manager->flush();
 
         StarshipFactory::createOne([
