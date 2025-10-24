@@ -17,9 +17,7 @@ framework:
         app: cache.adapter.array
 
         # Namespaced pools use the above "app" backend by default
-        pools:
-            iss_location_pool:
-                default_lifetime: '%iss_location_cache_ttl%'
+        # pools:
 
 when@prod:
     framework:
