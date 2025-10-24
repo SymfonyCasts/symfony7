@@ -13,7 +13,7 @@ final class PartController extends AbstractController
     #[Route('/parts', name: 'app_part_index')]
     public function index(StarshipPartRepository $repository, Request $request,): Response
     {
-        $query = $request->query->get('query');
+        $query = $request->query->getString('query');
 
         $parts = $repository->findAllOrderedByPrice($query);
 
