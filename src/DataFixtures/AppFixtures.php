@@ -55,10 +55,7 @@ class AppFixtures extends Fixture
 
         $ship = StarshipFactory::random()->_real();
         $droid = DroidFactory::random()->_real();
-        $starshipDroid = new StarshipDroid();
-        $starshipDroid->setStarship($ship);
-        $starshipDroid->setDroid($droid);
-        $manager->persist($starshipDroid);
+        $ship->addDroid($droid);
         $manager->flush();
     }
 }
