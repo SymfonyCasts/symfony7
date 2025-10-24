@@ -57,7 +57,7 @@
                     <p class="text-[22px] font-semibold">{{ ship.arrivedAt|ago }}</p>
 
                     <h4 class="text-xs text-slate-300 font-semibold mt-2 uppercase">
-                        Parts
+                        Parts ({{ ship.parts|length }})
                     </h4>
                     <ul class="text-sm font-medium text-slate-400 tracking-wide">
                         {% for part in ship.parts %}
