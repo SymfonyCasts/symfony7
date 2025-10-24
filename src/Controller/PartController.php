@@ -12,7 +12,7 @@ final class PartController extends AbstractController
     #[Route('/parts', name: 'app_part_index')]
     public function index(StarshipPartRepository $repository): Response
     {
-        $parts = $repository->findAll();
+        $parts = $repository->findAllOrderedByPrice();
 
         return $this->render('part/index.html.twig', [
             'parts' => $parts,
