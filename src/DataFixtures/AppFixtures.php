@@ -23,6 +23,9 @@ class AppFixtures extends Fixture
         $manager->persist($part1);
         $manager->persist($part2);
 
+        $starship->addPart($part1);
+        $starship->addPart($part2);
+
         $manager->flush();
         StarshipFactory::createOne([
             'name' => 'USS LeafyCruiser (NCC-0001)',
