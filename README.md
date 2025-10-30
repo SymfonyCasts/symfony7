@@ -34,17 +34,24 @@ symfony composer install
 > NOTE: You may alternatively need to run `symfony php composer.phar install`,
 > depending on how you installed Composer.
 
-### Setup the Database
+### Set up the Database
 
-Create the database (SQLite by default, but if you want to go with
-a different DB server - configure the `DATABASE_URL` env var in the `.env`
-file first), then generate a migration, migrate, and load the fixtures:
+Our migrations are generated for the SQLite DB server. To create the
+DB, migrate, and load the fixtures just run a single command: 
 
 ```bash
-symfony console doctrine:database:create --if-not-exists
-symfony console doctrine:migrations:migrate
-symfony console doctrine:fixtures:load
+symfony console foundry:load-fixtures
 ```
+
+> NOTE: If you want to go with a different DB server - configure
+> the `DATABASE_URL` env var in the `.env` file first. Then, delete
+> the existent migration, generate a new one, and load the fixtures:
+> ```bash
+> rm -f migrations/Version*.php # Or remove files manually on Windows
+> symfony console doctrine:database:create --if-not-exists
+> symfony console make:migration
+> symfony console foundry:load-fixtures
+> ```
 
 ### Build Tailwind CSS
 
