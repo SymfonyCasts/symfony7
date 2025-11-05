@@ -36,18 +36,19 @@ symfony composer install
 
 ### Set up the Database
 
-Our migrations are generated for the SQLite DB server. To create the
-DB, migrate, and load the fixtures just run a single command: 
+We recommend using SQLite DB server locally. To create the database,
+generate the migration, migrate, and load the fixtures, simply run:
 
 ```bash
+symfony console make:migration
 symfony console foundry:load-fixtures
 ```
 
-> NOTE: If you want to go with a different DB server - configure
-> the `DATABASE_URL` env var in the `.env` file first. Then, delete
-> the existent migration, generate a new one, and load the fixtures:
+> NOTE: If you prefer to use a different database server (e.g. MySQL),
+> first configure the `DATABASE_URL` environment variable in your
+> `.env` file. Then, create the database, generate the migration, migrate,
+> and load the fixtures:
 > ```bash
-> rm -f migrations/Version*.php # Or remove files manually on Windows
 > symfony console doctrine:database:create --if-not-exists
 > symfony console make:migration
 > symfony console foundry:load-fixtures
