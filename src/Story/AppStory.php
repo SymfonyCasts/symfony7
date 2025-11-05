@@ -42,12 +42,11 @@ final class AppStory extends Story
             'name' => 'Toilet Paper',
             'starship' => $ship,
         ]);
+        StarshipPartFactory::createMany(100);
 
         DroidFactory::createMany(100);
-
         StarshipFactory::createMany(100, fn() => [
             'droids' => DroidFactory::randomRange(1, 5),
         ]);
-        StarshipPartFactory::createMany(100);
     }
 }
