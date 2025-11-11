@@ -9,7 +9,92 @@
             "id": "preconditions-add-migration",
             "name": "Preconditions: Add migration",
             "description": null
+        },
+        {
+            "id": "form-type-install-the-component",
+            "name": "Form type: Install the component",
+            "description": null
+        },
+        {
+            "id": "form-type-make-form",
+            "name": "Form type: Make form",
+            "description": null
+        },
+        {
+            "id": "form-type-remove-date-fields",
+            "name": "Form type: Remove date fields",
+            "description": null
+        },
+        {
+            "id": "form-type-create-form",
+            "name": "Form type: Create form",
+            "description": null
+        },
+        {
+            "id": "form-type-dump-form-object",
+            "name": "Form type: Dump form object",
+            "description": null
+        },
+        {
+            "id": "form-type-dump-in-template",
+            "name": "Form type: Dump in template",
+            "description": null
+        },
+        {
+            "id": "render-form-render-the-whole-object",
+            "name": "Render form: Render the whole object",
+            "description": null
+        },
+        {
+            "id": "render-form-add-submit-btn",
+            "name": "Render form: Add submit btn",
+            "description": null
+        },
+        {
+            "id": "render-form-submit-btn-inside-form",
+            "name": "Render form: Submit btn inside form",
+            "description": null
+        },
+        {
+            "id": "handle-form-handle-request",
+            "name": "Handle form: Handle request",
+            "description": null
+        },
+        {
+            "id": "handle-form-check-if-submitted",
+            "name": "Handle form: Check if submitted",
+            "description": null
+        },
+        {
+            "id": "handle-form-fetch-data",
+            "name": "Handle form: Fetch data",
+            "description": null
+        },
+        {
+            "id": "handle-form-dump-data",
+            "name": "Handle form: Dump data",
+            "description": null
+        },
+        {
+            "id": "handle-form-add-phpdoc",
+            "name": "Handle form: Add PHPDoc",
+            "description": null
+        },
+        {
+            "id": "handle-form-save-entity",
+            "name": "Handle form: Save entity",
+            "description": null
+        },
+        {
+            "id": "handle-form-add-flash-message",
+            "name": "Handle form: Add flash message",
+            "description": null
+        },
+        {
+            "id": "handle-form-add-redirect",
+            "name": "Handle form: Add redirect",
+            "description": null
         }
     ],
-    "sha": "ec8905c4bab5260dd2cef5fb7af6048784e4709a"
+    "sha": "b1e71898bceacb8fe1b5ceba9fe8cd2f4854959a"
 }

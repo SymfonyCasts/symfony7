@@ -1,0 +1,21 @@
+diff --git a/src/Controller/AdminController.php b/src/Controller/AdminController.php
+index 0b8223e..8c85256 100644
+--- a/src/Controller/AdminController.php
++++ b/src/Controller/AdminController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Controller;
+ 
++use App\Form\StarshipPartType;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -11,6 +12,8 @@ class AdminController extends AbstractController
+ {
+     #[Route('/starship-part/new', name: 'app_admin_starship_part_new', methods: ['GET', 'POST'])]
+     public function newStarshipPart(): Response {
++        $form = $this->createForm(StarshipPartType::class);
++
+         return $this->render('admin/starship-part/new.html.twig');
+     }
+ }

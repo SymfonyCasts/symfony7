@@ -1,0 +1,28 @@
+diff --git a/src/Controller/AdminController.php b/src/Controller/AdminController.php
+index 8f41ada..57ab319 100644
+--- a/src/Controller/AdminController.php
++++ b/src/Controller/AdminController.php
+@@ -13,8 +13,9 @@ class AdminController extends AbstractController
+     #[Route('/starship-part/new', name: 'app_admin_starship_part_new', methods: ['GET', 'POST'])]
+     public function newStarshipPart(): Response {
+         $form = $this->createForm(StarshipPartType::class);
+-        dd($form);
+ 
+-        return $this->render('admin/starship-part/new.html.twig');
++        return $this->render('admin/starship-part/new.html.twig', [
++            'form' => $form,
++        ]);
+     }
+ }
+diff --git a/templates/admin/starship-part/new.html.twig b/templates/admin/starship-part/new.html.twig
+index 9959bd3..c9a7b38 100644
+--- a/templates/admin/starship-part/new.html.twig
++++ b/templates/admin/starship-part/new.html.twig
+@@ -6,6 +6,6 @@
+     <div class="max-w-4xl mx-auto">
+         <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Register a New Starship Part</h1>
+ 
+-        TODO
++        {{ dump(form) }}
+     </div>
+ {% endblock %}

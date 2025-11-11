@@ -1,0 +1,28 @@
+diff --git a/src/Controller/AdminController.php b/src/Controller/AdminController.php
+index b12efd1..9594e39 100644
+--- a/src/Controller/AdminController.php
++++ b/src/Controller/AdminController.php
+@@ -4,6 +4,7 @@ namespace App\Controller;
+ 
+ use App\Entity\StarshipPart;
+ use App\Form\StarshipPartType;
++use Doctrine\ORM\EntityManagerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+@@ -15,12 +16,15 @@ class AdminController extends AbstractController
+     #[Route('/starship-part/new', name: 'app_admin_starship_part_new', methods: ['GET', 'POST'])]
+     public function newStarshipPart(
+         Request $request,
++        EntityManagerInterface $entityManager,
+     ): Response {
+         $form = $this->createForm(StarshipPartType::class);
+         $form->handleRequest($request);
+         if ($form->isSubmitted()) {
+             /** @var StarshipPart $part */
+             $part = $form->getData();
++            $entityManager->persist($part);
++            $entityManager->flush();
+         }
+ 
+         return $this->render('admin/starship-part/new.html.twig', [

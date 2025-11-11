@@ -1,0 +1,13 @@
+diff --git a/src/Controller/AdminController.php b/src/Controller/AdminController.php
+index 9594e39..5ec6781 100644
+--- a/src/Controller/AdminController.php
++++ b/src/Controller/AdminController.php
+@@ -25,6 +25,8 @@ class AdminController extends AbstractController
+             $part = $form->getData();
+             $entityManager->persist($part);
+             $entityManager->flush();
++
++            $this->addFlash('success', sprintf('The part "%s" was successfully created.', $part->getName()));
+         }
+ 
+         return $this->render('admin/starship-part/new.html.twig', [

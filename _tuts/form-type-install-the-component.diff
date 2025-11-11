@@ -1,0 +1,346 @@
+diff --git a/composer.json b/composer.json
+index 149c105..cea5f94 100644
+--- a/composer.json
++++ b/composer.json
+@@ -23,6 +23,7 @@
+         "symfony/console": "7.3.*",
+         "symfony/dotenv": "7.3.*",
+         "symfony/flex": "^2",
++        "symfony/form": "7.3.*",
+         "symfony/framework-bundle": "7.3.*",
+         "symfony/http-client": "7.3.*",
+         "symfony/monolog-bundle": "^3.0",
+diff --git a/composer.lock b/composer.lock
+index c62df07..276cfd2 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "2c56f0afef04982dcdcb28a6aa849ef0",
++    "content-hash": "d22b4144688daa10d7626fb63c2782ea",
+     "packages": [
+         {
+             "name": "babdev/pagerfanta-bundle",
+@@ -3598,6 +3598,107 @@
+             ],
+             "time": "2025-10-31T15:22:50+00:00"
+         },
++        {
++            "name": "symfony/form",
++            "version": "v7.3.5",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/form.git",
++                "reference": "c8032766d5b198865d00b7d4471fc787a0a7f5e4"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/form/zipball/c8032766d5b198865d00b7d4471fc787a0a7f5e4",
++                "reference": "c8032766d5b198865d00b7d4471fc787a0a7f5e4",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=8.2",
++                "symfony/deprecation-contracts": "^2.5|^3",
++                "symfony/event-dispatcher": "^6.4|^7.0",
++                "symfony/options-resolver": "^7.3",
++                "symfony/polyfill-ctype": "~1.8",
++                "symfony/polyfill-intl-icu": "^1.21",
++                "symfony/polyfill-mbstring": "~1.0",
++                "symfony/property-access": "^6.4|^7.0",
++                "symfony/service-contracts": "^2.5|^3"
++            },
++            "conflict": {
++                "symfony/console": "<6.4",
++                "symfony/dependency-injection": "<6.4",
++                "symfony/doctrine-bridge": "<6.4",
++                "symfony/error-handler": "<6.4",
++                "symfony/framework-bundle": "<6.4",
++                "symfony/http-kernel": "<6.4",
++                "symfony/translation": "<6.4.3|>=7.0,<7.0.3",
++                "symfony/translation-contracts": "<2.5",
++                "symfony/twig-bridge": "<6.4"
++            },
++            "require-dev": {
++                "doctrine/collections": "^1.0|^2.0",
++                "symfony/config": "^6.4|^7.0",
++                "symfony/console": "^6.4|^7.0",
++                "symfony/dependency-injection": "^6.4|^7.0",
++                "symfony/expression-language": "^6.4|^7.0",
++                "symfony/html-sanitizer": "^6.4|^7.0",
++                "symfony/http-foundation": "^6.4|^7.0",
++                "symfony/http-kernel": "^6.4|^7.0",
++                "symfony/intl": "^6.4|^7.0",
++                "symfony/security-core": "^6.4|^7.0",
++                "symfony/security-csrf": "^6.4|^7.0",
++                "symfony/translation": "^6.4.3|^7.0.3",
++                "symfony/uid": "^6.4|^7.0",
++                "symfony/validator": "^6.4|^7.0",
++                "symfony/var-dumper": "^6.4|^7.0"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Component\\Form\\": ""
++                },
++                "exclude-from-classmap": [
++                    "/Tests/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Fabien Potencier",
++                    "email": "fabien@symfony.com"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Allows to easily create, process and reuse HTML forms",
++            "homepage": "https://symfony.com",
++            "support": {
++                "source": "https://github.com/symfony/form/tree/v7.3.5"
++            },
++            "funding": [
++                {
++                    "url": "https://symfony.com/sponsor",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://github.com/fabpot",
++                    "type": "github"
++                },
++                {
++                    "url": "https://github.com/nicolas-grekas",
++                    "type": "github"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2025-10-10T11:54:12+00:00"
++        },
+         {
+             "name": "symfony/framework-bundle",
+             "version": "v7.3.5",
+@@ -4298,6 +4399,77 @@
+             ],
+             "time": "2023-11-06T17:08:13+00:00"
+         },
++        {
++            "name": "symfony/options-resolver",
++            "version": "v7.3.3",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/options-resolver.git",
++                "reference": "0ff2f5c3df08a395232bbc3c2eb7e84912df911d"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/options-resolver/zipball/0ff2f5c3df08a395232bbc3c2eb7e84912df911d",
++                "reference": "0ff2f5c3df08a395232bbc3c2eb7e84912df911d",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=8.2",
++                "symfony/deprecation-contracts": "^2.5|^3"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Component\\OptionsResolver\\": ""
++                },
++                "exclude-from-classmap": [
++                    "/Tests/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Fabien Potencier",
++                    "email": "fabien@symfony.com"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Provides an improved replacement for the array_replace PHP function",
++            "homepage": "https://symfony.com",
++            "keywords": [
++                "config",
++                "configuration",
++                "options"
++            ],
++            "support": {
++                "source": "https://github.com/symfony/options-resolver/tree/v7.3.3"
++            },
++            "funding": [
++                {
++                    "url": "https://symfony.com/sponsor",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://github.com/fabpot",
++                    "type": "github"
++                },
++                {
++                    "url": "https://github.com/nicolas-grekas",
++                    "type": "github"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2025-08-05T10:16:07+00:00"
++        },
+         {
+             "name": "symfony/polyfill-intl-grapheme",
+             "version": "v1.33.0",
+@@ -4380,6 +4552,94 @@
+             ],
+             "time": "2025-06-27T09:58:17+00:00"
+         },
++        {
++            "name": "symfony/polyfill-intl-icu",
++            "version": "v1.33.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/polyfill-intl-icu.git",
++                "reference": "bfc8fa13dbaf21d69114b0efcd72ab700fb04d0c"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/polyfill-intl-icu/zipball/bfc8fa13dbaf21d69114b0efcd72ab700fb04d0c",
++                "reference": "bfc8fa13dbaf21d69114b0efcd72ab700fb04d0c",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=7.2"
++            },
++            "suggest": {
++                "ext-intl": "For best performance and support of other locales than \"en\""
++            },
++            "type": "library",
++            "extra": {
++                "thanks": {
++                    "url": "https://github.com/symfony/polyfill",
++                    "name": "symfony/polyfill"
++                }
++            },
++            "autoload": {
++                "files": [
++                    "bootstrap.php"
++                ],
++                "psr-4": {
++                    "Symfony\\Polyfill\\Intl\\Icu\\": ""
++                },
++                "classmap": [
++                    "Resources/stubs"
++                ],
++                "exclude-from-classmap": [
++                    "/Tests/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Nicolas Grekas",
++                    "email": "p@tchwork.com"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Symfony polyfill for intl's ICU-related data and classes",
++            "homepage": "https://symfony.com",
++            "keywords": [
++                "compatibility",
++                "icu",
++                "intl",
++                "polyfill",
++                "portable",
++                "shim"
++            ],
++            "support": {
++                "source": "https://github.com/symfony/polyfill-intl-icu/tree/v1.33.0"
++            },
++            "funding": [
++                {
++                    "url": "https://symfony.com/sponsor",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://github.com/fabpot",
++                    "type": "github"
++                },
++                {
++                    "url": "https://github.com/nicolas-grekas",
++                    "type": "github"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2025-06-20T22:24:30+00:00"
++        },
+         {
+             "name": "symfony/polyfill-intl-normalizer",
+             "version": "v1.33.0",
+diff --git a/config/packages/csrf.yaml b/config/packages/csrf.yaml
+new file mode 100644
+index 0000000..40d4040
+--- /dev/null
++++ b/config/packages/csrf.yaml
+@@ -0,0 +1,11 @@
++# Enable stateless CSRF protection for forms and logins/logouts
++framework:
++    form:
++        csrf_protection:
++            token_id: submit
++
++    csrf_protection:
++        stateless_token_ids:
++            - submit
++            - authenticate
++            - logout
+diff --git a/symfony.lock b/symfony.lock
+index fc31e5a..924dcf8 100644
+--- a/symfony.lock
++++ b/symfony.lock
+@@ -117,6 +117,18 @@
+             ".env.dev"
+         ]
+     },
++    "symfony/form": {
++        "version": "7.3",
++        "recipe": {
++            "repo": "github.com/symfony/recipes",
++            "branch": "main",
++            "version": "7.2",
++            "ref": "7d86a6723f4a623f59e2bf966b6aad2fc461d36b"
++        },
++        "files": [
++            "config/packages/csrf.yaml"
++        ]
++    },
+     "symfony/framework-bundle": {
+         "version": "7.3",
+         "recipe": {

@@ -1,0 +1,14 @@
+diff --git a/src/Controller/AdminController.php b/src/Controller/AdminController.php
+index e91f880..b12efd1 100644
+--- a/src/Controller/AdminController.php
++++ b/src/Controller/AdminController.php
+@@ -19,8 +19,8 @@ class AdminController extends AbstractController
+         $form = $this->createForm(StarshipPartType::class);
+         $form->handleRequest($request);
+         if ($form->isSubmitted()) {
++            /** @var StarshipPart $part */
+             $part = $form->getData();
+-            dd($part);
+         }
+ 
+         return $this->render('admin/starship-part/new.html.twig', [
