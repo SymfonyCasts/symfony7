@@ -1,0 +1,13 @@
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index e1d77d5..c11e056 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -20,7 +20,7 @@ class StarshipPartType extends AbstractType
+             ->add('notes')
+             ->add('starship', EntityType::class, [
+                 'class' => Starship::class,
+-                'choice_label' => 'id',
++                'choice_label' => 'name',
+             ])
+             ->add('createAndAddNew', SubmitType::class)
+         ;

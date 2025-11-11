@@ -46,6 +46,16 @@
             "description": null
         },
         {
+            "id": "render-form-use-tailwind-forms-css-plugin",
+            "name": "Render form: Use Tailwind forms CSS plugin",
+            "description": null
+        },
+        {
+            "id": "render-form-fix-fields-bg",
+            "name": "Render form: Fix fields bg",
+            "description": null
+        },
+        {
             "id": "render-form-add-submit-btn",
             "name": "Render form: Add submit btn",
             "description": null
@@ -94,7 +104,92 @@
             "id": "handle-form-add-redirect",
             "name": "Handle form: Add redirect",
             "description": null
+        },
+        {
+            "id": "multiple-submits-rename-to-create-and-close",
+            "name": "Multiple submits: Rename to Create and close",
+            "description": null
+        },
+        {
+            "id": "multiple-submits-add-new-btn",
+            "name": "Multiple submits: Add new btn",
+            "description": null
+        },
+        {
+            "id": "multiple-submits-get-btn-object",
+            "name": "Multiple submits: Get btn object",
+            "description": null
+        },
+        {
+            "id": "multiple-submits-add-phpdoc-and-delete-dd",
+            "name": "Multiple submits: Add PHPDoc and delete dd()",
+            "description": null
+        },
+        {
+            "id": "multiple-submits-redirect-to-the-same-page-on-click",
+            "name": "Multiple submits: Redirect to the same page on click",
+            "description": null
+        },
+        {
+            "id": "apply-tailwind-form-theme-in-the-template",
+            "name": "Apply Tailwind form theme in the template",
+            "description": null
+        },
+        {
+            "id": "entitytype-set-label-to-name",
+            "name": "EntityType: Set label to name",
+            "description": null
+        },
+        {
+            "id": "entitytype-order-by-name",
+            "name": "EntityType: Order by name",
+            "description": null
+        },
+        {
+            "id": "entitytype-label-callback",
+            "name": "EntityType: Label callback",
+            "description": null
+        },
+        {
+            "id": "set-form-field-attr-in-the-form-type",
+            "name": "Set form field attr in the form type",
+            "description": null
+        },
+        {
+            "id": "validation-disable-html5-validation",
+            "name": "Validation: Disable HTML5 validation",
+            "description": null
+        },
+        {
+            "id": "validation-install-validator-component",
+            "name": "Validation: Install Validator component",
+            "description": null
+        },
+        {
+            "id": "validation-add-notblank-constraint-for-name-field",
+            "name": "Validation: Add NotBlank constraint for name field",
+            "description": null
+        },
+        {
+            "id": "validation-add-isvalid-call",
+            "name": "Validation: Add isValid() call",
+            "description": null
+        },
+        {
+            "id": "validation-set-custom-error-message",
+            "name": "Validation: Set custom error message",
+            "description": null
+        },
+        {
+            "id": "validation-add-tailwind-theme-as-source",
+            "name": "Validation: Add Tailwind theme as source",
+            "description": null
+        },
+        {
+            "id": "validation-move-constraints-to-the-entity",
+            "name": "Validation: Move constraints to the entity",
+            "description": null
         }
     ],
-    "sha": "b1e71898bceacb8fe1b5ceba9fe8cd2f4854959a"
+    "sha": "a471fe7ed64e4f8fd78c3f969b0b3bcca67b0c28"
 }

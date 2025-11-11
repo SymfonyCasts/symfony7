@@ -1,0 +1,14 @@
+diff --git a/src/Controller/AdminController.php b/src/Controller/AdminController.php
+index 4cab11d..fb1d020 100644
+--- a/src/Controller/AdminController.php
++++ b/src/Controller/AdminController.php
+@@ -28,6 +28,9 @@ class AdminController extends AbstractController
+ 
+             $this->addFlash('success', sprintf('The part "%s" was successfully created.', $part->getName()));
+ 
++            $createAndAddNewBtn = $form->get('createAndAddNew');
++            dd($createAndAddNewBtn);
++
+             return $this->redirectToRoute('app_part_index');
+         }
+ 

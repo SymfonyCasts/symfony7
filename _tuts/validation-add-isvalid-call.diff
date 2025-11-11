@@ -1,0 +1,13 @@
+diff --git a/src/Controller/AdminController.php b/src/Controller/AdminController.php
+index 1d87f7f..f106244 100644
+--- a/src/Controller/AdminController.php
++++ b/src/Controller/AdminController.php
+@@ -21,7 +21,7 @@ class AdminController extends AbstractController
+     ): Response {
+         $form = $this->createForm(StarshipPartType::class);
+         $form->handleRequest($request);
+-        if ($form->isSubmitted()) {
++        if ($form->isSubmitted() && $form->isValid()) {
+             /** @var StarshipPart $part */
+             $part = $form->getData();
+             $entityManager->persist($part);

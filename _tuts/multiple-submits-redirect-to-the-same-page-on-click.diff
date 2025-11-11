@@ -1,0 +1,14 @@
+diff --git a/src/Controller/AdminController.php b/src/Controller/AdminController.php
+index 802e96b..1d87f7f 100644
+--- a/src/Controller/AdminController.php
++++ b/src/Controller/AdminController.php
+@@ -31,6 +31,9 @@ class AdminController extends AbstractController
+ 
+             /** @var SubmitButton $createAndAddNewBtn */
+             $createAndAddNewBtn = $form->get('createAndAddNew');
++            if ($createAndAddNewBtn->isClicked()) {
++                return $this->redirectToRoute('app_admin_starship_part_new');
++            }
+ 
+             return $this->redirectToRoute('app_part_index');
+         }

@@ -1,0 +1,13 @@
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index 9c5f0bc..ead44f2 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -20,7 +20,7 @@ class StarshipPartType extends AbstractType
+         $builder
+             ->add('name', null, [
+                 'constraints' => [
+-                    new NotBlank(),
++                    new NotBlank([], 'Every part should have a name!'),
+                 ],
+             ])
+             ->add('price')

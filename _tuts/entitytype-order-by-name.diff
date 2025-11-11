@@ -1,0 +1,24 @@
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index c11e056..51d4352 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -4,6 +4,8 @@ namespace App\Form;
+ 
+ use App\Entity\Starship;
+ use App\Entity\StarshipPart;
++use Doctrine\Common\Collections\Order;
++use Doctrine\ORM\EntityRepository;
+ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+ use Symfony\Component\Form\AbstractType;
+ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+@@ -21,6 +23,10 @@ class StarshipPartType extends AbstractType
+             ->add('starship', EntityType::class, [
+                 'class' => Starship::class,
+                 'choice_label' => 'name',
++                'query_builder' => function (EntityRepository $repo) {
++                    return $repo->createQueryBuilder('starship')
++                        ->orderBy('starship.name', Order::Ascending->value);
++                },
+             ])
+             ->add('createAndAddNew', SubmitType::class)
+         ;

@@ -1,0 +1,42 @@
+diff --git a/src/Entity/StarshipPart.php b/src/Entity/StarshipPart.php
+index 0cdf95c..25b3c2d 100644
+--- a/src/Entity/StarshipPart.php
++++ b/src/Entity/StarshipPart.php
+@@ -6,6 +6,7 @@ use App\Repository\StarshipPartRepository;
+ use Doctrine\DBAL\Types\Types;
+ use Doctrine\ORM\Mapping as ORM;
+ use Gedmo\Timestampable\Traits\TimestampableEntity;
++use Symfony\Component\Validator\Constraints as Assert;
+ 
+ #[ORM\Entity(repositoryClass: StarshipPartRepository::class)]
+ class StarshipPart
+@@ -17,9 +18,12 @@ class StarshipPart
+     #[ORM\Column]
+     private ?int $id = null;
+ 
++    #[Assert\NotBlank(message: 'Every part should have a name!')]
+     #[ORM\Column(length: 255)]
+     private ?string $name = null;
+ 
++    #[Assert\NotBlank(message: 'You forgot to set the price!')]
++    #[Assert\GreaterThan(value: 0, message: 'Starship part cannot be free')]
+     #[ORM\Column]
+     private ?int $price = null;
+ 
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index ead44f2..334ff08 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -19,9 +19,9 @@ class StarshipPartType extends AbstractType
+     {
+         $builder
+             ->add('name', null, [
+-                'constraints' => [
+-                    new NotBlank([], 'Every part should have a name!'),
+-                ],
++//                'constraints' => [
++//                    new NotBlank([], 'Every part should have a name!'),
++//                ],
+             ])
+             ->add('price')
+             ->add('notes')

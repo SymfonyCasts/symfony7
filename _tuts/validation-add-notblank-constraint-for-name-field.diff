@@ -1,0 +1,24 @@
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index 5e14279..9c5f0bc 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -11,13 +11,18 @@ use Symfony\Component\Form\AbstractType;
+ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\OptionsResolver\OptionsResolver;
++use Symfony\Component\Validator\Constraints\NotBlank;
+ 
+ class StarshipPartType extends AbstractType
+ {
+     public function buildForm(FormBuilderInterface $builder, array $options): void
+     {
+         $builder
+-            ->add('name')
++            ->add('name', null, [
++                'constraints' => [
++                    new NotBlank(),
++                ],
++            ])
+             ->add('price')
+             ->add('notes')
+             ->add('starship', EntityType::class, [

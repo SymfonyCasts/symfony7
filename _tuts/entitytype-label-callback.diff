@@ -1,0 +1,19 @@
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index 51d4352..3434425 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -22,7 +22,13 @@ class StarshipPartType extends AbstractType
+             ->add('notes')
+             ->add('starship', EntityType::class, [
+                 'class' => Starship::class,
+-                'choice_label' => 'name',
++                'choice_label' => function (Starship $starship) {
++                    return sprintf(
++                        '%s (by %s)',
++                        $starship->getName(),
++                        $starship->getCaptain(),
++                    );
++                },
+                 'query_builder' => function (EntityRepository $repo) {
+                     return $repo->createQueryBuilder('starship')
+                         ->orderBy('starship.name', Order::Ascending->value);

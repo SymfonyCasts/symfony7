@@ -1,0 +1,13 @@
+diff --git a/templates/admin/starship-part/new.html.twig b/templates/admin/starship-part/new.html.twig
+index 922f162..55a4839 100644
+--- a/templates/admin/starship-part/new.html.twig
++++ b/templates/admin/starship-part/new.html.twig
+@@ -9,7 +9,7 @@
+         {{ form_start(form) }}
+             {{ form_widget(form) }}
+ 
+-            <button type="submit" class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Create</button>
++            <button type="submit" class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Create and close</button>
+         {{ form_end(form) }}
+     </div>
+ {% endblock %}

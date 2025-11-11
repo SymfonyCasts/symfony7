@@ -1,0 +1,174 @@
+diff --git a/composer.json b/composer.json
+index cea5f94..7869bfe 100644
+--- a/composer.json
++++ b/composer.json
+@@ -34,6 +34,7 @@
+         "symfony/stimulus-bundle": "^2.13",
+         "symfony/twig-bundle": "7.3.*",
+         "symfony/ux-turbo": "^2.13",
++        "symfony/validator": "7.3.*",
+         "symfony/yaml": "7.3.*",
+         "symfonycasts/tailwind-bundle": "^0.9.0",
+         "twig/extra-bundle": "^2.12|^3.0",
+diff --git a/composer.lock b/composer.lock
+index 276cfd2..476862a 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "d22b4144688daa10d7626fb63c2782ea",
++    "content-hash": "24aa7a4505bd57af84f59675b43bbc20",
+     "packages": [
+         {
+             "name": "babdev/pagerfanta-bundle",
+@@ -6351,6 +6351,108 @@
+             ],
+             "time": "2025-10-16T07:24:06+00:00"
+         },
++        {
++            "name": "symfony/validator",
++            "version": "v7.3.6",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/validator.git",
++                "reference": "5a2904dc351c7bd1fb402dfc4faccccd6f55ce01"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/validator/zipball/5a2904dc351c7bd1fb402dfc4faccccd6f55ce01",
++                "reference": "5a2904dc351c7bd1fb402dfc4faccccd6f55ce01",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=8.2",
++                "symfony/deprecation-contracts": "^2.5|^3",
++                "symfony/polyfill-ctype": "~1.8",
++                "symfony/polyfill-mbstring": "~1.0",
++                "symfony/polyfill-php83": "^1.27",
++                "symfony/translation-contracts": "^2.5|^3"
++            },
++            "conflict": {
++                "doctrine/lexer": "<1.1",
++                "symfony/dependency-injection": "<6.4",
++                "symfony/doctrine-bridge": "<7.0",
++                "symfony/expression-language": "<6.4",
++                "symfony/http-kernel": "<6.4",
++                "symfony/intl": "<6.4",
++                "symfony/property-info": "<6.4",
++                "symfony/translation": "<6.4.3|>=7.0,<7.0.3",
++                "symfony/yaml": "<6.4"
++            },
++            "require-dev": {
++                "egulias/email-validator": "^2.1.10|^3|^4",
++                "symfony/cache": "^6.4|^7.0",
++                "symfony/config": "^6.4|^7.0",
++                "symfony/console": "^6.4|^7.0",
++                "symfony/dependency-injection": "^6.4|^7.0",
++                "symfony/expression-language": "^6.4|^7.0",
++                "symfony/finder": "^6.4|^7.0",
++                "symfony/http-client": "^6.4|^7.0",
++                "symfony/http-foundation": "^6.4|^7.0",
++                "symfony/http-kernel": "^6.4|^7.0",
++                "symfony/intl": "^6.4|^7.0",
++                "symfony/mime": "^6.4|^7.0",
++                "symfony/property-access": "^6.4|^7.0",
++                "symfony/property-info": "^6.4|^7.0",
++                "symfony/string": "^6.4|^7.0",
++                "symfony/translation": "^6.4.3|^7.0.3",
++                "symfony/type-info": "^7.1.8",
++                "symfony/yaml": "^6.4|^7.0"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Component\\Validator\\": ""
++                },
++                "exclude-from-classmap": [
++                    "/Tests/",
++                    "/Resources/bin/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Fabien Potencier",
++                    "email": "fabien@symfony.com"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Provides tools to validate values",
++            "homepage": "https://symfony.com",
++            "support": {
++                "source": "https://github.com/symfony/validator/tree/v7.3.6"
++            },
++            "funding": [
++                {
++                    "url": "https://symfony.com/sponsor",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://github.com/fabpot",
++                    "type": "github"
++                },
++                {
++                    "url": "https://github.com/nicolas-grekas",
++                    "type": "github"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2025-10-29T13:09:25+00:00"
++        },
+         {
+             "name": "symfony/var-dumper",
+             "version": "v7.3.5",
+diff --git a/config/packages/validator.yaml b/config/packages/validator.yaml
+new file mode 100644
+index 0000000..dd47a6a
+--- /dev/null
++++ b/config/packages/validator.yaml
+@@ -0,0 +1,11 @@
++framework:
++    validation:
++        # Enables validator auto-mapping support.
++        # For instance, basic validation constraints will be inferred from Doctrine's metadata.
++        #auto_mapping:
++        #    App\Entity\: []
++
++when@test:
++    framework:
++        validation:
++            not_compromised_password: false
+diff --git a/symfony.lock b/symfony.lock
+index 924dcf8..13b1435 100644
+--- a/symfony.lock
++++ b/symfony.lock
+@@ -248,6 +248,18 @@
+             "config/packages/ux_turbo.yaml"
+         ]
+     },
++    "symfony/validator": {
++        "version": "7.3",
++        "recipe": {
++            "repo": "github.com/symfony/recipes",
++            "branch": "main",
++            "version": "7.0",
++            "ref": "8c1c4e28d26a124b0bb273f537ca8ce443472bfd"
++        },
++        "files": [
++            "config/packages/validator.yaml"
++        ]
++    },
+     "symfony/web-profiler-bundle": {
+         "version": "7.3",
+         "recipe": {

@@ -1,0 +1,12 @@
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index b7fed7a..5e14279 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -35,6 +35,7 @@ class StarshipPartType extends AbstractType
+                 },
+             ])
+             ->add('createAndAddNew', SubmitType::class, [
++                'validate' => false,
+                 'attr' => [
+                     'class' => 'text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer',
+                 ],
