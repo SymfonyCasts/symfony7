@@ -1,0 +1,21 @@
+diff --git a/src/Form/StarshipType.php b/src/Form/StarshipType.php
+index e3ee107..0938f34 100644
+--- a/src/Form/StarshipType.php
++++ b/src/Form/StarshipType.php
+@@ -4,6 +4,7 @@ namespace App\Form;
+ 
+ use App\Entity\Starship;
+ use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\Extension\Core\Type\EnumType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\OptionsResolver\OptionsResolver;
+ 
+@@ -15,7 +16,7 @@ class StarshipType extends AbstractType
+             ->add('name')
+             ->add('class')
+             ->add('captain')
+-            ->add('status')
++            ->add('status', EnumType::class)
+             ->add('arrivedAt', null, [
+                 'widget' => 'single_text',
+             ])

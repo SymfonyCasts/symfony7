@@ -1,0 +1,255 @@
+diff --git a/templates/starship_admin/_delete_form.html.twig b/templates/starship_admin/_delete_form.html.twig
+index 1c1d526..d869ef8 100644
+--- a/templates/starship_admin/_delete_form.html.twig
++++ b/templates/starship_admin/_delete_form.html.twig
+@@ -1,4 +1,4 @@
+ <form method="post" action="{{ path('app_starship_admin_delete', {'id': starship.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ starship.id) }}">
+-    <button class="btn">Delete</button>
++    <button class="text-white bg-red-700 hover:bg-red-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Delete</button>
+ </form>
+diff --git a/templates/starship_admin/_form.html.twig b/templates/starship_admin/_form.html.twig
+index bf20b98..a946f0b 100644
+--- a/templates/starship_admin/_form.html.twig
++++ b/templates/starship_admin/_form.html.twig
+@@ -1,4 +1,4 @@
+ {{ form_start(form) }}
+     {{ form_widget(form) }}
+-    <button class="btn">{{ button_label|default('Save') }}</button>
++    <button class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">{{ button_label|default('Save') }}</button>
+ {{ form_end(form) }}
+diff --git a/templates/starship_admin/edit.html.twig b/templates/starship_admin/edit.html.twig
+index 3777291..e112922 100644
+--- a/templates/starship_admin/edit.html.twig
++++ b/templates/starship_admin/edit.html.twig
+@@ -1,13 +1,16 @@
+ {% extends 'base.html.twig' %}
++{% form_theme form 'tailwind_2_layout.html.twig' %}
+ 
+ {% block title %}Edit Starship{% endblock %}
+ 
+ {% block body %}
+-    <h1>Edit Starship</h1>
++    <div class="px-5 max-w-7xl mx-auto mt-4">
++        <a class="hover:text-gray-400 underline" href="{{ path('app_starship_admin_index') }}"> << back to list</a>
++        <h1 class="text-[32px] font-semibold border-b border-white/10 pb-5 mb-5 mt-8">Edit Starship</h1>
+ 
+-    {{ include('starship_admin/_form.html.twig', {'button_label': 'Update'}) }}
+-
+-    <a href="{{ path('app_starship_admin_index') }}">back to list</a>
+-
+-    {{ include('starship_admin/_delete_form.html.twig') }}
++        {{ include('starship_admin/_form.html.twig', {'button_label': 'Update'}) }}
++        <div class="flex justify-end">
++            {{ include('starship_admin/_delete_form.html.twig') }}
++        </div>
++    </div>
+ {% endblock %}
+diff --git a/templates/starship_admin/index.html.twig b/templates/starship_admin/index.html.twig
+index f320c20..14f7506 100644
+--- a/templates/starship_admin/index.html.twig
++++ b/templates/starship_admin/index.html.twig
+@@ -3,47 +3,54 @@
+ {% block title %}Starship index{% endblock %}
+ 
+ {% block body %}
+-    <h1>Starship index</h1>
++    <div class="max-w-7xl mx-auto px-5">
++        <div class="flex justify-between">
++            <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Starship index</h1>
++            <a class="bg-blue-500 hover:bg-blue-600 text-white self-center py-2 px-2.5 rounded-xl" href="{{ path('app_starship_admin_new') }}">Create new</a>
++        </div>
+ 
+-    <table class="table">
+-        <thead>
+-            <tr>
+-                <th>Id</th>
+-                <th>Name</th>
+-                <th>Class</th>
+-                <th>Captain</th>
+-                <th>Status</th>
+-                <th>ArrivedAt</th>
+-                <th>Slug</th>
+-                <th>CreatedAt</th>
+-                <th>UpdatedAt</th>
+-                <th>actions</th>
+-            </tr>
+-        </thead>
+-        <tbody>
+-        {% for starship in starships %}
+-            <tr>
+-                <td>{{ starship.id }}</td>
+-                <td>{{ starship.name }}</td>
+-                <td>{{ starship.class }}</td>
+-                <td>{{ starship.captain }}</td>
+-                <td>{{ starship.status.value }}</td>
+-                <td>{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
+-                <td>{{ starship.slug }}</td>
+-                <td>{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+-                <td>{{ starship.updatedAt ? starship.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+-                <td>
+-                    <a href="{{ path('app_starship_admin_show', {'id': starship.id}) }}">show</a>
+-                    <a href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
+-                </td>
+-            </tr>
+-        {% else %}
+-            <tr>
+-                <td colspan="10">no records found</td>
+-            </tr>
+-        {% endfor %}
+-        </tbody>
+-    </table>
+-
+-    <a href="{{ path('app_starship_admin_new') }}">Create new</a>
++        <div class="overflow-x-auto">
++            <table class="table-fixed border-collapse border border-gray-400">
++                <thead class="bg-gray-50 dark:bg-gray-700">
++                <tr>
++                    <th class="p-4 text-left font-semibold text-gray-200">Id</th>
++                    <th class="p-4 text-left font-semibold text-gray-200">Name</th>
++                    <th class="p-4 text-left font-semibold text-gray-200">Class</th>
++                    <th class="p-4 text-left font-semibold text-gray-200">Captain</th>
++                    <th class="p-4 text-left font-semibold text-gray-200">Status</th>
++                    <th class="p-4 text-left font-semibold text-gray-200">ArrivedAt</th>
++                    <th class="p-4 text-left font-semibold text-gray-200">Slug</th>
++                    <th class="p-4 text-left font-semibold text-gray-200">Created</th>
++                    <th class="p-4 text-left font-semibold text-gray-200">Updated</th>
++                    <th class="p-4 text-left font-semibold text-gray-200">Actions</th>
++                </tr>
++                </thead>
++                <tbody>
++                {% for starship in starships %}
++                    <tr class="hover:bg-blue-500/5">
++                        <td class="border-b p-4 pl-8 border-gray-700 text-gray-400">{{ starship.id }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.name }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.class }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.captain }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.status.value }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.slug }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ starship.updatedAt ? starship.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
++                        <td class="border-b p-4 border-gray-700 text-white">
++                            <div class="flex gap-2">
++                                <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_starship_admin_show', {'id': starship.id}) }}">show</a>
++                                <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
++                            </div>
++                        </td>
++                    </tr>
++                {% else %}
++                    <tr>
++                        <td colspan="10">no records found</td>
++                    </tr>
++                {% endfor %}
++                </tbody>
++            </table>
++        </div>
++    </div>
+ {% endblock %}
+diff --git a/templates/starship_admin/new.html.twig b/templates/starship_admin/new.html.twig
+index 24d3b43..c6d1a83 100644
+--- a/templates/starship_admin/new.html.twig
++++ b/templates/starship_admin/new.html.twig
+@@ -3,9 +3,10 @@
+ {% block title %}New Starship{% endblock %}
+ 
+ {% block body %}
+-    <h1>Create new Starship</h1>
++    <div class="px-5 max-w-7xl mx-auto mt-4">
++        <a class="hover:text-gray-400 underline" href="{{ path('app_starship_admin_index') }}"> << back to list</a>
++        <h1 class="text-[32px] font-semibold border-b border-white/10 pb-5 mb-5 mt-8">Create new Starship</h1>
+ 
+-    {{ include('starship_admin/_form.html.twig') }}
+-
+-    <a href="{{ path('app_starship_admin_index') }}">back to list</a>
++        {{ include('starship_admin/_form.html.twig') }}
++    </div>
+ {% endblock %}
+diff --git a/templates/starship_admin/show.html.twig b/templates/starship_admin/show.html.twig
+index 902c31a..33ab562 100644
+--- a/templates/starship_admin/show.html.twig
++++ b/templates/starship_admin/show.html.twig
+@@ -3,52 +3,54 @@
+ {% block title %}Starship{% endblock %}
+ 
+ {% block body %}
+-    <h1>Starship</h1>
++    <div class="max-w-7xl mx-auto px-5 mt-4">
++        <a class="hover:text-gray-400 underline" href="{{ path('app_starship_admin_index') }}"> << back to list</a>
+ 
+-    <table class="table">
+-        <tbody>
++        <h1 class="text-[32px] font-semibold border-b border-white/10 pb-5 mb-5 mt-8">{{ starship.name }}</h1>
++
++        <table class="table-fixed">
++            <tbody>
+             <tr>
+-                <th>Id</th>
+-                <td>{{ starship.id }}</td>
++                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Id</th>
++                <td class="text-[22px] font-semibold pl-5">{{ starship.id }}</td>
+             </tr>
+             <tr>
+-                <th>Name</th>
+-                <td>{{ starship.name }}</td>
++                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Name</th>
++                <td class="text-[22px] font-semibold pl-5">{{ starship.name }}</td>
+             </tr>
+             <tr>
+-                <th>Class</th>
+-                <td>{{ starship.class }}</td>
++                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Class</th>
++                <td class="text-[22px] font-semibold pl-5">{{ starship.class }}</td>
+             </tr>
+             <tr>
+-                <th>Captain</th>
+-                <td>{{ starship.captain }}</td>
++                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Captain</th>
++                <td class="text-[22px] font-semibold pl-5">{{ starship.captain }}</td>
+             </tr>
+             <tr>
+-                <th>Status</th>
+-                <td>{{ starship.status.value }}</td>
++                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Status</th>
++                <td class="text-[22px] font-semibold pl-5">{{ starship.status.value }}</td>
+             </tr>
+             <tr>
+-                <th>ArrivedAt</th>
+-                <td>{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
++                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">ArrivedAt</th>
++                <td class="text-[22px] font-semibold pl-5">{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
+             </tr>
+             <tr>
+-                <th>Slug</th>
+-                <td>{{ starship.slug }}</td>
++                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Slug</th>
++                <td class="text-[22px] font-semibold pl-5">{{ starship.slug }}</td>
+             </tr>
+             <tr>
+-                <th>CreatedAt</th>
+-                <td>{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
++                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">CreatedAt</th>
++                <td class="text-[22px] font-semibold pl-5">{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+             </tr>
+             <tr>
+-                <th>UpdatedAt</th>
+-                <td>{{ starship.updatedAt ? starship.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
++                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">UpdatedAt</th>
++                <td class="text-[22px] font-semibold pl-5">{{ starship.updatedAt ? starship.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+             </tr>
+-        </tbody>
+-    </table>
+-
+-    <a href="{{ path('app_starship_admin_index') }}">back to list</a>
+-
+-    <a href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
+-
+-    {{ include('starship_admin/_delete_form.html.twig') }}
++            </tbody>
++        </table>
++        <div class="flex gap-3 mt-5">
++            <a class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">Edit</a>
++            {{ include('starship_admin/_delete_form.html.twig') }}
++        </div>
++    </div>
+ {% endblock %}

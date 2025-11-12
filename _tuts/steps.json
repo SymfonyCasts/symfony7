@@ -239,7 +239,37 @@
             "id": "highlight-all-required-fields-with-css-trick",
             "name": "Highlight all required fields with CSS trick",
             "description": null
+        },
+        {
+            "id": "crud-generate-for-starship",
+            "name": "CRUD: Generate for Starship",
+            "description": null
+        },
+        {
+            "id": "crud-tweak-route-path",
+            "name": "CRUD: Tweak route path",
+            "description": null
+        },
+        {
+            "id": "crud-fix-enum-field-value-call",
+            "name": "CRUD: Fix ENUM field value call",
+            "description": null
+        },
+        {
+            "id": "crud-set-enum-form-field-type",
+            "name": "CRUD: Set ENUM form field type",
+            "description": null
+        },
+        {
+            "id": "crud-add-missing-class-for-enumtype",
+            "name": "CRUD: Add missing class for EnumType",
+            "description": null
+        },
+        {
+            "id": "crud-update-styles",
+            "name": "CRUD: Update styles",
+            "description": null
         }
     ],
-    "sha": "88cf8de4a6403ab3968966fedba831116869a063"
+    "sha": "fe3f3dd6c3da08f21f4b43c8b6b0c280f79228c7"
 }

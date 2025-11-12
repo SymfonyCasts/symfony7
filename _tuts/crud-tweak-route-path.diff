@@ -1,0 +1,13 @@
+diff --git a/src/Controller/StarshipAdminController.php b/src/Controller/StarshipAdminController.php
+index d936c9f..20e9a09 100644
+--- a/src/Controller/StarshipAdminController.php
++++ b/src/Controller/StarshipAdminController.php
+@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+ 
+-#[Route('/starship/admin')]
++#[Route('/admin/starship')]
+ final class StarshipAdminController extends AbstractController
+ {
+     #[Route(name: 'app_starship_admin_index', methods: ['GET'])]

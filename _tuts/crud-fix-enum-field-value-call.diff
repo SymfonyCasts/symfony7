@@ -1,0 +1,26 @@
+diff --git a/templates/starship_admin/index.html.twig b/templates/starship_admin/index.html.twig
+index 4d10055..f320c20 100644
+--- a/templates/starship_admin/index.html.twig
++++ b/templates/starship_admin/index.html.twig
+@@ -27,7 +27,7 @@
+                 <td>{{ starship.name }}</td>
+                 <td>{{ starship.class }}</td>
+                 <td>{{ starship.captain }}</td>
+-                <td>{{ starship.status }}</td>
++                <td>{{ starship.status.value }}</td>
+                 <td>{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
+                 <td>{{ starship.slug }}</td>
+                 <td>{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+diff --git a/templates/starship_admin/show.html.twig b/templates/starship_admin/show.html.twig
+index 3ecf9c3..902c31a 100644
+--- a/templates/starship_admin/show.html.twig
++++ b/templates/starship_admin/show.html.twig
+@@ -25,7 +25,7 @@
+             </tr>
+             <tr>
+                 <th>Status</th>
+-                <td>{{ starship.status }}</td>
++                <td>{{ starship.status.value }}</td>
+             </tr>
+             <tr>
+                 <th>ArrivedAt</th>

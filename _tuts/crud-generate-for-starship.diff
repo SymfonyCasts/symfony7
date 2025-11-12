@@ -1,0 +1,298 @@
+diff --git a/src/Controller/StarshipAdminController.php b/src/Controller/StarshipAdminController.php
+new file mode 100644
+index 0000000..d936c9f
+--- /dev/null
++++ b/src/Controller/StarshipAdminController.php
+@@ -0,0 +1,81 @@
++<?php
++
++namespace App\Controller;
++
++use App\Entity\Starship;
++use App\Form\StarshipType;
++use App\Repository\StarshipRepository;
++use Doctrine\ORM\EntityManagerInterface;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\HttpFoundation\Request;
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Component\Routing\Attribute\Route;
++
++#[Route('/starship/admin')]
++final class StarshipAdminController extends AbstractController
++{
++    #[Route(name: 'app_starship_admin_index', methods: ['GET'])]
++    public function index(StarshipRepository $starshipRepository): Response
++    {
++        return $this->render('starship_admin/index.html.twig', [
++            'starships' => $starshipRepository->findAll(),
++        ]);
++    }
++
++    #[Route('/new', name: 'app_starship_admin_new', methods: ['GET', 'POST'])]
++    public function new(Request $request, EntityManagerInterface $entityManager): Response
++    {
++        $starship = new Starship();
++        $form = $this->createForm(StarshipType::class, $starship);
++        $form->handleRequest($request);
++
++        if ($form->isSubmitted() && $form->isValid()) {
++            $entityManager->persist($starship);
++            $entityManager->flush();
++
++            return $this->redirectToRoute('app_starship_admin_index', [], Response::HTTP_SEE_OTHER);
++        }
++
++        return $this->render('starship_admin/new.html.twig', [
++            'starship' => $starship,
++            'form' => $form,
++        ]);
++    }
++
++    #[Route('/{id}', name: 'app_starship_admin_show', methods: ['GET'])]
++    public function show(Starship $starship): Response
++    {
++        return $this->render('starship_admin/show.html.twig', [
++            'starship' => $starship,
++        ]);
++    }
++
++    #[Route('/{id}/edit', name: 'app_starship_admin_edit', methods: ['GET', 'POST'])]
++    public function edit(Request $request, Starship $starship, EntityManagerInterface $entityManager): Response
++    {
++        $form = $this->createForm(StarshipType::class, $starship);
++        $form->handleRequest($request);
++
++        if ($form->isSubmitted() && $form->isValid()) {
++            $entityManager->flush();
++
++            return $this->redirectToRoute('app_starship_admin_index', [], Response::HTTP_SEE_OTHER);
++        }
++
++        return $this->render('starship_admin/edit.html.twig', [
++            'starship' => $starship,
++            'form' => $form,
++        ]);
++    }
++
++    #[Route('/{id}', name: 'app_starship_admin_delete', methods: ['POST'])]
++    public function delete(Request $request, Starship $starship, EntityManagerInterface $entityManager): Response
++    {
++        if ($this->isCsrfTokenValid('delete'.$starship->getId(), $request->getPayload()->getString('_token'))) {
++            $entityManager->remove($starship);
++            $entityManager->flush();
++        }
++
++        return $this->redirectToRoute('app_starship_admin_index', [], Response::HTTP_SEE_OTHER);
++    }
++}
+diff --git a/src/Form/StarshipType.php b/src/Form/StarshipType.php
+new file mode 100644
+index 0000000..e3ee107
+--- /dev/null
++++ b/src/Form/StarshipType.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace App\Form;
++
++use App\Entity\Starship;
++use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\FormBuilderInterface;
++use Symfony\Component\OptionsResolver\OptionsResolver;
++
++class StarshipType extends AbstractType
++{
++    public function buildForm(FormBuilderInterface $builder, array $options): void
++    {
++        $builder
++            ->add('name')
++            ->add('class')
++            ->add('captain')
++            ->add('status')
++            ->add('arrivedAt', null, [
++                'widget' => 'single_text',
++            ])
++            ->add('slug')
++            ->add('createdAt')
++            ->add('updatedAt')
++        ;
++    }
++
++    public function configureOptions(OptionsResolver $resolver): void
++    {
++        $resolver->setDefaults([
++            'data_class' => Starship::class,
++        ]);
++    }
++}
+diff --git a/templates/starship_admin/_delete_form.html.twig b/templates/starship_admin/_delete_form.html.twig
+new file mode 100644
+index 0000000..1c1d526
+--- /dev/null
++++ b/templates/starship_admin/_delete_form.html.twig
+@@ -0,0 +1,4 @@
++<form method="post" action="{{ path('app_starship_admin_delete', {'id': starship.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
++    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ starship.id) }}">
++    <button class="btn">Delete</button>
++</form>
+diff --git a/templates/starship_admin/_form.html.twig b/templates/starship_admin/_form.html.twig
+new file mode 100644
+index 0000000..bf20b98
+--- /dev/null
++++ b/templates/starship_admin/_form.html.twig
+@@ -0,0 +1,4 @@
++{{ form_start(form) }}
++    {{ form_widget(form) }}
++    <button class="btn">{{ button_label|default('Save') }}</button>
++{{ form_end(form) }}
+diff --git a/templates/starship_admin/edit.html.twig b/templates/starship_admin/edit.html.twig
+new file mode 100644
+index 0000000..3777291
+--- /dev/null
++++ b/templates/starship_admin/edit.html.twig
+@@ -0,0 +1,13 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}Edit Starship{% endblock %}
++
++{% block body %}
++    <h1>Edit Starship</h1>
++
++    {{ include('starship_admin/_form.html.twig', {'button_label': 'Update'}) }}
++
++    <a href="{{ path('app_starship_admin_index') }}">back to list</a>
++
++    {{ include('starship_admin/_delete_form.html.twig') }}
++{% endblock %}
+diff --git a/templates/starship_admin/index.html.twig b/templates/starship_admin/index.html.twig
+new file mode 100644
+index 0000000..4d10055
+--- /dev/null
++++ b/templates/starship_admin/index.html.twig
+@@ -0,0 +1,49 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}Starship index{% endblock %}
++
++{% block body %}
++    <h1>Starship index</h1>
++
++    <table class="table">
++        <thead>
++            <tr>
++                <th>Id</th>
++                <th>Name</th>
++                <th>Class</th>
++                <th>Captain</th>
++                <th>Status</th>
++                <th>ArrivedAt</th>
++                <th>Slug</th>
++                <th>CreatedAt</th>
++                <th>UpdatedAt</th>
++                <th>actions</th>
++            </tr>
++        </thead>
++        <tbody>
++        {% for starship in starships %}
++            <tr>
++                <td>{{ starship.id }}</td>
++                <td>{{ starship.name }}</td>
++                <td>{{ starship.class }}</td>
++                <td>{{ starship.captain }}</td>
++                <td>{{ starship.status }}</td>
++                <td>{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
++                <td>{{ starship.slug }}</td>
++                <td>{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
++                <td>{{ starship.updatedAt ? starship.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
++                <td>
++                    <a href="{{ path('app_starship_admin_show', {'id': starship.id}) }}">show</a>
++                    <a href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
++                </td>
++            </tr>
++        {% else %}
++            <tr>
++                <td colspan="10">no records found</td>
++            </tr>
++        {% endfor %}
++        </tbody>
++    </table>
++
++    <a href="{{ path('app_starship_admin_new') }}">Create new</a>
++{% endblock %}
+diff --git a/templates/starship_admin/new.html.twig b/templates/starship_admin/new.html.twig
+new file mode 100644
+index 0000000..24d3b43
+--- /dev/null
++++ b/templates/starship_admin/new.html.twig
+@@ -0,0 +1,11 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}New Starship{% endblock %}
++
++{% block body %}
++    <h1>Create new Starship</h1>
++
++    {{ include('starship_admin/_form.html.twig') }}
++
++    <a href="{{ path('app_starship_admin_index') }}">back to list</a>
++{% endblock %}
+diff --git a/templates/starship_admin/show.html.twig b/templates/starship_admin/show.html.twig
+new file mode 100644
+index 0000000..3ecf9c3
+--- /dev/null
++++ b/templates/starship_admin/show.html.twig
+@@ -0,0 +1,54 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}Starship{% endblock %}
++
++{% block body %}
++    <h1>Starship</h1>
++
++    <table class="table">
++        <tbody>
++            <tr>
++                <th>Id</th>
++                <td>{{ starship.id }}</td>
++            </tr>
++            <tr>
++                <th>Name</th>
++                <td>{{ starship.name }}</td>
++            </tr>
++            <tr>
++                <th>Class</th>
++                <td>{{ starship.class }}</td>
++            </tr>
++            <tr>
++                <th>Captain</th>
++                <td>{{ starship.captain }}</td>
++            </tr>
++            <tr>
++                <th>Status</th>
++                <td>{{ starship.status }}</td>
++            </tr>
++            <tr>
++                <th>ArrivedAt</th>
++                <td>{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
++            </tr>
++            <tr>
++                <th>Slug</th>
++                <td>{{ starship.slug }}</td>
++            </tr>
++            <tr>
++                <th>CreatedAt</th>
++                <td>{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
++            </tr>
++            <tr>
++                <th>UpdatedAt</th>
++                <td>{{ starship.updatedAt ? starship.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
++            </tr>
++        </tbody>
++    </table>
++
++    <a href="{{ path('app_starship_admin_index') }}">back to list</a>
++
++    <a href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
++
++    {{ include('starship_admin/_delete_form.html.twig') }}
++{% endblock %}
