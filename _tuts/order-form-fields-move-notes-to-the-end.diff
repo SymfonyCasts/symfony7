@@ -1,0 +1,20 @@
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index 334ff08..b3fe887 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -24,7 +24,6 @@ class StarshipPartType extends AbstractType
+ //                ],
+             ])
+             ->add('price')
+-            ->add('notes')
+             ->add('starship', EntityType::class, [
+                 'class' => Starship::class,
+                 'choice_label' => function (Starship $starship) {
+@@ -39,6 +38,7 @@ class StarshipPartType extends AbstractType
+                         ->orderBy('starship.name', Order::Ascending->value);
+                 },
+             ])
++            ->add('notes')
+             ->add('createAndAddNew', SubmitType::class, [
+                 'validate' => false,
+                 'attr' => [

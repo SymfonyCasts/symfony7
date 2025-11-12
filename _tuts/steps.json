@@ -189,7 +189,57 @@
             "id": "validation-move-constraints-to-the-entity",
             "name": "Validation: Move constraints to the entity",
             "description": null
+        },
+        {
+            "id": "validation-install-csrf-package",
+            "name": "Validation: Install CSRF package",
+            "description": null
+        },
+        {
+            "id": "order-form-fields-move-notes-to-the-end",
+            "name": "Order form fields: Move notes to the end",
+            "description": null
+        },
+        {
+            "id": "order-form-fields-use-priority-option",
+            "name": "Order form fields: Use priority option",
+            "description": null
+        },
+        {
+            "id": "order-form-fields-render-2-fields-in-1-row",
+            "name": "Order form fields: Render 2 fields in 1 row",
+            "description": null
+        },
+        {
+            "id": "order-form-fields-render-buttons-separately-too",
+            "name": "Order form fields: Render buttons separately too",
+            "description": null
+        },
+        {
+            "id": "order-form-fields-use-form-widget-for-the-btn",
+            "name": "Order form fields: Use form_widget for the btn",
+            "description": null
+        },
+        {
+            "id": "order-form-fields-render-form-errors",
+            "name": "Order form fields: Render form_errors()",
+            "description": null
+        },
+        {
+            "id": "add-help-field-option",
+            "name": "Add help field option",
+            "description": null
+        },
+        {
+            "id": "set-form-field-options-in-the-template",
+            "name": "Set form field options in the template",
+            "description": null
+        },
+        {
+            "id": "highlight-all-required-fields-with-css-trick",
+            "name": "Highlight all required fields with CSS trick",
+            "description": null
         }
     ],
-    "sha": "a471fe7ed64e4f8fd78c3f969b0b3bcca67b0c28"
+    "sha": "88cf8de4a6403ab3968966fedba831116869a063"
 }

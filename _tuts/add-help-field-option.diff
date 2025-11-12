@@ -1,0 +1,15 @@
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index a1a7d30..ac0567b 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -23,7 +23,9 @@ class StarshipPartType extends AbstractType
+ //                    new NotBlank([], 'Every part should have a name!'),
+ //                ],
+             ])
+-            ->add('price')
++            ->add('price', null, [
++                'help' => 'We don\'t allow free parts! Set up a price',
++            ])
+             ->add('starship', EntityType::class, [
+                 'class' => Starship::class,
+                 'choice_label' => function (Starship $starship) {

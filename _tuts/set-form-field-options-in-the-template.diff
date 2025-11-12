@@ -1,0 +1,17 @@
+diff --git a/templates/admin/starship-part/new.html.twig b/templates/admin/starship-part/new.html.twig
+index 9db740b..d1ca65a 100644
+--- a/templates/admin/starship-part/new.html.twig
++++ b/templates/admin/starship-part/new.html.twig
+@@ -19,7 +19,11 @@
+ 
+             {{ form_row(form.notes) }}
+ 
+-            {{ form_widget(form.createAndAddNew) }}
++            {{ form_widget(form.createAndAddNew, {
++                'attr': {
++                    'class': 'text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer',
++                },
++            }) }}
+             <button type="submit" class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Create and close</button>
+ 
+             {{ form_rest(form) }}

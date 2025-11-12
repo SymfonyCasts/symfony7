@@ -1,0 +1,12 @@
+diff --git a/src/Form/StarshipPartType.php b/src/Form/StarshipPartType.php
+index b3fe887..a1a7d30 100644
+--- a/src/Form/StarshipPartType.php
++++ b/src/Form/StarshipPartType.php
+@@ -37,6 +37,7 @@ class StarshipPartType extends AbstractType
+                     return $repo->createQueryBuilder('starship')
+                         ->orderBy('starship.name', Order::Ascending->value);
+                 },
++                'priority' => 10,
+             ])
+             ->add('notes')
+             ->add('createAndAddNew', SubmitType::class, [

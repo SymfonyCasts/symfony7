@@ -1,0 +1,13 @@
+diff --git a/templates/admin/starship-part/new.html.twig b/templates/admin/starship-part/new.html.twig
+index 71018b9..9db740b 100644
+--- a/templates/admin/starship-part/new.html.twig
++++ b/templates/admin/starship-part/new.html.twig
+@@ -9,6 +9,8 @@
+         <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Register a New Starship Part</h1>
+ 
+         {{ form_start(form) }}
++            {{ form_errors(form) }}
++
+             {{ form_row(form.starship) }}
+             <div class="grid grid-cols-2 gap-4">
+                 {{ form_row(form.name) }}

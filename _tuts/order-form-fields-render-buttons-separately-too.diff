@@ -1,0 +1,22 @@
+diff --git a/templates/admin/starship-part/new.html.twig b/templates/admin/starship-part/new.html.twig
+index d155237..f453852 100644
+--- a/templates/admin/starship-part/new.html.twig
++++ b/templates/admin/starship-part/new.html.twig
+@@ -15,9 +15,16 @@
+                 {{ form_row(form.price) }}
+             </div>
+ 
+-            {{ form_rest(form) }}
++            {{ form_row(form.notes) }}
+ 
++            {{ form_row(form.createAndAddNew) }}
+             <button type="submit" class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Create and close</button>
++
++            {{ form_rest(form) }}
++            {#
++                Anything you want to add after all fields are rendered
++                but before the closing </form>
++            #}
+         {{ form_end(form) }}
+     </div>
+ {% endblock %}
