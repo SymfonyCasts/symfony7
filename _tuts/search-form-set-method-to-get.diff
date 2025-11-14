@@ -1,0 +1,20 @@
+diff --git a/src/Form/PartSearchType.php b/src/Form/PartSearchType.php
+index c2995e8..54d4d30 100644
+--- a/src/Form/PartSearchType.php
++++ b/src/Form/PartSearchType.php
+@@ -4,6 +4,7 @@ namespace App\Form;
+ 
+ use Symfony\Component\Form\AbstractType;
+ use Symfony\Component\Form\FormBuilderInterface;
++use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\OptionsResolver\OptionsResolver;
+ 
+ class PartSearchType extends AbstractType
+@@ -25,6 +26,7 @@ class PartSearchType extends AbstractType
+     {
+         $resolver->setDefaults([
+             // Configure your form options here
++            'method' => Request::METHOD_GET,
+         ]);
+     }
+ }

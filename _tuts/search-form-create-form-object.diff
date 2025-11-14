@@ -1,0 +1,27 @@
+diff --git a/src/Controller/PartController.php b/src/Controller/PartController.php
+index 736a51d..9a94bd1 100644
+--- a/src/Controller/PartController.php
++++ b/src/Controller/PartController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Controller;
+ 
++use App\Form\PartSearchType;
+ use App\Repository\StarshipPartRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Request;
+@@ -13,12 +14,14 @@ final class PartController extends AbstractController
+     #[Route('/parts', name: 'app_part_index')]
+     public function index(StarshipPartRepository $repository, Request $request,): Response
+     {
++        $searchForm = $this->createForm(PartSearchType::class);
+         $query = $request->query->getString('query');
+ 
+         $parts = $repository->findAllOrderedByPrice($query);
+ 
+         return $this->render('part/index.html.twig', [
+             'parts' => $parts,
++            'searchForm' => $searchForm,
+         ]);
+     }
+ }

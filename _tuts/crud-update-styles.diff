@@ -19,26 +19,24 @@ index bf20b98..a946f0b 100644
 +    <button class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">{{ button_label|default('Save') }}</button>
  {{ form_end(form) }}
 diff --git a/templates/starship_admin/edit.html.twig b/templates/starship_admin/edit.html.twig
-index 3777291..e112922 100644
+index 3777291..08a868c 100644
 --- a/templates/starship_admin/edit.html.twig
 +++ b/templates/starship_admin/edit.html.twig
-@@ -1,13 +1,16 @@
- {% extends 'base.html.twig' %}
-+{% form_theme form 'tailwind_2_layout.html.twig' %}
- 
+@@ -3,11 +3,13 @@
  {% block title %}Edit Starship{% endblock %}
  
  {% block body %}
 -    <h1>Edit Starship</h1>
-+    <div class="px-5 max-w-7xl mx-auto mt-4">
-+        <a class="hover:text-gray-400 underline" href="{{ path('app_starship_admin_index') }}"> << back to list</a>
-+        <h1 class="text-[32px] font-semibold border-b border-white/10 pb-5 mb-5 mt-8">Edit Starship</h1>
- 
+-
 -    {{ include('starship_admin/_form.html.twig', {'button_label': 'Update'}) }}
 -
 -    <a href="{{ path('app_starship_admin_index') }}">back to list</a>
 -
 -    {{ include('starship_admin/_delete_form.html.twig') }}
++    <div class="px-5 max-w-7xl mx-auto mt-4">
++        <a class="hover:text-gray-400 underline" href="{{ path('app_starship_admin_index') }}"> << back to list</a>
++        <h1 class="text-[32px] font-semibold border-b border-white/10 pb-5 mb-5 mt-8">Edit Starship</h1>
++
 +        {{ include('starship_admin/_form.html.twig', {'button_label': 'Update'}) }}
 +        <div class="flex justify-end">
 +            {{ include('starship_admin/_delete_form.html.twig') }}

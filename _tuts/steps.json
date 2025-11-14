@@ -269,7 +269,72 @@
             "id": "crud-update-styles",
             "name": "CRUD: Update styles",
             "description": null
+        },
+        {
+            "id": "form-theme-comment-out-setting-in-the-template",
+            "name": "Form theme: Comment out setting in the template",
+            "description": null
+        },
+        {
+            "id": "form-theme-set-globally",
+            "name": "Form theme: Set globally",
+            "description": null
+        },
+        {
+            "id": "search-form-generate-form-type",
+            "name": "Search form: Generate form type",
+            "description": null
+        },
+        {
+            "id": "search-form-rename-field-to-query",
+            "name": "Search form: Rename field to query",
+            "description": null
+        },
+        {
+            "id": "search-form-create-form-object",
+            "name": "Search form: Create form object",
+            "description": null
+        },
+        {
+            "id": "search-form-render-the-form",
+            "name": "Search form: Render the form",
+            "description": null
+        },
+        {
+            "id": "search-form-disable-label",
+            "name": "Search form: Disable label",
+            "description": null
+        },
+        {
+            "id": "search-form-add-more-attr",
+            "name": "Search form: Add more attr",
+            "description": null
+        },
+        {
+            "id": "search-form-set-method-to-get",
+            "name": "Search form: Set method to GET",
+            "description": null
+        },
+        {
+            "id": "search-form-override-block-prefix",
+            "name": "Search form: Override block prefix",
+            "description": null
+        },
+        {
+            "id": "search-form-disable-csrf",
+            "name": "Search form: Disable CSRF",
+            "description": null
+        },
+        {
+            "id": "search-form-make-field-optional",
+            "name": "Search form: Make field optional",
+            "description": null
+        },
+        {
+            "id": "search-form-handle-the-request",
+            "name": "Search form: Handle the request",
+            "description": null
         }
     ],
-    "sha": "fe3f3dd6c3da08f21f4b43c8b6b0c280f79228c7"
+    "sha": "93ac31506b1a0346aafbb732c02903a806540bf6"
 }

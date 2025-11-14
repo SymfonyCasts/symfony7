@@ -1,0 +1,12 @@
+diff --git a/templates/admin/starship-part/new.html.twig b/templates/admin/starship-part/new.html.twig
+index d1ca65a..b5622f2 100644
+--- a/templates/admin/starship-part/new.html.twig
++++ b/templates/admin/starship-part/new.html.twig
+@@ -1,6 +1,6 @@
+ {% extends 'base.html.twig' %}
+ 
+-{% form_theme form 'tailwind_2_layout.html.twig' %}
++{#{% form_theme form 'tailwind_2_layout.html.twig' %}#}
+ 
+ {% block title %}Admin : New Starship Part{% endblock %}
+ 

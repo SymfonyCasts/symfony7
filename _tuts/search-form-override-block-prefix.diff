@@ -1,0 +1,14 @@
+diff --git a/src/Form/PartSearchType.php b/src/Form/PartSearchType.php
+index 54d4d30..c441851 100644
+--- a/src/Form/PartSearchType.php
++++ b/src/Form/PartSearchType.php
+@@ -29,4 +29,9 @@ class PartSearchType extends AbstractType
+             'method' => Request::METHOD_GET,
+         ]);
+     }
++
++    public function getBlockPrefix(): string
++    {
++        return '';
++    }
+ }

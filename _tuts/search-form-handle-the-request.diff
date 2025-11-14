@@ -1,0 +1,18 @@
+diff --git a/src/Controller/PartController.php b/src/Controller/PartController.php
+index 9a94bd1..5eb708c 100644
+--- a/src/Controller/PartController.php
++++ b/src/Controller/PartController.php
+@@ -15,7 +15,12 @@ final class PartController extends AbstractController
+     public function index(StarshipPartRepository $repository, Request $request,): Response
+     {
+         $searchForm = $this->createForm(PartSearchType::class);
+-        $query = $request->query->getString('query');
++        //$query = $request->query->getString('query');
++        $query = null;
++        $searchForm->handleRequest($request);
++        if ($searchForm->isSubmitted() && $searchForm->isValid()) {
++            $query = $searchForm->get('query')->getData();
++        }
+ 
+         $parts = $repository->findAllOrderedByPrice($query);
+ 

@@ -1,0 +1,12 @@
+diff --git a/src/Form/PartSearchType.php b/src/Form/PartSearchType.php
+index e179cdd..a6a1676 100644
+--- a/src/Form/PartSearchType.php
++++ b/src/Form/PartSearchType.php
+@@ -13,6 +13,7 @@ class PartSearchType extends AbstractType
+     {
+         $builder
+             ->add('query', null, [
++                'required' => false,
+                 'label' => false,
+                 'attr' => [
+                     'placeholder' => 'Search...',

@@ -1,0 +1,30 @@
+diff --git a/src/Form/PartSearchType.php b/src/Form/PartSearchType.php
+new file mode 100644
+index 0000000..7c34069
+--- /dev/null
++++ b/src/Form/PartSearchType.php
+@@ -0,0 +1,24 @@
++<?php
++
++namespace App\Form;
++
++use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\FormBuilderInterface;
++use Symfony\Component\OptionsResolver\OptionsResolver;
++
++class PartSearchType extends AbstractType
++{
++    public function buildForm(FormBuilderInterface $builder, array $options): void
++    {
++        $builder
++            ->add('field_name')
++        ;
++    }
++
++    public function configureOptions(OptionsResolver $resolver): void
++    {
++        $resolver->setDefaults([
++            // Configure your form options here
++        ]);
++    }
++}
