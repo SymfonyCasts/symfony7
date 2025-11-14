@@ -334,7 +334,17 @@
             "id": "search-form-handle-the-request",
             "name": "Search form: Handle the request",
             "description": null
+        },
+        {
+            "id": "search-form-add-svg-icon-and-drop-legacy-form",
+            "name": "Search form: Add SVG icon and drop legacy form",
+            "description": null
+        },
+        {
+            "id": "search-form-change-to-searchtype",
+            "name": "Search form: Change to SearchType",
+            "description": null
         }
     ],
-    "sha": "93ac31506b1a0346aafbb732c02903a806540bf6"
+    "sha": "ce7f9288ff7749484b06d525cb26180f9e5a6df1"
 }

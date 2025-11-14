@@ -1,0 +1,21 @@
+diff --git a/src/Form/PartSearchType.php b/src/Form/PartSearchType.php
+index a6a1676..6e8e27c 100644
+--- a/src/Form/PartSearchType.php
++++ b/src/Form/PartSearchType.php
+@@ -3,6 +3,7 @@
+ namespace App\Form;
+ 
+ use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\Extension\Core\Type\SearchType;
+ use Symfony\Component\Form\FormBuilderInterface;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\OptionsResolver\OptionsResolver;
+@@ -12,7 +13,7 @@ class PartSearchType extends AbstractType
+     public function buildForm(FormBuilderInterface $builder, array $options): void
+     {
+         $builder
+-            ->add('query', null, [
++            ->add('query', SearchType::class, [
+                 'required' => false,
+                 'label' => false,
+                 'attr' => [
