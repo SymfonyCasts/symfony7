@@ -1,6 +1,6 @@
 import './stimulus_bootstrap.js';
 // import '@hotwired/turbo';
-T
+
 /*
  * Welcome to your app's main JavaScript file!
  *
