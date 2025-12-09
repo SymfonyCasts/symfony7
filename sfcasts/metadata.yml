@@ -1,0 +1,4 @@
+chapters:
+    form-type:
+        tutsFirstStep: form-type-install-the-component
+        tutsLastStep: form-type-dump-in-template
