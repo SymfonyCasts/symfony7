@@ -2,3 +2,6 @@ chapters:
     form-type:
         tutsFirstStep: form-type-install-the-component
         tutsLastStep: form-type-dump-in-template
+    render-form:
+        tutsFirstStep: render-form-render-the-whole-object
+        tutsLastStep: handle-form-handle-request
