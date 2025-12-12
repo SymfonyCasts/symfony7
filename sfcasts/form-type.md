@@ -2,24 +2,16 @@
 
 ## Introduction: The Power of Forms
 
-I know what you're thinking:
+Forms are everywhere. Login boxes, search fields, admin tooling, checkout
+steps — if your app lets humans type things, congrats, you’re in Form Land.
+And even though front-ends today might be buzzing with Ajax, Turbo, and
+fancy JavaScript libraries, the core job is still the same old classic: grab
+some data, check it, and do something meaningful with it. And that’s exactly
+where Symfony's Form component steps in wearing a cape. It wrangles request data,
+applies validation, protects you from CSRF villains, and generally keeps you
+from hand-crafting HTML inputs like it's 1995.
 
-> Are forms even relevant in 2025? Isn't everything JavaScript now?
-
-That's a fair question. Forms might feel a bit old-school, almost as ancient
-as dial-up internet. But honestly, it all depends on what you're building.
-
-If you're working on a highly interactive, front-end-heavy,
-never-refreshes-the-page kind of app, you'll likely need a hefty JavaScript
-framework for your UI. But if your project involves users inputting or
-managing data — searching, creating, editing, filtering — then forms
-are still your best friend in the Symfony toolbox. 
-
-With Symfony Form component, forms are quick, safe, and best of all, they
-do a lot of the hard work for you. They handle request data, validate it,
-protect from CSRF attacks — all the usual superhero stuff. So let's get
-our hands dirty with the basics: form text, inputs, text areas, and all the
-magic Symfony builds around them.
+So let's get our hands dirty and create our first form!
 
 ## Getting Started with the Course Code
 
@@ -73,7 +65,7 @@ friendly coworker who gently reminds you that you forgot to run
 You can name the form whatever you like, but it's common practice to end
 form classes with "Type". For instance, since we're creating Starship
 parts, I'll name this one `StarshipPartType`. Next, maker will ask if we
-want to map the form to an entity. We certainly do in this case, so choose
+want to map the form to an entity. We certainly do in this case, so choose the
 `StarshipPart` entity. That's the entity we'll be creating with this form.
 Once that's done, maker will create a new file in the `src/Form/` directory.
 Now, open it up in PhpStorm.
@@ -83,9 +75,8 @@ just installed. Maker has also conveniently added a form field for every
 property on the entity. We don't really want users editing timestamps
 though (unless we're looking for time travel paradoxes), so let's get rid
 of those fields. Below, in the `configureOptions()`, you'll spot the
-`data_class` option set to the `StarshipPart::class`. Exactly this
-tells Symfony to create or update a `StarshipPart` object whenever
-this form is submitted. Quite handy!
+`data_class` option set to the `StarshipPart::class`. That binds this
+form to that entity. Quite handy!
 
 ## Creating the Form Object with `createForm()`
 
@@ -97,12 +88,12 @@ Let's open it up. Inside, we'll create a form object with
 Symfony kindly provides two useful methods, `createForm()` and
 `createFormBuilder()`. The latter lets you build a form right inside
 the controller, perfect for quick prototypes. However, best practice is to
-create a dedicated form type class, just like the one we just crafted.
+create a dedicated form type class, like the one we just crafted.
 
 So, we'll stick with `$this->createForm()`. Pass our `StarshipPartType::class`,
 and voila, we've got a form! If we `dd($form)` below and refresh the page,
 you'll see it's a Form object — a fully-fledged PHP object with all the
-logic. Let's pass it to the template as `$form` variable and remove the
+logic. Let's pass it to the template with `'form' => $form` and remove the
 `dd($form)` statement. Now we can render it in the template. 
 
 ## `Form` Object in PHP vs `FormView` one in Twig
@@ -115,12 +106,11 @@ look similar, but remember, they're technically different objects.
 
 Older versions of Symfony required developers to explicitly pass
 the `FormView` object to the template for rendering. That's why you might
-see `$form->createView()` calls on forms in legacy projects.
+see `$form->createView()` calls in legacy projects.
 
 But with the latest version of Symfony, this is handled automatically,
 so you don't need to worry about it. In fact, to make it work properly with
-Symfony live components, you should pass the internal form object
-to the template, just as we did before. 
+Turbo, you should now always pass the internal form object. 
 
-Okay, next up, we'll render and submit the form for real. Are you ready to
+Okay, up next, we'll render and submit the form for real. Are you ready to
 dive in?
