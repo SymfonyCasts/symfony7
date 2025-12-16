@@ -5,3 +5,12 @@ chapters:
     render-form:
         tutsFirstStep: render-form-render-the-whole-object
         tutsLastStep: handle-form-handle-request
+    handle-form:
+        tutsFirstStep: handle-form-check-if-submitted
+        tutsLastStep: multiple-submits-rename-to-create-and-close
+    multiple-submits:
+        tutsFirstStep: multiple-submits-add-new-btn
+        tutsLastStep: apply-tailwind-form-theme-in-the-template
+    form-theme:
+        tutsFirstStep: entitytype-set-label-to-name
+        tutsLastStep: validation-disable-html5-validation
