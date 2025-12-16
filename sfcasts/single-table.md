@@ -1,0 +1,3 @@
+# Single Table Inheritance
+
+Coming soon...

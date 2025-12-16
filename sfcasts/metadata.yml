@@ -1,16 +1,6 @@
 chapters:
-  - installing-doctrine
-  - database-setup
-  - entity
-  - migrations
-  - persisting-fixtures
-  - dql-query-builder-find
-  - entity-repository
-  - foundry-faker
-  - pagination
-  - add-fields
-  - doctrine-extensions
-  - controller-map-entity
-  - deleting-entities
-  - updating-entities
-  - rich-entities
+  - mapped-superclass
+  - single-table
+  - class-table
+  - querying
+  - associations

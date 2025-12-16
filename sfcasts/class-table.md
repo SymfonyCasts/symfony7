@@ -1,0 +1,3 @@
+# Class Table Inheritance
+
+Coming soon...
