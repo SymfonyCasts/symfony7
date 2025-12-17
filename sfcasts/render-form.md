@@ -1,12 +1,12 @@
-# Rendering the Form with Twig Helper Functions
+# Rendering the Form
 
-In the last chapter, we dived into the Symfony Form component, built our
+In the last chapter, we dove into the Symfony Form component, built our
 first Form type, and created a Form object from the type in the controller.
 
 Now, let's move on to the fun part — bringing it all to life by
 rendering the form. The Symfony Form component packs a bunch of neat helper
 functions that make form rendering a breeze. Open your template and swap
-out the dump with this line of code: `{{ form(form) }}`
+out the dump with: `{{ form(form) }}`
 
 Now, head back to your browser and refresh the page. Voila! We have a form.
 Sure, it might not win any beauty pageants, but as backend developers,
@@ -28,15 +28,15 @@ action explicitly, but most of the time, it's not necessary.
 
 Since our project uses Tailwind CSS, let's activate the Tailwind Forms
 plugin for some reasonable styling defaults. Back in PhpStorm, open
-`assets/styles/app.css`, and in the beginning add
+`assets/styles/app.css`, and at the top, add
 `@plugin "@tailwindcss/forms";`
 
 Don't forget the semicolon at the end. This plugin provides a neat minimal
 reset for form controls, making them easier to style with Tailwind classes.
-That's designer's favorite feature! 
+That's our designer's favorite feature! 
 
 Refresh your browser, and you'll notice a significant improvement. Our
-form has gone from a 90s throwback to a modern developer tool.
+form has gone from a 90s throwback to a more modern look.
 
 Now, let's add a minor detail to make our form fields blend better with the
 background. In the CSS file, add this bit:
@@ -49,14 +49,14 @@ input, textarea, select {
 
 ## Adding a Submit Button
 
-Buuuut we've got a tiny issue. Our beautiful reset form is missing the most
+Buuuut we've got a tiny issue. Our beautiful form is missing the most
 important element - a submit button. How do we add one? The best practice
 is to add your submit button manually in Twig, not inside the form type.
 
 Let's create a simple button. Back in the Twig template, below the form, add: 
-`<button type="submit"></button>`. I will add some Tailwind CSS classes
-to make it look prettier like a real stylish button. You can copy/paste
-that long list of CSS classes from the scripts below the video.
+`<button>Create</button>`, `type="submit"`. I'll add some Tailwind CSS classes
+to make it look prettier. You can copy/paste
+this long list of CSS classes from the script below.
 
 Remember, this button must be inside the `form` tag; otherwise, no matter how
 many times you click or how hard you will press your touchpad, it just won't
@@ -88,4 +88,4 @@ saving, no validating, no redirecting. You'll see this when you try to
 reload the page, and your browser asks if it should resubmit the form.
 
 But don't worry, we'll cover how to process the form and store the new
-StarshipPart in the database in the next video. Stay tuned!
+`StarshipPart` in the database in the next video. Stay tuned!
