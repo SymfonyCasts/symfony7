@@ -12,16 +12,16 @@ Open up `src/Controller/AdminController.php`, and in the `newStarshipPart()`
 method, right below the form object, add `$form->handleRequest()`. 
 
 To pull this off, we need to pass the current request object to this
-method. You're familiar with this by now. Inject a `$request` from
-HTTP Foundation as a method argument and pass the `$request` to this
-method. You might be wondering what this `handleRequest()` is all about.
+method. You're familiar with this by now. Inject `Request` from the
+HTTP Foundation as the method argument `$request` and pass it to
+`handleRequest()`. You might be wondering what this `handleRequest()` is all about.
 It simply grabs the submitted data from the request, applies that data to
 your form, and now your form contains the user's submitted values. 
 
 ## Checking Form Submission
 
-Next, we want to know whether the form has actually been submitted or we just
-load the form page. That's a breeze — just write `if ($form->isSubmitted())`.
+Next, we want to know whether the form has actually been submitted or if we just
+loaded the form page. That's a breeze — just write `if ($form->isSubmitted())`.
 Then within that `if`, we can retrieve the submitted data with `$form->getData()`.
 
 Since our form type has a `data_class` option set to `StarshipPart::class`,
@@ -32,7 +32,7 @@ variable and below `dd($part)`.
 
 ## Testing Our Form
 
-Back in the browser, I'll quickly fill in the form. Hit create to submit it
+Back in the browser, I'll quickly fill in the form. Hit create to submit it...
 and voila, a shiny new `StarshipPart` object with the data we sent. Notice
 that no ID is set because Doctrine hasn't saved it in the database yet.
 I'll quickly add a PHPDoc above the variable to make PhpStorm's autocomplete
@@ -42,11 +42,11 @@ happier, and delete the `dd()` statement.
 
 To save the new part, we need Doctrine's `EntityManager`. Inject it with
 `EntityManagerInterface $entityManager` in the method signature. Then, back
-in the `if`, add `$entityManager->persist($part)`, passing the `$part`
+in the `if`, add `$entityManager->persist()`, passing the `$part`
 object and next `$entityManager->flush()`.
 
 Back to the browser, I'll set the name to: "Legacy Hyperdrive".
-Give it a fair price, and don’t forget about important note:
+Give it a fair price, and don’t forget about an important note:
 
 > Be careful with high revs!
 
@@ -64,10 +64,10 @@ shown exactly once. They are perfect for things like:
 
 If you peek into `templates/base.html.twig` You'll see we already have code
 that loops over flash messages and renders them with nice styling depending
-on the type: success, warning, error, default. After saving the entity to the
-database, let's write this: `$this->addFlash()`
+on the type: success, warning, error, default. Back in our controller,
+after saving the part entity to the database, write: `$this->addFlash()`
 
-First argument: the message “type” - it helps to control styling. Write
+First argument: the message "type" - it helps to control styling. Write
 `success` here. Second argument: the content of the message. How about
 `sprintf('The part "%s" was created.', $part->getName())`.
 
@@ -79,7 +79,7 @@ process with a redirect. This is a classic best practice for POST forms.
 Let's return `$this->redirectToRoute()`.
 
 We can redirect anywhere, but I'll send users back to the part list for
-convenience. It should be `app_part_index` route name. 
+convenience. This route name is `app_part_index`. 
 
 ## Testing the Overall Flow
 
@@ -88,7 +88,7 @@ name, set a price, and for notes, I'll say:
 
 > Do not exceed 120% core flux
 
-OK, submit the form again, and there it is. Our success flash message,
+OK, submit the form again, and there it is. Our flash message,
 announcing that the part quantum reactor was successfully created. And if I
 try to refresh the page, the message is gone, so it was shown only once,
 and Chrome does not ask me if I want to resubmit the form again, so it was
