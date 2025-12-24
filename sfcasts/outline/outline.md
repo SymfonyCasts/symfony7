@@ -478,7 +478,7 @@
 - First, it checks for Origin/Referer HTTP headers of the Request
 - Next, the request is validated using a cookie and a CSRF token
 - TODO probably need a better explanation
-- Install it with `com require symfony/security-csrf`
+- Install it with `symfony composer symfony/security-csrf`
 - As soon as you installed that package - Symfony will add CSRF
   (Cross-Site Request Forgery) protection to all our Symfony forms by default
 - You can see it yourself
