@@ -17,3 +17,6 @@ chapters:
     validation:
         tutsFirstStep: validation-install-validator-component
         tutsLastStep: validation-move-constraints-to-the-entity
+    validation-constraints:
+        tutsFirstStep: validation-install-csrf-package
+        tutsLastStep: order-form-fields-move-notes-to-the-end
