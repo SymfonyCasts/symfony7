@@ -491,7 +491,7 @@
   > The CSRF token is invalid. Please try to resubmit the form.
 
 
-#  7. Sorting form field
+#  8. Sorting form field
 - Open the /admin/starship-part/new
 - Can we push that Notes field to the end?
 - I want required fields come first and optional - last
@@ -599,17 +599,19 @@
 - Inside `content: " *";`
 - And `color: #c10007;`
 
-# 8.
-### CRUD operations
+# 9. CRUD operations
+- Let's speed up our form generation for CRUD operations on entities by
+  leveraging MakerBundle again
+- Go to the terminal
 - Run `symfony console make:crud` command
 - For entity, choose `Starship`
 - For controller, we already have `StarshipController`
-- Let's name it as `StarshipAdminController`
+- So let's name it as `StarshipAdminController`
 - PHPUnit tests? Let's keep it as your homework - say "no"
 - Oh wow, it created a lot of files: controller, form type,
   and several templates
 - Open the controller
-- I will change the route to `#[Route('/admin/starship')]`
+- I will tweak the route to `#[Route('/admin/starship')]`
   to be consistent
 - Open the `/admin/starship`
 - Ah, an error:
@@ -618,13 +620,13 @@
 - Change status to `starship.status.value`
 - Maker did you a lot of good work but seems doesn't handle Enums well yet
 - Update the page to see it renders the list
-- Click on Show link
+- Click on the Show link
 - The same error
 - Do the same fix in `starship_admin/show.html.twig`
 - So it renders the list and allow us to watch the specific Starship details
 - But more important it also gives us some forms so that we could
   create, update and delete records
-- We can delete it from this show page
+- We can delete records from its show page
 - Press that button to delete ID 106
 - Oh, it asks a JS prompt to confirm the delete action
 - I will cancel and return back to the list page
@@ -633,7 +635,7 @@
 - Open the related template: `starship_admin/edit.html.twig`
 - It in turn includes `_form.html.twig`
 - As you can see we're using the same form for new and edit actions
-- The only button name is changed tat we pass as an arg
+- The only difference is that the button name is changed - we pass it as an arg
 - But we don't render the `status` field there manually
 - Symfony Form component tries to render that
 - So, the proper fix should be done in form type
@@ -650,7 +652,7 @@
 - This all generated code definitely needs some style
 - I will quickly paste some HTML code that contains some Tailwind CSS classes
   and some rearranged buttons - you can copy/paste it from the code blocks below
-
+- Now it looks much better
 ## Applying form theme globally for all forms in Twig config
 - For the form theme, we should use add it to the form template as we did in `new.html.twig`
 - It will work, but wait! I don't want to do this for every new form.
@@ -664,6 +666,8 @@
 - Add `form_themes:`
 - And set it to `- tailwind_2_layout.html.twig`
 - Refresh the page to see the theme applied globally for all our forms
+
+10.
 ## Symfony form without mapped data class
 - Now let's do something fun and practice working with Symfony forms
 - On the `/parts` we have a little search input
