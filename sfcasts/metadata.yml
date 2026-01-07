@@ -20,3 +20,6 @@ chapters:
     validation-constraints:
         tutsFirstStep: validation-install-csrf-package
         tutsLastStep: order-form-fields-move-notes-to-the-end
+    order-fields:
+        tutsFirstStep: order-form-fields-use-priority-option
+        tutsLastStep: crud-generate-for-starship
