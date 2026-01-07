@@ -8,10 +8,10 @@ rendering the form. The Symfony Form component packs a bunch of neat helper
 functions that make form rendering a breeze. Open your template and swap
 out the dump with: `{{ form(form) }}`
 
-Now, head back to your browser and refresh the page. Voila! We have a form.
-Sure, it might not win any beauty pageants, but as backend developers,
-we're not too worried about appearances just yet. Let's focus on
-functionality first, and we'll take care of the styling later.
+Now, head back to your browser and refresh the page. Uhh... well, we
+have a form... but it's hard to see the fields. They are all there, just
+totally reset by Tailwind. By default, Tailwind CSS strips away all
+styling from form elements to give you a clean slate to work with.
 
 ## Understanding Form Submission Methods
 
@@ -19,26 +19,24 @@ If you open your inspector, you'll notice something interesting. The form
 is sent via POST method. Symfony defaults to POST for forms, although you can
 override this. We'll explore how to send a form via GET later on.
 
-The action attribute is empty. This means the form submits to the same URL,
+There is no `action` attribute. This means the form submits to the same URL,
 which is incredibly convenient when you need to use the same form across
 different pages that submit to various places. Sure, you could specify an
 action explicitly, but most of the time, it's not necessary.
 
 ## Styling with Tailwind CSS
 
-Since our project uses Tailwind CSS, let's activate the Tailwind Forms
-plugin for some reasonable styling defaults. Back in PhpStorm, open
+Now to at least make our form fields visible. Tailwind CSS has a Forms plugin
+that provides basic styling for form elements. Back in PhpStorm, open
 `assets/styles/app.css`, and at the top, add
 `@plugin "@tailwindcss/forms";`
 
-Don't forget the semicolon at the end. This plugin provides a neat minimal
-reset for form controls, making them easier to style with Tailwind classes.
-That's our designer's favorite feature! 
+Don't forget the semicolon at the end.
 
-Refresh your browser, and you'll notice a significant improvement. Our
-form has gone from a 90s throwback to a more modern look.
+Refresh your browser, and you'll notice a slight improvement. We've gone from
+invisible fields to a 90's looking form. It's a start at least...
 
-Now, let's add a minor detail to make our form fields blend better with the
+Let's add a minor detail to make our form fields blend better with the
 background. In the CSS file, add this bit:
 
 ```css
@@ -47,25 +45,28 @@ input, textarea, select {
 }
 ```
 
+Refresh... and... Hey! That look's a bit better!
+
 ## Adding a Submit Button
 
-Buuuut we've got a tiny issue. Our beautiful form is missing the most
-important element - a submit button. How do we add one? The best practice
-is to add your submit button manually in Twig, not inside the form type.
+Our form is missing the most important element - a submit button. How do we add one? 
+There are two ways to do this. There's a `SubmitType` field that we can add to our custom
+form type class. The alternative is to add the button manually in the Twig template.
+We'll start with the manual method, but don't worry, we'll cover adding a button
+to the form type later.
 
-Let's create a simple button. Back in the Twig template, below the form, add: 
+Back in the Twig template, below the form, add: 
 `<button>Create</button>`, `type="submit"`. I'll add some Tailwind CSS classes
-to make it look prettier. You can copy/paste
-this long list of CSS classes from the script below.
+to make it look nicer. You can copy/paste this long list of CSS classes from the script below.
 
-Remember, this button must be inside the `form` tag; otherwise, no matter how
-many times you click or how hard you will press your touchpad, it just won't
+We have a problem here though, this button must be inside the `form` tag; otherwise, no matter how
+many times you click it, it just won't
 do anything. So, we'll switch from rendering the entire form at once
-to rendering it piece by piece.
+to rendering it in a way that gives us more control.
 
-Replace the form tag with `{{ form_start(form) }}`, add `{{ form_end(form) }}`
+Replace the `form()` function with `{{ form_start(form) }}`, add `{{ form_end(form) }}`
 below it, and put a special `{{ form_widget(form) }}` between them to
-render all the form fields.
+render all the form fields. Move our submit button just before `form_end()`.
 
 ## A Quick Note About disabled Turbo
 
@@ -80,7 +81,7 @@ For now, plain old full-page loads keep things simple and predictable.
 
 ## Testing our Form
 
-Finally, it's time to test our form. Fill out the form and hit that
+Finally, it's time to test our form. Fill it out with some fun data and hit that
 "Create" button! Did it work?!
 
 As of now, we're not doing anything with the submitted data internally — no
