@@ -12,7 +12,7 @@ Y... ¡ya tenemos droides! Nada del otro mundo: crear un nuevo`Droid`, establece
 
 ## Asignación de droides a naves estelares
 
-Ahora pasemos a la parte divertida: asignar un `Droid` a un `Starship`. Crea una variable `Starship` y prepárate para la magia:
+Ahora, pasemos a la parte divertida: asignar un `Droid` a un `Starship`. Crea una variable `Starship` y prepárate para la magia:
 
 [[[ code('7a0cd0d073') ]]]
 
@@ -34,7 +34,11 @@ Sin errores. Para ver si realmente funciona, ejecuta:
 symfony console doctrine:query:sql 'SELECT * FROM droid'
 ```
 
-Como esperábamos: tres filas, una por cada droide que hemos creado. Ahora, echa un vistazo a la tabla de unión, `starship_droid`.
+Como era de esperar: tres filas, una por cada droide que hemos creado. Ahora, echa un vistazo a la tabla de unión, `starship_droid`.
+
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
 
 ```terminal-silent
 symfony console doctrine:query:sql 'SELECT * FROM starship_droid'
@@ -46,7 +50,7 @@ symfony console doctrine:query:sql 'SELECT * FROM starship_droid'
 
 La verdadera magia es que, con Doctrine, sólo tenemos que preocuparnos de relacionar un objeto `Droid` con un objeto `Starship`. Luego, se encarga del resto, gestionando la inserción y eliminación de filas en la tabla de unión. 
 
-Después de la descarga, sabemos que tenemos tres filas en la tabla de unión. Ahora, tras la descarga, elimina una asignación:`$starship->removeDroid($droid1)`:
+Tras la descarga, sabemos que tenemos tres filas en la tabla de unión. Ahora, tras la descarga, elimina una asignación:`$starship->removeDroid($droid1)`:
 
 [[[ code('943c689e3d') ]]]
 
@@ -58,7 +62,7 @@ symfony console doctrine:query:sql 'SELECT * FROM droid'
 
 ¡Sólo quedan dos filas! Doctrine ha eliminado la fila de nuestro droide eliminado. 
 
-## Caras Propias vs Inversas
+## Lados Propios vs Inversos
 
 Un toque final en `ManyToMany`: ¿recuerdas cuando hablamos de lados propios e inversos de una relación? Como vimos, nuestros métodos sincronizan el otro lado de la relación, añadiendo el `Droid` al `Starship`cuando llamamos a `addDroid()`:
 
