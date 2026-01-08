@@ -50,11 +50,15 @@ symfony console doctrine:fixtures:load
 
 ¡Sin errores! Comprueba las cosas:
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM starship_part'
 ```
 
-¡Et voila! Ahí está nuestra pieza única, felizmente vinculada a `starship_id` 75. Compruébalo:
+Y ¡voilá! Ahí está nuestra pieza única, felizmente vinculada a `starship_id` 75. Búscalo:
 
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM starship WHERE id = 75'
