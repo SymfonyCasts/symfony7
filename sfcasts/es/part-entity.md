@@ -59,7 +59,11 @@ De nuevo en el terminal, ejecuta:
 symfony console doctrine:fixtures:load
 ```
 
-Y comprueba las nuevas piezas con:
+Y, a continuación, comprueba las nuevas piezas con:
+
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
 
 ```terminal
 symfony console doctrine:query:sql
