@@ -76,6 +76,10 @@ symfony console doctrine:fixtures:load
 
 And... it *worked*! Run our SQL query to see the values:
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal-silent
 symfony console doctrine:query:sql 'SELECT name, slug, updated_at, created_at FROM starship'
 ```
