@@ -57,6 +57,10 @@ symfony console doctrine:migrations:migrate
 
 Success! The new columns were added. Prove it by running:
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql 'SELECT name, slug, updated_at, created_at FROM starship'
 ```
