@@ -118,6 +118,10 @@ Remember the `starship_part` table? It already has 50 rows in it!
 The migration tries to add a new `starship_id` column and set it to `null`.
 But that's not allowed, thanks to the `nullable: false`. Clear those 50 rows with:
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql "DELETE FROM starship_part"
 ```
