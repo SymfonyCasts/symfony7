@@ -1,7 +1,7 @@
 # Processing the Submitted Form
 
-Alright, we've built, created, rendered, and styled our form (I swear, I’ve
-done my best so far!). I've given it my all and now our form is ready for
+Alright, we've built, created, rendered, and styled our form.
+I've given it my all and now our form is ready for
 submission. Now, as any seasoned backend developer will tell you, the real
 fun begins when we start dealing with that submitted data. Let's jump back
 into our controller and make this form functional. 
@@ -69,7 +69,7 @@ after saving the part entity to the database, write: `$this->addFlash()`
 
 First argument: the message "type" - it helps to control styling. Write
 `success` here. Second argument: the content of the message. How about
-`sprintf('The part "%s" was created.', $part->getName())`.
+`sprintf('The part "%s" was successfully created.', $part->getName())`.
 
 ## Avoiding Duplication and Redirecting User
 
