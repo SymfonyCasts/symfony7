@@ -56,6 +56,10 @@ symfony console doctrine:fixtures:load
 
 Y... ¡funcionó! Ejecuta nuestra consulta SQL para ver los valores:
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal-silent
 symfony console doctrine:query:sql 'SELECT name, slug, updated_at, created_at FROM starship'
 ```
@@ -66,4 +70,4 @@ symfony console doctrine:query:sql 'SELECT name, slug, updated_at, created_at FR
 
 Desplázate un poco hacia abajo. Observa que estos slugs llevan el sufijo `-1`? Esto se debe a que nuestro campo `slug` es único, pero nuestro `name` no lo es. Tenemos algunas naves estelares, como `Lunar Marauder` aquí, que tienen el mismo nombre. La extensión slug es lo suficientemente inteligente como para detectar esto, y añadir automáticamente un sufijo numérico (`-1`, `-2`, etc.) para mantenerlos únicos. ¡Inteligente!
 
-Ahora que tenemos un slug único y legible por humanos para nuestras naves estelares, vamos a utilizarlo en lugar de este feo `id` en nuestras URL. ¡También utilizaremos algo llamado Resolvedores de valores de controlador para hacer que nuestros controladores sean de alta tecnología! ¡Eso a continuación!
+Ahora que tenemos un slug único y legible por humanos para nuestras naves estelares, vamos a utilizarlo en lugar de este feo `id` en nuestras URL. ¡También utilizaremos algo llamado Resolvedores de valores de controlador para hacer que nuestros controladores sean de alta tecnología! ¡Eso a continuación! 
