@@ -10,13 +10,17 @@ symfony console doctrine:query:sql 'select * from starship'
 
 Eso es SQL en bruto, pero el ORM de Doctrine tiene su propio lenguaje de consulta llamado DQL: Lenguaje de Consulta Doctrine Es como SQL, pero en lugar de consultar a partir de tablas, con DQL piensas en términos de consulta a los objetos entidad. Ejecuta la misma consulta anterior pero como DQL:
 
-## Escribir DQL manualmente
+## Escribir DQL manual
+
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
 
 ```terminal
 symfony console doctrine:query:dql 'select s from App\Entity\Starship s'
 ```
 
-Esto parece un poco raro, pero es PHP volcando nuestros objetos `Starship` - y hay tres, igual que en la consulta sin procesar.
+Esto parece un poco raro, pero es PHP volcando nuestros objetos `Starship` - y hay tres de ellos, igual que en la consulta sin procesar.
 
 Aprovechemos esto en nuestro controlador de página de inicio. Abre`src/Controller/MainController.php` y busca el método `homepage()`. En lugar de inyectar este `StarshipRepository` (es el antiguo del directorio `Model` ), sustitúyelo por `EntityManagerInterface $em` de Doctrine.
 
