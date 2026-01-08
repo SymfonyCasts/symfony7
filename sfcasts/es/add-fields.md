@@ -44,6 +44,10 @@ symfony console doctrine:migrations:migrate
 
 ¡Éxito! Se han añadido las nuevas columnas. Compruébalo ejecutando:
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql 'SELECT name, slug, updated_at, created_at FROM starship'
 ```
@@ -104,7 +108,7 @@ symfony console doctrine:migrations:migrate
 symfony console doctrine:query:sql 'SELECT name, slug, updated_at, created_at FROM starship'
 ```
 
-¡Fíjate! Tres nuevos campos rellenados con datos.
+¡Mira! Tres nuevos campos rellenados con datos.
 
 ## Recargar las Fijaciones
 
