@@ -34,6 +34,10 @@ symfony console doctrine:fixtures:load
 
 ¡No hay errores! Comprueba la base de datos:
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql "SELECT * FROM starship_part"
 ```
@@ -103,7 +107,7 @@ symfony console doctrine:query:sql "SELECT * FROM starship"
 
 ## Las fábricas son recetas de objetos
 
-¡Dato curioso! Podemos utilizar estas instancias de fábrica como recetas para crear objetos.`StarshipFactory::new(['status' => StarshipStatusEnum::STATUS_IN_PROGRESS])`no crea un objeto en la base de datos. No: `new()` significa una nueva instancia de la fábrica. Y cuando pasas una fábrica para una propiedad, Foundry retrasa la creación de ese objeto hasta que se necesite, si es que se necesita. Por tanto, sólo si no se anula `Starship`, creará un nuevo `Starship` con el estado "en curso" y lo guardará. En realidad, ésta es la mejor práctica a la hora de establecer relaciones en Foundry: establecerlas en una instancia de fábrica.
+¡Dato curioso! Podemos utilizar estas instancias de fábrica como recetas para crear objetos.`StarshipFactory::new(['status' => StarshipStatusEnum::STATUS_IN_PROGRESS])`no crea un objeto en la base de datos. No: `new()` significa una nueva instancia de la fábrica. Y cuando pasas una fábrica para una propiedad, Foundry retrasa la creación de ese objeto hasta que se necesite, si es que se necesita. Por tanto, sólo si no se anula `Starship` creará un nuevo `Starship` con el estado "en curso" y lo guardará. En realidad, ésta es la mejor práctica a la hora de establecer relaciones en Foundry: establecerlas en una instancia de fábrica.
 
 Limpia nuestras instalaciones eliminando la anulación:
 
