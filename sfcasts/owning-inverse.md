@@ -77,6 +77,10 @@ symfony console doctrine:fixtures:load
 
 But surprise, surprise! No errors. In fact, if you check the database:
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql "SELECT * FROM starship_part"
 ```
