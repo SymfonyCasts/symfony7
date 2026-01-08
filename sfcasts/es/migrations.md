@@ -52,15 +52,15 @@ Pero, ¿cómo hace Doctrine para saber qué migraciones se han ejecutado? Crea u
 
 ¡Podemos verlo! Ejecuta:
 
-```tip
-Since DoctrineBundle 3.0, the command was renamed to symfony console dbal:run-sql
-```
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse symfony console dbal:run-sql
+***
 
 ```terminal
 symfony console doctrine:query:sql 'select * from doctrine_migration_versions'
 ```
 
-¡Mira esto! ¡Ahí está nuestra clase de migración, cuándo se ejecutó, cuánto tardó y el color favorito de la migración! Vale, esto último no.
+¡Fíjate! ¡Ahí está nuestra clase de migración, cuándo se ejecutó, cuánto tardó y el color favorito de la migración! Vale, esto último no.
 
 ¿Significa esto que tenemos nuestra tabla `starship`? ¡Ejecuta otra consulta SQL sin procesar para averiguarlo!
 
