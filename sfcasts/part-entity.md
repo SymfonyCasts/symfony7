@@ -88,6 +88,10 @@ symfony console doctrine:fixtures:load
 Confirm that we want to vent the oxygen from our database, then check out the new
 parts with:
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql
 ```
