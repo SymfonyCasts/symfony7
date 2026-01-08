@@ -9,6 +9,10 @@ is _completed_.
 This list on our homepage only lists _incomplete_ starships, so we need to find a
 completed one. In your terminal, run:
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql 'SELECT slug, status FROM starship'
 ```
