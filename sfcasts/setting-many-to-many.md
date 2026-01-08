@@ -49,6 +49,10 @@ symfony console doctrine:query:sql 'SELECT * FROM droid'
 As expected: three rows, one for each droid we created.
 Now, peek at that join table, `starship_droid`.
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal-silent
 symfony console doctrine:query:sql 'SELECT * FROM starship_droid'
 ```
