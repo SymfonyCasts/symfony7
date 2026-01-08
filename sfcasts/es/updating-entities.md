@@ -6,6 +6,10 @@ Nuestro negocio de reparación de naves va viento en popa Ahora tenemos algunos 
 
 En la lista de nuestra página de inicio sólo aparecen naves estelares incompletas, así que tenemos que encontrar una completada. Ejecuta en tu terminal:
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql 'SELECT slug, status FROM starship'
 ```
