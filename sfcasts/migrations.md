@@ -64,7 +64,7 @@ it's executed.
 
 We can see it! Run:
 
-```note
+```tip
 Since DoctrineBundle 3.0, the command was renamed to symfony console dbal:run-sql
 ```
 
