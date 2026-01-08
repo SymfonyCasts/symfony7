@@ -42,11 +42,15 @@ symfony console doctrine:fixtures:load
 
 Y echa un vistazo a la base de datos con:
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql "SELECT * FROM starship_droid"
 ```
 
-Estamos seleccionando en esa tabla de unión y ¡sí! Una entrada para el `Starship`, y otra para el `Droid`. Hasta aquí, todo bien. Actualiza la página de inicio. ¡Otro error!
+Estamos seleccionando de esa tabla de unión y ¡sí! Una entrada para el `Starship`, y otra para el `Droid`. Hasta aquí todo correcto. Actualiza la página de inicio. ¡Otro error!
 
 > [Error semántico] línea 0, col 55 cerca de 'droids WHERE':
 > La clase App\Entity\Starship no tiene ninguna asociación llamada droids.
