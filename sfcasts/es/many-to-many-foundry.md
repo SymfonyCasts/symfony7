@@ -28,11 +28,15 @@ symfony console doctrine:fixtures:load
 
 ¿No hay errores? Yo también estoy un poco sorprendido, ejem, encantado. Echa un vistazo a `droids` con:
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM droid'
 ```
 
-100 droides alocados y adorables. Echa también un vistazo a la tabla `starship_droid`:
+100 alocados y adorables droides. Echa también un vistazo a la tabla `starship_droid`:
 
 ```terminal-silent
 symfony console doctrine:query:sql 'SELECT * FROM starship_droid'
@@ -61,7 +65,7 @@ symfony console doctrine:query:sql 'SELECT * FROM starship_droid'
 
 Disfruta de la gloria de un conjunto de droides asignados a naves estelares realmente aleatorio.
 
-También podríamos haberlo arreglado moviendo la clave `droids` a`StarshipFactory` en el método `defaults()`. Pero me gusta conservar`defaults()` para las propiedades necesarias. Y como `droids` no son técnicamente necesarias -¡buena suerte limpiando el baño sin ellas! -
+También podríamos haber arreglado esto moviendo la clave `droids` a`StarshipFactory` en el método `defaults()`. Pero me gusta conservar`defaults()` para las propiedades necesarias. Y como `droids` no son técnicamente necesarias -¡buena suerte limpiando el baño sin ellas! -
 Me gusta mantenerlas fuera de `defaults()` y establecerlas donde utilicemos`StarshipFactory`.
 
 A continuación, aprenderemos a hacer JOIN entre relaciones `ManyToMany`. Una vez más, Doctrine se encarga del trabajo pesado por nosotros.
