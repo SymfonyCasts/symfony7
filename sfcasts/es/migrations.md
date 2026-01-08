@@ -53,7 +53,7 @@ Pero, ¿cómo hace Doctrine para saber qué migraciones se han ejecutado? Crea u
 ¡Podemos verlo! Ejecuta:
 
 ***NOTE
-Desde DoctrineBundle 3.0, el comando pasó a llamarse symfony console dbal:run-sql
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
 ***
 
 ```terminal
@@ -70,6 +70,6 @@ symfony console doctrine:query:sql 'select * from starship'
 
 > La consulta arrojó un conjunto de resultados vacío.
 
-El verde significa bueno, ¿no? ¡Sí! Esto nos dice que no hay datos en la tabla `starship`... ¡pero existe!
+El verde significa bueno, ¿verdad? ¡Sí! Esto nos dice que no hay datos en la tabla `starship`... ¡pero existe!
 
 Comprobación de la clase de entidad: ✅ Comprobación de la tabla de la base de datos: ✅ ¿Hay datos en la base de datos? ¡Aprendamos a hacerlo a continuación!
