@@ -60,6 +60,10 @@ symfony console doctrine:fixtures:load
 
 And peek at the database with:
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql "SELECT * FROM starship_droid"
 ```
