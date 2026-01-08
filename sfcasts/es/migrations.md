@@ -14,7 +14,7 @@ symfony console make:migration
 
 Ooh, es una clase PHP en la que el método `up()` contiene el SQL para crear nuestra tabla. Lo interesante es cómo se creó: Doctrine comparó el estado actual de nuestras entidades con la base de datos y generó el SQL necesario para hacerlas coincidir. ¡Vaya!
 
-[[[ code('08456e3596') ]]]
+[[[ code('e99151a445') ]]]
 
 También hay un método `down()`... porque las migraciones pueden invertirse, pero nunca lo he hecho, así que no me preocupa `down()`.
 
@@ -51,6 +51,10 @@ otra vez. ¡Estado: `migrated`!
 Pero, ¿cómo hace Doctrine para saber qué migraciones se han ejecutado? Crea una tabla`doctrine_migration_versions`, y luego inserta una fila por cada migración una vez ejecutada.
 
 ¡Podemos verlo! Ejecuta:
+
+```note
+Since DoctrineBundle 3.0, the command was renamed to symfony console dbal:run-sql
+```
 
 ```terminal
 symfony console doctrine:query:sql 'select * from doctrine_migration_versions'
