@@ -18,7 +18,7 @@ para ver lo que añadieron las recetas. Cosas estándar de Flex, añadió un bun
 
 ## Crear entidades
 
-Para añadir entidades a la base de datos estés donde estés, ¡es refrescantemente sencillo! Primero, crea el objeto como de costumbre:`$ship1 = new Starship()` - el de `App\Entity`.
+Para añadir entidades a la base de datos, estés donde estés, ¡es refrescantemente sencillo! Primero, crea el objeto como de costumbre:`$ship1 = new Starship()` - el de `App\Entity`.
 
 [[[ code('a55e56fca1') ]]]
 
@@ -38,7 +38,7 @@ Ahora tenemos tres objetos nave, pero todavía no se ha guardado nada, ni se ha 
 
 Para utilizarlo, después de haber creado nuestros objetos nave, escribe `$manager->persist($ship1)`,`$manager->persist($ship2)`, y `$manager->persist($ship3)`. Pero `persist()` aún no los inserta realmente: sólo los pone en cola para ser guardados.
 
-[[[ code('e21d621b7b') ]]]
+[[[ code('bc75e7f648') ]]]
 
 ## Descarga
 
@@ -60,10 +60,14 @@ Comprueba que realmente queremos cargar nuestras instalaciones fijas, porque tam
 
 Ejecuta de nuevo la consulta SQL sin procesar:
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM starship'
 ```
 
-¡Tenemos naves! ¡Estupendo!
+¡Ya tenemos naves! ¡Estupendo!
 
 Uf, ¡ya tenemos una base de datos con datos! A continuación, refactorizaremos los controladores de nuestra aplicación para extraer naves estelares de nuestra base de datos y mostrarlas en la página. ¡Esto será mucho más fácil de lo que imaginas!
