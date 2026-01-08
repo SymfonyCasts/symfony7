@@ -78,6 +78,10 @@ symfony console doctrine:migrations:migrate
 
 ¿Recuerdas la tabla `starship_part`? Ya tiene 50 filas! La migración intenta añadir una nueva columna `starship_id` y establecerla en `null`. Pero eso no está permitido, gracias a la `nullable: false`. Borra esas 50 filas con:
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql "DELETE FROM starship_part"
 ```
@@ -88,6 +92,6 @@ Y vuelve a ejecutar la migración:
 symfony console doctrine:migrations:migrate
 ```
 
-## Siguiente paso: Uniendo los puntos
+## Siguiente: Uniendo los puntos
 
-Entonces, ¿cómo enlazamos un objeto `StarshipPart` con su `Starship`? Abróchate el cinturón, ¡porque eso a continuación!
+Entonces, ¿cómo hacemos para vincular un objeto `StarshipPart` con su `Starship`? Abróchate el cinturón, ¡porque eso a continuación!
