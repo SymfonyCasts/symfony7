@@ -35,6 +35,10 @@ symfony console doctrine:fixtures:load
 
 No errors? I'm a bit surprised, ahem, delighted too. Take a peek at the `droids` with:
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql 'SELECT * FROM droid'
 ```
