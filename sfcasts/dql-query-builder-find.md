@@ -17,6 +17,10 @@ in terms of querying for the entity *objects*. Run the same query as above but a
 
 ## Writing Manual DQL
 
+***NOTE
+Since DoctrineBundle 3.0, the command was renamed to `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:dql 'select s from App\Entity\Starship s'
 ```
