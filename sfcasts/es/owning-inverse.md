@@ -53,13 +53,17 @@ symfony console doctrine:fixtures:load
 
 Pero, ¡sorpresa, sorpresa! No hay errores. De hecho, si compruebas la base de datos
 
+***NOTE
+Desde DoctrineBundle 3.0, el comando pasó a llamarse `symfony console dbal:run-sql`
+***
+
 ```terminal
 symfony console doctrine:query:sql "SELECT * FROM starship_part"
 ```
 
 Efectivamente, tenemos dos piezas nuevas, cada una relacionada con una nave estelar.
 
-Entonces, ¿qué pasa? Acabamos de establecer el lado inverso de la relación, y aún así se ha guardado en la base de datos. ¡Eso es lo contrario de lo que acabo de decirte!
+Entonces, ¿qué ocurre? Acabamos de establecer el lado inverso de la relación, y se sigue guardando en la base de datos. ¡Eso es lo contrario de lo que acabo de decirte!
 
 ## El giro argumental: el lado inverso establece el lado propio
 
