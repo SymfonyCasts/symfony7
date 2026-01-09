@@ -50,7 +50,7 @@ symfony console doctrine:query:sql 'SELECT * FROM starship_droid'
 
 La verdadera magia es que, con Doctrine, sólo tenemos que preocuparnos de relacionar un objeto `Droid` con un objeto `Starship`. Luego, se encarga del resto, gestionando la inserción y eliminación de filas en la tabla de unión. 
 
-Tras la descarga, sabemos que tenemos tres filas en la tabla de unión. Ahora, tras la descarga, elimina una asignación:`$starship->removeDroid($droid1)`:
+Después de la descarga, sabemos que tenemos tres filas en la tabla de unión. Ahora, tras la descarga, elimina una asignación:`$starship->removeDroid($droid1)`:
 
 [[[ code('943c689e3d') ]]]
 
