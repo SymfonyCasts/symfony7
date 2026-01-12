@@ -34,16 +34,14 @@ with neat spacing and alignment.
 
 ## An `EntityType` Form Type
 
-Now, let's shift gears and delve into form types. Here's a special treat I
-want to show you. Open `src/Form/StarshipPartType.php` and you'll see our
-ship field is utilizing the magical `EntityType`.
+There's something that's still bothering me... Open `src/Form/StarshipPartType.php`...
+The `starship` field is an `EntityType`. If you recall from the previous chapter,
+this field only requires the `class` option. This is the relationship
+that connects our `StarshipPart` to a `Starship`. It displays all the
+`Starship`'s in a select element.
 
-In the previous chapter, we learned that this type requires a `class` option.
-This needs to be set to the fully qualified class name of the entity
-you want to load choices from. In our case, since the `ship` property
-in the `StarshipPart` entity is an instance of `Starship`, we use
-`Starship::class` here. This will load all the `Starship`s we have
-and display them in a special select field.
+But look at this `choice_label` set to `id`. This sets the property of `Starship`
+that will be displayed in the dropdown. MakerBundle sets this to `id` by default.
 
 However, at the moment, they're just showing up as cold, soulless database
 IDs. Not very user-friendly, right?

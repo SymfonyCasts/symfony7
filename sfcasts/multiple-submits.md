@@ -123,8 +123,8 @@ for this `notes` field, then Symfony will automatically make it
 optional. And the reverse for the other fields, the `required` HTML attribute will be
 added if the field is not nullable, like for `name` and `price`.
 
-You can see it in the HTML inspector... The `notes` field doesn't have the
-`required` attribute, but `name` does.
+You can see this with the HTML inspector... If we inspect the notes field, we see it doesn't
+have the `required` attribute. If we inspect the name field, it does! Same with price.
 
 That's why when you submit an empty form, we see HTML5 validation errors for
 the required fields.
@@ -136,5 +136,5 @@ refresh and inspect the price field - the `required` attribute is gone!
 Revert that change - it really is required!
 
 We'll dive deeper into form field types later in this course. For now, let's
-switch gears to something fun and stylish: making our form look actually
-nice by applying a built-in Symfony form theme to it. That's next!
+switch gears to something fun and stylish: dressing up our form for the ball
+by applying a built-in Symfony form theme to it. That's next!
