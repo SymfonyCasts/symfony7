@@ -103,85 +103,89 @@ formulario con aspecto de los años 90.
 00:01:51.716 --> 00:01:53.416 align:middle
 Al menos es un comienzo...
 
-00:01:53.416 --> 00:02:00.086 align:middle
+00:01:53.416 --> 00:01:59.766 align:middle
 Vamos a añadir un pequeño detalle para que nuestros
 campos de formulario se mezclen mejor con el fondo.
 
-00:02:00.086 --> 00:02:02.466 align:middle
+00:01:59.766 --> 00:02:02.426 align:middle
 En el archivo CSS, añade
-esta parte: Actualizar...
+este bit input, textarea,
 
-00:02:02.466 --> 00:02:02.636 align:middle
+00:02:02.426 --> 00:02:04.716 align:middle
+select { background-color:
+inherit; }: Actualizar...
+
+00:02:04.716 --> 00:02:04.926 align:middle
 y... ¡Eh!
 
-00:02:02.636 --> 00:02:03.636 align:middle
-¡Así se ve un poco mejor!
+00:02:04.926 --> 00:02:06.506 align:middle
+¡Se ve un poco mejor!
 
-00:02:03.636 --> 00:02:08.146 align:middle
+00:02:06.506 --> 00:02:11.536 align:middle
 A nuestro formulario le falta el elemento
 más importante: un botón de envío.
 
-00:02:08.146 --> 00:02:09.066 align:middle
+00:02:11.936 --> 00:02:13.236 align:middle
 ¿Cómo añadimos uno?
 
-00:02:09.116 --> 00:02:10.866 align:middle
+00:02:13.236 --> 00:02:15.446 align:middle
 Hay dos formas de hacerlo.
 
-00:02:11.136 --> 00:02:15.966 align:middle
+00:02:15.446 --> 00:02:20.876 align:middle
 Hay un campo SubmitType que podemos añadir a
 nuestra clase de tipo de formulario personalizado.
 
-00:02:15.966 --> 00:02:19.136 align:middle
+00:02:21.726 --> 00:02:25.246 align:middle
 La alternativa es añadir el botón
 manualmente en la plantilla Twig.
 
-00:02:19.136 --> 00:02:22.646 align:middle
+00:02:25.446 --> 00:02:28.996 align:middle
 Empezaremos con el método
 manual, pero no te preocupes,
 
-00:02:22.646 --> 00:02:26.386 align:middle
+00:02:29.546 --> 00:02:33.876 align:middle
 ya veremos cómo añadir un botón
 al tipo de formulario más adelante.
 
-00:02:26.466 --> 00:02:34.696 align:middle
+00:02:33.876 --> 00:02:40.046 align:middle
 De vuelta en la plantilla Twig, debajo del formulario,
 añade: <button>Create</button>, type="submit".
 
-00:02:34.696 --> 00:02:42.096 align:middle
+00:02:40.176 --> 00:02:46.516 align:middle
 Añadiré algunas clases CSS de Tailwind para que
 quede más bonito: Puedes copiar/pegar esta larga lista
 
-00:02:42.346 --> 00:02:44.326 align:middle
+00:02:46.516 --> 00:02:49.316 align:middle
 de clases CSS del script de abajo.
 
-00:02:44.646 --> 00:02:51.426 align:middle
+00:02:49.406 --> 00:02:55.286 align:middle
 Sin embargo, aquí tenemos un problema: este botón
 debe estar dentro de la etiqueta form; de lo contrario,
 
-00:02:51.426 --> 00:02:55.326 align:middle
+00:02:55.286 --> 00:02:58.736 align:middle
 no importa cuántas veces hagas
 clic en él, no hará nada.
 
-00:02:55.326 --> 00:02:58.176 align:middle
+00:02:59.526 --> 00:03:03.726 align:middle
 Así que pasaremos de renderizar todo
 el formulario a la vez a renderizarlo
 
-00:02:58.176 --> 00:03:01.136 align:middle
+00:03:03.726 --> 00:03:05.906 align:middle
 de una forma que nos dé más control.
 
-00:03:01.136 --> 00:03:05.246 align:middle
+00:03:05.906 --> 00:03:08.426 align:middle
 Sustituye la función form()
 por {{ form_start(form) }},
 
-00:03:05.246 --> 00:03:10.336 align:middle
+00:03:08.426 --> 00:03:11.956 align:middle
 añade {{ form_end(form) }} debajo de ella,
-y pon un {{ form_widget(form) }} especial
+y pon una {{ form_widget(form) }} especial
 
-00:03:10.336 --> 00:03:12.376 align:middle
+00:03:11.956 --> 00:03:16.316 align:middle
 entre ellas para renderizar
 todos los campos del formulario.
 
-00:03:16.086 --> 00:03:18.296 align:middle
+00:03:16.346 --> 00:03:18.296 align:middle
 Mueve nuestro botón de envío justo antes de
 form_end(): Porque cuando Turbo está activado,
 
