@@ -1,0 +1,307 @@
+WEBVTT
+
+00:00:00.036 --> 00:00:04.036 align:middle
+Los formularios están por todas partes.
+
+00:00:04.266 --> 00:00:07.846 align:middle
+Casillas de inicio de sesión, campos de búsqueda,
+herramientas de administración, pasos de pago:
+
+00:00:08.226 --> 00:00:11.616 align:middle
+si tu aplicación permite a los humanos escribir cosas,
+enhorabuena, estás en la tierra de los formularios.
+
+00:00:12.246 --> 00:00:15.836 align:middle
+Y aunque los front-ends de hoy en
+día estén repletos de Ajax, Turbo
+
+00:00:15.866 --> 00:00:21.236 align:middle
+y sofisticadas librerías JavaScript, el trabajo principal
+sigue siendo el mismo de siempre: coger algunos datos,
+
+00:00:21.456 --> 00:00:23.466 align:middle
+comprobarlos y hacer algo
+significativo con ellos.
+
+00:00:23.736 --> 00:00:27.226 align:middle
+Y ahí es exactamente donde el componente
+Formulario de Symfony se pone la capa.
+
+00:00:27.766 --> 00:00:32.236 align:middle
+Trata los datos de la petición, aplica la
+validación, te protege de los villanos del CSRF
+
+00:00:32.396 --> 00:00:36.926 align:middle
+y, en general, evita que tengas que crear
+manualmente entradas HTML como si fuera 1995.
+
+00:00:36.926 --> 00:00:39.266 align:middle
+Así que vamos a ensuciarnos las manos
+y a crear nuestro primer formulario
+
+00:00:39.766 --> 00:00:43.146 align:middle
+Para seguir adelante, descarga el código
+del curso de esta página y extráelo.
+
+00:00:43.616 --> 00:00:46.646 align:middle
+Dentro, encontrarás un directorio start/
+que contiene el proyecto del curso.
+
+00:00:47.076 --> 00:00:50.766 align:middle
+Abre su archivo README.md, y encontrarás
+instrucciones para poner en marcha el sitio web.
+
+00:00:51.516 --> 00:00:55.016 align:middle
+Yo ya he hecho esta parte, así que me limitaré
+a lanzar el servidor web Symfony incorporado
+
+00:00:55.016 --> 00:01:00.706 align:middle
+en mi terminal con: symfony serve -d A
+continuación, abre el sitio manteniendo pulsado Cmd
+
+00:01:00.706 --> 00:01:02.706 align:middle
+y haciendo clic en la URL de salida.
+
+00:01:03.286 --> 00:01:07.236 align:middle
+Bienvenido a Starshop, tu ventanilla única para
+todas las piezas esenciales de tu nave estelar:
+
+00:01:07.476 --> 00:01:13.926 align:middle
+acopladores de hipervelocidad, bobinas factoriales,
+estabilizadores cuánticos zurdos, ya sabes, lo de siempre.
+
+00:01:13.926 --> 00:01:15.526 align:middle
+Vamos a la página de Piezas.
+
+00:01:15.986 --> 00:01:18.306 align:middle
+El negocio va viento en popa en
+nuestro pequeño rincón de la Galaxia,
+
+00:01:18.306 --> 00:01:21.446 align:middle
+así que ahora tenemos que crear nuevas piezas para
+naves estelares en el área de administración.
+
+00:01:21.986 --> 00:01:24.316 align:middle
+Ya he añadido un enlace
+a "Crear una nueva pieza".
+
+00:01:24.686 --> 00:01:28.006 align:middle
+El único problema es que el formulario
+en sí todavía está en construcción.
+
+00:01:28.316 --> 00:01:29.116 align:middle
+¡Vamos a arreglarlo!
+
+00:01:29.746 --> 00:01:33.686 align:middle
+Antes de que podamos crear formularios,
+necesitamos el componente Symfony Form.
+
+00:01:33.686 --> 00:01:41.906 align:middle
+Instálalo utilizando: symfony composer
+require form Ejecutando git status
+
+00:01:41.906 --> 00:01:44.416 align:middle
+veremos que la instalación trajo algunos
+archivos de configuración nuevos.
+
+00:01:44.946 --> 00:01:46.936 align:middle
+Perfecto, ahora estamos listos
+para empezar a construir.
+
+00:01:47.496 --> 00:01:50.726 align:middle
+Podríamos construir el formulario manualmente,
+campo por campo, línea por línea,
+
+00:01:51.036 --> 00:01:53.876 align:middle
+pero esa es una forma segura
+de agotar nuestra fuerza vital.
+
+00:01:53.876 --> 00:01:56.266 align:middle
+En lugar de eso, dejemos
+que Maker bundle nos ayude.
+
+00:01:56.596 --> 00:02:00.736 align:middle
+Ejecuta: symfony console make:form
+Aquí tienes un consejo rápido:
+
+00:02:00.736 --> 00:02:02.986 align:middle
+si aún no has instalado
+el componente Formulario,
+
+00:02:03.256 --> 00:02:05.736 align:middle
+Maker te dirá exactamente qué
+comando tienes que ejecutar.
+
+00:02:06.186 --> 00:02:08.796 align:middle
+Maker es como ese amable compañero
+de trabajo que te recuerda amablemente
+
+00:02:08.796 --> 00:02:10.756 align:middle
+que olvidaste ejecutar composer install...
+
+00:02:10.756 --> 00:02:13.246 align:middle
+de nuevo. Puedes dar al
+formulario el nombre que quieras,
+
+00:02:13.336 --> 00:02:16.506 align:middle
+pero es práctica común terminar
+las clases de formulario con "Tipo".
+
+00:02:16.506 --> 00:02:22.006 align:middle
+Por ejemplo, como vamos a crear piezas para naves
+estelares, a ésta la llamaré StarshipPartType.
+
+00:02:22.836 --> 00:02:25.996 align:middle
+A continuación, maker nos preguntará si
+queremos asignar el formulario a una entidad.
+
+00:02:26.396 --> 00:02:29.676 align:middle
+En este caso, desde luego que sí,
+así que elige la entidad StarshipPart.
+
+00:02:30.126 --> 00:02:32.096 align:middle
+Esa es la entidad que
+crearemos con este formulario.
+
+00:02:32.846 --> 00:02:36.516 align:middle
+Una vez hecho esto, maker creará un
+nuevo archivo en el directorio src/Form/.
+
+00:02:36.516 --> 00:02:41.746 align:middle
+Ahora, ábrelo en PhpStorm: La
+clase extiende AbstractType,
+
+00:02:41.836 --> 00:02:44.096 align:middle
+que proviene del componente
+Formulario que acabamos de instalar.
+
+00:02:44.726 --> 00:02:48.736 align:middle
+Maker también ha añadido convenientemente un campo
+de formulario para cada propiedad de la entidad.
+
+00:02:49.306 --> 00:02:52.466 align:middle
+Sin embargo, en realidad no queremos que los
+usuarios editen marcas de tiempo (a menos que
+
+00:02:52.466 --> 00:02:57.786 align:middle
+busquemos paradojas de viajes en el tiempo), así que vamos
+a deshacernos de esos campos: Abajo, en configureOptions(),
+
+00:02:57.976 --> 00:03:01.936 align:middle
+verás la opción data_class
+establecida en StarshipPart::class:
+
+00:03:02.286 --> 00:03:04.136 align:middle
+Eso vincula este formulario a esa entidad.
+
+00:03:04.406 --> 00:03:04.996 align:middle
+¡Muy práctico!
+
+00:03:05.776 --> 00:03:08.596 align:middle
+Ahora es el momento de crear un objeto formulario
+utilizando nuestro nuevo tipo de formulario.
+
+00:03:09.056 --> 00:03:11.596 align:middle
+El controlador de esta
+página es AdminController
+
+00:03:11.696 --> 00:03:14.106 align:middle
+y la acción es newStarshipPart().
+
+00:03:14.516 --> 00:03:15.216 align:middle
+Vamos a abrirlo.
+
+00:03:17.666 --> 00:03:22.916 align:middle
+Dentro, crearemos un objeto formulario
+con $form = $this->createForm...
+
+00:03:22.916 --> 00:03:28.276 align:middle
+Symfony proporciona amablemente dos métodos
+útiles, createForm() y createFormBuilder().
+
+00:03:28.726 --> 00:03:33.006 align:middle
+Este último te permite crear un formulario directamente
+dentro del controlador, perfecto para prototipos rápidos.
+
+00:03:33.316 --> 00:03:37.566 align:middle
+Sin embargo, la mejor práctica es crear una clase de
+tipo formulario dedicada, como la que acabamos de crear.
+
+00:03:37.566 --> 00:03:40.566 align:middle
+Así que nos quedaremos
+con $this->createForm().
+
+00:03:41.206 --> 00:03:45.696 align:middle
+Pasa nuestro StarshipPartType::class,
+y voilá, ¡tenemos un formulario!
+
+00:03:46.176 --> 00:03:50.996 align:middle
+Si escribimos dd($form) Y refrescamos la
+página, verás que es un objeto Formulario:
+
+00:03:50.996 --> 00:03:53.856 align:middle
+un objeto PHP en toda
+regla con toda la lógica.
+
+00:03:53.856 --> 00:04:01.586 align:middle
+Pasémoslo a la plantilla con 'form' =>
+$form y eliminemos la declaración dd($form):
+
+00:04:02.186 --> 00:04:03.706 align:middle
+Ahora podemos renderizarlo en la plantilla.
+
+00:04:04.096 --> 00:04:05.016 align:middle
+¡Pero hay una vuelta de tuerca!
+
+00:04:05.366 --> 00:04:09.366 align:middle
+Si primero lo vuelcas en Twig con {{ dump(form)
+}}: Y vuelves a actualizar la página,
+
+00:04:09.636 --> 00:04:12.176 align:middle
+verás que en su lugar es un objeto FormView.
+
+00:04:12.706 --> 00:04:16.576 align:middle
+Eso es que Symfony te está haciendo un favor
+silenciosamente convirtiendo el objeto interno Form
+
+00:04:16.576 --> 00:04:19.596 align:middle
+en un modelo de vista más simple
+que se puede renderizar en Twig.
+
+00:04:20.176 --> 00:04:23.526 align:middle
+Pueden parecer similares, pero recuerda
+que técnicamente son objetos diferentes.
+
+00:04:24.046 --> 00:04:26.146 align:middle
+Las versiones antiguas de Symfony
+requerían que los desarrolladores
+
+00:04:26.146 --> 00:04:29.836 align:middle
+pasaran explícitamente el objeto FormView
+a la plantilla para su renderización.
+
+00:04:30.126 --> 00:04:34.286 align:middle
+Por eso es posible que veas llamadas a
+$form->createView() en proyectos antiguos.
+
+00:04:34.596 --> 00:04:37.766 align:middle
+Pero con la última versión de Symfony,
+esto se gestiona automáticamente, por lo que
+
+00:04:37.766 --> 00:04:39.046 align:middle
+no tienes que preocuparte por ello.
+
+00:04:39.536 --> 00:04:42.056 align:middle
+De hecho, para que funcione
+correctamente con Turbo,
+
+00:04:42.176 --> 00:04:44.336 align:middle
+ahora debes pasar siempre el
+objeto interno del formulario.
+
+00:04:45.346 --> 00:04:48.236 align:middle
+Bien, a continuación, renderizaremos
+y enviaremos el formulario de verdad.
+
+00:04:48.536 --> 00:04:49.766 align:middle
+¿Estás listo para sumergirte?
