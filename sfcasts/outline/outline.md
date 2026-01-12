@@ -428,7 +428,9 @@
 - Or in `var/cache/tailwind/`
 - Send the empty form again - here it is, so red field. And also some more
   minor style changes
-## Validation constrains in entities
+
+
+# 7. Validation constrains in entities
 - But if we will create a new form type linking it to the 
   same `StarshipPart` entity - we will need to duplicate all
   those validation constraints
