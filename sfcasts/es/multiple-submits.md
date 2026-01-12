@@ -12,7 +12,7 @@ Si vas al navegador y actualizas, verás nuestros dos botones. El nuevo no parec
 
 ## Acceso a campos no mapeados en Symfony
 
-Por ahora, en el controlador, ya sabemos que `$form->getData()`nos entrega una entidad mapeada, que en nuestro caso es `StarshipPart`. Esta vez, sin embargo, necesitamos acceder a un campo no mapeado: el botón de envío que acabamos de añadir. Este campo no tiene una propiedad coincidente en la entidad, por eso lo llamamos "no mapeado".
+Por ahora, en el controlador, ya sabemos que `$form->getData()`nos pasa una entidad mapeada, que en nuestro caso es `StarshipPart`. Esta vez, sin embargo, necesitamos acceder a un campo no mapeado: el botón de envío que acabamos de añadir. Este campo no tiene una propiedad coincidente en la entidad, por eso lo llamamos "no mapeado".
 
 No pasa nada, podemos acceder a los datos brutos del formulario. Justo debajo de `addFlash()`, crea una variable `$createAndAddNewBtn` que sea igual a`$form->get('createAndAddNew')`. Esto debería coincidir con el nombre del botón de tu tipo de formulario. Hagamos primero una prueba rápida. Abajo,`dd($createAndAddNewBtn)`.
 
@@ -64,7 +64,7 @@ Lo utilizamos en nuestro `StarshipPartType` para el campo `ship`. Con éste, ver
 
 Y por cierto, Symfony no sólo adivina los tipos de campo, también adivina las opciones del tipo de campo. Por ejemplo, si una propiedad de entidad Doctrine es `nullable: true` como para este campo `notes`, entonces Symfony la convertirá automáticamente en opcional. Y al revés para los otros campos, el atributo HTML `required` se añadirá si el campo no es anulable, como para `name` y `price`.
 
-Puedes verlo en el inspector HTML... El campo `notes` no tiene el atributo`required`, pero `name` sí.
+Puedes ver esto con el inspector HTML... Si inspeccionamos el campo notas, vemos que no tiene el atributo `required`. Si inspeccionamos el campo nombre, ¡sí lo tiene! Lo mismo ocurre con el precio.
 
 Por eso, cuando envías un formulario vacío, vemos errores de validación HTML5 para los campos obligatorios.
 
@@ -72,4 +72,4 @@ Y, por supuesto, puedes anular fácilmente este comportamiento en esa tercera ma
 
 Revierte ese cambio: ¡realmente es necesario!
 
-Profundizaremos en los tipos de campos de formulario más adelante en este curso. Por ahora, vamos a cambiar de marcha hacia algo divertido y elegante: hacer que nuestro formulario tenga un aspecto realmente agradable aplicándole un tema de formulario Symfony incorporado. ¡Eso a continuación!
+Profundizaremos en los tipos de campos de formulario más adelante en este curso. Por ahora, cambiemos de marcha hacia algo divertido y elegante: vestir nuestro formulario para el baile aplicándole un tema de formulario Symfony incorporado. ¡Eso a continuación!
