@@ -24,13 +24,7 @@ No olvides el punto y coma al final.
 
 Actualiza tu navegador y notarás una ligera mejora. Hemos pasado de campos invisibles a un formulario con aspecto de los años 90. Al menos es un comienzo...
 
-Vamos a añadir un pequeño detalle para que nuestros campos de formulario se mezclen mejor con el fondo. En el archivo CSS, añade esta parte:
-
-```css
-input, textarea, select {
-    background-color: inherit;
-}
-```
+Vamos a añadir un pequeño detalle para que nuestros campos de formulario se mezclen mejor con el fondo. En el archivo CSS, añade este bit`input, textarea, select { background-color: inherit; }`:
 
 [[[ code('4551a5ac0c') ]]]
 
@@ -47,9 +41,9 @@ De vuelta en la plantilla Twig, debajo del formulario, añade:
 
 Puedes copiar/pegar esta larga lista de clases CSS del script de abajo.
 
-Sin embargo, aquí tenemos un problema, este botón debe estar dentro de la etiqueta `form`; de lo contrario, no importa cuántas veces hagas clic en él, no hará nada. Así que pasaremos de renderizar todo el formulario a la vez a renderizarlo de una forma que nos dé más control.
+Pero aquí tenemos un problema, este botón debe estar dentro de la etiqueta `form`; de lo contrario, no importa cuántas veces hagas clic en él, no hará nada. Así que pasaremos de renderizar todo el formulario a la vez a renderizarlo de una forma que nos dé más control.
 
-Sustituye la función `form()` por `{{ form_start(form) }}`, añade`{{ form_end(form) }}` debajo de ella, y pon un `{{ form_widget(form) }}`especial entre ellas para renderizar todos los campos del formulario. Mueve nuestro botón de envío justo antes de `form_end()`:
+Sustituye la función `form()` por `{{ form_start(form) }}`, añade`{{ form_end(form) }}` debajo de ella, y pon una `{{ form_widget(form) }}`especial entre ellas para renderizar todos los campos del formulario. Mueve nuestro botón de envío justo antes de `form_end()`:
 
 [[[ code('61e8edc5fa') ]]]
 
@@ -61,7 +55,7 @@ Por cierto, he desactivado temporalmente Turbo Drive de forma global en este pro
 
 ## Probando nuestro formulario
 
-Por último, es hora de probar nuestro formulario. Rellénalo con algunos datos divertidos y pulsa el botón "Crear" ¿Ha funcionado?
+Por último, es hora de probar nuestro formulario. Rellénalo con algunos datos divertidos y pulsa el botón "Crear" ¿Funcionó?
 
 Por ahora, no estamos haciendo nada con los datos enviados internamente: ni guardarlos, ni validarlos, ni redirigirlos. Lo verás cuando intentes recargar la página y tu navegador te pregunte si debe volver a enviar el formulario.
 
