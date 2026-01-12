@@ -40,13 +40,8 @@ Refresh your browser, and you'll notice a slight improvement. We've gone from
 invisible fields to a 90's looking form. It's a start at least...
 
 Let's add a minor detail to make our form fields blend better with the
-background. In the CSS file, add this bit:
-
-```css
-input, textarea, select {
-    background-color: inherit;
-}
-```
+background. In the CSS file, add this bit
+`input, textarea, select { background-color: inherit; }`:
 
 [[[ code('4551a5ac0c') ]]]
 

@@ -23,7 +23,7 @@ Symfony has a Tailwind CSS form theme too.
 So, how do we use a specific form theme? Twig to the
 rescue! There's a special Twig tag for form themes. First, open
 PhpStorm and locate the `new.html.twig` template with our form. At the top,
-just under the `extends` tag, type:
+just under the `extends` tag, add a new tag with:
 `{% form_theme form 'tailwind_2_layout.html.twig' %}`.
 
 Remember to pass the specific form variable - `form` in this instance - so
@@ -40,14 +40,11 @@ this field only requires the `class` option. This is the relationship
 that connects our `StarshipPart` to a `Starship`. It displays all the
 `Starship`'s in a select element.
 
-But look at this `choice_label` set to `id`. This sets the property of `Starship`
-that will be displayed in the dropdown. MakerBundle sets this to `id` by default.
+But look at this `choice_label` - set to `id`. This sets the property of `Starship`
+that will be displayed in the dropdown's choices. MakerBundle sets this to `id` by default.
 
-However, at the moment, they're just showing up as cold, soulless database
-IDs. Not very user-friendly, right?
+How the heck will our users know which starship to pick based on an ID?
 
-This is because the MakerBundle generated the `choice_label` option as
-`id` by default. We can do better!
 Inside the `Starship` entity, we have a `name` property. Let's use that!
 Replace `id` with `name`, hit refresh in your browser and...
 
@@ -76,9 +73,8 @@ Let's see if this worked!
 
 Back in the browser, refresh the page... Cool! The starships are now sorted
 alphabetically by name. There's just one tiny issue - there are duplicated names. It's
-possible our `Starship`s come from different galaxies, cultures, or even
-comic strips with questionable names. To make things clearer, let's enhance
-the label.
+possible our `Starship`s come from different galaxies, so they might have the same name.
+To make things clearer, let's enhance the label.
 
 ## Using a Custom Callback for the Choice Label
 
@@ -93,7 +89,7 @@ value elsewhere in your app.
 However, let's keep it simple for now. For the `ship`'s `choice_label` option,
 instead of `name`, set it to an anonymous function that accepts `Starship $starship`.
 Inside, `return sprintf('%s (by %s)')`, passing `$starship->getName()` and
-`$starship->getCapitan()` as the placeholder values. 
+`$starship->getCaptain()` as the placeholder values. 
 
 Hit refresh... and now we're cooking! It's so much easier to identify each
 ship.
