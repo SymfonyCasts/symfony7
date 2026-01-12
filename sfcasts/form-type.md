@@ -17,7 +17,7 @@ So let's get our hands dirty and create our first form!
 
 To follow along, download the course code from this page and extract it.
 Inside, you'll find a `start/` directory containing the course project.
-Open its `README.md` file and you'll find instructions to get the website up
+Open its `README.md` file, and you'll find instructions to get the website up
 and running. I've already done this part, so I'll just launch the built-in
 Symfony web server in my terminal with:
 
@@ -68,22 +68,31 @@ parts, I'll name this one `StarshipPartType`. Next, maker will ask if we
 want to map the form to an entity. We certainly do in this case, so choose the
 `StarshipPart` entity. That's the entity we'll be creating with this form.
 Once that's done, maker will create a new file in the `src/Form/` directory.
-Now, open it up in PhpStorm.
+Now, open it up in PhpStorm:
+
+[[[ code('9349fb25c2') ]]]
 
 The class extends `AbstractType`, which comes from the Form component we
 just installed. Maker has also conveniently added a form field for every
 property on the entity. We don't really want users editing timestamps
 though (unless we're looking for time travel paradoxes), so let's get rid
-of those fields. Below, in the `configureOptions()`, you'll spot the
-`data_class` option set to the `StarshipPart::class`. That binds this
-form to that entity. Quite handy!
+of those fields:
+
+[[[ code('213f049372') ]]]
+
+Below, in the `configureOptions()`, you'll spot the `data_class` option
+set to the `StarshipPart::class`:
+
+[[[ code('cd5c5be5d6') ]]]
+
+That binds this form to that entity. Quite handy!
 
 ## Creating the Form Object with `createForm()`
 
 Now it's time to create a form object using our new form type. The controller
-behind this page is `AdminController` and the action is `newStarshipPart`.
+behind this page is `AdminController` and the action is `newStarshipPart()`.
 Let's open it up. Inside, we'll create a form object with
-`$form = $this->createForm...`. 
+`$form = $this->createForm`... 
 
 Symfony kindly provides two useful methods, `createForm()` and
 `createFormBuilder()`. The latter lets you build a form right inside
@@ -91,16 +100,26 @@ the controller, perfect for quick prototypes. However, best practice is to
 create a dedicated form type class, like the one we just crafted.
 
 So, we'll stick with `$this->createForm()`. Pass our `StarshipPartType::class`,
-and voila, we've got a form! If we `dd($form)` below and refresh the page,
-you'll see it's a Form object — a fully-fledged PHP object with all the
-logic. Let's pass it to the template with `'form' => $form` and remove the
-`dd($form)` statement. Now we can render it in the template. 
+and voila, we've got a form! If we `dd($form)` below:
+
+[[[ code('9e40f30d2e') ]]]
+
+And refresh the page, you'll see it's a Form object — a fully-fledged
+PHP object with all the logic. Let's pass it to the template with
+`'form' => $form` and remove the `dd($form)` statement:
+
+[[[ code('9a62aa4f34') ]]]
+
+Now we can render it in the template. 
 
 ## `Form` Object in PHP vs `FormView` one in Twig
 
-But there's a twist! If you first dump it in Twig with `{{ dump(form) }}` and
-refresh the page again, you'll see that it's a `FormView` object instead.
-That's Symfony quietly doing you a favor converting the internal Form object
+But there's a twist! If you first dump it in Twig with `{{ dump(form) }}`:
+
+[[[ code('d9981327eb') ]]]
+
+And refresh the page again, you'll see that it's a `FormView` object instead.
+That's Symfony quietly doing you a favor converting the internal `Form` object
 into a simpler *view model* that can be rendered in Twig. They might
 look similar, but remember, they're technically different objects.
 
