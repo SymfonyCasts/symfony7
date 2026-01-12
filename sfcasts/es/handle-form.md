@@ -78,7 +78,7 @@ Y si intento actualizar la página, el mensaje desaparece, así que sólo se mos
 
 ## Añadir un segundo botón de envío
 
-Ahora mismo sólo tenemos un botón de envío: Crear. Pero imagina esto: si te sientes productivo, cafeinado, en racha, y quieres crear varias partes rápidamente, una tras otra, podrías hacerlo con unos pocos clics extra cada vez, haciendo clic en el enlace para volver al formulario. Pero, ¿no sería mucho más rápido tener un segundo botón de envío que, en lugar de crear y volver a la lista, creara y permaneciera en esta página con un formulario vacío abierto, para que pudieras crear inmediatamente otro parte?
+Ahora mismo sólo tenemos un botón de envío: Crear. Pero imagina esto, si te sientes productivo, cafeinado, en racha, y quieres crear varias partes rápidamente, una tras otra, podrías hacerlo con unos pocos clics extra cada vez, haciendo clic en el enlace para volver al formulario. Pero, ¿no sería mucho más rápido tener un segundo botón de envío que, en lugar de crear y volver a la lista, creara y permaneciera en esta página con un formulario vacío abierto, para que pudieras crear inmediatamente otro parte?
 
 Bueno, puede que no sea mucho más rápido, pero aún así podría ahorrarle a alguien unas cuantas horas de su vida a lo largo de muchos años de añadir esas piezas.
 
