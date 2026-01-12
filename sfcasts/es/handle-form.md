@@ -1,4 +1,4 @@
-# Procesar el formulario enviado
+# Procesamiento del formulario enviado
 
 Muy bien, hemos construido, creado, renderizado y estilizado nuestro formulario. Lo he dado todo y ahora nuestro formulario está listo para ser enviado. Ahora, como te dirá cualquier desarrollador experimentado, la verdadera diversión comienza cuando empezamos a tratar los datos enviados. Volvamos a nuestro controlador y hagamos que este formulario sea funcional. 
 
@@ -12,7 +12,7 @@ Para ello, tenemos que pasar el objeto de petición actual a este método. Esto 
 
 A continuación, queremos saber si el formulario se ha enviado realmente o si sólo hemos cargado la página del formulario. Eso es pan comido: escribe `if ($form->isSubmitted())`. Luego, dentro de ese `if`, podemos recuperar los datos enviados con `$form->getData()`.
 
-Dado que nuestro tipo de formulario tiene una opción `data_class` establecida en `StarshipPart::class`, los datos que recuperas aquí no son una matriz PHP directa. En lugar de eso, es una instancia de entidad`StarshipPart` con los campos ya rellenados por nosotros. ¿Eres escéptico? Adelante, compruébalo tú mismo. Asignémoslo a una variable `$part`y a continuación `dd($part)`.
+Como nuestro tipo de formulario tiene una opción `data_class` establecida en `StarshipPart::class`, los datos que recuperas aquí no son un array PHP directo. En lugar de eso, es una instancia de entidad`StarshipPart` con los campos ya rellenados por nosotros. ¿Eres escéptico? Adelante, compruébalo tú mismo. Asignémoslo a una variable `$part`y a continuación `dd($part)`.
 
 ## Probando nuestro formulario
 
@@ -50,10 +50,10 @@ Muy bien, volvamos a crear una nueva pieza. ¿Qué te parece un reactor cuántic
 
 > No superar el 120% de flujo del núcleo
 
-Vale, vuelve a enviar el formulario, y ya está. Nuestro mensaje flash, anunciando que la pieza reactor cuántico se ha creado correctamente. Y si intento actualizar la página, el mensaje desaparece, así que sólo se mostró una vez, y Chrome no me pregunta si quiero volver a enviar el formulario, así que también se redirigió correctamente. ¡Genial!
+Vale, vuelve a enviar el formulario y ya está. Nuestro mensaje flash, anunciando que la pieza reactor cuántico se ha creado correctamente. Y si intento actualizar la página, el mensaje desaparece, así que sólo se mostró una vez, y Chrome no me pregunta si quiero volver a enviar el formulario, así que también se redirigió correctamente. ¡Genial!
 
 ## Añadir un segundo botón de envío
 
-Ahora mismo sólo tenemos un botón de envío: Crear. Pero imagina esto: si te sientes productivo, cafeinado, en racha, y quieres crear varias partes rápidamente, una tras otra, podrías hacerlo con unos pocos clics extra cada vez, haciendo clic en el enlace para volver al formulario. Pero, ¿no sería mucho más rápido tener un segundo botón de envío que, en lugar de crear y volver a la lista, creara y permaneciera en esta página con un formulario vacío abierto, para que pudieras crear inmediatamente otro parte?
+Ahora mismo sólo tenemos un botón de envío: Crear. Pero imagina esto, si te sientes productivo, cafeinado, en racha, y quieres crear varias partes rápidamente, una tras otra, podrías hacerlo con unos pocos clics extra cada vez, haciendo clic en el enlace para volver al formulario. Pero, ¿no sería mucho más rápido tener un segundo botón de envío que, en lugar de crear y volver a la lista, cree y permanezca en esta página con un formulario vacío abierto, para que puedas crear inmediatamente otro parte?
 
 Bueno, puede que no sea mucho más rápido, pero aún así podría ahorrarle a alguien unas cuantas horas de su vida a lo largo de muchos años de añadir esas piezas. Te estarás preguntando, ¿es eso siquiera posible? Por supuesto que sí Y en el próximo capítulo veremos cómo.
