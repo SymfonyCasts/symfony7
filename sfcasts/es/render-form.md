@@ -40,7 +40,7 @@ De vuelta en la plantilla Twig, debajo del formulario, añade:
 
 Sin embargo, aquí tenemos un problema, este botón debe estar dentro de la etiqueta `form`; de lo contrario, no importa cuántas veces hagas clic en él, no hará nada. Así que pasaremos de renderizar todo el formulario a la vez a renderizarlo de una forma que nos dé más control.
 
-Sustituye la función `form()` por `{{ form_start(form) }}`, añade `{{ form_end(form) }}`debajo de ella, y pon una `{{ form_widget(form) }}` especial entre ellas para renderizar todos los campos del formulario. Mueve nuestro botón de envío justo antes de `form_end()`.
+Sustituye la función `form()` por `{{ form_start(form) }}`, añade `{{ form_end(form) }}`debajo de ella, y pon un `{{ form_widget(form) }}` especial entre ellas para renderizar todos los campos del formulario. Mueve nuestro botón de envío justo antes de `form_end()`.
 
 ## Una nota rápida sobre Turbo desactivado
 
