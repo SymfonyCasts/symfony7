@@ -1,0 +1,237 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:05.496 align:middle
+En el último capítulo, nos sumergimos en el componente
+Symfony Form, construimos nuestro primer tipo de formulario
+
+00:00:05.556 --> 00:00:08.436 align:middle
+y creamos un objeto Form a partir
+del tipo en el controlador.
+
+00:00:08.856 --> 00:00:12.866 align:middle
+Ahora, vamos a pasar a la parte
+divertida: darle vida al formulario.
+
+00:00:13.556 --> 00:00:16.466 align:middle
+El componente Formulario de Symfony
+incluye un montón de funciones de ayuda
+
+00:00:16.646 --> 00:00:18.396 align:middle
+que hacen que la renderización
+del formulario sea pan comido.
+
+00:00:18.826 --> 00:00:24.086 align:middle
+Abre tu plantilla y cambia el
+volcado por: {{ form(form) }}: Ahora,
+
+00:00:24.196 --> 00:00:26.436 align:middle
+vuelve a tu navegador y actualiza la página.
+
+00:00:26.846 --> 00:00:28.996 align:middle
+Uhh... bien, tenemos un formulario...
+
+00:00:29.206 --> 00:00:30.646 align:middle
+pero es difícil ver los campos.
+
+00:00:30.956 --> 00:00:33.636 align:middle
+Están todos ahí, sólo que
+totalmente restablecidos por Tailwind.
+
+00:00:34.336 --> 00:00:38.636 align:middle
+Por defecto, Tailwind CSS elimina todo
+el estilo de los elementos del formulario
+
+00:00:38.776 --> 00:00:40.456 align:middle
+para que puedas trabajar
+con una pizarra limpia.
+
+00:00:40.456 --> 00:00:44.986 align:middle
+Si abres tu inspector,
+notarás algo interesante.
+
+00:00:44.986 --> 00:00:46.256 align:middle
+El formulario se envía
+mediante el método POST.
+
+00:00:46.256 --> 00:00:50.966 align:middle
+Symfony utiliza por defecto el método POST
+para los formularios, aunque puedes anularlo.
+
+00:00:50.966 --> 00:00:53.846 align:middle
+Más adelante veremos cómo
+enviar un formulario mediante GET.
+
+00:00:53.846 --> 00:00:57.046 align:middle
+No hay atributo action.
+
+00:00:57.046 --> 00:01:06.106 align:middle
+Esto significa que el formulario se envía a la misma
+URL, lo que es increíblemente cómodo cuando necesitas
+
+00:01:06.616 --> 00:01:12.006 align:middle
+utilizar el mismo formulario en diferentes
+páginas que se envían a varios lugares.
+
+00:01:12.006 --> 00:01:18.356 align:middle
+Claro que podrías especificar una acción explícitamente,
+pero la mayoría de las veces no es necesario.
+
+00:01:18.496 --> 00:01:23.376 align:middle
+Ahora, al menos, debemos hacer visibles
+los campos de nuestro formulario.
+
+00:01:23.376 --> 00:01:32.606 align:middle
+Tailwind CSS tiene un plugin de Formularios que proporciona
+un estilo básico para los elementos del formulario.
+
+00:01:32.606 --> 00:01:38.906 align:middle
+De vuelta en PhpStorm, abre
+assets/styles/app.css, y en la parte superior,
+
+00:01:39.076 --> 00:01:43.476 align:middle
+añade @plugin "@tailwindcss/forms";:
+No olvides el punto y coma al final.
+
+00:01:44.126 --> 00:01:48.556 align:middle
+Actualiza tu navegador y
+notarás una ligera mejora.
+
+00:01:48.556 --> 00:01:51.716 align:middle
+Hemos pasado de campos invisibles a un
+formulario con aspecto de los años 90.
+
+00:01:51.716 --> 00:01:53.416 align:middle
+Al menos es un comienzo...
+
+00:01:53.416 --> 00:02:00.086 align:middle
+Vamos a añadir un pequeño detalle para que nuestros
+campos de formulario se mezclen mejor con el fondo.
+
+00:02:00.086 --> 00:02:02.466 align:middle
+En el archivo CSS, añade
+esta parte: Actualizar...
+
+00:02:02.466 --> 00:02:02.636 align:middle
+y... ¡Eh!
+
+00:02:02.636 --> 00:02:03.636 align:middle
+¡Así se ve un poco mejor!
+
+00:02:03.636 --> 00:02:08.146 align:middle
+A nuestro formulario le falta el elemento
+más importante: un botón de envío.
+
+00:02:08.146 --> 00:02:09.066 align:middle
+¿Cómo añadimos uno?
+
+00:02:09.116 --> 00:02:10.866 align:middle
+Hay dos formas de hacerlo.
+
+00:02:11.136 --> 00:02:15.966 align:middle
+Hay un campo SubmitType que podemos añadir a
+nuestra clase de tipo de formulario personalizado.
+
+00:02:15.966 --> 00:02:19.136 align:middle
+La alternativa es añadir el botón
+manualmente en la plantilla Twig.
+
+00:02:19.136 --> 00:02:22.646 align:middle
+Empezaremos con el método
+manual, pero no te preocupes,
+
+00:02:22.646 --> 00:02:26.386 align:middle
+ya veremos cómo añadir un botón
+al tipo de formulario más adelante.
+
+00:02:26.466 --> 00:02:34.696 align:middle
+De vuelta en la plantilla Twig, debajo del formulario,
+añade: <button>Create</button>, type="submit".
+
+00:02:34.696 --> 00:02:42.096 align:middle
+Añadiré algunas clases CSS de Tailwind para que
+quede más bonito: Puedes copiar/pegar esta larga lista
+
+00:02:42.346 --> 00:02:44.326 align:middle
+de clases CSS del script de abajo.
+
+00:02:44.646 --> 00:02:51.426 align:middle
+Sin embargo, aquí tenemos un problema: este botón
+debe estar dentro de la etiqueta form; de lo contrario,
+
+00:02:51.426 --> 00:02:55.326 align:middle
+no importa cuántas veces hagas
+clic en él, no hará nada.
+
+00:02:55.326 --> 00:02:58.176 align:middle
+Así que pasaremos de renderizar todo
+el formulario a la vez a renderizarlo
+
+00:02:58.176 --> 00:03:01.136 align:middle
+de una forma que nos dé más control.
+
+00:03:01.136 --> 00:03:05.246 align:middle
+Sustituye la función form()
+por {{ form_start(form) }},
+
+00:03:05.246 --> 00:03:10.336 align:middle
+añade {{ form_end(form) }} debajo de ella,
+y pon un {{ form_widget(form) }} especial
+
+00:03:10.336 --> 00:03:12.376 align:middle
+entre ellas para renderizar
+todos los campos del formulario.
+
+00:03:16.086 --> 00:03:18.296 align:middle
+Mueve nuestro botón de envío justo antes de
+form_end(): Porque cuando Turbo está activado,
+
+00:03:18.326 --> 00:03:20.246 align:middle
+la navegación de la página se produce a través
+de peticiones AJAX , y, ya sé que parece una locura
+
+00:03:20.276 --> 00:03:21.326 align:middle
+, pero incluso los envíos de
+formularios se convierten en AJAX.
+
+00:03:21.356 --> 00:03:22.796 align:middle
+Eso puede dificultar la depuración cuando
+se aprende cómo funcionan los formularios.
+
+00:03:22.826 --> 00:03:24.626 align:middle
+Por ahora, las cargas de página completa
+mantienen las cosas simples y predecibles.
+
+00:03:24.656 --> 00:03:25.556 align:middle
+Por último, es hora de
+probar nuestro formulario.
+
+00:03:25.586 --> 00:03:27.086 align:middle
+Rellénalo con algunos datos
+divertidos y pulsa el botón "Crear"
+
+00:03:27.116 --> 00:03:27.416 align:middle
+¿Ha funcionado?
+
+00:03:27.446 --> 00:03:29.186 align:middle
+Por ahora, no estamos haciendo nada
+con los datos enviados internamente:
+
+00:03:29.216 --> 00:03:30.236 align:middle
+ni guardarlos, ni validarlos, ni redirigirlos.
+
+00:03:30.266 --> 00:03:31.376 align:middle
+Lo verás cuando intentes recargar la página
+
+00:03:31.406 --> 00:03:32.756 align:middle
+y tu navegador te pregunte si debe
+volver a enviar el formulario.
+
+00:03:32.786 --> 00:03:34.856 align:middle
+Pero no te preocupes, en el próximo vídeo veremos cómo
+procesar el formulario y almacenar el nuevo StarshipPart
+
+00:03:34.886 --> 00:03:35.816 align:middle
+en la base de datos.
+
+00:03:35.846 --> 00:03:36.086 align:middle
+¡Permanece atento!
