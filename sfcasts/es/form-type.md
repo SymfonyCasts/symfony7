@@ -20,13 +20,13 @@ El negocio va viento en popa en nuestro pequeño rincón de la Galaxia, así que
 
 ## Instalar el componente de formulario Symfony
 
-Antes de que podamos crear formularios, necesitamos el componente Symfony Form. Instálalo utilizando:
+Antes de poder crear formularios, necesitamos el componente Symfony Form. Instálalo utilizando:
 
 ```terminal
 symfony composer require form
 ```
 
-Ejecutando `git status` nos mostrará que la instalación trajo algunos archivos de configuración nuevos. Perfecto, ahora estamos listos para empezar a construir. Podríamos construir el formulario manualmente, campo a campo, línea a línea, pero esa es una forma segura de agotar nuestra fuerza vital.
+Ejecutando `git status` veremos que la instalación ha traído algunos archivos de configuración nuevos. Perfecto, ahora estamos listos para empezar a construir. Podríamos construir el formulario manualmente, campo a campo, línea a línea, pero esa es una forma segura de agotar nuestra fuerza vital.
 
 ## Crear una clase de tipo formulario con Maker
 
@@ -46,7 +46,7 @@ La clase extiende `AbstractType`, que proviene del componente Formulario que aca
 
 [[[ code('213f049372') ]]]
 
-Abajo, en `configureOptions()`, verás la opción `data_class` establecida en `StarshipPart::class`:
+Abajo, en el `configureOptions()`, verás la opción `data_class` establecida en el `StarshipPart::class`:
 
 [[[ code('cd5c5be5d6') ]]]
 
@@ -74,7 +74,7 @@ Ahora podemos renderizarlo en la plantilla.
 
 [[[ code('d9981327eb') ]]]
 
-Y vuelves a actualizar la página, verás que en su lugar es un objeto `FormView`. Eso es que Symfony te está haciendo tranquilamente un favor convirtiendo el objeto interno `Form` en un modelo de vista más sencillo que puede renderizarse en Twig. Pueden parecer similares, pero recuerda que técnicamente son objetos diferentes.
+Y vuelves a actualizar la página, verás que en su lugar es un objeto `FormView`. Eso es que Symfony te está haciendo un favor silenciosamente convirtiendo el objeto interno `Form` en un modelo de vista más sencillo que se puede renderizar en Twig. Pueden parecer similares, pero recuerda que técnicamente son objetos diferentes.
 
 Las versiones antiguas de Symfony requerían que los desarrolladores pasaran explícitamente el objeto `FormView` a la plantilla para su renderización. Por eso es posible que veas llamadas a `$form->createView()` en proyectos antiguos.
 
