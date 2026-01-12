@@ -55,7 +55,7 @@ Por cierto, he desactivado temporalmente Turbo Drive de forma global en este pro
 
 ## Probando nuestro formulario
 
-Por último, es hora de probar nuestro formulario. Rellénalo con algunos datos divertidos y pulsa el botón "Crear" ¿Funcionó?
+Por último, es hora de probar nuestro formulario. Rellénalo con algunos datos divertidos y pulsa el botón "Crear" ¿Ha funcionado?
 
 Por ahora, no estamos haciendo nada con los datos enviados internamente: ni guardarlos, ni validarlos, ni redirigirlos. Lo verás cuando intentes recargar la página y tu navegador te pregunte si debe volver a enviar el formulario.
 
