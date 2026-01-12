@@ -1,0 +1,290 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.596 align:middle
+Muy bien, hemos construido, creado,
+renderizado y estilizado nuestro formulario.
+
+00:00:04.866 --> 00:00:07.796 align:middle
+Lo he dado todo y ahora nuestro
+formulario está listo para ser enviado.
+
+00:00:08.306 --> 00:00:12.306 align:middle
+Ahora, como cualquier desarrollador experimentado
+te dirá, la verdadera diversión comienza
+
+00:00:12.306 --> 00:00:14.086 align:middle
+cuando empezamos a tratar
+con los datos enviados.
+
+00:00:14.086 --> 00:00:17.566 align:middle
+Volvamos a nuestro controlador y hagamos
+que este formulario sea funcional.
+
+00:00:18.356 --> 00:00:23.946 align:middle
+Abre src/Controller/AdminController.php,
+y en el método newStarshipPart(),
+
+00:00:23.946 --> 00:00:28.566 align:middle
+justo debajo del objeto $form,
+añade $form->handleRequest().
+
+00:00:29.146 --> 00:00:32.866 align:middle
+Para ello, tenemos que pasar el objeto
+de petición actual a este método.
+
+00:00:33.176 --> 00:00:34.466 align:middle
+Esto ya te resultará familiar.
+
+00:00:34.936 --> 00:00:40.276 align:middle
+Inyecta Request desde HttpFoundation como
+argumento del método $request y pásalo
+
+00:00:40.276 --> 00:00:44.466 align:middle
+a handleRequest(): Puede que te estés
+preguntando de qué va este handleRequest().
+
+00:00:44.806 --> 00:00:49.436 align:middle
+Simplemente coge los datos enviados de
+la petición, los aplica a tu formulario,
+
+00:00:49.706 --> 00:00:52.616 align:middle
+y ahora tu formulario contiene los
+valores enviados por el usuario.
+
+00:00:53.306 --> 00:00:56.076 align:middle
+A continuación, queremos saber si
+el formulario se ha enviado realmente
+
+00:00:56.296 --> 00:00:58.036 align:middle
+o si acabamos de cargar
+la página del formulario.
+
+00:00:58.386 --> 00:01:02.566 align:middle
+Eso es pan comido: basta con escribir
+if ($form->isSubmitted()).
+
+00:01:03.146 --> 00:01:07.836 align:middle
+Luego, dentro de ese if, podemos recuperar
+los datos enviados con $form->getData():
+
+00:01:08.956 --> 00:01:13.256 align:middle
+Como nuestro tipo de formulario tiene una opción
+data_class establecida en StarshipPart::class:
+
+00:01:13.536 --> 00:01:16.696 align:middle
+los datos que recuperas aquí
+no son una matriz PHP directa.
+
+00:01:16.966 --> 00:01:21.866 align:middle
+En su lugar, es una instancia de entidad StarshipPart
+con los campos ya rellenados por nosotros.
+
+00:01:22.426 --> 00:01:23.066 align:middle
+¿Eres escéptico?
+
+00:01:23.376 --> 00:01:24.666 align:middle
+Adelante, compruébalo tú mismo.
+
+00:01:25.046 --> 00:01:28.556 align:middle
+Asignémoslo a una variable
+$part y debajo dd($part):
+
+00:01:29.376 --> 00:01:31.616 align:middle
+De vuelta en el navegador, rellenaré
+rápidamente el formulario.
+
+00:01:34.146 --> 00:01:35.556 align:middle
+Pulsa Crear para enviarlo...
+
+00:01:35.556 --> 00:01:39.666 align:middle
+y voilá, un nuevo y reluciente objeto
+StarshipPart con los datos que enviamos.
+
+00:01:40.306 --> 00:01:43.996 align:middle
+Observa que no tiene ID porque Doctrine
+aún no lo ha guardado en la base de datos.
+
+00:01:43.996 --> 00:01:49.106 align:middle
+Añadiré rápidamente un PHPDoc encima de la variable
+para que el autocompletado de PhpStorm sea más feliz,
+
+00:01:49.916 --> 00:01:55.206 align:middle
+y borraré la declaración dd(): Para guardar la
+nueva parte, necesitamos EntityManager de Doctrine.
+
+00:01:55.626 --> 00:02:00.466 align:middle
+Inyéctalo con EntityManagerInterface
+$entityManager en la firma del método.
+
+00:02:00.726 --> 00:02:04.866 align:middle
+Luego, de vuelta en el if, añade
+$entityManager->persist(),
+
+00:02:05.106 --> 00:02:11.006 align:middle
+pasando el objeto $part y a continuación
+$entityManager->flush(): De vuelta al navegador,
+
+00:02:11.676 --> 00:02:13.836 align:middle
+estableceré el nombre a: "Hipermotor Legado".
+
+00:02:14.526 --> 00:02:19.826 align:middle
+Ponle un precio justo, y no te olvides de una nota
+importante: ¡Ten cuidado con las altas revoluciones!
+
+00:02:20.646 --> 00:02:22.236 align:middle
+Ahora, pulsa de nuevo el botón de enviar.
+
+00:02:22.796 --> 00:02:23.746 align:middle
+¿Finalmente ha funcionado?
+
+00:02:24.156 --> 00:02:25.796 align:middle
+Bueno, al menos no hay errores.
+
+00:02:26.086 --> 00:02:28.846 align:middle
+Dirígete a la página $part
+y busca "Legacy Hyperdrive".
+
+00:02:29.706 --> 00:02:32.836 align:middle
+Ahí está, tu nueva y reluciente pieza
+de la nave estelar, lista para la venta.
+
+00:02:33.536 --> 00:02:35.096 align:middle
+Celebremos este momento como es debido.
+
+00:02:35.496 --> 00:02:37.626 align:middle
+Voy a añadir un mensaje flash de éxito.
+
+00:02:38.146 --> 00:02:42.936 align:middle
+Los mensajes flash son mensajes temporales que se
+almacenan en la sesión y se muestran exactamente una vez.
+
+00:02:43.136 --> 00:02:46.506 align:middle
+Son perfectos para cosas como ¡Tu
+pieza se ha creado con éxito!
+
+00:02:47.006 --> 00:02:52.566 align:middle
+Si echas un vistazo a templates/base.html.twig,
+verás que ya tenemos código que hace un bucle
+
+00:02:52.566 --> 00:02:58.466 align:middle
+sobre los mensajes flash y los muestra con un bonito
+estilo dependiendo del tipo: éxito, advertencia,
+
+00:02:58.676 --> 00:03:02.956 align:middle
+error, predeterminado: De vuelta en nuestro
+controlador, después de guardar la entidad de la pieza
+
+00:03:02.956 --> 00:03:06.556 align:middle
+en la base de datos, escribe:
+$this->addFlash().
+
+00:03:07.296 --> 00:03:10.796 align:middle
+Primer argumento: el "tipo" de
+mensaje - ayuda a controlar el estilo.
+
+00:03:11.126 --> 00:03:12.396 align:middle
+Escribe aquí success.
+
+00:03:13.236 --> 00:03:15.566 align:middle
+Segundo argumento: el contenido del mensaje.
+
+00:03:15.906 --> 00:03:23.626 align:middle
+Qué tal: sprintf('The part "%s" was
+successfully created!', $part->getName()):
+
+00:03:24.706 --> 00:03:28.216 align:middle
+Para evitar el envío duplicado de formularios
+cuando el usuario actualice la página
+
+00:03:28.376 --> 00:03:31.096 align:middle
+-lo que podría dar lugar a partes
+no deseadas flotando en el espacio-
+
+00:03:31.396 --> 00:03:33.406 align:middle
+, terminemos el proceso con una redirección.
+
+00:03:33.776 --> 00:03:36.366 align:middle
+Esta es una buena práctica
+clásica para los formularios POST.
+
+00:03:36.796 --> 00:03:39.636 align:middle
+Vamos a redirigir a
+$this->redirectToRoute().
+
+00:03:40.256 --> 00:03:44.496 align:middle
+Podemos redirigir a cualquier sitio, pero yo devolveré
+a los usuarios a la lista de piezas por comodidad.
+
+00:03:45.016 --> 00:03:50.166 align:middle
+El nombre de esta ruta es app_part_index.: Muy
+bien, vamos a crear una nueva pieza de nuevo.
+
+00:03:50.566 --> 00:03:55.556 align:middle
+¿Qué tal un "Reactor Cuántico" como
+nombre, fijamos un precio, y como notas diré:
+
+00:03:55.856 --> 00:04:02.296 align:middle
+No superar el 120% de flujo del núcleo De
+acuerdo, vuelve a enviar el formulario, y ya está.
+
+00:04:02.476 --> 00:04:06.716 align:middle
+Nuestro mensaje flash, anunciándolo: ¡La pieza
+"Reactor cuántico" se ha creado correctamente!
+
+00:04:07.226 --> 00:04:11.606 align:middle
+Y si intento actualizar la página, el mensaje
+desaparece, así que sólo se mostró una vez,
+
+00:04:11.856 --> 00:04:14.436 align:middle
+y Chrome no me pregunta si quiero
+volver a enviar el formulario,
+
+00:04:14.726 --> 00:04:16.446 align:middle
+así que también se redirigió correctamente.
+
+00:04:16.796 --> 00:04:21.306 align:middle
+¡Genial! Ahora mismo sólo
+tenemos un botón de envío: Crear.
+
+00:04:21.546 --> 00:04:25.446 align:middle
+Pero imagina esto, si te sientes
+productivo, cafeinado, en racha
+
+00:04:25.446 --> 00:04:28.666 align:middle
+, y quieres crear varias partes
+rápidamente, una tras otra,
+
+00:04:28.916 --> 00:04:31.336 align:middle
+podrías hacerlo con unos
+pocos clics extra cada vez,
+
+00:04:31.556 --> 00:04:33.436 align:middle
+haciendo clic en el enlace
+para volver al formulario.
+
+00:04:33.826 --> 00:04:38.196 align:middle
+Pero, ¿no sería mucho más rápido tener un
+segundo botón de envío que, en lugar de crear
+
+00:04:38.196 --> 00:04:42.796 align:middle
+y volver a la lista, creara y permaneciera en esta
+página con un formulario vacío abierto, para
+
+00:04:42.886 --> 00:04:44.806 align:middle
+que pudieras crear inmediatamente otro parte?
+
+00:04:45.426 --> 00:04:49.766 align:middle
+Bueno, puede que no sea mucho más rápido, pero aún así
+podría ahorrarle a alguien unas cuantas horas de su vida a lo
+
+00:04:49.766 --> 00:04:52.226 align:middle
+largo de muchos años de añadir esas piezas.
+
+00:04:52.726 --> 00:04:54.796 align:middle
+Tal vez te preguntes si eso es posible
+
+00:04:55.146 --> 00:04:55.936 align:middle
+Por supuesto que sí
+
+00:04:56.066 --> 00:04:58.086 align:middle
+Y en el próximo capítulo veremos cómo.
