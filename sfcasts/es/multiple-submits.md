@@ -12,7 +12,7 @@ Si vas al navegador y actualizas, verás nuestros dos botones. El nuevo no parec
 
 ## Acceso a campos no mapeados en Symfony
 
-Por ahora, en el controlador, ya sabemos que `$form->getData()`nos pasa una entidad mapeada, que en nuestro caso es `StarshipPart`. Esta vez, sin embargo, necesitamos acceder a un campo no mapeado: el botón de envío que acabamos de añadir. Este campo no tiene una propiedad coincidente en la entidad, por eso lo llamamos "no mapeado".
+Por ahora, en el controlador, ya sabemos que `$form->getData()`nos entrega una entidad mapeada, que en nuestro caso es `StarshipPart`. Esta vez, sin embargo, necesitamos acceder a un campo no mapeado: el botón de envío que acabamos de añadir. Este campo no tiene una propiedad coincidente en la entidad, por eso lo llamamos "no mapeado".
 
 No pasa nada, podemos acceder a los datos brutos del formulario. Justo debajo de `addFlash()`, crea una variable `$createAndAddNewBtn` que sea igual a`$form->get('createAndAddNew')`. Esto debería coincidir con el nombre del botón de tu tipo de formulario. Hagamos primero una prueba rápida. Abajo,`dd($createAndAddNewBtn)`.
 
