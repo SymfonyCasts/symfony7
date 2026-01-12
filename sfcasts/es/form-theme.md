@@ -18,11 +18,11 @@ Pulsa actualizar en tu navegador... ¡y voilá! Nuestro formulario tiene un aspe
 
 ## Un tipo de formulario `EntityType` 
 
-Ahora, cambiemos de marcha y profundicemos en los tipos de formulario. Aquí hay algo especial que quiero mostrarte. Abre `src/Form/StarshipPartType.php` y verás que nuestro campo de barco utiliza el mágico `EntityType`.
+Hay algo que todavía me molesta... Abre `src/Form/StarshipPartType.php`... El campo `starship` es un `EntityType`. Si recuerdas del capítulo anterior, este campo sólo requiere la opción `class`. Es la relación que conecta nuestro `StarshipPart` con un `Starship`. Muestra todos los`Starship`'s en un elemento de selección.
 
-En el capítulo anterior, aprendimos que este tipo requiere una opción `class`. Ésta debe establecerse con el nombre de clase completo de la entidad de la que quieres cargar las opciones. En nuestro caso, como la propiedad `ship` de la entidad `StarshipPart` es una instancia de `Starship`, aquí utilizaremos`Starship::class`. Esto cargará todos los `Starship`s que tengamos y los mostrará en un campo de selección especial.
+Pero mira este `choice_label` establecido en `id`. Esto establece la propiedad de `Starship`que se mostrará en el desplegable. MakerBundle establece esto en `id` por defecto.
 
-Sin embargo, de momento, sólo se muestran como fríos ID de base de datos sin alma. No es muy fácil de usar, ¿verdad?
+Sin embargo, en este momento, sólo se muestran como fríos ID de base de datos sin alma. No es muy fácil de usar, ¿verdad?
 
 Esto se debe a que el MakerBundle generó la opción `choice_label` como`id` por defecto. Podemos hacerlo mejor! Dentro de la entidad `Starship`, tenemos una propiedad `name`. ¡Usémosla! Sustituye `id` por `name`, pulsa actualizar en tu navegador y...
 
