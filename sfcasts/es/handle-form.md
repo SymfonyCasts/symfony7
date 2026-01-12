@@ -82,4 +82,4 @@ Ahora mismo sólo tenemos un botón de envío: Crear. Pero imagina esto, si te s
 
 Bueno, puede que no sea mucho más rápido, pero aún así podría ahorrarle a alguien unas cuantas horas de su vida a lo largo de muchos años de añadir esas piezas.
 
-Tal vez te preguntes si eso es posible Por supuesto que sí Y en el próximo capítulo veremos cómo.
+¿Tal vez te preguntes si eso es posible? ¡Por supuesto que sí! Y en el próximo capítulo veremos cómo.
