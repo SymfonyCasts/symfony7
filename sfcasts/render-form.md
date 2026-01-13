@@ -17,9 +17,8 @@ styling from form elements to give you a clean slate to work with.
 
 ## Understanding Form Submission Methods
 
-If you open your inspector, you'll notice something interesting. The form
-is sent via POST method. Symfony defaults to POST for forms, although you can
-override this. We'll explore how to send a form via GET later on.
+The form is sent via POST method. Symfony defaults to POST for forms,
+although you can override this. We'll explore how to send a form via GET later on.
 
 There is no `action` attribute. This means the form submits to the same URL,
 which is incredibly convenient when you need to use the same form across
