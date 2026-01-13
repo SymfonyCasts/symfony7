@@ -8,9 +8,9 @@ Ahora, vamos a pasar a la parte divertida: darle vida al formulario. El componen
 
 Ahora, vuelve a tu navegador y actualiza la página. Uhh... bien, tenemos un formulario... pero es difícil ver los campos. Están todos ahí, sólo que totalmente restablecidos por Tailwind. Por defecto, el CSS de Tailwind elimina todo el estilo de los elementos del formulario para que tengas una pizarra limpia con la que trabajar.
 
-## Comprender los métodos de envío de formularios
+## Entender los métodos de envío de formularios
 
-Si abres tu inspector, notarás algo interesante. El formulario se envía mediante el método POST. Symfony utiliza por defecto el método POST para los formularios, aunque puedes anularlo. Más adelante veremos cómo enviar un formulario mediante GET.
+El formulario se envía mediante el método POST. Symfony utiliza por defecto el método POST para los formularios, aunque puedes anularlo. Más adelante exploraremos cómo enviar un formulario mediante GET.
 
 No hay atributo `action`. Esto significa que el formulario se envía a la misma URL, lo que es increíblemente cómodo cuando necesitas utilizar el mismo formulario en diferentes páginas que se envían a varios lugares. Claro que podrías especificar una acción explícitamente, pero la mayoría de las veces no es necesario.
 
@@ -41,9 +41,9 @@ De vuelta en la plantilla Twig, debajo del formulario, añade:
 
 Puedes copiar/pegar esta larga lista de clases CSS del script de abajo.
 
-Pero aquí tenemos un problema, este botón debe estar dentro de la etiqueta `form`; de lo contrario, no importa cuántas veces hagas clic en él, no hará nada. Así que pasaremos de renderizar todo el formulario a la vez a renderizarlo de una forma que nos dé más control.
+Sin embargo, aquí tenemos un problema: este botón debe estar dentro de la etiqueta `form`; de lo contrario, no importa cuántas veces hagas clic en él, no hará nada. Así que pasaremos de renderizar todo el formulario a la vez a renderizarlo de una forma que nos dé más control.
 
-Sustituye la función `form()` por `{{ form_start(form) }}`, añade`{{ form_end(form) }}` debajo de ella, y pon una `{{ form_widget(form) }}`especial entre ellas para renderizar todos los campos del formulario. Mueve nuestro botón de envío justo antes de `form_end()`:
+Sustituye la función `form()` por `{{ form_start(form) }}`, añade`{{ form_end(form) }}` debajo de ella, y pon un `{{ form_widget(form) }}`especial entre ellas para renderizar todos los campos del formulario. Mueve nuestro botón de envío justo antes de `form_end()`:
 
 [[[ code('61e8edc5fa') ]]]
 
