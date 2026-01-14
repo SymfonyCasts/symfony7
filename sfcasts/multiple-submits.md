@@ -11,11 +11,18 @@ the *second* method of adding submit buttons to a form - using the `SubmitType`.
 ## Adding a Second Submit Button Inside the Form Type
 
 First things first, let's tweak the name of our current button in the
-`new.html.twig` template to "Create and Close". Now, pop open your Form
-type class in `src/Form/StarshipPartType.php`. It's time to drop in a
-second button below the fields. Add this using
-`->add('createAndAddNew', SubmitType::class)`. This handy
-`SubmitType::class` tells Symfony to render it as a `<button type="submit">`. 
+`new.html.twig` template to "Create and Close":
+
+[[[ code('b9028fa5b0') ]]]
+
+Now, pop open your form type class in `src/Form/StarshipPartType.php`.
+It's time to drop in a second button below the fields. Add this using
+`->add('createAndAddNew', SubmitType::class)`:
+
+[[[ code('d04ed3a4ec') ]]]
+
+This handy `SubmitType::class` tells Symfony to render it as a
+`<button type="submit">`. 
 
 If you hop over to the browser and refresh, you'll see our two buttons. The
 new one doesn't quite look like a button - that's because we've reset
@@ -25,16 +32,21 @@ We'll spruce up the styles later.
 ## Accessing Unmapped Fields in Symfony
 
 For now, in the controller, we're already aware that `$form->getData()`
-hands us a mapped entity, which in our case is `StarshipPart`. This time,
-though, we need to get our hands on an unmapped field - the submit button
-we just added. This field doesn't have a matching property on the entity,
-which is why we call it "unmapped".
+hands us a mapped entity, which in our case is `StarshipPart`:
+
+[[[ code('f3b6d94b2b') ]]]
+
+This time, though, we need to get our hands on an unmapped field - the submit
+button we just added. This field doesn't have a matching property on the
+entity, which is why we call it "unmapped".
 
 No sweat, we can access raw form data. Directly below the `addFlash()`,
 cook up a `$createAndAddNewBtn` variable that equals
 `$form->get('createAndAddNew')`. This should match the button name on your
 Form type. Let's give it a quick test run first. Down below,
-`dd($createAndAddNewBtn)`.
+`dd($createAndAddNewBtn)`:
+
+[[[ code('a38ad41ac2') ]]]
 
 Back to the browser, filling the form notes is optional, so just the name
 and price will do. Then hit our "Create and Add New" button...
@@ -50,7 +62,9 @@ little help. To solve the autocomplete, above the button, add a docblock with
 `/** @var SubmitButton $createAndAddNewBtn */`. Now, inside the form
 submit logic, write `$createAndAddNewBtn->isClicked()`. That's
 exactly what we need. Wrap it in an `if` statement, and if the button was
-clicked, let's return `$this->redirectToRoute('app_admin_starship_part_new')`.
+clicked, let's return `$this->redirectToRoute('app_admin_starship_part_new')`:
+
+[[[ code('ff29d468c2') ]]]
 
 Now, back in the browser, refresh and resubmit. Hmm, we see the successful
 flash message twice... That's because it was added during the `dd()` request,
@@ -64,11 +78,12 @@ to add fields to our form. Sometimes we specify the second argument, but
 others, we don't. This second one is the field type, and it's null
 by default. So, why don't we need to always specify it?
 
-Well, Symfony has this nifty feature called "field type guessing". When the type is
-`null`, Symfony will inspect the underlying data class - in our case,
-the `StarshipPart` entity. It will look for a property that matches
-the field name. Based on the found property's type (guessed from type-hints and metadata),
-Symfony will automatically select the most appropriate form field type.
+Well, Symfony has this nifty feature called *field type guessing*.
+When the type is `null`, Symfony will inspect the underlying data
+class - in our case, the `StarshipPart` entity. It will look for a property
+that matches the field name. Based on the found property's type
+(guessed from type-hints and metadata), Symfony will automatically select
+the most appropriate form field type.
 
 For example, since `price` is an integer, Symfony will pick the `IntegerType`.
 Since `name` is a string, Symfony will opt for a `TextType`. If we had,
@@ -95,7 +110,7 @@ At your terminal, run:
 symfony console debug:form
 ```
 
-This dumps all available form types, including your own Form Type classes,
+This dumps all available form types, including your own form type classes,
 which we can see here.
 
 If you want to inspect a specific type, just specify it as an argument to
@@ -114,14 +129,23 @@ symfony console debug:form EntityType
 
 We use this in our `StarshipPartType` for the `ship` field. With this one,
 you'll see that the `class` option is required. If we look at our form type...
-the MakerBundle already filled that for us. So smart! Options are set as the third argument
-of `$builder->add()`.
+the MakerBundle already filled that for us:
+
+[[[ code('29a3fd5171') ]]]
+
+So smart! Options are set as the third argument of `$builder->add()`.
 
 And by the way, Symfony doesn't only guess *field types*, it also guesses
 *field type options*. For example, if a Doctrine entity property is `nullable: true` like
-for this `notes` field, then Symfony will automatically make it
-optional. And the reverse for the other fields, the `required` HTML attribute will be
-added if the field is not nullable, like for `name` and `price`.
+for this `notes` field:
+
+[[[ code('aa80383bc0') ]]]
+
+Then Symfony will automatically make it optional. And the reverse for
+the other fields, the `required` HTML attribute will be added if the field
+is not nullable, like for `name` and `price`:
+
+[[[ code('dc0fdd0924') ]]]
 
 You can see this with the HTML inspector... If we inspect the notes field, we see it doesn't
 have the `required` attribute. If we inspect the name field, it does! Same with price.
@@ -129,9 +153,10 @@ have the `required` attribute. If we inspect the name field, it does! Same with 
 That's why when you submit an empty form, we see HTML5 validation errors for
 the required fields.
 
-And of course, you can easily override this behaviour in that third `$builder->add()` argument array.
-To see this, add `required => false` to our `price` field's options. Back in the browser,
-refresh and inspect the price field - the `required` attribute is gone!
+And of course, you can easily override this behaviour in that third
+`$builder->add()` argument array. To see this, add `required => false`
+to our `price` field's options. Back in the browser, refresh and inspect
+the price field - the `required` attribute is gone!
 
 Revert that change - it really is required!
 
