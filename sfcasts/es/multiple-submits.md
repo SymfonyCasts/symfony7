@@ -98,4 +98,4 @@ Y, por supuesto, puedes anular fácilmente este comportamiento en esa tercera ma
 
 Revierte ese cambio: ¡realmente es necesario!
 
-Profundizaremos en los tipos de campos de formulario más adelante en este curso. Por ahora, cambiemos de marcha hacia algo divertido y con estilo: vestir nuestro formulario para el baile aplicándole un tema de formulario Symfony incorporado. ¡Eso a continuación!
+Profundizaremos en los tipos de campos de formulario más adelante en este curso. Por ahora, cambiemos de marcha hacia algo divertido y elegante: vestir nuestro formulario para el baile aplicándole un tema de formulario Symfony incorporado. ¡Eso a continuación!
