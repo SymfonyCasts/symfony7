@@ -1,0 +1,374 @@
+WEBVTT
+
+00:00:01.116 --> 00:00:05.146 align:middle
+Muy bien, tenemos nuestro botón "Crear" funcionando
+a las mil maravillas, pero ¿y si queremos un par
+
+00:00:05.146 --> 00:00:10.696 align:middle
+de flujos de trabajo diferentes? "Crear y Cerrar"
+para guardar la pieza y volver a la lista,
+
+00:00:10.696 --> 00:00:16.316 align:middle
+y "Crear y Añadir Otra" para guardar la pieza pero permanecer
+en la página del formulario para introducir datos rápidamente.
+
+00:00:16.946 --> 00:00:19.936 align:middle
+No te preocupes, Symfony es
+totalmente capaz de manejar esto.
+
+00:00:20.266 --> 00:00:25.216 align:middle
+Vamos a sumergirnos en el segundo método para añadir
+botones de envío a un formulario - utilizando el SubmitType.
+
+00:00:25.996 --> 00:00:31.276 align:middle
+Lo primero es lo primero, vamos a cambiar el nombre
+de nuestro botón actual en la plantilla new.html.twig
+
+00:00:31.386 --> 00:00:38.576 align:middle
+a "Crear y Cerrar": Ahora, abre tu clase de tipo
+de formulario en src/Form/StarshipPartType.php.
+
+00:00:38.576 --> 00:00:42.496 align:middle
+Es hora de añadir un segundo
+botón debajo de los campos.
+
+00:00:42.916 --> 00:00:48.726 align:middle
+Añádelo utilizando
+->add('createAndAddNew', SubmitType::class):
+
+00:00:49.206 --> 00:00:54.166 align:middle
+Este práctico SubmitType::class le dice a Symfony
+que lo renderice como un <button type="submit">.
+
+00:00:54.956 --> 00:00:58.436 align:middle
+Si vas al navegador y actualizas,
+verás nuestros dos botones.
+
+00:00:58.816 --> 00:01:02.996 align:middle
+El nuevo no parece un botón, porque
+hemos restablecido los estilos.
+
+00:01:03.346 --> 00:01:06.696 align:middle
+Pero técnicamente, en el código,
+es <button type="submit">.
+
+00:01:07.076 --> 00:01:08.506 align:middle
+Ya arreglaremos los estilos más adelante.
+
+00:01:09.176 --> 00:01:15.266 align:middle
+Por ahora, en el controlador, ya sabemos que
+$form->getData() nos entrega una entidad mapeada,
+
+00:01:15.536 --> 00:01:19.866 align:middle
+que en nuestro caso es StarshipPart:
+Esta vez, sin embargo, necesitamos echar
+
+00:01:19.866 --> 00:01:23.236 align:middle
+mano de un campo no mapeado: el botón
+de envío que acabamos de añadir.
+
+00:01:23.916 --> 00:01:28.936 align:middle
+Este campo no tiene una propiedad coincidente
+en la entidad, por eso lo llamamos "no mapeado".
+
+00:01:29.496 --> 00:01:32.106 align:middle
+No pasa nada, podemos acceder a
+los datos brutos del formulario.
+
+00:01:32.676 --> 00:01:37.466 align:middle
+Justo debajo de addFlash(), crea
+una variable $createAndAddNewBtn
+
+00:01:37.536 --> 00:01:41.346 align:middle
+que sea igual a
+$form->get('createAndAddNew').
+
+00:01:42.106 --> 00:01:44.466 align:middle
+Esto debería coincidir con el nombre
+del botón de tu tipo de formulario.
+
+00:01:45.346 --> 00:01:47.096 align:middle
+Hagamos primero una prueba rápida.
+
+00:01:47.506 --> 00:01:54.436 align:middle
+Abajo, dd($createAndAddNewBtn): De vuelta al navegador,
+rellenar las notas del formulario es opcional,
+
+00:01:54.546 --> 00:01:56.196 align:middle
+así que bastará con el nombre y el precio.
+
+00:01:56.766 --> 00:01:58.866 align:middle
+A continuación, pulsa nuestro
+botón "Crear y añadir nuevo"...
+
+00:01:58.956 --> 00:02:00.516 align:middle
+y... ahí está nuestro vertedero.
+
+00:02:00.996 --> 00:02:03.536 align:middle
+Es un Botón de Enviar con
+algunos campos intrigantes.
+
+00:02:03.796 --> 00:02:07.226 align:middle
+Míralo más de cerca y descubrirás
+el mágico clicked = true.
+
+00:02:07.876 --> 00:02:12.026 align:middle
+Lo creas o no, esta pequeña joya es la forma en que
+podemos saber qué botón se ha pulsado realmente,
+
+00:02:12.026 --> 00:02:15.466 align:middle
+y podemos aprovecharla para potenciar
+diferentes lógicas de negocio.
+
+00:02:16.146 --> 00:02:20.056 align:middle
+Volviendo al código, deshazte del
+dd() y dale una ayudita a PhpStorm.
+
+00:02:20.326 --> 00:02:22.736 align:middle
+Para solucionar el
+autocompletado, encima del botón,
+
+00:02:22.826 --> 00:02:28.296 align:middle
+añade un docblock con /** @var
+SubmitButton $createAndAddNewBtn */.
+
+00:02:28.866 --> 00:02:34.766 align:middle
+Ahora, dentro de la lógica de envío del formulario,
+escribe $createAndAddNewBtn->isClicked().
+
+00:02:35.506 --> 00:02:36.756 align:middle
+Eso es exactamente lo que necesitamos.
+
+00:02:37.166 --> 00:02:40.016 align:middle
+Envuélvelo en una declaración if,
+y si se ha hecho clic en el botón,
+
+00:02:40.016 --> 00:02:45.856 align:middle
+devolvamos
+$this->redirectToRoute('app_admin_starship_part_new'):
+
+00:02:45.856 --> 00:02:49.896 align:middle
+Ahora, de vuelta en el navegador,
+actualiza y vuelve a enviar. Hmm,
+
+00:02:50.536 --> 00:02:53.556 align:middle
+vemos el mensaje flash de éxito
+dos veces... Eso es porque
+
+00:02:53.926 --> 00:02:58.336 align:middle
+se añadió durante la petición dd(), y
+de nuevo, cuando volvimos a enviarla. Pero
+
+00:02:58.786 --> 00:03:02.796 align:middle
+funcionó: estamos de nuevo en el formulario en
+blanco, listos para añadir otra parte. ¡Estupendo!
+
+00:03:03.166 --> 00:03:06.416 align:middle
+Volvamos un momento al tipo de
+formulario. Estamos utilizando
+
+00:03:06.886 --> 00:03:10.066 align:middle
+$builder->add() para añadir
+campos a nuestro formulario. A veces
+
+00:03:10.596 --> 00:03:14.466 align:middle
+especificamos el segundo argumento,
+pero otras, no. Este segundo
+
+00:03:15.016 --> 00:03:18.506 align:middle
+es el tipo de campo, y es nulo
+por defecto. Entonces, ¿por qué
+
+00:03:18.756 --> 00:03:21.016 align:middle
+no necesitamos especificarlo
+siempre? Bueno, Symfony
+
+00:03:21.496 --> 00:03:25.266 align:middle
+tiene esta ingeniosa función llamada
+adivinación del tipo de campo. Cuando el
+
+00:03:25.716 --> 00:03:29.586 align:middle
+tipo es null, Symfony inspeccionará la
+clase de datos subyacente - en nuestro
+
+00:03:29.796 --> 00:03:31.866 align:middle
+caso, la entidad StarshipPart.
+
+00:03:32.286 --> 00:03:34.496 align:middle
+Buscará una propiedad que coincida
+con el nombre del campo. Basándose
+
+00:03:35.066 --> 00:03:38.736 align:middle
+en el tipo de la propiedad encontrada (adivinado a partir
+de las sugerencias de tipo y los metadatos), Symfony
+
+00:03:39.066 --> 00:03:42.866 align:middle
+seleccionará automáticamente el tipo de campo
+de formulario más apropiado. Por ejemplo,
+
+00:03:43.526 --> 00:03:47.836 align:middle
+como price es un entero, Symfony
+elegirá IntegerType. Como name
+
+00:03:48.176 --> 00:03:51.536 align:middle
+es una cadena, Symfony optará por TextType.
+
+00:03:52.046 --> 00:03:57.336 align:middle
+Si tuviéramos, digamos, un booleano isActive,
+entonces Symfony seleccionaría CheckboxType. Muy guay,
+
+00:03:57.636 --> 00:03:58.356 align:middle
+¿eh? La mayoría de las
+
+00:03:58.866 --> 00:04:01.476 align:middle
+veces, Symfony adivina exactamente
+lo que quieres. Pero cuando
+
+00:04:01.476 --> 00:04:05.166 align:middle
+no puede adivinar correctamente, o cuando
+quieres algo diferente, siempre puedes
+
+00:04:05.316 --> 00:04:09.896 align:middle
+anular el tipo adivinado por defecto
+pasando el tipo explícitamente. Si
+
+00:04:10.626 --> 00:04:15.306 align:middle
+cambiamos price por IntegerType::class, cuando
+actualicemos el formulario, nada cambiará, porque ese
+
+00:04:15.466 --> 00:04:17.016 align:middle
+era el tipo adivinado. Pero, ¿qué
+
+00:04:17.016 --> 00:04:21.266 align:middle
+tipos de campo de formulario incorporados tiene
+Symfony y dónde podemos encontrarlos? Gran pregunta,
+
+00:04:21.726 --> 00:04:23.546 align:middle
+¡y me alegro de que lo preguntes!
+Los documentos de Symfony
+
+00:04:23.846 --> 00:04:26.196 align:middle
+siempre estarán ahí para
+ayudarte con eso. Pero Symfony
+
+00:04:26.626 --> 00:04:29.556 align:middle
+también viene con una herramienta
+súper fácil de usar para descubrir
+
+00:04:29.556 --> 00:04:32.376 align:middle
+todo sobre los tipos de
+campo incorporados. En tu
+
+00:04:32.956 --> 00:04:39.906 align:middle
+terminal, ejecuta: symfony console debug:form Esto vuelca
+todos los tipos de formulario disponibles, incluyendo tus
+
+00:04:39.906 --> 00:04:42.966 align:middle
+propias clases de tipos de
+formulario, que podemos ver aquí.
+
+00:04:43.706 --> 00:04:48.306 align:middle
+Si quieres inspeccionar un tipo específico, sólo tienes
+que especificarlo como argumento del comando. Por ejemplo,
+
+00:04:48.746 --> 00:04:55.666 align:middle
+Ejecuta:: symfony console debug:form TextType
+Y verás todas las opciones que admite TextType
+
+00:04:55.666 --> 00:04:58.806 align:middle
+, las opciones que son obligatorias y qué
+
+00:04:58.916 --> 00:05:01.936 align:middle
+opciones proceden de los tipos
+padre a los que extiende. Prueba
+
+00:05:02.436 --> 00:05:08.306 align:middle
+con otro: symfony console debug:form
+EntityType Lo utilizamos en nuestro
+
+00:05:08.306 --> 00:05:10.986 align:middle
+StarshipPartType para el campo ship.
+
+00:05:11.476 --> 00:05:14.806 align:middle
+Con éste, verás que la
+opción class es obligatoria. Si
+
+00:05:15.246 --> 00:05:16.486 align:middle
+miramos nuestro tipo de
+formulario... el MakerBundle
+
+00:05:16.706 --> 00:05:19.966 align:middle
+ya lo ha rellenado por
+nosotros: ¡Qué inteligente!
+
+00:05:20.666 --> 00:05:24.106 align:middle
+Las opciones se establecen como tercer
+argumento de $builder->add(). Y por
+
+00:05:24.106 --> 00:05:30.556 align:middle
+cierto, Symfony no sólo adivina los tipos de campo, también
+adivina las opciones de los tipos de campo. Por ejemplo,
+
+00:05:30.926 --> 00:05:36.356 align:middle
+si una propiedad de entidad Doctrine es nullable:
+true como para este campo notes: Entonces Symfony
+
+00:05:36.666 --> 00:05:39.036 align:middle
+la convertirá automáticamente en opcional. Y
+
+00:05:39.306 --> 00:05:44.576 align:middle
+al revés para los demás campos, se
+añadirá el atributo HTML required si el
+
+00:05:44.666 --> 00:05:47.876 align:middle
+campo no es anulable, como
+para name y price: Puedes
+
+00:05:48.496 --> 00:05:50.746 align:middle
+verlo con el inspector HTML... Si
+
+00:05:51.226 --> 00:05:55.416 align:middle
+inspeccionamos el campo notas, vemos
+que no tiene el atributo required. Si
+
+00:05:55.766 --> 00:05:58.176 align:middle
+inspeccionamos el campo nombre, ¡sí
+lo tiene! Lo mismo ocurre con el
+
+00:06:00.226 --> 00:06:01.126 align:middle
+precio. Por eso
+
+00:06:03.866 --> 00:06:09.666 align:middle
+, cuando envías un formulario vacío, vemos errores
+de validación HTML5 para los campos obligatorios. Y,
+
+00:06:10.206 --> 00:06:12.716 align:middle
+por supuesto, puedes anular
+fácilmente este comportamiento en esa
+
+00:06:12.716 --> 00:06:15.236 align:middle
+tercera matriz de argumentos
+$builder->add(). Para
+
+00:06:16.006 --> 00:06:21.216 align:middle
+verlo, añade required => false a las
+opciones de nuestro campo price. De vuelta en
+
+00:06:21.996 --> 00:06:27.836 align:middle
+el navegador, actualiza e inspecciona el campo de precio:
+¡el atributo required ha desaparecido! Revierte el
+
+00:06:28.346 --> 00:06:30.886 align:middle
+cambio: ¡realmente es necesario!
+
+00:06:32.786 --> 00:06:35.896 align:middle
+Profundizaremos en los tipos de campos de
+formulario más adelante en este curso. Por ahora,
+
+00:06:36.386 --> 00:06:41.266 align:middle
+cambiemos de marcha hacia algo divertido y elegante:
+vestir nuestro formulario para el baile aplicándole
+
+00:06:41.266 --> 00:06:43.866 align:middle
+un tema de formulario Symfony
+incorporado. ¡Eso a continuación!
