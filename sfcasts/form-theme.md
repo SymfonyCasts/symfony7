@@ -62,7 +62,7 @@ first argument: `starship.name`, second: `ASC` for ascending order.
 Totally not necessary, but let's get a little fancy and use an `Order` enum
 for the second argument. So instead of `ASC`, write
 `Order`, importing the enum from `Doctrine\Common\Collections`, then
-`::ASC->value`. Super nerdy... But at least we know we didn't make a typo in
+`::Ascending->value`. Super nerdy... But at least we know we didn't make a typo in
 those, ummm... 3 letters...
 
 Since we have access to the full query builder, we can easily add custom filters,
