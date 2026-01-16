@@ -690,81 +690,102 @@
   a specific form theme to a specific form in the template like we did before.
 
 
-# 11. Symfony form without mapped data class
-- Now let's do something fun and practice working with Symfony forms
-- On the `/parts` we have a little search input
-- Right now that's hardcoded form, but could we do the same using Symfony form?
-- You bet
-- Even though using plain forms is totally OK in your project,
-  we still can leverage Symfony forms in such cases too
+# 10. Symfony form without mapped data class
+- We're getting closer to the end of this short journey to Symfony forms 
+- Now let's do something fun and practice more by working with Symfony forms
+- On the `/parts` page we have a little search input
+- Right now that's a hardcoded form
+- Even though using plain forms is totally OK in your project
+- Could we do the same using Symfony form?
+- You bet!
+- We still can leverage Symfony forms in such cases too
 - We could simply leverage form builder in the controller and bypass
-  creating a form type, that would be totally fine
+  creating a form type, that would be totally fine too
 - But let's go with the form type again - we will see more useful tricks with it
 - You know the drill
 - Run `symfony console make:form`
 - Name it `PartSearchType`
 - But this time we don't want to tie it to an entity or model - just leave it blank
-- Open the `PartSearchType.php`
+- Open the new `PartSearchType.php`
 - Replace `field_name` with `query` to match the current input name
 - Next, open `PartController::index()`
-- Create `$searchForm = $this->createForm(PartSearchType::class)`
-- Pass search form to the template
-- Render the form with `{{ form($searchForm) }}` below the hardcoded form
+- And create `$searchForm = $this->createForm(PartSearchType::class)`
+- Pass the search form var to the template
+- Inside template, render the form with simple `{{ form($searchForm) }}`
+  below the hardcoded form
+- I'm going to keep the legacy form for the reference for now
 ### Hiding form field label
-- Nice, we have 2 input fields now
-- The rendered field has label, let's hide it
+- Go to the browser and refresh
+- Nice, we have 2 input fields now!
+- The field in the new form has rendered label, let's hide it
 - Since the submit button, we know the trick!
 - We can render the field w/o the label, i.e. expand the form with `form_start()`/`form_end()`
 - And inside, instead of `form_row()` render the field with `form_widget()` that will render
-  only the field w/o its label
-- But if we want to completely disable the label - there's a better solution  
+  only the field w/o its label (and errors - we would need to remember rendering
+  errors manually too)
+- But if jsut we want to completely disable the label - there's a better solution  
 - Back to the form type
-- Add `null, []`
-- Set `label` to `false`
+- Pass `null` for the type, and `[]` for options
+- Inside, set `label` to `false`
 - We can change it to any string we want here, but if we
-  set it to `false` - it won't be rendered at all
+  set it to `false` - it won't be rendered at all - exactly what we need
 - And while we're here, let's also add `attr`
-- And inside set `placeholder` to `Search...`
+- Inside, set `placeholder` to `Search...` to match the legacy form
 - Below, add `class` and set CSS classes from the original input
+- I will go grab them from the template 
 - Back to the website, refresh - now it looks exactly like the legacy field
 - Except for the Search icon, we will add it later
-### Submitting Form via GET HTTP Method
+- If you try to submit this form - it's sent, but via POST method
+- In the next chapter let's change the default POST method to GET
+  as in the legacy form learn how to handle it properly in the controller
+
+
+# 11. Submitting Form via GET HTTP Method
 - Now we can send the form, but it's sent via POST by default
-- We want the search query to be in the URL, so let's change to GET
+- We want the search query to be in the URL, so let's change HTTP method to GET
 - In `setDefaults()` set `method` to `Request::METHOD_GET`
 - Which is just a fancy way to say a simple `GET` string
 - Try to send the form and... yes, we see the query parameters
+## Overriding Block Prefix for Cleaner Query Parameters
 - But oh, the query params are weird, don't we only have to see `query`?
 - Well, Symfony Forms, by default, sent as arrays, first of all, to avoid collisions
 - To make it "flat" and get rid of that form type prefix
 - Override `getBlockPrefix()`
 - And `return ''` inside
-- Now if you send the form - here's our query... and CSRF `_token`
-- Usually, we don't need CSRF protection search, so let's disable it
-- In `setDefaults()`, add `'csrf_protection' => false`
+## Disabling CSRF
+- Now if you send the form - here's our query... and CSRF `_token`!
+- Usually, we don't need CSRF protection for search, so let's disable it
+- Below in `setDefaults()`, add `'csrf_protection' => false`
 - Try again - perfect! Only the `query` arg now
-### The `required` field option
+## The `required` field option
 - The finishing touch - if I try to send an empty field,
   we hit HTML5 validation. That can be totally fine for your case, but
-  I would like to allow an empty search form - it will mean no search query applied
-- In the `setDefaults()`, for the `form` tag we can add `novalidate` attribute
+  I would like to allow an empty search form - it will mean no search
+  query applied
+- In the same `setDefaults()`, for the `form` tag we can add
+  `novalidate` attribute
+- Better to do it for the whole form instead of a specific button,
+  because you can also submit form by pressing `Enter` when inside the text field
 - And technically, it would skip the required validation
 - But the correct way - make the field optional instead of required
 - For the `query` field, set `required` to false
-- Try again - now we can send empty field which technically will just show the full list 
-### Form handling and fetching form data
+- Try again - now we can send empty field which technically will
+  just show the full list 
+## Form handling and fetching form data
 - Well, actually the filter works only because of legacy form logic
-- Now let's handle the new form
+  inside the controller
+- Now let's handle the new form the correct way
 - Actually, in this specific case it's totally fine to keep
   `$request->query->get('query')`
 - But while we're practicing Symfony Forms here - let's handle it the Form-Component way
 - First, I will comment out this `$query` to keep it for the reference
 - Below, add `$query = null;`
 - Next, do `$searchForm->handleRequest($request);`
-- Below check for `isSubmitted()` && `isValid()`
-- Inside the `if` we can safely fetch the `query` value
-- And we already know how to fetch the form data
+- Below check for already known `isSubmitted()` && `isValid()`
+- Inside the `if`, we can safely fetch the `query` value
+- And we already know how to fetch the form data for unmapped fields
 - Add `$query = $searchForm->get('query')->getData();`
+## Final Tweaks in the Template
 - Last but not least, in the template
 - Copy the `svg`
 - The `svg` was below the `input` field, but let's try to just
@@ -776,5 +797,28 @@
 - By default, Symfony uses `TextType` for this field
 - Let's change it to a special `SearchType`
 - Refresh the page - it look the same
-- But when you start typing - it adds a little `x` icon to clear the field
+- But when you start typing - browser adds a little `x` icon to clear
+  the field
 - Sweet!
+## Enabling Turbo
+- You remember I said I've disabled Turbo for this course?
+- Open `app.js` to see the commented out line
+- Time to uncomment it
+- Go to the website and refresh
+- Now the navigation though the site should work via Ajax thanks to Turbo
+- You can notice it in the WDT when I click the links
+- And the cool part - try to send the form
+- Yes, it was sent via Turbo as well
+- And even form errors work - still works as expected!
+- That's thanks to us passing the whole `Form` object to the template
+  instead of passing the `FormView` object via `createView()`
+- Otherwise, we would have troubles with it
+- So, enabling Turbo makes your forms more snappy and immersive,
+  but there's more we can do! Stay tuned for more form-related topics with
+  Symfony UX ;)
+- And if you want to know more about Turbo itself - we have a standalone course,
+  here's the link to it!
+## Finishing the Tutorial
+- Alright guys, you're mastered basics of the Symfony Form Component.
+- Now, go create some cool forms, I bet you definitely need some in your apps!
+- And enjoy the Form Component magic this winter!
