@@ -1,0 +1,354 @@
+WEBVTT
+
+00:00:01.096 --> 00:00:02.496 align:middle
+Bien... por fin ha llegado el momento.
+
+00:00:02.586 --> 00:00:04.136 align:middle
+El momento tan esperado en el que...
+
+00:00:04.136 --> 00:00:05.526 align:middle
+añadimos estilo a nuestro formulario.
+
+00:00:05.996 --> 00:00:10.586 align:middle
+¡Sí! A partir de ahora, sólo serán 17 capítulos
+en los que ajustaremos cuidadosamente el relleno,
+
+00:00:10.746 --> 00:00:13.026 align:middle
+los márgenes y crearemos
+CSS de forma artesanal.
+
+00:00:13.026 --> 00:00:15.256 align:middle
+Puedes ir a tomar un café...
+
+00:00:15.466 --> 00:00:17.996 align:middle
+Yo seguiré aquí masajeando
+los valores de border-radius.
+
+00:00:18.446 --> 00:00:19.566 align:middle
+¡Ja! ¡Es broma!
+
+00:00:19.726 --> 00:00:21.146 align:middle
+Te prometo que no te haré eso.
+
+00:00:21.636 --> 00:00:25.646 align:middle
+Gracias a Symfony, tenemos temas
+incorporados para varios frameworks CSS,
+
+00:00:25.856 --> 00:00:30.166 align:middle
+lo que significa que podemos evitar la mayor parte del
+trabajo CSS y saltar directamente a la parte divertida.
+
+00:00:30.666 --> 00:00:33.296 align:middle
+Haz una búsqueda rápida en Google
+de "temas de formulario Symfony".
+
+00:00:34.276 --> 00:00:34.856 align:middle
+¡Ahí los tienes!
+
+00:00:35.176 --> 00:00:39.086 align:middle
+Symfony nos proporciona una plétora
+de temas: diseños de tabla clásicos,
+
+00:00:39.156 --> 00:00:44.616 align:middle
+temas bootstrap (tanto predeterminados como
+horizontales) para varias versiones, temas foundation...
+
+00:00:44.806 --> 00:00:46.596 align:middle
+es como un catálogo de moda completo.
+
+00:00:46.886 --> 00:00:47.956 align:middle
+¿Y la guinda del pastel?
+
+00:00:48.216 --> 00:00:50.566 align:middle
+Si utilizas Tailwind CSS, ¡estás de suerte!
+
+00:00:50.796 --> 00:00:53.236 align:middle
+Symfony también tiene un tema
+de formulario Tailwind CSS.
+
+00:00:53.866 --> 00:00:56.106 align:middle
+Entonces, ¿cómo utilizamos un
+tema de formulario específico?
+
+00:00:56.456 --> 00:00:57.496 align:middle
+¡Twig al rescate!
+
+00:00:57.846 --> 00:01:00.216 align:middle
+Hay una etiqueta Twig especial
+para los temas de formulario.
+
+00:01:00.676 --> 00:01:06.126 align:middle
+Primero, abre PhpStorm y localiza la plantilla
+new.html.twig con nuestro formulario.
+
+00:01:06.646 --> 00:01:10.176 align:middle
+En la parte superior, justo debajo de la
+etiqueta extends, añade una nueva etiqueta con:
+
+00:01:10.176 --> 00:01:15.626 align:middle
+{% form_theme form
+'tailwind_2_layout.html.twig' %}:
+
+00:01:16.126 --> 00:01:19.846 align:middle
+Recuerda pasar la variable específica
+del formulario - form en este caso -
+
+00:01:20.026 --> 00:01:22.066 align:middle
+para que el tema sepa qué formulario aplicar.
+
+00:01:23.346 --> 00:01:24.626 align:middle
+Pulsa actualizar en tu navegador...
+
+00:01:24.776 --> 00:01:25.256 align:middle
+y ¡voilá!
+
+00:01:25.256 --> 00:01:28.766 align:middle
+Nuestro formulario tiene un aspecto mucho más
+refinado, con un espaciado y una alineación limpios.
+
+00:01:29.516 --> 00:01:31.126 align:middle
+Hay algo que todavía me molesta...
+
+00:01:31.486 --> 00:01:34.576 align:middle
+Abre src/Form/StarshipPartType.php...
+
+00:01:35.766 --> 00:01:40.096 align:middle
+El campo starship es un EntityType:
+Si recuerdas del capítulo anterior,
+
+00:01:40.286 --> 00:01:42.666 align:middle
+este campo sólo requiere la opción class.
+
+00:01:43.226 --> 00:01:46.866 align:middle
+Es la relación que conecta nuestro
+StarshipPart con un Starship.
+
+00:01:47.416 --> 00:01:50.096 align:middle
+Muestra todos los Starship's
+en un elemento de selección.
+
+00:01:50.686 --> 00:01:53.126 align:middle
+Pero mira este choice_label
+- establecido en id.
+
+00:01:53.606 --> 00:01:58.136 align:middle
+Esto establece la propiedad de Starship que
+se mostrará en las opciones del desplegable.
+
+00:01:58.626 --> 00:02:00.996 align:middle
+MakerBundle la establece en id por defecto.
+
+00:02:01.516 --> 00:02:05.096 align:middle
+¿Cómo diablos sabrán nuestros usuarios
+qué nave estelar elegir basándose en un ID?
+
+00:02:05.656 --> 00:02:09.676 align:middle
+Dentro de la entidad Starship, tenemos
+una propiedad name: ¡Usémosla!
+
+00:02:10.176 --> 00:02:14.196 align:middle
+Sustituye id por name:
+Actualiza tu navegador y...
+
+00:02:14.676 --> 00:02:16.026 align:middle
+¡Boom! ¡Mucho mejor!
+
+00:02:16.696 --> 00:02:19.736 align:middle
+Sin embargo, la lista es bastante
+larga y parece bastante aleatoria.
+
+00:02:20.276 --> 00:02:22.426 align:middle
+¿Y si pudiéramos ordenar
+estas Starships por su nombre?
+
+00:02:22.886 --> 00:02:23.766 align:middle
+Suena bien, ¿verdad?
+
+00:02:24.176 --> 00:02:24.796 align:middle
+¡Hagámoslo!
+
+00:02:25.286 --> 00:02:29.096 align:middle
+Dentro de la configuración del campo, añade
+una nueva opción llamada query_builder.
+
+00:02:29.826 --> 00:02:34.756 align:middle
+Ponla en una función anónima
+que acepte EntityRepository $repo.
+
+00:02:35.426 --> 00:02:40.556 align:middle
+Dentro de esta función, return
+$repo->createQueryBuilder('starship').
+
+00:02:41.096 --> 00:02:48.066 align:middle
+A continuación, ->orderBy(), primer argumento:
+starship.name, segundo: ASC para el orden ascendente.
+
+00:02:48.796 --> 00:02:51.546 align:middle
+Totalmente innecesario, pero
+vamos a ponernos un poco elegantes
+
+00:02:51.546 --> 00:02:53.966 align:middle
+y utilizar un enum Order
+para el segundo argumento.
+
+00:02:54.376 --> 00:03:00.266 align:middle
+Así que en lugar de ASC, escribe Order,
+importando el enum de Doctrine\Common\Collections,
+
+00:03:00.596 --> 00:03:04.326 align:middle
+y luego ::Ascending->value: Super friki...
+
+00:03:04.546 --> 00:03:07.496 align:middle
+Pero al menos sabemos que no hemos cometido
+un error tipográfico en esas, ummm...
+
+00:03:07.566 --> 00:03:08.396 align:middle
+3 letras...
+
+00:03:09.046 --> 00:03:13.986 align:middle
+Como tenemos acceso al constructor de consultas completo,
+podemos añadir fácilmente filtros personalizados, JOINs
+
+00:03:13.986 --> 00:03:19.066 align:middle
+o incluso cláusulas WHERE complejas para filtrar los
+resultados a un sistema solar o galaxia concretos.
+
+00:03:19.766 --> 00:03:20.706 align:middle
+Veamos si ha funcionado
+
+00:03:21.106 --> 00:03:23.036 align:middle
+Vuelve al navegador, actualiza la página...
+
+00:03:24.166 --> 00:03:27.826 align:middle
+¡Genial! Ahora las naves estelares están
+ordenadas alfabéticamente por nombre.
+
+00:03:28.326 --> 00:03:31.776 align:middle
+Sólo hay un pequeño problema:
+hay nombres duplicados.
+
+00:03:32.116 --> 00:03:36.366 align:middle
+Es posible que nuestras Starshipprocedan de galaxias
+distintas, por lo que podrían tener el mismo nombre.
+
+00:03:36.746 --> 00:03:39.166 align:middle
+Para aclarar las cosas, mejoremos la etiqueta.
+
+00:03:39.796 --> 00:03:43.706 align:middle
+Podríamos mostrar el ID de la entidad
+junto al nombre, pero tengo una idea mejor.
+
+00:03:44.186 --> 00:03:46.896 align:middle
+Mostremos el nombre del capitán
+junto al nombre de la nave.
+
+00:03:47.506 --> 00:03:51.256 align:middle
+Podríamos crear un método como
+getNameWithCaptain() en la entidad Starship
+
+00:03:51.486 --> 00:03:54.556 align:middle
+, que devolviera el nombre del
+Starship y el nombre de su capitán.
+
+00:03:55.066 --> 00:03:56.426 align:middle
+Sería una buena solución...
+
+00:03:56.496 --> 00:03:59.066 align:middle
+sobre todo si necesitas este valor
+en otra parte de tu aplicación.
+
+00:03:59.456 --> 00:04:01.416 align:middle
+Sin embargo, vamos a simplificarlo por ahora.
+
+00:04:01.416 --> 00:04:04.966 align:middle
+Para la opción choice_label
+de starship, en lugar de name,
+
+00:04:05.116 --> 00:04:10.096 align:middle
+pon una función anónima que
+acepte Starship $starship.
+
+00:04:10.806 --> 00:04:22.656 align:middle
+Dentro, return sprintf('%s (by %s)'), pasando
+$starship->getName() y $starship->getCaptain()
+
+00:04:22.816 --> 00:04:25.586 align:middle
+como valores del marcador de
+posición: Pulsa actualizar...
+
+00:04:25.856 --> 00:04:26.826 align:middle
+¡y ya estamos cocinando!
+
+00:04:27.306 --> 00:04:29.406 align:middle
+Es mucho más fácil identificar cada barco.
+
+00:04:30.376 --> 00:04:32.386 align:middle
+¡Dirijámonos al botón feo de la habitación!
+
+00:04:32.696 --> 00:04:35.516 align:middle
+El botón de envío "Crear y añadir
+nuevo" tiene un aspecto asqueroso.
+
+00:04:35.946 --> 00:04:39.186 align:middle
+Hay un par de formas de añadir clases
+CSS para darle un estilo agradable.
+
+00:04:39.696 --> 00:04:44.156 align:middle
+La más sencilla es utilizar la opción attr
+en la configuración del campo del formulario.
+
+00:04:44.866 --> 00:04:51.646 align:middle
+De vuelta a nuestro tipo de formulario, añade una matriz
+de opciones al campo createAndAddNew con 'attr' => [].
+
+00:04:51.686 --> 00:04:56.166 align:middle
+Se trata de una matriz de atributos
+HTML que queremos añadir al botón.
+
+00:04:56.836 --> 00:05:05.716 align:middle
+Dentro, añade class => '', vuelve a nuestra
+plantilla new.html.twig, copia las clases que utilizamos
+
+00:05:05.716 --> 00:05:08.526 align:middle
+para el primer botón y pégalas aquí.
+
+00:05:09.386 --> 00:05:16.396 align:middle
+Sustituye bg-green-700 por bg-blue-700 para
+distinguirlo visualmente: De vuelta al navegador,
+
+00:05:16.496 --> 00:05:18.276 align:middle
+pulsa actualizar y ¡ya lo tenemos!
+
+00:05:18.536 --> 00:05:21.126 align:middle
+Nuestro botón tiene un aspecto
+fantástico y está listo para la acción.
+
+00:05:21.816 --> 00:05:24.366 align:middle
+Se puede añadir cualquier
+atributo HTML de esta forma.
+
+00:05:24.836 --> 00:05:29.266 align:middle
+Por ejemplo, puedes poner id,
+placeholder, ¡o incluso un atributo data
+
+00:05:29.266 --> 00:05:31.476 align:middle
+para hacer que los campos sean
+interactivos con Stimulus!
+
+00:05:31.966 --> 00:05:36.816 align:middle
+También hay una opción hermana llamada label_attr
+si necesitas dar estilo a la etiqueta <label>
+
+00:05:36.816 --> 00:05:39.896 align:middle
+del campo Hicimos bastantes ajustes
+
+00:05:39.896 --> 00:05:42.466 align:middle
+y ahora nuestro formulario tiene un
+aspecto nítido y se comporta de maravilla.
+
+00:05:43.016 --> 00:05:47.116 align:middle
+Lo siguiente es algo realmente emocionante
+y superimportante: la validación.
+
+00:05:47.296 --> 00:05:47.936 align:middle
+¡Permanece atento!
