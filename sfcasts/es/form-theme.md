@@ -70,7 +70,7 @@ Pulsa actualizar... ¡y ya estamos cocinando! Es mucho más fácil identificar c
 
 ## Establecer atributos de campo de formulario en el tipo de formulario
 
-¡Vamos a ocuparnos del botón feo de la habitación! El botón de envío "Crear y añadir nuevo" tiene un aspecto asqueroso.
+¡Abordemos el botón feo de la habitación! El botón de envío "Crear y añadir nuevo" tiene un aspecto asqueroso.
 
 Hay un par de formas de añadir clases CSS para darle un estilo agradable. La más sencilla es utilizar la opción `attr` en la configuración del campo del formulario.
 
