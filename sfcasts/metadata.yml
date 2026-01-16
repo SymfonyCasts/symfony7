@@ -23,3 +23,6 @@ chapters:
     order-fields:
         tutsFirstStep: order-form-fields-use-priority-option
         tutsLastStep: crud-generate-for-starship
+    crud:
+        tutsFirstStep: crud-tweak-route-path
+        tutsLastStep: search-form-generate-form-type
