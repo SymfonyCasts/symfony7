@@ -12,7 +12,7 @@ on purpose?) submit an empty form?
 ## HTML5 Validation
 
 Interestingly, the browser jumps in to save the day by showing a validation
-error. This is HTML5 validation at work. It's client-side validation
+error. This is HTML5 validation at work. It's *client-side validation*
 that's handled completely by our browser. It's fast, user-friendly,
 and quite neat. However, it's not something we can fully rely on!
 
@@ -30,11 +30,13 @@ Let's first see what happens then.
 
 We can disable HTML5 validation in the Twig template, but let's try
 another, more nerdy way. Open our `StarshipPartType`, and for the
-button, add the `validate` option set to `false`. 
+button, add the `validate` option set to `false`:
+
+[[[ code('6a42815e18') ]]]
 
 Now, refresh the page and inspect the button in your browser's HTML inspector.
 Aha, it added a special HTML attribute to the button:
-`formnovalidate="formNoValidate"`.
+`formnovalidate="formnovalidate"`.
 
 And this is how *anyone* can disable HTML5 validation on our website,
 or any website. You can try it yourself in Chrome's Inspector
@@ -70,7 +72,9 @@ Open our `StarshipPartType` class.
 
 For the `name` field, pass `null` as the second argument which is the
 default value for it, and an empty array as the third. Inside, 
-add a `constraints` key, and then add a new `NotBlank` constraint.
+add a `constraints` key, and then add a new `NotBlank` constraint:
+
+[[[ code('0ae3574af3') ]]]
 
 Now, go back to the browser and try to submit the empty form again. Hmm...
 we still have the same database error, but look down at the web debug toolbar.
@@ -93,7 +97,9 @@ In the admin controller, we should not persist any data
 if the form is invalid. Instead, we should just re-render the form with
 errors so the user can fix them, and resubmit the form. To do this, add
 another condition in the `if` statement after we checked the form was
-submitted: `&& $form->isValid()`.
+submitted: `&& $form->isValid()`:
+
+[[[ code('0c83947215') ]]]
 
 Refresh the page and resubmit the empty form. There you have it! No more
 exception, and the error is nicely rendered directly inside the form.
@@ -104,6 +110,8 @@ But can we customize the default message? Absolutely! Open the `StarshipPartType
 and set the second argument of `NotBlank` to... how about:
 
 > Every part should have a name!
+
+[[[ code('a8da0ea8db') ]]]
 
 Back to the browser, submit the empty form again and there's our custom
 message. But wait, why isn't it red? 
@@ -119,7 +127,9 @@ have the `SymfonyCasts/tailwind-bundle` installed?
 
 Here's the catch. These CSS classes are added dynamically and Tailwind
 didn't pick them up during compilation because they live in a vendor file
-which Tailwind ignores by default. 
+which Tailwind ignores by default:
+
+[[[ code('94d453e8f5') ]]]
 
 ### Updating Tailwind CSS Configuration
 
@@ -130,15 +140,19 @@ compiling our CSS?
 Since we're on Tailwind 4, there's no `tailwind.config.js` anymore.
 Instead, open `app.css` in the `assets/styles/` directory. After
 `@import` and `@plugin`, add the `@source`. I will go copy the long path
-to the `tailwind_2_layout.html.twig` template and paste it here.
+to the `tailwind_2_layout.html.twig` template and paste it here:
+
+[[[ code('f8ea8214a1') ]]]
 
 We need to adjust the path by prefixing it with `./../../` in order to
 go start from the project root directory. And that's it.
 
 Note that this requires Tailwind 4 and won't work in earlier versions.
 But we should be on the latest here. You can double-check the exact
-version in the `config/packages/symfonycasts_tailwind.yaml` config file - here it 
-is, `v4.1.11`. 
+version in the `config/packages/symfonycasts_tailwind.yaml` config file - here
+it is, `v4.1.11`:
+
+[[[ code('bde93edd3d') ]]]
 
 Ok, time to try it - refresh the browser aaaand... the text is still not red?
 Hm, I copy/pasted the path so it should be the correct. Probably due to
@@ -154,11 +168,15 @@ symfony console tailwind:build
 In order to see if it can build our final CSS successfully. Aha, there is
 an error:
 
-> `@source` cannot have a body
+> `@source` cannot have a body.
 
-Let's check `app.css`. Ah yes, hard to see, but I forgot to add the semicolon at the end. 
+Let's check `app.css`. Ah yes, hard to see, but I forgot to add the semicolon
+at the end:
 
-At the terminal, run the build command again... and... success! No errors this time.
+[[[ code('48d9916711') ]]]
+
+At the terminal, run the build command again... and... success! No errors
+this time.
 
 Go back to the browser... refresh... and there it is! The error message is now
 red, and so is the border around the associated field!
