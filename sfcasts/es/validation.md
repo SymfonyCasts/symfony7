@@ -8,7 +8,7 @@ Sabemos que cada `StarshipPart` debe tener al menos un `name` y un `price`. Senc
 
 Curiosamente, el navegador salva el día mostrando un error de validación. Esto es la validación HTML5 en acción. Es una validación del lado del cliente que maneja completamente nuestro navegador. Es rápido, fácil de usar y bastante limpio. Sin embargo, ¡no es algo en lo que podamos confiar plenamente!
 
-Esto se debe a varias razones. En primer lugar, no todos los navegadores lo soportan completamente. En segundo lugar, los usuarios pueden desactivarlo fácilmente. Además, como puedes ver en la práctica, sólo muestra un error cada vez en lugar de todos los errores a la vez, por lo que los usuarios pulsarán ese botón una y otra vez hasta que desaparezcan todos los errores. Y... los bots pueden saltárselo fácilmente, y no queremos que los bots se metan con nuestra base de datos de piezas de naves estelares, ¿verdad?
+Esto se debe a varias razones. Primero, no todos los navegadores lo soportan completamente. En segundo lugar, los usuarios pueden desactivarlo fácilmente. Además, como puedes ver en la práctica, sólo muestra un error cada vez en lugar de todos los errores a la vez, por lo que los usuarios pulsarán ese botón una y otra vez hasta que desaparezcan todos los errores. Y... los bots pueden saltárselo fácilmente, y no queremos que los bots se metan con nuestra base de datos de piezas de naves estelares, ¿verdad?
 
 Si se omite la validación HTML5, nuestro formulario se envía al servidor. Veamos primero qué ocurre entonces. 
 
@@ -95,7 +95,7 @@ Ten en cuenta que esto requiere Tailwind 4 y no funcionará en versiones anterio
 
 [[[ code('bde93edd3d') ]]]
 
-Vale, es hora de probarlo - actualiza el navegador y... ¿el texto sigue sin aparecer en rojo? Hm, he copiado/pegado la ruta, así que debería ser la correcta. ¿Probablemente se deba a la caché del navegador? Probemos primero con "Vaciar caché y recargar fuerte" - sigue sin cambiar nada.
+Vale, es hora de probarlo - actualiza el navegador y... ¿el texto sigue sin aparecer en rojo? Hm, he copiado/pegado la ruta, así que debería ser la correcta. ¿Probablemente se deba a la caché del navegador? Probemos primero con "Vaciar caché y recargar con fuerza" - sigue sin cambiar nada.
 
 Bien, ponte el sombrero de depuración y ve a tu terminal. Podemos ejecutarlo manualmente:
 
