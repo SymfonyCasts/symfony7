@@ -1,0 +1,437 @@
+WEBVTT
+
+00:00:00.036 --> 00:00:03.246 align:middle
+Es hora de hablar de la
+validación de formularios.
+
+00:00:03.536 --> 00:00:05.756 align:middle
+Porque, al igual que una
+nave estelar sin escudos
+
+00:00:05.756 --> 00:00:08.596 align:middle
+, un formulario sin validación
+impresiona a la vista...
+
+00:00:08.726 --> 00:00:11.616 align:middle
+pero sólo está a un
+asteroide del desastre total.
+
+00:00:11.896 --> 00:00:15.266 align:middle
+Por lo tanto, preparemos nuestro formulario
+para cualquier asteroide que llegue.
+
+00:00:16.186 --> 00:00:20.176 align:middle
+Sabemos que cada StarshipPart debe
+tener al menos un name y un price.
+
+00:00:20.416 --> 00:00:21.066 align:middle
+Sencillo, ¿verdad?
+
+00:00:21.066 --> 00:00:24.546 align:middle
+Pero, ¿qué ocurre cuando
+accidentalmente (¿o a propósito?)
+
+00:00:24.546 --> 00:00:25.856 align:middle
+enviamos un formulario vacío?
+
+00:00:26.726 --> 00:00:31.056 align:middle
+Curiosamente, el navegador salva el
+día mostrando un error de validación.
+
+00:00:31.476 --> 00:00:34.016 align:middle
+Esto es la validación HTML5 en acción.
+
+00:00:34.416 --> 00:00:38.496 align:middle
+Es una validación del lado del cliente
+que maneja completamente nuestro navegador.
+
+00:00:38.786 --> 00:00:41.086 align:middle
+Es rápido, fácil de usar y bastante limpio.
+
+00:00:41.316 --> 00:00:43.986 align:middle
+Sin embargo, ¡no es algo en lo
+que podamos confiar plenamente!
+
+00:00:44.356 --> 00:00:45.966 align:middle
+Esto se debe a varias razones.
+
+00:00:45.966 --> 00:00:48.596 align:middle
+En primer lugar, no todos los
+navegadores lo soportan completamente.
+
+00:00:48.786 --> 00:00:51.216 align:middle
+En segundo lugar, los usuarios
+pueden desactivarlo fácilmente.
+
+00:00:52.116 --> 00:00:57.586 align:middle
+Además, como puedes ver en la práctica, sólo
+muestra un error cada vez en lugar de todos los errores
+
+00:00:57.586 --> 00:01:02.566 align:middle
+a la vez, por lo que los usuarios pulsarán ese botón
+una y otra vez hasta que desaparezcan todos los errores.
+
+00:01:02.956 --> 00:01:07.166 align:middle
+Y... los bots pueden saltárselo fácilmente,
+y no queremos que los bots se metan
+
+00:01:07.166 --> 00:01:09.026 align:middle
+con nuestra base de datos de piezas
+de naves estelares, ¿verdad?
+
+00:01:09.756 --> 00:01:13.466 align:middle
+Si se salta la validación HTML5,
+nuestro formulario se envía al servidor.
+
+00:01:13.466 --> 00:01:15.296 align:middle
+Veamos primero qué ocurre entonces.
+
+00:01:15.816 --> 00:01:21.656 align:middle
+Podemos desactivar la validación HTML5 en la
+plantilla Twig, pero probemos otra forma más friki.
+
+00:01:22.246 --> 00:01:30.156 align:middle
+Abre nuestro StarshipPartType, y para el botón,
+añade la opción validate establecida en false: Ahora,
+
+00:01:30.196 --> 00:01:34.166 align:middle
+actualiza la página e inspecciona el
+botón en el inspector HTML de tu navegador.
+
+00:01:34.626 --> 00:01:41.536 align:middle
+Ajá, ha añadido un atributo HTML especial
+al botón: formnovalidate="formnovalidate".
+
+00:01:42.116 --> 00:01:47.016 align:middle
+Y así es como cualquiera puede desactivar la validación
+HTML5 en nuestro sitio web, o en cualquier sitio web.
+
+00:01:47.566 --> 00:01:51.566 align:middle
+Puedes probarlo tú mismo en el inspector
+de Chrome editando el código HTML
+
+00:01:51.566 --> 00:01:53.836 align:middle
+del otro botón, guardarlo y hacer clic en él.
+
+00:01:54.476 --> 00:01:57.586 align:middle
+Si pulso el botón de envío con ese
+atributo en un formulario vacío...
+
+00:01:58.266 --> 00:02:02.056 align:middle
+Error en la base de datos: Se ha producido
+una excepción al ejecutar una consulta:
+
+00:02:02.366 --> 00:02:05.946 align:middle
+Violación de la restricción de
+integridad: Campo de restricción NOT NULL:
+
+00:02:06.086 --> 00:02:10.656 align:middle
+starship_part.name Este error procede directamente
+de nuestro servidor, y eso es un problema
+
+00:02:10.816 --> 00:02:14.806 align:middle
+porque acabamos de intentar a ciegas guardar
+datos no válidos en la base de datos.
+
+00:02:14.806 --> 00:02:18.356 align:middle
+La buena noticia es que podemos solucionarlo
+con la validación del lado del servidor.
+
+00:02:18.356 --> 00:02:22.266 align:middle
+Symfony tiene un Componente
+Validador dedicado a este fin.
+
+00:02:22.576 --> 00:02:24.956 align:middle
+Y funciona armoniosamente
+con el Componente Formulario.
+
+00:02:25.456 --> 00:02:26.706 align:middle
+Vamos a instalarlo primero.
+
+00:02:27.196 --> 00:02:33.746 align:middle
+Vuelve al terminal y ejecuta: symfony composer
+require validator Empecemos poco a poco.
+
+00:02:34.156 --> 00:02:37.326 align:middle
+Queremos ver un error de validación
+si el campo name está vacío.
+
+00:02:37.776 --> 00:02:40.716 align:middle
+El componente viene con un montón de
+restricciones de validación incorporadas
+
+00:02:40.896 --> 00:02:43.246 align:middle
+, que podemos adjuntar directamente
+a nuestros campos de formulario.
+
+00:02:43.796 --> 00:02:45.916 align:middle
+Abre nuestra clase StarshipPartType.
+
+00:02:45.916 --> 00:02:50.726 align:middle
+Para el campo name, pasa null como segundo
+argumento, que es su valor por defecto
+
+00:02:50.726 --> 00:02:53.286 align:middle
+, y un array vacío como tercero.
+
+00:02:53.986 --> 00:03:00.586 align:middle
+Dentro, añade una clave constraints, y luego
+añade una nueva restricción NotBlank: Ahora,
+
+00:03:00.586 --> 00:03:03.536 align:middle
+vuelve al navegador e intenta enviar
+de nuevo el formulario vacío.
+
+00:03:05.246 --> 00:03:09.966 align:middle
+Hmm... seguimos teniendo el mismo error de base de datos,
+pero mira en la barra de herramientas de depuración web.
+
+00:03:10.056 --> 00:03:12.336 align:middle
+Hay una nueva sección
+relativa a la validación.
+
+00:03:13.086 --> 00:03:16.846 align:middle
+Pasa el ratón por encima de este pequeño
+icono y verás "Llamadas al validador:
+
+00:03:16.846 --> 00:03:19.436 align:middle
+1" y "Número de violaciones: 1".
+
+00:03:19.436 --> 00:03:24.196 align:middle
+Junto al icono del Validador, hay un icono
+de Formularios que nos muestra "Número
+
+00:03:24.196 --> 00:03:27.116 align:middle
+de formularios: 1" y "Número de errores: 1".
+
+00:03:27.116 --> 00:03:31.086 align:middle
+Si haces clic en el icono del
+Validador, verás nuestro error NotBlank
+
+00:03:31.086 --> 00:03:34.456 align:middle
+con su mensaje por defecto: Este
+valor no debe estar en blanco.
+
+00:03:34.636 --> 00:03:36.296 align:middle
+¿Qué ocurre aquí?
+
+00:03:36.636 --> 00:03:40.806 align:middle
+Aunque el formulario no sea válido, seguimos
+intentando guardar el objeto en la base de datos,
+
+00:03:40.806 --> 00:03:42.036 align:middle
+que no es lo que queremos, ¿verdad?
+
+00:03:42.036 --> 00:03:47.416 align:middle
+En el controlador de administración, no deberíamos
+guardar ningún dato si el formulario no es válido.
+
+00:03:47.416 --> 00:03:50.716 align:middle
+En su lugar, deberíamos simplemente volver
+a mostrar el formulario con los errores
+
+00:03:50.716 --> 00:03:53.166 align:middle
+para que el usuario pueda corregirlos,
+y volver a enviar el formulario.
+
+00:03:53.716 --> 00:03:56.626 align:middle
+Para ello, añade otra
+condición en la sentencia if
+
+00:03:56.626 --> 00:04:01.916 align:middle
+después de comprobar que el formulario se
+ha enviado: && $form->isValid():
+
+00:04:03.316 --> 00:04:05.496 align:middle
+Actualiza la página y vuelve
+a enviar el formulario vacío.
+
+00:04:06.866 --> 00:04:07.526 align:middle
+¡Ya está!
+
+00:04:07.726 --> 00:04:11.726 align:middle
+Ya no hay excepción, y el error se muestra
+correctamente dentro del formulario.
+
+00:04:11.986 --> 00:04:14.116 align:middle
+¿Pero podemos personalizar
+el mensaje por defecto?
+
+00:04:14.176 --> 00:04:15.056 align:middle
+¡Claro que sí!
+
+00:04:16.136 --> 00:04:20.936 align:middle
+Abre StarshipPartType, y establece el
+segundo argumento de NotBlank como...
+
+00:04:21.116 --> 00:04:23.226 align:middle
+¿qué te parece? ¡Cada
+parte debe tener un nombre!
+
+00:04:23.916 --> 00:04:29.086 align:middle
+Volvemos al navegador, enviamos de nuevo el formulario
+vacío y ahí tenemos nuestro mensaje personalizado.
+
+00:04:29.376 --> 00:04:30.916 align:middle
+Pero espera, ¿por qué no es rojo?
+
+00:04:30.916 --> 00:04:35.866 align:middle
+Si abres el Inspector HTML de
+Chrome y miras el error renderizado
+
+00:04:36.106 --> 00:04:40.346 align:middle
+, verás que el texto de error
+tiene la clase text-red-700
+
+00:04:40.516 --> 00:04:44.366 align:middle
+y el campo no válido tiene
+la clase border-red-700.
+
+00:04:44.856 --> 00:04:49.296 align:middle
+Estas clases proceden del tema de formulario CSS
+incorporado de Tailwind que aplicamos anteriormente
+
+00:04:49.296 --> 00:04:54.726 align:middle
+en este curso, y son clases CSS válidas de
+Tailwind, ¿por qué nos faltan estilos en ellas?
+
+00:04:54.846 --> 00:04:57.716 align:middle
+¿No tenemos instalado el
+SymfonyCasts/tailwind-bundle?
+
+00:04:58.606 --> 00:04:59.356 align:middle
+Aquí está el truco.
+
+00:04:59.666 --> 00:05:04.596 align:middle
+Estas clases CSS se añaden dinámicamente y
+Tailwind no las recogió durante la compilación
+
+00:05:04.826 --> 00:05:08.486 align:middle
+porque viven en un archivo de proveedor
+que Tailwind ignora por defecto:
+
+00:05:09.176 --> 00:05:15.436 align:middle
+Abre tailwind_2_layout.html.twig y
+verás las clases CSS definidas allí.
+
+00:05:15.886 --> 00:05:21.166 align:middle
+¿Cómo podemos pedir a Tailwind que vigile también
+este archivo externo mientras compila nuestro CSS?
+
+00:05:21.216 --> 00:05:25.886 align:middle
+Como estamos en Tailwind 4, ya
+no existe tailwind.config.js.
+
+00:05:25.886 --> 00:05:30.316 align:middle
+En su lugar, abre app.css en
+el directorio assets/styles/.
+
+00:05:30.316 --> 00:05:34.576 align:middle
+Después de @import y
+@plugin, añade el @source.
+
+00:05:34.696 --> 00:05:39.406 align:middle
+Iré a copiar la ruta larga de la
+plantilla tailwind_2_layout.html.twig
+
+00:05:39.506 --> 00:05:45.926 align:middle
+y la pegaré aquí: Tenemos que ajustar
+la ruta anteponiéndole ./../../
+
+00:05:45.926 --> 00:05:52.156 align:middle
+para que parta del directorio
+raíz del proyecto. Y
+
+00:05:52.726 --> 00:05:53.826 align:middle
+ya está. Ten en cuenta
+
+00:05:53.826 --> 00:05:57.726 align:middle
+que esto requiere Tailwind 4 y no
+funcionará en versiones anteriores. Pero
+
+00:05:57.996 --> 00:05:59.416 align:middle
+aquí deberíamos estar en la última.
+
+00:06:00.006 --> 00:06:01.916 align:middle
+Puedes volver a comprobar la versión exacta en
+
+00:06:01.916 --> 00:06:06.046 align:middle
+el archivo de configuración de
+config/packages/symfonycasts_tailwind.yaml
+
+00:06:06.046 --> 00:06:15.276 align:middle
+- aquí está, v4.1.11: Vale, hora de
+probarlo - actualiza el navegador y... ¿el
+
+00:06:15.736 --> 00:06:17.276 align:middle
+texto sigue sin estar en rojo? Hm,
+
+00:06:17.536 --> 00:06:19.976 align:middle
+he copiado/pegado la ruta, así que
+debería ser la correcta. ¿Probablemente
+
+00:06:20.166 --> 00:06:22.046 align:middle
+se deba a la caché del navegador?
+
+00:06:22.356 --> 00:06:27.016 align:middle
+Probemos primero con "Vaciar caché y recargar
+con fuerza" - sigue sin cambiar nada. Bien,
+
+00:06:27.586 --> 00:06:30.086 align:middle
+ponte el sombrero de
+depuración y ve a tu terminal.
+
+00:06:30.516 --> 00:06:34.476 align:middle
+Podemos ejecutarlo manualmente: symfony
+console tailwind:build Para ver si
+
+00:06:34.476 --> 00:06:36.946 align:middle
+puede construir nuestro
+CSS final con éxito. Ajá,
+
+00:06:38.356 --> 00:06:42.226 align:middle
+hay un error: @source no puede tener cuerpo.
+
+00:06:42.756 --> 00:06:46.216 align:middle
+Comprobemos app.css. Ah
+
+00:06:46.216 --> 00:06:49.706 align:middle
+, sí, es difícil de ver, pero olvidé
+añadir el punto y coma al final: En
+
+00:06:50.456 --> 00:06:53.516 align:middle
+el terminal, ejecuta de nuevo el
+comando de compilación... y...
+
+00:06:53.516 --> 00:06:54.816 align:middle
+¡éxito! Esta vez no hay
+
+00:06:54.816 --> 00:06:55.956 align:middle
+errores.
+
+00:06:56.836 --> 00:06:57.916 align:middle
+Vuelve al navegador... actualiza...
+
+00:06:57.916 --> 00:06:58.606 align:middle
+¡y
+
+00:06:59.566 --> 00:07:00.376 align:middle
+ahí está! El
+
+00:07:00.746 --> 00:07:04.736 align:middle
+mensaje de error ahora es rojo, ¡y también
+el borde alrededor del campo asociado! ¡ Y
+
+00:07:05.316 --> 00:07:05.976 align:middle
+ya está!
+
+00:07:06.126 --> 00:07:10.356 align:middle
+Hemos aprendido a añadir validación de formularios
+real, del lado del servidor, en un proyecto Symfony.
+
+00:07:10.906 --> 00:07:14.346 align:middle
+En el próximo capítulo, hablaremos más sobre
+las restricciones de validación. ¡ Nos vemos
+
+00:07:14.506 --> 00:07:15.106 align:middle
+allí!
