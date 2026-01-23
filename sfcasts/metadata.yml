@@ -26,3 +26,9 @@ chapters:
     crud:
         tutsFirstStep: crud-tweak-route-path
         tutsLastStep: search-form-generate-form-type
+    search-form:
+        tutsFirstStep: search-form-rename-field-to-query
+        tutsLastStep: search-form-set-method-to-get
+    finish-search-form:
+        tutsFirstStep: search-form-override-block-prefix
+        tutsLastStep: search-form-change-to-searchtype
