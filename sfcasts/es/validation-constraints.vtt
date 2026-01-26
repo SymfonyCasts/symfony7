@@ -1,0 +1,398 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:04.676 align:middle
+En el capítulo anterior, instalamos
+el Componente Validador de Symfony
+
+00:00:04.676 --> 00:00:08.336 align:middle
+y aplicamos nuestra primera restricción de
+validación al campo name de nuestro formulario.
+
+00:00:08.896 --> 00:00:11.766 align:middle
+Esta configuración nos ayuda a detectar
+errores cuando enviamos un formulario vacío
+
+00:00:11.856 --> 00:00:14.896 align:middle
+que elude la validación
+HTML5 del lado del cliente.
+
+00:00:15.346 --> 00:00:18.896 align:middle
+Sin embargo, nuestra validación está actualmente
+escondida dentro del tipo de formulario.
+
+00:00:19.446 --> 00:00:24.166 align:middle
+Esta configuración está bien hasta que creemos
+otro formulario para la misma entidad StarshipPart.
+
+00:00:24.636 --> 00:00:28.606 align:middle
+Si lo hiciéramos, acabaríamos duplicando todas
+las restricciones en el nuevo tipo de formulario.
+
+00:00:29.286 --> 00:00:33.726 align:middle
+Un enfoque mejor es adjuntar la validación
+directamente a la propia entidad.
+
+00:00:33.726 --> 00:00:36.526 align:middle
+De ese modo, todos los formularios
+se benefician automáticamente.
+
+00:00:36.756 --> 00:00:39.046 align:middle
+Además, será útil si
+
+00:00:39.046 --> 00:00:42.226 align:middle
+decidimos validar el objeto entidad de
+forma autónoma, fuera de un formulario.
+
+00:00:42.916 --> 00:00:45.646 align:middle
+Empecemos por comentar la
+restricción en el tipo de formulario:
+
+00:00:46.196 --> 00:00:48.616 align:middle
+A continuación, abre la entidad StarshipPart.
+
+00:00:50.256 --> 00:00:53.896 align:middle
+Justo encima de la propiedad $name, empieza
+a añadir un atributo #[NotBlank()].
+
+00:00:53.896 --> 00:00:58.876 align:middle
+PhpStorm me da varias opciones,
+y yo elegiré Assert\NotBlank.
+
+00:00:59.386 --> 00:01:03.866 align:middle
+Esto crea un alias común Assert para nuestro
+espacio de nombres de restricción por comodidad.
+
+00:01:04.306 --> 00:01:10.506 align:middle
+Dentro, podemos especificar un message: Agarra que del
+tipo de formulario: ¡Cada parte debe tener un nombre!
+
+00:01:12.716 --> 00:01:15.726 align:middle
+Ya que estamos aquí, añadamos también
+una regla para la propiedad $price.
+
+00:01:16.056 --> 00:01:19.356 align:middle
+Porque las piezas de la nave estelar
+no pueden salir gratis, son caras.
+
+00:01:19.766 --> 00:01:25.136 align:middle
+Así que, encima de $price, añade
+#[Assert\GreaterThan()] y pon value a 0.
+
+00:01:25.746 --> 00:01:30.116 align:middle
+También podemos personalizar este message, ¿qué te
+parece? ¡La pieza de nave estelar no puede ser gratis!
+
+00:01:31.636 --> 00:01:34.216 align:middle
+Perfecto. Ahora, probemos
+de nuevo nuestro formulario.
+
+00:01:36.116 --> 00:01:38.766 align:middle
+Hm, seguimos viendo sólo el error name.
+
+00:01:39.066 --> 00:01:41.376 align:middle
+¿Dónde está nuestro nuevo error
+de validación para el precio?
+
+00:01:41.856 --> 00:01:43.536 align:middle
+En realidad, éste es el
+comportamiento esperado.
+
+00:01:43.876 --> 00:01:47.066 align:middle
+La mayoría de las restricciones de
+validación se ignoran cuando el valor es null
+
+00:01:47.356 --> 00:01:49.366 align:middle
+para evitar tropiezos en los campos opcionales.
+
+00:01:49.646 --> 00:01:52.906 align:middle
+Pero NotBlank es diferente:
+rechaza directamente nulls.
+
+00:01:52.906 --> 00:01:57.506 align:middle
+Así que, encima de nuestra restricción
+GreaterThan, añade #[Assert\NotBlank()]
+
+00:01:57.636 --> 00:02:00.136 align:middle
+con el mensaje ¡Olvidaste poner el precio!
+
+00:02:01.566 --> 00:02:04.356 align:middle
+Puedes apilar tantas restricciones
+como quieras sobre el mismo campo.
+
+00:02:04.986 --> 00:02:06.896 align:middle
+Ahora, volvamos a enviar el formulario vacío.
+
+00:02:06.896 --> 00:02:10.356 align:middle
+Finalmente, ¡obtenemos
+errores para ambos campos!
+
+00:02:10.766 --> 00:02:13.096 align:middle
+Y si establecemos el price
+en 0 y lo intentamos de nuevo
+
+00:02:14.266 --> 00:02:16.346 align:middle
+, veremos un mensaje de
+error ligeramente distinto
+
+00:02:16.346 --> 00:02:18.326 align:middle
+procedente de la restricción
+de validación GreaterThan.
+
+00:02:18.656 --> 00:02:22.636 align:middle
+¡Perfecto! He aquí un detalle genial:
+Cuando un formulario no es válido,
+
+00:02:22.756 --> 00:02:28.396 align:middle
+Symfony devuelve automáticamente un código
+de estado HTTP 422 Unprocessable Content
+
+00:02:28.456 --> 00:02:29.966 align:middle
+al renderizar el formulario no válido.
+
+00:02:30.466 --> 00:02:34.546 align:middle
+Puedes ver el estado en la pestaña de red de tu navegador
+o en la barra de herramientas de depuración web (WDT).
+
+00:02:35.156 --> 00:02:38.066 align:middle
+Este comportamiento garantiza la
+compatibilidad con herramientas que
+
+00:02:38.066 --> 00:02:41.636 align:middle
+dependen de la especificación
+HTTP, como Symfony UX Turbo.
+
+00:02:42.306 --> 00:02:47.006 align:middle
+Esto funciona porque, en nuestro controlador,
+estamos pasando el objeto $form a la plantilla Twig.
+
+00:02:47.006 --> 00:02:52.016 align:middle
+Si hubiéramos llamado a ->createView(): como
+se requería en versiones anteriores de Symfony,
+
+00:02:52.186 --> 00:02:56.906 align:middle
+el código de estado sería por defecto 200 OK,
+lo que no es ideal para formularios inválidos,
+
+00:02:57.036 --> 00:02:59.336 align:middle
+y rompería la integración
+con cosas como Turbo.
+
+00:03:00.306 --> 00:03:03.196 align:middle
+La barra de herramientas de depuración web también
+es muy útil para los errores de validación.
+
+00:03:03.196 --> 00:03:07.456 align:middle
+Verás un icono con el número de
+errores que contiene tu formulario.
+
+00:03:07.946 --> 00:03:08.796 align:middle
+Ahora tenemos 2.
+
+00:03:09.126 --> 00:03:11.696 align:middle
+Si haces clic en él para abrir la
+pestaña Formulario del perfilador
+
+00:03:11.966 --> 00:03:14.736 align:middle
+, verás qué clase de tipo de
+formulario es responsable del formulario.
+
+00:03:15.246 --> 00:03:18.676 align:middle
+Haz clic en el nombre del campo para obtener información
+útil que podrías necesitar durante la depuración.
+
+00:03:21.186 --> 00:03:25.806 align:middle
+Si cambias a la pestaña Validator, verás datos
+similares, pero presentados de forma ligeramente diferente
+
+00:03:25.806 --> 00:03:29.536 align:middle
+, con más contexto sobre las restricciones
+de validación, como el nombre de su clase.
+
+00:03:30.286 --> 00:03:34.246 align:middle
+Esta pestaña es especialmente útil
+cuando utilizas el Componente Validador
+
+00:03:34.246 --> 00:03:36.066 align:middle
+fuera de los formularios, ¡lo
+cual es totalmente posible!
+
+00:03:36.746 --> 00:03:41.166 align:middle
+Independientemente de tu configuración, Symfony nos proporciona
+todo lo que necesitamos para depurar problemas de validación.
+
+00:03:41.696 --> 00:03:45.496 align:middle
+Ahora, hablemos de otro concepto
+importante: La protección CSRF.
+
+00:03:46.086 --> 00:03:49.126 align:middle
+CSRF son las siglas de Cross-Site Request Forgery
+(falsificación de peticiones entre sitios).
+
+00:03:49.656 --> 00:03:52.966 align:middle
+Es un tipo de ataque en el que un sitio
+web malicioso engaña a tu navegador
+
+00:03:52.966 --> 00:03:58.216 align:middle
+para que envíe una petición que tú no pretendías - por
+ejemplo, enviar un formulario o hacer clic en un botón
+
+00:03:58.216 --> 00:04:00.086 align:middle
+en otro sitio sin tu conocimiento.
+
+00:04:00.746 --> 00:04:06.586 align:middle
+Para evitarlo, los frameworks web utilizan tokens CSRF, valores
+aleatorios que prueban que una petición procede realmente
+
+00:04:06.586 --> 00:04:08.446 align:middle
+de tu aplicación y no de otro sitio.
+
+00:04:09.186 --> 00:04:14.396 align:middle
+En la protección CSRF tradicional, el servidor
+genera un token y lo incrusta en cada formulario
+
+00:04:14.396 --> 00:04:18.666 align:middle
+como un campo oculto, al tiempo que almacena
+el mismo valor en la sesión del usuario.
+
+00:04:19.226 --> 00:04:22.226 align:middle
+Cuando se envía el formulario,
+el servidor comprueba que el token
+
+00:04:22.226 --> 00:04:24.286 align:middle
+del formulario coincide con el de la sesión.
+
+00:04:24.286 --> 00:04:29.896 align:middle
+Si falta o no es válido, se rechaza la petición
+y se muestra un error de validación CSRF.
+
+00:04:30.456 --> 00:04:34.046 align:middle
+Esto impide que los atacantes falsifiquen
+las peticiones, porque no pueden saber
+
+00:04:34.046 --> 00:04:36.336 align:middle
+ni incluir el token CSRF correcto.
+
+00:04:36.886 --> 00:04:40.686 align:middle
+Este es el enfoque clásico, con
+estado, y Symfony lo soporta.
+
+00:04:41.106 --> 00:04:45.266 align:middle
+Pero en las nuevas versiones de Symfony,
+también existe la protección CSRF sin estado,
+
+00:04:45.586 --> 00:04:48.166 align:middle
+útil para aplicaciones que no
+quieren depender de las sesiones.
+
+00:04:48.166 --> 00:04:52.076 align:middle
+En lugar de almacenar tokens en el
+servidor, Symfony comprueba cosas
+
+00:04:52.076 --> 00:04:54.336 align:middle
+como el Origen y el Referer de la petición.
+
+00:04:54.336 --> 00:04:59.136 align:middle
+Si utilizas Stimulus, puedes reforzar esta
+protección con cookies y tokens de cabecera
+
+00:04:59.216 --> 00:05:00.986 align:middle
+que el navegador envía
+junto con el formulario.
+
+00:05:00.986 --> 00:05:05.196 align:middle
+Dirígete al terminal e
+instala el componente CSRF:
+
+00:05:05.426 --> 00:05:12.146 align:middle
+symfony composer require csrf Uy,
+no hay un alias de Flex para esto.
+
+00:05:12.266 --> 00:05:17.976 align:middle
+Así que, en su lugar, instala el
+paquete real symfony/security-csrf:
+
+00:05:17.976 --> 00:05:22.586 align:middle
+En cuanto se instala el paquete, la protección CSRF se
+activa por defecto para todos los formularios Symfony
+
+00:05:22.586 --> 00:05:26.826 align:middle
+, haciendo que tus formularios sean
+más seguros desde el primer momento.
+
+00:05:26.826 --> 00:05:28.266 align:middle
+Puedes comprobarlo por ti mismo.
+
+00:05:28.266 --> 00:05:33.276 align:middle
+Ve a la página del formulario, actualízala
+y abre el inspector HTML de tu navegador.
+
+00:05:33.816 --> 00:05:39.736 align:middle
+Dentro de nuestro formulario, encontrarás un tipo de entrada
+oculto conectado a un controlador Stimulus de csrf-protection.
+
+00:05:40.136 --> 00:05:44.306 align:middle
+Este controlador se añade como parte de
+la receta Flex del StimulusBundle y añade
+
+00:05:44.306 --> 00:05:45.746 align:middle
+el endurecimiento mencionado anteriormente.
+
+00:05:46.436 --> 00:05:51.336 align:middle
+La forma más fácil de verlo en acción, es
+modificando el valor del campo CSRF en el navegador.
+
+00:05:51.946 --> 00:05:54.726 align:middle
+Sustitúyelo por cualquier cadena
+aleatoria y envía el formulario.
+
+00:05:55.306 --> 00:05:57.436 align:middle
+Obtendrás un error global de
+validación del formulario.
+
+00:05:57.906 --> 00:05:59.606 align:middle
+El token CSRF no es válido.
+
+00:05:59.706 --> 00:06:01.226 align:middle
+Intenta volver a enviar el formulario.
+
+00:06:01.866 --> 00:06:05.896 align:middle
+Global significa que no está vinculado a un campo
+específico, sino al formulario en su conjunto.
+
+00:06:06.416 --> 00:06:10.276 align:middle
+Y así de sencillo, Symfony ha bloqueado una
+petición no válida y ha devuelto un error,
+
+00:06:10.436 --> 00:06:13.046 align:middle
+impidiendo que se ejecute
+ninguna acción de escritura.
+
+00:06:13.656 --> 00:06:15.396 align:middle
+Y así es como se hace la
+validación de formularios.
+
+00:06:15.726 --> 00:06:18.466 align:middle
+Añades restricciones de
+validación, bien al formulario,
+
+00:06:18.546 --> 00:06:20.886 align:middle
+bien al objeto que estás
+validando como atributos.
+
+00:06:21.096 --> 00:06:25.676 align:middle
+Después, antes de procesar los datos del
+formulario, llama a $form->isValid()
+
+00:06:25.856 --> 00:06:27.326 align:middle
+para comprobar que todo está correcto.
+
+00:06:28.196 --> 00:06:30.156 align:middle
+A continuación veremos cómo
+mostrar los campos del formulario
+
+00:06:30.156 --> 00:06:34.616 align:middle
+en un orden específico, haciendo que los campos
+importantes aparezcan arriba y los opcionales abajo.
+
+00:06:34.616 --> 00:06:35.546 align:middle
+¡Permanece atento!
