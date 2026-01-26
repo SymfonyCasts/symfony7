@@ -16,14 +16,19 @@ A better approach is to attach validation directly to the entity itself.
 That way, every form automatically benefits. Moreover, it will be useful
 if we decide to validate the entity object standalone, outside a form.
 
-Let's start by commenting out the constraint in the form type. Next, open
-up the `StarshipPart` entity. Right above the `$name` property, start adding
-a `#[NotBlank()]` attribute. PhpStorm gives me a few options, and I'll go with
-`Assert\NotBlank`. This creates a common `Assert` alias for our
+Let's start by commenting out the constraint in the form type:
+
+[[[ code('cdb7cd8d88') ]]]
+
+Next, open up the `StarshipPart` entity. Right above the `$name` property,
+start adding a `#[NotBlank()]` attribute. PhpStorm gives me a few options,
+and I'll go with `Assert\NotBlank`. This creates a common `Assert` alias for our
 constraint namespace for convenience. Inside, we can specify a `message:`
 Grab that from the form type:
 
 > Every part should have a name!
+
+[[[ code('75d701551c') ]]]
 
 ## Adding More Constraints
 
@@ -33,6 +38,8 @@ we can't have Starship parts going for free, they're expensive. So, above
 customize this `message`, how about:
 
 > StarshipPart cannot be free!
+
+[[[ code('1a3494e727') ]]]
  
 Perfect. 
 
@@ -44,6 +51,8 @@ different - it rejects `nulls` outright. So, above our `GreaterThan`
 constraint, add `#[Assert\NotBlank()]` with the message:
 
 > You forgot to set the price!
+
+[[[ code('c5bb18d5bb') ]]]
 
 You can stack as many constraints as you want on the same field.
 
@@ -58,25 +67,33 @@ error message coming from the `GreaterThan` validation constraint. Perfect!
 Here's a cool detail: When a form is invalid, Symfony automatically returns
 a `422 Unprocessable Content` HTTP status code when rendering the invalid
 form. You can see the status in your browser's network tab or in the
-web debug toolbar. This behavior ensures compatibility with tools that rely on the HTTP
-specification, like *Symfony UX Turbo*.
+web debug toolbar (WDT). This behavior ensures compatibility with tools that
+rely on the HTTP specification, like *Symfony UX Turbo*.
 
 This works because, in our controller, we're passing the `$form` object to the Twig template.
-If we had called `->createView()` on it, like was required in older Symfony versions,
-the status code would default to `200 OK`, which is not ideal for invalid forms, and
-would break integration with things like Turbo.
+If we had called `->createView()` on it:
 
-The web debug toolbar is super handy for validation errors too. You'll see a form icon
-with the number of errors your form contains. We have 2 now. If you click
-on it to open the profiler Form tab, you'll see which form type class is
-responsible for the form. Click on the field name for useful information
-you might need during debugging. 
+```php
+return $this->render('admin/starship-part/new.html.twig', [
+    'form' => $form->createView(),
+]);
+```
+
+like was required in older Symfony versions, the status code would default
+to `200 OK`, which is not ideal for invalid forms, and would break
+integration with things like Turbo.
 
 ## Debugging Validation Issues
 
-If you switch to the `Validator` tab, you'll see
-similar data, but presented slightly different with more context regarding the
-validation constraints, like its class name.
+The web debug toolbar is super handy for validation errors too. You'll see
+a form icon with the number of errors your form contains. We have 2 now.
+If you click on it to open the profiler Form tab, you'll see which form type
+class is responsible for the form. Click on the field name for useful
+information you might need during debugging. 
+
+If you switch to the `Validator` tab, you'll see similar data, but presented
+slightly different with more context regarding the validation constraints,
+like its class name.
 
 This tab is especially handy when you use the Validator Component outside
 of forms, which it totally possible! Regardless of your setup, Symfony gives us everything we need
@@ -96,8 +113,8 @@ the server generates a token and embeds it in each form as a hidden field, while
 storing the same value in the user’s session. When the form is submitted, the server
 verifies that the token from the form matches the one in the session. If it’s missing
 or invalid, the request is rejected and a CSRF validation error is shown. This prevents
-attackers from forging requests, because they can't
-know, or include the correct CSRF token.
+attackers from forging requests, because they can't know, or include
+the correct CSRF token.
 
 That's the classic, *stateful* approach and Symfony does support this. 
 
