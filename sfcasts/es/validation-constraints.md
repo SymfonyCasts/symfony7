@@ -64,7 +64,7 @@ Esta pestaña es especialmente útil cuando utilizas el Componente Validador fue
 
 ## Comprender la protección CSRF
 
-Ahora, hablemos de otro concepto importante: la protección CSRF: Protección CSRF. CSRF son las siglas de Cross-Site Request Forgery (falsificación de petición de sitio cruzado). Es un tipo de ataque en el que un sitio web malicioso engaña a tu navegador para que envíe una petición que tú no pretendías, por ejemplo, enviar un formulario o hacer clic en un botón de otro sitio sin tu conocimiento.
+Ahora, hablemos de otro concepto importante: la protección CSRF: Protección CSRF. CSRF son las siglas de Cross-Site Request Forgery (Falsificación de peticiones en sitios cruzados). Es un tipo de ataque en el que un sitio web malicioso engaña a tu navegador para que envíe una petición que tú no pretendías, por ejemplo, enviar un formulario o hacer clic en un botón de otro sitio sin tu conocimiento.
 
 Para evitarlo, los frameworks web utilizan tokens CSRF, valores aleatorios que prueban que una petición procede realmente de tu aplicación y no de otro sitio. En la protección CSRF tradicional, el servidor genera un token y lo incrusta en cada formulario como un campo oculto, al tiempo que almacena el mismo valor en la sesión del usuario. Cuando se envía el formulario, el servidor comprueba que el token del formulario coincide con el de la sesión. Si falta o no es válido, se rechaza la petición y se muestra un error de validación CSRF. Esto impide que los atacantes falsifiquen las peticiones, porque no pueden saber ni incluir el token CSRF correcto.
 
