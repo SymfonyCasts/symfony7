@@ -104,4 +104,8 @@ Y lo mejor es que, aunque hayamos establecido ese tema globalmente, puedes anula
 
 En un abrir y cerrar de ojos, tenemos un controlador rico en operaciones CRUD y una base sólida que podemos personalizar a nuestro antojo. MakerBundle se encarga de las cosas aburridas, permitiéndonos centrarnos en cosas increíbles.
 
+***SEEALSO
+Si quieres un generador de administración aún más potente para tu aplicación Symfony, con operaciones CRUD ya implementadas y otras funciones geniales, echa un vistazo al [curso EasyAdminBundle](https://symfonycasts.com/screencast/easyadminbundle).
+***
+
 A continuación, crearemos un nuevo formulario y lo enviaremos mediante el método GET. Pero por ahora, ¡disfruta de tu CRUD recién generado y ve a añadir más naves estelares a tu flota!
