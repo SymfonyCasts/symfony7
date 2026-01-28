@@ -48,7 +48,7 @@ Actualiza la página y verás que los campos Nombre y Precio están ahora felizm
 
 ## Alinear los botones de envío en la misma línea
 
-Pero espera, ¿podemos hacer lo mismo con los botones? ¡Claro que sí! De vuelta a la plantilla, renderiza el campo Notas con `form_row()` debajo de la cuadrícula, pasando `form.notes`. A continuación, justo antes del botón codificado, renderiza `form_row()` de nuevo pasando `form.createAndAddNew`:
+Pero espera, ¿podemos hacer lo mismo con los botones? ¡Claro que sí! De vuelta a la plantilla, representa el campo Notas con `form_row()` debajo de la cuadrícula, pasando `form.notes`. A continuación, justo antes del botón codificado, representa `form_row()` de nuevo pasando `form.createAndAddNew`:
 
 [[[ code('162be4adaa') ]]]
 
@@ -69,7 +69,7 @@ Normalmente, eso es estupendo para los campos, pero no en nuestro caso. Queremos
 
 Actualiza de nuevo y... ¡bien! Por fin los botones están alineados.
 
-Puedes renderizar manualmente todos los componentes de un `form_row()` de esta forma.`form_widget()` renderiza el elemento campo, `form_label()` renderiza el elemento etiqueta, `form_errors()` renderiza una lista de errores (si los hay), y`form_help()` renderiza texto de ayuda (si lo hay).
+Puedes renderizar manualmente todos los componentes de un `form_row()` de esta forma.`form_widget()` renderiza el elemento campo, `form_label()` renderiza el elemento etiqueta, `form_errors()` renderiza una lista de errores (si los hay), y`form_help()` renderiza el texto de ayuda (si lo hay).
 
 ## Mostrar los errores globales del formulario que faltan
 
@@ -99,7 +99,7 @@ Cuando actualices el formulario, verás este útil mensaje en un sutil texto gri
 
 ## Añadir atributos de campo de formulario en la plantilla
 
-¿Recuerdas cuando añadimos clases CSS al botón Enviar en el tipo de formulario? Eso funciona, pero no es lo ideal - los diseñadores probablemente no quieran tocar tu código PHP, y puede que ni siquiera sepan qué es un tipo de formulario, o cómo funciona en una aplicación Symfony. Por lo tanto, las decisiones de estilo realmente no pertenecen ahí.
+¿Recuerdas cuando añadimos clases CSS al botón Enviar en el tipo de formulario? Eso funciona, pero no es lo ideal - los diseñadores probablemente no quieran tocar tu código PHP, y puede que ni siquiera sepan lo que es un tipo de formulario, o cómo funciona en una aplicación Symfony. Por lo tanto, las decisiones de estilo realmente no pertenecen ahí.
 
 En su lugar, traslademos esos estilos a la plantilla para que nuestros diseñadores puedan cambiarlos fácilmente. Lo comentaré en el tipo de formulario. Copia la larga línea de clases CSS, y ve a la plantilla. Para la llamada a `form_widget(form.createAndAddNew)`, añade un segundo argumento, un hash de opciones.
 
