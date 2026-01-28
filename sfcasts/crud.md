@@ -183,6 +183,12 @@ In a flash, we've got a rich controller with CRUD operations and a solid
 foundation we can customize to our heart's content. MakerBundle handles
 the boring stuff, allowing us to focus on awesome things.
 
+***SEEALSO
+If you want an even more powerful admin generator for your Symfony application
+with already implemented CRUD operations and other cool features, take a look at
+[EasyAdminBundle course](https://symfonycasts.com/screencast/easyadminbundle).
+***
+
 Up next, we'll create a new form and send it via the GET HTTP method. But for now,
 enjoy your freshly generated CRUD and go add more starships to your fleet!
 

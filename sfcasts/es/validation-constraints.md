@@ -8,21 +8,31 @@ Sin embargo, nuestra validación está actualmente escondida dentro del tipo de 
 
 Un enfoque mejor es adjuntar la validación directamente a la propia entidad. De ese modo, todos los formularios se beneficiarán automáticamente. Además, será útil si decidimos validar el objeto entidad de forma independiente, fuera de un formulario.
 
-Empecemos por comentar la restricción en el tipo de formulario. A continuación, abre la entidad `StarshipPart`. Justo encima de la propiedad `$name`, empieza a añadir un atributo `#[NotBlank()]`. PhpStorm me da varias opciones, y yo elegiré`Assert\NotBlank`. Esto crea un alias común `Assert` para nuestro espacio de nombres de restricción por comodidad. Dentro, podemos especificar un `message:`Agarra que del tipo de formulario:
+Empecemos por comentar la restricción en el tipo de formulario:
+
+[[[ code('cdb7cd8d88') ]]]
+
+A continuación, abre la entidad `StarshipPart`. Justo encima de la propiedad `$name`, empieza a añadir un atributo `#[NotBlank()]`. PhpStorm me da varias opciones, y yo elegiré `Assert\NotBlank`. Esto crea un alias común `Assert` para nuestro espacio de nombres de restricción por comodidad. Dentro, podemos especificar un `message:`Agarra que del tipo de formulario:
 
 > ¡Cada parte debe tener un nombre!
+
+[[[ code('75d701551c') ]]]
 
 ## Añadir más restricciones
 
 Ya que estamos aquí, añadamos también una regla para la propiedad `$price`. Porque no podemos tener piezas de naves estelares gratis, son caras. Así que, por encima de`$price`, añade `#[Assert\GreaterThan()]` y establece `value` en `0`. También podemos personalizar esta `message`, ¿qué te parece:
 
-> ¡La Parte de Nave Estelar no puede ser gratis!
+> ¡La pieza de nave estelar no puede ser gratis!
+
+[[[ code('1a3494e727') ]]]
 
 Perfecto. 
 
 Ahora, probemos de nuevo nuestro formulario. Hm, seguimos viendo sólo el error `name`. ¿Dónde está nuestro nuevo error de validación para el precio? En realidad, éste es el comportamiento esperado. La mayoría de las restricciones de validación se ignoran cuando el valor es `null` para evitar tropiezos en los campos opcionales. Pero `NotBlank` es diferente: rechaza directamente `nulls`. Así que, encima de nuestra restricción `GreaterThan`, añade `#[Assert\NotBlank()]` con el mensaje:
 
 > ¡Olvidaste poner el precio!
+
+[[[ code('c5bb18d5bb') ]]]
 
 Puedes apilar tantas restricciones como quieras sobre el mismo campo.
 
@@ -32,13 +42,21 @@ Y si establecemos el `price` a 0 e intentamos de nuevo, veremos un mensaje de er
 
 ## Ventajas de la validación de formularios Symfony
 
-He aquí un detalle genial: Cuando un formulario no es válido, Symfony devuelve automáticamente un código de estado HTTP `422 Unprocessable Content` al renderizar el formulario no válido. Puedes ver el estado en la pestaña de red de tu navegador o en la barra de herramientas de depuración web. Este comportamiento garantiza la compatibilidad con herramientas que dependen de la especificación HTTP, como Symfony UX Turbo.
+He aquí un detalle genial: Cuando un formulario no es válido, Symfony devuelve automáticamente un código de estado HTTP `422 Unprocessable Content` al renderizar el formulario no válido. Puedes ver el estado en la pestaña de red de tu navegador o en la barra de herramientas de depuración web (WDT). Este comportamiento garantiza la compatibilidad con herramientas que dependen de la especificación HTTP, como Symfony UX Turbo.
 
-Esto funciona porque, en nuestro controlador, estamos pasando el objeto `$form` a la plantilla Twig. Si hubiéramos llamado a `->createView()` en él, como se requería en versiones anteriores de Symfony, el código de estado sería por defecto `200 OK`, lo que no es ideal para formularios no válidos, y rompería la integración con cosas como Turbo.
+Esto funciona porque, en nuestro controlador, estamos pasando el objeto `$form` a la plantilla Twig. Si lo hubiéramos llamado `->createView()` 
 
-La barra de herramientas de depuración web también es muy útil para los errores de validación. Verás un icono con el número de errores que contiene tu formulario. Ahora tenemos 2. Si haces clic en él para abrir la pestaña Formulario del perfilador, verás qué clase de tipo de formulario es responsable del formulario. Haz clic en el nombre del campo para obtener información útil que podrías necesitar durante la depuración. 
+```php
+return $this->render('admin/starship-part/new.html.twig', [
+    'form' => $form->createView(),
+]);
+```
+
+como se requería en versiones anteriores de Symfony, el código de estado sería por defecto `200 OK`, lo que no es ideal para formularios inválidos, y rompería la integración con cosas como Turbo.
 
 ## Depuración de problemas de validación
+
+La barra de herramientas de depuración web también es muy útil para los errores de validación. Verás un icono con el número de errores que contiene tu formulario. Ahora tenemos 2. Si haces clic en él para abrir la pestaña Formulario del perfilador, verás qué clase de tipo de formulario es responsable del formulario. Haz clic en el nombre del campo para obtener información útil que podrías necesitar durante la depuración. 
 
 Si cambias a la pestaña `Validator`, verás datos similares, pero presentados de forma ligeramente diferente, con más contexto sobre las restricciones de validación, como el nombre de su clase.
 
@@ -46,7 +64,7 @@ Esta pestaña es especialmente útil cuando utilizas el Componente Validador fue
 
 ## Comprender la protección CSRF
 
-Ahora, hablemos de otro concepto importante: la protección CSRF: Protección CSRF. CSRF son las siglas de Cross-Site Request Forgery (Falsificación de peticiones en sitios cruzados). Se trata de un tipo de ataque en el que un sitio web malicioso engaña a tu navegador para que envíe una petición que tú no pretendías, por ejemplo, enviar un formulario o hacer clic en un botón de otro sitio sin tu conocimiento.
+Ahora, hablemos de otro concepto importante: la protección CSRF: Protección CSRF. CSRF son las siglas de Cross-Site Request Forgery (Falsificación de peticiones en sitios cruzados). Es un tipo de ataque en el que un sitio web malicioso engaña a tu navegador para que envíe una petición que tú no pretendías, por ejemplo, enviar un formulario o hacer clic en un botón de otro sitio sin tu conocimiento.
 
 Para evitarlo, los frameworks web utilizan tokens CSRF, valores aleatorios que prueban que una petición procede realmente de tu aplicación y no de otro sitio. En la protección CSRF tradicional, el servidor genera un token y lo incrusta en cada formulario como un campo oculto, al tiempo que almacena el mismo valor en la sesión del usuario. Cuando se envía el formulario, el servidor comprueba que el token del formulario coincide con el de la sesión. Si falta o no es válido, se rechaza la petición y se muestra un error de validación CSRF. Esto impide que los atacantes falsifiquen las peticiones, porque no pueden saber ni incluir el token CSRF correcto.
 
@@ -68,7 +86,7 @@ No hay un alias de Flex para esto. Así que, en su lugar, instala el paquete rea
 symfony composer require symfony/security-csrf
 ```
 
-En cuanto instales el paquete, la protección CSRF se activará por defecto en todos los formularios Symfony, lo que hará que tus formularios sean más seguros desde el primer momento. 
+En cuanto se instale el paquete, la protección CSRF se activará por defecto para todos los formularios Symfony, haciendo que tus formularios sean más seguros desde el primer momento. 
 
 ### Comprobando la protección CSRF
 
@@ -80,7 +98,7 @@ La forma más fácil de verlo en acción, es modificando el valor del campo CSRF
 
 Global significa que no está vinculado a un campo específico, sino al formulario en su conjunto.
 
-Y así de sencillo, Symfony ha bloqueado una petición no válida y ha devuelto un error, impidiendo que se ejecute cualquier acción de escritura.
+Y así de sencillo, Symfony ha bloqueado una petición no válida y ha devuelto un error, impidiendo que se ejecute ninguna acción de escritura.
 
 Y así es como se hace la validación de formularios. Añades restricciones de validación, bien al formulario, bien al objeto que estás validando como atributos. Después, antes de procesar los datos del formulario, llama a `$form->isValid()` para comprobar que todo está correcto.
 
