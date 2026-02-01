@@ -128,9 +128,18 @@ OK, let's be honest. The generated code now works great, but visually it's
 not winning any design awards. I'll quickly spruce up some styling, but don't worry,
 you can copy/paste the same code from the code blocks below the video.
 
-I'll paste some Tailwind CSS classes to the form buttons. Also, some HTML
-with proper CSS classes to make the pages look better in `edit.html.twig`...
-`index.html.twig`... `new.html.twig`... and finally `show.html.twig`.
+First, in `_form.html.twig`, I'll paste some Tailwind CSS classes to the submit button.
+
+This `_delete_form.html.twig` template is interesting. It's a Twig partial for the Delete
+button. You never want delete actions to be simple links, that use the GET HTTP method.
+Instead, they should use the POST method. The only way to achieve this with pure HTML
+is to use a form. So MakerBundle generates this small form for us that contains the Delete button.
+For extra protection, it also includes a CSRF token. Pretty snazzy!
+
+I'll also paste some Tailwind CSS classes to the delete button here.
+
+Next, I'll paste some CSS and HTML to improve the layout of the edit template...
+index template... new template... and finally the show template.
 
 Once we're done, head back to the browser and refresh the page - much better!
 The new styles lend a cleaner layout and more intuitive buttons, including a "Create new"
@@ -189,6 +198,6 @@ with already implemented CRUD operations and other cool features, take a look at
 [EasyAdminBundle course](https://symfonycasts.com/screencast/easyadminbundle).
 ***
 
-Up next, we'll create a new form and send it via the GET HTTP method. But for now,
+Up next, we'll create a new form type that doesn't map to any entity. But for now,
 enjoy your freshly generated CRUD and go add more starships to your fleet!
 
