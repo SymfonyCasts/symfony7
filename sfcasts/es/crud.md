@@ -14,7 +14,7 @@ Pulsa intro y, ¡guau! Esta vez ha creado un montón de archivos. Un controlador
 
 ## Arreglar el problema con los Enums en la página de lista
 
-Ahora, echemos un vistazo al interior del recién estrenado controlador. En PhpStorm, navegaré hasta `StarshipAdminController` en nuestro directorio `src/Controller/`. Lo primero que quiero cambiar es la ruta. `Maker` eligió una ruta razonable, pero me gusta la coherencia entre mis rutas de administración, así que cambiaré la ruta a `/admin/starship`. Perfecto
+Ahora, echemos un vistazo al interior del nuevo controlador. En PhpStorm, navegaré hasta `StarshipAdminController` en nuestro directorio `src/Controller/`. Lo primero que quiero cambiar es la ruta. `Maker` eligió una ruta razonable, pero me gusta la coherencia entre mis rutas de administración, así que cambiaré la ruta a `/admin/starship`. Perfecto
 
 Abre esa URL `/admin/starship` en el navegador. Ah, ¡un error! Dice
 
@@ -76,7 +76,13 @@ En la página de la lista, desplázate hacia abajo y encontrarás un enlace "Cre
 
 Vale, seamos sinceros. El código generado ahora funciona muy bien, pero visualmente no está ganando ningún premio de diseño. Voy a mejorar rápidamente algunos estilos, pero no te preocupes, puedes copiar/pegar el mismo código de los bloques de código que aparecen debajo del vídeo.
 
-Pegaré algunas clases CSS de Tailwind en los botones del formulario. También, algo de HTML con clases CSS adecuadas para que las páginas tengan mejor aspecto en `edit.html.twig`...`index.html.twig`... `new.html.twig`... y finalmente `show.html.twig`.
+Primero, en `_form.html.twig`, pegaré algunas clases CSS de Tailwind en el botón de envío.
+
+Esta plantilla `_delete_form.html.twig` es interesante. Es un parcial de Twig para el botón Eliminar. Nunca querrás que las acciones de eliminar sean simples enlaces, que utilicen el método HTTP GET. En su lugar, deberían utilizar el método POST. La única forma de conseguirlo con HTML puro es utilizar un formulario. Así que MakerBundle nos genera este pequeño formulario que contiene el botón Eliminar. Para mayor protección, también incluye un token CSRF. ¡Bastante elegante!
+
+También pegaré aquí algunas clases CSS de Tailwind en el botón Eliminar.
+
+A continuación, pegaré algo de CSS y HTML para mejorar el diseño de la plantilla de edición... plantilla de índice... plantilla nueva... y finalmente la plantilla de presentación.
 
 Una vez que hayamos terminado, vuelve al navegador y actualiza la página: ¡mucho mejor! Los nuevos estilos aportan un diseño más limpio y botones más intuitivos, incluido un botón "Crear nuevo" en la parte superior para facilitar el acceso.
 
@@ -96,11 +102,11 @@ Y busca la clave `form_themes` en la salida, en algún lugar al principio ¡Aqu�
 
 Abre `new.html.twig` para la StarshipPart y comenta la etiqueta del tema del formulario. Ya no la necesitaremos. A continuación, copia el nombre de la plantilla del tema y ve a`config/packages/twig.yaml`.
 
-Debajo de la clave, añade esa opción `form_themes`, y debajo, añade`-`, pega: `tailwind_2_layout.html.twig`. Ya está Ahora, todos los formularios utilizan automáticamente el tema CSS de Tailwind. Y sí, esta configuración es una lista, así que puedes añadir más temas aquí. Eso es útil para aplicar parches y personalizaciones al tema por defecto del formulario. Pero por ahora, mantendré las cosas sencillas.
+Debajo de la clave, añade esa opción `form_themes`, y más abajo, añade`-`, pega: `tailwind_2_layout.html.twig`. Ya está Ahora, todos los formularios utilizan automáticamente el tema CSS de Tailwind. Y sí, esta configuración es una lista, así que puedes añadir más temas aquí. Eso es útil para aplicar parches y personalizaciones al tema por defecto del formulario. Pero por ahora, mantendré las cosas sencillas.
 
 Vuelve al navegador para asegurarte de que el formulario se ha aplicado tanto en la página nueva como en la de edición, y comprueba que nuestro formulario `StarshipPart` también lo sigue utilizando. Sí, tiene un aspecto estupendo, sin regresión.
 
-Y lo mejor es que, aunque hayamos establecido ese tema de forma global, puedes anularlo aplicando otro tema directamente en la plantilla a un formulario específico, como hicimos al principio.
+Y lo mejor de todo es que, aunque hayamos establecido ese tema globalmente, puedes anularlo aplicando otro tema directamente en la plantilla a un formulario específico, como hicimos al principio.
 
 ## Para terminar
 
@@ -110,4 +116,4 @@ En un abrir y cerrar de ojos, tenemos un controlador rico en operaciones CRUD y 
 Si quieres un generador de administración aún más potente para tu aplicación Symfony, con operaciones CRUD ya implementadas y otras funciones geniales, echa un vistazo al [curso EasyAdminBundle](https://symfonycasts.com/screencast/easyadminbundle).
 ***
 
-A continuación, crearemos un nuevo formulario y lo enviaremos mediante el método HTTP GET. Pero por ahora, ¡disfruta de tu CRUD recién generado y ve a añadir más naves estelares a tu flota!
+A continuación, crearemos un nuevo tipo de formulario que no se asigna a ninguna entidad. Pero por ahora, ¡disfruta de tu CRUD recién generado y ve a añadir más naves estelares a tu flota!
