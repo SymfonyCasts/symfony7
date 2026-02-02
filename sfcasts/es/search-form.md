@@ -1,4 +1,4 @@
-# Utilizar Symfony Forms sin una clase de datos
+# Formularios sin clase de datos
 
 Estamos casi en la línea de meta de nuestro viaje con Symfony Forms. Pero antes de terminar, vamos a sumergirnos en algo divertido y práctico a la vez. Si navegas a la página `/parts`, verás una simple entrada de búsqueda. Es un formulario HTML básico, y eso está muy bien. Pero he aquí una idea: ¿podemos recrear esto utilizando Symfony Forms? ¡Por supuesto!
 
@@ -30,7 +30,7 @@ De vuelta en `PartSearchType`, para el campo `query`, pasa `null` para el tipo, 
 
 Ya que estamos aquí, pulamos un poco las cosas. Añade la opción `attr` para los atributos, y dentro de ella, añade `placeholder` ajustado a `Search...` para que coincida con el formulario heredado. En la siguiente línea, `class`. Coge las clases CSS del formulario original y pégalas aquí.
 
-Vuelve a tu navegador y actualiza la página. Ahora debería ser la viva imagen del campo de búsqueda original, menos el icono de búsqueda, del que nos ocuparemos más adelante.
+Vuelve a tu navegador y actualiza la página. Ahora debería ser idéntico al campo de búsqueda original, menos el icono de búsqueda, del que nos ocuparemos más adelante.
 
 Si intentas enviar el formulario ahora, verás que utiliza el método POST, que es el comportamiento por defecto. Sin embargo, nuestro formulario de búsqueda utiliza GET, que es más adecuado para una función de búsqueda.
 
