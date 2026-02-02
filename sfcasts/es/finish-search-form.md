@@ -1,4 +1,4 @@
-# Enviar un formulario de búsqueda mediante GET
+# Enviar un formulario mediante GET
 
 Ahora tenemos un formulario de búsqueda. Pero hay un pequeño problema. Se envía a través de POST porque es el método por defecto de Symfony. Normalmente, eso está muy bien. Pero para un formulario de búsqueda, POST no es la mejor opción. ¿Por qué? Porque cuando buscamos, queremos que la consulta sea visible en la URL. Hace que los resultados de la página se puedan compartir y marcar como favoritos. Además, es como nuestro antiguo formulario. Así que vamos a modificarlo y cambiar nuestro formulario a GET.
 
