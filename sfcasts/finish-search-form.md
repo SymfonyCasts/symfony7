@@ -1,4 +1,4 @@
-# Submitting a Search Form via GET
+# Submitting a Form via GET
 
 Right now, we've got a search form. But there's a tiny hiccup. It's
 submitted through POST because that's Symfony's default approach.

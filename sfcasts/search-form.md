@@ -1,4 +1,4 @@
-# Using Symfony Forms Without a Data Class
+# Forms Without a Data Class
 
 We're almost at the finish line of our journey with Symfony Forms.
 But before we wrap it up, let's dive into something both fun and practical.
