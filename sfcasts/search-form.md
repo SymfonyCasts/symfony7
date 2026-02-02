@@ -1,10 +1,10 @@
 # Using Symfony Forms Without a Data Class
 
-We're almost at the finish line of our exciting journey with Symfony Forms.
+We're almost at the finish line of our journey with Symfony Forms.
 But before we wrap it up, let's dive into something both fun and practical.
 If you navigate to the `/parts` page, you'll see a simple search input.
 It's a basic HTML form, and that's all good. But here's a thought: can we
-recreate this using Symfony Form? You bet!
+recreate this using Symfony Forms? You bet!
 
 ## Creating a Form Without an Entity
 
@@ -25,7 +25,7 @@ symfony console make:form
 ```
 
 Name the form `PartSearchType`. This time around, when it asks for an
-entity or data class, leave it blank. Next up, locate `PartSearchType` in
+entity or data class, leave it blank. Next up, locate the generated `PartSearchType` in
 the `src/Form` directory and open it. You'll see a placeholder field named
 `field_name`. Swap that out with `query` to match the name of the legacy
 search input.
@@ -35,37 +35,37 @@ search input.
 Now, head over to the `index()` action in `src/Controller/PartController.php`.
 At the start, create a form with `$this->createForm()` passing 
 `PartSearchType::class` and store it in a variable named `$searchForm`.
-Then, pass `$searchForm` to the template.
+Then, pass it to the template.
 
-In `templates/part/index.html.twig`, you can render the whole form with
-`{{ form(searchForm) }}`. For now, let's keep the original form so that we
-could compare them. We'll tidy this up later.
+In `templates/part/index.html.twig`, render the whole form with
+`{{ form(searchForm) }}`. For now, let's keep the original so that we
+can compare them. We'll tidy this up later.
 
 After refreshing your browser, you'll notice two search inputs. The new kid
 on the block has a label, while the old one is label-free. Let's sort that
-out.
+out first.
 
 ## Hiding the Form Field Label
 
-Back in `PartSearchType`, for the `query` field, pass `null` as field type
-and an empty array for options. Within it, add `label` option. You can set
+Back in `PartSearchType`, for the `query` field, pass `null` for the type,
+and an array for options. Within it, add the `label` option. You can set
 it to any string that you want to be the label of the field. Or, just set it
 to `false`. This instructs Symfony not to render the label at all.
 
 While we're here, let's polish things up a bit. Add the `attr` option
 for attributes, and inside that, add `placeholder` set to `Search...` to match
-the legacy form. On the next line, `class`. I will go copy the CSS classes
-from the legacy form and paste them here.
+the legacy form. On the next line, `class`. Grab the CSS classes
+from the original form and paste them here.
 
 Jump back to your browser and refresh the page. It should now be a spitting
-image of the legacy search field, minus the missing search icon, which
-we'll take care later.
+image of the legacy search field, minus the search icon, which
+we'll take care of later.
 
 If you try to submit the form now, you'll notice it uses the POST method,
-which is the default behavior. However, the legacy search form uses GET,
+which is the default behavior. However, our search form uses GET,
 which is more fitting for a search feature.
 
 ## What's Next?
 
-In the next section, we'll switch the form method from POST to GET and
-learn how to manage it properly in the controller. See you there!
+Next, we'll switch the form method from POST to GET and
+learn how to manage it properly in the controller.
