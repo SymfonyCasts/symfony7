@@ -1,0 +1,526 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:02.076 align:middle
+¡Hablemos de CRUD!
+
+00:00:02.416 --> 00:00:07.276 align:middle
+No, no las cosas asquerosas, sino las operaciones
+de creación, lectura, actualización y eliminación
+
+00:00:07.426 --> 00:00:09.676 align:middle
+que son la columna vertebral de la mayoría
+de las secciones de administración.
+
+00:00:10.296 --> 00:00:14.456 align:middle
+En lugar de perder un tiempo precioso escribiendo
+controladores, formularios y plantillas manualmente,
+
+00:00:14.456 --> 00:00:18.366 align:middle
+Symfony tiene un ayudante de confianza que
+se encarga de todo lo tedioso por nosotros.
+
+00:00:18.786 --> 00:00:21.406 align:middle
+Es hora de recurrir a nuestro
+fiable aliado, el MakerBundle.
+
+00:00:21.756 --> 00:00:26.946 align:middle
+Ve al terminal y ejecuta: symfony
+console make:crud Una vez que lo hagas,
+
+00:00:27.136 --> 00:00:30.366 align:middle
+MakerBundle entrará en acción,
+haciendo algunas buenas preguntas.
+
+00:00:30.366 --> 00:00:32.776 align:middle
+Para la entidad, pongamos Starship.
+
+00:00:32.776 --> 00:00:37.536 align:middle
+Para el nombre del controlador, ya tenemos
+un StarshipController, pero como estamos
+
+00:00:37.536 --> 00:00:40.806 align:middle
+tratando con cosas de administradores,
+vamos a llamarlo StarshipAdminController.
+
+00:00:40.806 --> 00:00:44.166 align:middle
+En cuanto a las pruebas unitarias
+de PHP, sáltatelas por ahora.
+
+00:00:44.766 --> 00:00:46.556 align:middle
+Pulsa intro y, ¡guau!
+
+00:00:46.856 --> 00:00:48.686 align:middle
+Esta vez ha creado un montón de archivos.
+
+00:00:49.046 --> 00:00:53.376 align:middle
+Un controlador, un tipo de formulario y un
+montón de plantillas para listar, mostrar,
+
+00:00:53.376 --> 00:00:55.756 align:middle
+crear y editar la entidad Starship.
+
+00:00:56.426 --> 00:00:59.876 align:middle
+Este es el tipo de boilerplate que
+preferirías no escribir a mano cada vez.
+
+00:01:00.756 --> 00:01:03.346 align:middle
+Ahora, echemos un vistazo al interior
+del recién estrenado controlador.
+
+00:01:03.656 --> 00:01:07.036 align:middle
+En PhpStorm, navegaré hasta
+StarshipAdminController
+
+00:01:07.186 --> 00:01:08.906 align:middle
+en nuestro directorio src/Controller/.
+
+00:01:09.706 --> 00:01:11.846 align:middle
+Lo primero que quiero
+cambiar es la ruta de acceso.
+
+00:01:12.206 --> 00:01:16.546 align:middle
+Maker elegí una sensata, pero me gusta la coherencia
+en todos mis puntos finales de administración,
+
+00:01:16.546 --> 00:01:21.656 align:middle
+así que modificaré la ruta
+a /admin/starship: ¡Perfecto!
+
+00:01:23.726 --> 00:01:27.046 align:middle
+Abre esa URL /admin/starship en el navegador.
+
+00:01:29.616 --> 00:01:30.806 align:middle
+Ah, ¡un error!
+
+00:01:31.116 --> 00:01:36.236 align:middle
+Dice El objeto de clase StarshipStatusEnum
+no se ha podido convertir en una cadena.
+
+00:01:36.736 --> 00:01:37.566 align:middle
+Un problema clásico.
+
+00:01:38.516 --> 00:01:40.916 align:middle
+Arreglémoslo abriendo la plantilla responsable
+
+00:01:40.916 --> 00:01:44.806 align:middle
+de esta ruta: starship_admin/index.html.twig.
+
+00:01:45.526 --> 00:01:50.116 align:middle
+Actualmente, intenta mostrar directamente el
+estado de la Nave Estelar: Pero no es una cadena:
+
+00:01:51.816 --> 00:01:53.936 align:middle
+Si abres la entidad Starship - verás
+
+00:01:53.936 --> 00:01:56.996 align:middle
+que la propiedad de estado
+es un StarshipStatusEnum:
+
+00:01:57.456 --> 00:01:59.526 align:middle
+Tendremos que acceder
+explícitamente a su valor.
+
+00:02:00.026 --> 00:02:02.746 align:middle
+Aunque MakerBundle ha hecho
+mucho trabajo por nosotros,
+
+00:02:02.956 --> 00:02:05.036 align:middle
+parece que aún no entiende
+del todo los enums de PHP.
+
+00:02:05.286 --> 00:02:06.806 align:middle
+Pero no temas, lo tenemos.
+
+00:02:08.106 --> 00:02:14.126 align:middle
+Todo lo que tenemos que hacer es sustituir
+starship.status por starship.status.value en la plantilla:
+
+00:02:16.626 --> 00:02:20.726 align:middle
+Tras actualizar la página, tenemos una bonita lista
+de todas las naves estelares de nuestra base de datos,
+
+00:02:20.956 --> 00:02:24.376 align:middle
+con algunas acciones útiles que podemos
+realizar sobre ellas, como mostrar y editar.
+
+00:02:24.956 --> 00:02:27.606 align:middle
+Haz clic en el enlace Mostrar
+y aparecerá el mismo error.
+
+00:02:27.856 --> 00:02:31.016 align:middle
+Pero ahora que somos avezados solucionadores
+de problemas, busquemos el controlador
+
+00:02:31.016 --> 00:02:34.036 align:middle
+y la acción responsables y
+apliquemos la misma solución.
+
+00:02:34.696 --> 00:02:38.916 align:middle
+La barra de herramientas de depuración web nos dice
+que StarshipAdminController::show() es el culpable.
+
+00:02:40.906 --> 00:02:41.756 align:middle
+Encuentra ese método...
+
+00:02:45.886 --> 00:02:50.506 align:middle
+salta a la plantilla
+show.html.twig, y actualiza el campo
+
+00:02:50.506 --> 00:02:55.146 align:middle
+a starship.status.value:
+Ahora actualiza la página.
+
+00:02:57.196 --> 00:03:00.986 align:middle
+¡Genial! Ahora podemos ver los detalles
+individuales de la nave estelar y,
+
+00:03:00.986 --> 00:03:02.966 align:middle
+lo que es más importante,
+editarlos o eliminarlos.
+
+00:03:03.746 --> 00:03:07.686 align:middle
+Si hago clic en el botón Eliminar, se activa
+un diálogo de confirmación de JavaScript.
+
+00:03:07.916 --> 00:03:09.606 align:middle
+Un detalle pequeño pero significativo
+
+00:03:09.606 --> 00:03:12.946 align:middle
+para evitar eliminaciones accidentales
+- una característica que aprecio mucho.
+
+00:03:13.636 --> 00:03:21.246 align:middle
+Si lo cancelo y hago clic en Editar, nos encontramos
+con otro error similar, pero esta vez provocado
+
+00:03:21.246 --> 00:03:25.486 align:middle
+por el tema de formulario predeterminado de Symfony: Se
+ha producido una excepción durante la representación
+
+00:03:25.486 --> 00:03:30.046 align:middle
+de la plantilla ("El objeto de clase
+StarshipStatusEnum no se ha podido convertir
+
+00:03:30.046 --> 00:03:34.166 align:middle
+en cadena") en `form_div_layout.html.twig.
+
+00:03:34.166 --> 00:03:44.426 align:middle
+Busca la acción edit() en el controlador y
+abre la plantilla relacionada: edit.html.twig.
+
+00:03:46.726 --> 00:03:52.016 align:middle
+Ahora bien, este archivo no contiene lo que
+necesitamos, pero sí include() otra plantilla:
+
+00:03:52.116 --> 00:03:55.806 align:middle
+_form.html.twig: Continúa abriéndola.
+
+00:03:56.436 --> 00:03:57.846 align:middle
+Aquí es donde se renderiza el formulario.
+
+00:03:57.846 --> 00:04:02.296 align:middle
+Si abres starship_admin/new.html.twig verás
+
+00:04:02.296 --> 00:04:06.096 align:middle
+que estamos incluyendo el mismo formulario tanto
+para acciones nuevas como para acciones de edición.
+
+00:04:06.426 --> 00:04:10.236 align:middle
+La única diferencia es el button_label
+que pasamos como argumento al include().
+
+00:04:10.756 --> 00:04:13.566 align:middle
+El propósito de esta plantilla es
+evitar la duplicación de código.
+
+00:04:14.596 --> 00:04:19.786 align:middle
+Volviendo a _form.html.twig, no estamos
+renderizando ese campo de estado manualmente...
+
+00:04:20.096 --> 00:04:24.596 align:middle
+Todo el formulario se está renderizando con
+esta llamada a form_widget(form): Por suerte,
+
+00:04:24.766 --> 00:04:26.936 align:middle
+esta corrección se realiza en
+la clase de tipo de formulario.
+
+00:04:27.296 --> 00:04:32.846 align:middle
+MakerBundle creó StarshipType para nosotros
+- ábrelo en el directorio src/Form/.
+
+00:04:35.816 --> 00:04:41.176 align:middle
+El campo status aquí es el culpable, parece que adivinar
+el tipo de campo de formulario no funciona para los enums:
+
+00:04:41.486 --> 00:04:44.346 align:middle
+No te preocupes, podemos
+especificar explícitamente el tipo.
+
+00:04:45.226 --> 00:04:51.676 align:middle
+Pasa EnumType::class como 2º argumento
+y ve a actualizar la página: Otro error:
+
+00:04:52.066 --> 00:04:55.176 align:middle
+Falta la opción requerida
+class para este EnumType.
+
+00:04:55.176 --> 00:04:59.336 align:middle
+Los mensajes de error de Symfony son bastante
+útiles, así que puede que ya tengas una
+
+00:04:59.336 --> 00:05:01.306 align:middle
+idea del problema y de cómo solucionarlo.
+
+00:05:02.056 --> 00:05:03.146 align:middle
+Pero confirmémoslo.
+
+00:05:03.396 --> 00:05:06.046 align:middle
+En tu terminal, ejecuta un comando ya conocido:
+
+00:05:06.686 --> 00:05:17.236 align:middle
+symfony console debug:form EnumType Te
+mostrará que la opción class es necesaria
+
+00:05:17.236 --> 00:05:21.346 align:middle
+para este tipo de formulario, y debe
+apuntar a la clase concreta Enum.
+
+00:05:21.346 --> 00:05:24.146 align:middle
+En nuestro caso, sería StarshipStatusEnum.
+
+00:05:26.906 --> 00:05:31.026 align:middle
+Añade una matriz vacía como 3er argumento,
+y dentro, establece la opción class
+
+00:05:31.026 --> 00:05:37.716 align:middle
+en StarshipStatusEnum::class:
+Vuelve a actualizar la página...
+
+00:05:37.716 --> 00:05:38.716 align:middle
+y... ¡genial!
+
+00:05:38.856 --> 00:05:42.436 align:middle
+El formulario se muestra correctamente, podemos
+editar los detalles y actualizar la entidad.
+
+00:05:42.696 --> 00:05:44.116 align:middle
+¡Todo funciona como se esperaba!
+
+00:05:46.986 --> 00:05:50.346 align:middle
+En la página de la lista, desplázate hacia
+abajo y encontrarás un enlace "Crear nuevo".
+
+00:05:51.596 --> 00:05:55.046 align:middle
+Al hacer clic en él, aparece el mismo
+formulario, pero sin datos rellenados de antemano:
+
+00:05:55.326 --> 00:05:57.446 align:middle
+perfecto para crear una nave estelar nueva.
+
+00:05:57.956 --> 00:06:02.476 align:middle
+Esta es una de las mejores partes de la generación
+CRUD de Maker: un formulario que se reutiliza
+
+00:06:02.476 --> 00:06:04.786 align:middle
+tanto para operaciones de
+creación como de actualización.
+
+00:06:05.136 --> 00:06:06.446 align:middle
+Vale, seamos sinceros.
+
+00:06:06.636 --> 00:06:11.146 align:middle
+El código generado ahora funciona muy bien, pero
+visualmente no está ganando ningún premio de diseño.
+
+00:06:11.526 --> 00:06:15.706 align:middle
+Voy a arreglar rápidamente algunos estilos, pero no
+te preocupes, puedes copiar/pegar el mismo código
+
+00:06:15.706 --> 00:06:17.486 align:middle
+de los bloques de código
+que hay debajo del vídeo.
+
+00:06:17.486 --> 00:06:24.316 align:middle
+Primero, en _form.html.twig, pegaré algunas
+clases CSS de Tailwind en el botón de envío:
+
+00:06:25.606 --> 00:06:29.526 align:middle
+Esta plantilla _delete_form.html.twig
+es interesante:
+
+00:06:29.766 --> 00:06:31.906 align:middle
+Es un parcial Twig para el botón Eliminar.
+
+00:06:32.096 --> 00:06:36.486 align:middle
+Nunca querrás que las acciones de eliminar sean
+simples enlaces, que utilicen el método HTTP GET.
+
+00:06:36.746 --> 00:06:39.046 align:middle
+En su lugar, deben utilizar el método POST.
+
+00:06:39.326 --> 00:06:42.886 align:middle
+La única forma de conseguirlo con
+HTML puro es utilizar un formulario.
+
+00:06:43.256 --> 00:06:47.196 align:middle
+Así que MakerBundle nos genera este pequeño
+formulario que contiene el botón Eliminar.
+
+00:06:47.196 --> 00:06:50.896 align:middle
+Para mayor protección,
+también incluye un token CSRF.
+
+00:06:51.086 --> 00:06:51.866 align:middle
+¡Bastante elegante!
+
+00:06:52.266 --> 00:06:58.156 align:middle
+También pegaré aquí algunas clases CSS de Tailwind en
+el botón Eliminar: A continuación, pegaré algo de CSS
+
+00:06:58.156 --> 00:07:10.366 align:middle
+y HTML para mejorar el diseño de la plantilla de
+edición: Plantilla de índice: Nueva plantilla:
+
+00:07:12.446 --> 00:07:22.876 align:middle
+Y, por último, la plantilla de presentación:
+Una vez que hayamos terminado, vuelve al navegador
+
+00:07:22.876 --> 00:07:25.226 align:middle
+y actualiza la página: ¡mucho mejor!
+
+00:07:25.646 --> 00:07:28.856 align:middle
+Los nuevos estilos aportan un diseño
+más limpio y botones más intuitivos,
+
+00:07:29.096 --> 00:07:32.326 align:middle
+incluido un botón "Crear nuevo" en la
+parte superior para facilitar el acceso.
+
+00:07:32.946 --> 00:07:36.086 align:middle
+Lo importante es que sólo
+hemos hecho retoques de estilo,
+
+00:07:36.186 --> 00:07:39.806 align:middle
+la funcionalidad principal sigue estando
+generada al 100% por el MakerBundle.
+
+00:07:40.186 --> 00:07:43.996 align:middle
+Te da un muy buen comienzo, pero puedes tomar
+el control sobre esto si quieres también
+
+00:07:44.236 --> 00:07:46.836 align:middle
+retocando el StarshipAdminController generado.
+
+00:07:47.296 --> 00:07:49.396 align:middle
+Un buen comienzo podría
+ser añadir mensajes flash.
+
+00:07:49.536 --> 00:07:50.186 align:middle
+Pero ¡eso depende de ti!
+
+00:07:51.266 --> 00:07:56.506 align:middle
+El único detalle que queda: el formulario Starship claramente
+no está utilizando la plantilla de formulario CSS de Tailwind.
+
+00:07:57.016 --> 00:08:02.666 align:middle
+Podemos aplicarla en _form.html.twig, igual
+que hicimos para el formulario StarshipPart.
+
+00:08:03.136 --> 00:08:06.396 align:middle
+Pero, ¡espera! Prefiero no repetir esto
+para cada formulario de mi aplicación.
+
+00:08:06.716 --> 00:08:10.356 align:middle
+En lugar de eso, apliquemos ese tema globalmente
+para todos los formularios de nuestra app.
+
+00:08:10.856 --> 00:08:18.826 align:middle
+¿Cómo? En el terminal, Ejecuta: symfony console
+config:dump twig Y busca la clave form_themes
+
+00:08:18.826 --> 00:08:20.696 align:middle
+en la salida, en algún lugar al principio.
+
+00:08:21.296 --> 00:08:21.916 align:middle
+Aquí la tienes
+
+00:08:22.196 --> 00:08:26.036 align:middle
+Está configurado con el tema de formulario predeterminado
+de Symfony, pero podemos anularlo en la configuración.
+
+00:08:27.026 --> 00:08:30.526 align:middle
+Abre new.html.twig para
+la StarshipPart y comenta
+
+00:08:30.526 --> 00:08:33.336 align:middle
+la etiqueta del tema del
+formulario: Ya no la necesitaremos.
+
+00:08:34.286 --> 00:08:41.446 align:middle
+A continuación, copia el nombre de la plantilla
+del tema y ve a config/packages/twig.yaml.
+
+00:08:44.836 --> 00:08:51.236 align:middle
+Debajo de la clave, añade esa opción
+form_themes, y debajo, añade -, pega:
+
+00:08:51.236 --> 00:08:55.266 align:middle
+tailwind_2_layout.html.twig: ¡Ya está!
+
+00:08:55.536 --> 00:08:58.666 align:middle
+Ahora, todos los formularios utilizan
+automáticamente el tema CSS de Tailwind.
+
+00:08:59.176 --> 00:09:02.426 align:middle
+Y sí, esta configuración es una lista,
+así que puedes añadir más temas aquí.
+
+00:09:02.766 --> 00:09:06.436 align:middle
+Eso es útil para aplicar parches y
+personalizaciones al tema por defecto del formulario.
+
+00:09:06.936 --> 00:09:08.506 align:middle
+Pero por ahora, mantendré las cosas sencillas.
+
+00:09:09.276 --> 00:09:13.956 align:middle
+Vuelve al navegador para asegurarte de que el formulario se
+ha aplicado tanto en la página nueva como en la de edición,
+
+00:09:14.226 --> 00:09:17.026 align:middle
+y comprueba que nuestro formulario
+StarshipPart también lo sigue utilizando.
+
+00:09:17.766 --> 00:09:19.806 align:middle
+Sí, se ve muy bien, sin regresión.
+
+00:09:19.806 --> 00:09:24.996 align:middle
+Y lo mejor de todo es que, aunque hayamos
+establecido ese tema globalmente, puedes anularlo
+
+00:09:24.996 --> 00:09:26.686 align:middle
+aplicando otro tema directamente
+
+00:09:26.686 --> 00:09:30.166 align:middle
+en la plantilla a un formulario
+específico, como hicimos al principio.
+
+00:09:30.876 --> 00:09:34.106 align:middle
+En un abrir y cerrar de ojos, tenemos
+un controlador rico en operaciones CRUD
+
+00:09:34.256 --> 00:09:37.246 align:middle
+y una base sólida que podemos
+personalizar a nuestro antojo.
+
+00:09:37.876 --> 00:09:41.776 align:middle
+MakerBundle se encarga de las cosas aburridas,
+permitiéndonos centrarnos en cosas increíbles.
+
+00:09:42.466 --> 00:09:46.166 align:middle
+A continuación, crearemos un nuevo tipo de
+formulario que no se asigna a ninguna entidad.
+
+00:09:46.306 --> 00:09:51.116 align:middle
+Pero por ahora, ¡disfruta de tu CRUD recién generado
+y ve a añadir más naves estelares a tu flota!
