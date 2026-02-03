@@ -21,8 +21,8 @@ skip them for now.
 
 Hit enter and, wow! This time it created a ton of files. A controller,
 a form type, and a heap of templates for listing, showing, creating,
-and editing the `Starship` entity. This is the kind of boilerplate you'd rather not
-write by hand every time.
+and editing the `Starship` entity. This is the kind of boilerplate you'd
+rather not write by hand every time.
 
 ## Fixing the Problem with Enums on the List Page
 
@@ -30,7 +30,11 @@ Now, let's peek inside the newly minted controller. In PhpStorm, I'll navigate
 to the `StarshipAdminController` in our `src/Controller/` directory. The first
 thing I want to change is the route path. `Maker` chose a sensible one,
 but I like consistency across my admin endpoints, so I'll tweak the route
-to `/admin/starship`. Perfect!
+to `/admin/starship`:
+
+[[[ code('75dbe470a2') ]]]
+
+Perfect!
 
 Open that `/admin/starship` URL in the browser. Ah, an error! It says:
 
@@ -38,15 +42,24 @@ Open that `/admin/starship` URL in the browser. Ah, an error! It says:
 
 Classic issue. Let's fix this by opening the template responsible for this
 endpoint: `starship_admin/index.html.twig`. Currently, it
-attempts to render the status of the Starship directly, but it's not
-a string.
+attempts to render the status of the Starship directly:
+
+[[[ code('1496ca0df4') ]]]
+
+But it's not a string:
 
 If you open the `Starship` entity - you will see that the status property is
-a `StartshipStatusEnum`. We'll need to explicitly access its value.
+a `StarshipStatusEnum`:
+
+[[[ code('14f9f7bda8') ]]]
+
+We'll need to explicitly access its value.
 
 Even though MakerBundle did a lot of heavy lifting for us, it seems it
 doesn't fully grasp PHP enums yet. But fear not, we've got this. All we need
-to do is replace `starship.status` with `starship.status.value` in the template.
+to do is replace `starship.status` with `starship.status.value` in the template:
+
+[[[ code('4ebf24ab7b') ]]]
 
 After refreshing the page we have a lovely list of all the Starships in our
 database, complete with some handy actions we can perform on them, like show
@@ -60,10 +73,12 @@ for it, and apply the same fix.
 
 The web debug toolbar tells us `StarshipAdminController::show()` is the culprit.
 Find that method... jump to the `show.html.twig` template, and update the
-field to `starship.status.value`.
+field to `starship.status.value`:
 
-Now refresh the page. Cool! We can now see the
-individual Starship details and, more importantly, edit or delete them.
+[[[ code('077f9a42eb') ]]]
+
+Now refresh the page. Cool! We can now see the individual Starship details
+and, more importantly, edit or delete them.
 
 If I click on the Delete button - it triggers a JavaScript confirmation dialog.
 A small but significant detail to prevent accidental deletions — a feature
@@ -80,28 +95,40 @@ this time it's thrown from the default Symfony form theme:
 
 Find the `edit()` action in the controller and open the related template:
 `edit.html.twig`. Now, this file doesn't contain what we need, but
-it does `include()` another template: `_form.html.twig`. Follow up by opening it.
+it does `include()` another template: `_form.html.twig`:
+
+[[[ code('d1ca0a2b56') ]]]
+
+Follow up by opening it.
 
 This is where the form is rendered. If you open `starship_admin/new.html.twig`
 you will see that we're including the same form for both new and edit actions.
 The only difference is the `button_label` we pass as an argument to the `include()`.
 The purpose of this template is to avoid code duplication.
 
-Back in `_form.html.twig`, we're not rending that status field manually... The entire
-form is being rendered with this `form_widget(form)` call.
+Back in `_form.html.twig`, we're not rending that status field manually...
+The entire form is being rendered with this `form_widget(form)` call:
+
+[[[ code('ffc33983e1') ]]]
 
 Luckily, this fix is done in the form type class. MakerBundle created `StarshipType`
 for us - open it up in the `src/Form/` directory. The `status` field
-here is the culprit, it seems form field type guessing doesn't work for enums.
+here is the culprit, it seems form field type guessing doesn't work for enums:
+
+[[[ code('e868e4e909') ]]]
 
 No worries, we can explicitly specify the type. Pass `EnumType::class` as
-the 2nd argument and go refresh the page. Another error:
+the 2nd argument and go refresh the page:
 
-> The required option `class` is missing for this EnumType.
+[[[ code('cd54525834') ]]]
+
+Another error:
+
+> The required option `class` is missing for this `EnumType`.
 
 Symfony's error messages are quite helpful, so you may already have an inkling
-of the problem and how to fix it. But let's confirm this. In your terminal, run an
-already familiar command:
+of the problem and how to fix it. But let's confirm this. In your terminal,
+run an already familiar command:
 
 ```terminal
 symfony console debug:form EnumType
@@ -112,7 +139,9 @@ and it must point to the concrete Enum class. In our case, that'd be
 `StarshipStatusEnum`.
 
 Add an empty array as the 3rd argument, and inside, set the `class` option to
-`StarshipStatusEnum::class`.
+`StarshipStatusEnum::class`:
+
+[[[ code('39c2aaa727') ]]]
 
 Refresh the page again... and... great! The form renders correctly, we can edit
 the details, and update the entity. Everything works as expected!
@@ -125,37 +154,62 @@ generation - one form that's reused for both create and update operations.
 ## Improve Styling of the CRUD pages
 
 OK, let's be honest. The generated code now works great, but visually it's
-not winning any design awards. I'll quickly spruce up some styling, but don't worry,
-you can copy/paste the same code from the code blocks below the video.
+not winning any design awards. I'll quickly spruce up some styling, but don't 
+worry, you can copy/paste the same code from the code blocks below the video.
 
-First, in `_form.html.twig`, I'll paste some Tailwind CSS classes to the submit button.
+First, in `_form.html.twig`, I'll paste some Tailwind CSS classes to the submit
+button:
 
-This `_delete_form.html.twig` template is interesting. It's a Twig partial for the Delete
-button. You never want delete actions to be simple links, that use the GET HTTP method.
-Instead, they should use the POST method. The only way to achieve this with pure HTML
-is to use a form. So MakerBundle generates this small form for us that contains the Delete button.
+[[[ code('f033a494ca') ]]]
+
+This `_delete_form.html.twig` template is interesting:
+
+[[[ code('d8c2acfd2e') ]]]
+
+It's a Twig partial for the Delete button. You never want delete actions
+to be simple links, that use the GET HTTP method. Instead, they should use
+the POST method.
+
+The only way to achieve this with pure HTML is to use a form. So MakerBundle
+generates this small form for us that contains the Delete button.
 For extra protection, it also includes a CSRF token. Pretty snazzy!
 
-I'll also paste some Tailwind CSS classes to the delete button here.
+I'll also paste some Tailwind CSS classes to the delete button here:
 
-Next, I'll paste some CSS and HTML to improve the layout of the edit template...
-index template... new template... and finally the show template.
+[[[ code('3d55037bf0') ]]]
+
+Next, I'll paste some CSS and HTML to improve the layout of the edit template:
+
+[[[ code('f02a5cf866') ]]]
+
+Index template:
+
+[[[ code('85555a9eeb') ]]]
+
+New template:
+
+[[[ code('496aa0ce4c') ]]]
+
+And finally the show template:
+
+[[[ code('4edeadb04c') ]]]
 
 Once we're done, head back to the browser and refresh the page - much better!
-The new styles lend a cleaner layout and more intuitive buttons, including a "Create new"
-button at the top for easy access.
+The new styles lend a cleaner layout and more intuitive buttons, including
+a "Create new" button at the top for easy access.
 
 The important thing is that we've made just styling tweaks, the core
 functionality is still 100% generated by the MakerBundle. It gives you
-a very good start, but you can take the control over this if you want too by tweaking
-the generated `StarshipAdminController`. A good start could be adding flash messages.
-But it's up to you!
+a very good start, but you can take the control over this if you want too
+by tweaking the generated `StarshipAdminController`. A good start could be
+adding flash messages. But it's up to you!
 
 ## Applying Symfony form theme Globally
 
-The only detail left - the `Starship` form clearly isn't using the Tailwind CSS form template.
-We can apply it in `_form.html.twig`, just as we did for the `StarshipPart` form.
-But wait! I'd rather not repeat this for every form in my app.
+The only detail left - the `Starship` form clearly isn't using the Tailwind CSS
+form template. We can apply it in `_form.html.twig`, just as we did for
+the `StarshipPart` form. But wait! I'd rather not repeat this for every form
+in my app.
 
 Instead, let's apply that theme globally for all forms in our app. How?
 In the terminal, run:
@@ -168,15 +222,22 @@ And find the `form_themes` key in the output, somewhere in the beginning.
 Here it is! It's set to the default Symfony form theme, but we can override
 it in the config.
 
-Open `new.html.twig` for the StarshipPart and comment out
-the form theme tag. We won't need this anymore. Next, copy the theme template name and go to
+Open `new.html.twig` for the StarshipPart and comment out the form theme tag:
+
+[[[ code('fe2cf20ae8') ]]]
+
+We won't need this anymore. Next, copy the theme template name and go to
 `config/packages/twig.yaml`.
 
-Below the key, add that `form_themes` option, and below, add
-`-`, paste: `tailwind_2_layout.html.twig`. That's it! Now, all forms automatically
-use the Tailwind CSS theme. And yes, this config is a list so you can
-add more themes here. That's useful for applying patches and customization
-to the default form theme. But for now, I will keep things simple.
+Below the key, add that `form_themes` option, and below, add `-`, paste:
+`tailwind_2_layout.html.twig`:
+
+[[[ code('0502e23a5d') ]]]
+
+That's it! Now, all forms automatically use the Tailwind CSS theme.
+And yes, this config is a list so you can add more themes here.
+That's useful for applying patches and customization to the default form theme.
+But for now, I will keep things simple.
 
 Head back to the browser to make sure the form was applied for both the new and
 edit pages, and make sure our `StarshipPart` form still uses it too.
@@ -198,6 +259,7 @@ with already implemented CRUD operations and other cool features, take a look at
 [EasyAdminBundle course](https://symfonycasts.com/screencast/easyadminbundle).
 ***
 
-Up next, we'll create a new form type that doesn't map to any entity. But for now,
-enjoy your freshly generated CRUD and go add more starships to your fleet!
+Up next, we'll create a new form type that doesn't map to any entity.
+But for now, enjoy your freshly generated CRUD and go add more starships
+to your fleet!
 
