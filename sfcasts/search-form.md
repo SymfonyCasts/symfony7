@@ -25,21 +25,33 @@ symfony console make:form
 ```
 
 Name the form `PartSearchType`. This time around, when it asks for an
-entity or data class, leave it blank. Next up, locate the generated `PartSearchType` in
-the `src/Form` directory and open it. You'll see a placeholder field named
-`field_name`. Swap that out with `query` to match the name of the legacy
-search input.
+entity or data class, leave it blank. Next up, locate the generated
+`PartSearchType` in the `src/Form` directory and open it.
+
+You'll see a placeholder field named `field_name`:
+
+[[[ code('3b2582c88d') ]]]
+
+Swap that out with `query` to match the name of the legacy search input:
+
+[[[ code('5bfda05670') ]]]
 
 ## Using the Form in the Controller
 
 Now, head over to the `index()` action in `src/Controller/PartController.php`.
 At the start, create a form with `$this->createForm()` passing 
 `PartSearchType::class` and store it in a variable named `$searchForm`.
-Then, pass it to the template.
+Then, pass it to the template:
+
+[[[ code('203f9dccd8') ]]]
 
 In `templates/part/index.html.twig`, render the whole form with
-`{{ form(searchForm) }}`. For now, let's keep the original so that we
-can compare them. We'll tidy this up later.
+`{{ form(searchForm) }}`:
+
+[[[ code('8d0ad4e6a4') ]]]
+
+For now, let's keep the original so that we  can compare them. We'll tidy
+this up later.
 
 After refreshing your browser, you'll notice two search inputs. The new kid
 on the block has a label, while the old one is label-free. Let's sort that
@@ -49,21 +61,25 @@ out first.
 
 Back in `PartSearchType`, for the `query` field, pass `null` for the type,
 and an array for options. Within it, add the `label` option. You can set
-it to any string that you want to be the label of the field. Or, just set it
-to `false`. This instructs Symfony not to render the label at all.
+this to any string you want the label to be. Or, just set it
+to `false`. This instructs Symfony not to render the label at all:
+
+[[[ code('e7aaa1957d') ]]]
 
 While we're here, let's polish things up a bit. Add the `attr` option
 for attributes, and inside that, add `placeholder` set to `Search...` to match
 the legacy form. On the next line, `class`. Grab the CSS classes
-from the original form and paste them here.
+from the original form and paste them here:
+
+[[[ code('8d24961378') ]]]
 
 Jump back to your browser and refresh the page. It should now be a spitting
-image of the legacy search field, minus the search icon, which
-we'll take care of later.
+image of the legacy search field, minus the search icon, which we'll take care
+of later.
 
 If you try to submit the form now, you'll notice it uses the POST method,
-which is the default behavior. However, our search form uses GET,
-which is more fitting for a search feature.
+which is the default behavior. However, our search form uses GET, which is
+more fitting for a search feature.
 
 ## What's Next?
 
