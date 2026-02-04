@@ -1,6 +1,6 @@
 # Formularios sin clase de datos
 
-Estamos casi en la línea de meta de nuestro viaje con Symfony Forms. Pero antes de terminar, vamos a sumergirnos en algo divertido y práctico. Si navegas a la página `/parts`, verás una simple entrada de búsqueda. Es un formulario HTML básico, y eso está muy bien. Pero he aquí una idea: ¿podemos recrear esto utilizando Symfony Forms? ¡Por supuesto!
+Estamos casi en la línea de meta de nuestro viaje con Symfony Forms. Pero antes de terminar, vamos a sumergirnos en algo divertido y práctico a la vez. Si navegas a la página `/parts`, verás una simple entrada de búsqueda. Es un formulario HTML básico, y eso está muy bien. Pero he aquí una idea: ¿podemos recrear esto utilizando Symfony Forms? ¡Por supuesto!
 
 ## Crear un formulario sin una entidad
 
