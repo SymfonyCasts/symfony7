@@ -1,0 +1,184 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:04.176 align:middle
+Estamos casi en la línea de meta
+de nuestro viaje con Symfony Forms.
+
+00:00:04.426 --> 00:00:08.136 align:middle
+Pero antes de terminar, vamos a sumergirnos
+en algo divertido y práctico a la vez.
+
+00:00:08.776 --> 00:00:12.226 align:middle
+Si navegas a la página /parts, verás
+una simple entrada de búsqueda.
+
+00:00:12.656 --> 00:00:15.376 align:middle
+Es un formulario HTML
+básico, y eso está muy bien.
+
+00:00:15.716 --> 00:00:19.166 align:middle
+Pero he aquí una idea: ¿podemos
+recrear esto utilizando Symfony Forms?
+
+00:00:19.446 --> 00:00:24.936 align:middle
+¡Por supuesto! Cuando hablamos de Formularios Symfony,
+solemos vincularlos a una entidad o a una clase de datos.
+
+00:00:25.246 --> 00:00:27.186 align:middle
+Sin embargo, esto no es inamovible.
+
+00:00:27.186 --> 00:00:32.196 align:middle
+Los Formularios Symfony pueden funcionar por sí
+solos, sin ningún mapeo de objetos entre bastidores.
+
+00:00:32.716 --> 00:00:36.156 align:middle
+Todos los datos del formulario
+se almacenan en matrices PHP.
+
+00:00:36.566 --> 00:00:38.776 align:middle
+Nuestro formulario de búsqueda
+es un gran ejemplo de esto.
+
+00:00:39.216 --> 00:00:42.896 align:middle
+Por supuesto, podríamos crear este formulario directamente
+en el controlador utilizando el constructor de formularios.
+
+00:00:43.176 --> 00:00:46.306 align:middle
+Pero para mantener las cosas limpias y ordenadas,
+vamos a seguir con el tipo de formulario.
+
+00:00:46.666 --> 00:00:48.936 align:middle
+Además, aprenderemos algunos
+trucos útiles por el camino.
+
+00:00:49.486 --> 00:00:51.656 align:middle
+Dirígete a tu terminal y
+ejecuta el siguiente comando:
+
+00:00:51.886 --> 00:00:57.206 align:middle
+symfony console make:form Nombra
+el formulario PartSearchType.
+
+00:00:57.986 --> 00:01:01.756 align:middle
+Esta vez, cuando te pida una entidad
+o clase de datos, déjalo en blanco.
+
+00:01:01.756 --> 00:01:07.696 align:middle
+A continuación, localiza el PartSearchType
+generado en el directorio src/Form y ábrelo.
+
+00:01:08.366 --> 00:01:13.046 align:middle
+Verás un campo marcador de posición llamado field_name:
+Cámbialo por query para que coincida con el nombre de
+
+00:01:13.046 --> 00:01:17.096 align:middle
+la entrada de búsqueda heredada:
+Ahora, dirígete a la acción index()
+
+00:01:17.096 --> 00:01:19.626 align:middle
+en src/Controller/PartController.php.
+
+00:01:19.626 --> 00:01:22.356 align:middle
+Al principio, crea un formulario
+
+00:01:22.356 --> 00:01:27.466 align:middle
+con $this->createForm()
+pasando PartSearchType::class
+
+00:01:27.746 --> 00:01:30.136 align:middle
+y guárdalo en una variable
+llamada $searchForm.
+
+00:01:30.136 --> 00:01:33.986 align:middle
+A continuación, pásalo a la plantilla:
+En templates/part/index.html.twig,
+
+00:01:33.986 --> 00:01:39.196 align:middle
+renderiza todo el formulario con
+{{ form(searchForm) }}: Por ahora,
+
+00:01:39.196 --> 00:01:44.466 align:middle
+conservemos el original para poder compararlos.
+
+00:01:45.666 --> 00:01:49.586 align:middle
+Ya lo arreglaremos más adelante.
+
+00:01:49.656 --> 00:01:53.336 align:middle
+Después de actualizar tu navegador,
+verás dos entradas de búsqueda.
+
+00:01:53.426 --> 00:01:56.796 align:middle
+La nueva tiene una etiqueta,
+mientras que la antigua no la tiene.
+
+00:01:57.226 --> 00:01:58.606 align:middle
+Vamos a solucionar esto primero.
+
+00:01:59.176 --> 00:02:01.566 align:middle
+De vuelta en PartSearchType,
+para el campo query,
+
+00:02:01.896 --> 00:02:05.066 align:middle
+pasa null para el tipo, y
+un array para las opciones.
+
+00:02:05.636 --> 00:02:07.396 align:middle
+Dentro de ella, añade la opción label.
+
+00:02:07.826 --> 00:02:10.196 align:middle
+Puedes establecerla en cualquier
+cadena que quieras que sea la etiqueta.
+
+00:02:10.476 --> 00:02:12.206 align:middle
+O, simplemente, ponle false.
+
+00:02:12.586 --> 00:02:15.006 align:middle
+Esto indica a Symfony que
+no muestre la etiqueta:
+
+00:02:15.716 --> 00:02:17.806 align:middle
+Ya que estamos aquí,
+pulamos un poco las cosas.
+
+00:02:17.806 --> 00:02:24.706 align:middle
+Añade la opción attr para los atributos, y dentro
+de ella, añade placeholder ajustado a Search...
+
+00:02:24.706 --> 00:02:27.226 align:middle
+para que coincida con el formulario heredado.
+
+00:02:27.466 --> 00:02:29.236 align:middle
+En la siguiente línea, class.
+
+00:02:30.576 --> 00:02:33.986 align:middle
+Coge las clases CSS del formulario
+original y pégalas aquí:
+
+00:02:36.776 --> 00:02:38.876 align:middle
+Vuelve a tu navegador y actualiza la página.
+
+00:02:39.166 --> 00:02:41.846 align:middle
+Ahora debería ser la viva imagen
+del campo de búsqueda original,
+
+00:02:42.026 --> 00:02:44.606 align:middle
+menos el icono de búsqueda, del
+que nos ocuparemos más adelante.
+
+00:02:44.606 --> 00:02:49.076 align:middle
+Si intentas enviar el formulario ahora,
+verás que utiliza el método POST
+
+00:02:49.156 --> 00:02:50.606 align:middle
+, que es el comportamiento por defecto.
+
+00:02:51.126 --> 00:02:55.306 align:middle
+Sin embargo, nuestro formulario de búsqueda utiliza
+GET, que es más adecuado para una función de búsqueda.
+
+00:02:55.996 --> 00:02:59.136 align:middle
+A continuación, cambiaremos el método
+del formulario de POST a GET y aprenderemos
+
+00:02:59.136 --> 00:03:00.996 align:middle
+a gestionarlo correctamente en el controlador.
