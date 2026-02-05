@@ -16,7 +16,7 @@ this.
 
 Sure, we could build this form right in the controller using the form
 builder. But to keep things neat and tidy, let's stick with the form type again.
-Plus, we'll pick up a few handy tricks on the way.
+Plus, we'll pick up a few handy tricks along the way.
 
 Head to your terminal and run the following command:
 
@@ -41,7 +41,8 @@ Swap that out with `query` to match the name of the legacy search input:
 Now, head over to the `index()` action in `src/Controller/PartController.php`.
 At the start, create a form with `$this->createForm()` passing 
 `PartSearchType::class` and store it in a variable named `$searchForm`.
-Then, pass it to the template:
+When rendering the template below, pass it as an additional parameter with
+`'searchForm' => $searchForm`:
 
 [[[ code('203f9dccd8') ]]]
 

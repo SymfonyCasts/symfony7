@@ -59,7 +59,7 @@ shows the full list.
 
 Honestly, right now, the search works because of some legacy business logic
 in the `PartController`. Specifically, we're grabbing the query directly
-from the request with `$request->query->get('query')`. And for a tiny search
+from the request with `$request->query->getString('query')`. And for a tiny search
 form, that's totally fine. But since we're learning the Symfony Form component,
 let's do this the Symfony form-handling way.
 
@@ -105,7 +105,7 @@ Now, navigation through the site happens via AJAX powered by Turbo. You can
 see it in action in the web debug toolbar when clicking links. Even cooler? Form submission
 also happens via Turbo, and form errors still work perfectly.
 
-If you go to Create new starship part and try to send the empty form... Yep, that's an AJAX request
+On the parts list, if you go to "Create new part" and try to send the empty form... Yep, that's an AJAX request
 and we still see the expected validation errors.
 Turbo makes our app feel faster, smoother, and more immersive. And this is just the start! If you want to go deeper,
 I recommend you take a look at our standalone [Turbo course](https://symfonycasts.com/screencast/turbo).
