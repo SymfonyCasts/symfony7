@@ -1,6 +1,6 @@
 # Formularios sin clase de datos
 
-Estamos casi en la línea de meta de nuestro viaje con Symfony Forms. Pero antes de terminar, vamos a sumergirnos en algo divertido y práctico a la vez. Si navegas a la página `/parts`, verás una simple entrada de búsqueda. Es un formulario HTML básico, y eso está muy bien. Pero he aquí una idea: ¿podemos recrear esto utilizando Symfony Forms? ¡Por supuesto!
+Estamos casi en la línea de meta de nuestro viaje con Symfony Forms. Pero antes de terminar, vamos a sumergirnos en algo divertido y práctico. Si navegas a la página `/parts`, verás una simple entrada de búsqueda. Es un formulario HTML básico, y eso está muy bien. Pero he aquí una idea: ¿podemos recrear esto utilizando Symfony Forms? ¡Por supuesto!
 
 ## Crear un formulario sin una entidad
 
@@ -26,7 +26,7 @@ Cámbialo por `query` para que coincida con el nombre de la entrada de búsqueda
 
 ## Utilizar el formulario en el controlador
 
-Ahora, dirígete a la acción `index()` en `src/Controller/PartController.php`. Al principio, crea un formulario con `$this->createForm()` pasando`PartSearchType::class` y guárdalo en una variable llamada `$searchForm`. Después, pásalo a la plantilla:
+Ahora, dirígete a la acción `index()` en `src/Controller/PartController.php`. Al principio, crea un formulario con `$this->createForm()` pasando`PartSearchType::class` y guárdalo en una variable llamada `$searchForm`. Al renderizar la plantilla de abajo, pásala como parámetro adicional con`'searchForm' => $searchForm`:
 
 [[[ code('203f9dccd8') ]]]
 
