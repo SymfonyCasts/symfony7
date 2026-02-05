@@ -26,7 +26,7 @@ Vuelve a enviar el formulario y ¡bingo! Sólo tenemos el parámetro `query` en 
 
 Actualiza la página, y si intentamos buscar con una entrada vacía, simplemente muestra la lista completa.
 
-Sinceramente, ahora mismo, la búsqueda funciona debido a cierta lógica de negocio heredada en `PartController`. En concreto, estamos capturando la consulta directamente de la petición con `$request->query->get('query')`. Y para un pequeño formulario de búsqueda, eso está totalmente bien. Pero ya que estamos aprendiendo el componente Formulario de Symfony, hagámoslo a la manera de Symfony.
+Sinceramente, ahora mismo, la búsqueda funciona debido a cierta lógica de negocio heredada en `PartController`. En concreto, estamos capturando la consulta directamente de la petición con `$request->query->getString('query')`. Y para un pequeño formulario de búsqueda, eso está totalmente bien. Pero ya que estamos aprendiendo el componente Formulario de Symfony, hagámoslo a la manera de Symfony.
 
 ## Manejo adecuado de formularios en Symfony
 
@@ -52,7 +52,7 @@ Si recuerdas, desactivé Turbo al principio de este curso para simplificar las c
 
 Ahora, la navegación por el sitio se realiza a través de AJAX potenciado por Turbo. Puedes verlo en acción en la barra de herramientas de depuración web al hacer clic en los enlaces. ¿Increíble aún? El envío de formularios también se realiza mediante Turbo, y los errores de formulario siguen funcionando perfectamente.
 
-Si vas a Crear nueva parte de nave estelar e intentas enviar el formulario vacío... Sí, es una petición AJAX y seguimos viendo los errores de validación esperados. Turbo hace que nuestra aplicación sea más rápida, fluida e inmersiva. ¡Y esto es sólo el principio! Si quieres profundizar más, te recomiendo que eches un vistazo a nuestro [curso Turbo] independiente (https://symfonycasts.com/screencast/turbo).
+En la lista de piezas, si vas a "Crear nueva pieza" e intentas enviar el formulario vacío... Sí, es una petición AJAX y seguimos viendo los errores de validación esperados. Turbo hace que nuestra aplicación sea más rápida, fluida y envolvente. ¡Y esto es sólo el principio! Si quieres profundizar más, te recomiendo que eches un vistazo a nuestro [curso Turbo] independiente (https://symfonycasts.com/screencast/turbo).
 
 ## Para terminar
 
