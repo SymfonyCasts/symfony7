@@ -85,22 +85,26 @@ Al principio, crea un formulario
 con $this->createForm()
 pasando PartSearchType::class
 
-00:01:27.746 --> 00:01:30.136 align:middle
+00:01:27.746 --> 00:01:30.226 align:middle
 y guárdalo en una variable
 llamada $searchForm.
 
-00:01:30.136 --> 00:01:33.986 align:middle
-A continuación, pásalo a la plantilla:
+00:01:31.266 --> 00:01:34.466 align:middle
+Cuando renderices la plantilla
+de abajo, pásala como parámetro
+
+00:01:34.466 --> 00:01:41.806 align:middle
+adicional con 'searchForm' => $searchForm:
 En templates/part/index.html.twig,
 
-00:01:33.986 --> 00:01:39.196 align:middle
+00:01:42.146 --> 00:01:45.946 align:middle
 renderiza todo el formulario con
 {{ form(searchForm) }}: Por ahora,
 
-00:01:39.196 --> 00:01:44.466 align:middle
+00:01:45.946 --> 00:01:48.196 align:middle
 conservemos el original para poder compararlos.
 
-00:01:45.666 --> 00:01:49.586 align:middle
+00:01:48.426 --> 00:01:49.586 align:middle
 Ya lo arreglaremos más adelante.
 
 00:01:49.656 --> 00:01:53.336 align:middle
