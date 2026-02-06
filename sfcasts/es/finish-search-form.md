@@ -80,7 +80,11 @@ Si recuerdas, desactivé Turbo al principio de este curso para simplificar las c
 
 Ahora, la navegación por el sitio se realiza mediante AJAX con Turbo. Puedes verlo en acción en la barra de herramientas de depuración web al hacer clic en los enlaces. El envío de formularios también se realiza mediante Turbo, y los errores de formulario siguen funcionando perfectamente.
 
-En la lista de piezas, si vas a "Crear nueva pieza" e intentas enviar el formulario vacío... Sí, es una petición AJAX y seguimos viendo los errores de validación esperados. Turbo hace que nuestra aplicación sea más rápida, fluida e inmersiva. ¡Y esto es sólo el principio! Si quieres profundizar más, te recomiendo que eches un vistazo a nuestro [curso Turbo] independiente (https://symfonycasts.com/screencast/turbo).
+En la lista de piezas, si vas a "Crear nueva pieza" e intentas enviar el formulario vacío... Sí, es una petición AJAX y seguimos viendo los errores de validación esperados. Turbo hace que nuestra aplicación sea más rápida, fluida e inmersiva. ¡Y esto es sólo el principio!
+
+***SEEALSO
+Si quieres profundizar más, te recomiendo que eches un vistazo a nuestro [curso Turbo] independiente (https://symfonycasts.com/screencast/turbo).
+***
 
 ## Para terminar
 
