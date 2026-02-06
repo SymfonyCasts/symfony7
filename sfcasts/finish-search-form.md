@@ -134,8 +134,12 @@ Form submission also happens via Turbo, and form errors still work perfectly.
 On the parts list, if you go to "Create new part" and try to send the empty
 form... Yep, that's an AJAX request and we still see the expected validation
 errors. Turbo makes our app feel faster, smoother, and more immersive. And
-this is just the start! If you want to go deeper, I recommend you take a look
-at our standalone [Turbo course](https://symfonycasts.com/screencast/turbo).
+this is just the start!
+
+***SEEALSO
+If you want to go deeper, I recommend you take a look at our standalone
+[Turbo course](https://symfonycasts.com/screencast/turbo).
+***
 
 ## Wrapping Up
 
