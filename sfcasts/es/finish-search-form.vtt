@@ -1,0 +1,372 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:02.766 align:middle
+Ahora mismo, tenemos un
+formulario de búsqueda.
+
+00:00:02.856 --> 00:00:03.916 align:middle
+Pero hay un pequeño problema.
+
+00:00:04.246 --> 00:00:07.686 align:middle
+Se envía a través de POST porque ese
+es el enfoque por defecto de Symfony.
+
+00:00:08.086 --> 00:00:09.286 align:middle
+Normalmente, eso es genial.
+
+00:00:09.666 --> 00:00:12.226 align:middle
+Pero para un formulario de búsqueda,
+POST no es la mejor opción.
+
+00:00:12.606 --> 00:00:16.796 align:middle
+¿Por qué? Porque cuando buscamos, queremos
+que la consulta sea visible en la URL.
+
+00:00:17.256 --> 00:00:19.806 align:middle
+Hace que los resultados de la página se
+puedan compartir y marcar como favoritos.
+
+00:00:20.246 --> 00:00:22.366 align:middle
+Además, es como nuestro antiguo formulario.
+
+00:00:22.826 --> 00:00:24.996 align:middle
+Así que vamos a modificarlo y
+cambiar nuestro formulario a GET.
+
+00:00:25.706 --> 00:00:28.896 align:middle
+Para empezar, abre nuestra
+clase PartSearchType.
+
+00:00:29.486 --> 00:00:32.726 align:middle
+En setDefaults() podemos ajustar
+las opciones de nuestro formulario.
+
+00:00:33.316 --> 00:00:38.626 align:middle
+En el array vacío, añade una nueva clave
+llamada method y ponla en Request::METHOD_GET.
+
+00:00:39.386 --> 00:00:42.196 align:middle
+Esto no es más que una forma
+rara de escribir la cadena GET:
+
+00:00:42.886 --> 00:00:45.126 align:middle
+Tómate un momento para enviar
+el nuevo formulario con "Legacy".
+
+00:00:46.186 --> 00:00:47.796 align:middle
+Echa un vistazo a la URL.
+
+00:00:48.026 --> 00:00:50.096 align:middle
+Los parámetros de consulta
+parecen un poco locos.
+
+00:00:50.536 --> 00:00:55.656 align:middle
+En lugar del simple query=legacy,
+vemos parts_search[query]=legacy -
+
+00:00:56.246 --> 00:00:59.676 align:middle
+esos %5B y %5D's son
+simplemente [] codificados.
+
+00:00:59.756 --> 00:01:01.796 align:middle
+¿Qué ocurre?
+
+00:01:02.416 --> 00:01:07.096 align:middle
+Por defecto, los formularios Symfony envían los datos como
+matrices anidadas, con la clave del nombre del formulario.
+
+00:01:07.746 --> 00:01:11.556 align:middle
+Esto ayuda a evitar colisiones de nombres cuando
+tienes varios formularios en la misma página.
+
+00:01:11.986 --> 00:01:16.896 align:middle
+Es un movimiento inteligente, pero para nuestro formulario
+de búsqueda, es exagerado y, seamos sinceros, un poco feo.
+
+00:01:17.526 --> 00:01:18.256 align:middle
+Esto es lo que haremos.
+
+00:01:18.606 --> 00:01:20.726 align:middle
+Queremos aplanar los parámetros de consulta.
+
+00:01:20.996 --> 00:01:25.536 align:middle
+Para deshacernos de este prefijo de nombre de formulario,
+podemos anular un método especial en el tipo de formulario.
+
+00:01:26.216 --> 00:01:30.306 align:middle
+De vuelta en PartSearchType, al
+final de esta clase, pulsaré Cmd + N
+
+00:01:30.466 --> 00:01:34.986 align:middle
+y elegiré "Anular métodos", luego
+elegiré el método getBlockPrefix().
+
+00:01:35.556 --> 00:01:39.236 align:middle
+Dentro de él, simplemente devuelve una
+cadena vacía: Esto le dice a Symfony que no
+
+00:01:39.236 --> 00:01:40.996 align:middle
+anteponga a nuestros campos
+el nombre del formulario.
+
+00:01:41.726 --> 00:01:44.216 align:middle
+Vuelve a buscar y ¡bam!
+
+00:01:44.416 --> 00:01:46.526 align:middle
+Tenemos parámetros de
+consulta limpios y planos.
+
+00:01:46.816 --> 00:01:47.436 align:middle
+¡Mucho mejor!
+
+00:01:48.106 --> 00:01:49.246 align:middle
+Pero aún no hemos llegado al final.
+
+00:01:49.516 --> 00:01:51.796 align:middle
+Tenemos esta consulta _token en la URL.
+
+00:01:52.166 --> 00:01:56.816 align:middle
+Es la protección CSRF haciendo su trabajo, pero es
+innecesaria para un formulario de búsqueda basado en GET.
+
+00:01:57.516 --> 00:01:59.356 align:middle
+Sólo estamos filtrando una lista de productos,
+
+00:01:59.706 --> 00:02:02.416 align:middle
+así que vamos a desactivarla para
+este formulario en setDefaults().
+
+00:02:02.856 --> 00:02:07.896 align:middle
+Para ello, vuelve a PartSearchType y añade
+una nueva opción llamada csrf_protection,
+
+00:02:08.366 --> 00:02:13.736 align:middle
+estableciéndola en false: Vuelve
+a enviar el formulario y ¡bingo!
+
+00:02:13.916 --> 00:02:17.596 align:middle
+Sólo tenemos el parámetro query en
+la URL, limpia e intencionadamente.
+
+00:02:18.406 --> 00:02:20.726 align:middle
+¿Qué pasa si intentamos enviar el
+formulario con una consulta vacía?
+
+00:02:21.456 --> 00:02:24.266 align:middle
+Hmm, un error de validación HTML5...
+
+00:02:24.746 --> 00:02:28.926 align:middle
+Puede que eso esté bien para tu aplicación, pero yo preferiría
+que una búsqueda vacía significara "Muéstramelo todo".
+
+00:02:29.566 --> 00:02:33.636 align:middle
+Podemos desactivar la validación utilizando el
+atributo novalidate en la etiqueta del formulario,
+
+00:02:33.876 --> 00:02:36.336 align:middle
+pero una opción mejor es simplemente
+hacer que el campo sea opcional.
+
+00:02:36.796 --> 00:02:41.346 align:middle
+Para el campo query, añade otro parámetro
+llamado required y ajústalo a false:
+
+00:02:42.576 --> 00:02:47.196 align:middle
+Actualiza la página, y si intentamos buscar con una
+entrada vacía, simplemente muestra la lista completa.
+
+00:02:48.136 --> 00:02:50.086 align:middle
+Sinceramente, ahora mismo,
+la búsqueda funciona
+
+00:02:50.086 --> 00:02:53.006 align:middle
+debido a cierta lógica de negocio
+heredada en el PartController.
+
+00:02:53.256 --> 00:02:56.376 align:middle
+En concreto, estamos obteniendo la
+consulta directamente de la petición
+
+00:02:56.376 --> 00:03:03.286 align:middle
+con $request->query->getString('query'): Y para
+un pequeño formulario de búsqueda, eso está muy bien.
+
+00:03:03.576 --> 00:03:05.646 align:middle
+Pero como estamos aprendiendo
+el componente Symfony Form,
+
+00:03:05.866 --> 00:03:08.056 align:middle
+hagámoslo a la manera Symfony
+de manejar formularios.
+
+00:03:08.716 --> 00:03:09.766 align:middle
+Comenta esa línea.
+
+00:03:10.086 --> 00:03:13.036 align:middle
+A continuación, inicializa una nueva
+variable query con el valor null.
+
+00:03:13.916 --> 00:03:20.066 align:middle
+A continuación, dile al formulario que gestione la
+petición con $searchForm->handleRequest($request):
+
+00:03:21.406 --> 00:03:23.016 align:middle
+Añade nuestra comprobación
+habitual de envío de formularios.
+
+00:03:23.016 --> 00:03:29.896 align:middle
+if ($searchForm->isSubmitted()
+&& $searchForm->isValid()).
+
+00:03:30.056 --> 00:03:35.666 align:middle
+El campo se considera no mapeado porque el
+formulario no está asociado a un objeto. query
+
+00:03:36.166 --> 00:03:43.296 align:middle
+Dentro de , establece la variable en : if $query
+$searchForm->get('query')->getData()
+
+00:03:44.446 --> 00:03:49.056 align:middle
+Esto coge el campo de consulta
+y recupera su valor enviado.
+
+00:03:49.056 --> 00:03:50.436 align:middle
+Ya casi está.
+
+00:03:50.436 --> 00:03:57.096 align:middle
+Hagamos el último ajuste en la plantilla.
+
+00:03:57.446 --> 00:04:00.836 align:middle
+Copia el icono SVG y colócalo
+debajo de todo el formulario.
+
+00:04:01.276 --> 00:04:05.106 align:middle
+El posicionamiento CSS adecuado debería seguir
+funcionando, así que no necesitamos colocarlo
+
+00:04:05.106 --> 00:04:07.176 align:middle
+entre las etiquetas de apertura
+y cierre del formulario.
+
+00:04:07.756 --> 00:04:12.596 align:middle
+Ahora ya podemos eliminar por completo el
+antiguo formulario: Actualiza la página de nuevo
+
+00:04:12.596 --> 00:04:17.366 align:middle
+para ver nuestro formulario, y si
+lo buscamos, ¡todavía funciona!
+
+00:04:17.706 --> 00:04:21.426 align:middle
+Tiene el mismo aspecto, pero ahora
+funciona completamente con Symfony Forms.
+
+00:04:22.066 --> 00:04:25.496 align:middle
+De vuelta en , una última
+mejora. PartSearchType.php
+
+00:04:26.096 --> 00:04:30.276 align:middle
+Por defecto, si no especificas el tipo
+de campo, Symfony utiliza . TextType
+
+00:04:30.736 --> 00:04:34.556 align:middle
+Pero como se trata de un campo de búsqueda,
+seamos un poco más semánticos y cambiémoslo
+
+00:04:34.556 --> 00:04:38.796 align:middle
+por uno especial : De vuelta en el navegador,
+actualiza de nuevo la página. SearchType
+
+00:04:39.496 --> 00:04:43.886 align:middle
+A primera vista no ha cambiado nada, pero si empiezas
+a escribir, hay un pequeño y práctico botón X
+
+00:04:43.886 --> 00:04:45.476 align:middle
+que te permite borrar fácilmente la entrada.
+
+00:04:46.336 --> 00:04:50.366 align:middle
+Si recuerdas, desactivé Turbo al principio
+de este curso para simplificar las cosas.
+
+00:04:50.786 --> 00:04:52.496 align:middle
+Pero ahora es el momento de desatar su poder.
+
+00:04:53.126 --> 00:04:59.876 align:middle
+Abre y descomenta : Ahora,
+assets/app.js import '@hotwired/turbo';
+
+00:04:59.956 --> 00:05:03.496 align:middle
+la navegación por el sitio se realiza
+a través de AJAX potenciado por Turbo.
+
+00:05:04.096 --> 00:05:07.296 align:middle
+Puedes verlo en acción en la barra de herramientas
+de depuración web al hacer clic en los enlaces.
+
+00:05:07.976 --> 00:05:08.696 align:middle
+¿Increíble aún?
+
+00:05:08.786 --> 00:05:13.566 align:middle
+El envío de formularios también se realiza mediante Turbo,
+y los errores de formulario siguen funcionando perfectamente.
+
+00:05:14.186 --> 00:05:18.276 align:middle
+En la lista de piezas, si vas a "Crear nueva
+pieza" e intentas enviar el formulario vacío...
+
+00:05:19.346 --> 00:05:23.516 align:middle
+Sí, es una petición AJAX y seguimos
+viendo los errores de validación esperados.
+
+00:05:24.096 --> 00:05:27.356 align:middle
+Turbo hace que nuestra aplicación
+sea más rápida, fluida e inmersiva.
+
+00:05:27.726 --> 00:05:30.316 align:middle
+¡Y esto es sólo el principio!
+
+00:05:30.476 --> 00:05:35.166 align:middle
+¡Muy bien, amigos!
+
+00:05:35.236 --> 00:05:38.506 align:middle
+Has dominado oficialmente los fundamentos
+del componente Formulario de Symfony.
+
+00:05:39.066 --> 00:05:42.366 align:middle
+Ya sabes cómo instalarlo y
+configurarlo, crear tipos de formularios,
+
+00:05:42.626 --> 00:05:44.606 align:middle
+procesarlos con las funciones de ayuda de Twig
+
+00:05:44.806 --> 00:05:48.326 align:middle
+y gestionar los envíos correctamente
+con Form::handleRequest().
+
+00:05:48.906 --> 00:05:52.796 align:middle
+Hemos visto cómo se enlazan los formularios con las
+entidades de Doctrine, cómo funciona la validación,
+
+00:05:52.926 --> 00:05:57.096 align:middle
+cómo personalizar los campos y
+atributos, y cómo dar estilo a todo con
+
+00:05:57.096 --> 00:05:59.096 align:middle
+los temas de formulario integrados en Symfony.
+
+00:05:59.706 --> 00:06:02.856 align:middle
+Estamos listos para construir formularios
+reales, listos para producción, con confianza.
+
+00:06:03.046 --> 00:06:04.726 align:middle
+Así que, ¡a construir
+formularios increíbles!
+
+00:06:04.956 --> 00:06:06.596 align:middle
+Son esenciales en tus aplicaciones.
+
+00:06:06.706 --> 00:06:09.066 align:middle
+Y disfruta de la magia de
+los formularios Symfony.
+
+00:06:09.496 --> 00:06:11.176 align:middle
+hasta la próxima, ¡feliz programación!
