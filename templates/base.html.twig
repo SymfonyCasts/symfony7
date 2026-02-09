@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        {% block stylesheets %}
+        {% endblock %}
+
+        {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+        {% endblock %}
+    </head>
+    <body class="text-white" style="background: radial-gradient(102.21% 102.21% at 50% 28.75%, #00121C 42.62%, #013954 100%);">
+        {% set flashBgColors = {
+            'success': 'bg-green-400/30',
+            'warning': 'bg-yellow-400/30',
+            'error': 'bg-red-400/30',
+            'default': 'bg-blue-400/30'
+        } %}
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="relative isolate flex items-center gap-x-6 overflow-hidden {{ flashBgColors[label]|default(flashBgColors['default']) }} px-6 py-2.5 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10 sm:px-3.5 sm:before:flex-1">
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <p class="text-sm/6 text-gray-100">
+                            {{ message }}
+                        </p>
+                    </div>
+                    <div class="flex flex-1 justify-end">
+                        <button type="button" class="-m-3 p-3 focus-visible:-outline-offset-4">
+                            <span class="sr-only">Dismiss</span>
+                            <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="size-5 text-gray-100">
+                                <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="flex flex-col justify-between min-h-screen relative">
+            <div>
+                <header class="h-[114px] shrink-0 flex flex-col sm:flex-row items-center sm:justify-between py-4 sm:py-0 px-6 border-b border-white/20 shadow-md">
+                    <a href="{{ path('app_homepage') }}">
+                        <img class="h-[42px]" src="{{ asset('images/starshop-logo.png') }}" alt="starshop logo">
+                    </a>
+                    <nav class="flex space-x-4 font-semibold">
+                        <a class="hover:text-amber-400 pt-2" href="{{ path('app_homepage') }}">
+                            Home
+                        </a>
+                        <a class="hover:text-amber-400  pt-2" href="{{ path('app_part_index') }}">
+                            Parts
+                        </a>
+                        <a class="hover:text-amber-400 pt-2" href="#">
+                            Contact
+                        </a>
+                        <a class="rounded-[60px] py-2 px-5 bg-white/10 hover:bg-white/20" href="#">
+                            Get Started
+                        </a>
+                    </nav>
+                </header>
+                {% block body %}{% endblock %}
+            </div>
+            <div class="p-5 bg-white/5 mt-3 text-center">
+                Made with ❤️ by <a class="text-[#0086C4]" href="https://symfonycasts.com">SymfonyCasts</a>
+            </div>
+        </div>
+    </body>
+</html>

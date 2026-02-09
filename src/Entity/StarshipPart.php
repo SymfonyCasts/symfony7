@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\StarshipPartRepository;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: StarshipPartRepository::class)]
+class StarshipPart
+{
+    use TimestampableEntity;
+
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[Assert\NotBlank(message: 'Every part should have a name!')]
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
+    #[Assert\NotBlank(message: 'You forgot to set the price!')]
+    #[Assert\GreaterThan(value: 0, message: 'Starship part cannot be free')]
+    #[ORM\Column]
+    private ?int $price = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $notes = null;
+
+    #[ORM\ManyToOne(inversedBy: 'parts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Starship $starship = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+
+    public function setPrice(int $price): static
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getNotes(): ?string
+    {
+        return $this->notes;
+    }
+
+    public function setNotes(?string $notes): static
+    {
+        $this->notes = $notes;
+
+        return $this;
+    }
+
+    public function getStarship(): ?Starship
+    {
+        return $this->starship;
+    }
+
+    public function setStarship(?Starship $starship): static
+    {
+        $this->starship = $starship;
+
+        return $this;
+    }
+}
