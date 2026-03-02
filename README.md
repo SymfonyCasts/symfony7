@@ -1,56 +1,76 @@
-# Doctrine, Symfony 7 & the Database
+# Doctrine Inheritance: Classes in the Database
 
 Well hi there! This repository holds the code and script for the
-[Doctrine, Symfony 7 & the Database](https://symfonycasts.com/screencast/symfony7-doctrine)
+[Doctrine Inheritance: Classes in the Database](https://symfonycasts.com/screencast/doctrine-inheritance)
 course on SymfonyCasts.
 
 ## Setup
 
-If you've just downloaded the code, congratulations!!
+If you've just downloaded the code, congratulations!
 
 To get it working, follow these steps:
 
+**Download Symfony CLI**
+
+https://symfony.com/download
+
+Make sure you have [Symfony CLI installed](https://symfony.com/download).
+You only need to install it once on your system.
+
+Symfony CLI is a developer tool to help you build, run, and manage
+your Symfony applications directly from your terminal.
+
 **Download Composer dependencies**
 
-Make sure you have [Composer installed](https://getcomposer.org/download/)
-and then run:
+Make sure you have [Composer installed](https://getcomposer.org/download/).
+You only need to install it once on your system.
 
-```
-composer install
-```
+Install Composer dependencies with:
 
-You may alternatively need to run `php composer.phar install`, depending
-on how you installed Composer.
-
-**Build TailwindCSS**
-
-This project uses TailwindCSS, to build the CSS file run:
-
-```
-php bin/console tailwind:build
+```bash
+symfony composer install
 ```
 
-**Start the Symfony web server**
+> [!NOTE]
+> You may alternatively need to run `symfony php composer.phar install`,
+> depending on how you installed Composer.
 
-You can use Nginx or Apache, but Symfony's local web server
-works even better.
+**Setup the Database**
 
-To install the Symfony local web server, follow
-"Downloading the Symfony client" instructions found
-here: https://symfony.com/download - you only need to do this
-once on your system.
+Create the database (SQLite by default, but if you want to go with
+a different DB server - configure the `DATABASE_URL` env var in the `.env`
+file first). Create the database and load the initial fixtures with:
 
-Then, to start the web server, open a terminal, move into the
-project, and run:
-
-```
-symfony serve
+```bash
+symfony console foundry:load-fixtures
 ```
 
-(If this is your first time using this command, you may see an
-error that you need to run `symfony server:ca:install` first).
+**Build Tailwind CSS**
 
-Now check out the site at `https://localhost:8000`
+```bash
+symfony console tailwind:build
+```
+
+> [!NOTE]
+> If you use Symfony Web Server below, it will start
+> a worker for you that will watch your Tailwind CSS assets.
+
+**Start the Symfony Web Server**
+
+You can use Nginx or Apache, but Symfony's local web server works
+even better.
+
+Open a terminal, move into the project dir, and start the web server:
+
+```bash
+symfony serve -d
+```
+
+> [!NOTE]
+> If this is your first time using this command, you may see an
+> error that you need to run `symfony server:ca:install` first.
+
+Now check out the site at `https://localhost:8000`.
 
 Have fun!
 
