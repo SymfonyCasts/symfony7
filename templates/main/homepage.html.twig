@@ -8,7 +8,7 @@
 
         <div class="px-12 pt-10 w-full">
             <h1 class="text-4xl font-semibold mb-8">
-                Ship Repair Queue
+                Ships ({{ ships|length }})
             </h1>
 
             <div class="space-y-5">
@@ -24,7 +24,7 @@
                                 <h4 class="text-[22px] pt-1 font-semibold">
                                     <a
                                         class="hover:text-slate-200"
-                                        href="{{ path('app_starship_show', { id: ship.id }) }}"
+                                        href="#"
                                     >{{ ship.name }}</a>
                                 </h4>
                                 <div>
@@ -34,7 +34,7 @@
                         </div>
                         <div class="flex justify-center min-[1174px]:justify-start mt-2 min-[1174px]:mt-0 shrink-0">
                             <div class="border-r border-white/20 pr-8">
-                                <p class="text-slate-400 text-xs">Captain</p>
+                                <p class="text-slate-400 text-xs text-right">Captain</p>
                                 <p class="text-xl">{{ ship.captain }}</p>
                             </div>
 
@@ -46,11 +46,6 @@
                     </div>
                 {% endfor %}
             </div>
-
-            <p class="text-lg mt-5 text-center md:text-left">
-                Looking for your next galactic ride?
-                <a href="#" class="underline font-semibold">Browse the {{ ships|length * 10 }} starships for sale!</a>
-            </p>
         </div>
     </main>
 {% endblock %}
