@@ -1,0 +1,69 @@
+diff --git a/src/Entity/Freighter.php b/src/Entity/Freighter.php
+index 319769f..11d916a 100644
+--- a/src/Entity/Freighter.php
++++ b/src/Entity/Freighter.php
+@@ -6,21 +6,11 @@ use App\Repository\FreighterRepository;
+ use Doctrine\ORM\Mapping as ORM;
+ 
+ #[ORM\Entity(repositoryClass: FreighterRepository::class)]
+-class Freighter
++class Freighter extends Starship
+ {
+-    #[ORM\Id]
+-    #[ORM\GeneratedValue]
+-    #[ORM\Column]
+-    private ?int $id = null;
+-
+     #[ORM\Column]
+     private ?int $cargoCapacity = null;
+ 
+-    public function getId(): ?int
+-    {
+-        return $this->id;
+-    }
+-
+     public function getCargoCapacity(): ?int
+     {
+         return $this->cargoCapacity;
+diff --git a/src/Entity/Scout.php b/src/Entity/Scout.php
+index 42f76cb..0eca5e1 100644
+--- a/src/Entity/Scout.php
++++ b/src/Entity/Scout.php
+@@ -6,21 +6,11 @@ use App\Repository\ScoutRepository;
+ use Doctrine\ORM\Mapping as ORM;
+ 
+ #[ORM\Entity(repositoryClass: ScoutRepository::class)]
+-class Scout
++class Scout extends Starship
+ {
+-    #[ORM\Id]
+-    #[ORM\GeneratedValue]
+-    #[ORM\Column]
+-    private ?int $id = null;
+-
+     #[ORM\Column]
+     private ?int $sensorRange = null;
+ 
+-    public function getId(): ?int
+-    {
+-        return $this->id;
+-    }
+-
+     public function getSensorRange(): ?int
+     {
+         return $this->sensorRange;
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 5c1adc0..4059971 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -5,8 +5,8 @@ namespace App\Entity;
+ use App\Repository\StarshipRepository;
+ use Doctrine\ORM\Mapping as ORM;
+ 
+-#[ORM\Entity(repositoryClass: StarshipRepository::class)]
+-class Starship
++#[ORM\MappedSuperclass]
++abstract class Starship
+ {
+     #[ORM\Id]
+     #[ORM\GeneratedValue]

@@ -1,0 +1,180 @@
+diff --git a/src/Entity/Freighter.php b/src/Entity/Freighter.php
+new file mode 100644
+index 0000000..319769f
+--- /dev/null
++++ b/src/Entity/Freighter.php
+@@ -0,0 +1,35 @@
++<?php
++
++namespace App\Entity;
++
++use App\Repository\FreighterRepository;
++use Doctrine\ORM\Mapping as ORM;
++
++#[ORM\Entity(repositoryClass: FreighterRepository::class)]
++class Freighter
++{
++    #[ORM\Id]
++    #[ORM\GeneratedValue]
++    #[ORM\Column]
++    private ?int $id = null;
++
++    #[ORM\Column]
++    private ?int $cargoCapacity = null;
++
++    public function getId(): ?int
++    {
++        return $this->id;
++    }
++
++    public function getCargoCapacity(): ?int
++    {
++        return $this->cargoCapacity;
++    }
++
++    public function setCargoCapacity(int $cargoCapacity): static
++    {
++        $this->cargoCapacity = $cargoCapacity;
++
++        return $this;
++    }
++}
+diff --git a/src/Entity/Scout.php b/src/Entity/Scout.php
+new file mode 100644
+index 0000000..42f76cb
+--- /dev/null
++++ b/src/Entity/Scout.php
+@@ -0,0 +1,35 @@
++<?php
++
++namespace App\Entity;
++
++use App\Repository\ScoutRepository;
++use Doctrine\ORM\Mapping as ORM;
++
++#[ORM\Entity(repositoryClass: ScoutRepository::class)]
++class Scout
++{
++    #[ORM\Id]
++    #[ORM\GeneratedValue]
++    #[ORM\Column]
++    private ?int $id = null;
++
++    #[ORM\Column]
++    private ?int $sensorRange = null;
++
++    public function getId(): ?int
++    {
++        return $this->id;
++    }
++
++    public function getSensorRange(): ?int
++    {
++        return $this->sensorRange;
++    }
++
++    public function setSensorRange(int $sensorRange): static
++    {
++        $this->sensorRange = $sensorRange;
++
++        return $this;
++    }
++}
+diff --git a/src/Repository/FreighterRepository.php b/src/Repository/FreighterRepository.php
+new file mode 100644
+index 0000000..6abe8bd
+--- /dev/null
++++ b/src/Repository/FreighterRepository.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Repository;
++
++use App\Entity\Freighter;
++use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
++use Doctrine\Persistence\ManagerRegistry;
++
++/**
++ * @extends ServiceEntityRepository<Freighter>
++ */
++class FreighterRepository extends ServiceEntityRepository
++{
++    public function __construct(ManagerRegistry $registry)
++    {
++        parent::__construct($registry, Freighter::class);
++    }
++
++    //    /**
++    //     * @return Freighter[] Returns an array of Freighter objects
++    //     */
++    //    public function findByExampleField($value): array
++    //    {
++    //        return $this->createQueryBuilder('f')
++    //            ->andWhere('f.exampleField = :val')
++    //            ->setParameter('val', $value)
++    //            ->orderBy('f.id', 'ASC')
++    //            ->setMaxResults(10)
++    //            ->getQuery()
++    //            ->getResult()
++    //        ;
++    //    }
++
++    //    public function findOneBySomeField($value): ?Freighter
++    //    {
++    //        return $this->createQueryBuilder('f')
++    //            ->andWhere('f.exampleField = :val')
++    //            ->setParameter('val', $value)
++    //            ->getQuery()
++    //            ->getOneOrNullResult()
++    //        ;
++    //    }
++}
+diff --git a/src/Repository/ScoutRepository.php b/src/Repository/ScoutRepository.php
+new file mode 100644
+index 0000000..c446ed2
+--- /dev/null
++++ b/src/Repository/ScoutRepository.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Repository;
++
++use App\Entity\Scout;
++use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
++use Doctrine\Persistence\ManagerRegistry;
++
++/**
++ * @extends ServiceEntityRepository<Scout>
++ */
++class ScoutRepository extends ServiceEntityRepository
++{
++    public function __construct(ManagerRegistry $registry)
++    {
++        parent::__construct($registry, Scout::class);
++    }
++
++    //    /**
++    //     * @return Scout[] Returns an array of Scout objects
++    //     */
++    //    public function findByExampleField($value): array
++    //    {
++    //        return $this->createQueryBuilder('s')
++    //            ->andWhere('s.exampleField = :val')
++    //            ->setParameter('val', $value)
++    //            ->orderBy('s.id', 'ASC')
++    //            ->setMaxResults(10)
++    //            ->getQuery()
++    //            ->getResult()
++    //        ;
++    //    }
++
++    //    public function findOneBySomeField($value): ?Scout
++    //    {
++    //        return $this->createQueryBuilder('s')
++    //            ->andWhere('s.exampleField = :val')
++    //            ->setParameter('val', $value)
++    //            ->getQuery()
++    //            ->getOneOrNullResult()
++    //        ;
++    //    }
++}

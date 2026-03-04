@@ -1,0 +1,25 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "add-migration",
+            "name": "add migration",
+            "description": null
+        },
+        {
+            "id": "add-scout-freighter",
+            "name": "add Scout\/Freighter",
+            "description": null
+        },
+        {
+            "id": "mapped-superclass",
+            "name": "mapped superclass",
+            "description": null
+        }
+    ],
+    "sha": "ed2ee43f2f9b3ed5197a833c54f86ccdaf36bf60"
+}
