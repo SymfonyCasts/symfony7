@@ -1,6 +1,16 @@
 chapters:
-  - mapped-superclass
-  - single-table
-  - class-table
-  - querying
-  - associations
+    mapped-superclass:
+        tutsFirstStep: add-scout-freighter
+        tutsLastStep: mapped-superclass
+    single-table:
+        tutsFirstStep: null
+        tutsLastStep: null
+    class-table:
+        tutsFirstStep: null
+        tutsLastStep: null
+    querying:
+        tutsFirstStep: null
+        tutsLastStep: null
+    associations:
+        tutsFirstStep: null
+        tutsLastStep: null
