@@ -2,6 +2,9 @@ chapters:
     mapped-superclass:
         tutsFirstStep: add-scout-freighter
         tutsLastStep: mapped-superclass
+    foundry-fixtures:
+        tutsFirstStep: null
+        tutsLastStep: null
     single-table:
         tutsFirstStep: null
         tutsLastStep: null
