@@ -1,0 +1,76 @@
+diff --git a/src/Factory/FreighterFactory.php b/src/Factory/FreighterFactory.php
+new file mode 100644
+index 0000000..990b1df
+--- /dev/null
++++ b/src/Factory/FreighterFactory.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\Factory;
++
++use App\Entity\Freighter;
++use App\Entity\StarshipStatusEnum;
++use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
++
++/**
++ * @extends PersistentProxyObjectFactory<Freighter>
++ */
++final class FreighterFactory extends PersistentProxyObjectFactory
++{
++    #[\Override]
++    public static function class(): string
++    {
++        return Freighter::class;
++    }
++
++    #[\Override]
++    protected function defaults(): array
++    {
++        return [
++            'arrivedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
++            'captain' => self::faker()->text(),
++            'cargoCapacity' => self::faker()->randomNumber(),
++            'class' => self::faker()->text(),
++            'name' => self::faker()->text(),
++            'status' => self::faker()->randomElement(StarshipStatusEnum::cases()),
++        ];
++    }
++}
+diff --git a/src/Factory/ScoutFactory.php b/src/Factory/ScoutFactory.php
+new file mode 100644
+index 0000000..e17542f
+--- /dev/null
++++ b/src/Factory/ScoutFactory.php
+@@ -0,0 +1,32 @@
++<?php
++
++namespace App\Factory;
++
++use App\Entity\Scout;
++use App\Entity\StarshipStatusEnum;
++use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
++
++/**
++ * @extends PersistentProxyObjectFactory<Scout>
++ */
++final class ScoutFactory extends PersistentProxyObjectFactory
++{
++    #[\Override]
++    public static function class(): string
++    {
++        return Scout::class;
++    }
++
++    #[\Override]
++    protected function defaults(): array
++    {
++        return [
++            'arrivedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
++            'captain' => self::faker()->text(),
++            'class' => self::faker()->text(),
++            'name' => self::faker()->text(),
++            'sensorRange' => self::faker()->randomNumber(),
++            'status' => self::faker()->randomElement(StarshipStatusEnum::cases()),
++        ];
++    }
++}

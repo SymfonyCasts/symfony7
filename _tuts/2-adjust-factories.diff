@@ -1,0 +1,146 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index e82db8a..e70c8fd 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -2,7 +2,7 @@
+ 
+ namespace App\Controller;
+ 
+-use App\Repository\StarshipRepository;
++use App\Repository\ScoutRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -11,7 +11,7 @@ class MainController extends AbstractController
+ {
+     #[Route('/', name: 'app_homepage')]
+     public function homepage(
+-        StarshipRepository $starshipRepository,
++        ScoutRepository $starshipRepository,
+     ): Response {
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+diff --git a/src/Factory/FreighterFactory.php b/src/Factory/FreighterFactory.php
+index 990b1df..7f300f3 100644
+--- a/src/Factory/FreighterFactory.php
++++ b/src/Factory/FreighterFactory.php
+@@ -3,13 +3,11 @@
+ namespace App\Factory;
+ 
+ use App\Entity\Freighter;
+-use App\Entity\StarshipStatusEnum;
+-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+ 
+ /**
+- * @extends PersistentProxyObjectFactory<Freighter>
++ * @extends StarshipFactory<Freighter>
+  */
+-final class FreighterFactory extends PersistentProxyObjectFactory
++final class FreighterFactory extends StarshipFactory
+ {
+     #[\Override]
+     public static function class(): string
+@@ -20,13 +18,8 @@ final class FreighterFactory extends PersistentProxyObjectFactory
+     #[\Override]
+     protected function defaults(): array
+     {
+-        return [
+-            'arrivedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+-            'captain' => self::faker()->text(),
++        return array_merge(parent::defaults(), [
+             'cargoCapacity' => self::faker()->randomNumber(),
+-            'class' => self::faker()->text(),
+-            'name' => self::faker()->text(),
+-            'status' => self::faker()->randomElement(StarshipStatusEnum::cases()),
+-        ];
++        ]);
+     }
+ }
+diff --git a/src/Factory/ScoutFactory.php b/src/Factory/ScoutFactory.php
+index e17542f..20de615 100644
+--- a/src/Factory/ScoutFactory.php
++++ b/src/Factory/ScoutFactory.php
+@@ -4,12 +4,11 @@ namespace App\Factory;
+ 
+ use App\Entity\Scout;
+ use App\Entity\StarshipStatusEnum;
+-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+ 
+ /**
+- * @extends PersistentProxyObjectFactory<Scout>
++ * @extends StarshipFactory<Scout>
+  */
+-final class ScoutFactory extends PersistentProxyObjectFactory
++final class ScoutFactory extends StarshipFactory
+ {
+     #[\Override]
+     public static function class(): string
+@@ -20,13 +19,8 @@ final class ScoutFactory extends PersistentProxyObjectFactory
+     #[\Override]
+     protected function defaults(): array
+     {
+-        return [
+-            'arrivedAt' => \DateTimeImmutable::createFromMutable(self::faker()->dateTime()),
+-            'captain' => self::faker()->text(),
+-            'class' => self::faker()->text(),
+-            'name' => self::faker()->text(),
++        return array_merge(parent::defaults(), [
+             'sensorRange' => self::faker()->randomNumber(),
+-            'status' => self::faker()->randomElement(StarshipStatusEnum::cases()),
+-        ];
++        ]);
+     }
+ }
+diff --git a/src/Factory/StarshipFactory.php b/src/Factory/StarshipFactory.php
+index 054d729..77f8ce3 100644
+--- a/src/Factory/StarshipFactory.php
++++ b/src/Factory/StarshipFactory.php
+@@ -7,9 +7,10 @@ use App\Entity\StarshipStatusEnum;
+ use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+ 
+ /**
+- * @extends PersistentProxyObjectFactory<Starship>
++ * @template T of Starship
++ * @extends PersistentProxyObjectFactory<T>
+  */
+-final class StarshipFactory extends PersistentProxyObjectFactory
++abstract class StarshipFactory extends PersistentProxyObjectFactory
+ {
+     private const SHIP_NAMES = [
+         'Nebula Drifter',
+@@ -90,12 +91,6 @@ final class StarshipFactory extends PersistentProxyObjectFactory
+         'Vale Shadow',
+     ];
+ 
+-    #[\Override]
+-    public static function class(): string
+-    {
+-        return Starship::class;
+-    }
+-
+     #[\Override]
+     protected function defaults(): array|callable
+     {
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 16f4882..5274327 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -2,7 +2,8 @@
+ 
+ namespace App\Story;
+ 
+-use App\Factory\StarshipFactory;
++use App\Factory\FreighterFactory;
++use App\Factory\ScoutFactory;
+ use Zenstruck\Foundry\Attribute\AsFixture;
+ use Zenstruck\Foundry\Story;
+ 
+@@ -11,6 +12,7 @@ final class AppStory extends Story
+ {
+     public function build(): void
+     {
+-        StarshipFactory::createMany(3);
++        ScoutFactory::createMany(3);
++        FreighterFactory::createMany(3);
+     }
+ }

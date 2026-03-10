@@ -19,7 +19,17 @@
             "id": "mapped-superclass",
             "name": "mapped superclass",
             "description": null
+        },
+        {
+            "id": "2-make-factory",
+            "name": "2. make:factory",
+            "description": null
+        },
+        {
+            "id": "2-adjust-factories",
+            "name": "2. adjust factories",
+            "description": null
         }
     ],
-    "sha": "ed2ee43f2f9b3ed5197a833c54f86ccdaf36bf60"
+    "sha": "4631558ba60d758bfd7e6fb8c62f465a70d402ff"
 }
