@@ -29,7 +29,12 @@
             "id": "2-adjust-factories",
             "name": "2. adjust factories",
             "description": null
+        },
+        {
+            "id": "3-single-table-inheritance",
+            "name": "3. single table inheritance",
+            "description": null
         }
     ],
-    "sha": "4631558ba60d758bfd7e6fb8c62f465a70d402ff"
+    "sha": "cef1bc973ff6359b1952bc21e5b707c037c9cc1a"
 }

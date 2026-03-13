@@ -1,0 +1,40 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index e70c8fd..1acb674 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -3,6 +3,7 @@
+ namespace App\Controller;
+ 
+ use App\Repository\ScoutRepository;
++use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -11,7 +12,7 @@ class MainController extends AbstractController
+ {
+     #[Route('/', name: 'app_homepage')]
+     public function homepage(
+-        ScoutRepository $starshipRepository,
++        StarshipRepository $starshipRepository,
+     ): Response {
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 4059971..3b382c3 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -5,7 +5,13 @@ namespace App\Entity;
+ use App\Repository\StarshipRepository;
+ use Doctrine\ORM\Mapping as ORM;
+ 
+-#[ORM\MappedSuperclass]
++#[ORM\Entity(repositoryClass: StarshipRepository::class)]
++#[ORM\InheritanceType('SINGLE_TABLE')]
++#[ORM\DiscriminatorColumn('ship_type', 'string')]
++#[ORM\DiscriminatorMap([
++    'scout' => Scout::class,
++    'freighter' => Freighter::class,
++])]
+ abstract class Starship
+ {
+     #[ORM\Id]
