@@ -6,8 +6,8 @@ chapters:
         tutsFirstStep: 2-make-factory
         tutsLastStep: 2-adjust-factories
     single-table:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 3-single-table-inheritance
+        tutsLastStep: 3-single-table-inheritance
     class-table:
         tutsFirstStep: null
         tutsLastStep: null
