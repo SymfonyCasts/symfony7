@@ -51,3 +51,30 @@
 - Not ideal. Would be cool to still be able to inject the StarshipRepository
   and have it return both scouts and freighters
 - We'll solve this next by using a different type of inheritance: Single Table Inheritance
+
+## Single Table Inheritance
+- With Single Table Inheritance, all classes in the hierarchy are stored in a single table
+- In Starship
+  - `MappedSuperclass` -> `Entity(repositoryClass: StarshipRepository::class)`
+  - add `ORM\InheritanceType('SINGLE_TABLE')`
+  - add `ORM\DiscriminatorColumn('ship_type', 'string')` (look into attribute)
+  - `[ORM\DiscriminatorMap([
+        'freighter' => Freighter::class,
+        'scout' => Scout::class,
+     ])]`
+- `symfony console doctrine:schema:update --dump-sql`
+  - drops the scout and freighter tables, creates a new starship table with all the
+    fields from both entities, plus a new `ship_type` field
+  - even though our scout and freighter properties are not-nullable, they need to
+    nullable in the database, because they won't be filled for the other type of ship
+- `symfony console foundry:load-fixtures` - works!
+- `symfony console doctrine:query:sql 'select * from starship'`
+  - note this command has changed to `dbal:run-sql`
+- in `MainController`
+  - switch back to `StarshipRepository`
+- Go to homepage - 6 ships!
+  - Check the profiler and view formatted query
+- Some cons:
+  - cannot have non-nullable fields in child entities
+  - potentially a ton of empty fields in the database
+- Next, let's look at the final type of Doctrine inheritance
