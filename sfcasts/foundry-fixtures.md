@@ -99,7 +99,7 @@ To fix this, open `src/Controller/MainController`. In the `homepage()` method, r
 Refresh the homepage... and there we go! These are our three Scouts.
 
 But what about the Freighters? Well, we could also inject the `FreighterRepository`,
-fetch those too, and merge them with the Scouts. This isn't really ideal though,
+fetch those too, and merge them with the Scouts. But this isn't really ideal though,
 it would not scale well. Imagine we had 20 different types of starships - we'd have
 to inject 20 different repositories... Gross!
 
