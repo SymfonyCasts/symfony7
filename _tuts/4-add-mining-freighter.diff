@@ -1,0 +1,160 @@
+diff --git a/src/Entity/MiningFreighter.php b/src/Entity/MiningFreighter.php
+new file mode 100644
+index 0000000..563eeff
+--- /dev/null
++++ b/src/Entity/MiningFreighter.php
+@@ -0,0 +1,25 @@
++<?php
++
++namespace App\Entity;
++
++use App\Repository\MiningFreighterRepository;
++use Doctrine\ORM\Mapping as ORM;
++
++#[ORM\Entity(repositoryClass: MiningFreighterRepository::class)]
++class MiningFreighter extends Freighter
++{
++    #[ORM\Column]
++    private ?int $laserPower = null;
++
++    public function getLaserPower(): ?int
++    {
++        return $this->laserPower;
++    }
++
++    public function setLaserPower(int $laserPower): static
++    {
++        $this->laserPower = $laserPower;
++
++        return $this;
++    }
++}
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 8e13e97..24f1a6c 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
+ #[ORM\DiscriminatorMap([
+     'scout' => Scout::class,
+     'freighter' => Freighter::class,
++    'mining_freighter' => MiningFreighter::class,
+ ])]
+ abstract class Starship
+ {
+diff --git a/src/Factory/FreighterFactory.php b/src/Factory/FreighterFactory.php
+index 7f300f3..4e770f9 100644
+--- a/src/Factory/FreighterFactory.php
++++ b/src/Factory/FreighterFactory.php
+@@ -5,9 +5,10 @@ namespace App\Factory;
+ use App\Entity\Freighter;
+ 
+ /**
+- * @extends StarshipFactory<Freighter>
++ * @template T of Freighter
++ * @extends StarshipFactory<T>
+  */
+-final class FreighterFactory extends StarshipFactory
++class FreighterFactory extends StarshipFactory
+ {
+     #[\Override]
+     public static function class(): string
+diff --git a/src/Factory/MiningFreighterFactory.php b/src/Factory/MiningFreighterFactory.php
+new file mode 100644
+index 0000000..c601454
+--- /dev/null
++++ b/src/Factory/MiningFreighterFactory.php
+@@ -0,0 +1,26 @@
++<?php
++
++namespace App\Factory;
++
++use App\Entity\MiningFreighter;
++use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
++
++/**
++ * @extends FreighterFactory<MiningFreighter>
++ */
++final class MiningFreighterFactory extends FreighterFactory
++{
++    #[\Override]
++    public static function class(): string
++    {
++        return MiningFreighter::class;
++    }
++
++    #[\Override]
++    protected function defaults(): array
++    {
++        return array_merge(parent::defaults(), [
++            'laserPower' => self::faker()->randomNumber(),
++        ]);
++    }
++}
+diff --git a/src/Repository/MiningFreighterRepository.php b/src/Repository/MiningFreighterRepository.php
+new file mode 100644
+index 0000000..c57a2c3
+--- /dev/null
++++ b/src/Repository/MiningFreighterRepository.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Repository;
++
++use App\Entity\MiningFreighter;
++use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
++use Doctrine\Persistence\ManagerRegistry;
++
++/**
++ * @extends ServiceEntityRepository<MiningFreighter>
++ */
++class MiningFreighterRepository extends ServiceEntityRepository
++{
++    public function __construct(ManagerRegistry $registry)
++    {
++        parent::__construct($registry, MiningFreighter::class);
++    }
++
++    //    /**
++    //     * @return MiningFreighter[] Returns an array of MiningFreighter objects
++    //     */
++    //    public function findByExampleField($value): array
++    //    {
++    //        return $this->createQueryBuilder('m')
++    //            ->andWhere('m.exampleField = :val')
++    //            ->setParameter('val', $value)
++    //            ->orderBy('m.id', 'ASC')
++    //            ->setMaxResults(10)
++    //            ->getQuery()
++    //            ->getResult()
++    //        ;
++    //    }
++
++    //    public function findOneBySomeField($value): ?MiningFreighter
++    //    {
++    //        return $this->createQueryBuilder('m')
++    //            ->andWhere('m.exampleField = :val')
++    //            ->setParameter('val', $value)
++    //            ->getQuery()
++    //            ->getOneOrNullResult()
++    //        ;
++    //    }
++}
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 5274327..e053b94 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -3,6 +3,7 @@
+ namespace App\Story;
+ 
+ use App\Factory\FreighterFactory;
++use App\Factory\MiningFreighterFactory;
+ use App\Factory\ScoutFactory;
+ use Zenstruck\Foundry\Attribute\AsFixture;
+ use Zenstruck\Foundry\Story;
+@@ -14,5 +15,6 @@ final class AppStory extends Story
+     {
+         ScoutFactory::createMany(3);
+         FreighterFactory::createMany(3);
++        MiningFreighterFactory::createMany(2);
+     }
+ }

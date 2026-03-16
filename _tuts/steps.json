@@ -34,7 +34,17 @@
             "id": "3-single-table-inheritance",
             "name": "3. single table inheritance",
             "description": null
+        },
+        {
+            "id": "4-use-joined",
+            "name": "4. use joined",
+            "description": null
+        },
+        {
+            "id": "4-add-mining-freighter",
+            "name": "4. add mining freighter",
+            "description": null
         }
     ],
-    "sha": "cef1bc973ff6359b1952bc21e5b707c037c9cc1a"
+    "sha": "2ab399d81046de61b6b371bb5c2e3cd19d401883"
 }

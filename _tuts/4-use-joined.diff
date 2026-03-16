@@ -1,0 +1,13 @@
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 3b382c3..8e13e97 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -6,7 +6,7 @@ use App\Repository\StarshipRepository;
+ use Doctrine\ORM\Mapping as ORM;
+ 
+ #[ORM\Entity(repositoryClass: StarshipRepository::class)]
+-#[ORM\InheritanceType('SINGLE_TABLE')]
++#[ORM\InheritanceType('JOINED')]
+ #[ORM\DiscriminatorColumn('ship_type', 'string')]
+ #[ORM\DiscriminatorMap([
+     'scout' => Scout::class,
