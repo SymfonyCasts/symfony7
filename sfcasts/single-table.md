@@ -19,9 +19,9 @@ open that up. Change the `MappedSuperclass` attribute back to `Entity`. It may s
 a bit strange because it's abstract, but for querying purposes, it *is* an entity.
 Also, add back `repositoryClass: StarshipRepository::class` as the argument.
 
-Next, add the attribute `#[ORM\InheritanceType('SINGLE_TABLE')]` to the class. Oops, I have
-an extra `ORM` here. This attribute tells Doctrine that this entity is using
-single table inheritance.
+Next, add the attribute `#[ORM\InheritanceType()]` to the class. Oops, I have
+an extra `ORM` here. The argument for this attribute is a string that specifies
+the type of inheritance we're using. In our case, `SINGLE_TABLE`.
 
 Because it's a single table, Doctrine needs to know which entity type is
 associated with each row. In our case, it could be a `freighter` or a
