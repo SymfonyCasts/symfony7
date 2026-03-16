@@ -10,9 +10,9 @@ Lo primero que tienes que hacer es encontrar la entidad padre en tu jerarquía. 
 
 En nuestro caso, es `Starship`, así que ábrela. Vuelve a cambiar el atributo `MappedSuperclass` por `Entity`. Puede parecer un poco extraño porque es abstracto, pero a efectos de consulta, es una entidad. Además, vuelve a añadir `repositoryClass: StarshipRepository::class` como argumento.
 
-A continuación, añade el atributo `#[ORM\InheritanceType('SINGLE_TABLE')]` a la clase. Uy, aquí me sobra `ORM`. Este atributo indica a Doctrine que esta entidad utiliza la herencia de tabla única.
+A continuación, añade el atributo `#[ORM\InheritanceType()]` a la clase. Uy, aquí me sobra `ORM`. El argumento de este atributo es una cadena que especifica el tipo de herencia que estamos utilizando. En nuestro caso, `SINGLE_TABLE`.
 
-Como se trata de una tabla única, Doctrine necesita saber qué tipo de entidad está asociada a cada fila. En nuestro caso, podría ser un `freighter` o un`scout`. Para ello, necesitamos configurar una columna Discriminador.
+Al tratarse de una tabla única, Doctrine necesita saber qué tipo de entidad está asociada a cada fila. En nuestro caso, podría ser un `freighter` o un`scout`. Para ello, necesitamos configurar una columna Discriminador.
 
 Añade el atributo `#[ORM\DiscriminatorColumn]`. Indaga en él para echar un vistazo a su firma. Se parece bastante al atributo normal `Column` que estás acostumbrado a utilizar. Y, sí, define una columna en la base de datos. Así que puedes utilizar este atributo para configurar su esquema.
 
