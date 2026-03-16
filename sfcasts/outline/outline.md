@@ -78,3 +78,37 @@
   - cannot have non-nullable fields in child entities
   - potentially a ton of empty fields in the database
 - Next, let's look at the final type of Doctrine inheritance
+
+## Class Table Inheritance
+- With Class Table Inheritance, each class in the hierarchy is stored in its own table.
+  - Only properties specific to that class are stored in the table for that class
+- In `Starship`, change to `JOINED` inheritance type
+  - That's it!
+- `symfony console doctrine:schema:drop --force`
+- `symfony console doctrine:schema:update --dump-sql`
+  - creates a new starship table with only the common fields, and creates new scout and
+    freighter tables with the specific fields, plus a foreign key to the starship table
+- `symfony console foundry:load-fixtures` - still works!
+- `symfony console doctrine:query:sql 'select * from starship'`
+  - only returns the common fields, not the specific fields for each type of ship
+- `symfony console doctrine:query:sql 'select * from scout'`
+- check the app and the profiler... joins are happening behind the scenes
+- Let's add another Starship type, this time, deeper in the hierarchy
+- `symfony console make:entity MiningFreighter`
+  - `laserPower` (integer)
+- `symfony console make:factory` - all
+- in `src/Entity/MiningFreighter.php`
+  - extend `Freighter`, remove id
+- in MiningFreighterFactory...
+  - First, we need to adjust the FreighterFactory
+    - remove final, add `@template T of Freighter`, add T to extends
+  - Back in MiningFreighterFactory
+    - `extends FreighterFactory<MiningFreighter>`
+    - adjust defaults to use `array_merge(parent::defaults(), [...])`
+- in AppStory, create 2 mining freighters
+- `symfony console foundry:load-fixtures` - ERRROR!!!
+  - "Entity 'App\Entity\MiningFreighter' has to be part of the discriminator map of 'App\Entity\Starship'..."
+- This step is easy to forget...
+- In `Starship`, `'mining_freighter' => MiningFreighter::class` to the discriminator map
+- load fixtures again - works!
+- Check the homepage - all 8 ships!
