@@ -9,8 +9,8 @@ chapters:
         tutsFirstStep: 3-single-table-inheritance
         tutsLastStep: 3-single-table-inheritance
     class-table:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 4-use-joined
+        tutsLastStep: 4-add-mining-freighter
     querying:
         tutsFirstStep: null
         tutsLastStep: null
