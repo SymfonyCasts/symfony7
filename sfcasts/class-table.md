@@ -8,7 +8,11 @@ specific to that entity are stored in the table
 the scenes to get all the data for the entity you're fetching.
 
 Over in starship, in the `InheritanceType` attribute, change `SINGLE_TABLE`
-to `JOINED`. Doctrine traditionally used `JOINED` to refer to this type of
+to `JOINED`:
+
+[[[ code('7b788d1aaa') ]]]
+
+Doctrine traditionally used `JOINED` to refer to this type of
 inheritance, but it's more commonly known as Class Table Inheritance. That's it!
 
 ***NOTE
@@ -103,7 +107,9 @@ symfony console make:factory
 Choose `all` to create the missing `MiningFreighter`.
 
 Back in our IDE, open up our new `MiningFreighter` entity. Have it extend `Freighter` and
-remove the `id` property and getter.
+remove the `id` property and getter:
+
+[[[ code('962f647f0b') ]]]
 
 ## Updating the Factory
 
@@ -112,20 +118,28 @@ to the `FreighterFactory` before we can extend it, so open up that.
 
 Remove the `final` so we *can* extend it. Next, we need to add a template so sub-factories
 can specify the type of entity they are creating. In the class docblock, add
-`@template T of Freighter`. Then, in the `@extends`, scope it to `T`.
+`@template T of Freighter`. Then, in the `@extends`, scope it to `T`:
+
+[[[ code('52d87f25d9') ]]]
 
 Back in `MiningFreighterFactory`, have the class extend `FreighterFactory`. Do the same
-for `@extends` in the docblock.
+for `@extends` in the docblock:
+
+[[[ code('e3c68a0a09') ]]]
 
 Down in `defatuls()`, add our `array_merge` trick. `array_merge(parent::defaults()`, second
-argument, the array, and don't forget to close the function.
+argument, the array, and don't forget to close the function:
+
+[[[ code('4e4012e22c') ]]]
 
 We have some cool `array_merge` inception going on here. The `MiningFreighterFactory` is merging
 with the defaults from the `FreighterFactory`, which is merging with the defaults from `StarshipFactory`.
 
 ## Creating Some Data
 
-Next, over in `AppStory`, create a few mining freighters with `MiningFreighterFactory::createMany(2)`.
+Next, over in `AppStory`, create a few mining freighters with `MiningFreighterFactory::createMany(2)`:
+
+[[[ code('21e3eec82b') ]]]
 
 Back in the terminal, reload the fixtures.
 
@@ -139,7 +153,11 @@ to be properly mapped in the inheritance hierarchy."
 This is a common step to forget when adding new entities to an inheritance hierarchy.
 
 Back in `Starship`, in the `DiscriminatorMap` array, add our new entity with
-`'mining_freighter' => MiningFreighter::class`. I like to use snake case for the keys,
+`'mining_freighter' => MiningFreighter::class`:
+
+[[[ code('4f5157d633') ]]]
+
+I like to use snake case for the keys,
 but you can use whatever you want. The important thing is that the value is the class name
 of the entity.
 

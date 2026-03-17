@@ -61,13 +61,27 @@ The first type of inheritance we're going to explore is the mapped
 superclass. It's like an abstract class in PHP, or more accurately, an
 abstract entity. Our `Starship` will be the Mapped Superclass.
 Make it `abstract`, meaning it can't be instantiated directly
-but must be extended to be used. Next, replace the `ORM\Entity` attribute with
-`ORM\MappedSuperclass`. That's it!
+but must be extended to be used:
+
+[[[ code('27de96a78e') ]]]
+
+Next, replace the `ORM\Entity` attribute with `ORM\MappedSuperclass`:
+
+[[[ code('957310e89f') ]]]
+
+That's it!
 
 Next, our `Freighter` entity. Have it `extends Starship`. We
 don't need the `id`, since that's inherited from `Starship`, so we'll
-delete it along with the `getId()` method. Everything else is specific
-to the `Freighter`. Repeat these steps for the `Scout` entity.
+delete it along with the `getId()` method:
+
+[[[ code('4da13ec44f') ]]]
+
+
+Everything else is specific to the `Freighter`. Repeat these steps for the
+`Scout` entity:
+
+[[[ code('ca22e1c73e') ]]]
 
 ## Updating the Schema and Loading Fixtures
 

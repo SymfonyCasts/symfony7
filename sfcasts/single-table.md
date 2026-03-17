@@ -17,11 +17,15 @@ entities in our hierarchy extend from.
 In our case, it's `Starship`, so
 open that up. Change the `MappedSuperclass` attribute back to `Entity`. It may seem
 a bit strange because it's abstract, but for querying purposes, it *is* an entity.
-Also, add back `repositoryClass: StarshipRepository::class` as the argument.
+Also, add back `repositoryClass: StarshipRepository::class` as the argument:
+
+[[[ code('acf8d6bf0b') ]]]
 
 Next, add the attribute `#[ORM\InheritanceType()]` to the class. Oops, I have
 an extra `ORM` here. The argument for this attribute is a string that specifies
-the type of inheritance we're using. In our case, `SINGLE_TABLE`.
+the type of inheritance we're using. In our case, `SINGLE_TABLE`:
+
+[[[ code('4b281928ae') ]]]
 
 Because it's a single table, Doctrine needs to know which entity type is
 associated with each row. In our case, it could be a `freighter` or a
@@ -32,7 +36,9 @@ at its signature. This looks pretty similar to the normal `Column` attribute
 you're used to using. And, yep, it does define a column in the database. So you
 can use this attribute to configure its schema.
 
-Set the name to `ship_type` and the type to `string`.
+Set the name to `ship_type` and the type to `string`:
+
+[[[ code('7d1ead0ceb') ]]]
 
 One important thing to note. This column is only used internally by Doctrine.
 It's not something you can access from your entity. This is kind of a bummer
@@ -48,7 +54,9 @@ Add the `#[ORM\DiscriminatorMap]` attribute. It takes an array where the keys
 are the value stored in the discriminator column, and the values are the entity classes.
 
 So, add the `freighter` key and set it to `Freighter::class`. Then add the `scout` key
-and set it to `Scout::class`.
+and set it to `Scout::class`:
+
+[[[ code('db3ae39fff') ]]]
 
 Even though our `Starship` is abstract here (meaning you can't instantiate
 it), that's not a limitation. If you wanted to, you could instantiate and
@@ -106,7 +114,9 @@ for the `scout` rows. This is exactly what we expected!
 ## Adjusting the Homepage Controller
 
 Ok, time to query them all at once! Head over to `MainController::homepage()` and
-inject `StarshipRepository` instead of `ScoutRepository`.
+inject `StarshipRepository` instead of `ScoutRepository`:
+
+[[[ code('1ebde19463') ]]]
 
 This `$ships` variable will now be an array `Scout` and `Freighter` entities.
 

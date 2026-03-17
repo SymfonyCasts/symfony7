@@ -34,7 +34,11 @@ be used directly. In the docblock, we'll sprinkle in some PHP generics to help
 with auto-completion. Add our own template with `@template T of Starship`.
 This indicates that our template `T` can only be of type `Starship`, or any
 subclass of `Starship`. Then, modify the `@extends` to `PersistentProxyObjectFactory<T>` to
-*use* our template. Now, any sub-factory that extends `StarshipFactory` can specify their own
+*use* our template:
+
+[[[ code('748965f26b') ]]]
+
+Now, any sub-factory that extends `StarshipFactory` can specify their own
 Starship type for `T`, and we'll get auto-completion for that Starship type when we use the factory.
 
 ***TIP
@@ -50,14 +54,21 @@ overridden from the sub factories.
 Time to one of my favorite things to do, removing duplicated code!
 
 In `FreighterFactory`, have it `extends StarshipFactory`,
-and in the docblock, change the `@extends` to `StarshipFactory<Freighter>`.
+and in the docblock, change the `@extends` to `StarshipFactory<Freighter>`:
+
+[[[ code('9df947dcad') ]]]
+
 Down in `defaults()`, wrap the returned array in an `array_merge()`. First argument:
 `parent::defaults()`, don't forget to close the parentheses! For the second argument,
 we can strip down to just the `cargoCapacity`, since that's the only thing that differs
-from the defaults in `StarshipFactory`.
+from the defaults in `StarshipFactory`:
+
+[[[ code('f0e9345f84') ]]]
 
 Same thing for the `ScoutFactory`, `extends StarshipFactory`, `@extends StarshipFactory<Scout>`,
-and in `defaults()`, merge with `parent::defaults()` and only include the `sensorRange`.
+and in `defaults()`, merge with `parent::defaults()` and only include the `sensorRange`:
+
+[[[ code('587d4db71b') ]]]
 
 Nice!
 
@@ -74,7 +85,9 @@ Hmm, same error. Oh, duh... we created the new factories, but we aren't yet usin
 Open up `src/Story/AppStory`. This is the default *story* that Foundry loads when
 loading fixtures. Down in the `build()` method, replace `StarshipFactory::createMany(3)`
 with `FreighterFactory::createMany(3)`. Also, duplicate this line and change it to
-`ScoutFactory::createMany(3)` to load some Scouts as well. 6 starships total.
+`ScoutFactory::createMany(3)` to load some Scouts as well. 6 starships total:
+
+[[[ code('ea54781502') ]]]
 
 Run the load fixtures command again:
 
@@ -94,7 +107,11 @@ longer a valid entity. Same problem as we had with using the `StarshipFactory`
 directly earlier.
 
 To fix this, open `src/Controller/MainController`. In the `homepage()` method, replace the injected
-`StarshipRepository` with `ScoutRepository`. This should now fetch all the Scout starships.
+`StarshipRepository` with `ScoutRepository`:
+
+[[[ code('acf8d6bf0b') ]]]
+
+This should now fetch all the Scout starships.
 
 Refresh the homepage... and there we go! These are our three Scouts.
 
