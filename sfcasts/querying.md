@@ -1,4 +1,4 @@
-# Querying "Types"
+# Querying Classes
 
 Let's see how we can query specific types of ships. Here, we see a list of
 all starships. But what if we only want to display
