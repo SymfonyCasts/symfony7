@@ -36,23 +36,9 @@ De vuelta a nuestro código, ahora tenemos dos nuevas y relucientes entidades.
 
 ## Explorando las superclases mapeadas
 
-El primer tipo de herencia que vamos a explorar es la superclase mapeada. Es como una clase abstracta en PHP, o más exactamente, una entidad abstracta. Nuestro `Starship` será la Superclase Mapeada. Hazlo `abstract`, lo que significa que no puede instanciarse directamente, sino que debe extenderse para poder utilizarse:
+El primer tipo de herencia que vamos a explorar es la superclase mapeada. Es como una clase abstracta en PHP, o más exactamente, una entidad abstracta. Nuestra `Starship` será la superclase mapeada. Conviértela en `abstract`, lo que significa que no puede instanciarse directamente, sino que debe extenderse para poder utilizarse. A continuación, sustituye el atributo `ORM\Entity` por`ORM\MappedSuperclass`. Ya está
 
-[[[ code('27de96a78e') ]]]
-
-A continuación, sustituye el atributo `ORM\Entity` por `ORM\MappedSuperclass`:
-
-[[[ code('957310e89f') ]]]
-
-¡Ya está!
-
-A continuación, nuestra entidad `Freighter`. Que sea `extends Starship`. No necesitamos el `id`, ya que se hereda de `Starship`, así que lo eliminaremos junto con el método `getId()`:
-
-[[[ code('4da13ec44f') ]]]
-
-Todo lo demás es propio de `Freighter`. Repite estos pasos para la entidad`Scout`:
-
-[[[ code('ca22e1c73e') ]]]
+A continuación, nuestra entidad `Freighter`. Que sea `extends Starship`. No necesitamos el `id`, ya que se hereda de `Starship`, así que lo eliminaremos junto con el método `getId()`. Todo lo demás es específico de `Freighter`. Repite estos pasos para la entidad `Scout`.
 
 ## Actualizar el esquema y cargar los accesorios
 

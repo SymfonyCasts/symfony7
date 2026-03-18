@@ -1,0 +1,259 @@
+WEBVTT
+
+00:00:00.096 --> 00:00:03.296 align:middle
+¡Hola Amigos!
+
+00:00:03.296 --> 00:00:06.926 align:middle
+Vamos a sumergirnos en el mundo de
+la Herencia Doctrine en Symfony.
+
+00:00:07.586 --> 00:00:11.256 align:middle
+Ya sabes cómo las clases Doctrine
+representan tablas en nuestra base de datos,
+
+00:00:11.496 --> 00:00:14.696 align:middle
+y sus instancias, u objetos, representan filas.
+
+00:00:15.106 --> 00:00:17.056 align:middle
+¿Pero sabías que podemos
+llevarlo aún más lejos?
+
+00:00:17.586 --> 00:00:20.436 align:middle
+El ORM de Doctrine nos ofrece una
+ingeniosa función de herencia.
+
+00:00:20.966 --> 00:00:25.766 align:middle
+Esto nos permite crear entidades que extienden
+clases abstractas o incluso otras entidades.
+
+00:00:26.176 --> 00:00:28.846 align:middle
+Esto es muy útil para
+compartir propiedades comunes.
+
+00:00:29.256 --> 00:00:33.826 align:middle
+Hay tres formas de hacerlo, y exploraremos cada
+una de ellas y sopesaremos sus pros y sus contras.
+
+00:00:34.286 --> 00:00:35.766 align:middle
+Abróchate el cinturón, ¡empecemos!
+
+00:00:36.386 --> 00:00:40.066 align:middle
+Para empezar, descarga el código del curso que
+aparece en la parte superior de este vídeo.
+
+00:00:40.636 --> 00:00:43.736 align:middle
+Dentro del directorio de inicio,
+encontrarás un nuevo y reluciente proyecto.
+
+00:00:44.136 --> 00:00:46.796 align:middle
+Sólo tienes que seguir el README para
+ponerlo en marcha en tu máquina local.
+
+00:00:47.426 --> 00:00:50.526 align:middle
+Puede que te resulte familiar si has seguido
+alguno de nuestros cursos anteriores,
+
+00:00:50.746 --> 00:00:54.366 align:middle
+pero asegúrate de descargar esta nueva copia
+en lugar de utilizar un proyecto existente.
+
+00:00:54.976 --> 00:00:57.936 align:middle
+Una vez que ejecutes el servidor Symfony,
+verás nuestra aplicación Starshop.
+
+00:00:58.396 --> 00:01:01.416 align:middle
+Esta sencilla aplicación sólo lista las
+naves estelares de nuestra base de datos.
+
+00:01:02.006 --> 00:01:06.496 align:middle
+De vuelta a nuestro código, en el directorio
+src\Entity, encontrarás nuestra entidad Starship
+
+00:01:06.686 --> 00:01:08.996 align:middle
+con propiedades generales
+relacionadas con las naves estelares.
+
+00:01:09.386 --> 00:01:14.336 align:middle
+Nuestra misión hoy es crear distintos tipos de
+Nave Estelar, un carguero y una nave exploradora.
+
+00:01:15.026 --> 00:01:18.166 align:middle
+Podrías pensar que podríamos simplemente
+añadir una columna type a la entidad Starship
+
+00:01:18.336 --> 00:01:20.606 align:middle
+y utilizarla para diferenciar los tipos.
+
+00:01:21.176 --> 00:01:25.666 align:middle
+La cuestión es que cada tipo diferente tiene
+su propio conjunto de propiedades específicas.
+
+00:01:26.196 --> 00:01:29.566 align:middle
+Por ejemplo, un carguero tendrá
+una propiedad cargoCapacity
+
+00:01:29.826 --> 00:01:32.426 align:middle
+, mientras que una nave exploradora
+tendrá una propiedad sensorRange.
+
+00:01:33.096 --> 00:01:36.096 align:middle
+Así que las queremos como entidades
+propias, pero también tienen
+
+00:01:36.096 --> 00:01:38.336 align:middle
+que compartir las propiedades
+comunes de una nave estelar.
+
+00:01:38.836 --> 00:01:41.226 align:middle
+En primer lugar, tenemos que crear
+algunas naves estelares secundarias.
+
+00:01:41.546 --> 00:01:45.066 align:middle
+Salta al terminal y ensuciémonos
+las manos creando algunas entidades.
+
+00:01:45.496 --> 00:01:51.776 align:middle
+Ejecuta la siguiente orden: symfony console
+make:entity Scout Esta entidad Exploradora tendrá una
+
+00:01:51.776 --> 00:01:55.296 align:middle
+propiedad única llamada sensorRange,
+que será un número entero...
+
+00:01:55.546 --> 00:01:56.406 align:middle
+y no podrá ser nulo.
+
+00:01:57.056 --> 00:01:59.036 align:middle
+Una vez hecho esto, pulsa intro para salir.
+
+00:01:59.616 --> 00:02:01.666 align:middle
+A continuación, vamos a
+crear una entidad Carguero:
+
+00:02:02.226 --> 00:02:06.206 align:middle
+symfony console make:entity
+Freighter La propiedad única
+
+00:02:06.206 --> 00:02:10.106 align:middle
+de esta entidad será cargoCapacity,
+también un número entero...
+
+00:02:10.106 --> 00:02:11.066 align:middle
+y no anulable.
+
+00:02:11.856 --> 00:02:13.386 align:middle
+Eso es todo por ahora, así que termina.
+
+00:02:14.096 --> 00:02:16.906 align:middle
+De vuelta a nuestro código, ahora
+tenemos dos nuevas y brillantes entidades.
+
+00:02:17.656 --> 00:02:21.746 align:middle
+El primer tipo de herencia que vamos
+a explorar es la superclase mapeada.
+
+00:02:22.116 --> 00:02:26.666 align:middle
+Es como una clase abstracta en PHP, o
+más exactamente, una entidad abstracta.
+
+00:02:27.296 --> 00:02:29.626 align:middle
+Nuestro Starship será la Superclase Mapeada.
+
+00:02:30.076 --> 00:02:33.146 align:middle
+Haz que sea abstract, lo que significa
+que no puede instanciarse directamente
+
+00:02:33.356 --> 00:02:35.196 align:middle
+, sino que debe extenderse
+para poder utilizarse.
+
+00:02:35.936 --> 00:02:40.766 align:middle
+A continuación, sustituye el atributo
+ORM\Entity por ORM\MappedSuperclass.
+
+00:02:41.336 --> 00:02:41.756 align:middle
+Ya está
+
+00:02:42.316 --> 00:02:43.636 align:middle
+A continuación, nuestra entidad Freighter.
+
+00:02:44.066 --> 00:02:45.496 align:middle
+Que sea extends Starship.
+
+00:02:45.956 --> 00:02:48.876 align:middle
+No necesitamos el id, ya
+que se hereda de Starship,
+
+00:02:49.236 --> 00:02:51.666 align:middle
+así que lo eliminaremos
+junto con el método getId().
+
+00:02:52.356 --> 00:02:54.366 align:middle
+Todo lo demás es específico de Freighter.
+
+00:02:54.956 --> 00:02:56.856 align:middle
+Repite estos pasos para la entidad Scout.
+
+00:03:00.946 --> 00:03:04.996 align:middle
+Ahora, pasemos a la consola y veamos qué aspecto
+tendrá nuestra actualización del esquema.
+
+00:03:05.386 --> 00:03:09.206 align:middle
+Ejecuta: symfony console doctrine:schema:update
+
+00:03:09.596 --> 00:03:15.426 align:middle
+--dump-sql La bandera dump-sql sólo
+muestra el SQL que se ejecutaría.
+
+00:03:16.146 --> 00:03:19.136 align:middle
+Al final, observa que
+eliminamos la tabla starship.
+
+00:03:19.556 --> 00:03:22.266 align:middle
+Las superclases mapeadas no
+tienen sus propias tablas.
+
+00:03:22.516 --> 00:03:27.696 align:middle
+En su lugar, sus propiedades son heredadas por las
+entidades hijas, que sí tienen sus propias tablas.
+
+00:03:28.256 --> 00:03:32.866 align:middle
+Así que, en nuestro caso, las tablas freighter y
+scout tendrán todas las propiedades de una Starship,
+
+00:03:33.046 --> 00:03:34.706 align:middle
+junto con sus propiedades únicas:
+
+00:03:35.006 --> 00:03:38.506 align:middle
+cargo_capacity para la freighter
+y sensor_range para la scout.
+
+00:03:39.246 --> 00:03:42.176 align:middle
+Veamos cómo funciona esto cuando recarguemos
+los accesorios de nuestra aplicación.
+
+00:03:42.596 --> 00:03:48.196 align:middle
+Ejecuta: symfony console foundry:load-fixtures
+Aquí hay un inconveniente:
+
+00:03:48.536 --> 00:03:51.246 align:middle
+no podemos instanciar la
+clase abstracta Starship.
+
+00:03:51.646 --> 00:03:53.296 align:middle
+Estamos utilizando fábricas Foundry
+
+00:03:53.426 --> 00:03:56.896 align:middle
+, y como Starship es ahora abstracta,
+no puede crear esas entidades.
+
+00:03:57.406 --> 00:03:59.326 align:middle
+No te preocupes, en la siguiente
+parte de nuestro viaje,
+
+00:03:59.506 --> 00:04:02.926 align:middle
+ajustaremos nuestras instalaciones de
+Foundry para manejar la Herencia de Doctrine.
+
+00:04:03.206 --> 00:04:03.866 align:middle
+¡Permanece atento!

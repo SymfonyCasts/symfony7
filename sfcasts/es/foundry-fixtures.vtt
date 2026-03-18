@@ -1,0 +1,285 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.596 align:middle
+Vale, nos quedamos con un error cuando
+intentamos cargar nuestros accesorios.
+
+00:00:05.036 --> 00:00:07.796 align:middle
+Abre src/Factory/StarshipFactory.
+
+00:00:08.446 --> 00:00:12.596 align:middle
+Básicamente, ahora que hemos hecho de
+Starship una MappedSuperclass abstracta,
+
+00:00:12.756 --> 00:00:15.636 align:middle
+ya no se puede instanciar
+y persistir por sí misma.
+
+00:00:16.026 --> 00:00:20.046 align:middle
+Tenemos que crear fábricas separadas para
+nuestras dos nuevas entidades subestrella:
+
+00:00:20.286 --> 00:00:21.656 align:middle
+Freighter y Scout.
+
+00:00:22.096 --> 00:00:22.796 align:middle
+¡Muy fácil!
+
+00:00:23.296 --> 00:00:29.866 align:middle
+Ejecuta en el terminal: symfony console make:factory
+Una característica ingeniosa de Foundry
+
+00:00:29.866 --> 00:00:33.636 align:middle
+es que puedes crear fábricas
+individualmente, o puedes elegir "todas"
+
+00:00:33.636 --> 00:00:37.086 align:middle
+y creará fábricas para todas las
+entidades que aún no tengan una.
+
+00:00:37.726 --> 00:00:39.086 align:middle
+Selecciona "todas" y...
+
+00:00:39.296 --> 00:00:44.466 align:middle
+¡voilá! Ahora, si volvemos a nuestro código,
+tenemos dos nuevas y relucientes fábricas.
+
+00:00:45.346 --> 00:00:49.986 align:middle
+Observarás que nuestros valores predeterminados están
+básicamente duplicados, excepto la capacidad de carga
+
+00:00:49.986 --> 00:00:52.576 align:middle
+del Freighter y el alcance
+de los sensores del Scout.
+
+00:00:53.156 --> 00:00:56.266 align:middle
+Podemos llevar los valores predeterminados
+compartidos hasta StarshipFactory
+
+00:00:56.536 --> 00:01:01.126 align:middle
+y, a continuación, anular los valores predeterminados
+específicos en FreighterFactory y ScoutFactory.
+
+00:01:01.816 --> 00:01:05.046 align:middle
+Para ello, necesitamos reflejar la
+estructura de herencia que tenemos
+
+00:01:05.046 --> 00:01:07.276 align:middle
+con nuestras entidades para
+las fábricas de la Fundición.
+
+00:01:07.806 --> 00:01:09.296 align:middle
+Empieza con StarshipFactory.
+
+00:01:09.636 --> 00:01:12.536 align:middle
+Hazlo abstracto para que quede claro
+que no debe utilizarse directamente.
+
+00:01:13.196 --> 00:01:17.376 align:middle
+En el docblock, espolvorearemos algunos
+genéricos PHP para ayudar con el autocompletado.
+
+00:01:18.126 --> 00:01:21.896 align:middle
+Añade nuestra propia plantilla
+con @template T of Starship.
+
+00:01:22.456 --> 00:01:28.076 align:middle
+Esto indica que nuestra plantilla T sólo puede ser
+del tipo Starship, o cualquier subclase de Starship.
+
+00:01:28.726 --> 00:01:30.966 align:middle
+A continuación, modifica el @extends
+
+00:01:31.156 --> 00:01:35.676 align:middle
+a PersistentProxyObjectFactory<T>
+para que utilice nuestra plantilla.
+
+00:01:36.386 --> 00:01:41.426 align:middle
+Ahora, cualquier subfábrica que extienda
+StarshipFactory puede especificar su propio
+
+00:01:41.426 --> 00:01:45.896 align:middle
+tipo de nave estelar para T, y obtendremos autocompletado
+para ese tipo de nave estelar cuando utilicemos la fábrica.
+
+00:01:45.956 --> 00:01:50.856 align:middle
+Además, como esto es abstracto,
+podemos deshacernos del método class()
+
+00:01:50.856 --> 00:02:00.796 align:middle
+, que siempre tendrá que ser
+invocado por las subfábricas.
+
+00:02:01.606 --> 00:02:05.016 align:middle
+Es hora de una de mis cosas favoritas,
+¡eliminar código duplicado!
+
+00:02:05.596 --> 00:02:11.316 align:middle
+En FreighterFactory, pon extends
+StarshipFactory, y en el docblock,
+
+00:02:11.476 --> 00:02:14.866 align:middle
+cambia @extends por
+StarshipFactory<Freighter>.
+
+00:02:15.706 --> 00:02:19.196 align:middle
+Abajo, en defaults(), envuelve el
+array devuelto en un array_merge().
+
+00:02:19.626 --> 00:02:23.996 align:middle
+Primer argumento: parent::defaults(),
+¡no olvides cerrar los paréntesis!
+
+00:02:24.426 --> 00:02:28.136 align:middle
+Para el segundo argumento, podemos
+reducirlo a sólo cargoCapacity,
+
+00:02:28.386 --> 00:02:31.876 align:middle
+ya que es lo único que difiere de los
+valores predeterminados en StarshipFactory.
+
+00:02:32.786 --> 00:02:36.506 align:middle
+Lo mismo para el ScoutFactory,
+extends StarshipFactory,
+
+00:02:36.926 --> 00:02:43.026 align:middle
+@extends StarshipFactory<Scout>, y en
+defaults(), fusionar con parent::defaults()
+
+00:02:43.546 --> 00:02:45.436 align:middle
+e incluir sólo el sensorRange.
+
+00:02:48.616 --> 00:02:52.936 align:middle
+¡Qué bien! De vuelta en el terminal,
+¡vamos a cargar estos accesorios de nuevo!
+
+00:02:53.426 --> 00:02:58.776 align:middle
+symfony console foundry:load-fixtures
+Hmm, el mismo error.
+
+00:02:59.186 --> 00:02:59.996 align:middle
+Oh, duh...
+
+00:03:00.246 --> 00:03:02.896 align:middle
+hemos creado las nuevas fábricas,
+¡pero aún no las estamos utilizando!
+
+00:03:03.526 --> 00:03:05.766 align:middle
+Abre src/Story/AppStory.
+
+00:03:06.486 --> 00:03:09.866 align:middle
+Esta es la historia por defecto que
+Foundry carga al cargar las instalaciones.
+
+00:03:10.416 --> 00:03:14.666 align:middle
+Abajo, en el método build(), sustituye
+StarshipFactory::createMany(3)
+
+00:03:14.866 --> 00:03:17.076 align:middle
+por FreighterFactory::createMany(3).
+
+00:03:17.546 --> 00:03:19.646 align:middle
+Además, duplica esta línea y cámbiala
+
+00:03:19.646 --> 00:03:23.406 align:middle
+por ScoutFactory::createMany(3) para
+cargar también algunas Exploradoras.
+
+00:03:23.716 --> 00:03:25.136 align:middle
+6 naves estelares en total.
+
+00:03:26.056 --> 00:03:30.746 align:middle
+Ejecuta de nuevo el comando cargar accesorios:
+Fantástico, ¡está totalmente cargado!
+
+00:03:31.546 --> 00:03:35.326 align:middle
+Vuelve a la página de inicio, donde se enumeran
+las naves estelares, y mira lo que tenemos.
+
+00:03:36.176 --> 00:03:37.346 align:middle
+Uy, tenemos un error.
+
+00:03:37.346 --> 00:03:41.966 align:middle
+Nuestro controlador sigue intentando cargar
+naves estelares desde nuestro StarshipRepository.
+
+00:03:42.406 --> 00:03:45.496 align:middle
+Esto no funciona porque Starship
+ya no es una entidad válida.
+
+00:03:45.896 --> 00:03:49.276 align:middle
+Es el mismo problema que tuvimos antes
+al utilizar directamente StarshipFactory.
+
+00:03:50.026 --> 00:03:53.506 align:middle
+Para solucionarlo, abre
+src/Controller/MainController.
+
+00:03:53.756 --> 00:03:59.176 align:middle
+En el método homepage(), sustituye el
+StarshipRepository inyectado por ScoutRepository.
+
+00:03:59.756 --> 00:04:02.076 align:middle
+Esto debería recuperar
+todas las naves exploradoras.
+
+00:04:02.496 --> 00:04:03.686 align:middle
+Actualiza la página de inicio...
+
+00:04:04.136 --> 00:04:04.826 align:middle
+y ¡ya está!
+
+00:04:05.216 --> 00:04:06.566 align:middle
+Éstas son nuestras tres Exploradoras.
+
+00:04:07.206 --> 00:04:08.766 align:middle
+¿Y los Cargueros?
+
+00:04:09.336 --> 00:04:12.116 align:middle
+Bueno, también podríamos
+inyectar el FreighterRepository,
+
+00:04:12.116 --> 00:04:14.866 align:middle
+buscarlos también y fusionarlos
+con los Exploradores.
+
+00:04:15.326 --> 00:04:18.776 align:middle
+Pero esto no es lo ideal,
+no se escalaría bien.
+
+00:04:19.076 --> 00:04:24.166 align:middle
+Imagina que tuviéramos 20 tipos diferentes de naves estelares:
+tendríamos que inyectar 20 repositorios diferentes...
+
+00:04:24.396 --> 00:04:28.256 align:middle
+¡Qué asco! Así es como tendrías que
+hacerlo con las Superclases Mapeadas.
+
+00:04:28.736 --> 00:04:32.116 align:middle
+En realidad no es una limitación de las Superclases
+Mapeadas, simplemente no es su propósito.
+
+00:04:32.426 --> 00:04:36.566 align:middle
+Están más pensadas para compartir
+propiedades comunes y mapeos entre entidades,
+
+00:04:36.746 --> 00:04:39.766 align:middle
+no para consultar una jerarquía de entidades.
+
+00:04:40.436 --> 00:04:43.906 align:middle
+¿No sería estupendo poder
+inyectar la StarshipRepository
+
+00:04:44.056 --> 00:04:46.516 align:middle
+y que devolviera tanto
+Exploradores como Cargueros?
+
+00:04:46.836 --> 00:04:47.766 align:middle
+¡Pues sí!
+
+00:04:48.126 --> 00:04:50.996 align:middle
+Pero para ello tenemos que
+utilizar otro tipo de herencia.
+
+00:04:51.306 --> 00:04:51.986 align:middle
+¡Eso a continuación!
