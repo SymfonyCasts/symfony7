@@ -112,3 +112,32 @@
 - In `Starship`, `'mining_freighter' => MiningFreighter::class` to the discriminator map
 - load fixtures again - works!
 - Check the homepage - all 8 ships!
+
+# Querying Classes
+- When listing, show the ship type
+- Can't access the discriminator column, here's a trick
+- In `Starship`
+  - Move discriminator map to `private const TYPE_MAP`
+  - add `final public function getType(): string`
+    - `return array_flip(self::TYPE_MAP)[static::class]`
+      - important to use `static` here!
+- In `homepage.html.twig`
+  - Before the ship name, add `{{ ship.type }}`
+  - Check the app
+  - Tip: even if not multilingual, you can use the types as translation keys for full control
+  - `{{ ship.type|replace({'_': ' '})|title }}`
+- In StarshipRepository, add filterShips() method
+  - `return $this->createQueryBuilder('s')
+        ->where('s INSTANCE OF '.Scout::class)
+        ->getQuery()
+        ->execute()`
+  - use filterShips in MainController and see results
+  - Cannot use class name directly as a parameter
+    - `->where('s INSTANCE OF :class')->setParameter('class', Scout::class)`
+    - Instead: `->setParameter('class', $this->getEntityManager()->getClassMetadata(Scout::class))`
+- Let's try `Freighter::class`
+- Notice the mining freighters are included
+  - this would also be the case when using the FreighterRepository too
+  - You have to specifically exclude
+- `->andWhere('s NOT INSTANCE OF :notclass')->setParameter(...)`
+- change back to `->findAll()` in `MainController`
