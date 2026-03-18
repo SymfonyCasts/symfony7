@@ -1,0 +1,51 @@
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 24f1a6c..cbe0835 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -8,13 +8,15 @@ use Doctrine\ORM\Mapping as ORM;
+ #[ORM\Entity(repositoryClass: StarshipRepository::class)]
+ #[ORM\InheritanceType('JOINED')]
+ #[ORM\DiscriminatorColumn('ship_type', 'string')]
+-#[ORM\DiscriminatorMap([
+-    'scout' => Scout::class,
+-    'freighter' => Freighter::class,
+-    'mining_freighter' => MiningFreighter::class,
+-])]
++#[ORM\DiscriminatorMap(self::TYPE_MAP)]
+ abstract class Starship
+ {
++    private const TYPE_MAP = [
++        'scout' => Scout::class,
++        'freighter' => Freighter::class,
++        'mining_freighter' => MiningFreighter::class,
++    ];
++
+     #[ORM\Id]
+     #[ORM\GeneratedValue]
+     #[ORM\Column]
+@@ -113,4 +115,9 @@ abstract class Starship
+             StarshipStatusEnum::COMPLETED => 'images/status-complete.png',
+         };
+     }
++
++    final public function getType(): string
++    {
++        return array_flip(self::TYPE_MAP)[static::class];
++    }
+ }
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 9cb2097..9ee8073 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -25,7 +25,10 @@
+                                     <a
+                                         class="hover:text-slate-200"
+                                         href="#"
+-                                    >{{ ship.name }}</a>
++                                    >
++                                        {{ ship.type }}
++                                        {{ ship.name }}
++                                    </a>
+                                 </h4>
+                                 <div>
+                                     Arrived at: {{ ship.arrivedAt|ago }}

@@ -1,0 +1,45 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 1acb674..f7010cb 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -14,7 +14,7 @@ class MainController extends AbstractController
+     public function homepage(
+         StarshipRepository $starshipRepository,
+     ): Response {
+-        $ships = $starshipRepository->findAll();
++        $ships = $starshipRepository->filterShips();
+         $myShip = $ships[array_rand($ships)];
+ 
+         return $this->render('main/homepage.html.twig', [
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index bf4904a..1b04e55 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Repository;
+ 
++use App\Entity\Scout;
+ use App\Entity\Starship;
+ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+ use Doctrine\Persistence\ManagerRegistry;
+@@ -16,6 +17,19 @@ class StarshipRepository extends ServiceEntityRepository
+         parent::__construct($registry, Starship::class);
+     }
+ 
++    /**
++     * @return Starship[]
++     */
++    public function filterShips(): array
++    {
++        return $this->createQueryBuilder('s')
++            ->where('s INSTANCE OF :class')
++            ->setParameter('class', Scout::class)
++            ->getQuery()
++            ->execute()
++        ;
++    }
++
+     //    /**
+     //     * @return Starship[] Returns an array of Starship objects
+     //     */

@@ -44,7 +44,42 @@
             "id": "4-add-mining-freighter",
             "name": "4. add mining freighter",
             "description": null
+        },
+        {
+            "id": "5-gettype",
+            "name": "5. getType",
+            "description": null
+        },
+        {
+            "id": "5-capitalize",
+            "name": "5. capitalize",
+            "description": null
+        },
+        {
+            "id": "5-instance-of-scout",
+            "name": "5. instance of scout",
+            "description": null
+        },
+        {
+            "id": "5-class-metadata",
+            "name": "5. class metadata",
+            "description": null
+        },
+        {
+            "id": "5-instance-of-freighter",
+            "name": "5. instance of freighter",
+            "description": null
+        },
+        {
+            "id": "5-not-instanceof",
+            "name": "5. not instanceof",
+            "description": null
+        },
+        {
+            "id": "5-findall",
+            "name": "5. findAll",
+            "description": null
         }
     ],
-    "sha": "2ab399d81046de61b6b371bb5c2e3cd19d401883"
+    "sha": "2025676317e99c085fa6dd4f583485e75cf1f17b"
 }

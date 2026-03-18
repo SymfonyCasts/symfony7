@@ -1,0 +1,22 @@
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index c4f1b06..010c073 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -3,6 +3,7 @@
+ namespace App\Repository;
+ 
+ use App\Entity\Freighter;
++use App\Entity\MiningFreighter;
+ use App\Entity\Scout;
+ use App\Entity\Starship;
+ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+@@ -25,7 +26,9 @@ class StarshipRepository extends ServiceEntityRepository
+     {
+         return $this->createQueryBuilder('s')
+             ->where('s INSTANCE OF :class')
++            ->andWhere('s NOT INSTANCE OF :notclass')
+             ->setParameter('class', $this->getEntityManager()->getClassMetadata(Freighter::class))
++            ->setParameter('notclass', $this->getEntityManager()->getClassMetadata(MiningFreighter::class))
+             ->getQuery()
+             ->execute()
+         ;
