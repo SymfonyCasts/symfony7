@@ -1,6 +1,6 @@
-# Consulta de "Tipos
+# Consulta de clases
 
-Veamos cómo podemos consultar tipos concretos de naves. Aquí vemos una lista de todas las naves estelares. Pero, ¿y si sólo queremos mostrar exploradoras, o cargueros, o cargueros mineros? ¡Hay DQL para eso!
+Veamos cómo podemos consultar tipos específicos de naves. Aquí vemos una lista de todas las naves estelares. Pero, ¿y si sólo queremos mostrar exploradoras, o cargueros, o cargueros mineros? ¡Hay DQL para eso!
 
 En primer lugar, vamos a distinguir visualmente los distintos tipos de naves, para que sepamos cuáles son exploradoras, cargueros, etc.
 
@@ -62,6 +62,6 @@ Actualiza la página de inicio y... ¡ya está, sólo los cargueros normales!
 Desgraciadamente, si el carguero tuviera 10 subclases, tendríamos que añadir 10 `NOT
 INSTANCE OF`'s - una para cada subclase. No creo que haya una forma más elegante de conseguirlo, pero ¡házmelo saber en los comentarios si conoces alguna!
 
-Antes de seguir adelante, vuelve a `MainController` y cambia de`filterShips` a `findAll` y confirma que lo tenemos todo de nuevo.
+Antes de continuar, vuelve a `MainController` y cambia de`filterShips` a `findAll` y confirma que lo tenemos todo de nuevo.
 
 A continuación, veremos cómo podemos mostrar las propiedades específicas de cada tipo de nave en la plantilla Twig.
