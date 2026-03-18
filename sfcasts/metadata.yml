@@ -12,8 +12,8 @@ chapters:
         tutsFirstStep: 4-use-joined
         tutsLastStep: 4-add-mining-freighter
     querying:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 5-gettype
+        tutsLastStep: 5-findall
     associations:
         tutsFirstStep: null
         tutsLastStep: null
