@@ -2,7 +2,7 @@
 
 Time to let's dive into the final type of Doctrine Inheritance:
 Class Table Inheritance. This one goes back to using a single table
-per entity in the hierarchy. But here's the rub - only properties
+per entity in the hierarchy. But here's the difference - only properties
 specific to that entity are stored in the table
 (plus the id). When fetching, Doctrine does the necessary joins behind
 the scenes to get all the data for the entity you're fetching.
@@ -82,7 +82,7 @@ and grabs the cargo capacity. Phew, I'm glad Doctrine is doing all that for us!
 ## Profiler Inspection
 
 Jumping back to the app, let's take a moment to check the profiler and see this in action.
-View the formatted query to get a better view. The query is a bit more complex than before,
+Click the formatted query to get a better view. The query is a bit more complex than before,
 because of the joins, but it's doing exactly what we expected.
 
 ## Adding a New Entity
