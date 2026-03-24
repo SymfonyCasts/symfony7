@@ -1,0 +1,342 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:05.556 align:middle
+Es hora de sumergirnos en el último tipo de
+Herencia de Doctrine: Herencia de Tabla de Clase.
+
+00:00:06.126 --> 00:00:09.736 align:middle
+Ésta vuelve a utilizar una única
+tabla por entidad en la jerarquía.
+
+00:00:10.116 --> 00:00:12.606 align:middle
+Pero aquí está la diferencia: en la tabla
+sólo se almacenan las propiedades específicas
+
+00:00:12.606 --> 00:00:15.526 align:middle
+de esa entidad (más el id).
+
+00:00:16.186 --> 00:00:19.776 align:middle
+Al buscar, Doctrine realiza las
+uniones necesarias entre bastidores
+
+00:00:19.966 --> 00:00:22.216 align:middle
+para obtener todos los datos de
+la entidad que estás buscando.
+
+00:00:22.916 --> 00:00:28.096 align:middle
+En Starship, en el atributo InheritanceType,
+cambia SINGLE_TABLE por JOINED:
+
+00:00:28.866 --> 00:00:32.456 align:middle
+Doctrine utilizaba tradicionalmente JOINED
+para referirse a este tipo de herencia,
+
+00:00:32.566 --> 00:00:35.336 align:middle
+pero se conoce más comúnmente
+como Herencia de tabla de clases.
+
+00:00:35.896 --> 00:00:36.216 align:middle
+Ya está
+
+00:00:36.216 --> 00:00:42.456 align:middle
+Para mostrar mejor cómo cambia el SQL,
+eliminemos el esquema y empecemos de cero.
+
+00:00:42.566 --> 00:00:48.466 align:middle
+En el terminal, ejecuta symfony
+console doctrine:schema:drop
+
+00:00:48.466 --> 00:00:55.506 align:middle
+--force Ahora, crea el esquema con:
+symfony console doctrine:schema:create
+
+00:00:55.706 --> 00:01:02.006 align:middle
+--dump-sql Veamos lo que tenemos aquí.
+
+00:01:02.006 --> 00:01:09.856 align:middle
+La tabla carguero sólo
+tiene id y cargo_capacity.
+
+00:01:10.386 --> 00:01:12.856 align:middle
+La tabla starship tiene todas
+las propiedades comunes,
+
+00:01:13.126 --> 00:01:16.136 align:middle
+y la tabla scout sólo tiene
+un id y un sensor_range.
+
+00:01:16.706 --> 00:01:19.156 align:middle
+Carguemos nuestros accesorios para
+asegurarnos de que todo sigue funcionando.
+
+00:01:19.646 --> 00:01:24.636 align:middle
+symfony console
+foundry:load-fixtures Se ve bien.
+
+00:01:25.156 --> 00:01:26.796 align:middle
+Salta a la aplicación y actualiza.
+
+00:01:27.716 --> 00:01:29.846 align:middle
+¡Perfecto! ¡Seguimos teniendo seis naves!
+
+00:01:30.366 --> 00:01:32.986 align:middle
+Ahora, echemos un vistazo a la base de
+datos para ver con qué estamos tratando.
+
+00:01:33.536 --> 00:01:40.766 align:middle
+De nuevo en el terminal, ejecuta: symfony console
+doctrine:query:sql 'select * from starship'
+
+00:01:40.766 --> 00:01:43.536 align:middle
+Como puedes ver, sólo contiene las columnas
+
+00:01:43.696 --> 00:01:50.996 align:middle
+de la entidad Starship, no
+las de Freighter y Scout.
+
+00:01:51.356 --> 00:01:53.866 align:middle
+Sin embargo, sigue incluyendo una ship_type.
+
+00:01:54.126 --> 00:01:56.736 align:middle
+Y sí, tenemos tres cargueros
+y tres exploradores.
+
+00:01:57.496 --> 00:02:01.436 align:middle
+Si queremos ver las propiedades específicas
+de éstos, están en sus respectivas tablas.
+
+00:02:02.076 --> 00:02:03.416 align:middle
+Veamos la tabla de los cargueros.
+
+00:02:03.716 --> 00:02:07.626 align:middle
+En primer lugar, fíjate en la columna
+id para los cargueros, 1, 2 y 3.
+
+00:02:08.116 --> 00:02:10.466 align:middle
+Deberían coincidir con los
+identificadores de la tabla de cargueros.
+
+00:02:10.896 --> 00:02:15.806 align:middle
+Ejecuta: symfony console
+doctrine:query:sql 'select *
+
+00:02:15.806 --> 00:02:20.656 align:middle
+from freighter' Esto sólo tiene los
+cargo_capacity's de los tres cargueros
+
+00:02:20.846 --> 00:02:24.196 align:middle
+, y efectivamente, los ids coinciden con
+los ids de la tabla de naves estelares.
+
+00:02:24.796 --> 00:02:27.906 align:middle
+Así, cuando Doctrine construye
+(o hidrata) una nave estelar,
+
+00:02:28.156 --> 00:02:30.706 align:middle
+sabe que la nave con id 1 es un carguero.
+
+00:02:31.266 --> 00:02:35.966 align:middle
+Entonces instanciará un objeto Freighter, tomará las
+propiedades comunes de la tabla de naves estelares,
+
+00:02:36.356 --> 00:02:40.096 align:middle
+se unirá con la tabla de cargueros en
+el id y tomará la capacidad de carga.
+
+00:02:40.556 --> 00:02:43.226 align:middle
+Uf, ¡me alegro de que Doctrine
+haga todo eso por nosotros!
+
+00:02:43.916 --> 00:02:47.926 align:middle
+Volviendo a la aplicación, tomémonos un momento
+para comprobar el perfilador y ver esto en acción.
+
+00:02:48.586 --> 00:02:50.626 align:middle
+Haz clic en la consulta
+formateada para verla mejor.
+
+00:02:51.266 --> 00:02:54.436 align:middle
+La consulta es un poco más compleja
+que antes, debido a las uniones,
+
+00:02:54.596 --> 00:02:56.346 align:middle
+pero hace exactamente lo que esperábamos.
+
+00:02:56.986 --> 00:02:59.596 align:middle
+Vamos a subir la apuesta con un
+escenario un poco más avanzado.
+
+00:03:00.196 --> 00:03:02.666 align:middle
+Vamos a crear otra nave: un carguero minero.
+
+00:03:03.056 --> 00:03:07.296 align:middle
+Será una subclase de Freighter, lo que nos llevará
+a otro nivel de profundidad en el árbol de herencia.
+
+00:03:07.936 --> 00:03:09.886 align:middle
+De vuelta al terminal, crea la entidad con:
+
+00:03:10.236 --> 00:03:16.766 align:middle
+symfony console make:entity MiningFreighter
+Dale una propiedad llamada laserPower,
+
+00:03:17.346 --> 00:03:19.826 align:middle
+un número entero, no anulable, y listo.
+
+00:03:20.616 --> 00:03:26.146 align:middle
+Ahora la fábrica Foundry: symfony
+console make:factory Elige all
+
+00:03:26.146 --> 00:03:27.636 align:middle
+para crear el MiningFreighter que falta.
+
+00:03:28.566 --> 00:03:31.496 align:middle
+De vuelta en nuestro IDE, abre
+nuestra nueva entidad MiningFreighter.
+
+00:03:32.346 --> 00:03:36.086 align:middle
+Haz que extienda Freighter y
+elimina la propiedad id y el getter:
+
+00:03:38.816 --> 00:03:40.766 align:middle
+Ahora, abre el MiningFreighterFactory.
+
+00:03:41.356 --> 00:03:42.566 align:middle
+Tenemos que hacer algunos
+
+00:03:42.566 --> 00:03:46.496 align:middle
+ajustes en FreighterFactory antes de
+poder ampliarlo, así que ábrelo.
+
+00:03:46.496 --> 00:03:48.456 align:middle
+Elimina el final para que podamos extenderlo.
+
+00:03:49.016 --> 00:03:52.686 align:middle
+A continuación, tenemos que añadir una plantilla
+para que las subfactorías puedan especificar el tipo
+
+00:03:52.686 --> 00:03:54.126 align:middle
+de entidad que están creando.
+
+00:03:54.846 --> 00:03:58.536 align:middle
+En el docblock de la clase,
+añade @template T of Freighter.
+
+00:03:59.216 --> 00:04:04.226 align:middle
+Luego, en @extends, amplíala a T:
+De vuelta en MiningFreighterFactory,
+
+00:04:04.506 --> 00:04:06.526 align:middle
+haz que la clase extienda a FreighterFactory.
+
+00:04:07.256 --> 00:04:13.966 align:middle
+Haz lo mismo con @extends en el docblock: Abajo
+en defatuls(), añade nuestro truco array_merge.
+
+00:04:14.406 --> 00:04:18.806 align:middle
+array_merge(parent::defaults(),
+el segundo argumento, el array,
+
+00:04:18.806 --> 00:04:23.966 align:middle
+y no olvides cerrar la función: Aquí
+tenemos un inicio genial de array_merge.
+
+00:04:24.416 --> 00:04:28.396 align:middle
+MiningFreighterFactory se está fusionando con
+los valores por defecto de FreighterFactory,
+
+00:04:28.526 --> 00:04:31.186 align:middle
+que a su vez se está fusionando con los
+valores por defecto de StarshipFactory.
+
+00:04:32.916 --> 00:04:36.136 align:middle
+A continuación, en AppStory, crea
+unos cuantos cargueros mineros
+
+00:04:36.136 --> 00:04:42.316 align:middle
+con MiningFreighterFactory::createMany(2): De
+vuelta al terminal, vuelve a cargar los accesorios.
+
+00:04:42.716 --> 00:04:44.446 align:middle
+Uy, tenemos un error...
+
+00:04:44.446 --> 00:04:52.966 align:middle
+"La entidad MiningFreighter tiene que formar
+parte del mapa discriminador de Starship
+
+00:04:53.046 --> 00:04:55.526 align:middle
+para estar correctamente mapeada
+en la jerarquía de herencia"
+
+00:04:56.146 --> 00:05:00.026 align:middle
+Este es un paso habitual que se olvida al añadir
+nuevas entidades a una jerarquía de herencia.
+
+00:05:00.696 --> 00:05:04.456 align:middle
+De vuelta en Starship, en la matriz
+DiscriminatorMap, añade nuestra nueva entidad
+
+00:05:04.516 --> 00:05:10.516 align:middle
+con 'mining_freighter' =>
+MiningFreighter::class: Me gusta utilizar snake case
+
+00:05:10.516 --> 00:05:12.636 align:middle
+para las claves, pero puedes
+utilizar lo que quieras.
+
+00:05:13.076 --> 00:05:16.106 align:middle
+Lo importante es que el valor sea
+el nombre de la clase de la entidad.
+
+00:05:16.916 --> 00:05:18.376 align:middle
+Ahora carga de nuevo nuestros accesorios.
+
+00:05:19.826 --> 00:05:20.896 align:middle
+Bien, ¡ha funcionado!
+
+00:05:21.766 --> 00:05:22.626 align:middle
+Actualiza nuestra aplicación...
+
+00:05:23.526 --> 00:05:24.326 align:middle
+y ¡voilá!
+
+00:05:24.556 --> 00:05:25.876 align:middle
+¡Ahora tenemos ocho naves!
+
+00:05:26.476 --> 00:05:28.686 align:middle
+Vuelve a echar un vistazo a
+la consulta en el perfilador.
+
+00:05:30.316 --> 00:05:32.866 align:middle
+Se ha añadido otro join para
+la tabla mining_freighter.
+
+00:05:33.536 --> 00:05:37.896 align:middle
+Este es uno de los contras de la herencia de tablas
+de clases, las consultas se vuelven más complejas
+
+00:05:37.896 --> 00:05:39.926 align:middle
+cuantas más entidades tengas en tu jerarquía.
+
+00:05:40.456 --> 00:05:42.256 align:middle
+Esto puede reducir el rendimiento.
+
+00:05:42.806 --> 00:05:46.486 align:middle
+Otro contra en el que quizá no pienses es que,
+si utilizas herramientas externas para consultar
+
+00:05:46.486 --> 00:05:49.446 align:middle
+y manipular tu base de datos, es
+más difícil trabajar con ella.
+
+00:05:49.946 --> 00:05:53.296 align:middle
+Tienes que duplicar las uniones y la
+lógica que Doctrine utiliza internamente.
+
+00:05:54.006 --> 00:05:57.256 align:middle
+Como en la mayoría de las cosas, hay ventajas
+y desventajas con cada tipo de herencia.
+
+00:05:57.726 --> 00:06:00.616 align:middle
+A continuación, veremos cómo consultar
+los distintos tipos de naves estelares.
