@@ -12,7 +12,7 @@ index 1acb674..f7010cb 100644
  
          return $this->render('main/homepage.html.twig', [
 diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
-index bf4904a..1b04e55 100644
+index bf4904a..678645c 100644
 --- a/src/Repository/StarshipRepository.php
 +++ b/src/Repository/StarshipRepository.php
 @@ -2,6 +2,7 @@
@@ -23,7 +23,7 @@ index bf4904a..1b04e55 100644
  use App\Entity\Starship;
  use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  use Doctrine\Persistence\ManagerRegistry;
-@@ -16,6 +17,19 @@ class StarshipRepository extends ServiceEntityRepository
+@@ -16,6 +17,18 @@ class StarshipRepository extends ServiceEntityRepository
          parent::__construct($registry, Starship::class);
      }
  
@@ -33,8 +33,7 @@ index bf4904a..1b04e55 100644
 +    public function filterShips(): array
 +    {
 +        return $this->createQueryBuilder('s')
-+            ->where('s INSTANCE OF :class')
-+            ->setParameter('class', Scout::class)
++            ->where('s INSTANCE OF '.Scout::class)
 +            ->getQuery()
 +            ->execute()
 +        ;

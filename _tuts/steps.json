@@ -61,6 +61,11 @@
             "description": null
         },
         {
+            "id": "5-instance-of-parameter",
+            "name": "5. instance of parameter",
+            "description": null
+        },
+        {
             "id": "5-class-metadata",
             "name": "5. class metadata",
             "description": null
@@ -81,5 +86,5 @@
             "description": null
         }
     ],
-    "sha": "2025676317e99c085fa6dd4f583485e75cf1f17b"
+    "sha": "c9ffe9427565d09e31ce083b47a82806510ae9aa"
 }

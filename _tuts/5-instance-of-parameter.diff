@@ -1,0 +1,14 @@
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index 678645c..1b04e55 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -23,7 +23,8 @@ class StarshipRepository extends ServiceEntityRepository
+     public function filterShips(): array
+     {
+         return $this->createQueryBuilder('s')
+-            ->where('s INSTANCE OF '.Scout::class)
++            ->where('s INSTANCE OF :class')
++            ->setParameter('class', Scout::class)
+             ->getQuery()
+             ->execute()
+         ;
