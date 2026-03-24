@@ -12,7 +12,7 @@ Me gustaría poder llamar a `$starship->getType()` y que devolviera el valor del
 
 Ahora, abajo, añade un nuevo método, `final public function getType()`, éste devolverá una cadena. Aquí utilizamos `final` para evitar que cualquier subclase modifique la lógica.
 
-Nuestro `TYPE_MAP` tiene como clave los valores del discriminador que queremos devolver, y los valores son los nombres de las clases. Para obtener el valor del discriminador del objeto nave actual, podemos dar la vuelta a la matriz `TYPE_MAP`, de modo que los nombres de las clases sean las claves. Abajo en `getType`, `return array_flip(self::class)[static::class]`. Como recordatorio, `self::class` siempre devuelve la clase en la que está escrito el código, por lo que devolvería `Starship::class` para todas las naves. `static::class`
+Nuestro `TYPE_MAP` tiene como clave los valores discriminantes que queremos devolver, y los valores son los nombres de las clases. Para obtener el valor del discriminador del objeto nave actual, podemos dar la vuelta a la matriz `TYPE_MAP`, de modo que los nombres de las clases sean las claves. Abajo en `getType`, `return array_flip(self::class)[static::class]`. Como recordatorio, `self::class` siempre devuelve la clase en la que está escrito el código, por lo que devolvería `Starship::class` para todas las naves. `static::class`
 devuelve la clase del objeto real, por lo que devolvería `Scout::class` para un explorador, `Freighter::class` para un carguero, etc. Por lo tanto, aquí es importante utilizar `static::class` para la clave:
 
 [[[ code('f794e09ed1') ]]]
@@ -61,7 +61,7 @@ Cambia la cláusula where por `s INSTANCE OF :class`, y debajo, añade `->setPar
 
 [[[ code('1885194f6e') ]]]
 
-Actualiza la página y... un error. "array_rand no puede estar vacío". Hmm, vale esto viene de nuestro `MainController`. Estamos utilizando `array_rand` para obtener una nave aleatoria, y está fallando porque el array `$ships` está vacío.
+Actualiza la página y... un error. "array_rand no puede estar vacío". Hmm, ok esto viene de nuestro `MainController`. Estamos utilizando `array_rand` para obtener una nave aleatoria, y está fallando porque el array `$ships` está vacío.
 
 Es una putada, pero no podemos utilizar el nombre de la clase directamente como parámetro. Sin embargo, ¡hay una solución!
 
