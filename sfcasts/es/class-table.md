@@ -1,6 +1,6 @@
 # Herencia de tablas de clases
 
-Es hora de sumergirnos en el último tipo de Herencia Doctrine: la Herencia de Tabla de Clase. Ésta vuelve a utilizar una única tabla por entidad en la jerarquía. Pero aquí está el problema: en la tabla sólo se almacenan las propiedades específicas de esa entidad (además del id). Al buscar, Doctrine realiza las uniones necesarias entre bastidores para obtener todos los datos de la entidad que estás buscando.
+Es hora de sumergirnos en el último tipo de Herencia Doctrine: la Herencia de Tabla de Clase. Ésta vuelve a utilizar una única tabla por entidad en la jerarquía. Pero aquí está la diferencia: en la tabla sólo se almacenan las propiedades específicas de esa entidad (más el id). Al buscar, Doctrine realiza las uniones necesarias entre bastidores para obtener todos los datos de la entidad que estás buscando.
 
 En Starship, en el atributo `InheritanceType`, cambia `SINGLE_TABLE`por `JOINED`:
 
@@ -60,7 +60,7 @@ Esto sólo tiene los `cargo_capacity`'s de los tres cargueros, y efectivamente, 
 
 ## Inspección del perfilador
 
-Volviendo a la aplicación, tomémonos un momento para comprobar el perfilador y ver esto en acción. Visualiza la consulta formateada para tener una mejor visión. La consulta es un poco más compleja que antes, debido a las uniones, pero hace exactamente lo que esperábamos.
+Volviendo a la aplicación, dediquemos un momento a comprobar el perfilador y ver esto en acción. Haz clic en la consulta formateada para verla mejor. La consulta es un poco más compleja que antes, debido a las uniones, pero hace exactamente lo que esperábamos.
 
 ## Añadir una nueva entidad
 
