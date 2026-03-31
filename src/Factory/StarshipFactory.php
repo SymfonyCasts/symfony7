@@ -4,12 +4,12 @@ namespace App\Factory;
 
 use App\Entity\Starship;
 use App\Entity\StarshipStatusEnum;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Starship>
+ * @extends PersistentObjectFactory<Starship>
  */
-final class StarshipFactory extends PersistentProxyObjectFactory
+final class StarshipFactory extends PersistentObjectFactory
 {
     private const SHIP_NAMES = [
         'Nebula Drifter',

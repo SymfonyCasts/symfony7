@@ -2,13 +2,13 @@
 
 namespace App\Factory;
 
-use App\Entity\Droid;
+use App\Entity\User;
 use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentObjectFactory<Droid>
+ * @extends PersistentObjectFactory<User>
  */
-final class DroidFactory extends PersistentObjectFactory
+final class UserFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
@@ -19,9 +19,10 @@ final class DroidFactory extends PersistentObjectFactory
     {
     }
 
+    #[\Override]
     public static function class(): string
     {
-        return Droid::class;
+        return User::class;
     }
 
     /**
@@ -29,29 +30,25 @@ final class DroidFactory extends PersistentObjectFactory
      *
      * @todo add your default values here
      */
+    #[\Override]
     protected function defaults(): array|callable
     {
         return [
-            'name' => self::faker()->randomElement([
-                'R2-D2', 'C-3PO', 'BB-8', 'ZZZ-123',
-            ]),
-            'primaryFunction' => self::faker()->randomElement([
-                'astromech',
-                'protocol',
-                'astromech',
-                'assassin',
-                'sleeper',
-            ]),
+            'email' => self::faker()->text(180),
+            'firstName' => self::faker()->text(30),
+            'password' => self::faker()->text(),
+            'roles' => [],
         ];
     }
 
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
      */
+    #[\Override]
     protected function initialize(): static
     {
         return $this
-            // ->afterInstantiate(function(Droid $droid): void {})
+            // ->afterInstantiate(function(User $user): void {})
         ;
     }
 }

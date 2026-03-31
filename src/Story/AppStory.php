@@ -6,6 +6,7 @@ use App\Entity\StarshipStatusEnum;
 use App\Factory\DroidFactory;
 use App\Factory\StarshipFactory;
 use App\Factory\StarshipPartFactory;
+use App\Factory\UserFactory;
 use Zenstruck\Foundry\Attribute\AsFixture;
 use Zenstruck\Foundry\Story;
 
@@ -36,7 +37,7 @@ final class AppStory extends Story
             'captain' => 'Kathryn Journeyway',
             'status' => StarshipStatusEnum::WAITING,
             'arrivedAt' => new \DateTimeImmutable('-1 month'),
-        ])->_real();
+        ]);
 
         StarshipPartFactory::createOne([
             'name' => 'Toilet Paper',
@@ -47,6 +48,12 @@ final class AppStory extends Story
         DroidFactory::createMany(100);
         StarshipFactory::createMany(100, fn() => [
             'droids' => DroidFactory::randomRange(1, 5),
+        ]);
+
+        UserFactory::createOne([
+            'email' => 'user@example.com',
+            'firstName' => 'User',
+            'password' => '$2y$13$zYGY0mDZZnR5mi7ipHUkqek22.2Xnr2.PLiIA6Q/t0m8afNGTJ/Wq', // hash of "userpass"
         ]);
     }
 }

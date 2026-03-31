@@ -1,2 +1,75 @@
+# Symfony 8 Security Basics Outline
+
+## Preconditions
+- Upgrade Foundry properly: https://github.com/zenstruck/foundry/blob/2.x/UPGRADE-2.7.md
+  - replace `PersistentProxyObjectFactory` to `PersistentObjectFactory`
+  - remove `_real()` call
+
+
+## Outline
 - Install w/: `symfony composer req security`
-- 
+  - It installs `symfony/security-bundle` with some core Sf packages
+  - Show new `config/packages/security.yaml` file
+  - We will go though it soon
+- Open the homepage
+  - Now WDT has Security section saying n/a
+  - Hover over it to see Authenticated: No
+  - And Firewall name: main - that from `security.yaml` our default firewall for all the normal requests
+  - Excluding dev tools and static assets with the special `dev` firewall
+- To authenticate, first, we need to create a "user"
+  - Create it w/ `symfony console make:user` command
+  - Name class `User`
+  - Say "yes" to store user data in the database
+  - Use `email` property that will be the unique "display" name for the user
+    - though you can go with username or UUID if you want
+  - Say "yes" to hash/check user passwords in the app
+  - It created User and UserRepo classes
+  - Also updated `config/packages/security.yaml` config file
+  - It added new `app_user_provider` provider for our User entity
+  - And it will search it for `email` property
+  - And it also added this user provider to the `main` firewall
+  - Providers help to find the User from different sources
+  - We use `entity` user provider, that will fetch our user form the DB
+  - But there are more providers: Memory, LDAP, Chain
+- Open `User.php`
+  - We have a `UniqueConstraint` for email field
+  - It implements core `UserInterface` and `PasswordAuthenticatedUserInterface`
+  - Among with `email` and required `id` fields, we also have `roles` and `password` ones
+  - The `getRoles()` always returns the default `ROLE_USER`, but we can add more roles e.g. `ROLE_ADMIN`
+- Let's personalize our users
+  - Modify User class w/ `symfony console make:entity` command
+  - Add `firstName` property
+  - Make it `string`
+  - Set length to `30`
+  - Say "no" for nullable - we will require first name during the registration
+  - It will add the property with getter and setter
+- Make migration w/ `symfony console make:migration` command
+- And migrate w/ `symfony console doctrine:migration:migrate` command
+- Let's focus on authentication for now
+  - Actually, you even may don't need a registration form on your website
+  - You can create a user in migration
+  - Or write a console command to create users
+  - We will cover the registration form later in this course
+  - For now, let's just create a user in fixtures
+- Create a Foundry factory w/ `symfony console make:factory` command
+  - Choose `App\Entity\User`
+  - Open `src/Factory/UserFactory.php` to show the generated class
+  - Open `src/Story/AppStory.php`
+  - Add `UserFactory::createOne([])` call
+  - And pass `'email' => 'user@example.com',`
+  - And `'firstName' => 'User',`
+  - And `'password' => 'userpass'`
+  - Load fixtures w/ `symfony console foundry:load-fixtures` command
+  - Success!
+  - But if you pick at the user table in the DB - the password isn't hashed!
+  - That of course won't work, because it has to be properly hashed
+  - No problem! Let's hash it via a console command
+  - Run: `symfony console security:hash-password` command
+  - Type our password there: `userpass`
+  - Success! Copy the hash
+  - Set it in the `AppStory`
+  - I will leave a comment `hash of "userpass"` for the reference
+  - Reload the fixtures w/ `symfony console foundry:load-fixtures` command
+  - Check the DB to see the hashed password now
+- Now time to create a long form!
+  - Create a login form w/ `symfony console make:security:form-login` command
