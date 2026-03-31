@@ -167,3 +167,36 @@
     - `{{ parent() }}`
     - `<div>Laser Power: {{ ship.laserPower }}</div>`
 - Refresh
+
+## Inheritance Routing
+- `symfony console make:controller Starship`
+    - `#[Route('/starship/{id}', name: 'app_starship_show')]`
+    - rename method to `show()`
+    - inject `Starship $ship`
+    - `dd($ship)`
+- in `teaser.html.twig`
+    - edit link: `{{ path('app_starship_show', {id: ship.id}) }}`
+- Refresh homepage
+    - click first ship, instance of `Freighter`
+    - click last ship, instance of `MiningFreighter`
+- Use `Scout` as the typehint and refresh - 404
+    - back to `Starship`
+- rename `templates/starship/index.html.twig` to `show.html.twig`
+    - title: `{{ ship.name }}`
+    - body: copy from `teaser.html.twig` to keep it simple
+- In `StarshipController::show()`
+    - remove `dd()`
+    - `$this->render('starship/show.html.twig', ['ship' => $ship])`
+- Same Twig inheritance, but in the controller...
+- copy `templates/starship/teaser` to `templates/starship/show`
+    - freighter extends show.html.twig
+    - mining freighter extends freighter.html.twig
+- In `StarshipController::show()`
+    - inject `Environment $twig`
+    - `$template = "starship/show/{$ship->getType()}.html.twig";`
+    - `if (!$twig->getLoader()->exists($template)) {`
+    - `$template = 'starship/show.html.twig';`
+    - `$this->render($template, ['ship' => $ship])`
+- Refresh app, see cargo capacity and laser power
+- Homepage, click a freighter, just cargo capacity
+- Homepage, click a scout, no extra info
