@@ -14,6 +14,12 @@ chapters:
     querying:
         tutsFirstStep: 5-gettype
         tutsLastStep: 5-findall
+    twig:
+        tutsFirstStep: null
+        tutsLastStep: null
+    routing:
+        tutsFirstStep: null
+        tutsLastStep: null
     associations:
         tutsFirstStep: null
         tutsLastStep: null
