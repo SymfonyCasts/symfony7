@@ -15,7 +15,7 @@
   - Now WDT has Security section saying n/a
   - Hover over it to see Authenticated: No
   - And Firewall name: main - that from `security.yaml` our default firewall for all the normal requests
-  - Excluding dev tools and static assets with the special `dev` firewall
+  - Excluding dev tools like WDT and static assets with the special `dev` firewall
 - To authenticate, first, we need to create a "user"
   - Create it w/ `symfony console make:user` command
   - Name class `User`
@@ -62,8 +62,31 @@
   - Load fixtures w/ `symfony console foundry:load-fixtures` command
   - Success!
   - But if you pick at the user table in the DB - the password isn't hashed!
-  - That of course won't work, because it has to be properly hashed
-  - No problem! Let's hash it via a console command
+  - Will it work? Let's find out!
+- Now time to create a login form!
+  - We will use traditional login form authentication, but there're more! (HTTP Basic, JSON login, Login link, etc.)
+  - For transitional login form, we can leverage MakerBundle
+  - Create a login form w/ `symfony console make:security:form-login` command
+  - Keep `SecurityController` as the controller name
+  - Let's say "yes" to generate a logout URL
+  - Say "no" for PHPUnit tests for now
+  - OK, it created a controller and template
+  - And updated the `security.yaml` - open it!
+  - It added `form_login` with `login_path`, `check_path`, and enabled CSRF feature
+  - Also added `logout_path`
+  - Those routes are placed in your new `SecurityController` - go check it
+  - You can see the `logout()` throws an exception - that route is handled internally
+  - We need `logout()` just to have a route in the system so we could build the link to it
+  - Ok, go open the /login page
+  - There's an email and password fields w/ a Sign in button
+  - Let's try to log in
+  - Enter `user@example.com` as login
+  - And `userpass` as the password
+  - Aha, "Invalid credentials" error
+  - Of course won't work, because it has to be properly hashed
+  - Authenticator will first hash the password with a special algorithm
+  - And then it will check it with the hash in the DB
+- No problem! Let's hash it via a console command
   - Run: `symfony console security:hash-password` command
   - Type our password there: `userpass`
   - Success! Copy the hash
@@ -71,5 +94,39 @@
   - I will leave a comment `hash of "userpass"` for the reference
   - Reload the fixtures w/ `symfony console foundry:load-fixtures` command
   - Check the DB to see the hashed password now
-- Now time to create a long form!
-  - Create a login form w/ `symfony console make:security:form-login` command
+  - Notice that login page automatically remembered the last entered email
+  - So convenient!
+  - Now try the `userpass` again
+  - Did it work? I was redirected to the homepage
+  - Check the WDT - we're authenticated now!
+  - That means we hashed the password correct
+  - It says we have that default `ROLE_USER` role
+  - There's also a logout link for convenience if we want to log out the user
+  - But manually hashing passwords for fixtures would be such a bummer
+  - Instead, we can inject the password hasher inside the `UserFactory` and automate it
+- Open the `UserFactory`
+  - To require deps in Foundry factories we need to make them services
+  - In the `__construct()`, add `private UserPasswordHasherInterface $passwordHasher`
+  - Below in `initialize()`, uncomment `->afterInstantiate()`
+  - Inside, add `$hashedPassword = $this->passwordHasher->hashPassword($user, $user->getPassword())`
+  - And call `$user->setPassword($hashedPassword);`
+  - Back to `AppStory`
+  - Set password back to `userpass`
+  - Reload fixtures again w/ `symfony console foundry:load-fixtures` command
+  - If you reload the page (we were authenticated) - system automatically logs us out
+  - Try to log in again - it worked!
+  - Now we can just write plain passwords in the fixtures, and it will be hashed automatically
+  - But you know what, let's add login/logout buttons in the header of our template
+- Open `base.html.twig` template
+  - Add Logout link with `path('app_logout')`
+  - Below add Login link with `path('app_login')`
+  - But we need to show either one or another depends on whether logged-in user or no
+  - Symfony gives us a special variable in Twig templates
+  - Wrap links in if-else
+  - And in if write `if app.user`
+  - If user us logged-in - `app.user` will return a User object, otherwise it will be null
+  - Reload the page to see the Logout link
+  - WDT says we're authenticated that's why we see it
+  - Hit the Logout
+  - Now the Login link is shown and WDT says `n/a`
+  - Click login - we're on the login form again

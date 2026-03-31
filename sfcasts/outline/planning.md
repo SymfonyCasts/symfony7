@@ -17,25 +17,25 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Make migration w/ `make:migration` command and migrate
 //- Create a user in Foundry fixtures and load fixtures
 //- Mention `bin/console security:hash-password` command for manual password hashing
-- Hashing the password in the fixtures (Foundry factories as services to require deps)
+//- Hashing the password in the fixtures (Foundry factories as services to require deps)
 - Mention "Reduce Password Encoder Work Factor" feature: https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#reduce-password-encoder-work-factor
+//- We will use traditional login form authentication, but there're more! (HTTP Basic, JSON login, Login link, etc.)
 //- Create a login form w/ `make:security:form-login` command
-- We will use traditional login form authentication, but there're more! (HTTP Basic, JSON login, Login link, etc.)
 - Make sure CSRF protection is enabled for our login form
-- Explain *Firewalls*: `main` vs `dev`
+//- Explain *Firewalls*: `main` vs `dev`
 - Explain *Authenticators* (mention we can create custom ones)
 - But use default `form_login` (`FormLoginAuthenticator`) (via configuration)
 - Explain Session
-- Successful authentication flow
-- Show related info in the WDT
-- Unsuccessful authentication flow
-- Show "last username" feature on the failed auth
+//- Successful authentication flow
+//- Show related info in the WDT
+//- Unsuccessful authentication flow
+//- Show "last username" feature on the failed auth
 - Translate authentication errors messages
 - Show PHPSESSID cookie in Application tab of the Chrome dev tools
 - Explain automatic user refresh on each request
 - Show how changing user in the DB lead to user is logged out automatically
 - Show `hide_user_not_found: false` config option?
-- Adding logout button
+//- Adding logout button
 - Enable remember me feature
 - Show REMEMBERME cookie in Application tab of the Chrome dev tools
 - Opt into the Remember Me cookie in the login form

@@ -61,6 +61,15 @@
                         <a class="hover:text-amber-400 pt-2" href="#">
                             Contact
                         </a>
+                        {% if app.user %}
+                            <a class="hover:text-amber-400 pt-2" href="{{ path('app_logout') }}">
+                                Logout
+                            </a>
+                        {% else %}
+                            <a class="hover:text-amber-400 pt-2" href="{{ path('app_login') }}">
+                                Login
+                            </a>
+                        {% endif %}
                         <a class="rounded-[60px] py-2 px-5 bg-white/10 hover:bg-white/20" href="#">
                             Get Started
                         </a>

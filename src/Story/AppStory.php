@@ -53,7 +53,7 @@ final class AppStory extends Story
         UserFactory::createOne([
             'email' => 'user@example.com',
             'firstName' => 'User',
-            'password' => '$2y$13$zYGY0mDZZnR5mi7ipHUkqek22.2Xnr2.PLiIA6Q/t0m8afNGTJ/Wq', // hash of "userpass"
+            'password' => 'userpass',
         ]);
     }
 }
