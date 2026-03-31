@@ -1,0 +1,12 @@
+diff --git a/templates/starship/teaser/mining_freighter.html.twig b/templates/starship/teaser/mining_freighter.html.twig
+new file mode 100644
+index 0000000..04be4ac
+--- /dev/null
++++ b/templates/starship/teaser/mining_freighter.html.twig
+@@ -0,0 +1,6 @@
++{% extends 'starship/teaser/freighter.html.twig' %}
++
++{% block extra %}
++    {{ parent() }}
++    <div>Laser Power: {{ ship.laserPower }}</div>
++{% endblock %}

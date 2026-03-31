@@ -84,7 +84,27 @@
             "id": "5-findall",
             "name": "5. findAll",
             "description": null
+        },
+        {
+            "id": "6-teaser",
+            "name": "6. teaser",
+            "description": null
+        },
+        {
+            "id": "6-freighter-teaser",
+            "name": "6. freighter teaser",
+            "description": null
+        },
+        {
+            "id": "6-teaser-fallback",
+            "name": "6. teaser fallback",
+            "description": null
+        },
+        {
+            "id": "6-mining-freighter-teaser",
+            "name": "6. mining freighter teaser",
+            "description": null
         }
     ],
-    "sha": "c9ffe9427565d09e31ce083b47a82806510ae9aa"
+    "sha": "b46bf35ab33e85e2906ef7115bb42c1cb3fc0d59"
 }

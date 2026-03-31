@@ -1,0 +1,13 @@
+diff --git a/templates/main/homepage.html.twig b/templates/main/homepage.html.twig
+index 6d510c2..733a978 100644
+--- a/templates/main/homepage.html.twig
++++ b/templates/main/homepage.html.twig
+@@ -13,7 +13,7 @@
+ 
+             <div class="space-y-5">
+                 {% for ship in ships %}
+-                    {{ include('starship/teaser/'~ship.type~'.html.twig', {ship: ship}) }}
++                    {{ include(['starship/teaser/'~ship.type~'.html.twig', 'starship/teaser.html.twig'], {ship: ship}) }}
+                 {% endfor %}
+             </div>
+         </div>
