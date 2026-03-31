@@ -165,5 +165,5 @@
     - `{% extends 'starship/teaser/freighter.html.twig' %}`
     - `{% block extra %}`
     - `{{ parent() }}`
-    - `<div>Laser Strength: {{ ship.laserStrength }}</div>`
+    - `<div>Laser Power: {{ ship.laserPower }}</div>`
 - Refresh
