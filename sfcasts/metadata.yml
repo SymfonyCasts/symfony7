@@ -13,10 +13,10 @@ chapters:
         tutsLastStep: 4-add-mining-freighter
     querying:
         tutsFirstStep: 5-gettype
-        tutsLastStep: 5-findall
+        tutsLastStep: 5-not-instanceof
     twig:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 5-findall
+        tutsLastStep: 6-teaser-fallback
     routing:
         tutsFirstStep: null
         tutsLastStep: null
