@@ -141,3 +141,29 @@
   - You have to specifically exclude
 - `->andWhere('s NOT INSTANCE OF :notclass')->setParameter(...)`
 - change back to `->findAll()` in `MainController`
+
+## Inheritance with Twig
+- "teaser"
+- create `templates/starship`
+    - `teaser.html.twig`
+    - extract teaser from homepage template
+    - `{{ include('starship/teaser.html.twig', {ship: ship}) }}`
+- list sub-class properties
+    - could use an if...
+    - better to use "template inheritance"
+    - add `{% block extra %}{% endblock %}` below "arrived at"
+- create `templates/starship/teaser/freighter.html.twig`
+    - `{% extends 'starship/teaser.html.twig' %}`
+    - `{% block extra %}<div>Cargo Capacity: {{ ship.cargoCapacity }}</div>{% endblock %}`
+- in `homepage.html.twig`
+    - `{{ include('starship/teaser/'~ship.type~'.html.twig', {ship: ship}) }}`
+- Refresh... error... could create each one... but... use fallback
+- in `homepage.html.twig`
+    - `{{ include(['starship/teaser/'~ship.type~'.html.twig', 'starship/teaser.html.twig'], {ship: ship}) }}`
+- Refresh... success... fallback to teaser.html.twig when specific type not found
+- create `templates/starship/teaser/mining_freighter.html.twig`
+    - `{% extends 'starship/teaser/freighter.html.twig' %}`
+    - `{% block extra %}`
+    - `{{ parent() }}`
+    - `<div>Laser Strength: {{ ship.laserStrength }}</div>`
+- Refresh
