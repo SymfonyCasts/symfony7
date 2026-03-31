@@ -1,0 +1,53 @@
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+index efde9ac..644233c 100644
+--- a/src/Controller/StarshipController.php
++++ b/src/Controller/StarshipController.php
+@@ -6,13 +6,22 @@ use App\Entity\Starship;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
++use Twig\Environment;
+ 
+ final class StarshipController extends AbstractController
+ {
+     #[Route('/starship/{id}', name: 'app_starship_show')]
+-    public function index(Starship $ship): Response
+-    {
+-        return $this->render('starship/show.html.twig', [
++    public function index(
++        Starship $ship,
++        Environment $twig,
++    ): Response {
++        $template = "starship/show/{$ship->getType()}.html.twig";
++
++        if (!$twig->getLoader()->exists($template)) {
++            $template = 'starship/show.html.twig';
++        }
++
++        return $this->render($template, [
+             'ship' => $ship,
+         ]);
+     }
+diff --git a/templates/starship/show/freighter.html.twig b/templates/starship/show/freighter.html.twig
+new file mode 100644
+index 0000000..ed3f2c6
+--- /dev/null
++++ b/templates/starship/show/freighter.html.twig
+@@ -0,0 +1,5 @@
++{% extends 'starship/show.html.twig' %}
++
++{% block extra %}
++    <div>Cargo Capacity: {{ ship.cargoCapacity }}</div>
++{% endblock %}
+diff --git a/templates/starship/show/mining_freighter.html.twig b/templates/starship/show/mining_freighter.html.twig
+new file mode 100644
+index 0000000..f147751
+--- /dev/null
++++ b/templates/starship/show/mining_freighter.html.twig
+@@ -0,0 +1,6 @@
++{% extends 'starship/show/freighter.html.twig' %}
++
++{% block extra %}
++    {{ parent() }}
++    <div>Laser Power: {{ ship.laserPower }}</div>
++{% endblock %}

@@ -1,0 +1,66 @@
+diff --git a/src/Controller/StarshipController.php b/src/Controller/StarshipController.php
+new file mode 100644
+index 0000000..273a6f1
+--- /dev/null
++++ b/src/Controller/StarshipController.php
+@@ -0,0 +1,21 @@
++<?php
++
++namespace App\Controller;
++
++use App\Entity\Starship;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Component\Routing\Attribute\Route;
++
++final class StarshipController extends AbstractController
++{
++    #[Route('/starship/{id}', name: 'app_starship_show')]
++    public function index(Starship $ship): Response
++    {
++        dd($ship);
++
++        return $this->render('starship/index.html.twig', [
++            'controller_name' => 'StarshipController',
++        ]);
++    }
++}
+diff --git a/templates/starship/index.html.twig b/templates/starship/index.html.twig
+new file mode 100644
+index 0000000..9677a43
+--- /dev/null
++++ b/templates/starship/index.html.twig
+@@ -0,0 +1,20 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}Hello StarshipController!{% endblock %}
++
++{% block body %}
++<style>
++    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
++    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
++</style>
++
++<div class="example-wrapper">
++    <h1>Hello {{ controller_name }}! ✅</h1>
++
++    This friendly message is coming from:
++    <ul>
++        <li>Your controller at <code>/Users/valkyrie/www/doctrine-inheritance/src/Controller/StarshipController.php</code></li>
++        <li>Your template at <code>/Users/valkyrie/www/doctrine-inheritance/templates/starship/index.html.twig</code></li>
++    </ul>
++</div>
++{% endblock %}
+diff --git a/templates/starship/teaser.html.twig b/templates/starship/teaser.html.twig
+index 1134db4..73979be 100644
+--- a/templates/starship/teaser.html.twig
++++ b/templates/starship/teaser.html.twig
+@@ -9,7 +9,7 @@
+             <h4 class="text-[22px] pt-1 font-semibold">
+                 <a
+                     class="hover:text-slate-200"
+-                    href="#"
++                    href="{{ path('app_starship_show', {id: ship.id}) }}"
+                 >
+                     {{ ship.type|replace({'_': ' '})|title }}
+                     {{ ship.name }}

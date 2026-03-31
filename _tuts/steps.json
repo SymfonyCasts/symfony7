@@ -104,7 +104,32 @@
             "id": "6-mining-freighter-teaser",
             "name": "6. mining freighter teaser",
             "description": null
+        },
+        {
+            "id": "7-starship-controller",
+            "name": "7. starship controller",
+            "description": null
+        },
+        {
+            "id": "7-scout-typehint",
+            "name": "7. scout typehint",
+            "description": null
+        },
+        {
+            "id": "7-remove-scout-typehint",
+            "name": "7. remove scout typehint",
+            "description": null
+        },
+        {
+            "id": "7-show-templates",
+            "name": "7. show templates",
+            "description": null
+        },
+        {
+            "id": "7-twig-inheritance",
+            "name": "7. twig inheritance",
+            "description": null
         }
     ],
-    "sha": "b46bf35ab33e85e2906ef7115bb42c1cb3fc0d59"
+    "sha": "f035ec43c2d235da2bc4bd651f27672451a4c080"
 }
