@@ -18,8 +18,8 @@ chapters:
         tutsFirstStep: 5-findall
         tutsLastStep: 6-teaser-fallback
     routing:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 7-starship-controller
+        tutsLastStep: 7-twig-inheritance
     associations:
         tutsFirstStep: null
         tutsLastStep: null
