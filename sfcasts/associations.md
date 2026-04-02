@@ -1,3 +1,3 @@
-# Association Considerations
+# Doctrine Inheritance Associations
 
 Coming soon...
