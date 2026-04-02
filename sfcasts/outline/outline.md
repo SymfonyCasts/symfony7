@@ -102,6 +102,8 @@
   - That means we hashed the password correct
   - It says we have that default `ROLE_USER` role
   - There's also a logout link for convenience if we want to log out the user
+  - Btw, make sure your website uses HTTPS... for ALL pages, that's the best practice now
+  - If your website is on HTTP, especially security pages like user login form or registration form - user credentials can e very easily intercepted on the way. With HTTPS it's much more secure. 
   - But manually hashing passwords for fixtures would be such a bummer
   - Instead, we can inject the password hasher inside the `UserFactory` and automate it
 - Open the `UserFactory`
@@ -130,3 +132,46 @@
   - Hit the Logout
   - Now the Login link is shown and WDT says `n/a`
   - Click login - we're on the login form again
+- TODO MORE STEPS 
+- Let's allow user registration
+  - Create a registration form w/ `symfony console make:registration-form` command
+  - Say "yes" to `#[UniqueEntity]`
+  - Say "NO" to verify the user's email - we will handle it later (or in another micro-course)
+  - Say "yes" to automatically authenticate the user after registration
+  - And say "no" to PHPUnit test for now
+  - This time it created controller, template and the form type
+  - It also updated User
+  - Run `git diff src/Entity/User.php` to see it added unique email constraint
+  - Open `RegistrationController` - it added a new `/register` route
+  - Let's open the `base.html.twig`
+  - Find "Get Started" link - I will rename it to "Sign Up"
+  - Set its `href` to `path('app_register')`
+  - And also while we're here move it inside `else`
+- Click on the Sign-up link now
+  - Here's our registration form - fill it in
+  - But on purpose try to use already registered user email `user@example.com` and hit Register btn
+  - Aha, it says: There is already an account with this email
+  - That's thanks to the unique constraint on the User
+  - Perfect, try a new email
+  - Oh, an error: An exception occurred while executing a query: SQLSTATE[23000]: Integrity constraint violation: 19 NOT NULL constraint failed: user.first_name
+  - Yeah, that makes sense, we added firstName field and make it required in the DB
+  - Let's open the `RegistrationFormType`
+  - Add `->add('firstName')` there
+  - While we're here, take a look at the fields on this form
+  - We have `agreeTerms` and `plainPassword`
+  - And you can notice they have `mapped => false`
+  - That's because we don't have those fields on the User entity, they are so-called "unmapped" fields
+  - If you return to `RegistrationController`
+  - We handle the plainPassword field there - hash it and store the hash on the User entity
+  - So we never store the plain password in the DB
+  - With `agreeTerms` it's even simpler - we don't store that anywhere as well, just require user to check it to complete the registration  
+  - Ok, now open `templates/registration/register.html.twig`
+  - And render the new field in the beginning of the form
+  - Refresh the page to see the new field
+  - OK, again, fill in the form and hit Register btn
+  - Wow! We've successfully registered and even authenticated!
+  - If I log out and log in again with the new credentials - it works too.
+  - If you double-check the `RegistrationController`
+  - You will notice this `return $security->login($user, 'form_login', 'main')`
+  - That's the magic line that's responsible for the automatic authentication of the just registered user
+- 

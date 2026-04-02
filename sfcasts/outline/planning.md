@@ -58,15 +58,15 @@ https://symfonycasts.com/screencast/symfony-forms
 - Fetch the current user object in a Twig template w/ `app.user`
 - Switch user w/ impersonation
 - Tweak styles to warn ourselves we're impersonating the user
-- Create a registration form w/ `make:registration-form` command
-- Add `firstName` field
-- Add `plainPassword` unmapped field
-- Unmapped field persisted to DB like `agreeTerms`
-- The `UniqueEntity` validation constraint
-- Login the user programmatically w/ `Security` after the successful registration
+//- Create a registration form w/ `make:registration-form` command
+//- Add `firstName` field
+//- Add `plainPassword` unmapped field
+//- Unmapped field persisted to DB like `agreeTerms`
+//- The `UniqueEntity` validation constraint
+//- Login the user programmatically w/ `Security` after the successful registration
 - Add `login_throttling` feature leveraging `symfony/rate-limiter`
 - Difference between "Authentication" (`firewalls`) and "Authorization" (`access_control`)
-- Make sure your website uses HTTPS.. for all pages, that's the best practice now
+//- Make sure your website uses HTTPS... for all pages, that's the best practice now
 - Customize the redirect after successful login form response with `_target_path`: https://symfony.com/doc/current/security/form_login.html
 - Cover a voter with a subject, like only allowing a user to edit their own starships
 - Also cover a super admin voter, which is super practical for a lot of apps
