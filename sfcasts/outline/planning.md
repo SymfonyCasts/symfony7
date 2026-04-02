@@ -21,19 +21,19 @@ https://symfonycasts.com/screencast/symfony-forms
 - Mention "Reduce Password Encoder Work Factor" feature: https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#reduce-password-encoder-work-factor
 //- We will use traditional login form authentication, but there're more! (HTTP Basic, JSON login, Login link, etc.)
 //- Create a login form w/ `make:security:form-login` command
-- Make sure CSRF protection is enabled for our login form
+//- Make sure CSRF protection is enabled for our login form
 //- Explain *Firewalls*: `main` vs `dev`
-- Explain *Authenticators* (mention we can create custom ones)
-- But use default `form_login` (`FormLoginAuthenticator`) (via configuration)
-- Explain Session
+//- Explain *Authenticators* (mention we can create custom ones)
+//- But use default `form_login` (`FormLoginAuthenticator`) (via configuration)
 //- Successful authentication flow
 //- Show related info in the WDT
 //- Unsuccessful authentication flow
 //- Show "last username" feature on the failed auth
 - Translate authentication errors messages
-- Show PHPSESSID cookie in Application tab of the Chrome dev tools
-- Explain automatic user refresh on each request
-- Show how changing user in the DB lead to user is logged out automatically
+//- Explain Session
+//- Show PHPSESSID cookie in Application tab of the Chrome dev tools
+//- Explain automatic user refresh on each request
+//- Show how changing user in the DB lead to user is logged out automatically
 - Show `hide_user_not_found: false` config option?
 //- Adding logout button
 - Enable remember me feature
@@ -55,7 +55,7 @@ https://symfonycasts.com/screencast/symfony-forms
 - Force remembered users to authenticate fully, e.g. for profile edit page (so-called "sudo mode")
 - Fetch the current user object in the controller w/ `CurrentUser` PHP attr
 - Fetch the current user object in a service w/ `Security` service
-- Fetch the current user object in a Twig template w/ `app.user`
+//- Fetch the current user object in a Twig template w/ `app.user`
 - Switch user w/ impersonation
 - Tweak styles to warn ourselves we're impersonating the user
 //- Create a registration form w/ `make:registration-form` command
@@ -65,9 +65,9 @@ https://symfonycasts.com/screencast/symfony-forms
 //- The `UniqueEntity` validation constraint
 //- Login the user programmatically w/ `Security` after the successful registration
 - Add `login_throttling` feature leveraging `symfony/rate-limiter`
-- Difference between "Authentication" (`firewalls`) and "Authorization" (`access_control`)
+//- Difference between "Authentication" (`firewalls`) and "Authorization" (`access_control`)
 //- Make sure your website uses HTTPS... for all pages, that's the best practice now
-- Customize the redirect after successful login form response with `_target_path`: https://symfony.com/doc/current/security/form_login.html
+//- Customize the redirect after successful login form response with `_target_path`: https://symfony.com/doc/current/security/form_login.html
 - Cover a voter with a subject, like only allowing a user to edit their own starships
 - Also cover a super admin voter, which is super practical for a lot of apps
 - Cover security events, a listener that updates the last login timestamp on the user

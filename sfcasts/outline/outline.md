@@ -73,13 +73,28 @@
   - OK, it created a controller and template
   - And updated the `security.yaml` - open it!
   - It added `form_login` with `login_path`, `check_path`, and enabled CSRF feature
+  - The `form_login` is a Symfony's built-in login form authenticator
+  - Authenticators helps us to "authenticate" users
+  - There are 2 different concepts: "Authentication" (`firewalls`) and "Authorization" (`access_control`)
+  - Authentication is all about "Who you are? You're Victor". It's the process
+    of verifying identity. Here we're checking for user credentials:
+    email/password pair, API token, OAuth, etc. - without worry about
+    what they can do on our platform. And this job is done by the Authenticator.
+  - Authorization is all about "What are you allowed to do? Victor can access /admin? YES".
+    It's the process of checking permissions. "Now that I know who you are,
+    what are you allowed to do?". That's already about what *roles* this user has.
+    And this job is done by the `access_control` and Voters.
+  - In other words, if a user is successfully logged in - that's yet does not mean they can access everything.
+  - NOTE: Let's explain it a bit this way - and that would be an awesome video clip snippet for our YouTube channel
   - Also added `logout_path`
   - Those routes are placed in your new `SecurityController` - go check it
   - You can see the `logout()` throws an exception - that route is handled internally
   - We need `logout()` just to have a route in the system so we could build the link to it
   - Ok, go open the /login page
   - There's an email and password fields w/ a Sign in button
-  - Let's try to log in
+  - And if you open Chrome inspector - you will see a hidden `_csrf_token` field,
+    which if we modify and try to send will show us an error: Invalid CSRF token.
+  - OK, let's try with correct credentials
   - Enter `user@example.com` as login
   - And `userpass` as the password
   - Aha, "Invalid credentials" error
@@ -124,6 +139,7 @@
   - Below add Login link with `path('app_login')`
   - But we need to show either one or another depends on whether logged-in user or no
   - Symfony gives us a special variable in Twig templates
+  - Write `{{ dump(app.user) }}` and refresh the page - we can leverage it 
   - Wrap links in if-else
   - And in if write `if app.user`
   - If user us logged-in - `app.user` will return a User object, otherwise it will be null
@@ -132,7 +148,34 @@
   - Hit the Logout
   - Now the Login link is shown and WDT says `n/a`
   - Click login - we're on the login form again
-- TODO MORE STEPS 
+- So how does that works?
+  - Symfony authenticates the user for the current session
+  - Explain well what session is
+  - Let's open Application tab of the Chrome dev tools
+  - Show `PHPSESSID` cookie - that's our session ID
+  - It's the same on every page of our website
+  - If you open our website in Chrome Incognito mode - you won't see `PHPSESSID`
+  - That's because we even don't start a session yet there
+  - But as soon as you log in - that `PHPSESSID` will pop up, but with a different unique ID
+  - What will happen if we delete it? Let's try it
+  - Delete `PHPSESSID` and reload the page
+  - Aha, we're not logged in anymore!
+  - Actually, that's exactly what logout feature do, destroy our session, i.e. removes that `PHPSESSID` completely
+  - Let's log in again
+  - But every time we load the page, Symfony pulls a fresh user data from the DB
+  - It automatically refreshes user object on each request
+  - And we can prove it!
+  - Open `login.html.twig`
+  - And add `Hello {{ app.user.firstName }}!` before `You are logged in as...`
+  - Now go to the /login - here's our name
+  - Change user first name in the DB and reload the page
+  - The name is changed! Symfony pulled fresh User data from the DB
+  - But what will happen if we change a sensitive information? E.g. email or password...
+  - Change user email in the DB and reload the page again
+  - Aha, we're logged out!
+  - That's for security reasons, if users change their credentials - we want to destroy their sessions everywhere
+
+- TODO MORE STEPS
 - Let's allow user registration
   - Create a registration form w/ `symfony console make:registration-form` command
   - Say "yes" to `#[UniqueEntity]`
@@ -174,4 +217,13 @@
   - If you double-check the `RegistrationController`
   - You will notice this `return $security->login($user, 'form_login', 'main')`
   - That's the magic line that's responsible for the automatic authentication of the just registered user
-- 
+
+
+
+- TODO
+- Dynamically customize redirect after successful login
+  - Ok, now let's logout, go to a URL behind the firewall, e.g. /admin/starship
+  - It redirects us to the login page
+  - Log in aaaand, we're redirected to the homepage
+  - Won't it be cool to redirect user to the /admin page instead?
+  - Customize the redirect after successful login form response with `_target_path`: https://symfony.com/doc/current/security/form_login.html
