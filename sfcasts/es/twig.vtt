@@ -1,0 +1,268 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:02.976 align:middle
+¿Ves cada una de estas filas
+de naves estelares de aquí?
+
+00:00:03.416 --> 00:00:05.596 align:middle
+Muestran las propiedades
+genéricas de las naves estelares.
+
+00:00:05.876 --> 00:00:07.656 align:middle
+Quiero hacerlas un poco más interesantes
+
+00:00:07.866 --> 00:00:11.596 align:middle
+mostrando en estas filas las propiedades personalizadas
+de las naves estelares para nuestras subnavegaciones.
+
+00:00:12.166 --> 00:00:13.836 align:middle
+Llamemos a esta fila "teaser".
+
+00:00:14.366 --> 00:00:18.236 align:middle
+Lo primero que haremos será extraer
+nuestro HTML teaser en un parcial.
+
+00:00:18.926 --> 00:00:22.426 align:middle
+En nuestro directorio templates,
+crea un nuevo directorio starship
+
+00:00:22.836 --> 00:00:27.306 align:middle
+y, a continuación, crea un archivo
+Twig llamado teaser.html.twig.
+
+00:00:28.176 --> 00:00:31.406 align:middle
+Luego, en la plantilla de nuestra página
+de inicio, busca el HTML del teaser
+
+00:00:31.596 --> 00:00:34.366 align:middle
+, que es todo lo que hay dentro de
+esta sección "for ship in ships".
+
+00:00:34.366 --> 00:00:36.586 align:middle
+Coge todo ese trozo y córtalo.
+
+00:00:38.846 --> 00:00:45.266 align:middle
+A continuación, pégalo en nuestro nuevo archivo
+teaser.html.twig: De vuelta en homepage.html.twig,
+
+00:00:45.586 --> 00:00:51.596 align:middle
+inclúyelo como parcial con : {{
+include('starship/teaser.html.twig') }}.
+
+00:00:52.216 --> 00:00:57.796 align:middle
+Para los parámetros, pasa {ship: ship}: Haz una rápida
+comprobación de cordura refrescando la aplicación
+
+00:00:57.796 --> 00:00:59.336 align:middle
+para ver si todo sigue en orden.
+
+00:00:59.966 --> 00:01:01.676 align:middle
+Perfecto. ¡Sin regresiones!
+
+00:01:02.426 --> 00:01:07.156 align:middle
+Ahora que tenemos el teaser en su propio parcial,
+vamos a animarlo con propiedades de subenvío.
+
+00:01:07.596 --> 00:01:10.886 align:middle
+Por ejemplo, quiero mostrar la
+capacidad de carga de los cargueros.
+
+00:01:11.406 --> 00:01:13.066 align:middle
+Podríamos hacerlo con una sentencia if...
+
+00:01:13.126 --> 00:01:18.536 align:middle
+como if ship.type == 'freighter',
+pero eso se complicaría muy rápido.
+
+00:01:18.906 --> 00:01:21.566 align:middle
+En su lugar, utilicemos la
+herencia de plantillas Twig.
+
+00:01:21.926 --> 00:01:25.186 align:middle
+Herencia de plantillas Twig con
+herencia Doctrine, ¡me encanta!
+
+00:01:25.966 --> 00:01:30.306 align:middle
+Primero, en el directorio templates/starship,
+crea un nuevo directorio teaser.
+
+00:01:30.786 --> 00:01:33.696 align:middle
+Éste será el hogar de todas
+nuestras plantillas teaser heredadas.
+
+00:01:34.196 --> 00:01:37.656 align:middle
+Crea la primera, freighter.html.twig.
+
+00:01:38.276 --> 00:01:41.846 align:middle
+De vuelta en teaser.html.twig,
+necesitamos crear un bloque
+
+00:01:41.846 --> 00:01:44.146 align:middle
+que pueda ser anulado por
+nuestras plantillas heredadas.
+
+00:01:44.756 --> 00:01:48.696 align:middle
+Debajo de "llegado a", añade
+{% block extra %}{% endblock %}:
+
+00:01:49.186 --> 00:01:51.176 align:middle
+Esto está vacío en la
+plantilla teaser genérica,
+
+00:01:51.356 --> 00:01:54.426 align:middle
+pero va a permitir que las plantillas
+que la extiendan, lo anulen.
+
+00:01:55.136 --> 00:01:56.906 align:middle
+Salta a nuestra nueva plantilla freighter.
+
+00:01:57.416 --> 00:01:59.166 align:middle
+Ups, tengo un error tipográfico
+en el nombre del archivo.
+
+00:01:59.676 --> 00:02:06.236 align:middle
+Debería ser .twig con un i. Primero, haz
+que amplíe starship/teaser.html.twig.
+
+00:02:07.076 --> 00:02:10.136 align:middle
+Ahora, anula el bloque extra y, dentro,
+
+00:02:10.236 --> 00:02:16.486 align:middle
+añade <div>Cargo Capacity: {{
+ship.cargoCapacity }}</div>.
+
+00:02:17.256 --> 00:02:20.956 align:middle
+Podríamos llamar aquí a parent() para renderizar
+el bloque padre, pero como está vacío,
+
+00:02:20.986 --> 00:02:23.866 align:middle
+me lo saltaré por ahora:
+¿Listo para ver algo de magia?
+
+00:02:24.286 --> 00:02:29.016 align:middle
+En nuestra plantilla de página de inicio, incluiremos
+dinámicamente la plantilla teaser correcta en
+
+00:02:29.016 --> 00:02:29.786 align:middle
+función del tipo de nave.
+
+00:02:30.366 --> 00:02:35.866 align:middle
+Dentro de include(), rompe la cadena después
+de teaser y añade algunos ~'s para concatenar.
+
+00:02:36.456 --> 00:02:41.536 align:middle
+Dentro de ellos, añade ship.type: De
+vuelta a nuestra aplicación, actualiza y...
+
+00:02:41.966 --> 00:02:47.726 align:middle
+¡error! "No se puede encontrar la plantilla
+starship/teaserfreighter.html.twig".
+
+00:02:48.206 --> 00:02:50.266 align:middle
+Ups, he olvidado un / después de teaser.
+
+00:02:50.666 --> 00:02:52.296 align:middle
+Lo arreglo y actualizo de nuevo...
+
+00:02:53.586 --> 00:02:55.336 align:middle
+Sigue habiendo un error, ¡pero diferente!
+
+00:02:55.656 --> 00:03:00.696 align:middle
+"No se puede encontrar la plantilla
+starship/teaser/scout.html.twig".
+
+00:03:01.236 --> 00:03:06.226 align:middle
+Ahh, sólo hemos creado un teaser para el freighter,
+pero también tenemos un scout y un mining_freighter.
+
+00:03:06.856 --> 00:03:10.406 align:middle
+Para que esto funcione, tenemos que
+crear un teaser para cada tipo de nave.
+
+00:03:11.026 --> 00:03:13.166 align:middle
+Pero, ¿y si no quiero tener ese requisito?
+
+00:03:13.406 --> 00:03:17.766 align:middle
+Me gustaría simplemente recurrir al teaser
+genérico si no existe uno específico.
+
+00:03:18.156 --> 00:03:18.996 align:middle
+¡No hay problema!
+
+00:03:19.636 --> 00:03:25.066 align:middle
+En homepage.html.twig, envuelve el nombre de la
+plantilla en la función include() en una matriz.
+
+00:03:25.666 --> 00:03:29.996 align:middle
+Cuando pases una matriz a include(), Twig
+intentará encontrar cada plantilla en la matriz.
+
+00:03:30.426 --> 00:03:32.466 align:middle
+Utilizará la primera que encuentre.
+
+00:03:32.806 --> 00:03:35.666 align:middle
+Así que, para el segundo elemento del
+array, utiliza nuestro teaser genérico:
+
+00:03:35.836 --> 00:03:40.526 align:middle
+starship/teaser.html.twig:
+Actualiza nuestra aplicación...
+
+00:03:41.366 --> 00:03:42.086 align:middle
+¡y ya está!
+
+00:03:42.376 --> 00:03:44.736 align:middle
+¡Nuestros cargueros muestran
+ahora sus capacidades de carga!
+
+00:03:45.196 --> 00:03:48.966 align:middle
+Y más abajo, los exploradores y los cargueros
+mineros utilizan el teaser genérico.
+
+00:03:49.526 --> 00:03:52.506 align:middle
+Pasemos a otro nivel y añadamos
+un teaser para el mining_freighter.
+
+00:03:53.206 --> 00:04:00.626 align:middle
+En templates/starship/teaser, crea un nuevo
+archivo Twig: mining_freighter.html.twig.
+
+00:04:01.356 --> 00:04:04.096 align:middle
+Al igual que nuestra entidad
+MiningFreighter extiende Freighter,
+
+00:04:04.326 --> 00:04:07.836 align:middle
+esta plantilla extenderá el
+teaser freighter.html.twig.
+
+00:04:08.536 --> 00:04:09.616 align:middle
+Añade el bloque extra.
+
+00:04:11.046 --> 00:04:15.766 align:middle
+Esta vez, renderiza el bloque parent() para
+incluir la capacidad de carga del teaser freighter.
+
+00:04:16.156 --> 00:04:20.796 align:middle
+A continuación, añade <div>Laser
+Power: {{ ship.laserPower }}</div>:
+
+00:04:20.796 --> 00:04:27.036 align:middle
+Debido a nuestra lógica de herencia dinámica de
+plantillas, esto es todo lo que deberíamos necesitar hacer.
+
+00:04:27.356 --> 00:04:28.266 align:middle
+Actualiza la aplicación...
+
+00:04:28.476 --> 00:04:30.116 align:middle
+desplázate hasta nuestros cargueros mineros...
+
+00:04:30.696 --> 00:04:34.766 align:middle
+y ¡qué bien, muestran tanto la capacidad
+de carga como la potencia láser!
+
+00:04:35.256 --> 00:04:37.416 align:middle
+Creo que esto es bastante elegante, ¿y tú?
+
+00:04:38.156 --> 00:04:41.266 align:middle
+A continuación veremos cómo funcionan
+conjuntamente la Herencia de Doctrine y las rutas
