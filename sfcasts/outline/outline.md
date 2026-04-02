@@ -135,6 +135,7 @@
   - Now we can just write plain passwords in the fixtures, and it will be hashed automatically
   - But you know what, let's add login/logout buttons in the header of our template
 - Open `base.html.twig` template
+  - We need a logout link for users, because they don't see dev's logout link in WDT
   - Add Logout link with `path('app_logout')`
   - Below add Login link with `path('app_login')`
   - But we need to show either one or another depends on whether logged-in user or no
@@ -174,7 +175,37 @@
   - Change user email in the DB and reload the page again
   - Aha, we're logged out!
   - That's for security reasons, if users change their credentials - we want to destroy their sessions everywhere
-
+  - But session also has TTL
+  - Run `symfony console debug:config framework security` command
+  - Hm, ok, there's no cookie lifetime
+  - Then let's run: `symfony console config:dump framework session`command
+  - Aha, here it is `cookie_lifetime` set to `~` which means we don't set it on the Symfony's app level
+  - It means that the session lifetime value will be taken from php.ini
+  - But you can configure it on the app level setting that parameter
+  - When session ends - it will automatically log user out
+  - But there's a special feature called "remember me" that helps you to keep user logged in even if session is ended
+- Let's enable "remember me" feature for our form
+  - The simplest way to activate it - go to `security.yaml`
+  - In the `main` firewall, add `remember_me:`, then `always_remember_me: true`
+  - Log in again
+  - Aha, now we have `PHPSESSID` AND also `REMEMBERME` cookie
+  - How does it work? When session is ended - user should be still logged in
+  - Let's just drop the `PHPSESSID`
+  - Reload the page aaaaaand, we're still alive!... I mean, authenticated!
+  - You may notice that `PHPSESSID` popups again, but w/ a different new ID
+  - But as soon as you also remove `PHPSESSID` along w/ `REMEMBERME` - we're finally logged out
+  - You can control the lifetime of `REMEMBERME` as well
+  - Add e.g. `lifetime: 604800 # 1 week in seconds`
+  - After that time our `REMEMBERME` will be expired and user should be logged out
+  - But instead of forcing "remember me" feature always working, we can
+    let users decide if they want to be authenticated as remembered or no
+    (when e.g. they use a shared computer) during the authentication
+  - I will comment out `always_remember_me: true` for the reference
+  - Open `login.html.twig`
+  - And uncomment that `_remember_me`-related code
+  - Try to log in w/o checked that checkbox - no `REMEMBERME`
+  - Log out and try to log in again with check `REMEMBERME`
+  - Yes, our `REMEMBERME` is on spot! 
 - TODO MORE STEPS
 - Let's allow user registration
   - Create a registration form w/ `symfony console make:registration-form` command

@@ -36,11 +36,11 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Show how changing user in the DB lead to user is logged out automatically
 - Show `hide_user_not_found: false` config option?
 //- Adding logout button
-- Enable remember me feature
-- Show REMEMBERME cookie in Application tab of the Chrome dev tools
-- Opt into the Remember Me cookie in the login form
-- Watch the Remember Me cookie authenticate the user (by deleting PHPSESSID)
-- Mention `always_remember_me: true` config option
+//- Enable remember me feature
+//- Show REMEMBERME cookie in Application tab of the Chrome dev tools
+//- Watch the Remember Me cookie authenticate the user (by deleting PHPSESSID)
+//- Mention `always_remember_me: true` config option
+//- Opt into the Remember Me cookie in the login form
 - Explain `signature_properties` config option
 - Explain `access_control` config option
 - Explain roles
