@@ -1,0 +1,21 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 63d198f..f96e8c2 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -2,6 +2,7 @@
+ 
+ namespace App\Controller;
+ 
++use App\Repository\MiningFreighterRepository;
+ use App\Repository\ScoutRepository;
+ use App\Repository\StarshipPartRepository;
+ use App\Repository\StarshipRepository;
+@@ -13,7 +14,7 @@ class MainController extends AbstractController
+ {
+     #[Route('/', name: 'app_homepage')]
+     public function homepage(
+-        StarshipRepository $starshipRepository,
++        MiningFreighterRepository $starshipRepository,
+         StarshipPartRepository $starshipPartRepository,
+     ): Response {
+         $ships = $starshipRepository->findAll();

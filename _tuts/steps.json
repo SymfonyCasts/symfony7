@@ -129,7 +129,27 @@
             "id": "7-twig-inheritance",
             "name": "7. twig inheritance",
             "description": null
+        },
+        {
+            "id": "8-create-starshippart",
+            "name": "8. create StarshipPart",
+            "description": null
+        },
+        {
+            "id": "8-add-first",
+            "name": "8. add first",
+            "description": null
+        },
+        {
+            "id": "8-inject-miningfreighterrepository",
+            "name": "8. inject miningfreighterrepository",
+            "description": null
+        },
+        {
+            "id": "8-switch-to-leaf-relation",
+            "name": "8. switch to leaf relation",
+            "description": null
         }
     ],
-    "sha": "f035ec43c2d235da2bc4bd651f27672451a4c080"
+    "sha": "d45d484d7ce4ef4452c7dccfff86fd013d1ce7a5"
 }

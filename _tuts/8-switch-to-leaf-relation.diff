@@ -1,0 +1,178 @@
+diff --git a/src/Entity/Scout.php b/src/Entity/Scout.php
+index 0eca5e1..410eeb8 100644
+--- a/src/Entity/Scout.php
++++ b/src/Entity/Scout.php
+@@ -3,6 +3,8 @@
+ namespace App\Entity;
+ 
+ use App\Repository\ScoutRepository;
++use Doctrine\Common\Collections\ArrayCollection;
++use Doctrine\Common\Collections\Collection;
+ use Doctrine\ORM\Mapping as ORM;
+ 
+ #[ORM\Entity(repositoryClass: ScoutRepository::class)]
+@@ -11,6 +13,17 @@ class Scout extends Starship
+     #[ORM\Column]
+     private ?int $sensorRange = null;
+ 
++    /**
++     * @var Collection<int, StarshipPart>
++     */
++    #[ORM\OneToMany(targetEntity: StarshipPart::class, mappedBy: 'starship')]
++    private Collection $starshipParts;
++
++    public function __construct()
++    {
++        $this->starshipParts = new ArrayCollection();
++    }
++
+     public function getSensorRange(): ?int
+     {
+         return $this->sensorRange;
+@@ -22,4 +35,34 @@ class Scout extends Starship
+ 
+         return $this;
+     }
++
++    /**
++     * @return Collection<int, StarshipPart>
++     */
++    public function getStarshipParts(): Collection
++    {
++        return $this->starshipParts;
++    }
++
++    public function addStarshipPart(StarshipPart $starshipPart): static
++    {
++        if (!$this->starshipParts->contains($starshipPart)) {
++            $this->starshipParts->add($starshipPart);
++            $starshipPart->setStarship($this);
++        }
++
++        return $this;
++    }
++
++    public function removeStarshipPart(StarshipPart $starshipPart): static
++    {
++        if ($this->starshipParts->removeElement($starshipPart)) {
++            // set the owning side to null (unless already changed)
++            if ($starshipPart->getStarship() === $this) {
++                $starshipPart->setStarship(null);
++            }
++        }
++
++        return $this;
++    }
+ }
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index 3b3c19d..61008ed 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -39,17 +39,6 @@ abstract class Starship
+     #[ORM\Column]
+     private ?\DateTimeImmutable $arrivedAt = null;
+ 
+-    /**
+-     * @var Collection<int, StarshipPart>
+-     */
+-    #[ORM\OneToMany(targetEntity: StarshipPart::class, mappedBy: 'starship')]
+-    private Collection $starshipParts;
+-
+-    public function __construct()
+-    {
+-        $this->starshipParts = new ArrayCollection();
+-    }
+-
+     public function getId(): ?int
+     {
+         return $this->id;
+@@ -133,34 +122,4 @@ abstract class Starship
+     {
+         return array_flip(self::TYPE_MAP)[static::class];
+     }
+-
+-    /**
+-     * @return Collection<int, StarshipPart>
+-     */
+-    public function getStarshipParts(): Collection
+-    {
+-        return $this->starshipParts;
+-    }
+-
+-    public function addStarshipPart(StarshipPart $starshipPart): static
+-    {
+-        if (!$this->starshipParts->contains($starshipPart)) {
+-            $this->starshipParts->add($starshipPart);
+-            $starshipPart->setStarship($this);
+-        }
+-
+-        return $this;
+-    }
+-
+-    public function removeStarshipPart(StarshipPart $starshipPart): static
+-    {
+-        if ($this->starshipParts->removeElement($starshipPart)) {
+-            // set the owning side to null (unless already changed)
+-            if ($starshipPart->getStarship() === $this) {
+-                $starshipPart->setStarship(null);
+-            }
+-        }
+-
+-        return $this;
+-    }
+ }
+diff --git a/src/Entity/StarshipPart.php b/src/Entity/StarshipPart.php
+index b1286f1..9ca48da 100644
+--- a/src/Entity/StarshipPart.php
++++ b/src/Entity/StarshipPart.php
+@@ -14,19 +14,19 @@ class StarshipPart
+     private ?int $id = null;
+ 
+     #[ORM\ManyToOne(inversedBy: 'starshipParts')]
+-    private ?Starship $starship = null;
++    private ?Scout $starship = null;
+ 
+     public function getId(): ?int
+     {
+         return $this->id;
+     }
+ 
+-    public function getStarship(): ?Starship
++    public function getStarship(): ?Scout
+     {
+         return $this->starship;
+     }
+ 
+-    public function setStarship(?Starship $starship): static
++    public function setStarship(?Scout $starship): static
+     {
+         $this->starship = $starship;
+ 
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 6605b54..18799bc 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -14,21 +14,12 @@ final class AppStory extends Story
+ {
+     public function build(): void
+     {
+-
+-        FreighterFactory::createMany(3, function () {
+-            return [
+-                'starshipParts' => StarshipPartFactory::createRange(1, 3),
+-            ];
+-        });
++        FreighterFactory::createMany(3);
+         ScoutFactory::createMany(3, function () {
+             return [
+                 'starshipParts' => StarshipPartFactory::createRange(1, 3),
+             ];
+         });
+-        MiningFreighterFactory::createMany(2, function () {
+-            return [
+-                'starshipParts' => StarshipPartFactory::createRange(1, 3),
+-            ];
+-        });
++        MiningFreighterFactory::createMany(2);
+     }
+ }

@@ -1,0 +1,26 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 43da9f0..63d198f 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -3,6 +3,7 @@
+ namespace App\Controller;
+ 
+ use App\Repository\ScoutRepository;
++use App\Repository\StarshipPartRepository;
+ use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Response;
+@@ -13,11 +14,12 @@ class MainController extends AbstractController
+     #[Route('/', name: 'app_homepage')]
+     public function homepage(
+         StarshipRepository $starshipRepository,
++        StarshipPartRepository $starshipPartRepository,
+     ): Response {
+         $ships = $starshipRepository->findAll();
+         $myShip = $ships[array_rand($ships)];
+ 
+-        dump($myShip->getStarshipParts());
++        dump($starshipPartRepository->find(1));
+ 
+         return $this->render('main/homepage.html.twig', [
+             'myShip' => $myShip,
