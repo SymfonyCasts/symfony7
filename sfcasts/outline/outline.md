@@ -200,3 +200,38 @@
 - Refresh app, see cargo capacity and laser power
 - Homepage, click a freighter, just cargo capacity
 - Homepage, click a scout, no extra info
+
+## Inheritance Associations
+- Work like normal but lazy loading can't be used in certain conditions
+- Load homepage - 1 query
+- `symfony console make:entity StarshipPart`
+    - `starship`
+    - `?`, `relation` to use the wizard
+    - `Starship`, `ManyToOne`, allow null, `yes`
+- `symfony console make:factory`
+    - `all`
+- In `AppStory`
+    - make sure to create the freighters first
+    - use the second argument of createMany, use a callback and explain why
+    - `return ['starshipParts' => StarshipPartFactory::createRange(1, 3)]`
+    - Do the same for all ships
+- `symfony console foundry:load-fixtures`
+- Refresh homepage, still 1 query, all good
+- In `MainController::homepage()`
+    - `dump($myShip->getStarshipParts())`
+    - Refresh, still 1 query, the starship parts are a lazy collection
+    - add `->first()` and refresh, 2 queries, 1 for the list and one for myShip's parts
+- Let's go the other way
+- Inject `StarshipPartRepository` into `MainController::homepage()`
+- `dump($starshipPartRepository->find(1));`
+- Refresh, 2 queries... this doesn't require lazy loading because the list of ships is already loaded - memory is used
+- Notice the starship it's associated with is a Freighter
+- Replace `StarshipRepository` with `MiningFreighterRepository` and refresh
+- 3 queries... the Freighter was eager loaded but should have been lazy?
+- Associations to parent classes in an inheritance hierarchy cannot be lazy loaded
+- Only the leafs can - in this case, only Scout and MiningFreighter
+- Move the relationship to `Scout` and reload fixtures
+- In `AppStory`, only Scouts get parts
+- Reload fixtures and refresh
+- 2 queries now and if you look at the dump, the starship is a proxy object, not a real Scout
+- Explain again with diagram
