@@ -21,5 +21,5 @@ chapters:
         tutsFirstStep: 7-starship-controller
         tutsLastStep: 7-twig-inheritance
     associations:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 8-create-starshippart
+        tutsLastStep: 8-switch-to-leaf-relation
