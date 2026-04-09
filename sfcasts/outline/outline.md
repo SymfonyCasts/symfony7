@@ -269,8 +269,81 @@
   - Inside, add `ROLE_SUPER_ADMIN: ROLE_ADMIN`
   - Go refresh the page again and vualà, super admin has access to the /admin page as well!
   - WDT will show us that it has its own roles, but also inherited roles.
-- 
-- TODO Check for `PUBLIC_ACCESS`/`IS_REMEMBERED`/`IS_AUTHENTICATED_FULLY`
+- We have the "remember me" feature, and when session is over it still keeps us authenticated.
+  - This is called that user is authenticated as "remembered".
+  - But for security reasons, for some parts of our website, we may want to force users to authenticate fully.
+  - This is so-called "sudo mode"
+  - For example, when users edit their profile, changing their passwords, etc.
+  - Let's force admins to be fully authenticated when they access the /admin/starship-part/new page
+  - For this, we can leverage special attributes that are similar to roles.
+  - Go to the `AdminController::newStarshipPart()` action
+  - Uncomment `#[IsGranted()]` but change it to `IS_AUTHENTICATED_FULLY`
+  - Now log out, go to the login page again, authenticate but make sure you checked the "remember me" checkbox.
+  - Now go to Parts and click on "Create a new part"
+  - We're on the create form
+  - Open the Chrome dev tools and delete the `PHPSESSID` cookie, but keep the `REMEMBERME` cookie
+  - Refresh the page - we're redirected to the login page!
+  - But if you look at the WDT - we're still authenticated via RememberMeToken
+  - Once again, go to the Parts
+  - We see this "Create a new part" link, but as soon as we click it - we're on the login page again
+  - The system now requires us to be full authenticated
+  - Fill in admin credentials and hit login
+  - We're on the create part form again
+  - With this special attibute we can control which parts of our website require full authentication and which can be accessed by remembered users as well.
+  - Among the `IS_AUTHENTICATED_FULLY`, there're also `IS_REMEMBERED` & `PUBLIC_ACCESS` attributes that you can use in the same way.
+- Let's log out and log in as a regular user.
+  - When you click "Parts" - you will see "Create a new part"
+  - But that link works only for admins
+  - If we click on it: `Access Denied. The user doesn't have ROLE_ADMIN.`
+  - That's correct behavior, the only problem is that we don't want to show this link for normal users
+  - Let's show it only for admins
+  - Open `part/index.html.twig`
+  - Wrap the "Create a new part" link with if statement
+  - Inside if, check for `is_granted('ROLE_ADMIN')`
+  - Now refresh the page - the link is gone.
+  - If you log in as with ROLE_ADMIN again - you will see it.
+  - This way regular users won't be able to accidentally click on a link the don't have access to.
+- Let's also open `base.html.twig`
+  - Before Home link add one more and called it Admin
+  - Link to `path('app_starship_admin_index')`
+  - And wrap this link with `if is_granted('ROLE_ADMIN')`.
+  - This way Admin link will be shown only to admins.
+- Symfony security system also has a special feature called "impersonation" that allows you to easily switch user without the need to know user credentials.
+  - It's super useful for debugging and testing purposes, e.g. when you want to quickly check how the website looks for a specific user when you're logged in as an admin.
+  - First, log in as super admin
+  - Then, open `security.yaml`
+  - And set `switch_user: true`
+  - Now, to switch the user you can leverage a special `_switch_user` query parameter in any URL
+  - Let's type in the address bar: `/?_switch_user=user@example.com`
+  - The user@example.com is the email in the system we want to impersonate
+  - Hit enter and... error: "Access Denied. The user doesn't have ROLE_ALLOWED_TO_SWITCH."
+  - That role is required to have on the 
+  - Back to `security.yaml`
+  - We want to add that role only to super admin, only super admins will be able to impersonate other users.
+  - Change `ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]`
+  - Reload the page again - yes, we're authenticated as user@example.com via `SwitchUserToken`
+  - And we see `Impersonator: superadmin@example.com` in the WDT
+  - We don't see "Admin" and "Create a new part" links because we're impersonating a regular user now
+  - This is an awesome feature for debugging on production
+  - In the WDT you will see "Exit impersonation" link leading to `?_switch_user=_exit`
+  - Locally we can leverage this link to exit impersonation.
+  - But on production, where we don't have WDT, you may want to add a special link in the menu.
+  - Open `base.html.twig`
+  - And wrap Logout link with an if-else/
+  - Move our Logout link to else. 
+  - In if, write: `is_granted('IS_IMPERSONATOR')`
+  - That's a special attribute that helps to know if we're in the impersonation mode or no
+  - And add a new link called "Exit Impersonation"
+  - We can generate a link ourselves, but Symfony already has a Special Twig function for this
+  - Set href to `impersonation_exit_path('/')` - I will specify the homepage where we will be redirected to
+  - Perfect!
+  - The last thing - I would like to make it noticeable that we're in the impersonation mode
+  - Add CSS class to the `header`: `{{ is_granted('IS_IMPERSONATOR') ? 'bg-red-900 ' }}`
+  - It will apply this style only in the impersonation mode
+  - Now refresh - it's very easy to notice this big red header
+  - Click Exit Impersonation link
+  - We're back to super admin and the red bg is gone
+  - Now we can safely use it even in production
 - TODO MORE STEPS
 - Let's allow user registration
   - Create a registration form w/ `symfony console make:registration-form` command

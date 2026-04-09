@@ -1,5 +1,7 @@
 # Symfony 7 Security
 
+TODO Sync updates with the version in tutorial-planning repo!  
+
 ## Preconditions:
 //- Base on the latest "Symfony 7 Forms: The Basics" tutorial:
 https://symfonycasts.com/screencast/symfony-forms
@@ -52,12 +54,12 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Deny access to the entire controller class w/ `IsGranted` PHP attr
 //- Check for access w/ `isGranted()` function in controller or Twig template
 //- Check for `PUBLIC_ACCESS`/`IS_REMEMBERED`/`IS_AUTHENTICATED_FULLY`
-- Force remembered users to authenticate fully, e.g. for profile edit page (so-called "sudo mode")
+//- Force remembered users to authenticate fully, e.g. for profile edit page (so-called "sudo mode")
 - Fetch the current user object in the controller w/ `CurrentUser` PHP attr
 - Fetch the current user object in a service w/ `Security` service
 //- Fetch the current user object in a Twig template w/ `app.user`
-- Switch user w/ impersonation
-- Tweak styles to warn ourselves we're impersonating the user
+//- Switch user w/ impersonation
+//- Tweak styles to warn ourselves we're impersonating the user
 //- Create a registration form w/ `make:registration-form` command
 //- Add `firstName` field
 //- Add `plainPassword` unmapped field
@@ -73,6 +75,7 @@ https://symfonycasts.com/screencast/symfony-forms
 - Cover security events, a listener that updates the last login timestamp on the user
 
 ## Advanced bonus topics
+- OAuth 2 flow (league/OAuth2-Bundle vs knpuniversity/oauth2-client-bundle)
 - Create a reset password feature w/ `make:reset-password` command, promoting our `symfonycasts/reset-password-bundle`
 - Verify email after registration, promoting our `symfonycasts/verify-email-bundle`
 - Create a custom authenticator w/ `make:auth` command (or  `make:security:custom`?)

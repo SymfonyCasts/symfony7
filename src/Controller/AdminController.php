@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin')]
 class AdminController extends AbstractController
 {
-//    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/starship-part/new', name: 'app_admin_starship_part_new', methods: ['GET', 'POST'])]
     public function newStarshipPart(
         Request $request,
