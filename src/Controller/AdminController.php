@@ -10,15 +10,21 @@ use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/admin')]
 class AdminController extends AbstractController
 {
+//    #[IsGranted('ROLE_ADMIN')]
     #[Route('/starship-part/new', name: 'app_admin_starship_part_new', methods: ['GET', 'POST'])]
     public function newStarshipPart(
         Request $request,
         EntityManagerInterface $entityManager,
     ): Response {
+//        if (!$this->isGranted('ROLE_ADMIN')) {
+//            throw $this->createAccessDeniedException('Access Denied!');
+//        }
+
         $form = $this->createForm(StarshipPartType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

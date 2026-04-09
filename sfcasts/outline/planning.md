@@ -42,16 +42,16 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Mention `always_remember_me: true` config option
 //- Opt into the Remember Me cookie in the login form
 - Explain `signature_properties` config option
-- Explain `access_control` config option
-- Explain roles
-- Explain role hierarchy
-- Restrict access to admin with specific ROLE_ADMIN
-- Mention only 1 `access_control` match per request!
-- Deny access from the controller w/ `createAccessDeniedException()`
-- Deny access to an action w/ `IsGranted` PHP attr
-- Deny access to the entire controller class w/ `IsGranted` PHP attr
-- Check for access w/ `isGranted()` function in controller or Twig template
-- Check for `PUBLIC_ACCESS`/`IS_REMEMBERED`/`IS_AUTHENTICATED_FULLY`
+//- Explain `access_control` config option
+//- Mention only 1 `access_control` match per request!
+//- Explain roles
+//- Explain role hierarchy
+//- Restrict access to admin with specific ROLE_ADMIN
+//- Deny access from the controller w/ `createAccessDeniedException()`
+//- Deny access to an action w/ `IsGranted` PHP attr
+//- Deny access to the entire controller class w/ `IsGranted` PHP attr
+//- Check for access w/ `isGranted()` function in controller or Twig template
+//- Check for `PUBLIC_ACCESS`/`IS_REMEMBERED`/`IS_AUTHENTICATED_FULLY`
 - Force remembered users to authenticate fully, e.g. for profile edit page (so-called "sudo mode")
 - Fetch the current user object in the controller w/ `CurrentUser` PHP attr
 - Fetch the current user object in a service w/ `Security` service

@@ -55,5 +55,17 @@ final class AppStory extends Story
             'firstName' => 'User',
             'password' => 'userpass',
         ]);
+        UserFactory::createOne([
+            'email' => 'admin@example.com',
+            'firstName' => 'Admin',
+            'password' => 'adminpass',
+            'roles' => ['ROLE_ADMIN'],
+        ]);
+        UserFactory::createOne([
+            'email' => 'superadmin@example.com',
+            'firstName' => 'Super Admin',
+            'password' => 'superadminpass',
+            'roles' => ['ROLE_SUPER_ADMIN'],
+        ]);
     }
 }

@@ -205,7 +205,72 @@
   - And uncomment that `_remember_me`-related code
   - Try to log in w/o checked that checkbox - no `REMEMBERME`
   - Log out and try to log in again with check `REMEMBERME`
-  - Yes, our `REMEMBERME` is on spot! 
+  - Yes, our `REMEMBERME` is on spot!
+- Explain roles
+  - Let's talk about user *roles*
+  - Right now every user has `ROLE_USER` role by default, see `getRoles()` method in User class
+  - You can see it in the WDT
+  - But what else roles can we have? E.g. `ROLE_ADMIN` for admin users who should have access to admin parts of the website
+  - OK, log out and then click "Parts" -> "Create a new part"
+  - We're on the "Register a New Starship Part" page and still can add parts
+  - That's a black hole in our security.
+  - First of all, let's allow only `ROLE_ADMIN` for that page
+  - Open the `AdminController::newStarshipPart()` action responsible for that page.
+  - We can check for any role inside the action using special `isGranted()` method.
+  - Mention that we can even call this from Twig template with `{{ is_granted() }}` Twig function to show some parts of the template only to specific users - we will see it later
+  - Let's wrap it with `if (!$this->isGranted('ROLE_ADMIN'))`.
+  - And if so, `throw $this->createAccessDeniedException('Access Denied!');`.
+  - This `createAccessDeniedException()` is just a fancy shortcut that creates a special `AccessDeniedException` exception.
+  - If you hold Cmd and click this method - you will see it yourself.
+  - Actually, we can throw it from any place in our code, e.g. from a service, and it will work the same way.
+  - But while we're in the controller - let's use this shortcut.
+  - Refresh the page - we're redirected to the login form!
+  - That's because the system does not know if we have access or no to that page, so it asks us to authenticate first 
+  - Log in and you're redirected back to the `/admin/starship-part/new`
+  - But now because the system knows who we're and see that the user does not have the required `ROLE_ADMIN` - it shows us our: "Access Denied!"
+  - Well, let's go create a new (admin) user in fixtures
+  - Open `AppStory`
+  - Below the first user, add another one with `UserFactory::createOne([])`
+  - With next credentials: `admin@example.com`, Admin, `adminpass`
+  - And also add `'roles' => ['ROLE_ADMIN'],`
+  - And while we're here - let's add one more user
+  - With credentials: `superadmin@example.com`, Super Admin, `superadminpass`, and `ROLE_SUPER_ADMIN`
+  - Reload fixtures w/ `symfony console foundry:load-fixtures` command
+  - The user IDs are changed in the DB that's why we're automatically logged out
+  - Log in with the new *admin* credentials
+  - And we have access to the /admin page!
+  - Check the WDT to see 2 roles are presented on the user - you can see more details of you open the profiler.
+  - Actually, I was showing a longer way to you for learning purposes
+- But we can do it even short using `#[IsGranted()]` PHP attribute.
+  - I will comment out this code for the reference.
+  - And above this method add: `#[IsGranted('ROLE_ADMIN')]`.
+  - If you refresh the page - we're still on this page because we're authenticated as an admin, but if you log out and refresh - we're on the login page again!
+  - Buuuut if you open another page: `/admin/starship` - that page has no security!
+  - We can add this `#[IsGranted('ROLE_ADMIN')]` to the methods in `StarshipAdminController` too
+  - Or even better add this only once to the whole controller class, so that all the actions in it will be protected
+  - But there's a better solution
+- Open `security.yaml`
+- In the `access_control` section, uncomment `- { path: ^/admin, roles: ROLE_ADMIN }`
+  - Now all the URLs that start with `/admin` will require `ROLE_ADMIN` role
+  - Refresh the page - we're asked to log in again
+  - Log in as an admin - access granted!
+  - We can keep that PHP attribute as well, no harm, but I will comment it out so that we control this only from access_control spot
+  - But it's important to understand how `access_control` works with the URL patterns
+  - As soon as it found the first match - it stops and does not check the rest of the rules
+  - So remember this rule: only 1 `access_control` match per request!
+  - So you should place rules in the correct order, .e.g. write  `path: ^/admin/starship` before `path: ^/admin` if you want to have different access rules for those URLs
+  - In short, don't forget about testing your endpoints to make sure your rules are working as expected
+- But if you log out and log in as a super admin - you won't have access to the /admin
+- But clearly our ROLE_SUPER_ADMIN should have access to everything that ROLE_ADMIN has and even more
+- Of course, we can also add `ROLE_ADMIN` to our super admin user.
+- But there's a better solution called *role hierarchy*.
+  - Open the `security.yaml` again
+  - Below `access_control:`, add `role_hierarchy:` section
+  - Inside, add `ROLE_SUPER_ADMIN: ROLE_ADMIN`
+  - Go refresh the page again and vualà, super admin has access to the /admin page as well!
+  - WDT will show us that it has its own roles, but also inherited roles.
+- 
+- TODO Check for `PUBLIC_ACCESS`/`IS_REMEMBERED`/`IS_AUTHENTICATED_FULLY`
 - TODO MORE STEPS
 - Let's allow user registration
   - Create a registration form w/ `symfony console make:registration-form` command
