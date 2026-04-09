@@ -1,0 +1,288 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:05.326 align:middle
+Vamos a crear una página de espectáculo dedicada a nuestras
+naves estelares y a comprobar cómo funciona el enrutamiento
+
+00:00:05.326 --> 00:00:06.996 align:middle
+con las entidades de herencia de Doctrine.
+
+00:00:07.696 --> 00:00:11.136 align:middle
+Primero necesitamos un nuevo controlador,
+así que espera al terminal y ejecuta:
+
+00:00:11.236 --> 00:00:17.386 align:middle
+symfony console make:controller Starship
+No es necesario realizar ninguna prueba.
+
+00:00:17.386 --> 00:00:21.426 align:middle
+Bien, salta a tu IDE y busca nuestro
+nuevo y brillante . StarshipController
+
+00:00:21.426 --> 00:00:23.896 align:middle
+Empieza por cambiar el
+nombre del método a . show()
+
+00:00:24.406 --> 00:00:29.806 align:middle
+A continuación, en el atributo , cambia
+la ruta a , #[Route] /starship/{id}
+
+00:00:29.906 --> 00:00:36.856 align:middle
+y nómbralo : Por último, vamos a
+utilizar la magia app_starship_show
+
+00:00:36.856 --> 00:00:41.306 align:middle
+del resolvedor de valores de entidad de Doctrine
+para inyectar para el id pasado. Starship
+
+00:00:41.306 --> 00:00:47.526 align:middle
+Añade como argumento al método : Por ahora,
+sólo para verlo Starship $ship show() dd($ship)
+
+00:00:47.526 --> 00:00:50.916 align:middle
+en acción: Ahora, dirígete a
+nuestra plantilla teaser genérica.
+
+00:00:50.986 --> 00:00:54.356 align:middle
+Busca el enlace marcador de
+posición (el que tiene como href). #
+
+00:00:55.156 --> 00:01:01.996 align:middle
+Sustitúyelo por y como parámetros: {{
+path('app_starship_show') }} {id: ship.id}
+
+00:01:02.726 --> 00:01:05.076 align:middle
+Actualiza nuestra página de inicio
+y haz clic en el primer carguero.
+
+00:01:06.716 --> 00:01:09.406 align:middle
+Este volcado nos muestra
+esta instancia . Freighter
+
+00:01:09.906 --> 00:01:12.586 align:middle
+Vuelve a la página de inicio y haz
+clic en el último carguero minero.
+
+00:01:14.026 --> 00:01:16.976 align:middle
+Ahora el volcado nos muestra
+una instancia . MiningFreighter
+
+00:01:16.976 --> 00:01:21.806 align:middle
+Aunque hemos indicado , Doctrine sabe que debe
+instanciar la clase de entidad correcta. Starship
+
+00:01:21.806 --> 00:01:25.476 align:middle
+Si todo esto funciona exactamente
+como esperabas, tienes razón,
+
+00:01:25.726 --> 00:01:29.326 align:middle
+realmente no hay nada especial en el
+enrutamiento y la herencia Doctrine.
+
+00:01:29.886 --> 00:01:33.256 align:middle
+Pero toma nota: si vuelves a
+, StarshipController::show()
+
+00:01:33.376 --> 00:01:36.166 align:middle
+y cambias la sugerencia de
+tipo de a Starship Scout:
+
+00:01:36.706 --> 00:01:39.626 align:middle
+Acabarás con un error 404
+cuando actualices la página.
+
+00:01:40.056 --> 00:01:42.986 align:middle
+¿Por qué? Porque no hay ninguna
+nave exploradora con este ID.
+
+00:01:42.986 --> 00:01:48.106 align:middle
+Así que, para asegurarte de que se puede encontrar cualquier nave
+estelar en esta ruta , tu sugerencia de tipo debe ser , Starship
+
+00:01:48.266 --> 00:01:50.856 align:middle
+la entidad más alta que quieras
+encontrar para esta ruta:
+
+00:01:50.856 --> 00:01:53.696 align:middle
+Preparemos la plantilla de este controlador.
+
+00:01:54.156 --> 00:01:59.936 align:middle
+El bundle creador creó este archivo en nuestro
+directorio . index.html.twig templates/starship
+
+00:02:00.416 --> 00:02:02.626 align:middle
+Cámbiale el nombre a . show.html.twig
+
+00:02:03.556 --> 00:02:07.466 align:middle
+Ábrelo y sustituye el bloque
+del título por : {{ ship.name }}
+
+00:02:08.046 --> 00:02:10.126 align:middle
+Elimina todo el texto repetitivo
+del bloque del cuerpo.
+
+00:02:10.266 --> 00:02:15.016 align:middle
+Para simplificar, copia el contenido
+de nuestra plantilla teaser y pégalo
+
+00:02:15.016 --> 00:02:16.676 align:middle
+en el bloque body de la plantilla show.
+
+00:02:17.366 --> 00:02:20.796 align:middle
+En una aplicación del mundo real, la plantilla de
+espectáculo probablemente sería bastante diferente,
+
+00:02:20.926 --> 00:02:22.876 align:middle
+ofreciendo más detalles y un diseño distinto.
+
+00:02:23.656 --> 00:02:28.516 align:middle
+Vuelve a , elimina el , cambia la
+plantilla StarshipController::show() dd()
+
+00:02:28.516 --> 00:02:33.156 align:middle
+a , y pasa como parámetro.
+starship/show.html.twig ship
+
+00:02:35.596 --> 00:02:37.996 align:middle
+Ahora, vuelve a nuestra
+aplicación y actualiza la página.
+
+00:02:39.056 --> 00:02:43.486 align:middle
+Por supuesto, esto se parece al teaser, pero en realidad
+se trata de nuestra página independiente del programa.
+
+00:02:44.116 --> 00:02:45.656 align:middle
+Al igual que hicimos con los teasers,
+
+00:02:45.656 --> 00:02:48.636 align:middle
+podemos utilizar la herencia de plantillas
+Twig con nuestra plantilla de espectáculo.
+
+00:02:49.116 --> 00:02:52.026 align:middle
+Sin embargo, esto requiere un enfoque diferente,
+ya que estamos renderizando la plantilla
+
+00:02:52.026 --> 00:02:56.016 align:middle
+dentro de un controlador, no con la
+función en otra plantilla Twig. include()
+
+00:02:56.016 --> 00:03:01.336 align:middle
+En primer lugar, copia el directorio en dentro
+del directorio . teaser show templates/starship
+
+00:03:01.946 --> 00:03:05.716 align:middle
+Estas serán las plantillas de espectáculo
+personalizadas y específicas para cada entidad.
+
+00:03:05.716 --> 00:03:13.456 align:middle
+Abre , y cambia el por : show/freighter.html.twig
+extends starship/show.html.twig
+
+00:03:14.006 --> 00:03:22.126 align:middle
+En , cambia el por : show/mining_freighter.html.twig
+extends starship/show/freighter.html.twig
+
+00:03:22.816 --> 00:03:26.536 align:middle
+Ya estamos listos para utilizar estas plantillas,
+pero tenemos que averiguar cuál renderizar.
+
+00:03:27.046 --> 00:03:29.506 align:middle
+Al principio, podrías pensar
+que podrías hacer lo mismo
+
+00:03:29.506 --> 00:03:31.696 align:middle
+con y simplemente cambiarla
+por una matriz. render()
+
+00:03:32.046 --> 00:03:35.126 align:middle
+Pero es estrictamente de tipo
+cadena para la vista. render()
+
+00:03:35.526 --> 00:03:37.636 align:middle
+Así que... tenemos que
+ensuciarnos un poco las manos.
+
+00:03:38.166 --> 00:03:41.276 align:middle
+En , vamos a darnos un respiro
+StarshipController::show()
+
+00:03:41.276 --> 00:03:46.206 align:middle
+e inyectar el servicio de entorno Twig con ,
+el del espacio de nombres , Environment Twig
+
+00:03:46.206 --> 00:03:49.796 align:middle
+$twig: A continuación, crea
+una variable . $template
+
+00:03:49.796 --> 00:03:53.426 align:middle
+Para ello, utilizaremos la interpolación de
+cadenas para construir el nombre de la plantilla:
+
+00:03:53.426 --> 00:04:00.066 align:middle
+starship/show/{$ship->getType()}.html.twig.
+
+00:04:00.066 --> 00:04:06.046 align:middle
+Este es el nombre de la plantilla
+para el tipo específico de nave.
+
+00:04:06.376 --> 00:04:10.566 align:middle
+Si esta plantilla no existe, queremos recurrir
+a la plantilla genérica del programa.
+
+00:04:10.896 --> 00:04:17.926 align:middle
+Así que, , y dentro, if
+(!$twig->getLoader()->exists($template))
+
+00:04:17.926 --> 00:04:24.716 align:middle
+pon a : Por último, sustituye la
+cadena $template starship/show.html.twig
+
+00:04:24.716 --> 00:04:28.886 align:middle
+del método por nuestra nueva variable
+: Esto es muy similar render() $template
+
+00:04:28.886 --> 00:04:31.896 align:middle
+a lo que la función de Twig hace por
+nosotros cuando pasas una matriz. include()
+
+00:04:32.536 --> 00:04:34.196 align:middle
+Salta a nuestra aplicación y actualiza...
+
+00:04:34.816 --> 00:04:39.636 align:middle
+Genial, como se trata de un carguero minero, ahora
+vemos la capacidad de carga y la potencia láser.
+
+00:04:40.266 --> 00:04:42.876 align:middle
+Ve a la página de inicio y haz
+clic en el primer carguero normal.
+
+00:04:43.516 --> 00:04:45.736 align:middle
+Bien, ahora vemos la capacidad de carga.
+
+00:04:46.506 --> 00:04:50.806 align:middle
+Puedes pasar el ratón por encima del icono Twig de la barra de
+herramientas de depuración web para ver la plantilla utilizada.
+
+00:04:51.376 --> 00:04:55.656 align:middle
+Efectivamente, .
+starship/show/freighter.html.twig
+
+00:04:56.476 --> 00:04:58.616 align:middle
+Vuelve a la página de inicio
+y haz clic en un explorador.
+
+00:04:59.986 --> 00:05:06.606 align:middle
+Genial, no hay detalles adicionales, y la barra de herramientas muestra
+que se está renderizando la plantilla genérica starship/show.html.twig.
+
+00:05:07.896 --> 00:05:10.446 align:middle
+¡Nuestro sistema casero de
+plantillas dinámicas funciona!
+
+00:05:11.276 --> 00:05:15.046 align:middle
+A continuación veremos cómo funcionan las
+asociaciones con la Herencia de Doctrine
+
+00:05:15.046 --> 00:05:17.796 align:middle
+y qué consideraciones debes
+tener en cuenta al utilizarlas.
