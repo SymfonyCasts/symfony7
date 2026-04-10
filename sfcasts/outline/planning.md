@@ -55,8 +55,8 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Check for access w/ `isGranted()` function in controller or Twig template
 //- Check for `PUBLIC_ACCESS`/`IS_REMEMBERED`/`IS_AUTHENTICATED_FULLY`
 //- Force remembered users to authenticate fully, e.g. for profile edit page (so-called "sudo mode")
-- Fetch the current user object in the controller w/ `CurrentUser` PHP attr
-- Fetch the current user object in a service w/ `Security` service
+//- Fetch the current user object in the controller w/ `CurrentUser` PHP attr
+//- Fetch the current user object in a service w/ `Security` service
 //- Fetch the current user object in a Twig template w/ `app.user`
 //- Switch user w/ impersonation
 //- Tweak styles to warn ourselves we're impersonating the user
@@ -70,7 +70,7 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Difference between "Authentication" (`firewalls`) and "Authorization" (`access_control`)
 //- Make sure your website uses HTTPS... for all pages, that's the best practice now
 //- Customize the redirect after successful login form response with `_target_path`: https://symfony.com/doc/current/security/form_login.html
-- Cover a voter with a subject, like only allowing a user to edit their own starships
+//- Cover a voter with a subject, like only allowing a user to edit their own starships
 - Also cover a super admin voter, which is super practical for a lot of apps
 //- Cover security events, a listener that updates the last login timestamp on the user
 

@@ -40,7 +40,9 @@
                         <td class="border-b p-4 border-gray-700 text-white">
                             <div class="flex gap-2">
                                 <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_starship_admin_show', {'id': starship.id}) }}">show</a>
-                                <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
+                                {% if is_granted(constant('App\\Security\\Voter\\StarshipVoter::EDIT'), starship) %}
+                                    <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
+                                {% endif %}
                             </div>
                         </td>
                     </tr>

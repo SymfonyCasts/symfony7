@@ -344,6 +344,101 @@
   - Click Exit Impersonation link
   - We're back to super admin and the red bg is gone
   - Now we can safely use it even in production
+- Roles are great, but they are not very flexible.
+  - If you want something more complex - you need another tool called *voters*.
+  - Imagine, you want to allow admins to edit only their own starships, but not the starships of other users.
+  - While super admins still should be able to edit everything
+  - With roles, it's not reasonable to implement, we're not going to create hundreds and thousands of roles
+  - Instead, voter is the perfect solution for solving this kind of problem.
+  - But first, we need to track *who* creates a starship so that we could decide if we should allow users to edit it or no
+  - Run `symfony console make:entity` command again
+  - Choose `Starship` entity
+  - Add `createdBy` property
+  - I will choose `relation` type to show the wizard
+  - It should relate to `User` entity
+  - And we need `ManyToOne` here
+  - Let's allow it to be nullable
+  - And one more "yes" to access/update Starship objects from User
+  - And let the field called `starships`
+  - Done, now you know the drill
+  - Create migration w/ `symfony console make:migration` command
+  - And migrate w/ `symfony console doctrine:migration:migrate` command
+  - Next, open `StarshipAdminController`
+  - And go to `new()` action
+  - You should remember that to get the current user in Twig templates we use `app.user`
+  - In controllers, we have a special `getUser()` shortcut method for that
+  - In the beginning, call `$user = $this->getUser();`
+  - It works, but it returns a common `UserInterface` typehint, and also it may return null if there's no current user authenticated during the request
+  - Better solution - use the `#[CurrentUser]` attribute that will automatically inject the current user for us with the correct typehint
+  - Add it to the method signature as `#[CurrentUser] User $user`
+  - Before the `flush()`, call `$starship->setCreatedBy($user);`
+  - Done! Let's go create a new starship
+  - Successfully created, and if you pick at the DB - you will see that `created_by_id` is set to our user ID
+  - Perfect!
+  - Now, let's create our first voter w/ `symfony console make:voter` command
+  - Call it `StarshipVoter`
+  - Open the generated file
+  - Maker gave us a good boilerplate code to start with
+  - First of all, we have `supports()` that helps to decide if this voter can vote on the passed subject or not
+  - I will autocomplete Starship class properly to add the namespace
+  - It will vote only on `Starship` entities
+  - And only if we pass those 2 specific attributes
+  - I will keep EDIT and VIEW constants, but set them to `STARSHIP_EDIT` and `STARSHIP_VIEW` for clarity
+  - And also add `string` type-hits for them
+  - Now go down to the `voteOnAttribute()` method
+  - Inside, we have a simple user check.
+  - But I will be more strict to help IDE with autocompletion and check for `User` class
+  - Below, add `if (!$subject instanceof Starship)`
+  - And inside, call `$vote?->addReason('The subject must be an instance of Starship.');`
+  - And `return false` too.
+  - Next, in `case self::EDIT`, just `return $subject->getCreatedBy() === $user;`
+  - In `case self::VIEW`, let's allow everyone to view starships, so just `return true;`
+  - That's it! Our voter is ready.
+  - Now let's use it in the `StarshipAdminController::edit()` action
+  - We can leverage the `#[IsGranted()]` attribute for it again - add it above the method
+  - Add arguments: `#[IsGranted(StarshipVoter::EDIT, 'starship', 'Access denied.', Response::HTTP_FORBIDDEN)]`
+  - Now ho to the /admin/starship
+  - Find our latest starship we created a few minutes ago
+  - Click edit - the page is loaded
+  - Edit the name and save - success!
+  - Now click edit on any other starship - Access denied!
+  - Our voter in action
+  - OK, but it's silly to show the edit button if users don't have access to it, right?
+  - Let's open `starship_admin/index.html.twig`
+  - Find the Edit link
+  - Wrap it with `{% if is_granted(constant('App\\Security\\Voter\\StarshipVoter::EDIT'), starship) %}`
+  - I use `constant()` to have this autocompletion
+  - And the same in `show.html.twig`
+  - Reload the page - all the edit buttons are gone, except on our starships
+- How about the delete button?
+  - The same!
+  - Open the voter
+  - I will add `public const string DELETE = 'STARSHIP_DELETE';`
+  - Iterate it in `supports()`
+  - Add `case self::DELETE:`
+  - Final touch - back to the controller, `delete()` action
+  - Add `#[IsGranted(StarshipVoter::DELETE, 'starship', 'Access denied.', Response::HTTP_FORBIDDEN)]` above
+  - Go click on the delete button on not your ship, confirm - access denied!
+  - It works, so time to hide that button
+  - In `templates/starship_admin/_delete_form.html.twig`
+  - Wrap the form with `{% if is_granted(constant('App\\Security\\Voter\\StarshipVoter::DELETE'), starship) %}`
+  - The delete button is gone from Show and Edit pages, except on our starships
+- Now log out and log in as a Super Admin
+  - Yeah, the same behavior - we don't see edit buttons for not our starships
+  - Head to voter again
+  - Before the `switch`, we could check if the user has `ROLE_SUPER_ADMIN`
+  - But that would not work with role hierarchy well, so better to use the proper `isGranted()` method
+  - For this, we need to inject `Security` service in our constructor
+  - Add `__construct()`
+  - Inside `private readonly AuthorizationCheckerInterface $authorizationChecker,`
+  - Now before the `switch`, add `if ($this->authorizationChecker->isGranted('ROLE_SUPER_ADMIN'))`
+  - Then just `return true`
+  - Go reload the page now
+  - Yes, full access granted!
+- This `AuthorizationCheckerInterface` is just a lightweight service to check for `isGranted()`
+  - If you also need access to the current user in any spot of your application, not only in controllers but in another service
+  - You can inject the `Security` service - that will provide you both `isGranted()` and `getUser()`
+  - And `getUser()` either will return you a currently authenticated `User` object or null of no authenticated user
 - Let's talk more about security of personal information
   - By default, Symfony does not show expose sensitive information about user existence in the system
   - No matter if you made a typo in email or password - you always get the same "Invalid credentials" error

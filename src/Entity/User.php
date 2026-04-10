@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -38,6 +40,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $lastLoginAt = null;
+
+    /**
+     * @var Collection<int, Starship>
+     */
+    #[ORM\OneToMany(targetEntity: Starship::class, mappedBy: 'createdBy')]
+    private Collection $starships;
+
+    public function __construct()
+    {
+        $this->starships = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -134,6 +147,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastLoginAt(?\DateTimeImmutable $lastLoginAt): static
     {
         $this->lastLoginAt = $lastLoginAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Starship>
+     */
+    public function getStarships(): Collection
+    {
+        return $this->starships;
+    }
+
+    public function addStarship(Starship $starship): static
+    {
+        if (!$this->starships->contains($starship)) {
+            $this->starships->add($starship);
+            $starship->setCreatedBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStarship(Starship $starship): static
+    {
+        if ($this->starships->removeElement($starship)) {
+            // set the owning side to null (unless already changed)
+            if ($starship->getCreatedBy() === $this) {
+                $starship->setCreatedBy(null);
+            }
+        }
 
         return $this;
     }

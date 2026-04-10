@@ -49,7 +49,9 @@
             </tbody>
         </table>
         <div class="flex gap-3 mt-5">
-            <a class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">Edit</a>
+            {% if is_granted(constant('App\\Security\\Voter\\StarshipVoter::EDIT'), starship) %}
+                <a class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">Edit</a>
+            {% endif %}
             {{ include('starship_admin/_delete_form.html.twig') }}
         </div>
     </div>

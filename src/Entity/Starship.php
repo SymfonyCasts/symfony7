@@ -54,6 +54,9 @@ class Starship
     #[ORM\OneToMany(targetEntity: StarshipDroid::class, mappedBy: 'starship', cascade: ['persist'])]
     private Collection $starshipDroids;
 
+    #[ORM\ManyToOne(inversedBy: 'starships')]
+    private ?User $createdBy = null;
+
     public function __construct()
     {
         $this->parts = new ArrayCollection();
@@ -258,6 +261,18 @@ class Starship
                 $starshipDroid->setStarship(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedBy(): ?User
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy(?User $createdBy): static
+    {
+        $this->createdBy = $createdBy;
 
         return $this;
     }
