@@ -36,11 +36,11 @@ del resolvedor de valores de entidad de Doctrine
 para inyectar para el id pasado. Starship
 
 00:00:41.306 --> 00:00:47.526 align:middle
-Añade como argumento al método : Por ahora,
-sólo para verlo Starship $ship show() dd($ship)
+Añade Starship $ship como argumento al método show():
+Por ahora, sólo `dd($ship)` para verlo en acción:
 
 00:00:47.526 --> 00:00:50.916 align:middle
-en acción: Ahora, dirígete a
+Ahora, dirígete a
 nuestra plantilla teaser genérica.
 
 00:00:50.986 --> 00:00:54.356 align:middle
