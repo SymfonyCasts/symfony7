@@ -31,12 +31,12 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Show related info in the WDT
 //- Unsuccessful authentication flow
 //- Show "last username" feature on the failed auth
-- Translate authentication errors messages
+//- Translate authentication errors messages
 //- Explain Session
 //- Show PHPSESSID cookie in Application tab of the Chrome dev tools
 //- Explain automatic user refresh on each request
 //- Show how changing user in the DB lead to user is logged out automatically
-- Show `hide_user_not_found: false` config option?
+//- Show `hide_user_not_found: false` config option? (was deprecated in favor of `expose_security_errors`)
 //- Adding logout button
 //- Enable remember me feature
 //- Show REMEMBERME cookie in Application tab of the Chrome dev tools
@@ -66,13 +66,13 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Unmapped field persisted to DB like `agreeTerms`
 //- The `UniqueEntity` validation constraint
 //- Login the user programmatically w/ `Security` after the successful registration
-- Add `login_throttling` feature leveraging `symfony/rate-limiter`
+//- Add `login_throttling` feature leveraging `symfony/rate-limiter`
 //- Difference between "Authentication" (`firewalls`) and "Authorization" (`access_control`)
 //- Make sure your website uses HTTPS... for all pages, that's the best practice now
 //- Customize the redirect after successful login form response with `_target_path`: https://symfony.com/doc/current/security/form_login.html
 - Cover a voter with a subject, like only allowing a user to edit their own starships
 - Also cover a super admin voter, which is super practical for a lot of apps
-- Cover security events, a listener that updates the last login timestamp on the user
+//- Cover security events, a listener that updates the last login timestamp on the user
 
 ## Advanced bonus topics
 - OAuth 2 flow (league/OAuth2-Bundle vs knpuniversity/oauth2-client-bundle)

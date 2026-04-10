@@ -344,6 +344,83 @@
   - Click Exit Impersonation link
   - We're back to super admin and the red bg is gone
   - Now we can safely use it even in production
+- Let's talk more about security of personal information
+  - By default, Symfony does not show expose sensitive information about user existence in the system
+  - No matter if you made a typo in email or password - you always get the same "Invalid credentials" error
+  - And that's a good security practice
+  - But in case you want to show more specific error messages - you have control over it
+  - Open `security.yaml`
+  - Above, add `expose_security_errors`
+  - By default, it's set to `none` string
+  - But you can change it to `account_status` which will show account-related exceptions (e.g. blocked or expired accounts) but only for users who provided the correct password.
+  - Or let's set it to `all` to show all security-related exceptions
+  - And try to login in again with wrong password
+  - The same "Invalid credentials"
+  - But try invalid email now
+  - Aha, "Username could not be found." now
+  - This improves UX but also makes things less secure, because intruder now will know that the user is 100% exist in the DB and instead of brute-forcing 2 fields: email & password they should brute-force only password.
+  - But using extra security layers like 2FA helps to mitigate that risk a lot.
+- Btw, Security component already comes with a bunch of translations of the error messages
+  - But how to customize the error message e.g. if instead of "Invalid credentials" you want to show "Wrong password."?
+  - You just need to create a new translation file in your `translations/` dir with the same translation domain
+  - For our Security component, for English translations, it should be `security.en.xlf` or any other supported translation format
+  - How did I know? Look at the `vendor/symfony/security-core/Resources/translations/security.en.xlf`
+  - The `security` is the translation domain, `en` is the locale, and `xlf` - file format
+  - Open the file to see the translation key for "Invalid credentials." is... "Invalid credentials."
+  - For my app translations I prefer using Yaml format, so I can create `translations/security.en.yaml` file
+  - We need to override only traslations we want to change
+  - So I will add `Invalid credentials.: Whoops, wrong password.` there
+  - Yeah, don't forget the dot at the end of the key, it should be exactly the same as in the original translation file
+  - Now try to log in with existent email but wrong password again
+  - Here's our new error message
+  - If you don't see it - try to clear the cache with `symfony console cache:clear` command
+- Another tool to prevert brute forcing on our website - Limit Login Attempts!
+  - Symfony can provide basic protection against brute force login attacks
+  - First, let's install `symfony/rate-limiter` package: `symfony composer req symfony/rate-limiter`
+  - Add `login_throttling:` to your main firewall in `security.yaml`
+  - If we open terminal and run `symfony console config:dump security firewalls` command
+  - And search for `login_throttling` in the output
+  - You will see that by default it allows 5 failed login attempts during 1 minute
+  - We can also configure, e.g. set `max_attempts: 3`
+  - Now it will limit to 3 failed requests for IP address + username
+  - And `5 * max_attempts` failed requests for IP address to protect against multiple username attacks
+  - But if you try to login more than 3 times in dev mode - nothing will happen
+  - Open the `config/packages/cache.yaml` to see we use `cache.adapter.array` in dev mode which the cache lives only within the request and is cleared on the next one
+  - We can either try to switch to prod env to see it in action
+  - Or let's change `cache.adapter.array` to `cache.adapter.filesystem` for the dev env as well
+  - Back to login form, try to log in with wrong credentials more than 3 times
+  - Aaaaand, on the 4th attempt: "Too many failed login attempts, please try again in 1 minute."
+  - Even if I will try to use correct credentials - we still need to wait for a minute.
+- Let's talk about events
+  - Symfony has a powerful event system that allows you to listen to different events in the system and react to them
+  - Security component also dispatches a bunch of security-related events that we can listen to
+  - See available events: https://symfony.com/doc/current/security.html#security-events
+  - I have an idea, how about saving the last successful login timestamp for the user?
+  - Let's create an event listener
+  - Run `symfony console make:listener` command
+  - Name it `LastUserLoginListener`
+  - Choose `Symfony\Component\Security\Http\Event\LoginSuccessEvent` event
+  - Now we need a new field on the User entity
+  - Run `symfony console make:entity` command
+  - Choose `User` entity
+  - Add `lastLoginAt` property
+  - Make it `datetime_immutable`
+  - Make it nullable, because we will have null value for users who never logged in
+  - It will add the property with getter and setter
+  - Make migration w/ `symfony console make:migration` command
+  - And migrate w/ `symfony console doctrine:migration:migrate` command
+  - Back to the `onLoginSuccessEvent()`
+  - Inside, add `$user = $event->getUser();`
+  - It autocompletes only interface, let's add `if (!$user instanceof User)`
+  - Inside `throw new \LogicException(sprintf('Expected an instance of %s.', User::class));`
+  - This will help IDE with autocomplete
+  - Finally, `$user->setLastLoginAt(new \DateTimeImmutable());`
+  - To save, we should inject the `EntityManagerInterface`
+  - Do it in the constructor
+  - Inject `private readonly EntityManagerInterface $entityManager,`
+  - Finally, at the end call `$this->entityManager->flush();`
+  - Now log in again
+  - Check the DB - here's our timestamp!
 - TODO MORE STEPS
 - Let's allow user registration
   - Create a registration form w/ `symfony console make:registration-form` command
