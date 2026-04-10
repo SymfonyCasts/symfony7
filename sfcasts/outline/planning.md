@@ -20,7 +20,7 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Create a user in Foundry fixtures and load fixtures
 //- Mention `bin/console security:hash-password` command for manual password hashing
 //- Hashing the password in the fixtures (Foundry factories as services to require deps)
-- Mention "Reduce Password Encoder Work Factor" feature: https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#reduce-password-encoder-work-factor
+//- Mention "Reduce Password Encoder Work Factor" feature: https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#reduce-password-encoder-work-factor
 //- We will use traditional login form authentication, but there're more! (HTTP Basic, JSON login, Login link, etc.)
 //- Create a login form w/ `make:security:form-login` command
 //- Make sure CSRF protection is enabled for our login form
@@ -43,7 +43,6 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Watch the Remember Me cookie authenticate the user (by deleting PHPSESSID)
 //- Mention `always_remember_me: true` config option
 //- Opt into the Remember Me cookie in the login form
-- Explain `signature_properties` config option
 //- Explain `access_control` config option
 //- Mention only 1 `access_control` match per request!
 //- Explain roles
@@ -71,10 +70,11 @@ https://symfonycasts.com/screencast/symfony-forms
 //- Make sure your website uses HTTPS... for all pages, that's the best practice now
 //- Customize the redirect after successful login form response with `_target_path`: https://symfony.com/doc/current/security/form_login.html
 //- Cover a voter with a subject, like only allowing a user to edit their own starships
-- Also cover a super admin voter, which is super practical for a lot of apps
 //- Cover security events, a listener that updates the last login timestamp on the user
+- Also cover a super admin voter, which is super practical for a lot of apps
 
 ## Advanced bonus topics
+- Explain `signature_properties` config option
 - OAuth 2 flow (league/OAuth2-Bundle vs knpuniversity/oauth2-client-bundle)
 - Create a reset password feature w/ `make:reset-password` command, promoting our `symfonycasts/reset-password-bundle`
 - Verify email after registration, promoting our `symfonycasts/verify-email-bundle`

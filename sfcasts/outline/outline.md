@@ -516,7 +516,6 @@
   - Finally, at the end call `$this->entityManager->flush();`
   - Now log in again
   - Check the DB - here's our timestamp!
-- TODO MORE STEPS
 - Let's allow user registration
   - Create a registration form w/ `symfony console make:registration-form` command
   - Say "yes" to `#[UniqueEntity]`
@@ -558,6 +557,17 @@
   - If you double-check the `RegistrationController`
   - You will notice this `return $security->login($user, 'form_login', 'main')`
   - That's the magic line that's responsible for the automatic authentication of the just registered user
+- We didn't do any tests in our application in this course, but you definitely should test your website security
+  - Checking that regular users don't have access to admin parts is a good one
+  - Checking that admins can't edit other starships like in our case - also good one
+  - During such tests you may need to create users and authenticate in the app
+  - While using strong password encoding algorithms is a good idea for production
+  - In tests, it might be overkill and cause unnecessary slowness in your tests
+  - But there is a way we can reduce password encoder work factor, see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#reduce-password-encoder-work-factor
+  - Open `security.yaml`
+  - We already have this nice `password_hashers` setup out of the box
+  - So this should help with speed up your test in case you have a lot of tests that work with encoded passwords
+  - So no actions are required from us, thanks Symfony!
 
 
 
