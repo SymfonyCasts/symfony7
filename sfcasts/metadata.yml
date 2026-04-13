@@ -23,3 +23,6 @@ chapters:
     associations:
         tutsFirstStep: 8-create-starshippart
         tutsLastStep: 8-switch-to-leaf-relation
+    custom-dql-function:
+        tutsFirstStep: null
+        tutsLastStep: null
