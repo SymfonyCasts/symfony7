@@ -149,7 +149,37 @@
             "id": "8-switch-to-leaf-relation",
             "name": "8. switch to leaf relation",
             "description": null
+        },
+        {
+            "id": "9-s-equals-class",
+            "name": "9. s equals class",
+            "description": null
+        },
+        {
+            "id": "9-type-function",
+            "name": "9. type function",
+            "description": null
+        },
+        {
+            "id": "9-dd-alias",
+            "name": "9. dd alias",
+            "description": null
+        },
+        {
+            "id": "9-remove-dd-alias",
+            "name": "9. remove dd alias",
+            "description": null
+        },
+        {
+            "id": "9-string-discr",
+            "name": "9. string discr",
+            "description": null
+        },
+        {
+            "id": "9-static-gettype",
+            "name": "9. static gettype",
+            "description": null
         }
     ],
-    "sha": "d45d484d7ce4ef4452c7dccfff86fd013d1ce7a5"
+    "sha": "aefbb58b15f5cde66fb0171dde52ad57c561ca8c"
 }

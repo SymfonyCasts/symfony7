@@ -1,0 +1,13 @@
+diff --git a/src/Doctrine/ORM/Function/TypeFunction.php b/src/Doctrine/ORM/Function/TypeFunction.php
+index 46e1bce..b5b4b85 100644
+--- a/src/Doctrine/ORM/Function/TypeFunction.php
++++ b/src/Doctrine/ORM/Function/TypeFunction.php
+@@ -41,6 +41,8 @@ final class TypeFunction extends FunctionNode
+ 
+     public function getSql(SqlWalker $sqlWalker): string
+     {
++        dd($this->dqlAlias);
++
+         $qComp      = $sqlWalker->getQueryComponent($this->dqlAlias);
+         /** @var ClassMetadata $class */
+         $class      = $qComp['metadata'];
