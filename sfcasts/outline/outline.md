@@ -235,3 +235,39 @@
 - Reload fixtures and refresh
 - 2 queries now and if you look at the dump, the starship is a proxy object, not a real Scout
 - Explain again with diagram
+
+## Bonus: Custom DQL Function
+- Not being able to select *just* the Freighters is a bummer
+- In `StarshipRepository::filterShips()`
+    - Feels like `->where('s = :class')` should work...
+    - Remove the not instance of condition and parameter
+- In `MainController::homepage()`
+    - cleanup/revert
+    - `filterShips()` instead of `findAll()`
+- Refresh - error: no starships
+    - look at the query - it's comparing the id...
+- Maybe we can do `s.ship_type = :class`?
+    - nope... ship_type is a real column but it's internal and can't be accessed this way
+- We could use raw sql...
+- Let's create a custom DQL function: `TYPE()`
+    - I believe the Doctrine equivelant in Java, Hibernate, has this out of the box
+- In `StarshipRepository::filterShips()`, change to `->where('TYPE(s) = :class')`
+- Refresh - failed - "Unknown DQL function 'TYPE'"
+- Create `src/Doctrine/ORM/Function/TypeFunction.php`
+    - paste gist: https://gist.github.com/nanotronic/f967239f1b4613b3b01110072f0c8a31
+    - clean up file
+        - `private ?string $dqlAlias = null`
+        - `Lexer` to `TokenType`
+        - `$tableAlias . '.' . $class->discriminatorColumn['name']`
+- In `config/packages/doctrine.yaml`
+    - https://symfony.com/doc/current/doctrine/custom_dql_functions.html
+    - `TYPE: App\Doctrine\ORM\Function\TypeFunction`
+- Refresh - dump is what we expect!
+- Remove the dump and refresh again.
+    - Error, no ships... look at the query. It's using the class name... :(
+- In `StarshipRepository::filterShips()`, set `:class` to `freighter`
+    - Refresh - just our 3 freighters!
+    - Works but kind of a bummer to have to use the discr value instead of the class name...
+- We can at least use a static method...
+- In `Starship`, make `getType()` static
+- In `StarshipRepository::filterShips()`, use `->setParameter('class', Freighter::getType())`
