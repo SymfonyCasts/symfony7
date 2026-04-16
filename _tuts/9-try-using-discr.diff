@@ -1,0 +1,13 @@
+diff --git a/src/Repository/StarshipRepository.php b/src/Repository/StarshipRepository.php
+index ac03190..3c538bc 100644
+--- a/src/Repository/StarshipRepository.php
++++ b/src/Repository/StarshipRepository.php
+@@ -25,7 +25,7 @@ class StarshipRepository extends ServiceEntityRepository
+     public function filterShips(): array
+     {
+         return $this->createQueryBuilder('s')
+-            ->where('s = :class')
++            ->where('s.ship_type = :class')
+             ->setParameter('class', $this->getEntityManager()->getClassMetadata(Freighter::class))
+             ->getQuery()
+             ->execute()

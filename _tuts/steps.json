@@ -156,6 +156,16 @@
             "description": null
         },
         {
+            "id": "9-try-using-discr",
+            "name": "9. try using discr",
+            "description": null
+        },
+        {
+            "id": "9-back-to-s-equals-class",
+            "name": "9. back to s equals class",
+            "description": null
+        },
+        {
             "id": "9-type-function",
             "name": "9. type function",
             "description": null
@@ -181,5 +191,5 @@
             "description": null
         }
     ],
-    "sha": "aefbb58b15f5cde66fb0171dde52ad57c561ca8c"
+    "sha": "5d5594b1859dab9f3330d0ef2f2f2a51e5cef47b"
 }
