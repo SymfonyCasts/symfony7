@@ -34,15 +34,25 @@ symfony console make:factory
 
 ## Explorar las entidades y relaciones creadas
 
-En `src/Entity`, tenemos nuestra nueva entidad `StarshipPart` y la relación `ManyToOne` con `Starship`. Y en `Starship`, tenemos la relación inversa `OneToMany` con `StarshipPart`como `Collection` de `StarshipParts`.
+En `src/Entity`, aquí está nuestra nueva entidad `StarshipPart` y la relación `ManyToOne` con `Starship`:
 
-Nuestro `StarshipPartFactory` está bastante desnudo, ya que de momento no tenemos ningún campo obligatorio.
+[[[ code('eef24d8e51') ]]]
+
+Y en `Starship`, tenemos la relación inversa `OneToMany` con `StarshipPart`como `Collection` de `StarshipParts`:
+
+[[[ code('33c34960a3') ]]]
+
+Nuestro `StarshipPartFactory` está bastante desnudo, ya que de momento no tenemos ningún campo obligatorio:
+
+[[[ code('1a774a9ce1') ]]]
 
 Vamos a añadir algunas partes a nuestro `AppStory`. Asegúrate de que este `FreighterFactory::createMany()` es el primero.
 
 Para el segundo argumento, pasa una función anónima que devuelva un array. Dentro,`'starshipParts' => StarshipPartFactory::createRange(1, 3)`. Esto creará entre 1 y 3`StarshipParts` para cada `Freighter` y los asociará a él. La razón por la que utilizamos una función anónima es que queremos crear un nuevo conjunto de `StarshipParts` para cada `Freighter`. Si pasáramos directamente el array, crearía un conjunto de `StarshipParts` e intentaría asociarlos a todos los cargueros, lo que sería un problema...
 
-Copia el segundo argumento y pégalo para las otras dos llamadas a fábrica.
+Copia el segundo argumento y pégalo para las otras dos llamadas a fábrica:
+
+[[[ code('2597d2907b') ]]]
 
 Ahora vuelve a cargar los accesorios.
 
@@ -50,11 +60,13 @@ Ahora vuelve a cargar los accesorios.
 symfony console foundry:load-fixtures
 ```
 
-## Comprender las colecciones de carga perezosa
+## Comprender la carga perezosa de colecciones
 
 Vuelve a la página principal y actualízala. Todo parece igual y seguimos teniendo una única consulta. La consulta para seleccionar todas las naves estelares. Aunque cada nave tiene varias partes, éstas no se cargan porque no hemos intentado acceder a ellas, ¡son perezosas!
 
-Ahora, abre nuestro `MainController::homepage()` y `dump($myShip->getStarshipParts())`.
+Ahora, abre nuestro `MainController::homepage()` y `dump($myShip->getStarshipParts())`:
+
+[[[ code('1667f94a27') ]]]
 
 Actualiza... y... ¿sigue habiendo una sola consulta? ¡Sí! Si miramos el volcado, podemos ver que es un `PersistentCollection` con `initialized: false`. Esto significa que es una colección perezosa. De nuevo, ¡no inicializará la colección hasta que llamemos a un método sobre ella! Así que vamos a hacerlo. Añade`->first()` para coger el primer elemento.
 
@@ -66,13 +78,21 @@ Ahora vayamos en sentido contrario...
 
 ## Explorar las implicaciones de la herencia de doctrinas
 
-En `MainController::homepage()`, inyecta `StarshipPartRepository $starshipPartRepository` y`dump($starshipPartRepository->find(1))`. `1` debería ser el ID del primer `StarshipPart`de nuestra base de datos.
+En `MainController::homepage()`, inyecta `StarshipPartRepository $starshipPartRepository` y`dump($starshipPartRepository->find(1))`:
+
+[[[ code('a72550d644') ]]]
+
+`1` debería ser el ID del primer `StarshipPart` de nuestra base de datos.
 
 Actualiza la página... y tenemos dos consultas: la select principal y la consulta `find()`en la que estamos cargando el `StarshipPart`. Mira el `StarshipPart` que se ha volcado. Observa que la propiedad `starship` es una instancia de `Freighter`. Doctrine sabe que este `Freighter` ya fue instanciado con nuestra primera consulta, la findAll, así que lo reutilizó aquí.
 
 Para demostrar la carga perezosa, asegurémonos de que este carguero no se reutiliza.
 
-En el controlador, sustituye `StarshipRepository` por `MiningFreighterRepository`. Esto reduce las naves obtenidas a sólo `MiningFreighters`.
+En el controlador, sustituye el `StarshipRepository` por `MiningFreighterRepository`:
+
+[[[ code('615ee0c9bc') ]]]
+
+Esto reduce las naves obtenidas a sólo `MiningFreighters`.
 
 Vuelve a la página de inicio. Recuerda que, en nuestra última petición, cargamos un `StarshipPart` y el `Freighter` con el que estaba relacionado ya estaba instanciado.
 
@@ -88,11 +108,17 @@ Existe un escenario en el que puedes conseguir que la carga perezosa funcione pa
 
 Para ver esto en acción, haremos que nuestro `StarshipPart` esté relacionado con `Scout` en lugar de con `Starship`.`Scout` es una hoja en nuestra jerarquía.
 
-En `Starship`, corta la propiedad de relación y el constructor. Pégalo en `Scout`. En `Starship`, corta los 3 métodos relacionados con la relación y pégalos también en `Scout`.
+En `Starship`, corta la propiedad de relación y el constructor. Pégalo en `Scout`. En `Starship`, corta los 3 métodos relacionados con la relación y pégalos también en `Scout`:
 
-Ahora, en `StarshipPart`, cambia el typehint de la relación de `Starship` a `Scout` en todos los sitios.
+[[[ code('d6fb5a6be1') ]]]
 
-Por último, en `AppStory`, elimina el segundo argumento de `FreighterFactory` y `MiningFreighterFactory``createMany` 's, ya que ya no pueden funcionar.
+Ahora, en `StarshipPart`, cambia el typehint de la relación de `Starship` a `Scout` en todos los lugares:
+
+[[[ code('37ea3cf47c') ]]]
+
+Por último, en `AppStory`, elimina el segundo argumento de los `FreighterFactory` y `MiningFreighterFactory``createMany` 's ya que éstos ya no pueden funcionar:
+
+[[[ code('76d97a0710') ]]]
 
 Ahora, vuelve a cargar nuestras instalaciones...
 
@@ -100,15 +126,15 @@ Ahora, vuelve a cargar nuestras instalaciones...
 symfony console foundry:load-fixtures
 ```
 
-Vuelve a la página de inicio y... ¡Guau! Volvemos a tener sólo dos consultas. Ya no tenemos esa tercera consulta ansiosa.
+Vuelve a la página de inicio y... ¡Vaya! Volvemos a tener sólo dos consultas. Ya no tenemos esa tercera consulta ansiosa.
 
-En el panel de depuración, la propiedad `starship` es esta extraña clase `Proxies/__CG__`. Se trata de un proxy para nuestro Scout que permite la carga perezosa. Sólo cuando llamemos a un método, consultará realmente a la base de datos para cargar el `Scout` asociado.
+En el panel de depuración, la propiedad `starship` es esta extraña clase `Proxies/__CG__`. Se trata de un proxy para nuestro Scout que permite la carga diferida. Sólo cuando llamemos a un método, consultará realmente a la base de datos para cargar el `Scout` asociado.
 
 Entonces... ¿por qué esta limitación?
 
 ## ¿Por qué no puede ser siempre perezosa?
 
-La razón por la que las entidades que tienen hijos en una jerarquía de herencia no pueden cargarse perezosamente es cómo funcionan las relaciones de base de datos y la instanciación de objetos PHP. En la tabla sólo se almacena el ID de la entidad relacionada. En el caso de una entidad con hijos, el ID por sí solo no basta para determinar de qué entidad se trata. Si es `Starship`, ¿es `Freighter`, `MiningFreighter` o `Scout`? Necesita saberlo para instanciar el objeto correcto. Y la única forma de saberlo es consultar la tabla de la relación para obtener el valor de la columna discriminadora. Por lo tanto, necesita cargar la relación inmediatamente, o con avidez.
+La razón por la que las entidades que tienen hijos en una jerarquía de herencia no pueden cargarse perezosamente se debe a cómo funcionan las relaciones de base de datos y la instanciación de objetos PHP. En la tabla sólo se almacena el ID de la entidad relacionada. En el caso de una entidad con hijos, el ID por sí solo no basta para determinar de qué entidad se trata. Si es `Starship`, ¿es `Freighter`, `MiningFreighter` o `Scout`? Necesita saberlo para instanciar el objeto correcto. Y la única forma de saberlo es consultar la tabla de la relación para obtener el valor de la columna discriminadora. Por lo tanto, necesita cargar la relación inmediatamente, o con avidez.
 
 Vale, pero ¿por qué las entidades sin hijos no tienen esta limitación? Porque Doctrine sabe exactamente qué tipo de entidad es la relación Si es una `Scout`, Doctrine puede crear el proxy perezoso para ella. Lo mismo ocurriría con `MiningFreighter`.
 
