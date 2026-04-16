@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{#{% form_theme form 'tailwind_2_layout.html.twig' %}#}
+
+{% block title %}Admin : New Starship Part{% endblock %}
+
+{% block body %}
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Register a New Starship Part</h1>
+
+        {{ form_start(form) }}
+            {{ form_errors(form) }}
+
+            {{ form_row(form.starship) }}
+            <div class="grid grid-cols-2 gap-4">
+                {{ form_row(form.name) }}
+                {{ form_row(form.price) }}
+            </div>
+
+            {{ form_row(form.notes) }}
+
+            {{ form_widget(form.createAndAddNew, {
+                'attr': {
+                    'class': 'text-white bg-blue-700 hover:bg-blue-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer',
+                },
+            }) }}
+            <button type="submit" class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Create and close</button>
+
+            {{ form_rest(form) }}
+            {#
+                Anything you want to add after all fields are rendered
+                but before the closing </form>
+            #}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
