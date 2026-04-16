@@ -1,0 +1,489 @@
+WEBVTT
+
+00:00:01.046 --> 00:00:02.836 align:middle
+Es hora de hablar de las asociaciones,
+
+00:00:02.886 --> 00:00:06.456 align:middle
+o relaciones entre entidades que
+utilizan la herencia Doctrine.
+
+00:00:06.896 --> 00:00:11.476 align:middle
+En su mayor parte, funcionan como cabría esperar,
+pero hay una pega relacionada con la carga perezosa.
+
+00:00:11.896 --> 00:00:17.316 align:middle
+Como recordatorio, cuando tienes una entidad que
+tiene una relación con otra entidad, por defecto,
+
+00:00:17.386 --> 00:00:21.476 align:middle
+Doctrine no cargará realmente esa entidad
+hasta que llames a un método sobre ella.
+
+00:00:21.866 --> 00:00:26.446 align:middle
+Esto ayuda al rendimiento, manteniendo al mínimo el
+número de consultas y el número de hidrataciones
+
+00:00:26.596 --> 00:00:28.726 align:middle
+(instanciación de objetos).
+
+00:00:29.426 --> 00:00:34.176 align:middle
+En determinadas condiciones, la carga perezosa de una
+entidad en una jerarquía de herencia no funciona.
+
+00:00:34.776 --> 00:00:39.246 align:middle
+Esto no rompe tu aplicación, pero implica consultas
+adicionales que podrían afectar al rendimiento.
+
+00:00:39.796 --> 00:00:42.546 align:middle
+Para entender estas condiciones,
+¡creemos una relación!
+
+00:00:42.996 --> 00:00:45.286 align:middle
+Nuestras Naves Estelares
+tendrán Partes Estelares.
+
+00:00:45.806 --> 00:00:52.286 align:middle
+En tu terminal, ejecuta: symfony console
+make:entity StarshipPart Lo mantendremos super
+
+00:00:52.286 --> 00:00:54.836 align:middle
+sencillo, sólo tendrá
+la relación Nave Estelar.
+
+00:00:55.256 --> 00:00:57.476 align:middle
+Para el nombre de la nueva
+propiedad, utiliza starship.
+
+00:00:57.946 --> 00:00:58.986 align:middle
+¿El tipo? Utiliza ?
+
+00:00:58.986 --> 00:01:01.426 align:middle
+para ver todos los tipos de campo disponibles.
+
+00:01:02.686 --> 00:01:05.616 align:middle
+Elige relation para utilizar el
+práctico asistente de relaciones.
+
+00:01:07.506 --> 00:01:09.356 align:middle
+¿A qué clase debe asociarse?
+
+00:01:09.826 --> 00:01:12.906 align:middle
+Starship. Ahora, ¿qué tipo de relación...
+
+00:01:13.426 --> 00:01:14.706 align:middle
+Esta primera es la que queremos
+
+00:01:14.946 --> 00:01:19.476 align:middle
+"Cada StarshipPart se relaciona
+con (tiene) un objeto Starship ".
+
+00:01:19.746 --> 00:01:24.766 align:middle
+Y "Cada Starship puede relacionarse con
+(puede tener) muchos objetos StarshipPart ".
+
+00:01:25.296 --> 00:01:27.266 align:middle
+Sí, ManyToOne, así que elige eso.
+
+00:01:28.016 --> 00:01:32.686 align:middle
+"¿Se permite que la propiedad StarshipPart.starship
+sea nula?", claro, elige la predeterminada.
+
+00:01:33.416 --> 00:01:37.236 align:middle
+¿Queremos añadir una propiedad
+starshipParts a la clase Starship?
+
+00:01:37.686 --> 00:01:39.946 align:middle
+Sí El nuevo nombre de campo en Starship?
+
+00:01:40.246 --> 00:01:41.336 align:middle
+starshipParts es bueno.
+
+00:01:41.876 --> 00:01:44.676 align:middle
+No necesitamos otra propiedad,
+así que pulsa intro para salir.
+
+00:01:45.276 --> 00:01:47.596 align:middle
+A continuación, crea la fábrica
+Foundry para esta entidad.
+
+00:01:48.006 --> 00:01:53.076 align:middle
+symfony console make:factory
+1 para todos (y todos para 1).
+
+00:01:53.696 --> 00:01:55.976 align:middle
+Genial, echemos un vistazo al código generado.
+
+00:01:56.516 --> 00:02:01.506 align:middle
+En src/Entity, tenemos nuestra nueva entidad
+StarshipPart y la relación ManyToOne
+
+00:02:01.506 --> 00:02:07.186 align:middle
+con Starship: Y en Starship, tenemos la
+relación inversa OneToMany con StarshipPart
+
+00:02:07.186 --> 00:02:12.176 align:middle
+como Collection de StarshipParts: Nuestro
+StarshipPartFactory está bastante desnudo
+
+00:02:12.176 --> 00:02:16.766 align:middle
+, ya que de momento no tenemos ningún campo obligatorio:
+Vamos a añadir algunas partes a nuestro AppStory.
+
+00:02:17.466 --> 00:02:20.516 align:middle
+Asegúrate de que este
+FreighterFactory::createMany() es el primero.
+
+00:02:21.186 --> 00:02:24.766 align:middle
+Para el segundo argumento, pasa una
+función anónima que devuelva un array.
+
+00:02:26.096 --> 00:02:32.126 align:middle
+Dentro, 'starshipParts' =>
+StarshipPartFactory::createRange(1, 3).
+
+00:02:32.126 --> 00:02:39.236 align:middle
+Esto creará entre 1 y 3 StarshipParts
+para cada Freighter y los asociará a él.
+
+00:02:39.816 --> 00:02:43.656 align:middle
+La razón por la que utilizamos una función
+anónima es que queremos crear un nuevo conjunto
+
+00:02:43.656 --> 00:02:45.636 align:middle
+de StarshipParts para cada Freighter.
+
+00:02:46.196 --> 00:02:50.376 align:middle
+Si le pasáramos directamente el array,
+crearía un conjunto de StarshipParts
+
+00:02:50.576 --> 00:02:53.996 align:middle
+e intentaría asociarlos a todos los
+Cargadores, lo que sería un problema...
+
+00:02:54.796 --> 00:02:56.606 align:middle
+Copia el segundo argumento y pégalo
+
+00:02:56.606 --> 00:03:01.366 align:middle
+para las otras dos llamadas a fábrica:
+Ahora vuelve a cargar los accesorios.
+
+00:03:01.546 --> 00:03:08.026 align:middle
+symfony console foundry:load-fixtures Vuelve
+a la página de inicio y actualízala.
+
+00:03:09.086 --> 00:03:11.706 align:middle
+Todo parece igual y seguimos
+teniendo una única consulta.
+
+00:03:12.216 --> 00:03:14.216 align:middle
+La consulta para seleccionar
+todas las naves estelares.
+
+00:03:14.916 --> 00:03:18.476 align:middle
+Aunque cada nave estelar tiene
+varias partes, éstas no se cargan
+
+00:03:18.476 --> 00:03:21.256 align:middle
+porque no hemos intentado
+acceder a ellas, ¡son perezosas!
+
+00:03:21.696 --> 00:03:29.286 align:middle
+Ahora, abre nuestro MainController::homepage() y
+dump($myShip->getStarshipParts()): Actualizar...
+
+00:03:29.286 --> 00:03:31.696 align:middle
+y... ¿sigue habiendo una sola consulta?
+
+00:03:32.086 --> 00:03:37.826 align:middle
+Sip! Si miramos el volcado, podemos ver que es
+un PersistentCollection con initialized: false.
+
+00:03:38.326 --> 00:03:39.966 align:middle
+Esto significa que es una colección perezosa.
+
+00:03:40.226 --> 00:03:43.946 align:middle
+De nuevo, ¡no inicializará la colección
+hasta que llamemos a un método sobre ella!
+
+00:03:44.156 --> 00:03:44.906 align:middle
+Así que vamos a hacerlo.
+
+00:03:45.246 --> 00:03:47.906 align:middle
+Añade ->first() para
+coger el primer elemento.
+
+00:03:48.576 --> 00:03:49.196 align:middle
+Actualiza...
+
+00:03:50.066 --> 00:03:51.576 align:middle
+Ahora tenemos dos consultas.
+
+00:03:51.946 --> 00:03:54.656 align:middle
+La primera es la consulta
+principal findAll para Starships
+
+00:03:54.906 --> 00:03:58.036 align:middle
+, y la segunda es para seleccionar
+el primer StarshipPart para myShip.
+
+00:03:58.586 --> 00:04:02.266 align:middle
+En el panel de depuración, efectivamente,
+aquí está la instancia StarshipPart.
+
+00:04:02.886 --> 00:04:06.096 align:middle
+Así pues, cuando tienes
+una entidad que está en una
+
+00:04:06.226 --> 00:04:10.866 align:middle
+jerarquía de herencia, y tienes una relación con otra
+entidad que no está en una jerarquía de herencia,
+
+00:04:11.116 --> 00:04:13.706 align:middle
+la carga perezosa funciona
+exactamente como cabría esperar.
+
+00:04:14.396 --> 00:04:15.596 align:middle
+Ahora vayamos en sentido contrario...
+
+00:04:16.036 --> 00:04:22.526 align:middle
+En MainController::homepage(), inyecta
+StarshipPartRepository $starshipPartRepository
+
+00:04:23.756 --> 00:04:30.026 align:middle
+y dump($starshipPartRepository->find(1)):
+1 debe ser el ID
+
+00:04:30.026 --> 00:04:32.176 align:middle
+de la primera StarshipPart
+de nuestra base de datos.
+
+00:04:32.906 --> 00:04:33.836 align:middle
+Actualiza la página...
+
+00:04:34.116 --> 00:04:38.446 align:middle
+y tenemos dos consultas: la select
+principal y la consulta find()
+
+00:04:38.446 --> 00:04:40.036 align:middle
+en la que estamos cargando el StarshipPart.
+
+00:04:40.976 --> 00:04:42.776 align:middle
+Mira el StarshipPart que se ha volcado.
+
+00:04:43.666 --> 00:04:46.806 align:middle
+Observa que la propiedad starship
+es una instancia de Freighter.
+
+00:04:47.156 --> 00:04:50.936 align:middle
+Doctrine sabe que este Freighter ya fue
+instanciado con nuestra primera consulta,
+
+00:04:50.996 --> 00:04:53.236 align:middle
+la findAll, así que lo reutilizó aquí.
+
+00:04:53.936 --> 00:04:57.936 align:middle
+Para demostrar la carga perezosa, asegurémonos
+de que este carguero no se reutiliza.
+
+00:04:58.536 --> 00:05:01.506 align:middle
+En el controlador, sustituye StarshipRepository
+
+00:05:01.696 --> 00:05:07.326 align:middle
+por MiningFreighterRepository: Esto reduce las
+naves estelares obtenidas a sólo MiningFreighters.
+
+00:05:07.856 --> 00:05:08.936 align:middle
+Vuelve a la página de inicio.
+
+00:05:09.306 --> 00:05:12.626 align:middle
+Recuerda que, en nuestra última
+petición, cargamos un StarshipPart
+
+00:05:12.626 --> 00:05:15.566 align:middle
+y el Freighter con el que estaba
+relacionado ya estaba instanciado.
+
+00:05:16.076 --> 00:05:17.056 align:middle
+Actualiza la página.
+
+00:05:17.846 --> 00:05:20.006 align:middle
+Ahora sólo hay dos naves, la MiningFreighters.
+
+00:05:20.576 --> 00:05:22.696 align:middle
+Mira el recuento de consultas: ahora son 3.
+
+00:05:23.306 --> 00:05:25.736 align:middle
+Primero es el findAll para el MiningFreighters.
+
+00:05:26.456 --> 00:05:29.236 align:middle
+La segunda es nuestro
+find(1) para el StarshipPart.
+
+00:05:29.506 --> 00:05:33.276 align:middle
+Y la tercera es buscar el Starship para
+el StarshipPart encontrado anteriormente.
+
+00:05:34.176 --> 00:05:35.636 align:middle
+Se está cargando ansiosamente.
+
+00:05:36.056 --> 00:05:40.836 align:middle
+Si Starship no utilizara la Herencia Doctrine,
+esta tercera consulta no sería necesaria.
+
+00:05:41.166 --> 00:05:43.936 align:middle
+Sólo se cargaría el Starship cuando
+llamáramos a un método sobre él.
+
+00:05:44.546 --> 00:05:48.446 align:middle
+Éste es el inconveniente de utilizar este tipo
+de relación con la Herencia de Doctrine...
+
+00:05:48.826 --> 00:05:51.676 align:middle
+En realidad no puede evitarse, y
+más adelante explicaré por qué.
+
+00:05:52.486 --> 00:05:56.256 align:middle
+Hay un escenario en el que puedes conseguir que
+la carga perezosa funcione para esta relación.
+
+00:05:56.656 --> 00:06:02.276 align:middle
+La entidad asociada en la jerarquía debe ser una hoja,
+lo que significa que no puede tener ninguna entidad hija.
+
+00:06:02.766 --> 00:06:06.146 align:middle
+Para ver esto en acción,
+haremos que nuestro StarshipPart
+
+00:06:06.146 --> 00:06:07.956 align:middle
+esté relacionado con Scout
+en lugar de con Starship.
+
+00:06:08.296 --> 00:06:10.166 align:middle
+Scout es una hoja en nuestra jerarquía.
+
+00:06:11.046 --> 00:06:14.676 align:middle
+En Starship, corta la propiedad
+de relación y el constructor.
+
+00:06:16.686 --> 00:06:17.786 align:middle
+Pégalo en Scout.
+
+00:06:21.456 --> 00:06:29.146 align:middle
+En Starship, corta los 3 métodos relacionados
+con la relación y pégalos también en Scout:
+
+00:06:29.146 --> 00:06:37.476 align:middle
+Ahora, en StarshipPart, cambia el typehint
+de la relación de Starship a Scout
+
+00:06:37.476 --> 00:06:46.766 align:middle
+en todos los sitios: Por último, en AppStory, elimina
+el segundo argumento de los métodos FreighterFactory
+
+00:06:46.766 --> 00:06:50.536 align:middle
+y MiningFreighterFactory createMany 's
+ya que éstos ya no pueden funcionar:
+
+00:06:51.526 --> 00:06:53.066 align:middle
+Ahora, vuelve a cargar
+nuestras instalaciones...
+
+00:06:54.186 --> 00:06:55.866 align:middle
+Vuelve a la página de inicio y...
+
+00:06:56.476 --> 00:06:59.066 align:middle
+¡Vaya! Volvemos a tener sólo dos consultas.
+
+00:06:59.496 --> 00:07:01.866 align:middle
+Ya no tenemos esa tercera consulta ansiosa.
+
+00:07:02.526 --> 00:07:07.526 align:middle
+En el panel de depuración, la propiedad
+starship es esta extraña clase Proxies/__CG__.
+
+00:07:07.996 --> 00:07:11.066 align:middle
+Se trata de un proxy para nuestro
+Scout que permite la carga diferida.
+
+00:07:11.686 --> 00:07:15.096 align:middle
+Sólo cuando llamemos a un método,
+consultará realmente a la base de datos
+
+00:07:15.096 --> 00:07:16.876 align:middle
+para cargar el Scout asociado.
+
+00:07:17.496 --> 00:07:19.236 align:middle
+Entonces... ¿por qué esta limitación?
+
+00:07:20.086 --> 00:07:25.116 align:middle
+La razón por la que las entidades que tienen hijos en una
+jerarquía de herencia no pueden cargarse perezosamente
+
+00:07:25.116 --> 00:07:29.776 align:middle
+se debe a cómo funcionan las relaciones de base
+de datos y la instanciación de objetos PHP.
+
+00:07:30.246 --> 00:07:33.466 align:middle
+En la tabla sólo se almacena
+el ID de la entidad relacionada.
+
+00:07:34.016 --> 00:07:35.936 align:middle
+En el caso de una entidad con hijos,
+
+00:07:36.096 --> 00:07:39.606 align:middle
+el ID por sí solo no basta para
+determinar de qué entidad se trata.
+
+00:07:39.996 --> 00:07:43.686 align:middle
+Cuando es Starship, ¿es un
+Freighter, MiningFreighter, o Scout?
+
+00:07:43.996 --> 00:07:47.116 align:middle
+Necesita saberlo para
+instanciar el objeto correcto.
+
+00:07:47.116 --> 00:07:50.596 align:middle
+Y la única forma de saberlo es
+consultar la tabla de la relación
+
+00:07:50.796 --> 00:07:52.736 align:middle
+para obtener el valor de
+la columna discriminadora.
+
+00:07:53.186 --> 00:07:56.696 align:middle
+Por lo tanto, necesita cargar la
+relación inmediatamente, o con avidez.
+
+00:07:57.536 --> 00:08:00.666 align:middle
+Vale, pero ¿por qué las entidades
+sin hijos no tienen esta limitación?
+
+00:08:01.096 --> 00:08:04.766 align:middle
+Porque Doctrine sabe exactamente
+qué tipo de entidad es la relación
+
+00:08:05.226 --> 00:08:08.546 align:middle
+Si es una Scout, Doctrine puede
+crear el proxy perezoso para ella.
+
+00:08:08.986 --> 00:08:10.736 align:middle
+Lo mismo ocurriría con MiningFreighter.
+
+00:08:11.746 --> 00:08:13.956 align:middle
+Con esto terminamos nuestro curso
+sobre la herencia de Doctrine.
+
+00:08:14.276 --> 00:08:19.266 align:middle
+Siempre que seas consciente de las limitaciones, ¡puede
+ser una herramienta poderosa para modelar tu dominio!
+
+00:08:19.926 --> 00:08:23.766 align:middle
+Sólo tienes que ser consciente de tus relaciones
+y de cómo pueden afectar al rendimiento.
+
+00:08:24.356 --> 00:08:27.106 align:middle
+Si tienes alguna pregunta, estamos a
+tu disposición en los comentarios.
+
+00:08:27.486 --> 00:08:29.276 align:middle
+Hasta la próxima, ¡feliz codificación!
