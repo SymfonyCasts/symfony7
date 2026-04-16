@@ -8,11 +8,15 @@ which is a subclass. If you had a large class hierarchy, this could get pretty m
 ## Refining the `filterShips()` Method
 
 Let's see if we can improve this. First, remove the `notclass` part and the parameter.
-I feel like this could work... `s = :class`, so let's try that.
+I feel like this could work... `s = :class`, so let's try that:
+
+[[[ code('091c6563cf') ]]]
 
 Before we test this, let's bring back the use of `filterShips` in our
 `MainController::homepage()`. We'll revert some previous changes, inject the
-`StarshipRepository` again, and call `filterShips()` instead of `findAll()`.
+`StarshipRepository` again, and call `filterShips()` instead of `findAll()`:
+
+[[[ code('1a049c8710') ]]]
 
 Head over to the browser and refresh the homepage... Hmm, we have this "array_rand...
 array cannot be empty" error. We've seen this before, it's what happens if our `filterShips()`
@@ -27,19 +31,29 @@ use just an alias in DQL, it defaults to the id of the entity.
 
 Ok, that didn't work. Let's try something else. Can we just add the discriminator column in
 our DQL? What was it again, open the `Starship` entity to check the `DiscriminatorColumn` attribute...
-`ship_type`. So set our DQL to `s.ship_type = :class` and refresh the homepage...
+`ship_type`. So set our DQL to `s.ship_type = :class`:
+
+[[[ code('788b53a345') ]]]
+
+and refresh the homepage...
 
 Nope, we can't do that either. At the DQL level, Doctrine isn't aware of the discriminator column, it's trying
 to find a property called `ship_type` on our `Starship` entity, which doesn't exist.
 
 I'm going to quickly revert back to the `s = :class` version...
 
+[[[ code('824f4292f0') ]]]
+
 Alright, back to the drawing board.
 
 ## Crafting Our Own Function
 
 What we need to do is create our own DQL function. I want it to look like this:
-`TYPE(s) = :class`. This will take the `s`, our DQL entity alias, and convert it to the correct SQL with the discriminator
+`TYPE(s) = :class`:
+
+[[[ code('5eb98bb541') ]]]
+
+This will take the `s`, our DQL entity alias, and convert it to the correct SQL with the discriminator
 column.
 
 ## Creating the `TypeFunction` Class
@@ -73,6 +87,8 @@ Now that our PHP code is valid, let's do a bit of cleanup. Remove these redundan
 longer add value. This `$dqlAlias` property doesn't need to be public, make it a `private` nullable `string`
 that defaults to `null`. Up at the top, we can remove the `Lexer` import since it's not used anymore.
 
+[[[ code('03759221d4') ]]]
+
 ## Anatomy of the `TypeFunction` Class
 
 Now let's see how this works. We're going to register this function with the name `TYPE` to match the function
@@ -102,7 +118,9 @@ that shows this! Looks like we register it in `doctrine.yaml`, under the `orm.dq
 a string function, so I'll copy this chunk... open `config/packages/doctrine.yaml`... find the `orm` section...
 and paste it here.
 
-This key under `string_functions` is the function name, so use `TYPE`. The value is the class name: `App\Doctrine\ORM\Function\TypeFunction`.
+This key under `string_functions` is the function name, so use `TYPE`. The value is the class name: `App\Doctrine\ORM\Function\TypeFunction`:
+
+[[[ code('00201396af') ]]]
 
 ## Testing the `TypeFunction`
 
@@ -120,8 +138,11 @@ the query profiler panel to see what's going on. Ok cool, the `WHERE` clause is 
 discriminator column. Ahh, the problem is the passed parameter. It's the Freighter class name, but this column uses
 the mapping aliases.
 
-In `StarshipRepository::filterShips()`, replace this parameter value with just a simple string: `freighter`, and
-refresh the homepage. Woo! That worked, and check it out, we now just have the freighters, no mining freighters in sight!
+In `StarshipRepository::filterShips()`, replace this parameter value with just a simple string: `freighter`:
+
+[[[ code('3dcc362105') ]]]
+
+and refresh the homepage. Woo! That worked, and check it out, we now just have the freighters, no mining freighters in sight!
 
 ## Improving Our Function
 
@@ -130,10 +151,15 @@ have to remember to change it here as well. I think we can improve this!
 
 In our `Starship` entity, we have this `getType()` method that flips the `TYPE_MAP` and grabs the alias for the current
 class. Right now, it's an instance method, so you need an instantiated `Starship` object to call it on. But, there's
-nothing about this method that requires it to be an instance method. Make it `static`. Don't worry, PHP is
-forgiving when calling static methods as instance methods, so this won't break anything.
+nothing about this method that requires it to be an instance method. Make it `static`:
 
-Now, back in the `filterShips()` method, set the parameter value to `Freighter::getType()`.
+[[[ code('86f8c2979a') ]]]
+
+Don't worry, PHP is forgiving when calling static methods as instance methods, so this won't break anything.
+
+Now, back in the `filterShips()` method, set the parameter value to `Freighter::getType()`:
+
+[[[ code('5391f5c4dc') ]]]
 
 Refresh the homepage again... perfect, nothing changed! That logic is working as expected!
 

@@ -50,11 +50,19 @@ symfony console make:factory
 ## Exploring the Created Entities and Relationships
 
 In `src/Entity`, here's our new `StarshipPart` entity and the `ManyToOne` relationship
-to `Starship`. And in `Starship`, we have the reverse `OneToMany` relationship to `StarshipPart`
-as a `Collection` of `StarshipParts`.
+to `Starship`:
+
+[[[ code('eef24d8e51') ]]]
+
+And in `Starship`, we have the reverse `OneToMany` relationship to `StarshipPart`
+as a `Collection` of `StarshipParts`:
+
+[[[ code('33c34960a3') ]]]
 
 Our `StarshipPartFactory` is pretty bare bones since we don't have any required fields at
-the moment.
+the moment:
+
+[[[ code('1a774a9ce1') ]]]
 
 Let's add some parts to our `AppStory`. Make sure this `FreighterFactory::createMany()` is first.
 
@@ -65,7 +73,9 @@ anonymous function is that we want to create a new set of `StarshipParts` for ea
 If we just passed the array directly, it would create one set of `StarshipParts` and try to
 associate them to all the Freighters, which would be a problem...
 
-Copy the second argument and paste it for the other two factory calls.
+Copy the second argument and paste it for the other two factory calls:
+
+[[[ code('2597d2907b') ]]]
 
 Now reload the fixtures.
 
@@ -80,7 +90,9 @@ single query. The query to select all the starships. Even though each starship h
 several parts, these aren't loaded because we haven't tried to access them, they're
 lazy!
 
-Now, open our `MainController::homepage()` and `dump($myShip->getStarshipParts())`.
+Now, open our `MainController::homepage()` and `dump($myShip->getStarshipParts())`:
+
+[[[ code('1667f94a27') ]]]
 
 Refresh... and... still just one query? Yep! If we look at the dump, we can see it's
 a `PersistentCollection` with `initialized: false`. This means it's a lazy collection. Again,
@@ -99,8 +111,11 @@ Now let's go the other way...
 ## Exploring the Implications of Doctrine Inheritance
 
 In `MainController::homepage()`, inject `StarshipPartRepository $starshipPartRepository` and
-`dump($starshipPartRepository->find(1))`. `1` should be the ID of the first `StarshipPart`
-in our database.
+`dump($starshipPartRepository->find(1))`:
+
+[[[ code('a72550d644') ]]]
+
+`1` should be the ID of the first `StarshipPart` in our database.
 
 Refresh the page... and we have two queries: the main select and the `find()`
 query where we're loading the `StarshipPart`. Look at the `StarshipPart` that was
@@ -110,8 +125,11 @@ so it reused it here.
 
 To demonstrate lazy loading, let's ensure this Freighter won't be reused.
 
-In the controller, replace the `StarshipRepository` with `MiningFreighterRepository`. This
-reduces the fetched starships to just `MiningFreighters`.
+In the controller, replace the `StarshipRepository` with `MiningFreighterRepository`:
+
+[[[ code('615ee0c9bc') ]]]
+
+This reduces the fetched starships to just `MiningFreighters`.
 
 Go back to the homepage. Remember, in our last request, we loaded a `StarshipPart` and
 the `Freighter` its related to was already instantiated.
@@ -135,13 +153,19 @@ To see this in action, we'll have our `StarshipPart` be related to `Scout` inste
 `Scout` is a leaf in our hierarchy.
 
 In `Starship`, cut the relationship property and constructor. Paste it into `Scout`. Back
-in `Starship`, cut the 3 methods related to the relationship and paste these into `Scout` as well.
+in `Starship`, cut the 3 methods related to the relationship and paste these into `Scout` as well:
+
+[[[ code('d6fb5a6be1') ]]]
 
 Now, in `StarshipPart`, change the relationship typehint from `Starship` to `Scout` in all
-places.
+places:
+
+[[[ code('37ea3cf47c') ]]]
 
 Finally, in `AppStory`, remove the second argument from the `FreighterFactory` and `MiningFreighterFactory`
-`createMany`'s as these can't work anymore.
+`createMany`'s as these can't work anymore:
+
+[[[ code('76d97a0710') ]]]
 
 Now, reload our fixtures again...
 
