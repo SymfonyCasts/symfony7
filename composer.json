@@ -4,13 +4,12 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
+        "php": ">=8.3",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "babdev/pagerfanta-bundle": "^4.5",
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.13",
-        "doctrine/doctrine-migrations-bundle": "^3.3",
         "doctrine/orm": "^3.3",
         "knplabs/knp-time-bundle": "^2.2",
         "pagerfanta/doctrine-orm-adapter": "^4.7",
@@ -91,8 +90,7 @@
     "extra": {
         "symfony": {
             "allow-contrib": false,
-            "require": "7.3.*",
-            "docker": true
+            "require": "7.3.*"
         }
     },
     "require-dev": {
