@@ -1,1 +1,4 @@
-chapters: []
+chapters:
+    php-84:
+        tutsFirstStep: start
+        tutsLastStep: start
