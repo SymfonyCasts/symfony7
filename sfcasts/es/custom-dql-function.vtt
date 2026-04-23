@@ -1,0 +1,547 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:01.736 align:middle
+¿Sigues aquí?
+
+00:00:02.026 --> 00:00:03.826 align:middle
+¡Estupendo! Tengo algo que quiero enseñarte.
+
+00:00:04.296 --> 00:00:07.906 align:middle
+¿Recuerdas el método filterShips() que
+creamos en nuestro StarshipRepository?
+
+00:00:08.456 --> 00:00:11.726 align:middle
+Para obtener sólo los cargueros,
+tuvimos que añadir NOT INSTANCEOF
+
+00:00:11.726 --> 00:00:14.696 align:middle
+para excluir a los cargueros
+mineros, que son una subclase.
+
+00:00:14.696 --> 00:00:18.706 align:middle
+Si tuvieras una gran jerarquía de clases,
+esto podría resultar bastante lioso.
+
+00:00:19.396 --> 00:00:20.746 align:middle
+Veamos si podemos mejorarlo.
+
+00:00:20.746 --> 00:00:23.916 align:middle
+Primero, elimina la parte
+notclass y el parámetro.
+
+00:00:25.346 --> 00:00:26.676 align:middle
+Me parece que esto podría funcionar...
+
+00:00:27.126 --> 00:00:33.556 align:middle
+s = :classasí que vamos a probarlo: Antes de
+probarlo, recuperemos el uso de filterShips
+
+00:00:33.556 --> 00:00:35.366 align:middle
+en nuestro MainController::homepage().
+
+00:00:35.756 --> 00:00:39.706 align:middle
+Revertiremos algunos cambios anteriores,
+inyectaremos de nuevo el StarshipRepository
+
+00:00:39.766 --> 00:00:42.106 align:middle
+y llamaremos a filterShips()
+en lugar de a findAll():
+
+00:00:42.846 --> 00:00:45.206 align:middle
+Ve al navegador y actualiza
+la página de inicio...
+
+00:00:46.256 --> 00:00:48.446 align:middle
+Hmm, tenemos este error "array_rand...
+
+00:00:48.446 --> 00:00:49.806 align:middle
+array cannot be empty" error.
+
+00:00:50.316 --> 00:00:54.796 align:middle
+Ya lo hemos visto antes, es lo que ocurre si nuestro
+método filterShips() devuelve un array vacío.
+
+00:00:55.426 --> 00:00:57.226 align:middle
+Comprobemos la consulta para ver qué ocurre.
+
+00:00:57.946 --> 00:01:02.426 align:middle
+Es sutil, pero fíjate en la cláusula WHERE:
+
+00:01:02.456 --> 00:01:10.836 align:middle
+s0_.id = ?. Este s0_ es un alias de tabla SQL interna
+que utiliza Doctrine: es nuestra tabla starship.
+
+00:01:11.506 --> 00:01:15.406 align:middle
+Esperaba que utilizara nuestra columna
+discriminadora, pero está utilizando el id.
+
+00:01:16.056 --> 00:01:20.666 align:middle
+Supongo que cuando utilizas sólo un alias en
+DQL, utiliza por defecto el id de la entidad.
+
+00:01:21.486 --> 00:01:22.776 align:middle
+Vale, eso no ha funcionado.
+
+00:01:23.026 --> 00:01:24.126 align:middle
+Probemos otra cosa.
+
+00:01:24.666 --> 00:01:27.566 align:middle
+¿Podemos añadir la columna
+discriminante en nuestro DQL?
+
+00:01:28.126 --> 00:01:32.906 align:middle
+Lo que era, otra vez, abrir la entidad Starship
+para comprobar el atributo DiscriminatorColumn...
+
+00:01:33.146 --> 00:01:33.946 align:middle
+ship_type.
+
+00:01:34.066 --> 00:01:39.536 align:middle
+Así que establece nuestro DQL en s.ship_type
+= :class: y actualiza la página de inicio...
+
+00:01:41.426 --> 00:01:42.806 align:middle
+No, tampoco podemos hacer eso.
+
+00:01:43.226 --> 00:01:47.166 align:middle
+A nivel de DQL, Doctrine no conoce
+la columna discriminadora, está
+
+00:01:47.466 --> 00:01:52.096 align:middle
+intentando encontrar una propiedad llamada ship_type
+en nuestra entidad Starship, que no existe.
+
+00:01:52.096 --> 00:01:56.266 align:middle
+Voy a volver rápidamente
+a la versión s = :class...
+
+00:01:57.086 --> 00:01:58.746 align:middle
+Bien, volvamos a la mesa de dibujo.
+
+00:01:59.456 --> 00:02:02.526 align:middle
+Lo que tenemos que hacer es crear
+nuestra propia función DQL.
+
+00:02:03.006 --> 00:02:11.036 align:middle
+Quiero que tenga este aspecto: TYPE(s) = :class:
+Esto tomará el s, nuestro alias de entidad DQL,
+
+00:02:11.276 --> 00:02:14.566 align:middle
+y lo convertirá al SQL correcto
+con la columna discriminadora.
+
+00:02:15.196 --> 00:02:17.506 align:middle
+En src, crea una nueva clase PHP...
+
+00:02:18.746 --> 00:02:24.446 align:middle
+Llámala TypeFunction y el espacio de
+nombres será App\Doctrine\ORM\Function.
+
+00:02:25.266 --> 00:02:28.026 align:middle
+Este parece un buen hogar para
+nuestras funciones DQL personalizadas.
+
+00:02:28.636 --> 00:02:31.056 align:middle
+Durante mi investigación,
+encontré este Gist de GitHub...
+
+00:02:31.276 --> 00:02:32.176 align:middle
+¿O es gist?
+
+00:02:32.336 --> 00:02:34.546 align:middle
+Oh tío, este es el argumento jif, gif...
+
+00:02:35.206 --> 00:02:37.556 align:middle
+En fin, el autor tuvo la
+misma idea que nosotros.
+
+00:02:37.676 --> 00:02:38.866 align:middle
+Y este gist funciona...
+
+00:02:39.066 --> 00:02:41.026 align:middle
+pero necesita algo de
+limpieza y modernización.
+
+00:02:41.616 --> 00:02:44.316 align:middle
+Copia todo el archivo excepto
+el espacio de nombres,
+
+00:02:44.456 --> 00:02:46.906 align:middle
+y pégalo sobre la clase
+vacía que acabamos de crear.
+
+00:02:47.916 --> 00:02:50.746 align:middle
+Como puedes ver, esta clase
+extiende a FunctionNode,
+
+00:02:50.966 --> 00:02:53.986 align:middle
+que es la clase base que se utiliza
+para las funciones DQL personalizadas.
+
+00:02:54.896 --> 00:02:56.496 align:middle
+Hay algunos errores que debemos corregir.
+
+00:02:56.496 --> 00:03:01.006 align:middle
+En primer lugar, parece que el método getSql()
+probablemente requiere un tipo de retorno.
+
+00:03:01.426 --> 00:03:04.776 align:middle
+Si miramos en el padre, sí,
+string, así que añádelo.
+
+00:03:07.626 --> 00:03:12.876 align:middle
+Este ClassMetadataInfo ha sido renombrado a
+sólo ClassMetadata, así que lo actualizaré.
+
+00:03:13.996 --> 00:03:16.296 align:middle
+Esto no es realmente un error
+porque está en un comentario,
+
+00:03:16.426 --> 00:03:18.766 align:middle
+pero ayudará con el
+autocompletado y la legibilidad.
+
+00:03:19.426 --> 00:03:22.076 align:middle
+Creo que el método parse() también
+requiere un tipo de retorno.
+
+00:03:22.586 --> 00:03:23.316 align:middle
+Mira el padre...
+
+00:03:23.936 --> 00:03:25.616 align:middle
+sip, void, añade eso.
+
+00:03:28.386 --> 00:03:31.586 align:middle
+Parece que esta clase Lexer
+ya no tiene estas constantes.
+
+00:03:32.096 --> 00:03:34.126 align:middle
+Si saltamos a esa clase y
+nos desplazamos hacia abajo,
+
+00:03:34.286 --> 00:03:37.526 align:middle
+veo que estas constantes se han
+trasladado a este enum TokenType.
+
+00:03:37.526 --> 00:03:43.286 align:middle
+Así que, de vuelta en el método parse(),
+sustituye Lexer por TokenType en los tres lugares.
+
+00:03:43.286 --> 00:03:49.166 align:middle
+Ahora que nuestro código PHP es
+válido, hagamos un poco de limpieza.
+
+00:03:49.706 --> 00:03:52.896 align:middle
+Elimina estos docblocks
+redundantes, ya no aportan valor.
+
+00:03:56.516 --> 00:03:59.646 align:middle
+Esta propiedad $dqlAlias
+no necesita ser pública,
+
+00:04:00.056 --> 00:04:03.536 align:middle
+conviértela en una private anulable
+string que por defecto sea null.
+
+00:04:04.426 --> 00:04:08.066 align:middle
+En la parte superior, podemos eliminar la
+importación Lexer puesto que ya no se utiliza.
+
+00:04:09.456 --> 00:04:10.856 align:middle
+Ahora veamos cómo funciona esto.
+
+00:04:11.176 --> 00:04:13.746 align:middle
+Vamos a registrar esta
+función con el nombre TYPE
+
+00:04:13.916 --> 00:04:16.276 align:middle
+para que coincida con la función
+que utilizamos en nuestro DQL.
+
+00:04:16.786 --> 00:04:19.996 align:middle
+Cuando Doctrine analiza el
+DQL y encuentra una función,
+
+00:04:20.266 --> 00:04:22.226 align:middle
+recorre las funciones registradas
+
+00:04:22.396 --> 00:04:25.136 align:middle
+y llama al método parse() en cada una
+de ellas para encontrar una coincidencia.
+
+00:04:25.616 --> 00:04:28.406 align:middle
+Aquí puedes ver que está
+intentando analizar este IDENTIFIER,
+
+00:04:28.646 --> 00:04:31.326 align:middle
+que será TYPE, el nombre
+con el que lo registramos.
+
+00:04:31.916 --> 00:04:34.046 align:middle
+A continuación, estamos haciendo
+coincidir un OPENING_PARANTHESIS.
+
+00:04:34.996 --> 00:04:40.496 align:middle
+Luego establecemos la propiedad dqlAlias en
+este IdentificationVariable(), básicamente,
+
+00:04:40.496 --> 00:04:43.366 align:middle
+la cadena que viene después
+del paréntesis de apertura
+
+00:04:43.626 --> 00:04:48.436 align:middle
+, que en este caso será s. Por último,
+hacemos coincidir el CLOSING_PARANTHESIS.
+
+00:04:49.096 --> 00:04:54.246 align:middle
+Si todo eso coincide, entonces Doctrine llama
+a este método getSql() para convertirlo a SQL.
+
+00:04:54.986 --> 00:04:56.726 align:middle
+No voy a entrar en detalles aquí.
+
+00:04:57.106 --> 00:04:59.966 align:middle
+Básicamente, estamos cogiendo este
+"componente de consulta", que es una matriz.
+
+00:05:00.506 --> 00:05:04.446 align:middle
+Una de las claves es metadata, que
+es una instancia de ClassMetadata.
+
+00:05:05.076 --> 00:05:07.636 align:middle
+A continuación, cogemos
+el alias de la tabla SQL.
+
+00:05:07.836 --> 00:05:10.906 align:middle
+Este alias es esa cosa
+interna que genera Doctrine.
+
+00:05:11.306 --> 00:05:13.676 align:middle
+Puedes verlo en el panel
+del perfilador de consultas.
+
+00:05:14.206 --> 00:05:17.106 align:middle
+En este caso, la tabla
+starship tiene el alias s0_.
+
+00:05:17.106 --> 00:05:19.966 align:middle
+Eso es lo que estamos cogiendo aquí.
+
+00:05:20.726 --> 00:05:25.096 align:middle
+Esta comprobación y excepción es para asegurarnos de
+que esta función sólo se puede utilizar en entidades
+
+00:05:25.096 --> 00:05:26.836 align:middle
+que estén en una jerarquía de herencia.
+
+00:05:26.836 --> 00:05:29.736 align:middle
+Por último, estamos devolviendo $tableAlias...
+
+00:05:29.896 --> 00:05:33.276 align:middle
+punto... el nombre de la columna
+discriminadora de los metadatos de la clase.
+
+00:05:34.046 --> 00:05:37.206 align:middle
+Ahora tenemos que informar a Doctrine de
+nuestra nueva función registrándola.
+
+00:05:37.526 --> 00:05:40.006 align:middle
+¡Hay documentación de
+Symfony que muestra esto!
+
+00:05:40.466 --> 00:05:45.556 align:middle
+Parece que la registramos en
+doctrine.yaml, en la sección orm.dql.
+
+00:05:45.556 --> 00:05:49.216 align:middle
+Nuestra función es una función de
+cadena, así que copiaré este trozo...
+
+00:05:50.006 --> 00:05:52.986 align:middle
+abrir config/packages/doctrine.yaml...
+
+00:05:52.986 --> 00:05:54.806 align:middle
+busca la sección orm...
+
+00:05:54.906 --> 00:05:55.836 align:middle
+y lo pegaré aquí.
+
+00:05:56.766 --> 00:06:00.716 align:middle
+Esta clave bajo string_functions es el
+nombre de la función, así que utiliza TYPE.
+
+00:06:01.396 --> 00:06:07.126 align:middle
+El valor es el nombre de la clase:
+App\Doctrine\ORM\Function\TypeFunction:
+
+00:06:08.076 --> 00:06:10.446 align:middle
+Para asegurarnos de que está
+registrado y funciona como esperamos,
+
+00:06:10.646 --> 00:06:16.206 align:middle
+vuelve a TypeFunction::getSql(),
+dd($this->dqlAlias).
+
+00:06:16.616 --> 00:06:20.176 align:middle
+Esto debería volcar el contenido de
+nuestra función TYPE, s en nuestro caso.
+
+00:06:20.946 --> 00:06:23.046 align:middle
+De vuelta en el navegador,
+vamos a la página principal...
+
+00:06:23.146 --> 00:06:27.646 align:middle
+y obtenemos un error "Esperaba
+función conocida, obtuvo TIPO".
+
+00:06:28.156 --> 00:06:31.106 align:middle
+Hmm, esto significa que nuestra función
+no se está registrando correctamente...
+
+00:06:31.566 --> 00:06:33.406 align:middle
+Tal vez tenga un error tipográfico
+en el espacio de nombres.
+
+00:06:33.996 --> 00:06:37.746 align:middle
+Lo copiaré y lo pegaré en doctrine.yaml
+para asegurarme de que es correcto.
+
+00:06:38.356 --> 00:06:39.736 align:middle
+Hmm, era correcto.
+
+00:06:40.136 --> 00:06:42.746 align:middle
+Oh, duh, ¡tengo el nombre
+de la función como TEST!
+
+00:06:43.236 --> 00:06:45.636 align:middle
+Cambiaré el nombre a TYPE y
+actualizaré la página de inicio...
+
+00:06:46.716 --> 00:06:48.216 align:middle
+¡genial! ¡se ha volcado s!
+
+00:06:48.986 --> 00:06:50.726 align:middle
+Elimina el dd() y actualiza de nuevo...
+
+00:06:50.726 --> 00:06:57.466 align:middle
+nuestro viejo amigo, la excepción "el array no puede
+estar vacío" ha vuelto, pero eso es una buena señal
+
+00:06:57.666 --> 00:07:00.176 align:middle
+porque significa que nuestra
+función al menos está registrada
+
+00:07:00.266 --> 00:07:01.806 align:middle
+y funciona sin lanzar ningún error.
+
+00:07:02.416 --> 00:07:05.146 align:middle
+Comprobemos el panel del perfilador de
+consultas para ver qué está pasando.
+
+00:07:06.356 --> 00:07:12.936 align:middle
+Muy bien, la cláusula WHERE es ahora s0_.ship_type,
+que es nuestra columna discriminadora.
+
+00:07:13.626 --> 00:07:15.936 align:middle
+Ahh, el problema es el parámetro pasado.
+
+00:07:16.306 --> 00:07:20.616 align:middle
+Es el nombre de la clase Carguero, pero
+esta columna utiliza los alias del mapeo.
+
+00:07:21.326 --> 00:07:26.626 align:middle
+En StarshipRepository::filterShips(), sustituye
+el valor de este parámetro por una simple cadena:
+
+00:07:26.626 --> 00:07:29.246 align:middle
+freighter: y actualiza la página de inicio.
+
+00:07:30.566 --> 00:07:34.636 align:middle
+¡Guau! Ha funcionado, y fíjate,
+ahora sólo tenemos los cargueros,
+
+00:07:34.696 --> 00:07:36.276 align:middle
+¡no hay cargueros mineros a la vista!
+
+00:07:37.086 --> 00:07:40.106 align:middle
+Tal vez sea una pena que tengamos
+que utilizar el alias de cadena.
+
+00:07:40.306 --> 00:07:45.146 align:middle
+Si cambiamos el alias en nuestra entidad Starship,
+tendríamos que acordarnos de cambiarlo también aquí.
+
+00:07:45.656 --> 00:07:46.906 align:middle
+¡Creo que podemos mejorar esto!
+
+00:07:47.266 --> 00:07:51.876 align:middle
+En nuestra entidad Starship, tenemos este
+método getType() que invierte el TYPE_MAP
+
+00:07:52.116 --> 00:07:55.016 align:middle
+y coge el alias de la clase actual.
+
+00:07:55.016 --> 00:08:00.006 align:middle
+Ahora mismo, es un método de instancia, por lo que
+necesitas un objeto Starship instanciado para llamarlo.
+
+00:08:00.616 --> 00:08:04.246 align:middle
+Pero no hay nada en este método que
+requiera que sea un método de instancia.
+
+00:08:04.656 --> 00:08:09.186 align:middle
+Hazlo static: No te preocupes, PHP es
+indulgente cuando llama a métodos estáticos
+
+00:08:09.186 --> 00:08:11.836 align:middle
+como métodos de instancia,
+así que esto no romperá nada.
+
+00:08:12.536 --> 00:08:16.036 align:middle
+Ahora, de vuelta en el método filterShips(),
+establece el valor del parámetro
+
+00:08:16.036 --> 00:08:20.486 align:middle
+en Freighter::getType(): Vuelve a
+actualizar la página de inicio...
+
+00:08:21.966 --> 00:08:23.626 align:middle
+perfecto, ¡nada ha cambiado!
+
+00:08:24.036 --> 00:08:25.806 align:middle
+¡La lógica funciona como se esperaba!
+
+00:08:26.756 --> 00:08:29.696 align:middle
+Vale, ¡hemos encontrado una
+función que le faltaba a Doctrine
+
+00:08:29.856 --> 00:08:32.966 align:middle
+, y la hemos añadido nosotros mismos
+como una función DQL personalizada!
+
+00:08:33.426 --> 00:08:37.806 align:middle
+Esta es una función realmente potente de
+Doctrine, y te permite ampliar las capacidades
+
+00:08:37.806 --> 00:08:40.446 align:middle
+de DQL para adaptarlas a tus
+necesidades específicas.
+
+00:08:40.896 --> 00:08:44.016 align:middle
+Puedes crear todo tipo de funciones
+personalizadas para diferentes casos de uso.
+
+00:08:44.956 --> 00:08:50.366 align:middle
+El paquete beberlei/doctrineextensions Composer
+contiene un montón de funciones precreadas.
+
+00:08:50.366 --> 00:08:53.806 align:middle
+Si alguna vez necesitas una función
+que no está incorporada, echa
+
+00:08:54.096 --> 00:08:56.676 align:middle
+un vistazo a ese paquete, ¡puede
+que encuentres lo que necesitas!
+
+00:08:57.396 --> 00:08:59.116 align:middle
+Hasta la próxima, ¡feliz programación!
