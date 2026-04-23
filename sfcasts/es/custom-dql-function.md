@@ -18,7 +18,7 @@ Ve al navegador y actualiza la página de inicio... Hmm, tenemos este error "arr
 
 Es sutil, pero fíjate en la cláusula `WHERE`: `s0_.id = ?`. Este `s0_` es un alias de tabla SQL interna que utiliza Doctrine: es nuestra tabla `starship`. Esperaba que utilizara nuestra columna discriminadora, pero utiliza el identificador. Supongo que cuando utilizas sólo un alias en DQL, utiliza por defecto el id de la entidad.
 
-Vale, eso no ha funcionado. Probemos otra cosa. ¿Podemos añadir la columna discriminante en nuestro DQL? Otra vez lo mismo, abre la entidad `Starship` para comprobar el atributo `DiscriminatorColumn`...`ship_type`. Así que pon nuestro DQL en `s.ship_type = :class`:
+Vale, eso no ha funcionado. Probemos otra cosa. ¿Podemos añadir la columna discriminante en nuestro DQL? Lo que era, otra vez, abrir la entidad `Starship` para comprobar el atributo `DiscriminatorColumn`...`ship_type`. Así que pon nuestro DQL en `s.ship_type = :class`:
 
 [[[ code('788b53a345') ]]]
 
