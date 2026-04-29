@@ -1,0 +1,3 @@
+# Upgrading to Symfony 7.4
+
+Coming soon...

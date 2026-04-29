@@ -1,0 +1,3 @@
+# Upgrading to Symfony 8.0!
+
+Coming soon...

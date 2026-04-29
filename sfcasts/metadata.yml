@@ -2,3 +2,15 @@ chapters:
     php-84:
         tutsFirstStep: start
         tutsLastStep: start
+    symfony-74:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    doctrine:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    deprecations:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    symfony-80:
+        tutsFirstStep: ~
+        tutsLastStep: ~
