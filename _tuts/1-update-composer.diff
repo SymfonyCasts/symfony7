@@ -9,7 +9,7 @@ index 2689398..d4e50c9 100644
  // register any custom, 3rd party controllers here
  // app.register('some_controller_name', SomeImportedController);
 diff --git a/composer.json b/composer.json
-index a09d71c..ad958f7 100644
+index a09d71c..d2e9815 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -4,7 +4,7 @@
@@ -36,13 +36,13 @@ index a09d71c..ad958f7 100644
          "symfony/polyfill-php81": "*",
 -        "symfony/polyfill-php82": "*"
 +        "symfony/polyfill-php82": "*",
-+        "symfony/polyfill-php84": "*",
-+        "symfony/polyfill-php85": "*"
++        "symfony/polyfill-php83": "*",
++        "symfony/polyfill-php84": "*"
      },
      "scripts": {
          "auto-scripts": {
 diff --git a/composer.lock b/composer.lock
-index 4883e55..58b701f 100644
+index 4883e55..7acbe68 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,59 +4,58 @@
@@ -50,7 +50,7 @@ index 4883e55..58b701f 100644
          "This file is @generated automatically"
      ],
 -    "content-hash": "a7eb1df86441f551e9711edbfeb19cb2",
-+    "content-hash": "864e46df85aad2f892e1998c9bd6cd7d",
++    "content-hash": "db27b860cf867b7793f5f43c6287716b",
      "packages": [
          {
              "name": "babdev/pagerfanta-bundle",
@@ -472,7 +472,7 @@ index 4883e55..58b701f 100644
              },
              "suggest": {
                  "ext-dom": "Provides support for XSD validation for XML mapping files",
-@@ -952,9 +949,9 @@
+@@ -952,25 +949,26 @@
              ],
              "support": {
                  "issues": "https://github.com/doctrine/orm/issues",
@@ -484,7 +484,59 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "doctrine/persistence",
-@@ -1051,16 +1048,16 @@
+-            "version": "4.1.1",
++            "version": "4.2.0",
+             "source": {
+                 "type": "git",
+                 "url": "https://github.com/doctrine/persistence.git",
+-                "reference": "b9c49ad3558bb77ef973f4e173f2e9c2eca9be09"
++                "reference": "49ab73e0d3e2ac8d1f5ecda3dd8acd5503781e8b"
+             },
+             "dist": {
+                 "type": "zip",
+-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/b9c49ad3558bb77ef973f4e173f2e9c2eca9be09",
+-                "reference": "b9c49ad3558bb77ef973f4e173f2e9c2eca9be09",
++                "url": "https://api.github.com/repos/doctrine/persistence/zipball/49ab73e0d3e2ac8d1f5ecda3dd8acd5503781e8b",
++                "reference": "49ab73e0d3e2ac8d1f5ecda3dd8acd5503781e8b",
+                 "shasum": ""
+             },
+             "require": {
++                "doctrine/deprecations": "^1",
+                 "doctrine/event-manager": "^1 || ^2",
+                 "php": "^8.1",
+                 "psr/cache": "^1.0 || ^2.0 || ^3.0"
+@@ -981,13 +979,13 @@
+                 "phpstan/phpstan-phpunit": "^2",
+                 "phpstan/phpstan-strict-rules": "^2",
+                 "phpunit/phpunit": "^10.5.58 || ^12",
+-                "symfony/cache": "^4.4 || ^5.4 || ^6.0 || ^7.0",
+-                "symfony/finder": "^4.4 || ^5.4 || ^6.0 || ^7.0"
++                "symfony/cache": "^4.4 || ^5.4 || ^6.0 || ^7.0 || ^8.0",
++                "symfony/finder": "^4.4 || ^5.4 || ^6.0 || ^7.0 || ^8.0"
+             },
+             "type": "library",
+             "autoload": {
+                 "psr-4": {
+-                    "Doctrine\\Persistence\\": "src/Persistence"
++                    "Doctrine\\Persistence\\": "src"
+                 }
+             },
+             "notification-url": "https://packagist.org/downloads/",
+@@ -1031,7 +1029,7 @@
+             ],
+             "support": {
+                 "issues": "https://github.com/doctrine/persistence/issues",
+-                "source": "https://github.com/doctrine/persistence/tree/4.1.1"
++                "source": "https://github.com/doctrine/persistence/tree/4.2.0"
+             },
+             "funding": [
+                 {
+@@ -1047,20 +1045,20 @@
+                     "type": "tidelift"
+                 }
+             ],
+-            "time": "2025-10-16T20:13:18+00:00"
++            "time": "2026-04-26T12:12:52+00:00"
          },
          {
              "name": "doctrine/sql-formatter",
@@ -505,7 +557,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -1100,22 +1097,22 @@
+@@ -1100,22 +1098,22 @@
              ],
              "support": {
                  "issues": "https://github.com/doctrine/sql-formatter/issues",
@@ -534,7 +586,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -1126,8 +1123,8 @@
+@@ -1126,8 +1124,8 @@
                  "php": "^7.4 || ^8.0",
                  "psr/cache": "^1 || ^2 || ^3",
                  "psr/clock": "^1",
@@ -545,7 +597,7 @@ index 4883e55..58b701f 100644
              },
              "conflict": {
                  "behat/transliterator": "<1.2 || >=2.0",
-@@ -1143,21 +1140,21 @@
+@@ -1143,21 +1141,21 @@
                  "doctrine/cache": "^1.11 || ^2.0",
                  "doctrine/common": "^2.13 || ^3.0",
                  "doctrine/dbal": "^3.7 || ^4.0",
@@ -576,7 +628,7 @@ index 4883e55..58b701f 100644
              },
              "suggest": {
                  "doctrine/mongodb-odm": "to use the extensions with the MongoDB ODM",
-@@ -1214,7 +1211,7 @@
+@@ -1214,7 +1212,7 @@
              "support": {
                  "docs": "https://github.com/doctrine-extensions/DoctrineExtensions/tree/main/doc",
                  "issues": "https://github.com/doctrine-extensions/DoctrineExtensions/issues",
@@ -585,7 +637,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -1234,27 +1231,27 @@
+@@ -1234,27 +1232,27 @@
                      "type": "github"
                  }
              ],
@@ -621,7 +673,7 @@ index 4883e55..58b701f 100644
              },
              "conflict": {
                  "phpunit/phpunit": "<8.0"
-@@ -1262,9 +1259,9 @@
+@@ -1262,9 +1260,9 @@
              "require-dev": {
                  "phpstan/phpstan": "^1.11",
                  "phpunit/phpunit": "^9.6",
@@ -634,7 +686,7 @@ index 4883e55..58b701f 100644
              },
              "suggest": {
                  "symfony/twig-bundle": "to use the Twig `time_diff()` function and `|time_diff`/`|duration` filter"
-@@ -1307,22 +1304,22 @@
+@@ -1307,22 +1305,22 @@
              ],
              "support": {
                  "issues": "https://github.com/KnpLabs/KnpTimeBundle/issues",
@@ -663,7 +715,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -1340,7 +1337,7 @@
+@@ -1340,7 +1338,7 @@
                  "graylog2/gelf-php": "^1.4.2 || ^2.0",
                  "guzzlehttp/guzzle": "^7.4.5",
                  "guzzlehttp/psr7": "^2.2",
@@ -672,7 +724,7 @@ index 4883e55..58b701f 100644
                  "php-amqplib/php-amqplib": "~2.4 || ^3",
                  "php-console/php-console": "^3.1.8",
                  "phpstan/phpstan": "^2",
-@@ -1400,7 +1397,7 @@
+@@ -1400,7 +1398,7 @@
              ],
              "support": {
                  "issues": "https://github.com/Seldaek/monolog/issues",
@@ -681,7 +733,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -1412,20 +1409,20 @@
+@@ -1412,20 +1410,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -707,7 +759,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -1453,22 +1450,22 @@
+@@ -1453,22 +1451,22 @@
                  "pagerfanta"
              ],
              "support": {
@@ -736,7 +788,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -1478,7 +1475,7 @@
+@@ -1478,7 +1476,7 @@
              },
              "require-dev": {
                  "phpunit/phpunit": "^10.5",
@@ -745,7 +797,7 @@ index 4883e55..58b701f 100644
              },
              "type": "library",
              "autoload": {
-@@ -1500,9 +1497,9 @@
+@@ -1500,9 +1498,9 @@
                  "pagerfanta"
              ],
              "support": {
@@ -757,7 +809,7 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "phpdocumentor/reflection-common",
-@@ -1559,16 +1556,16 @@
+@@ -1559,16 +1557,16 @@
          },
          {
              "name": "phpdocumentor/reflection-docblock",
@@ -778,7 +830,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -1578,7 +1575,7 @@
+@@ -1578,7 +1576,7 @@
                  "phpdocumentor/reflection-common": "^2.2",
                  "phpdocumentor/type-resolver": "^1.7",
                  "phpstan/phpdoc-parser": "^1.7|^2.0",
@@ -787,7 +839,7 @@ index 4883e55..58b701f 100644
              },
              "require-dev": {
                  "mockery/mockery": "~1.3.5 || ~1.6.0",
-@@ -1617,22 +1614,22 @@
+@@ -1617,22 +1615,22 @@
              "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
              "support": {
                  "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
@@ -816,7 +868,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -1675,22 +1672,22 @@
+@@ -1675,22 +1673,22 @@
              "description": "A PSR-5 based resolver of Class names, Types and Structural Element Names",
              "support": {
                  "issues": "https://github.com/phpDocumentor/TypeResolver/issues",
@@ -845,7 +897,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -1722,9 +1719,9 @@
+@@ -1722,9 +1720,9 @@
              "description": "PHPDoc parser with support for nullable, intersection and generic types",
              "support": {
                  "issues": "https://github.com/phpstan/phpdoc-parser/issues",
@@ -857,7 +909,7 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "psr/cache",
-@@ -1978,26 +1975,26 @@
+@@ -1978,26 +1976,26 @@
          },
          {
              "name": "stof/doctrine-extensions-bundle",
@@ -894,7 +946,7 @@ index 4883e55..58b701f 100644
                  "symfony/translation-contracts": "^2.5 || ^3.5"
              },
              "require-dev": {
-@@ -2006,9 +2003,10 @@
+@@ -2006,9 +2004,10 @@
                  "phpstan/phpstan-phpunit": "^2.0",
                  "phpstan/phpstan-strict-rules": "^2.0",
                  "phpstan/phpstan-symfony": "^2.0",
@@ -908,7 +960,7 @@ index 4883e55..58b701f 100644
              },
              "suggest": {
                  "doctrine/doctrine-bundle": "to use the ORM extensions",
-@@ -2053,22 +2051,22 @@
+@@ -2053,22 +2052,22 @@
              ],
              "support": {
                  "issues": "https://github.com/stof/StofDoctrineExtensionsBundle/issues",
@@ -937,7 +989,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -2108,7 +2106,7 @@
+@@ -2108,7 +2107,7 @@
              "description": "Manages URL generation and versioning of web assets such as CSS stylesheets, JavaScript files and image files",
              "homepage": "https://symfony.com",
              "support": {
@@ -946,7 +998,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -2119,25 +2117,29 @@
+@@ -2119,25 +2118,29 @@
                      "url": "https://github.com/fabpot",
                      "type": "github"
                  },
@@ -981,7 +1033,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -2188,7 +2190,7 @@
+@@ -2188,7 +2191,7 @@
              "description": "Maps directories of assets & makes them available in a public directory with versioned filenames.",
              "homepage": "https://symfony.com",
              "support": {
@@ -990,7 +1042,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -2208,20 +2210,20 @@
+@@ -2208,20 +2211,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1016,7 +1068,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -2290,7 +2292,7 @@
+@@ -2290,7 +2293,7 @@
                  "psr6"
              ],
              "support": {
@@ -1025,7 +1077,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -2310,7 +2312,7 @@
+@@ -2310,7 +2313,7 @@
                      "type": "tidelift"
                  }
              ],
@@ -1034,7 +1086,7 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "symfony/cache-contracts",
-@@ -2390,16 +2392,16 @@
+@@ -2390,16 +2393,16 @@
          },
          {
              "name": "symfony/config",
@@ -1055,7 +1107,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -2445,7 +2447,7 @@
+@@ -2445,7 +2448,7 @@
              "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
              "homepage": "https://symfony.com",
              "support": {
@@ -1064,7 +1116,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -2465,20 +2467,20 @@
+@@ -2465,20 +2468,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1090,7 +1142,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -2543,7 +2545,7 @@
+@@ -2543,7 +2546,7 @@
                  "terminal"
              ],
              "support": {
@@ -1099,7 +1151,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -2563,20 +2565,20 @@
+@@ -2563,20 +2566,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1125,7 +1177,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -2627,7 +2629,7 @@
+@@ -2627,7 +2630,7 @@
              "description": "Allows you to standardize and centralize the way objects are constructed in your application",
              "homepage": "https://symfony.com",
              "support": {
@@ -1134,7 +1186,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -2647,7 +2649,7 @@
+@@ -2647,7 +2650,7 @@
                      "type": "tidelift"
                  }
              ],
@@ -1143,7 +1195,7 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "symfony/deprecation-contracts",
-@@ -2718,16 +2720,16 @@
+@@ -2718,16 +2721,16 @@
          },
          {
              "name": "symfony/doctrine-bridge",
@@ -1164,7 +1216,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -2807,7 +2809,7 @@
+@@ -2807,7 +2810,7 @@
              "description": "Provides integration for Doctrine with various Symfony components",
              "homepage": "https://symfony.com",
              "support": {
@@ -1173,7 +1225,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -2827,20 +2829,20 @@
+@@ -2827,20 +2830,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1199,7 +1251,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -2885,7 +2887,7 @@
+@@ -2885,7 +2888,7 @@
                  "environment"
              ],
              "support": {
@@ -1208,7 +1260,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -2905,20 +2907,20 @@
+@@ -2905,20 +2908,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1234,7 +1286,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -2966,7 +2968,7 @@
+@@ -2966,7 +2969,7 @@
              "description": "Provides tools to manage errors and ease debugging PHP code",
              "homepage": "https://symfony.com",
              "support": {
@@ -1243,7 +1295,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -2986,20 +2988,20 @@
+@@ -2986,20 +2989,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1269,7 +1321,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -3050,7 +3052,7 @@
+@@ -3050,7 +3053,7 @@
              "description": "Provides tools that allow your application components to communicate with each other by dispatching events and listening to them",
              "homepage": "https://symfony.com",
              "support": {
@@ -1278,7 +1330,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -3070,7 +3072,7 @@
+@@ -3070,7 +3073,7 @@
                      "type": "tidelift"
                  }
              ],
@@ -1287,7 +1339,7 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "symfony/event-dispatcher-contracts",
-@@ -3150,16 +3152,16 @@
+@@ -3150,16 +3153,16 @@
          },
          {
              "name": "symfony/filesystem",
@@ -1308,7 +1360,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -3196,7 +3198,7 @@
+@@ -3196,7 +3199,7 @@
              "description": "Provides basic utilities for the filesystem",
              "homepage": "https://symfony.com",
              "support": {
@@ -1317,7 +1369,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -3216,20 +3218,20 @@
+@@ -3216,20 +3219,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1343,7 +1395,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -3264,7 +3266,7 @@
+@@ -3264,7 +3267,7 @@
              "description": "Finds files and directories via an intuitive fluent interface",
              "homepage": "https://symfony.com",
              "support": {
@@ -1352,7 +1404,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -3284,20 +3286,20 @@
+@@ -3284,20 +3287,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1378,7 +1430,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -3305,7 +3307,8 @@
+@@ -3305,7 +3308,8 @@
                  "php": ">=8.1"
              },
              "conflict": {
@@ -1388,7 +1440,7 @@ index 4883e55..58b701f 100644
              },
              "require-dev": {
                  "composer/composer": "^2.1",
-@@ -3336,7 +3339,7 @@
+@@ -3336,7 +3340,7 @@
              "description": "Composer plugin for Symfony",
              "support": {
                  "issues": "https://github.com/symfony/flex/issues",
@@ -1397,7 +1449,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -3356,20 +3359,20 @@
+@@ -3356,20 +3360,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1423,7 +1475,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -3437,7 +3440,7 @@
+@@ -3437,7 +3441,7 @@
              "description": "Allows to easily create, process and reuse HTML forms",
              "homepage": "https://symfony.com",
              "support": {
@@ -1432,7 +1484,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -3457,20 +3460,20 @@
+@@ -3457,20 +3461,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1458,7 +1510,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -3492,8 +3495,8 @@
+@@ -3492,8 +3496,8 @@
              },
              "conflict": {
                  "doctrine/persistence": "<1.3",
@@ -1469,7 +1521,7 @@ index 4883e55..58b701f 100644
                  "symfony/asset": "<6.4",
                  "symfony/asset-mapper": "<6.4",
                  "symfony/clock": "<6.4",
-@@ -3527,7 +3530,7 @@
+@@ -3527,7 +3531,7 @@
              "require-dev": {
                  "doctrine/persistence": "^1.3|^2|^3",
                  "dragonmantank/cron-expression": "^3.1",
@@ -1478,7 +1530,7 @@ index 4883e55..58b701f 100644
                  "seld/jsonlint": "^1.10",
                  "symfony/asset": "^6.4|^7.0",
                  "symfony/asset-mapper": "^6.4|^7.0",
-@@ -3595,7 +3598,7 @@
+@@ -3595,7 +3599,7 @@
              "description": "Provides a tight integration between Symfony components and the Symfony full-stack framework",
              "homepage": "https://symfony.com",
              "support": {
@@ -1487,7 +1539,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -3615,20 +3618,20 @@
+@@ -3615,20 +3619,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1513,7 +1565,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -3695,7 +3698,7 @@
+@@ -3695,7 +3699,7 @@
                  "http"
              ],
              "support": {
@@ -1522,7 +1574,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -3715,7 +3718,7 @@
+@@ -3715,7 +3719,7 @@
                      "type": "tidelift"
                  }
              ],
@@ -1531,7 +1583,7 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "symfony/http-client-contracts",
-@@ -3797,16 +3800,16 @@
+@@ -3797,16 +3801,16 @@
          },
          {
              "name": "symfony/http-foundation",
@@ -1552,7 +1604,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -3856,7 +3859,7 @@
+@@ -3856,7 +3860,7 @@
              "description": "Defines an object-oriented layer for the HTTP specification",
              "homepage": "https://symfony.com",
              "support": {
@@ -1561,7 +1613,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -3876,20 +3879,20 @@
+@@ -3876,20 +3880,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1587,7 +1639,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -3974,7 +3977,7 @@
+@@ -3974,7 +3978,7 @@
              "description": "Provides a structured process for converting a Request into a Response",
              "homepage": "https://symfony.com",
              "support": {
@@ -1596,7 +1648,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -3994,20 +3997,20 @@
+@@ -3994,20 +3998,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1622,7 +1674,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -4056,7 +4059,7 @@
+@@ -4056,7 +4060,7 @@
              "description": "Provides integration for Monolog with various Symfony components",
              "homepage": "https://symfony.com",
              "support": {
@@ -1631,7 +1683,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -4076,48 +4079,43 @@
+@@ -4076,48 +4080,43 @@
                      "type": "tidelift"
                  }
              ],
@@ -1698,7 +1750,7 @@ index 4883e55..58b701f 100644
              },
              "notification-url": "https://packagist.org/downloads/",
              "license": [
-@@ -4141,7 +4139,7 @@
+@@ -4141,7 +4140,7 @@
              ],
              "support": {
                  "issues": "https://github.com/symfony/monolog-bundle/issues",
@@ -1707,7 +1759,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -4152,25 +4150,29 @@
+@@ -4152,25 +4151,29 @@
                      "url": "https://github.com/fabpot",
                      "type": "github"
                  },
@@ -1742,7 +1794,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -4208,7 +4210,7 @@
+@@ -4208,7 +4211,7 @@
                  "options"
              ],
              "support": {
@@ -1751,7 +1803,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -4228,20 +4230,20 @@
+@@ -4228,20 +4231,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -1777,7 +1829,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -4284,7 +4286,7 @@
+@@ -4284,7 +4287,7 @@
                  "password"
              ],
              "support": {
@@ -1786,7 +1838,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -4295,25 +4297,29 @@
+@@ -4295,25 +4298,29 @@
                      "url": "https://github.com/fabpot",
                      "type": "github"
                  },
@@ -1805,42 +1857,42 @@ index 4883e55..58b701f 100644
          {
              "name": "symfony/polyfill-intl-grapheme",
 -            "version": "v1.33.0",
-+            "version": "v1.36.0",
++            "version": "v1.37.0",
              "source": {
                  "type": "git",
                  "url": "https://github.com/symfony/polyfill-intl-grapheme.git",
 -                "reference": "380872130d3a5dd3ace2f4010d95125fde5d5c70"
-+                "reference": "ad1b7b9092976d6c948b8a187cec9faaea9ec1df"
++                "reference": "4864388bfbd3001ce88e234fab652acd91fdc57e"
              },
              "dist": {
                  "type": "zip",
 -                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/380872130d3a5dd3ace2f4010d95125fde5d5c70",
 -                "reference": "380872130d3a5dd3ace2f4010d95125fde5d5c70",
-+                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/ad1b7b9092976d6c948b8a187cec9faaea9ec1df",
-+                "reference": "ad1b7b9092976d6c948b8a187cec9faaea9ec1df",
++                "url": "https://api.github.com/repos/symfony/polyfill-intl-grapheme/zipball/4864388bfbd3001ce88e234fab652acd91fdc57e",
++                "reference": "4864388bfbd3001ce88e234fab652acd91fdc57e",
                  "shasum": ""
              },
              "require": {
-@@ -4362,7 +4368,7 @@
+@@ -4362,7 +4369,7 @@
                  "shim"
              ],
              "support": {
 -                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.33.0"
-+                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.36.0"
++                "source": "https://github.com/symfony/polyfill-intl-grapheme/tree/v1.37.0"
              },
              "funding": [
                  {
-@@ -4382,20 +4388,20 @@
+@@ -4382,20 +4389,20 @@
                      "type": "tidelift"
                  }
              ],
 -            "time": "2025-06-27T09:58:17+00:00"
-+            "time": "2026-04-10T16:19:22+00:00"
++            "time": "2026-04-26T13:13:48+00:00"
          },
          {
              "name": "symfony/polyfill-intl-icu",
 -            "version": "v1.33.0",
-+            "version": "v1.36.0",
++            "version": "v1.37.0",
              "source": {
                  "type": "git",
                  "url": "https://github.com/symfony/polyfill-intl-icu.git",
@@ -1856,16 +1908,16 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -4450,7 +4456,7 @@
+@@ -4450,7 +4457,7 @@
                  "shim"
              ],
              "support": {
 -                "source": "https://github.com/symfony/polyfill-intl-icu/tree/v1.33.0"
-+                "source": "https://github.com/symfony/polyfill-intl-icu/tree/v1.36.0"
++                "source": "https://github.com/symfony/polyfill-intl-icu/tree/v1.37.0"
              },
              "funding": [
                  {
-@@ -4470,11 +4476,11 @@
+@@ -4470,11 +4477,11 @@
                      "type": "tidelift"
                  }
              ],
@@ -1875,25 +1927,25 @@ index 4883e55..58b701f 100644
          {
              "name": "symfony/polyfill-intl-normalizer",
 -            "version": "v1.33.0",
-+            "version": "v1.36.0",
++            "version": "v1.37.0",
              "source": {
                  "type": "git",
                  "url": "https://github.com/symfony/polyfill-intl-normalizer.git",
-@@ -4535,7 +4541,7 @@
+@@ -4535,7 +4542,7 @@
                  "shim"
              ],
              "support": {
 -                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.33.0"
-+                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.36.0"
++                "source": "https://github.com/symfony/polyfill-intl-normalizer/tree/v1.37.0"
              },
              "funding": [
                  {
-@@ -4559,16 +4565,16 @@
+@@ -4559,16 +4566,16 @@
          },
          {
              "name": "symfony/polyfill-mbstring",
 -            "version": "v1.33.0",
-+            "version": "v1.36.0",
++            "version": "v1.37.0",
              "source": {
                  "type": "git",
                  "url": "https://github.com/symfony/polyfill-mbstring.git",
@@ -1909,46 +1961,11 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -4620,7 +4626,7 @@
+@@ -4620,87 +4627,7 @@
                  "shim"
              ],
              "support": {
 -                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.33.0"
-+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.36.0"
-             },
-             "funding": [
-                 {
-@@ -4640,20 +4646,20 @@
-                     "type": "tidelift"
-                 }
-             ],
--            "time": "2024-12-23T08:48:59+00:00"
-+            "time": "2026-04-10T17:25:58+00:00"
-         },
-         {
-             "name": "symfony/polyfill-php83",
--            "version": "v1.33.0",
-+            "version": "v1.36.0",
-             "source": {
-                 "type": "git",
-                 "url": "https://github.com/symfony/polyfill-php83.git",
--                "reference": "17f6f9a6b1735c0f163024d959f700cfbc5155e5"
-+                "reference": "3600c2cb22399e25bb226e4a135ce91eeb2a6149"
-             },
-             "dist": {
-                 "type": "zip",
--                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/17f6f9a6b1735c0f163024d959f700cfbc5155e5",
--                "reference": "17f6f9a6b1735c0f163024d959f700cfbc5155e5",
-+                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/3600c2cb22399e25bb226e4a135ce91eeb2a6149",
-+                "reference": "3600c2cb22399e25bb226e4a135ce91eeb2a6149",
-                 "shasum": ""
-             },
-             "require": {
-@@ -4700,87 +4706,7 @@
-                 "shim"
-             ],
-             "support": {
--                "source": "https://github.com/symfony/polyfill-php83/tree/v1.33.0"
 -            },
 -            "funding": [
 -                {
@@ -1968,6 +1985,75 @@ index 4883e55..58b701f 100644
 -                    "type": "tidelift"
 -                }
 -            ],
+-            "time": "2024-12-23T08:48:59+00:00"
+-        },
+-        {
+-            "name": "symfony/polyfill-php83",
+-            "version": "v1.33.0",
+-            "source": {
+-                "type": "git",
+-                "url": "https://github.com/symfony/polyfill-php83.git",
+-                "reference": "17f6f9a6b1735c0f163024d959f700cfbc5155e5"
+-            },
+-            "dist": {
+-                "type": "zip",
+-                "url": "https://api.github.com/repos/symfony/polyfill-php83/zipball/17f6f9a6b1735c0f163024d959f700cfbc5155e5",
+-                "reference": "17f6f9a6b1735c0f163024d959f700cfbc5155e5",
+-                "shasum": ""
+-            },
+-            "require": {
+-                "php": ">=7.2"
+-            },
+-            "type": "library",
+-            "extra": {
+-                "thanks": {
+-                    "url": "https://github.com/symfony/polyfill",
+-                    "name": "symfony/polyfill"
+-                }
+-            },
+-            "autoload": {
+-                "files": [
+-                    "bootstrap.php"
+-                ],
+-                "psr-4": {
+-                    "Symfony\\Polyfill\\Php83\\": ""
+-                },
+-                "classmap": [
+-                    "Resources/stubs"
+-                ]
+-            },
+-            "notification-url": "https://packagist.org/downloads/",
+-            "license": [
+-                "MIT"
+-            ],
+-            "authors": [
+-                {
+-                    "name": "Nicolas Grekas",
+-                    "email": "p@tchwork.com"
+-                },
+-                {
+-                    "name": "Symfony Community",
+-                    "homepage": "https://symfony.com/contributors"
+-                }
+-            ],
+-            "description": "Symfony polyfill backporting some PHP 8.3+ features to lower PHP versions",
+-            "homepage": "https://symfony.com",
+-            "keywords": [
+-                "compatibility",
+-                "polyfill",
+-                "portable",
+-                "shim"
+-            ],
+-            "support": {
+-                "source": "https://github.com/symfony/polyfill-php83/tree/v1.33.0"
++                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.37.0"
+             },
+             "funding": [
+                 {
+@@ -4720,100 +4647,20 @@
+                     "type": "tidelift"
+                 }
+             ],
 -            "time": "2025-07-08T02:45:35+00:00"
 -        },
 -        {
@@ -2029,14 +2115,25 @@ index 4883e55..58b701f 100644
 -            ],
 -            "support": {
 -                "source": "https://github.com/symfony/polyfill-php84/tree/v1.33.0"
-+                "source": "https://github.com/symfony/polyfill-php83/tree/v1.36.0"
-             },
-             "funding": [
-                 {
-@@ -4800,20 +4726,20 @@
-                     "type": "tidelift"
-                 }
-             ],
+-            },
+-            "funding": [
+-                {
+-                    "url": "https://symfony.com/sponsor",
+-                    "type": "custom"
+-                },
+-                {
+-                    "url": "https://github.com/fabpot",
+-                    "type": "github"
+-                },
+-                {
+-                    "url": "https://github.com/nicolas-grekas",
+-                    "type": "github"
+-                },
+-                {
+-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+-                    "type": "tidelift"
+-                }
+-            ],
 -            "time": "2025-06-24T13:30:11+00:00"
 +            "time": "2026-04-10T17:25:58+00:00"
          },
@@ -2059,7 +2156,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -4845,7 +4771,7 @@
+@@ -4845,7 +4692,7 @@
              "description": "Executes commands in sub-processes",
              "homepage": "https://symfony.com",
              "support": {
@@ -2068,7 +2165,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -4865,25 +4791,25 @@
+@@ -4865,25 +4712,25 @@
                      "type": "tidelift"
                  }
              ],
@@ -2100,7 +2197,7 @@ index 4883e55..58b701f 100644
              },
              "require-dev": {
                  "symfony/cache": "^6.4|^7.0"
-@@ -4925,7 +4851,7 @@
+@@ -4925,7 +4772,7 @@
                  "reflection"
              ],
              "support": {
@@ -2109,7 +2206,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -4945,30 +4871,30 @@
+@@ -4945,30 +4792,30 @@
                      "type": "tidelift"
                  }
              ],
@@ -2147,7 +2244,7 @@ index 4883e55..58b701f 100644
                  "phpdocumentor/type-resolver": "<1.5.1",
                  "symfony/cache": "<6.4",
                  "symfony/dependency-injection": "<6.4",
-@@ -5015,7 +4941,7 @@
+@@ -5015,7 +4862,7 @@
                  "validator"
              ],
              "support": {
@@ -2156,7 +2253,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5035,20 +4961,20 @@
+@@ -5035,20 +4882,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2182,7 +2279,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5100,7 +5026,7 @@
+@@ -5100,7 +4947,7 @@
                  "url"
              ],
              "support": {
@@ -2191,7 +2288,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5120,20 +5046,20 @@
+@@ -5120,20 +4967,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2217,7 +2314,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5183,7 +5109,7 @@
+@@ -5183,7 +5030,7 @@
                  "runtime"
              ],
              "support": {
@@ -2226,7 +2323,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5203,20 +5129,20 @@
+@@ -5203,20 +5050,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2252,7 +2349,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5274,7 +5200,7 @@
+@@ -5274,7 +5121,7 @@
              "description": "Symfony Security Component - Core Library",
              "homepage": "https://symfony.com",
              "support": {
@@ -2261,7 +2358,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5294,20 +5220,20 @@
+@@ -5294,20 +5141,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2287,7 +2384,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5348,7 +5274,7 @@
+@@ -5348,7 +5195,7 @@
              "description": "Symfony Security Component - CSRF Library",
              "homepage": "https://symfony.com",
              "support": {
@@ -2296,7 +2393,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5359,25 +5285,29 @@
+@@ -5359,25 +5206,29 @@
                      "url": "https://github.com/fabpot",
                      "type": "github"
                  },
@@ -2331,7 +2428,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5387,8 +5317,8 @@
+@@ -5387,8 +5238,8 @@
                  "symfony/polyfill-php84": "^1.30"
              },
              "conflict": {
@@ -2342,7 +2439,7 @@ index 4883e55..58b701f 100644
                  "symfony/dependency-injection": "<6.4",
                  "symfony/property-access": "<6.4",
                  "symfony/property-info": "<6.4",
-@@ -5397,7 +5327,7 @@
+@@ -5397,7 +5248,7 @@
                  "symfony/yaml": "<6.4"
              },
              "require-dev": {
@@ -2351,7 +2448,7 @@ index 4883e55..58b701f 100644
                  "phpstan/phpdoc-parser": "^1.0|^2.0",
                  "seld/jsonlint": "^1.10",
                  "symfony/cache": "^6.4|^7.0",
-@@ -5447,7 +5377,7 @@
+@@ -5447,7 +5298,7 @@
              "description": "Handles serializing and deserializing data structures, including object graphs, into array structures or other formats like XML and JSON.",
              "homepage": "https://symfony.com",
              "support": {
@@ -2360,7 +2457,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5467,20 +5397,20 @@
+@@ -5467,20 +5318,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2386,7 +2483,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5534,7 +5464,7 @@
+@@ -5534,7 +5385,7 @@
                  "standards"
              ],
              "support": {
@@ -2395,7 +2492,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5545,25 +5475,29 @@
+@@ -5545,25 +5396,29 @@
                      "url": "https://github.com/fabpot",
                      "type": "github"
                  },
@@ -2430,7 +2527,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5603,7 +5537,7 @@
+@@ -5603,7 +5458,7 @@
                  "symfony-ux"
              ],
              "support": {
@@ -2439,7 +2536,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5623,20 +5557,20 @@
+@@ -5623,20 +5478,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2465,7 +2562,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5693,7 +5627,7 @@
+@@ -5693,7 +5548,7 @@
                  "utf8"
              ],
              "support": {
@@ -2474,7 +2571,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5713,20 +5647,20 @@
+@@ -5713,20 +5568,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2500,7 +2597,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5793,7 +5727,7 @@
+@@ -5793,7 +5648,7 @@
              "description": "Provides tools to internationalize your application",
              "homepage": "https://symfony.com",
              "support": {
@@ -2509,7 +2606,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5813,20 +5747,20 @@
+@@ -5813,20 +5668,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2535,7 +2632,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5875,7 +5809,7 @@
+@@ -5875,7 +5730,7 @@
                  "standards"
              ],
              "support": {
@@ -2544,7 +2641,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -5886,25 +5820,29 @@
+@@ -5886,25 +5741,29 @@
                      "url": "https://github.com/fabpot",
                      "type": "github"
                  },
@@ -2579,7 +2676,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -5914,10 +5852,10 @@
+@@ -5914,10 +5773,10 @@
                  "twig/twig": "^3.21"
              },
              "conflict": {
@@ -2593,7 +2690,7 @@ index 4883e55..58b701f 100644
                  "symfony/http-foundation": "<6.4",
                  "symfony/http-kernel": "<6.4",
                  "symfony/mime": "<6.4",
-@@ -5928,7 +5866,7 @@
+@@ -5928,7 +5787,7 @@
              "require-dev": {
                  "egulias/email-validator": "^2.1.10|^3|^4",
                  "league/html-to-markdown": "^5.0",
@@ -2602,7 +2699,7 @@ index 4883e55..58b701f 100644
                  "symfony/asset": "^6.4|^7.0",
                  "symfony/asset-mapper": "^6.4|^7.0",
                  "symfony/console": "^6.4|^7.0",
-@@ -5936,7 +5874,7 @@
+@@ -5936,7 +5795,7 @@
                  "symfony/emoji": "^7.1",
                  "symfony/expression-language": "^6.4|^7.0",
                  "symfony/finder": "^6.4|^7.0",
@@ -2611,7 +2708,7 @@ index 4883e55..58b701f 100644
                  "symfony/html-sanitizer": "^6.4|^7.0",
                  "symfony/http-foundation": "^7.3",
                  "symfony/http-kernel": "^6.4|^7.0",
-@@ -5986,7 +5924,7 @@
+@@ -5986,7 +5845,7 @@
              "description": "Provides integration for Twig with various Symfony components",
              "homepage": "https://symfony.com",
              "support": {
@@ -2620,7 +2717,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -6006,20 +5944,20 @@
+@@ -6006,20 +5865,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2646,7 +2743,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -6074,7 +6012,7 @@
+@@ -6074,7 +5933,7 @@
              "description": "Provides a tight integration of Twig into the Symfony full-stack framework",
              "homepage": "https://symfony.com",
              "support": {
@@ -2655,7 +2752,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -6094,20 +6032,20 @@
+@@ -6094,20 +5953,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2681,7 +2778,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -6157,7 +6095,7 @@
+@@ -6157,7 +6016,7 @@
                  "type"
              ],
              "support": {
@@ -2690,7 +2787,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -6177,32 +6115,32 @@
+@@ -6177,32 +6036,32 @@
                      "type": "tidelift"
                  }
              ],
@@ -2730,7 +2827,7 @@ index 4883e55..58b701f 100644
                  "doctrine/orm": "^2.8|^3.0",
                  "php-webdriver/webdriver": "^1.15",
                  "phpstan/phpstan": "^2.1.17",
-@@ -6211,7 +6149,7 @@
+@@ -6211,7 +6070,7 @@
                  "symfony/expression-language": "^5.4|^6.0|^7.0|^8.0",
                  "symfony/form": "^5.4|^6.0|^7.0|^8.0",
                  "symfony/framework-bundle": "^6.4|^7.0|^8.0",
@@ -2739,7 +2836,7 @@ index 4883e55..58b701f 100644
                  "symfony/messenger": "^5.4|^6.0|^7.0|^8.0",
                  "symfony/panther": "^2.2",
                  "symfony/phpunit-bridge": "^5.4|^6.0|^7.0|^8.0",
-@@ -6220,7 +6158,7 @@
+@@ -6220,7 +6079,7 @@
                  "symfony/security-core": "^5.4|^6.0|^7.0|^8.0",
                  "symfony/stopwatch": "^5.4|^6.0|^7.0|^8.0",
                  "symfony/twig-bundle": "^6.4|^7.0|^8.0",
@@ -2748,7 +2845,7 @@ index 4883e55..58b701f 100644
                  "symfony/web-profiler-bundle": "^5.4|^6.0|^7.0|^8.0"
              },
              "type": "symfony-bundle",
-@@ -6260,7 +6198,7 @@
+@@ -6260,7 +6119,7 @@
                  "turbo-stream"
              ],
              "support": {
@@ -2757,7 +2854,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -6280,20 +6218,20 @@
+@@ -6280,20 +6139,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2783,7 +2880,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -6362,7 +6300,7 @@
+@@ -6362,7 +6221,7 @@
              "description": "Provides tools to validate values",
              "homepage": "https://symfony.com",
              "support": {
@@ -2792,7 +2889,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -6382,20 +6320,20 @@
+@@ -6382,20 +6241,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2818,7 +2915,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -6449,7 +6387,7 @@
+@@ -6449,7 +6308,7 @@
                  "dump"
              ],
              "support": {
@@ -2827,7 +2924,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -6469,7 +6407,7 @@
+@@ -6469,7 +6328,7 @@
                      "type": "tidelift"
                  }
              ],
@@ -2836,7 +2933,7 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "symfony/var-exporter",
-@@ -6554,16 +6492,16 @@
+@@ -6554,16 +6413,16 @@
          },
          {
              "name": "symfony/yaml",
@@ -2857,7 +2954,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -6606,7 +6544,7 @@
+@@ -6606,7 +6465,7 @@
              "description": "Loads and dumps YAML files",
              "homepage": "https://symfony.com",
              "support": {
@@ -2866,7 +2963,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -6626,7 +6564,7 @@
+@@ -6626,7 +6485,7 @@
                      "type": "tidelift"
                  }
              ],
@@ -2875,7 +2972,7 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "symfonycasts/tailwind-bundle",
-@@ -6686,22 +6624,22 @@
+@@ -6686,22 +6545,22 @@
          },
          {
              "name": "twig/extra-bundle",
@@ -2904,7 +3001,7 @@ index 4883e55..58b701f 100644
                  "twig/twig": "^3.2|^4.0"
              },
              "require-dev": {
-@@ -6744,7 +6682,7 @@
+@@ -6744,7 +6603,7 @@
                  "twig"
              ],
              "support": {
@@ -2913,7 +3010,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -6756,20 +6694,20 @@
+@@ -6756,20 +6615,20 @@
                      "type": "tidelift"
                  }
              ],
@@ -2939,7 +3036,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -6779,7 +6717,8 @@
+@@ -6779,7 +6638,8 @@
                  "symfony/polyfill-mbstring": "^1.3"
              },
              "require-dev": {
@@ -2949,7 +3046,7 @@ index 4883e55..58b701f 100644
                  "psr/container": "^1.0|^2.0",
                  "symfony/phpunit-bridge": "^5.4.9|^6.4|^7.0"
              },
-@@ -6823,7 +6762,7 @@
+@@ -6823,7 +6683,7 @@
              ],
              "support": {
                  "issues": "https://github.com/twigphp/Twig/issues",
@@ -2958,7 +3055,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -6835,27 +6774,27 @@
+@@ -6835,27 +6695,27 @@
                      "type": "tidelift"
                  }
              ],
@@ -2992,7 +3089,7 @@ index 4883e55..58b701f 100644
              },
              "suggest": {
                  "ext-intl": "",
-@@ -6865,7 +6804,7 @@
+@@ -6865,7 +6725,7 @@
              "type": "library",
              "extra": {
                  "branch-alias": {
@@ -3001,7 +3098,7 @@ index 4883e55..58b701f 100644
                  }
              },
              "autoload": {
-@@ -6881,6 +6820,10 @@
+@@ -6881,6 +6741,10 @@
                  {
                      "name": "Bernhard Schussek",
                      "email": "bschussek@gmail.com"
@@ -3012,7 +3109,7 @@ index 4883e55..58b701f 100644
                  }
              ],
              "description": "Assertions to validate method input/output with nice error messages.",
-@@ -6891,9 +6834,9 @@
+@@ -6891,9 +6755,9 @@
              ],
              "support": {
                  "issues": "https://github.com/webmozarts/assert/issues",
@@ -3024,7 +3121,7 @@ index 4883e55..58b701f 100644
          }
      ],
      "packages-dev": [
-@@ -6962,16 +6905,16 @@
+@@ -6962,16 +6826,16 @@
          },
          {
              "name": "nikic/php-parser",
@@ -3045,7 +3142,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -7014,9 +6957,9 @@
+@@ -7014,9 +6878,9 @@
              ],
              "support": {
                  "issues": "https://github.com/nikic/PHP-Parser/issues",
@@ -3057,7 +3154,7 @@ index 4883e55..58b701f 100644
          },
          {
              "name": "symfony/debug-bundle",
-@@ -7095,31 +7038,32 @@
+@@ -7095,31 +6959,32 @@
          },
          {
              "name": "symfony/maker-bundle",
@@ -3102,7 +3199,7 @@ index 4883e55..58b701f 100644
              },
              "conflict": {
                  "doctrine/doctrine-bundle": "<2.10",
-@@ -7127,13 +7071,14 @@
+@@ -7127,13 +6992,14 @@
              },
              "require-dev": {
                  "composer/semver": "^3.0",
@@ -3123,16 +3220,96 @@ index 4883e55..58b701f 100644
                  "twig/twig": "^3.0|^4.x-dev"
              },
              "type": "symfony-bundle",
-@@ -7168,7 +7113,7 @@
+@@ -7168,7 +7034,87 @@
              ],
              "support": {
                  "issues": "https://github.com/symfony/maker-bundle/issues",
 -                "source": "https://github.com/symfony/maker-bundle/tree/v1.64.0"
 +                "source": "https://github.com/symfony/maker-bundle/tree/v1.67.0"
++            },
++            "funding": [
++                {
++                    "url": "https://symfony.com/sponsor",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://github.com/fabpot",
++                    "type": "github"
++                },
++                {
++                    "url": "https://github.com/nicolas-grekas",
++                    "type": "github"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2026-03-18T13:39:06+00:00"
++        },
++        {
++            "name": "symfony/polyfill-php85",
++            "version": "v1.37.0",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/polyfill-php85.git",
++                "reference": "fcfa4973a9917cef23f2e38774da74a2b7d115ee"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/polyfill-php85/zipball/fcfa4973a9917cef23f2e38774da74a2b7d115ee",
++                "reference": "fcfa4973a9917cef23f2e38774da74a2b7d115ee",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=7.2"
++            },
++            "type": "library",
++            "extra": {
++                "thanks": {
++                    "url": "https://github.com/symfony/polyfill",
++                    "name": "symfony/polyfill"
++                }
++            },
++            "autoload": {
++                "files": [
++                    "bootstrap.php"
++                ],
++                "psr-4": {
++                    "Symfony\\Polyfill\\Php85\\": ""
++                },
++                "classmap": [
++                    "Resources/stubs"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Nicolas Grekas",
++                    "email": "p@tchwork.com"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Symfony polyfill backporting some PHP 8.5+ features to lower PHP versions",
++            "homepage": "https://symfony.com",
++            "keywords": [
++                "compatibility",
++                "polyfill",
++                "portable",
++                "shim"
++            ],
++            "support": {
++                "source": "https://github.com/symfony/polyfill-php85/tree/v1.37.0"
              },
              "funding": [
                  {
-@@ -7179,12 +7124,16 @@
+@@ -7179,12 +7125,16 @@
                      "url": "https://github.com/fabpot",
                      "type": "github"
                  },
@@ -3146,11 +3323,11 @@ index 4883e55..58b701f 100644
                  }
              ],
 -            "time": "2025-06-23T16:12:08+00:00"
-+            "time": "2026-03-18T13:39:06+00:00"
++            "time": "2026-04-26T13:10:57+00:00"
          },
          {
              "name": "symfony/stopwatch",
-@@ -7250,16 +7199,16 @@
+@@ -7250,16 +7200,16 @@
          },
          {
              "name": "symfony/web-profiler-bundle",
@@ -3171,7 +3348,7 @@ index 4883e55..58b701f 100644
                  "shasum": ""
              },
              "require": {
-@@ -7315,7 +7264,7 @@
+@@ -7315,7 +7265,7 @@
                  "dev"
              ],
              "support": {
@@ -3180,7 +3357,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -7335,24 +7284,24 @@
+@@ -7335,24 +7285,24 @@
                      "type": "tidelift"
                  }
              ],
@@ -3211,7 +3388,7 @@ index 4883e55..58b701f 100644
                  "symfony/polyfill-php81": "^1.23",
                  "symfony/var-exporter": "^5.4|^6.0|^7.0|^8.0"
              },
-@@ -7386,7 +7335,7 @@
+@@ -7386,7 +7336,7 @@
              ],
              "support": {
                  "issues": "https://github.com/zenstruck/assert/issues",
@@ -3220,7 +3397,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -7398,56 +7347,57 @@
+@@ -7398,56 +7348,57 @@
                      "type": "github"
                  }
              ],
@@ -3291,7 +3468,7 @@ index 4883e55..58b701f 100644
                  "symfony/routing": "^6.4|^7.0|^8.0",
                  "symfony/runtime": "^6.4|^7.0|^8.0",
                  "symfony/translation-contracts": "^3.4",
-@@ -7461,6 +7411,9 @@
+@@ -7461,6 +7412,9 @@
                  "psalm": {
                      "pluginClass": "Zenstruck\\Foundry\\Psalm\\FoundryPlugin"
                  },
@@ -3301,7 +3478,7 @@ index 4883e55..58b701f 100644
                  "bamarni-bin": {
                      "bin-links": true,
                      "forward-command": false,
-@@ -7506,7 +7459,7 @@
+@@ -7506,7 +7460,7 @@
              ],
              "support": {
                  "issues": "https://github.com/zenstruck/foundry/issues",
@@ -3310,7 +3487,7 @@ index 4883e55..58b701f 100644
              },
              "funding": [
                  {
-@@ -7518,7 +7471,7 @@
+@@ -7518,7 +7472,7 @@
                      "type": "github"
                  }
              ],
@@ -3319,7 +3496,7 @@ index 4883e55..58b701f 100644
          }
      ],
      "aliases": [],
-@@ -7527,13 +7480,13 @@
+@@ -7527,13 +7481,13 @@
      "prefer-stable": true,
      "prefer-lowest": false,
      "platform": {

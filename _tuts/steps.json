@@ -9,7 +9,12 @@
             "id": "1-update-composer",
             "name": "1. update composer",
             "description": null
+        },
+        {
+            "id": "2-symfony-74",
+            "name": "2. symfony 74",
+            "description": null
         }
     ],
-    "sha": "4a720038523fbdefd897f4dc19bc817978d6ead4"
+    "sha": "14e2b65bacbb4b7033280b684263cd1a16e4c611"
 }
