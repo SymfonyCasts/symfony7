@@ -3,14 +3,14 @@ chapters:
         tutsFirstStep: start
         tutsLastStep: start
     symfony-74:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: start
+        tutsLastStep: start
     doctrine:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: null
+        tutsLastStep: null
     deprecations:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: null
+        tutsLastStep: null
     symfony-80:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: null
+        tutsLastStep: null
