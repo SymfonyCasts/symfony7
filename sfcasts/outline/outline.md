@@ -40,3 +40,34 @@
         - config/routes.yaml: simplified config
         - `git commit -a --amend`
 - App works!
+
+## Upgrading Doctrine & Native Lazy Objects
+
+- Refresher on lazy objects
+    - Open `StarshipPart` - Starship is many to one
+    - `symfony console make:controller`: Lazy
+    - Open and inject `StarshipPartRepository $repository`
+    - `$part = $repository->find(1); dump($part)`
+    - visit `/lazy`, 1 db query, check dump and proxy
+    - `dump($part->getStarship()->getName(), $part)`, 2 db queries, check dump and proxy
+    - PHP 8.4 supports native lazy objects: https://www.php.net/manual/en/language.oop5.lazy-objects.php
+    - Upgrading to DoctrineBundle 3 will enable this!
+- In `composer.json`, `doctrine-bundle` to `^3.0`
+- `symfony composer update`
+    - error, need dbal 4+
+        - Previously, the DoctrineBundle didn't support dbal 4, so we locked at 3
+        - remove this requirement entirely
+- `symfony composer update`
+    - Update happened but we got an error
+    - we could fix manually, but I believe the recipe will contain this change
+- `git status`
+- `git add .`
+- `git commit -m "upgrade doctrine-bundle"`
+- `symfony composer recipe:update`
+    - choose doctrine bundle
+- Success!
+- `git status` and check changes in `doctrine.yaml`
+- refresh `/lazy` still works
+- in LazyController, dump($part) so we can see the lazy object
+- We can now make all our entities final!
+- Pages still work
