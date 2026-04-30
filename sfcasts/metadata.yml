@@ -6,8 +6,8 @@ chapters:
         tutsFirstStep: start
         tutsLastStep: start
     doctrine:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: start
+        tutsLastStep: start
     deprecations:
         tutsFirstStep: null
         tutsLastStep: null
