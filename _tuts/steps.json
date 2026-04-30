@@ -14,7 +14,32 @@
             "id": "2-symfony-74",
             "name": "2. symfony 74",
             "description": null
+        },
+        {
+            "id": "3-make-controller",
+            "name": "3. make controller",
+            "description": null
+        },
+        {
+            "id": "3-dump-starship-name",
+            "name": "3. dump starship name",
+            "description": null
+        },
+        {
+            "id": "3-upgrade-doctrine",
+            "name": "3. upgrade doctrine",
+            "description": null
+        },
+        {
+            "id": "3-upgrade-doctrine-recipe",
+            "name": "3. upgrade doctrine recipe",
+            "description": null
+        },
+        {
+            "id": "3-final-entities",
+            "name": "3. final entities",
+            "description": null
         }
     ],
-    "sha": "14e2b65bacbb4b7033280b684263cd1a16e4c611"
+    "sha": "08f95f38bc553e00e3b80accda84c80ea83b01f9"
 }

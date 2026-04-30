@@ -1,0 +1,13 @@
+diff --git a/src/Controller/LazyController.php b/src/Controller/LazyController.php
+index 752a649..0141463 100644
+--- a/src/Controller/LazyController.php
++++ b/src/Controller/LazyController.php
+@@ -14,7 +14,7 @@ final class LazyController extends AbstractController
+     {
+         $part = $repository->find(1);
+ 
+-        dump($part);
++        dump($part->getStarship()->getName(), $part);
+ 
+         return $this->render('lazy/index.html.twig', [
+             'controller_name' => 'LazyController',
