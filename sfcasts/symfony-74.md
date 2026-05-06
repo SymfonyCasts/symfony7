@@ -10,12 +10,22 @@ If you're using PhpStorm, go to edit... find... replace. Search for
 `7.3.*` and replace with `7.4.*`. We can see we have 19 occurences to
 replace. Hit replace all... and... boom!
 
+[[[ code('d2578f21c8') ]]]
+
 Let's just do a double check to make sure we didn't miss any. Under `require`...
-yep, looks good. Now down to `require-dev`... yep, looks good there too. The
+yep, looks good. Now down to `require-dev`... 
+
+[[[ code('3f1507918a') ]]]
+
+Yep, looks good there too. The
 `maker-bundle` has a different versioning strategy than the Symfony
 core components and bundles. That's why it looks different.
 
-Notice under the `extra` section, we have this `symfony` `require` config. This tells
+Notice under the `extra` section, we have this `symfony` `require` config.
+
+[[[ code('fc6afcd1be') ]]]
+
+This tells
 Symfony Flex which version of Symfony to use when installing Symfony components.
 Some of our required Symfony components require other Symfony components as dependencies.
 These are called *transitive* dependencies (fancy word!), and can allow a

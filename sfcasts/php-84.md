@@ -29,18 +29,26 @@ If you've done these major upgrades before, you might be thinking we should upgr
 to 7.4, the last Symfony 7 version. We will, but I like to take small steps to avoid
 getting overwhelmed with too many changes at once.
 
-In your IDE, open `composer.json`. In the `require` section, change `>=8.3` to `>=8.4`.
+In your IDE, open `composer.json`. In the `require` section, change `>=8.3` to `>=8.4`:
+
+[[[ code('4426dcd419') ]]]
+
 This tells composer at least PHP 8.4 is required for this project.
 
 Scroll down and find the `config.platform.php` section. This is what the Symfony CLI uses
 to determine which local version of PHP to use when you run `symfony console` or `symfony php`.
-Change this to `8.4`.
+Change this to `8.4`:
+
+[[[ code('d1ae6bb136') ]]]
 
 This step isn't required, but scroll down to the `replace` section. This is a list of packages
 that composer will ignore when installing dependencies. You can see it's all *polyfill* packages.
 These are packages that provide features from newer versions of PHP to older versions. Since we're
-on PHP 8.4, we can add the polyfill packages for 8.3 and 8.4 to this list. Saves a few
-bytes of disk space and a few milliseconds of install time...
+on PHP 8.4, we can add the polyfill packages for 8.3 and 8.4 to this list:
+
+[[[ code('94ddfe93aa') ]]]
+
+Saves a few bytes of disk space and a few milliseconds of install time...
 
 Over in our terminal, let's confirm we're using PHP 8.4 now. Run:
 
@@ -93,7 +101,9 @@ Looks like we have 3. This first one is a PHP deprecation. The `addDroid()` meth
 first.
 
 Open `src/Entity/Starship.php` and scroll down to the `addDroid()` method. Ahh, even 
-PhpStorm is warning me about this. The fix is simple, add a `?` before `DateTimeImmutable`.
+PhpStorm is warning me about this. The fix is simple, add a `?` before `DateTimeImmutable`:
+
+[[[ code('2491d03716') ]]]
 
 Back to the browser, refresh the homepage, and... still 3 deprecations... It didn't get
 cleared. Sometimes when you fix deprecations, you need to clear the Symfony cache manually
@@ -203,7 +213,9 @@ Now refresh the homepage. 2 deprecations. The Doctrine autoloader one is still h
 ignore that until we upgrade Doctrine. The Foundry one is still here too, so the recipe update didn't
 fix it. Let's fix it ourselves. It's saying this `enable_auto_refresh_with_lazy_objects` config
 is going to be forced to `true` in 3.0, so let's set it to `true` now. Copy the option and open 
-`config/packages/zenstruck_foundry.yaml`. Under `zenstruck_foundry`, paste, and set to `true`.
+`config/packages/zenstruck_foundry.yaml`. Under `zenstruck_foundry`, paste, and set to `true`:
+
+[[[ code('fe8d185e21') ]]]
 
 Totally an aside, but if you're curious what this weird `&dev` and `*dev` syntax is, this is a YAML
 anchor and alias. The `&dev` marks this config as an anchor named `dev`, and then the `*dev` is an alias that

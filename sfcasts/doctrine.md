@@ -22,7 +22,9 @@ Name it `LazyController`, and no need for tests.
 Open the new controller in `src/Controller/LazyController.php`. Ok, we have
 this `index()` method whose route is set to `/lazy`. Inject
 `StarshipPartRepository $repository` into it. Then, grab the first part from the
-repository with `$part = $repository->find(1)`. Dump it with `dump($part)`.
+repository with `$part = $repository->find(1)`. Dump it with `dump($part)`:
+
+[[[ code('6978bbd0ba') ]]]
 
 Now, head back to our app and manually navigate to the `/lazy` url.
 
@@ -38,7 +40,9 @@ accessing a property of the `Starship` does Doctrine trigger a second query
 to fetch the rest.
 
 Let's trigger this second query! In `LazyController::index()`, add
-`$part->getStarship()->getName()` as the first argument to the `dump()`.
+`$part->getStarship()->getName()` as the first argument to the `dump()`:
+
+[[[ code('1a9adbf178') ]]]
 
 Refresh the `/lazy` page... There are now two queries. The first one fetches the `StarshipPart`,
 and the second one fetches the `Starship` because we accessed its name.
@@ -131,7 +135,10 @@ Doctrine generated files for the proxy classes to improve performance.
 None of that is needed anymore with *native* lazy objects!
 
 Ok, let's see what our lazy objects look like now. First, head back to
-`LazyController:index()` and remove the first argument from the `dump()`.
+`LazyController:index()` and remove the first argument from the `dump()`:
+
+[[[ code('5f1058052a') ]]]
+
 This should be dumping the part with a starship instance that isn't
 fully loaded.
 
@@ -143,6 +150,9 @@ But look inside! All the properties are unset except for the ID. This looks
 just like we saw in the old proxy class. This is *native* lazy objects in action!
 
 Back in `LazyController::index()`, re-add the `$part->getStarship()->getName()` to the `dump()`...
+
+[[[ code('5b465d6980') ]]]
+
 and refresh the `/lazy` page again. Two queries, and if we look at the `starship` property in the dump
 panel. Still just our normal `Starship` entity... and if we expand it... all its properties
 are loaded!
@@ -157,8 +167,21 @@ super life-changing, but it's nice we don't need a hacky workaround anymore.
 
 So... let's mark our entities as final!
 
-`src/Entity/Droid.php`: final. `Starship.php`: final. `StarshipDroid.php`: final, and
-*finally* `StarshipPart.php`: final.
+`src/Entity/Droid.php`: final:
+
+[[[ code('81207aef19') ]]]
+
+`Starship.php`: final:
+
+[[[ code('325bfc7d86') ]]]
+
+`StarshipDroid.php`: final:
+
+[[[ code('348d6467e5') ]]]
+
+and *finally* `StarshipPart.php`: final:
+
+[[[ code('ae68f7dcbf') ]]]
 
 Refresh our lazy page... and... it all still works!
 
