@@ -36,7 +36,7 @@ git status
 
 Nuestros archivos `composer.json` y `composer.lock` están modificados, es de esperar. Pero también tenemos este nuevo `config/reference.php`.
 
-Ábrelo en tu editor. Se trata de un archivo autogenerado que Symfony crea al construir el contenedor. Symfony tiene ahora un formato de configuración basado en arrays PHP, una alternativa a YAML. Este archivo se genera para proporcionar un mejor autocompletado cuando se utiliza ese formato. YAML sigue siendo el formato recomendado, y el que estamos utilizando en esta aplicación, por lo que este archivo no es importante para nosotros en este momento. Si Symfony cambia su recomendación en el futuro, ¡estaremos preparados! Echa un vistazo a [esta entrada del blog](https://symfony.com/blog/new-in-symfony-7-4-better-php-configuration) para obtener más información al respecto.
+Ábrelo en tu editor. Se trata de un archivo autogenerado que Symfony crea al construir el contenedor. Symfony tiene ahora un formato de configuración basado en arrays PHP, una alternativa a YAML. Este archivo se genera para proporcionar un mejor autocompletado cuando se utiliza ese formato. YAML sigue siendo el formato recomendado, y lo que estamos utilizando en esta aplicación, por lo que este archivo no es importante para nosotros en este momento. Si Symfony cambia su recomendación en el futuro, ¡estaremos preparados! Echa un vistazo a [esta entrada del blog](https://symfony.com/blog/new-in-symfony-7-4-better-php-configuration) para obtener más información al respecto.
 
 Puedes añadir este archivo a tu `.gitignore` o confirmarlo. La mejor práctica ahora mismo es confirmarlo, así que vamos a hacerlo. Ejecuta en tu terminal:
 
