@@ -1,0 +1,325 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:04.766 align:middle
+Muy bien, vamos a meternos de lleno
+en la actualización a Symfony 7.4.
+
+00:00:05.356 --> 00:00:07.176 align:middle
+Abre tu archivo composer.json.
+
+00:00:07.706 --> 00:00:11.296 align:middle
+Observa que los paquetes Symfony
+utilizan el formato 7.3.*.
+
+00:00:11.296 --> 00:00:15.256 align:middle
+Esto es ligeramente diferente del
+resto de nuestros paquetes, que
+
+00:00:15.386 --> 00:00:17.886 align:middle
+suelen utilizar el formato de prefijo ^. Esto
+
+00:00:18.346 --> 00:00:21.776 align:middle
+hace que sea muy fácil encontrar y
+actualizar los paquetes symfony. Si
+
+00:00:22.346 --> 00:00:24.536 align:middle
+utilizas PhpStorm, ve a editar... buscar...
+
+00:00:24.536 --> 00:00:26.406 align:middle
+reemplazar.
+
+00:00:26.966 --> 00:00:28.726 align:middle
+Busca 7.3.* y
+
+00:00:28.726 --> 00:00:31.826 align:middle
+sustitúyelo por 7.4.*. Podemos
+
+00:00:31.826 --> 00:00:35.546 align:middle
+ver que tenemos 19 ocurrencias que
+reemplazar. Pulsa reemplazar todo...
+
+00:00:36.066 --> 00:00:36.946 align:middle
+y... ¡boom! Vamos
+
+00:00:38.596 --> 00:00:40.896 align:middle
+a hacer una doble comprobación para asegurarnos de
+que no se nos ha pasado ninguna. En require... sí,
+
+00:00:41.466 --> 00:00:42.336 align:middle
+parece que está bien.
+
+00:00:42.836 --> 00:00:43.776 align:middle
+Ahora en
+
+00:00:44.316 --> 00:00:45.716 align:middle
+require-dev... Sí,
+
+00:00:47.126 --> 00:00:48.416 align:middle
+ahí también tiene buena pinta. maker-bundle
+
+00:00:49.216 --> 00:00:51.716 align:middle
+tiene una estrategia de versionado diferente a la
+de los componentes principales y bundles de Symfony.
+
+00:00:51.716 --> 00:00:53.916 align:middle
+Por eso
+
+00:00:54.206 --> 00:00:55.376 align:middle
+tiene un aspecto diferente. Observa que bajo la
+
+00:00:56.236 --> 00:01:00.016 align:middle
+secciónextra, tenemos esta configuración
+symfony require . Esto le dice a Symfony
+
+00:01:00.696 --> 00:01:05.826 align:middle
+Flex qué versión de Symfony debe utilizar al instalar
+los componentes de Symfony. Algunos de nuestros
+
+00:01:05.896 --> 00:01:11.476 align:middle
+componentes Symfony necesarios requieren otros
+componentes Symfony como dependencias. Estas se llaman
+
+00:01:11.976 --> 00:01:15.256 align:middle
+dependencias transitivas (¡palabra
+elegante!), y pueden permitir
+
+00:01:15.256 --> 00:01:18.186 align:middle
+una amplia gama de versiones
+de Symfony. Como Symfony 6,
+
+00:01:18.366 --> 00:01:20.496 align:middle
+7 u 8. Esta configuración garantiza
+
+00:01:21.046 --> 00:01:24.896 align:middle
+que sólo se instalen las versiones
+7.4. Así que cuando actualices
+
+00:01:24.896 --> 00:01:28.616 align:middle
+Symfony, es importante que también actualices
+esta configuración. ¡Genial! Ahora que
+
+00:01:29.226 --> 00:01:33.666 align:middle
+hemos actualizado nuestro composer.json, vamos a ejecutar la
+actualización de nuestro Composer: symfony composer update
+
+00:01:33.666 --> 00:01:41.036 align:middle
+Perfecto, ¡parece que ha funcionado!
+
+00:01:41.036 --> 00:01:43.516 align:middle
+Vayamos a nuestra aplicación
+y actualicemos. Sí, ahora
+
+00:01:44.946 --> 00:01:49.186 align:middle
+estamos en 7.4.8, la última
+versión de 7.4. De vuelta a nuestro
+
+00:01:49.796 --> 00:01:54.896 align:middle
+terminal, Ejecuta:: git status Nuestros
+archivos composer.json y composer.lock
+
+00:01:54.896 --> 00:01:58.226 align:middle
+están modificados, esto es
+lo esperado. Pero también
+
+00:01:58.226 --> 00:02:02.896 align:middle
+tenemos este nuevo
+config/reference.php. Ábrelo
+
+00:02:02.896 --> 00:02:03.956 align:middle
+en tu editor. Se trata de un
+
+00:02:06.186 --> 00:02:10.266 align:middle
+archivo autogenerado que Symfony crea al
+construir el contenedor. Symfony tiene ahora
+
+00:02:10.266 --> 00:02:15.946 align:middle
+un formato de configuración basado en arrays
+PHP, una alternativa a YAML. Este archivo se
+
+00:02:16.426 --> 00:02:20.616 align:middle
+genera para proporcionar un mejor autocompletado
+cuando se utiliza ese formato. YAML sigue siendo
+
+00:02:21.316 --> 00:02:24.606 align:middle
+el formato recomendado, y el que estamos utilizando
+en esta aplicación, por lo que este archivo
+
+00:02:24.606 --> 00:02:26.976 align:middle
+no es importante para nosotros en
+este momento. Si Symfony cambia
+
+00:02:26.976 --> 00:02:30.996 align:middle
+su recomendación en el futuro,
+¡estaremos preparados! Consulta esta
+
+00:02:31.526 --> 00:02:33.496 align:middle
+entrada del blog para obtener
+más información al respecto.
+
+00:02:34.186 --> 00:02:37.136 align:middle
+Puedes añadir este archivo a tu .gitignore
+o confirmarlo. La mejor práctica
+
+00:02:37.556 --> 00:02:40.426 align:middle
+ahora mismo es confirmarlo, así que
+vamos a hacerlo. Ejecuta en tu terminal:
+
+00:02:40.866 --> 00:02:47.656 align:middle
+git add config/reference.php Después de
+ejecutar git status para confirmar que estamos
+
+00:02:47.656 --> 00:02:53.606 align:middle
+bien, podemos confirmar con: git commit -a -m
+"update composer" (Sí, realmente deberíamos
+
+00:02:53.606 --> 00:02:58.146 align:middle
+usar un mensaje de confirmación
+mejor aquí) ¡Veamos
+
+00:02:58.146 --> 00:03:00.566 align:middle
+si hay alguna actualización de recetas
+para la 7.4! Ejecuta: symfony composer
+
+00:03:00.956 --> 00:03:07.446 align:middle
+recipe:update Sólo dos, empieza por
+framework-bundle. Ejecuta git status
+
+00:03:09.146 --> 00:03:11.226 align:middle
+para ver los cambios. .env
+y config/services.yaml
+
+00:03:11.416 --> 00:03:15.036 align:middle
+han sido modificadas. Abre primero .env.
+
+00:03:15.806 --> 00:03:17.256 align:middle
+Se ha añadido una nueva variable de entorno
+
+00:03:19.566 --> 00:03:22.706 align:middle
+: APP_SHARE_DIR. Cuando se ejecuta Symfony
+
+00:03:23.226 --> 00:03:27.026 align:middle
+en una arquitectura multiservidor,
+este es un directorio que debe ser
+
+00:03:27.026 --> 00:03:29.056 align:middle
+compartido entre los servidores. Antes, tenías
+
+00:03:29.616 --> 00:03:33.536 align:middle
+que compartir todo el directorio de caché,
+lo que no es idea. Esta nueva configuración
+
+00:03:34.256 --> 00:03:37.406 align:middle
+te permite tener un control
+más preciso sobre lo que se
+
+00:03:37.586 --> 00:03:39.516 align:middle
+comparte entre servidores. Si te
+
+00:03:39.516 --> 00:03:43.376 align:middle
+interesa saber más sobre esto, consulta
+esta entrada del blog. Abre nuestro segundo
+
+00:03:44.296 --> 00:03:47.836 align:middle
+archivo modificado, config/services.yaml.
+Sólo se han modificado los comentarios
+
+00:03:48.166 --> 00:03:50.346 align:middle
+de la parte superior. Pero
+
+00:03:50.726 --> 00:03:52.776 align:middle
+proporciona una nueva función muy
+interesante ¿Ves esto de yaml-language-server
+
+00:03:52.776 --> 00:03:56.526 align:middle
+$schema? Esto configura un
+
+00:03:56.526 --> 00:03:59.046 align:middle
+esquema JSON para este archivo. Espera, ¿JSON?
+
+00:03:59.546 --> 00:04:00.596 align:middle
+Esto es YAML.
+
+00:04:00.786 --> 00:04:01.516 align:middle
+Como YAML es
+
+00:04:01.516 --> 00:04:08.056 align:middle
+compatible con JSON, podemos utilizar esquemas JSON
+para validar nuestros archivos YAML. Esto es genial,
+
+00:04:08.686 --> 00:04:11.016 align:middle
+pero lo mejor es que
+
+00:04:11.176 --> 00:04:14.496 align:middle
+nos proporciona autocompletado en nuestros
+IDEs si lo soportan. ¡ Y PhpStorm
+
+00:04:14.676 --> 00:04:16.926 align:middle
+lo soporta! Aquí tienes una entrada de blog
+
+00:04:17.356 --> 00:04:20.306 align:middle
+si quieres saber más sobre
+ello Ok, vamos a confirmar
+
+00:04:20.306 --> 00:04:23.136 align:middle
+estos cambios en nuestro
+terminal con: git commit -a
+
+00:04:23.436 --> 00:04:30.196 align:middle
+-m "update recipes" Ejecuta de nuevo el comando
+de actualización de la receta y actualiza el
+
+00:04:30.306 --> 00:04:31.976 align:middle
+paqueterouting. Ejecuta git status
+
+00:04:33.506 --> 00:04:35.586 align:middle
+para ver los cambios.
+config/routes.yaml: ábrelo.
+
+00:04:36.146 --> 00:04:38.876 align:middle
+En la parte superior
+
+00:04:39.836 --> 00:04:42.896 align:middle
+, se ha añadido una configuración
+de esquema YAML JSON. Abajo
+
+00:04:43.516 --> 00:04:46.126 align:middle
+, mira la nueva configuración
+simplificada. Con la configuración anterior
+
+00:04:46.796 --> 00:04:51.116 align:middle
+, sólo se cargaban los controladores en
+src/Controller. Con esta nueva configuración
+
+00:04:51.586 --> 00:04:56.386 align:middle
+, cualquier clase que contenga atributos #[Route]
+se cargará como controlador. Sigue siendo la
+
+00:04:56.916 --> 00:05:00.176 align:middle
+mejor práctica colocar todos tus
+controladores en src/Controller. Pero si
+
+00:05:00.476 --> 00:05:04.736 align:middle
+tienes una aplicación más compleja con varios dominios
+y sus propios controladores, éstos se cargarán
+
+00:05:05.006 --> 00:05:07.196 align:middle
+independientemente de dónde
+estén ubicados. Confirmemos estos
+
+00:05:08.046 --> 00:05:15.186 align:middle
+cambios con: git commit -a
+--amend ¡Perfecto! Entra en
+
+00:05:15.356 --> 00:05:19.406 align:middle
+nuestra aplicación y actualiza la página de inicio para asegurarte de que
+todo sigue funcionando correctamente. Bien, ¡la actualización a la 7.4
+
+00:05:20.396 --> 00:05:23.436 align:middle
+ha sido un éxito! A continuación, vamos
+
+00:05:24.116 --> 00:05:27.136 align:middle
+a actualizar Doctrine y explorar
+una interesante mejora de la última
+
+00:05:27.136 --> 00:05:28.766 align:middle
+versión del ORM. ¡Permanece atento!
