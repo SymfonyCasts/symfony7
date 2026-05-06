@@ -1,0 +1,611 @@
+WEBVTT
+
+00:00:00.036 --> 00:00:02.676 align:middle
+¡Hola amigos!
+
+00:00:02.676 --> 00:00:08.976 align:middle
+Bienvenidos a un nuevo curso sobre cómo actualizar
+una aplicación Symfony de Symfony 7 a Symfony 8.
+
+00:00:09.586 --> 00:00:13.526 align:middle
+Por suerte, las nuevas versiones de Symfony hacen
+que este proceso de actualización sea pan comido.
+
+00:00:13.736 --> 00:00:15.956 align:middle
+Pero todavía hay algunas cosas que hacer para
+que el proceso de actualización sea más suave.
+
+00:00:15.956 --> 00:00:21.356 align:middle
+Para seguir adelante, descarga el código del curso desde
+la parte superior de esta página, abre el directorio start
+
+00:00:21.356 --> 00:00:23.796 align:middle
+en tu IDE, y verás lo que tengo aquí.
+
+00:00:23.796 --> 00:00:28.696 align:middle
+Sigue el README para configurarlo todo,
+cuando estés listo, en tu terminal, ejecuta:
+
+00:00:28.826 --> 00:00:34.246 align:middle
+symfony server:start -d (la bandera -d
+ejecuta el servidor en segundo plano).
+
+00:00:34.816 --> 00:00:37.376 align:middle
+Haz clic en el enlace de la salida para
+abrir la aplicación en tu navegador.
+
+00:00:38.096 --> 00:00:39.306 align:middle
+¡Bienvenido a la Starshop!
+
+00:00:39.766 --> 00:00:43.776 align:middle
+Si has seguido nuestros cursos anteriores sobre
+Symfony 7, esto debería resultarte familiar.
+
+00:00:44.356 --> 00:00:52.326 align:middle
+Abajo, en la barra de herramientas de depuración web,
+puedes ver que estamos en Symfony 7.3.5 y PHP 8.3.30.
+
+00:00:52.326 --> 00:00:55.866 align:middle
+¿Nuestro objetivo? ¡Actualizar
+este chico malo a Symfony 8!
+
+00:00:55.866 --> 00:01:03.336 align:middle
+Dado que Symfony 8 requiere PHP 8.4, un buen primer paso
+es actualizar esta aplicación para que requiera PHP 8.4.
+
+00:01:03.756 --> 00:01:08.216 align:middle
+Al mismo tiempo, también actualizaremos
+a la última versión de Symfony 7.3.
+
+00:01:08.216 --> 00:01:12.266 align:middle
+Si ya has hecho estas actualizaciones importantes antes,
+puede que estés pensando que deberíamos actualizar
+
+00:01:12.266 --> 00:01:14.966 align:middle
+a 7.4, la última versión de Symfony 7.
+
+00:01:15.516 --> 00:01:17.556 align:middle
+Lo haremos, pero me gusta dar pequeños pasos
+
+00:01:17.556 --> 00:01:20.426 align:middle
+para evitar agobiarme con
+demasiados cambios a la vez.
+
+00:01:21.146 --> 00:01:23.696 align:middle
+En tu IDE, abre composer.json.
+
+00:01:24.256 --> 00:01:32.246 align:middle
+En la sección require, cambia >=8.3
+por >=8.4: Esto indica a Composer
+
+00:01:32.246 --> 00:01:35.746 align:middle
+que se necesita al menos
+PHP 8.4 para este proyecto.
+
+00:01:36.366 --> 00:01:39.926 align:middle
+Desplázate hacia abajo y encuentra
+la sección config.platform.php.
+
+00:01:40.446 --> 00:01:45.266 align:middle
+Esto es lo que la CLI de Symfony utiliza para
+determinar qué versión local de PHP utilizar
+
+00:01:45.456 --> 00:01:48.026 align:middle
+cuando ejecutas symfony console o symfony php.
+
+00:01:48.726 --> 00:01:54.326 align:middle
+Cámbialo a 8.4: Este paso no es necesario, pero
+desplázate hacia abajo hasta la sección replace.
+
+00:01:54.906 --> 00:01:59.306 align:middle
+Esta es una lista de paquetes que Composer
+ignorará al instalar dependencias.
+
+00:01:59.796 --> 00:02:02.266 align:middle
+Puedes ver que son todos paquetes polyfill.
+
+00:02:02.546 --> 00:02:07.076 align:middle
+Son paquetes que proporcionan características de
+versiones más recientes de PHP a versiones más antiguas.
+
+00:02:07.076 --> 00:02:14.506 align:middle
+Como estamos en PHP 8.4, podemos añadir los
+paquetes polyfill para 8.3 y 8.4 a esta lista:
+
+00:02:15.006 --> 00:02:18.436 align:middle
+Ahorra unos bytes de espacio en disco y unos
+milisegundos de tiempo de instalación...
+
+00:02:19.306 --> 00:02:22.966 align:middle
+En nuestro terminal, confirmemos que
+ahora estamos utilizando PHP 8.4.
+
+00:02:23.426 --> 00:02:29.766 align:middle
+Ejecuta: symfony php --version Bien, ¡8.4.20!
+
+00:02:30.486 --> 00:02:35.706 align:middle
+Ahora, hagamos una actualización de Composer para capturar todos
+los cambios que hemos hecho en nuestro archivo composer.json
+
+00:02:35.886 --> 00:02:38.606 align:middle
+y actualicemos a las últimas
+dependencias permitidas.
+
+00:02:39.136 --> 00:02:46.976 align:middle
+Ejecuta: symfony composer
+update Sin errores, ¡genial!
+
+00:02:47.716 --> 00:02:49.696 align:middle
+Salta al navegador y actualiza la página...
+
+00:02:50.706 --> 00:02:52.806 align:middle
+Qué asco, esto es un error desagradable.
+
+00:02:53.136 --> 00:02:57.306 align:middle
+No se parece a los errores estándar de Symfony
+porque ni siquiera ha podido cargar Symfony.
+
+00:02:57.766 --> 00:03:00.376 align:middle
+Se trata de un error a nivel
+del autoloader de Composer.
+
+00:03:00.996 --> 00:03:06.456 align:middle
+Dice que estamos ejecutando PHP 8.3 pero
+nuestras dependencias requieren PHP 8.4.
+
+00:03:07.096 --> 00:03:09.976 align:middle
+¿Recuerdas que antes ejecutamos el
+servidor Symfony en segundo plano?
+
+00:03:10.366 --> 00:03:12.486 align:middle
+Lo ejecutamos con PHP 8.3.
+
+00:03:12.486 --> 00:03:16.426 align:middle
+Solución sencilla, reinicia el servidor con:
+
+00:03:16.426 --> 00:03:25.546 align:middle
+symfony server:stop symfony server:start
+-d Ahora actualiza la página...
+
+00:03:27.066 --> 00:03:29.036 align:middle
+¡Genial! Volvemos a estar operativos.
+
+00:03:29.436 --> 00:03:37.146 align:middle
+Observa en la barra de herramientas de depuración
+web que ahora estamos en Symfony 7.3.11 y PHP 8.4.20.
+
+00:03:37.146 --> 00:03:40.056 align:middle
+Y ahora, ¡las depreciaciones!
+
+00:03:40.366 --> 00:03:43.456 align:middle
+Cuando Symfony, o el
+propio PHP quieren eliminar
+
+00:03:43.456 --> 00:03:46.496 align:middle
+o cambiar una característica,
+no hacen el cambio sin más.
+
+00:03:46.796 --> 00:03:49.836 align:middle
+Esto podría romper montones de
+aplicaciones y causar muchos problemas.
+
+00:03:50.226 --> 00:03:54.946 align:middle
+En lugar de eso, marcan la función como obsoleta
+durante un tiempo, lo que significa que sigue funcionando
+
+00:03:54.946 --> 00:03:57.176 align:middle
+como se espera, pero activará una advertencia.
+
+00:03:57.616 --> 00:04:00.276 align:middle
+Normalmente, la advertencia explica
+cómo solucionar el problema
+
+00:04:00.426 --> 00:04:02.736 align:middle
+y actualizar a la nueva
+forma de hacer las cosas.
+
+00:04:03.226 --> 00:04:05.696 align:middle
+Symfony tiene una política de
+desaprobación realmente buena.
+
+00:04:06.076 --> 00:04:08.566 align:middle
+Garantizan que nada se romperá al actualizar
+
+00:04:08.566 --> 00:04:12.466 align:middle
+a una nueva versión menor,
+como de la 7.3 a la 7.4.
+
+00:04:12.856 --> 00:04:17.266 align:middle
+Los cambios de ruptura se producen en la
+versión mayor, como pasar de la 7 a la 8.
+
+00:04:17.806 --> 00:04:23.066 align:middle
+En la 7.4, todos los cambios de ruptura que se
+producirán en la 8 se marcan como obsoletos.
+
+00:04:23.436 --> 00:04:25.566 align:middle
+Esto te da tiempo y
+orientación para arreglarlos.
+
+00:04:26.086 --> 00:04:29.186 align:middle
+Sólo pasarás a la 8 cuando
+ya no queden depreciaciones.
+
+00:04:29.186 --> 00:04:31.516 align:middle
+Entonces, ¡cómo encontramos las obsoletas!
+
+00:04:31.896 --> 00:04:35.966 align:middle
+Este panel de registro de depreciaciones va a
+ser tu mejor amigo cuando actualices Symfony.
+
+00:04:36.656 --> 00:04:37.796 align:middle
+Parece que tenemos 3.
+
+00:04:38.256 --> 00:04:40.736 align:middle
+La primera es una deprecación de PHP.
+
+00:04:41.056 --> 00:04:44.836 align:middle
+El método de nuestra entidad necesita
+que un parámetro addDroid() Starship
+
+00:04:44.936 --> 00:04:46.996 align:middle
+se marque explícitamente como anulable.
+
+00:04:47.486 --> 00:04:48.716 align:middle
+Arreglemos eso primero.
+
+00:04:49.306 --> 00:04:54.756 align:middle
+Abre y desplázate hasta el método
+. src/Entity/Starship.php addDroid()
+
+00:04:57.646 --> 00:05:00.606 align:middle
+Ahh, incluso PhpStorm me avisa de esto.
+
+00:05:01.106 --> 00:05:02.886 align:middle
+La solución es sencilla, añade un ?
+
+00:05:02.986 --> 00:05:09.246 align:middle
+antes de : Vuelve al navegador, actualiza
+la página de inicio, y... DateTimeImmutable
+
+00:05:09.246 --> 00:05:11.546 align:middle
+todavía 3 deprecations...
+
+00:05:11.626 --> 00:05:12.766 align:middle
+No se ha borrado.
+
+00:05:12.766 --> 00:05:15.426 align:middle
+A veces, cuando se corrigen
+las depreciaciones, es
+
+00:05:15.426 --> 00:05:18.586 align:middle
+necesario borrar manualmente la
+caché de Symfony para que las recoja.
+
+00:05:19.096 --> 00:05:22.196 align:middle
+Esto se debe a que algunas deprecaciones
+se detectan en tiempo de compilación
+
+00:05:22.386 --> 00:05:23.966 align:middle
+cuando se está construyendo el contenedor.
+
+00:05:24.306 --> 00:05:31.146 align:middle
+Así que en tu terminal, ejecuta: Actualiza la
+página de nuevo... symfony console cache:clear
+
+00:05:32.256 --> 00:05:34.926 align:middle
+Vaya, ahora tenemos 4 desaprensiones.
+
+00:05:35.366 --> 00:05:36.106 align:middle
+Abre el panel.
+
+00:05:36.776 --> 00:05:40.166 align:middle
+Nuestra deprecación ha desaparecido,
+así que la hemos arreglado. addDroid()
+
+00:05:40.166 --> 00:05:44.586 align:middle
+A veces, cuando limpias la caché
+manualmente, se activan otras imprecisiones.
+
+00:05:45.256 --> 00:05:47.146 align:middle
+Vale, 3 de ellas son de Doctrine.
+
+00:05:47.326 --> 00:05:51.566 align:middle
+Tendremos un capítulo entero sobre la actualización de Doctrine
+un poco más adelante, así que las ignoraremos por ahora.
+
+00:05:52.226 --> 00:05:56.106 align:middle
+La cuarta es una opción de configuración
+obsoleta de zenstruck/foundry.
+
+00:05:56.686 --> 00:06:00.886 align:middle
+Antes de arreglarla manualmente, actualicemos
+primero nuestras recetas Symfony Flex.
+
+00:06:01.256 --> 00:06:04.686 align:middle
+A veces, simplemente actualizándolas
+se arreglan las obsoletas por ti.
+
+00:06:05.346 --> 00:06:08.146 align:middle
+Para actualizar las recetas,
+en tu terminal, ejecuta:
+
+00:06:08.146 --> 00:06:13.496 align:middle
+symfony composer recipe:update
+No ha funcionado.
+
+00:06:13.826 --> 00:06:15.966 align:middle
+Dice que tenemos cambios no comprometidos.
+
+00:06:16.466 --> 00:06:21.296 align:middle
+El comando de actualización de recetas debe
+ejecutarse desde cero, sin cambios pendientes.
+
+00:06:21.846 --> 00:06:24.186 align:middle
+Ejecuta: Para ver nuestros cambios. git status
+
+00:06:24.776 --> 00:06:28.256 align:middle
+composer.json, , y nuestro
+. composer.lock Starship.php
+
+00:06:28.256 --> 00:06:31.646 align:middle
+Tiene sentido, vamos a confirmarlos:
+
+00:06:31.846 --> 00:06:39.426 align:middle
+git commit -a -m "composer update" -a
+añade todos los archivos modificados
+
+00:06:39.426 --> 00:06:44.146 align:middle
+a la lista de cambios antes de confirmar y nos
+permite establecer un mensaje de confirmación. -m
+
+00:06:44.806 --> 00:06:51.506 align:middle
+Borrón y cuenta nueva, así que vuelve a ejecutar el comando de
+actualización de la receta: Ooo, tenemos un montón que actualizar.
+
+00:06:51.856 --> 00:06:53.236 align:middle
+Los revisaremos uno a uno.
+
+00:06:53.686 --> 00:06:57.586 align:middle
+Al pulsar enter utilizaremos el primero
+de la lista, . doctrine/deprecations
+
+00:06:57.876 --> 00:07:01.906 align:middle
+"No se ha modificado ningún archivo...".
+Ejecuta para ver qué pasa. git status
+
+00:07:02.586 --> 00:07:04.986 align:middle
+Sólo se ha modificado
+el archivo . symfony.lock
+
+00:07:05.466 --> 00:07:09.786 align:middle
+Este es el archivo de configuración interno que Symfony
+Flex utiliza para mantener un registro de tus recetas.
+
+00:07:10.166 --> 00:07:17.616 align:middle
+Podemos confirmar esto y seguir adelante:
+¡Adelante! git commit -a -m "update recipes"
+
+00:07:18.176 --> 00:07:21.816 align:middle
+Ejecuta de nuevo el comando de actualización
+de recetas: es el siguiente... asset-mapper
+
+00:07:22.386 --> 00:07:24.066 align:middle
+Otra vez el archivo . symfony.lock
+
+00:07:24.876 --> 00:07:28.606 align:middle
+Cuando actualizo recetas, me gusta guardar
+todas las actualizaciones en un único commit.
+
+00:07:28.766 --> 00:07:34.686 align:middle
+Así que modificaremos los nuevos cambios
+con el commit anterior con: git commit -a
+
+00:07:34.896 --> 00:07:39.486 align:middle
+--amend Esto abre un editor de texto para actualizar
+opcionalmente el mensaje de confirmación.
+
+00:07:39.896 --> 00:07:41.406 align:middle
+Saldré para mantenerlo igual.
+
+00:07:42.336 --> 00:07:44.366 align:middle
+Ahora actualiza la receta
+de ... framework-bundle
+
+00:07:45.306 --> 00:07:47.606 align:middle
+Ooo, este tiene algunos cambios reales.
+
+00:07:48.146 --> 00:07:52.836 align:middle
+Lo bueno de este comando es que muestra el
+CHANGELOG del repositorio symfony/recipe,
+
+00:07:52.836 --> 00:07:56.246 align:middle
+así que puedes indagar fácilmente para
+entender por qué se ha hecho un cambio.
+
+00:07:57.566 --> 00:07:59.626 align:middle
+Ejecuta para ver los cambios. git status
+
+00:08:00.196 --> 00:08:04.886 align:middle
+Aparte del archivo , se modificó
+. symfony.lock public/index.php
+
+00:08:05.256 --> 00:08:06.076 align:middle
+¡Vamos a comprobarlo!
+
+00:08:06.636 --> 00:08:10.026 align:middle
+Abre y observa el cambio... public/index.php
+
+00:08:10.606 --> 00:08:12.586 align:middle
+Parece que se ha añadido
+la palabra clave . static
+
+00:08:12.586 --> 00:08:16.666 align:middle
+Creo que es una microoptimización
+útil, ¡la mantendremos!
+
+00:08:17.286 --> 00:08:21.086 align:middle
+Este es un buen momento para mencionar que
+nunca debes actualizar recetas a ciegas.
+
+00:08:21.536 --> 00:08:26.226 align:middle
+Comprueba siempre los cambios y, si no estás
+seguro de un cambio, sigue el registro de cambios
+
+00:08:26.226 --> 00:08:29.366 align:middle
+hasta el repositorio symfony/recipe
+para encontrar el razonamiento.
+
+00:08:30.026 --> 00:08:32.716 align:middle
+Modifica el commit y pasa a la
+siguiente actualización de recetas.
+
+00:08:34.256 --> 00:08:36.686 align:middle
+El también tiene algunos
+cambios. monolog-bundle
+
+00:08:37.806 --> 00:08:43.476 align:middle
+Parecen de configuración del paquete, así que
+abre para verlos. config/packages/monolog.yaml
+
+00:08:46.186 --> 00:08:47.476 align:middle
+Sólo se han eliminado algunos comentarios.
+
+00:08:47.646 --> 00:08:48.356 align:middle
+No es gran cosa...
+
+00:08:49.176 --> 00:08:49.976 align:middle
+modifica el commit.
+
+00:08:51.106 --> 00:08:54.846 align:middle
+A continuación, actualiza la receta
+y verás los cambios. stimulus-bundle
+
+00:08:55.756 --> 00:08:58.606 align:middle
+Abre . assets/stimulus_bootstrap.js
+
+00:09:00.056 --> 00:09:02.506 align:middle
+Sólo se han añadido algunas cosas.
+
+00:09:02.506 --> 00:09:06.946 align:middle
+Modifica el commit y pasa a
+actualizar la receta . twig-bundle
+
+00:09:09.316 --> 00:09:14.246 align:middle
+Nuestra plantilla base fue modificada,
+así que abre . templates/base.html.twig
+
+00:09:16.696 --> 00:09:18.696 align:middle
+Se han añadido algunas cosas de FrankenPHP.
+
+00:09:19.066 --> 00:09:21.826 align:middle
+De momento no utilizamos
+FrankenPHP, pero no está de
+
+00:09:21.826 --> 00:09:23.646 align:middle
+más dejarlo por si lo hacemos en el futuro
+
+00:09:24.536 --> 00:09:28.556 align:middle
+Modifica el commit y actualiza la
+última receta: . zenstruck/foundry
+
+00:09:31.486 --> 00:09:37.166 align:middle
+Se modificó el archivo de configuración, así
+que abre . config/packages/zenstruck_foundry.yaml
+
+00:09:38.176 --> 00:09:40.366 align:middle
+Sólo se ha actualizado un
+comentario, así que no pasa nada.
+
+00:09:40.996 --> 00:09:42.746 align:middle
+Modifica el commit y ¡habremos terminado!
+
+00:09:43.206 --> 00:09:45.666 align:middle
+Ejecuta de nuevo el comando de
+actualización de la receta para confirmar.
+
+00:09:46.146 --> 00:09:48.686 align:middle
+¡Qué bien! "Todos los paquetes
+parecen estar actualizados"
+
+00:09:49.356 --> 00:09:51.746 align:middle
+Antes de comprobar la aplicación,
+limpia de nuevo la caché...
+
+00:09:53.686 --> 00:09:54.996 align:middle
+Ahora actualiza la página de inicio.
+
+00:09:56.466 --> 00:09:57.736 align:middle
+2 desapariciones.
+
+00:09:58.696 --> 00:10:02.996 align:middle
+La del cargador automático de Doctrine sigue aquí,
+pero la ignoraremos hasta que actualicemos Doctrine.
+
+00:10:03.696 --> 00:10:07.576 align:middle
+La de Foundry también sigue aquí, así que la
+actualización de la receta no la ha arreglado.
+
+00:10:07.946 --> 00:10:09.206 align:middle
+Vamos a arreglarlo nosotros.
+
+00:10:09.836 --> 00:10:13.626 align:middle
+Dice que esta configuración de
+enable_auto_refresh_with_lazy_objects
+
+00:10:13.626 --> 00:10:17.896 align:middle
+se forzará a en la 3.0, así que
+pongámosla ahora en . true true
+
+00:10:18.576 --> 00:10:23.566 align:middle
+Copia la opción y abre .
+config/packages/zenstruck_foundry.yaml
+
+00:10:24.516 --> 00:10:29.416 align:middle
+En , pégala y ajústala a : Totalmente
+al margen, zenstruck_foundry true
+
+00:10:29.576 --> 00:10:36.926 align:middle
+pero si tienes curiosidad por saber qué es esta extraña sintaxis
+de y , se trata de un ancla y un alias de YAML. &dev *dev
+
+00:10:37.726 --> 00:10:41.686 align:middle
+El marca esta configuración como
+un ancla llamada , &dev dev
+
+00:10:42.166 --> 00:10:45.596 align:middle
+y luego el es un alias que hace
+referencia a esa ancla. *dev
+
+00:10:45.596 --> 00:10:49.956 align:middle
+Esto quiere decir: "para el entorno , utiliza
+la misma configuración que ". test dev
+
+00:10:50.606 --> 00:10:53.596 align:middle
+Es una forma genial de evitar la
+duplicación en tus archivos YAML.
+
+00:10:54.556 --> 00:10:57.296 align:middle
+Vale, vuelve al navegador y
+actualiza la página de inicio.
+
+00:10:58.036 --> 00:10:59.706 align:middle
+¡Ya no hay depreciaciones!
+
+00:11:00.816 --> 00:11:02.646 align:middle
+Pero... vamos a borrar la caché...
+
+00:11:02.646 --> 00:11:03.646 align:middle
+y actualicemos de nuevo...
+
+00:11:07.486 --> 00:11:10.576 align:middle
+ahora hay 3, pero son las de
+Doctrine que arreglaremos más tarde.
+
+00:11:11.486 --> 00:11:15.236 align:middle
+Vale, hemos actualizado con éxito
+nuestra aplicación a PHP 8.4.
+
+00:11:15.706 --> 00:11:19.956 align:middle
+A continuación, actualizaremos a Symfony
+7.4, la última versión de Symfony 7.
