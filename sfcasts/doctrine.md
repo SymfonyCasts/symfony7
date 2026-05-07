@@ -107,7 +107,7 @@ To track everything and run `git status` again. Now that everything is tracked,
 we can commit it with:
 
 ```terminal
-git commit -a -m "upgrade doctrine-bundle"
+git commit -a -m "update doctrine-bundle"
 ```
 
 `git status` again to confirm we're clean. Finally, upgrade the recipe with:
