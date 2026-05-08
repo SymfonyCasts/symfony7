@@ -1,0 +1,12 @@
+diff --git a/config/packages/monolog.yaml b/config/packages/monolog.yaml
+index a044a88..d880684 100644
+--- a/config/packages/monolog.yaml
++++ b/config/packages/monolog.yaml
+@@ -19,6 +19,7 @@ when@dev:
+                 channels: [ deprecation ]
+                 path: "%kernel.logs_dir%/%kernel.environment%.deprecations.json"
+                 formatter: monolog.formatter.json
++                include_stacktraces: true
+ 
+ when@test:
+     monolog:

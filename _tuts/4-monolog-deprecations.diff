@@ -1,0 +1,16 @@
+diff --git a/config/packages/monolog.yaml b/config/packages/monolog.yaml
+index bb59708..a044a88 100644
+--- a/config/packages/monolog.yaml
++++ b/config/packages/monolog.yaml
+@@ -14,6 +14,11 @@ when@dev:
+                 type: console
+                 process_psr_3_messages: false
+                 channels: ["!event", "!doctrine", "!console"]
++            deprecation:
++                type: stream
++                channels: [ deprecation ]
++                path: "%kernel.logs_dir%/%kernel.environment%.deprecations.json"
++                formatter: monolog.formatter.json
+ 
+ when@test:
+     monolog:

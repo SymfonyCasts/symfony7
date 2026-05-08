@@ -39,7 +39,27 @@
             "id": "3-final-entities",
             "name": "3. final entities",
             "description": null
+        },
+        {
+            "id": "4-monolog-deprecations",
+            "name": "4. monolog deprecations",
+            "description": null
+        },
+        {
+            "id": "4-include-stacktraces",
+            "name": "4. include stacktraces",
+            "description": null
+        },
+        {
+            "id": "4-web-processor",
+            "name": "4. web processor",
+            "description": null
+        },
+        {
+            "id": "4-fix-deprecation",
+            "name": "4. fix deprecation",
+            "description": null
         }
     ],
-    "sha": "08f95f38bc553e00e3b80accda84c80ea83b01f9"
+    "sha": "94600e1d5fe82b1e39065977c1bbd6d7356dc0c5"
 }

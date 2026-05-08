@@ -1,0 +1,13 @@
+diff --git a/src/Repository/StarshipPartRepository.php b/src/Repository/StarshipPartRepository.php
+index d1686e0..4bd2c66 100644
+--- a/src/Repository/StarshipPartRepository.php
++++ b/src/Repository/StarshipPartRepository.php
+@@ -20,7 +20,7 @@ class StarshipPartRepository extends ServiceEntityRepository
+ 
+     public static function createExpensiveCriteria(): Criteria
+     {
+-        return Criteria::create()->andWhere(Criteria::expr()->gt('price', 50000));
++        return Criteria::create(true)->andWhere(Criteria::expr()->gt('price', 50000));
+     }
+ 
+     /**
