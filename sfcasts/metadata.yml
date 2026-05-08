@@ -9,8 +9,8 @@ chapters:
         tutsFirstStep: start
         tutsLastStep: start
     deprecations:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 4-monolog-deprecations
+        tutsLastStep: 4-fix-deprecation
     symfony-80:
         tutsFirstStep: null
         tutsLastStep: null
