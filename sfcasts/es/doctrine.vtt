@@ -1,0 +1,421 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:02.676 align:middle
+Tenemos que actualizar el bundle de Doctrine...
+
+00:00:02.986 --> 00:00:08.676 align:middle
+pero antes de hacerlo, quiero refrescarte la memoria sobre una
+función muy interesante de Doctrine: los objetos perezosos.
+
+00:00:09.326 --> 00:00:12.496 align:middle
+Abre src/Entity/StarshipPart.php.
+
+00:00:13.186 --> 00:00:18.566 align:middle
+Esta entidad tiene una propiedad Starship con una
+relación de muchos a uno con nuestra entidad Starship.
+
+00:00:19.206 --> 00:00:24.616 align:middle
+Cada StarshipPart tiene un Starship, y cada
+Starship puede tener muchos StarshipParts.
+
+00:00:25.436 --> 00:00:29.436 align:middle
+Cuando se obtienen entidades con
+relaciones, Doctrine utiliza cierta magia
+
+00:00:29.436 --> 00:00:31.816 align:middle
+para evitar consultas
+innecesarias a la base de datos.
+
+00:00:32.226 --> 00:00:33.586 align:middle
+Veamos cómo funciona en acción.
+
+00:00:34.236 --> 00:00:36.436 align:middle
+En tu terminal, crea un nuevo controlador:
+
+00:00:36.776 --> 00:00:43.266 align:middle
+symfony console make:controller Nómbralo
+LazyController, y no hace falta que hagas pruebas.
+
+00:00:44.296 --> 00:00:48.536 align:middle
+Abre el nuevo controlador en
+src/Controller/LazyController.php.
+
+00:00:49.426 --> 00:00:53.196 align:middle
+Vale, tenemos este método index()
+cuya ruta está establecida en /lazy.
+
+00:00:53.746 --> 00:00:57.526 align:middle
+Inyecta StarshipPartRepository
+$repository en él.
+
+00:00:58.216 --> 00:01:04.566 align:middle
+Luego, coge la primera parte del repositorio
+con $part = $repository->find(1).
+
+00:01:05.386 --> 00:01:12.366 align:middle
+Vuelcalo con dump($part): Ahora, vuelve a nuestra
+aplicación y navega manualmente a la url /lazy.
+
+00:01:13.336 --> 00:01:16.526 align:middle
+Si observamos la barra de herramientas de
+depuración web, veremos una única consulta.
+
+00:01:17.026 --> 00:01:19.006 align:middle
+Es la que obtiene StarshipPart.
+
+00:01:19.586 --> 00:01:24.056 align:middle
+Si abrimos el panel del perfil de volcado,
+veremos el objeto StarshipPart obtenido.
+
+00:01:24.686 --> 00:01:29.436 align:middle
+Fíjate en la propiedad starship,
+su tipo es este extraño Proxy CG.
+
+00:01:30.066 --> 00:01:31.936 align:middle
+Se trata de un objeto Doctrine lazy.
+
+00:01:32.476 --> 00:01:33.166 align:middle
+Mira dentro.
+
+00:01:33.396 --> 00:01:36.436 align:middle
+Todas las propiedades están
+desactivadas excepto el ID.
+
+00:01:36.936 --> 00:01:39.786 align:middle
+El ID es lo único que
+Doctrine conoce de Starship
+
+00:01:39.976 --> 00:01:43.006 align:middle
+hasta que consulta a la base
+de datos el resto de los datos.
+
+00:01:43.616 --> 00:01:47.996 align:middle
+Sólo cuando accede a una propiedad de
+Starship, Doctrine lanza una segunda
+
+00:01:48.166 --> 00:01:49.096 align:middle
+consulta para obtener el resto.
+
+00:01:49.756 --> 00:01:51.236 align:middle
+¡Vamos a lanzar esta segunda consulta!
+
+00:01:51.716 --> 00:01:57.696 align:middle
+En LazyController::index(), añade
+$part->getStarship()->getName()
+
+00:01:57.916 --> 00:02:02.256 align:middle
+como primer argumento a dump():
+Actualiza la página /lazy...
+
+00:02:02.786 --> 00:02:04.356 align:middle
+Ahora hay dos consultas.
+
+00:02:04.546 --> 00:02:06.506 align:middle
+La primera recupera la página StarshipPart,
+
+00:02:06.856 --> 00:02:10.496 align:middle
+y la segunda recupera la página Starship
+porque hemos accedido a su nombre.
+
+00:02:11.176 --> 00:02:16.036 align:middle
+En el panel de volcado, podemos ver que el Starship está
+ahora completamente cargado con todas sus propiedades.
+
+00:02:17.076 --> 00:02:21.206 align:middle
+Así que este Proxy CG es una clase real
+que Doctrine genera sobre la marcha.
+
+00:02:21.686 --> 00:02:24.566 align:middle
+Contiene toda la lógica para obtener
+los datos cuando sea necesario.
+
+00:02:24.986 --> 00:02:28.516 align:middle
+La clave es que extiende
+la entidad real Starship.
+
+00:02:29.226 --> 00:02:34.436 align:middle
+Así es como puede utilizarse como sustituto de
+Starship hasta que se necesiten los datos reales.
+
+00:02:34.876 --> 00:02:40.836 align:middle
+También por eso las entidades no pueden ser finales,
+tienen que ser extensibles por estas clases proxy.
+
+00:02:41.466 --> 00:02:46.196 align:middle
+Como puedes imaginar, la lógica para hacer todo
+esto es bastante compleja y difícil de mantener.
+
+00:02:46.616 --> 00:02:53.566 align:middle
+Pero... todo eso cambió en PHP 8.4, que
+introdujo objetos lazy nativos en el propio PHP.
+
+00:02:53.956 --> 00:02:57.606 align:middle
+Y Doctrine Bundle 3, ¡permite que nuestras
+aplicaciones Symfony se aprovechen de ello!
+
+00:02:57.926 --> 00:02:58.736 align:middle
+Así que ¡a actualizar!
+
+00:02:59.396 --> 00:03:01.196 align:middle
+Primero, abre nuestro composer.json.
+
+00:03:01.726 --> 00:03:03.836 align:middle
+Busca donde requerimos el doctrine-bundle.
+
+00:03:04.306 --> 00:03:06.786 align:middle
+Cambia su versión a ^3.0.
+
+00:03:07.626 --> 00:03:14.286 align:middle
+Ahora, en el terminal, ejecuta: symfony
+composer update Oooo, un error de Composer.
+
+00:03:14.286 --> 00:03:16.476 align:middle
+No se han podido resolver
+nuestras dependencias...
+
+00:03:16.886 --> 00:03:20.026 align:middle
+composer.json requiere doctrine-bundle 3.
+
+00:03:20.286 --> 00:03:25.876 align:middle
+Sí... doctrine-bundle 3 requiere
+doctrine/dbal 4 pero esto entra en
+
+00:03:25.876 --> 00:03:28.396 align:middle
+conflicto con nuestro
+requisito de doctrine/dbal 3.
+
+00:03:29.116 --> 00:03:33.796 align:middle
+Como referencia, doctrine/dbal es la capa de
+abstracción de bases de datos que Doctrine utiliza
+
+00:03:33.796 --> 00:03:35.636 align:middle
+para comunicarse con diferentes bases de datos.
+
+00:03:36.506 --> 00:03:37.996 align:middle
+Comprobemos nuestro composer.json.
+
+00:03:38.476 --> 00:03:40.826 align:middle
+Sólo requerimos dbal versión 3,
+
+00:03:41.106 --> 00:03:44.466 align:middle
+pero doctrine-bundle necesita
+la versión 4 según ese error.
+
+00:03:45.426 --> 00:03:47.566 align:middle
+Vale, esto es un problema heredado.
+
+00:03:48.106 --> 00:03:51.536 align:middle
+Las versiones anteriores de
+doctrine-bundle no soportaban dbal 4, por
+
+00:03:51.846 --> 00:03:54.246 align:middle
+lo que teníamos que asegurarnos
+de que se utilizaba la versión 3.
+
+00:03:54.596 --> 00:03:57.766 align:middle
+Esto ya no es necesario, así que
+podemos eliminarlo por completo
+
+00:03:57.876 --> 00:04:00.446 align:middle
+y dejar que doctrine-bundle
+decida qué versión utilizar.
+
+00:04:00.886 --> 00:04:01.876 align:middle
+Vuelve a intentar la actualización...
+
+00:04:04.886 --> 00:04:06.796 align:middle
+Otro error, pero diferente.
+
+00:04:07.396 --> 00:04:08.126 align:middle
+Desplázate un poco hacia arriba...
+
+00:04:08.886 --> 00:04:12.936 align:middle
+podemos ver que doctrine-bundle 3 y
+dbal 4 se instalaron correctamente.
+
+00:04:13.746 --> 00:04:16.336 align:middle
+El error se produjo al
+intentar borrar la caché.
+
+00:04:16.636 --> 00:04:20.956 align:middle
+Parece que nuestra configuración de doctrine está
+utilizando algunas opciones que ya no son compatibles.
+
+00:04:21.766 --> 00:04:26.606 align:middle
+Podríamos arreglarlas manualmente, pero estoy bastante
+seguro de que actualizar la receta Flex lo resolverá.
+
+00:04:27.556 --> 00:04:32.016 align:middle
+Necesitamos un estado git limpio antes de actualizar la
+receta, así que vamos a comprobar nuestro git status.
+
+00:04:32.916 --> 00:04:35.836 align:middle
+Tenemos algunos cambios modificados
+y algunos archivos sin seguimiento.
+
+00:04:36.296 --> 00:04:37.306 align:middle
+Ejecuta: git add .
+
+00:04:37.386 --> 00:04:40.466 align:middle
+Ejecuta: Para rastrearlo todo
+y vuelve a ejecutar git status.
+
+00:04:41.196 --> 00:04:43.556 align:middle
+Ahora que todo está rastreado,
+podemos confirmarlo con:
+
+00:04:44.046 --> 00:04:51.436 align:middle
+git commit -a -m "update doctrine-bundle" git
+status de nuevo para confirmar que estamos limpios.
+
+00:04:52.266 --> 00:04:58.596 align:middle
+Por último, actualiza la receta con: symfony
+composer recipe:update Efectivamente, ha
+
+00:04:58.686 --> 00:05:00.366 align:middle
+encontrado una actualización
+para doctrine-bundle.
+
+00:05:00.706 --> 00:05:04.586 align:middle
+¡Aplícala! Ejecuta git
+status para ver los cambios.
+
+00:05:05.086 --> 00:05:07.636 align:middle
+Perfecto, ha actualizado
+el archivo doctrine.yaml.
+
+00:05:08.416 --> 00:05:12.696 align:middle
+De vuelta a nuestro código, abre
+config/packages/doctrine.yaml.
+
+00:05:13.536 --> 00:05:16.086 align:middle
+En primer lugar, ha eliminado
+3 opciones de configuración.
+
+00:05:16.266 --> 00:05:18.996 align:middle
+Éstas eran las que provocaban
+el error al borrar la caché.
+
+00:05:19.646 --> 00:05:22.566 align:middle
+Después, parece que cambió la
+estrategia de nombres por defecto...
+
+00:05:22.846 --> 00:05:25.036 align:middle
+y eliminó algunas opciones de
+configuración del controlador.
+
+00:05:26.286 --> 00:05:30.696 align:middle
+Debajo de la configuración de producción,
+eliminó las opciones auto_generate_proxy_classes
+
+00:05:30.806 --> 00:05:32.486 align:middle
+y proxy_dir.
+
+00:05:33.056 --> 00:05:37.796 align:middle
+Con el sistema de objetos perezosos original,
+en producción, Doctrine generaba archivos
+
+00:05:37.796 --> 00:05:40.176 align:middle
+para las clases proxy con el
+fin de mejorar el rendimiento.
+
+00:05:40.736 --> 00:05:43.546 align:middle
+¡Nada de eso es ya necesario con
+los objetos perezosos nativos!
+
+00:05:44.356 --> 00:05:47.166 align:middle
+Bien, veamos qué aspecto tienen
+ahora nuestros objetos perezosos.
+
+00:05:47.716 --> 00:05:52.436 align:middle
+En primer lugar, vuelve a LazyController:index()
+y elimina el primer argumento de dump():
+
+00:05:53.046 --> 00:05:56.866 align:middle
+Esto debería volcar la parte con una instancia de
+nave estelar que no está completamente cargada.
+
+00:05:57.476 --> 00:05:59.266 align:middle
+Actualiza la página /lazy en tu navegador.
+
+00:06:00.016 --> 00:06:02.196 align:middle
+Vale, sólo una consulta, que es lo esperado.
+
+00:06:02.996 --> 00:06:05.866 align:middle
+Abre el panel de depuración y
+comprueba la propiedad starship.
+
+00:06:06.286 --> 00:06:10.916 align:middle
+Ahora es nuestra entidad Starship
+normal, no esa clase proxy generada.
+
+00:06:11.556 --> 00:06:12.396 align:middle
+Pero ¡mira dentro!
+
+00:06:12.626 --> 00:06:15.496 align:middle
+Todas las propiedades están
+sin establecer excepto el ID.
+
+00:06:16.026 --> 00:06:18.786 align:middle
+Esto se parece a lo que vimos
+en la antigua clase proxy.
+
+00:06:19.166 --> 00:06:21.386 align:middle
+¡Esto son objetos perezosos
+nativos en acción!
+
+00:06:22.096 --> 00:06:29.166 align:middle
+Vuelve a LazyController::index(), vuelve a añadir
+el $part->getStarship()->getName() al dump()...
+
+00:06:29.346 --> 00:06:30.936 align:middle
+y vuelve a actualizar la página /lazy.
+
+00:06:31.726 --> 00:06:35.296 align:middle
+Dos consultas, y si miramos la propiedad
+starship en el panel de volcado.
+
+00:06:35.596 --> 00:06:37.596 align:middle
+Sigue siendo sólo nuestra
+entidad Starship normal...
+
+00:06:37.966 --> 00:06:38.976 align:middle
+y si la expandimos...
+
+00:06:39.376 --> 00:06:40.806 align:middle
+¡se cargan todas sus propiedades!
+
+00:06:41.496 --> 00:06:45.236 align:middle
+Vale... esto mola, pero ¿qué significa
+realmente para mí como desarrollador?
+
+00:06:45.716 --> 00:06:49.396 align:middle
+Bueno, probablemente haya alguna mejora de
+rendimiento con los objetos lazy nativos.
+
+00:06:49.636 --> 00:06:54.596 align:middle
+Pero la principal conclusión es que ahora podemos,
+por fin, marcar nuestras entidades como final.
+
+00:06:55.006 --> 00:06:59.536 align:middle
+Así que, sí, no es que nos cambie la vida, pero está
+bien que ya no necesitemos una solución complicada.
+
+00:07:00.126 --> 00:07:02.196 align:middle
+Así que... ¡marquemos
+nuestras entidades como finales!
+
+00:07:02.746 --> 00:07:11.496 align:middle
+src/Entity/Droid.php: final: Starship.php:
+final: StarshipDroid.php: final:
+
+00:07:12.076 --> 00:07:17.626 align:middle
+y finalmente StarshipPart.php: final:
+Actualiza nuestra página perezosa...
+
+00:07:17.686 --> 00:07:19.646 align:middle
+y... ¡todo sigue funcionando!
+
+00:07:20.426 --> 00:07:25.656 align:middle
+Estamos casi listos para dar el salto a Symfony 8, pero
+antes de hacerlo, volvamos a revisar las depreciaciones.

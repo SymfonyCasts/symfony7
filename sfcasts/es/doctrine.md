@@ -55,7 +55,7 @@ Como referencia, `doctrine/dbal` es la capa de abstracción de bases de datos qu
 
 Comprobemos nuestro `composer.json`. Sólo requerimos `dbal` versión 3, pero`doctrine-bundle` necesita la versión 4 según ese error.
 
-Vale, esto es un problema heredado. Las versiones anteriores de `doctrine-bundle` no soportaban `dbal` 4, por lo que teníamos que asegurarnos de que se utilizaba la versión 3. Esto ya no es necesario, así que podemos eliminarlo por completo y dejar que `doctrine-bundle` decida qué versión utilizar.
+Vale, esto es un problema heredado. Las versiones anteriores de `doctrine-bundle` no soportaban `dbal` 4, así que teníamos que asegurarnos de que se utilizaba la versión 3. Esto ya no es necesario, así que podemos eliminarlo por completo y dejar que `doctrine-bundle` decida qué versión utilizar.
 
 Vuelve a intentar la actualización...
 
