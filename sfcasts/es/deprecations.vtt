@@ -1,0 +1,502 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:04.336 align:middle
+Volvamos a las deprecaciones, ya
+que es importante corregirlas.
+
+00:00:04.606 --> 00:00:08.716 align:middle
+Como se mencionó anteriormente, antes de que
+puedas saltar con seguridad a Symfony 8.0,
+
+00:00:08.966 --> 00:00:13.136 align:middle
+debes asegurarte de que estás ejecutando
+Symfony 7.4 libre de depreciaciones.
+
+00:00:13.626 --> 00:00:17.396 align:middle
+Esto significa que no debería haber
+ninguna deprecación en toda tu aplicación.
+
+00:00:18.186 --> 00:00:21.546 align:middle
+Sabemos que podemos encontrar depreciaciones en la
+barra de herramientas de depuración web, pero...
+
+00:00:21.696 --> 00:00:24.566 align:middle
+esto sólo muestra las imprecisiones
+de la página actual...
+
+00:00:24.836 --> 00:00:25.506 align:middle
+Aquí no hay ninguna...
+
+00:00:25.886 --> 00:00:27.086 align:middle
+pero haz clic en esta nave estelar.
+
+00:00:27.436 --> 00:00:29.336 align:middle
+Esta página sí tiene una desaprobación.
+
+00:00:29.966 --> 00:00:32.436 align:middle
+Exploremos el panel de
+obsoletos con más detalle.
+
+00:00:32.916 --> 00:00:35.166 align:middle
+Haz clic en el icono de la barra
+de herramientas para abrirlo.
+
+00:00:35.886 --> 00:00:38.356 align:middle
+Esta deprecación parece provenir de Doctrine,
+
+00:00:38.356 --> 00:00:41.266 align:middle
+algo sobre el acceso a valores
+de campo sin procesar...
+
+00:00:41.756 --> 00:00:42.536 align:middle
+Pero ¡mira esto!
+
+00:00:42.686 --> 00:00:45.426 align:middle
+¡Un enlace a un pull
+request justo en el mensaje!
+
+00:00:45.596 --> 00:00:47.186 align:middle
+Muy útil, ¡me encanta!
+
+00:00:47.776 --> 00:00:49.756 align:middle
+Copia el enlace y pégalo en tu navegador...
+
+00:00:51.676 --> 00:00:56.536 align:middle
+Este es el PR de Doctrine que modificó algunos
+comportamientos y provocó esta desaprobación.
+
+00:00:57.126 --> 00:00:59.476 align:middle
+Parece que soluciona algunos
+problemas de memoria.
+
+00:01:00.056 --> 00:01:03.196 align:middle
+Hay una gran discusión para ayudarnos
+a tener más contexto si queremos.
+
+00:01:03.806 --> 00:01:04.906 align:middle
+Pero, ¿cómo lo arreglamos?
+
+00:01:05.366 --> 00:01:08.576 align:middle
+En la descripción del PR, hay una
+sección de ruta de migración.
+
+00:01:09.116 --> 00:01:14.926 align:middle
+El nuevo comportamiento es opcional, y puede
+activarse pasando accessRawFieldValues:
+
+00:01:14.926 --> 00:01:17.246 align:middle
+true al constructor Criteria.
+
+00:01:17.906 --> 00:01:20.886 align:middle
+Vale... ¿cómo encontramos dónde necesita
+nuestra aplicación esta corrección?
+
+00:01:21.286 --> 00:01:23.326 align:middle
+¡El panel de obsoletos al rescate!
+
+00:01:23.986 --> 00:01:26.596 align:middle
+Haz clic en "mostrar seguimiento"
+debajo del mensaje de desaprobación.
+
+00:01:26.936 --> 00:01:30.666 align:middle
+Este es el seguimiento de cómo tu
+aplicación ha llegado a esta desaprobación.
+
+00:01:31.176 --> 00:01:34.936 align:middle
+Puedes leerlo de arriba
+abajo e ignorar las líneas
+
+00:01:34.936 --> 00:01:36.636 align:middle
+que no están en tu directorio src.
+
+00:01:37.306 --> 00:01:41.666 align:middle
+La primera línea de nuestro directorio src es
+probablemente la que está provocando la eliminación.
+
+00:01:42.186 --> 00:01:46.186 align:middle
+En este caso, es la línea
+23 de StarshipPartRepository.
+
+00:01:46.816 --> 00:01:51.006 align:middle
+Incluso podemos ampliarlo para ver el código
+real que está provocando la eliminación.
+
+00:01:51.406 --> 00:01:55.666 align:middle
+¡Genial! También en este panel
+está el enlace "mostrar contexto".
+
+00:01:56.116 --> 00:02:00.746 align:middle
+Muestra la excepción real lanzada, pero en
+su mayor parte muestra la misma información.
+
+00:02:01.016 --> 00:02:01.746 align:middle
+El mensaje...
+
+00:02:01.866 --> 00:02:03.386 align:middle
+y el seguimiento de la pila.
+
+00:02:03.386 --> 00:02:05.536 align:middle
+Normalmente, sólo utilizo el
+enlace de seguimiento de la pila.
+
+00:02:05.536 --> 00:02:11.246 align:middle
+Así que... para encontrar todas las imprecisiones con la barra
+de herramientas de depuración web, tendríamos que ir localmente
+
+00:02:11.246 --> 00:02:16.436 align:middle
+a cada página, a cada envío de formulario,
+a cada ruta de la API, etcétera.
+
+00:02:16.786 --> 00:02:18.506 align:middle
+Eso no es muy eficiente.
+
+00:02:18.506 --> 00:02:21.616 align:middle
+Entonces, ¿cuál es la mejor forma
+de encontrar las desaprobaciones?
+
+00:02:22.216 --> 00:02:24.526 align:middle
+Hay dos formas alternativas principales.
+
+00:02:24.526 --> 00:02:26.206 align:middle
+La primera es tu conjunto de pruebas.
+
+00:02:26.206 --> 00:02:29.556 align:middle
+PHPUnit puede configurarse para
+mostrar las depreciaciones.
+
+00:02:30.056 --> 00:02:34.276 align:middle
+Pero... a menos que tengas una cobertura de
+pruebas del 100%, esto no lo detectará todo.
+
+00:02:34.726 --> 00:02:36.966 align:middle
+Vaya, ni siquiera tengo
+pruebas en esta aplicación...
+
+00:02:37.776 --> 00:02:40.766 align:middle
+La última forma es un método infalible.
+
+00:02:41.276 --> 00:02:46.686 align:middle
+Despliegas tu aplicación Symfony 7.4 en producción
+durante un tiempo, unas semanas o un mes.
+
+00:02:46.686 --> 00:02:50.696 align:middle
+Durante ese tiempo, registra todas las
+depreciaciones que se produzcan en producción.
+
+00:02:51.196 --> 00:02:54.846 align:middle
+Recuerda que las depreciaciones no son errores,
+por lo que no romperán tu aplicación.
+
+00:02:55.576 --> 00:02:58.376 align:middle
+Cuando se produzcan, o al
+final del periodo de tiempo,
+
+00:02:58.596 --> 00:03:01.436 align:middle
+revisa esos registros y
+corrige las depreciaciones.
+
+00:03:02.046 --> 00:03:05.866 align:middle
+Haz este ciclo unas cuantas veces hasta que
+no tengas más depreciaciones en producción.
+
+00:03:06.386 --> 00:03:09.296 align:middle
+Ahora estás listo para actualizar
+a Symfony 8.0 de forma segura.
+
+00:03:09.296 --> 00:03:13.486 align:middle
+Veamos cómo funciona el registro
+y cómo se puede mejorar.
+
+00:03:14.016 --> 00:03:17.266 align:middle
+Abre config/packages/monolog.yaml.
+
+00:03:17.266 --> 00:03:21.226 align:middle
+Desplázate hasta el gestor deprecation
+en la configuración de producción.
+
+00:03:21.906 --> 00:03:25.566 align:middle
+Este gestor sólo escribe las deprecaciones
+en el flujo de error estándar.
+
+00:03:26.156 --> 00:03:28.366 align:middle
+Por supuesto, puedes personalizarlo a tu gusto.
+
+00:03:28.366 --> 00:03:31.576 align:middle
+Mi favorito es llenar de ellas
+el canal de Slack de mi equipo
+
+00:03:32.316 --> 00:03:35.796 align:middle
+Vamos a añadir este controlador a nuestro
+entorno de desarrollo para verlo en acción.
+
+00:03:36.426 --> 00:03:40.556 align:middle
+Copia el manejador deprecation y
+pégalo en la sección when@dev...
+
+00:03:42.826 --> 00:03:45.146 align:middle
+No quiero enviar esto a error estándar aquí,
+
+00:03:45.146 --> 00:03:48.486 align:middle
+así que copia la ruta del
+manejador anterior y pégala aquí.
+
+00:03:49.996 --> 00:03:55.916 align:middle
+Sufija el archivo con deprecations.json: Esto
+ya está usando el formateador JSON y usar
+
+00:03:55.916 --> 00:03:58.796 align:middle
+esa extensión me ayudará a
+hacerlo bonito en PhpStorm.
+
+00:03:59.576 --> 00:04:02.526 align:middle
+De vuelta en nuestra aplicación, actualiza
+la página que provoca la depreciación.
+
+00:04:03.236 --> 00:04:05.016 align:middle
+Ahora, abre var/log...
+
+00:04:07.696 --> 00:04:09.206 align:middle
+Hmm, no veo el archivo.
+
+00:04:09.726 --> 00:04:11.776 align:middle
+Quizás PhpStorm no lo ha recogido todavía.
+
+00:04:12.116 --> 00:04:13.206 align:middle
+Lo recargaré desde el disco...
+
+00:04:13.696 --> 00:04:14.586 align:middle
+¡y ahí está!
+
+00:04:14.886 --> 00:04:17.096 align:middle
+dev.deprecations.json.
+
+00:04:17.616 --> 00:04:18.516 align:middle
+Ábrelo.
+
+00:04:18.516 --> 00:04:20.686 align:middle
+Daré formato al código para
+que sea más fácil de leer.
+
+00:04:22.156 --> 00:04:25.566 align:middle
+Vemos el mismo mensaje de desaprobación
+que vimos en el panel del perfilador...
+
+00:04:25.916 --> 00:04:27.196 align:middle
+y un montón de cosas más...
+
+00:04:27.576 --> 00:04:29.836 align:middle
+pero... falta el seguimiento de la pila.
+
+00:04:30.306 --> 00:04:33.526 align:middle
+Por defecto, es difícil saber
+dónde se dispara la depreciación.
+
+00:04:34.116 --> 00:04:36.256 align:middle
+Por suerte, ¡podemos incluir
+el seguimiento de pila!
+
+00:04:36.326 --> 00:04:39.076 align:middle
+Borraré este archivo de registro
+para que podamos empezar de cero.
+
+00:04:39.776 --> 00:04:43.866 align:middle
+De vuelta en monolog.yaml, en la configuración
+de nuestro gestor de deprecación dev,
+
+00:04:44.186 --> 00:04:48.906 align:middle
+añade include_stacktraces:
+true: Actualizar la página...
+
+00:04:49.946 --> 00:04:50.976 align:middle
+comprueba el archivo de registro...
+
+00:04:50.976 --> 00:04:52.156 align:middle
+formatéalo...
+
+00:04:54.276 --> 00:04:55.056 align:middle
+¡y ya está!
+
+00:04:55.446 --> 00:04:58.306 align:middle
+El seguimiento de pila tiene el mismo
+aspecto que en el panel del perfilador.
+
+00:04:58.796 --> 00:05:00.036 align:middle
+Y efectivamente, podemos ver
+
+00:05:00.036 --> 00:05:04.506 align:middle
+que la línea 23 de StarshipPartRepository
+está provocando la depreciación.
+
+00:05:05.546 --> 00:05:07.266 align:middle
+Hay una cosa que creo que sigue faltando...
+
+00:05:07.596 --> 00:05:10.246 align:middle
+Estaría bien saber qué URL lo ha provocado.
+
+00:05:10.766 --> 00:05:14.596 align:middle
+Esto ayudaría a duplicar el problema
+localmente y confirmar la solución.
+
+00:05:15.096 --> 00:05:20.066 align:middle
+Monolog tiene algo llamado procesadores que pueden
+añadir datos adicionales a las entradas del registro.
+
+00:05:20.536 --> 00:05:24.716 align:middle
+Hay un montón de procesadores incorporados,
+uno para añadir detalles de autenticación,
+
+00:05:24.966 --> 00:05:28.266 align:middle
+detalles de comandos de consola e
+información adicional de depuración.
+
+00:05:28.796 --> 00:05:31.406 align:middle
+El que quiero activar es el WebProcessor.
+
+00:05:31.826 --> 00:05:36.466 align:middle
+Esto añade los detalles de la petición,
+como la URL, el método HTTP y la IP.
+
+00:05:37.256 --> 00:05:40.546 align:middle
+Los procesadores incorporados no se
+registran como servicios por defecto,
+
+00:05:40.736 --> 00:05:42.636 align:middle
+pero es superfácil hacerlo nosotros mismos.
+
+00:05:42.696 --> 00:05:44.496 align:middle
+Volveré a borrar este archivo de registro.
+
+00:05:45.366 --> 00:05:49.696 align:middle
+Abre config/services.yaml y en la
+parte inferior, debajo de services,
+
+00:05:49.906 --> 00:05:55.276 align:middle
+añade monolog.processor.web
+con la clase WebProcessor.
+
+00:05:55.666 --> 00:06:00.306 align:middle
+Elige la del Puente Monolog, ya que está
+preparada para funcionar con Symfony: ¡Ya está!
+
+00:06:00.596 --> 00:06:04.646 align:middle
+Está autocableado y autoconfigurado,
+así que no necesitamos hacer nada más.
+
+00:06:04.646 --> 00:06:05.766 align:middle
+Vuelve a actualizar la página...
+
+00:06:06.666 --> 00:06:07.706 align:middle
+comprueba el archivo de registro...
+
+00:06:07.706 --> 00:06:09.446 align:middle
+formatéalo...
+
+00:06:10.496 --> 00:06:11.496 align:middle
+¡y ya está!
+
+00:06:11.726 --> 00:06:15.866 align:middle
+Tenemos el mensaje, la traza de la
+pila, y abajo del todo, en extra,
+
+00:06:16.116 --> 00:06:19.306 align:middle
+tenemos la URL, la IP y el método HTTP.
+
+00:06:19.886 --> 00:06:22.916 align:middle
+Sólo tienes que modificar nuestra configuración
+para producción en tus aplicaciones y desplegar.
+
+00:06:22.916 --> 00:06:27.176 align:middle
+Encontrar, duplicar y corregir
+depreciaciones será pan comido
+
+00:06:27.986 --> 00:06:30.336 align:middle
+Bien, ¡ahora vamos a
+arreglar esta depreciación!
+
+00:06:30.796 --> 00:06:34.436 align:middle
+Se activó en StarshipPartRepository
+en la línea 23, ¿verdad?
+
+00:06:34.976 --> 00:06:35.676 align:middle
+Ábrelo...
+
+00:06:35.776 --> 00:06:37.096 align:middle
+y busca la línea 23...
+
+00:06:37.626 --> 00:06:41.146 align:middle
+Recuerda que tenemos que pasar
+true al constructor Criteria.
+
+00:06:41.906 --> 00:06:46.476 align:middle
+Este Criteria::create() no es el constructor
+real, sino que es un constructor con nombre.
+
+00:06:46.926 --> 00:06:48.136 align:middle
+Cuando saltamos a ese método...
+
+00:06:48.446 --> 00:06:52.006 align:middle
+efectivamente, tiene el
+parámetro accessRawFieldValues...
+
+00:06:52.426 --> 00:06:53.476 align:middle
+pero está comentado.
+
+00:06:53.896 --> 00:06:54.676 align:middle
+¿Qué pasa con eso?
+
+00:06:55.386 --> 00:06:57.416 align:middle
+Forma parte del proceso de desaprobación.
+
+00:06:57.696 --> 00:06:59.536 align:middle
+No pueden añadir el nuevo parámetro sin más.
+
+00:06:59.796 --> 00:07:03.966 align:middle
+Esta clase y este método no son definitivos, así que,
+para mantener la compatibilidad con versiones anteriores,
+
+00:07:04.086 --> 00:07:05.776 align:middle
+tienen que conservar la firma actual.
+
+00:07:06.266 --> 00:07:10.776 align:middle
+Comentan el nuevo parámetro y
+activan la eliminación si no se pasa.
+
+00:07:11.126 --> 00:07:15.436 align:middle
+Esto de func_num_args() es una forma de
+comprobar si se ha pasado el nuevo parámetro
+
+00:07:15.586 --> 00:07:18.006 align:middle
+sin añadirlo realmente a la firma del método.
+
+00:07:18.786 --> 00:07:22.236 align:middle
+La próxima versión principal de este
+paquete tendrá el parámetro real
+
+00:07:22.236 --> 00:07:25.436 align:middle
+en la firma del método, y se
+eliminará la forma antigua.
+
+00:07:25.786 --> 00:07:28.066 align:middle
+Este es el último paso del
+ciclo de desaprobación.
+
+00:07:28.776 --> 00:07:30.266 align:middle
+Basta de charla, ¡arreglémoslo!
+
+00:07:30.736 --> 00:07:36.736 align:middle
+De vuelta en StarshipPartRepository, pasa true
+a Criteria::create(): De vuelta al navegador.
+
+00:07:37.246 --> 00:07:39.896 align:middle
+Cuando actualicemos, esta desaprobación
+debería haber desaparecido...
+
+00:07:40.736 --> 00:07:41.436 align:middle
+¡Y así es!
+
+00:07:42.026 --> 00:07:44.236 align:middle
+¡Por fin estamos listos
+para pasar a Symfony 8!
+
+00:07:44.526 --> 00:07:45.236 align:middle
+¡Eso a continuación!
