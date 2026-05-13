@@ -59,7 +59,17 @@
             "id": "4-fix-deprecation",
             "name": "4. fix deprecation",
             "description": null
+        },
+        {
+            "id": "5-symfony-8",
+            "name": "5. symfony 8",
+            "description": null
+        },
+        {
+            "id": "ch5-tuts",
+            "name": "ch5 tuts",
+            "description": null
         }
     ],
-    "sha": "94600e1d5fe82b1e39065977c1bbd6d7356dc0c5"
+    "sha": "8be88747c67a53af39e880218f4b37b48d8c522f"
 }
