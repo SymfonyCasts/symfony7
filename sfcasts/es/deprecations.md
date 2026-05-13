@@ -2,7 +2,7 @@
 
 Volvamos a las deprecaciones, ya que es importante corregirlas. Como se mencionó anteriormente, antes de que puedas saltar con seguridad a Symfony 8.0, debes asegurarte de que estás ejecutando Symfony 7.4 libre de depreciaciones. Esto significa que no debería haber ninguna deprecación en toda tu aplicación.
 
-Sabemos que podemos encontrar depreciaciones en la barra de herramientas de depuración web, pero... esto sólo muestra las depreciaciones de la página actual... Aquí no hay ninguna... pero haz clic en esta nave estelar. 
+Sabemos que podemos encontrar las deprecaciones en la barra de herramientas de depuración web, pero... esto sólo muestra las deprecaciones de la página actual... Aquí no hay ninguna... pero haz clic en esta nave estelar. 
 Esta página sí tiene una desaprobación.
 
 ## Profundizando en el panel de obsoletos
