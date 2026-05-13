@@ -105,3 +105,24 @@
   - Sure enough, there's a new parameter
   - Use `true` to opt-in
 - Refresh again, no more deprecation!
+
+## Upgrade to Symfony 8.0!
+
+- `symfony composer -D`
+- In `composer.json`
+    - Find and replace `7.4.*` with `8.0.*`
+- `symfony composer update`
+    - tailwind-bundle doesn't support Symfony 8
+- check packagist.org for tailwind-bundle
+    - need to change `composer.json` to `0.12.0`
+- `symfony composer update`
+    - monolog bundle, check packagist
+    - change to `^4.0`
+- `symfony composer update`
+    - worked!
+    - `symfony console --version`
+- `git status`
+- `git commit -a -m "Upgrade to Symfony 8.0"`
+- `symfony composer recipe:update`
+    - no recipes to update!
+- Check app, everything works!
