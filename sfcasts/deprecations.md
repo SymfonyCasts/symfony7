@@ -55,8 +55,11 @@ them is my favorite!
 
 Let's add this handler to our dev environment so we can see it in action. Copy the `deprecation` handler and paste
 it in the `when@dev` section... I don't want to stream these to standard error here, so copy the path from the
-handler above and paste it here. Suffix the file with `deprecations.json`. This is already using the JSON
-formatter and using that extension will help me make it pretty in PhpStorm.
+handler above and paste it here. Suffix the file with `deprecations.json`: 
+
+[[[ code('53ecd5f082') ]]]
+
+This is already using the JSON formatter and using that extension will help me make it pretty in PhpStorm.
 
 Back in our app, refresh the page that causes the deprecation. Now, open `var/log`... Hmm, I don't see the file.
 Maybe PhpStorm hasn't picked it up yet. I'll reload from disk... and there it is!
@@ -70,7 +73,9 @@ missing the stack trace. By default, it's hard to know where the deprecation is 
 
 Luckily, we can include the stack trace! I'll clear this log file so we have a fresh start.
 
-Back in `monolog.yaml`, in our dev deprecation handler config, add `include_stacktraces: true`.
+Back in `monolog.yaml`, in our dev deprecation handler config, add `include_stacktraces: true`:
+
+[[[ code('a5f5a65ecb') ]]]
 
 Refresh the page... check the log file... format it... and there we go! The stack trace looks just like it did
 in the profiler panel. And sure enough, we can see that `StarshipPartRepository` line 23 is triggering the deprecation.
@@ -88,8 +93,11 @@ The built-in processors aren't registered as services by default, but it's super
 I'll clear this log file again.
 
 Open `config/services.yaml` and at the bottom, under `services`, add `monolog.processor.web` with the class `WebProcessor`. Choose
-the one from the Monolog Bridge, as it's ready to go with Symfony. That's it! It's autowired and autoconfigured, so we
-don't need to do anything else.
+the one from the Monolog Bridge, as it's ready to go with Symfony:
+
+[[[ code('8105a00509') ]]]
+
+That's it! It's autowired and autoconfigured, so we don't need to do anything else.
 
 Refresh the page again... check the log file... format it... and there we go! We have the message, the stack trace, and
 down at the bottom, under `extra`, we have the URL, the IP, and the HTTP method.
@@ -111,7 +119,9 @@ is a way to check if the new parameter was passed without actually adding it to 
 The next major version of this package will have the real parameter in the method signature, and the old way will
 be removed. That's the last step of the deprecation cycle.
 
-Enough talk, let's fix it! Back in `StarshipPartRepository`, pass `true` to `Criteria::create()`.
+Enough talk, let's fix it! Back in `StarshipPartRepository`, pass `true` to `Criteria::create()`:
+
+[[[ code('2cd4b32bdd') ]]]
 
 Back to the browser. When we refresh, this deprecation should be gone... And it is!
 
