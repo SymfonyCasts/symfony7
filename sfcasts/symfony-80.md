@@ -13,6 +13,8 @@ Replace... `7.4.*` and replace it with `8.0.*`. Replace all... Nice.
 I'll take a moment to verify. `require` section looks good... Ah, great, our
 `extra` `symfony` `require` option was updated. And `require-dev` looks good too!
 
+[[[ code('f0e52d5b2a') ]]]
+
 Head over to the terminal and run:
 
 ```terminal
@@ -31,7 +33,9 @@ we're on. Sure enough, Symfony packages it requires only support up to Symfony 7
 Here's the newest version: `v0.12.0`, and sweet, this one does support Symfony 8!
 
 Back in our `composer.json`... find the `tailwind-bundle`... and change its version
-to `^0.12.0`.
+to `^0.12.0`:
+
+[[[ code('3f6a754752') ]]]
 
 Let's try the update again.
 
@@ -47,7 +51,9 @@ Symfony 8. Let's quickly jump back to Packagist and search for `monolog-bundle`.
 
 Yep, version 3 doesn't support Symfony 8... but version 4 does!
 
-Back to `composer.json`, find the `monolog-bundle`... and change its version to `^4.0`.
+Back to `composer.json`, find the `monolog-bundle`... and change its version to `^4.0`:
+
+[[[ code('404b6a4b0d') ]]]
 
 ***NOTE
 If you're wondering why the `monolog-bundle` uses a different
@@ -87,7 +93,9 @@ Looks like we have 3 packages that have newer versions available. `phpdocumentor
 ahead and do that in our `composer.json` file.
 
 Find `phpdocumentor/reflection-docblock` and change to `^6.0`. Next, `stimulus-bundle`, change to `^3.0`.
-Finally, `ux-turbo`, change to `^3.0`.
+Finally, `ux-turbo`, change to `^3.0`:
+
+[[[ code('38cf8b54ad') ]]]
 
 Let's update!
 
