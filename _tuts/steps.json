@@ -9,7 +9,12 @@
             "id": "add-migrations",
             "name": "add migrations",
             "description": null
+        },
+        {
+            "id": "1-add-security-bundle",
+            "name": "1. add security bundle",
+            "description": null
         }
     ],
-    "sha": "641800883d9303fdd66b63106ec80f061ac8d281"
+    "sha": "5c7ec55585c1e084d45301b66f5c95da1b7e6fd0"
 }
