@@ -59,44 +59,47 @@
     - Success!
     - But if you pick at the user table in the DB - the password isn't hashed!
     - Will it work? Let's find out!
-- Now time to create a login form!
-    - We will use traditional login form authentication, but there're more! (HTTP Basic, JSON login, Login link, etc.)
-    - For transitional login form, we can leverage MakerBundle
-    - Create a login form w/ `symfony console make:security:form-login` command
-    - Keep `SecurityController` as the controller name
-    - Let's say "yes" to generate a logout URL
-    - Say "no" for PHPUnit tests for now
-    - OK, it created a controller and template
-    - And updated the `security.yaml` - open it!
-    - It added `form_login` with `login_path`, `check_path`, and enabled CSRF feature
-    - The `form_login` is a Symfony's built-in login form authenticator
-    - Authenticators helps us to "authenticate" users
-    - There are 2 different concepts: "Authentication" (`firewalls`) and "Authorization" (`access_control`)
-    - Authentication is all about "Who you are? You're Victor". It's the process
-      of verifying identity. Here we're checking for user credentials:
-      email/password pair, API token, OAuth, etc. - without worry about
-      what they can do on our platform. And this job is done by the Authenticator.
-    - Authorization is all about "What are you allowed to do? Victor can access /admin? YES".
-      It's the process of checking permissions. "Now that I know who you are,
-      what are you allowed to do?". That's already about what *roles* this user has.
-      And this job is done by the `access_control` and Voters.
-    - In other words, if a user is successfully logged in - that's yet does not mean they can access everything.
-    - NOTE: Let's explain it a bit this way - and that would be an awesome video clip snippet for our YouTube channel
-    - Also added `logout_path`
-    - Those routes are placed in your new `SecurityController` - go check it
-    - You can see the `logout()` throws an exception - that route is handled internally
-    - We need `logout()` just to have a route in the system so we could build the link to it
-    - Ok, go open the /login page
-    - There's an email and password fields w/ a Sign in button
-    - And if you open Chrome inspector - you will see a hidden `_csrf_token` field,
-      which if we modify and try to send will show us an error: Invalid CSRF token.
-    - OK, let's try with correct credentials
-    - Enter `user@example.com` as login
-    - And `userpass` as the password
-    - Aha, "Invalid credentials" error
-    - Of course won't work, because it has to be properly hashed
-    - Authenticator will first hash the password with a special algorithm
-    - And then it will check it with the hash in the DB
+
+## Login Form
+- We will use traditional login form authentication, but there're more! (HTTP Basic, JSON login, Login link, etc.)
+- For transitional login form, we can leverage MakerBundle
+- Create a login form w/ `symfony console make:security:form-login` command
+- Keep `SecurityController` as the controller name
+- Let's say "yes" to generate a logout URL
+- Say "no" for PHPUnit tests for now
+- OK, it created a controller and template
+- And updated the `security.yaml` - open it!
+- It added `form_login` with `login_path`, `check_path`, and enabled CSRF feature
+- The `form_login` is a Symfony's built-in login form authenticator
+- Authenticators helps us to "authenticate" users
+- There are 2 different concepts: "Authentication" (`firewalls`) and "Authorization" (`access_control`)
+- Authentication is all about "Who you are? You're Victor". It's the process
+  of verifying identity. Here we're checking for user credentials:
+  email/password pair, API token, OAuth, etc. - without worry about
+  what they can do on our platform. And this job is done by the Authenticator.
+- Authorization is all about "What are you allowed to do? Victor can access /admin? YES".
+  It's the process of checking permissions. "Now that I know who you are,
+  what are you allowed to do?". That's already about what *roles* this user has.
+  And this job is done by the `access_control` and Voters.
+- In other words, if a user is successfully logged in - that's yet does not mean they can access everything.
+- NOTE: Let's explain it a bit this way - and that would be an awesome video clip snippet for our YouTube channel
+- Also added `logout_path`
+- Those routes are placed in your new `SecurityController` - go check it
+- You can see the `logout()` throws an exception - that route is handled internally
+- We need `logout()` just to have a route in the system so we could build the link to it
+- Ok, go open the /login page
+- There's an email and password fields w/ a Sign in button
+- And if you open Chrome inspector - you will see a hidden `_csrf_token` field,
+  which if we modify and try to send will show us an error: Invalid CSRF token.
+- OK, let's try with correct credentials
+- Enter `user@example.com` as login
+- And `userpass` as the password
+- Aha, "Invalid credentials" error
+- Of course won't work, because it has to be properly hashed
+
+## Password Hashing
+- Authenticator will first hash the password with a special algorithm
+- And then it will check it with the hash in the DB
 - No problem! Let's hash it via a console command
     - Run: `symfony console security:hash-password` command
     - Type our password there: `userpass`

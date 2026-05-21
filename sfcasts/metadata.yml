@@ -1,1 +1,13 @@
-chapters: []
+chapters:
+    installation:
+        tutsFirstStep: 1-add-security-bundle
+        tutsLastStep: 1-add-security-bundle
+    user:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    login-form:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    password-hashing:
+        tutsFirstStep: ~
+        tutsLastStep: ~
