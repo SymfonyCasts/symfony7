@@ -36,7 +36,7 @@ final class AppStory extends Story
             'captain' => 'Kathryn Journeyway',
             'status' => StarshipStatusEnum::WAITING,
             'arrivedAt' => new \DateTimeImmutable('-1 month'),
-        ])->_real();
+        ]);
 
         StarshipPartFactory::createOne([
             'name' => 'Toilet Paper',

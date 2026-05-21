@@ -4,12 +4,12 @@ namespace App\Factory;
 
 use App\Entity\StarshipPart;
 use App\Entity\StarshipStatusEnum;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<StarshipPart>
+ * @extends PersistentObjectFactory<StarshipPart>
  */
-final class StarshipPartFactory extends PersistentProxyObjectFactory
+final class StarshipPartFactory extends PersistentObjectFactory
 {
     private static array $partIdeas = [
         'warp core' => 'looks cool AND zoom',

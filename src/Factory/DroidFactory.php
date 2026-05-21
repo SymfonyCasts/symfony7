@@ -3,12 +3,12 @@
 namespace App\Factory;
 
 use App\Entity\Droid;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Droid>
+ * @extends PersistentObjectFactory<Droid>
  */
-final class DroidFactory extends PersistentProxyObjectFactory
+final class DroidFactory extends PersistentObjectFactory
 {
     /**
      * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
