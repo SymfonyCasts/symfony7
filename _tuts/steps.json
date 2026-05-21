@@ -1,0 +1,15 @@
+{
+    "steps": [
+        {
+            "id": "start",
+            "name": "start",
+            "description": null
+        },
+        {
+            "id": "add-migrations",
+            "name": "add migrations",
+            "description": null
+        }
+    ],
+    "sha": "641800883d9303fdd66b63106ec80f061ac8d281"
+}
