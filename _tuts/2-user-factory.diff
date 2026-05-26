@@ -1,0 +1,85 @@
+diff --git a/src/Factory/UserFactory.php b/src/Factory/UserFactory.php
+new file mode 100644
+index 0000000..0c47309
+--- /dev/null
++++ b/src/Factory/UserFactory.php
+@@ -0,0 +1,54 @@
++<?php
++
++namespace App\Factory;
++
++use App\Entity\User;
++use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
++
++/**
++ * @extends PersistentObjectFactory<User>
++ */
++final class UserFactory extends PersistentObjectFactory
++{
++    /**
++     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services
++     *
++     * @todo inject services if required
++     */
++    public function __construct()
++    {
++    }
++
++    #[\Override]
++    public static function class(): string
++    {
++        return User::class;
++    }
++
++    /**
++     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#model-factories
++     *
++     * @todo add your default values here
++     */
++    #[\Override]
++    protected function defaults(): array|callable
++    {
++        return [
++            'email' => self::faker()->unique()->email(),
++            'name' => self::faker()->name(),
++            'password' => 'engage',
++            'roles' => [],
++        ];
++    }
++
++    /**
++     * @see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
++     */
++    #[\Override]
++    protected function initialize(): static
++    {
++        return $this
++            // ->afterInstantiate(function(User $user): void {})
++        ;
++    }
++}
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 54c04bb..a142ac2 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -6,6 +6,7 @@ use App\Entity\StarshipStatusEnum;
+ use App\Factory\DroidFactory;
+ use App\Factory\StarshipFactory;
+ use App\Factory\StarshipPartFactory;
++use App\Factory\UserFactory;
+ use Zenstruck\Foundry\Attribute\AsFixture;
+ use Zenstruck\Foundry\Story;
+ 
+@@ -14,6 +15,12 @@ final class AppStory extends Story
+ {
+     public function build(): void
+     {
++        UserFactory::createOne([
++            'email' => 'picard@enterprise.space',
++            'password' => 'makeitso',
++            'name' => 'Jean-Luc Picard',
++        ]);
++
+         StarshipFactory::createOne([
+             'name' => 'USS LeafyCruiser (NCC-0001)',
+             'class' => 'Garden',

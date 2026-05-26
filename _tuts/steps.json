@@ -14,7 +14,47 @@
             "id": "1-add-security-bundle",
             "name": "1. add security bundle",
             "description": null
+        },
+        {
+            "id": "2-make-user",
+            "name": "2. make:user",
+            "description": null
+        },
+        {
+            "id": "2-add-name",
+            "name": "2. add name",
+            "description": null
+        },
+        {
+            "id": "2-user-migration",
+            "name": "2. user migration",
+            "description": null
+        },
+        {
+            "id": "2-user-factory",
+            "name": "2. user factory",
+            "description": null
+        },
+        {
+            "id": "3-make-login-form",
+            "name": "3. make login form",
+            "description": null
+        },
+        {
+            "id": "3-style-login-form",
+            "name": "3. style login form",
+            "description": null
+        },
+        {
+            "id": "4-hashed-password",
+            "name": "4. hashed password",
+            "description": null
+        },
+        {
+            "id": "4-auto-hash-in-factory",
+            "name": "4. auto-hash in factory",
+            "description": null
         }
     ],
-    "sha": "5c7ec55585c1e084d45301b66f5c95da1b7e6fd0"
+    "sha": "c14513a8d3ee0368609297ea9ccd4baf700cfecb"
 }
