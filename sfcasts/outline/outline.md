@@ -34,9 +34,8 @@
     - The `getRoles()` always returns the default `ROLE_USER`, but we can add more roles e.g. `ROLE_ADMIN`
 - Let's personalize our users
     - Modify User class w/ `symfony console make:entity` command
-    - Add `firstName` property
+    - Add `name` property
     - Make it `string`
-    - Set length to `30`
     - Say "no" for nullable - we will require first name during the registration
     - It will add the property with getter and setter
 - Make migration w/ `symfony console make:migration` command
@@ -50,15 +49,18 @@
 - Create a Foundry factory w/ `symfony console make:factory` command
     - Choose `App\Entity\User`
     - Open `src/Factory/UserFactory.php` to show the generated class
+      - `'email' => self::faker()->unique()->email(),
+         'name' => self::faker()->name(),
+         'password' => 'engage',`
     - Open `src/Story/AppStory.php`
     - Add `UserFactory::createOne([])` call
-    - And pass `'email' => 'user@example.com',`
-    - And `'firstName' => 'User',`
-    - And `'password' => 'userpass'`
+    - And pass `'email' => 'picard@enterprise.space',`
+    - And `'name' => 'Jean-Luc Picard',`
+    - And `'password' => 'makeitso'`
     - Load fixtures w/ `symfony console foundry:load-fixtures` command
     - Success!
-    - But if you pick at the user table in the DB - the password isn't hashed!
-    - Will it work? Let's find out!
+    - `symfony console dbal:run-sql 'select * from user'`
+      - Something's wrong with the password, can you guess what it is?
 
 ## Login Form
 - We will use traditional login form authentication, but there're more! (HTTP Basic, JSON login, Login link, etc.)
@@ -69,70 +71,78 @@
 - Say "no" for PHPUnit tests for now
 - OK, it created a controller and template
 - And updated the `security.yaml` - open it!
-- It added `form_login` with `login_path`, `check_path`, and enabled CSRF feature
-- The `form_login` is a Symfony's built-in login form authenticator
-- Authenticators helps us to "authenticate" users
-- There are 2 different concepts: "Authentication" (`firewalls`) and "Authorization" (`access_control`)
-- Authentication is all about "Who you are? You're Victor". It's the process
-  of verifying identity. Here we're checking for user credentials:
-  email/password pair, API token, OAuth, etc. - without worry about
-  what they can do on our platform. And this job is done by the Authenticator.
-- Authorization is all about "What are you allowed to do? Victor can access /admin? YES".
-  It's the process of checking permissions. "Now that I know who you are,
-  what are you allowed to do?". That's already about what *roles* this user has.
-  And this job is done by the `access_control` and Voters.
-- In other words, if a user is successfully logged in - that's yet does not mean they can access everything.
-- NOTE: Let's explain it a bit this way - and that would be an awesome video clip snippet for our YouTube channel
-- Also added `logout_path`
+  - It added `form_login` with `login_path`, `check_path`, and enabled CSRF feature
+  - The `form_login` is a Symfony's built-in login form authenticator
+  - Also added `logout_path`
 - Those routes are placed in your new `SecurityController` - go check it
-- You can see the `logout()` throws an exception - that route is handled internally
-- We need `logout()` just to have a route in the system so we could build the link to it
-- Ok, go open the /login page
-- There's an email and password fields w/ a Sign in button
+  - You can see the `logout()` throws an exception - that route is handled internally
+  - We need `logout()` just to have a route in the system so we could build the link to it
+- Ok, go open the `/login` page
+  - Look at `login.html.twig`
+  - anatomy... errors, logout button, csrf
+  - improve theme (copy from tutorial directory)
+  - refresh...
+- Try invalid credentials...
 - And if you open Chrome inspector - you will see a hidden `_csrf_token` field,
   which if we modify and try to send will show us an error: Invalid CSRF token.
+  - it doesn't look super secure... but... we are using stateless CSRF 
+    - `csrf.yaml`
+    - "hardened" with `assets/controllers/csrf_protection_controller.js` (`data-controller="csrf-protection"`)
 - OK, let's try with correct credentials
-- Enter `user@example.com` as login
-- And `userpass` as the password
+- Enter `picard@enterprise.space`
+- And `makeitso` as the password
 - Aha, "Invalid credentials" error
-- Of course won't work, because it has to be properly hashed
+- Of course won't work, because it has to be properly hashed...
 
 ## Password Hashing
-- Authenticator will first hash the password with a special algorithm
-- And then it will check it with the hash in the DB
+- Our password isn't "hashed"
+- `symfony console dbal:run-sql 'select * from user'`
+  - password is plain text
+- hashing vs encryption
+  - hashing is one-way function, you can't get the original password from the hash
+  - encryption is two-way function, you can get the original password from the encrypted string with a special key
 - No problem! Let's hash it via a console command
-    - Run: `symfony console security:hash-password` command
-    - Type our password there: `userpass`
-    - Success! Copy the hash
-    - Set it in the `AppStory`
-    - I will leave a comment `hash of "userpass"` for the reference
-    - Reload the fixtures w/ `symfony console foundry:load-fixtures` command
-    - Check the DB to see the hashed password now
-    - Notice that login page automatically remembered the last entered email
-    - So convenient!
-    - Now try the `userpass` again
-    - Did it work? I was redirected to the homepage
-    - Check the WDT - we're authenticated now!
-    - That means we hashed the password correct
-    - It says we have that default `ROLE_USER` role
-    - There's also a logout link for convenience if we want to log out the user
-    - Btw, make sure your website uses HTTPS... for ALL pages, that's the best practice now
-    - If your website is on HTTP, especially security pages like user login form or registration form - user credentials can e very easily intercepted on the way. With HTTPS it's much more secure.
-    - But manually hashing passwords for fixtures would be such a bummer
-    - Instead, we can inject the password hasher inside the `UserFactory` and automate it
+  - Run: `symfony console security:hash-password` command
+  - Type `makeitso`
+  - Here's the hash and the hasher used... Migrating?
+  - Symfony has an awesome feature: migrating hashers
+  - Open `security.yaml`
+    - By default, Symfony uses the `auto` hasher
+    - This uses the current best available hashing algorithm - currently, it's bcrypt
+    - So all passwords are hashed with that
+    - Later, a better hasher might be available, `auto` will then use this!
+    - But what about old passwords hashed with the previous algo?
+    - Check out `UserRepository::upgradePassword()`!
+    - On login, if the old algo is detected, Symfony will rehash and save!
+- copy the hash and set it in the `AppStory` fixture
+- `symfony console foundry:load-fixtures` command again
+- Visit `/login` and login again: `picard@enterprise.space` / `makeitso`
+- Success!
+  - Check out the web debug toolbar...
+- annoying to have to pre-hash... let's have our factory auto-hash!
 - Open the `UserFactory`
-    - To require deps in Foundry factories we need to make them services
-    - In the `__construct()`, add `private UserPasswordHasherInterface $passwordHasher`
-    - Below in `initialize()`, uncomment `->afterInstantiate()`
-    - Inside, add `$hashedPassword = $this->passwordHasher->hashPassword($user, $user->getPassword())`
-    - And call `$user->setPassword($hashedPassword);`
-    - Back to `AppStory`
-    - Set password back to `userpass`
-    - Reload fixtures again w/ `symfony console foundry:load-fixtures` command
-    - If you reload the page (we were authenticated) - system automatically logs us out
-    - Try to log in again - it worked!
-    - Now we can just write plain passwords in the fixtures, and it will be hashed automatically
-    - But you know what, let's add login/logout buttons in the header of our template
+  - Factories are actually services!
+  - Inject `private UserPasswordHasherInterface $passwordHasher` in the constructor
+  - Below in `initialize()`, uncomment `->afterInstantiate()`
+    - Inside: `$user->setPassword($this->passwordHasher->hashPassword($user, $user->getPassword()));`
+  - Back to `AppStory`
+    - Set password back to `makeitso`
+- Reload fixtures again w/ `symfony console foundry:load-fixtures` command
+  - If you reload the page (we were authenticated) - system automatically logs us out
+    - This is because the password changed
+      - Well, the password didn't change, the hash did
+    - Symfony detects that and logs us out for security reasons
+- Try to log in again - it worked!
+  - Now we can just write plain passwords in the fixtures, and it will be hashed automatically
+- One last thing about hashing - open `security.yaml` and look under `when@test`
+  - Password hashing is meant to be expensive (CPU/time consuming)
+  - If you have a lot of tests that load user fixtures and hash passwords, it can slow down your tests
+  - Changing the "work factor" of the hasher to minimum values basically makes it as fast as possible
+    - Never change this in your production environment!
+- Next, let's add a login/logout to our topbar!
+
+## Login/Logout Links
+  - But you know what, let's add login/logout buttons in the header of our template
 - Open `base.html.twig` template
     - We need a logout link for users, because they don't see dev's logout link in WDT
     - Add Logout link with `path('app_logout')`
