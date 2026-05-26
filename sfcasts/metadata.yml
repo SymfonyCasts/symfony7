@@ -3,11 +3,11 @@ chapters:
         tutsFirstStep: 1-add-security-bundle
         tutsLastStep: 1-add-security-bundle
     user:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: 2-make-user
+        tutsLastStep: 2-user-factory
     login-form:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: 3-make-login-form
+        tutsLastStep: 3-style-login-form
     password-hashing:
-        tutsFirstStep: ~
-        tutsLastStep: ~
+        tutsFirstStep: 4-hashed-password
+        tutsLastStep: 4-auto-hash-in-factory
