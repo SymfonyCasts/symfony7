@@ -18,7 +18,7 @@ A continuación, necesitamos una propiedad única para identificar a nuestros us
 
 Ahora nos preguntan si nuestro `User` necesita una contraseña... ¿eh? ¿Es realmente opcional una contraseña?
 
-Más o menos. Con cosas como SSO o LDAP, Symfony en realidad no necesita almacenar o comprobar una contraseña en absoluto. En su lugar, un sistema externo se encarga del inicio de sesión, y una vez que está satisfecho, simplemente le dice a tu aplicación: "sí, este usuario está autenticado" En ese momento, Symfony confía en el resultado, y puedes omitir por completo el almacenamiento de una contraseña.
+Más o menos. Con cosas como SSO o LDAP, Symfony en realidad no necesita almacenar o comprobar una contraseña en absoluto. En su lugar, un sistema externo gestiona el inicio de sesión, y una vez que está satisfecho, simplemente le dice a tu aplicación: "sip, este usuario está autenticado" En ese momento, Symfony confía en el resultado, y puedes omitir por completo el almacenamiento de una contraseña.
 
 Pero para nuestros propósitos, `yes`, sí queremos almacenar y verificar las contraseñas nosotros mismos.
 
@@ -38,9 +38,9 @@ Desplazándonos hacia abajo tenemos nuestra propiedad estándar `id` y la propie
 
 Luego tenemos nuestra propiedad `password` y los getters y setters correspondientes.
 
-El comando `make:user` ha añadido algunas cosas interesantes.
+Aquí tienes algunas cosas interesantes que ha añadido el comando `make:user`.
 
-Aquí está la implementación de `getUserIdentifier()` que devuelve la propiedad email, que, si recuerdas, es lo que elegimos como identificador único.
+La implementación de `getUserIdentifier()` devuelve la propiedad email, que, si recuerdas, es lo que elegimos como identificador único.
 
 `getRoles()` tiene un poco de lógica extra. Coge los roles que están guardados en la base de datos, pero también añade siempre`ROLE_USER` a la lista. Es una convención común que todos los usuarios tengan al menos este rol.
 
@@ -48,7 +48,7 @@ En la parte inferior hay un método mágico `__serialize()`. Siempre que se seri
 
 ## Personalizar la entidad de usuario
 
-Quiero que nuestros usuarios tengan un nombre, así que vamos a personalizar nuestra entidad `User`. Recuerda que nuestro `User` es una entidad Doctrine, por lo que podemos utilizar el maker-bundle para añadirle propiedades.
+Quiero que nuestros usuarios tengan un nombre, así que vamos a personalizar nuestra entidad `User`. Recuerda que nuestro `User` es una entidad Doctrine, así que podemos utilizar el maker-bundle para añadirle propiedades.
 
 En tu terminal, ejecuta:
 
@@ -140,4 +140,4 @@ symfony console dbal:run-sql 'select * from user'
 
 Bien, ¡aquí está! Pero hmm... tenemos un grave problema de seguridad aquí... no te preocupes, lo arreglaremos pronto... pero ¿puedes adivinar cuál es?
 
-A continuación, crearemos un formulario de acceso.
+A continuación, crearemos un formulario de inicio de sesión para que nuestros usuarios puedan conectarse
