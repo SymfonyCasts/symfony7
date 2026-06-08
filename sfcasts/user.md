@@ -58,9 +58,9 @@ list of strings) that's stored as JSON in the database.
 
 Then we have our `password` property and getters and setters for these.
 
-A few interesting things the `make:user` command added.
+Here's a few interesting things the `make:user` command added.
 
-Here's the `getUserIdentifier()` implementation that returns the email property, which, if you remember, is what
+The `getUserIdentifier()` implementation returns the email property, which, if you remember, is what
 we chose as our unique identifier.
 
 `getRoles()` has a bit of extra logic. It grabs the roles that are saved in the database, but also *always* adds
@@ -178,4 +178,4 @@ symfony console dbal:run-sql 'select * from user'
 Nice, here he is! But hmm... we have a serious security issue here... don't worry, we'll fix it soon... but
 can you guess what it is?
 
-Next, we'll be creating a login form.
+Next, we'll create a login form so our users can actually log in!
