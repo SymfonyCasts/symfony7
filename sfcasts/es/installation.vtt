@@ -1,0 +1,366 @@
+WEBVTT
+
+00:00:00.096 --> 00:00:03.666 align:middle
+¡Hola Amigos!
+
+00:00:03.916 --> 00:00:05.966 align:middle
+¡Bienvenidos al curso de Seguridad Symfony!
+
+00:00:06.326 --> 00:00:10.786 align:middle
+En este tutorial, vamos a explorar una de las partes
+más importantes de cualquier aplicación web:
+
+00:00:11.196 --> 00:00:15.596 align:middle
+controlar quién puede acceder a tu sitio
+y qué se les permite hacer una vez dentro.
+
+00:00:15.596 --> 00:00:19.956 align:middle
+Para ayudar a explicar estos conceptos,
+utilizaremos nuestro universo Starshop:
+
+00:00:20.156 --> 00:00:25.076 align:middle
+una enorme estación de reparación interestelar
+llena de mecánicos, capitanes, ingenieros,
+
+00:00:25.276 --> 00:00:28.386 align:middle
+hangares restringidos y cubiertas
+de mando de alta seguridad.
+
+00:00:28.966 --> 00:00:32.966 align:middle
+Piensa en Symfony Security como el sistema de
+seguridad automatizado a bordo de la estación.
+
+00:00:33.466 --> 00:00:38.656 align:middle
+Cuando llega una nave, la estación primero tiene que
+identificar quién está atracando: eso es la autenticación.
+
+00:00:39.276 --> 00:00:42.416 align:middle
+Luego, una vez dentro, la
+estación decide a qué sectores
+
+00:00:42.416 --> 00:00:45.286 align:middle
+puede acceder esa persona:
+eso es la autorización.
+
+00:00:45.956 --> 00:00:49.246 align:middle
+Por el camino, exploraremos
+cortafuegos, roles, votantes,
+
+00:00:49.246 --> 00:00:51.956 align:middle
+sistemas de inicio de sesión,
+hash de contraseñas y mucho más.
+
+00:00:52.676 --> 00:00:55.136 align:middle
+Para seguir el curso, deberás
+descargarte el código del curso,
+
+00:00:55.206 --> 00:00:56.786 align:middle
+que encontrarás en la parte
+superior de la página.
+
+00:00:57.236 --> 00:01:00.206 align:middle
+Una vez que lo tengas, abre el
+directorio start en tu IDE favorito.
+
+00:01:00.206 --> 00:01:02.686 align:middle
+Encontrarás un código parecido a éste.
+
+00:01:03.116 --> 00:01:04.826 align:middle
+Echa un vistazo al README para empezar.
+
+00:01:05.506 --> 00:01:10.166 align:middle
+Sigue los pasos que allí se indican, y una vez que hayas
+terminado, podrás ejecutar el servidor Symfony utilizando:
+
+00:01:10.286 --> 00:01:16.356 align:middle
+symfony serve -d Abre el enlace proporcionado en
+tu navegador y verás nuestra aplicación Starshop,
+
+00:01:16.626 --> 00:01:19.876 align:middle
+una ingeniosa herramienta diseñada para
+gestionar y reparar naves estelares.
+
+00:01:20.476 --> 00:01:21.986 align:middle
+Ahora, vamos a ensuciarnos las manos.
+
+00:01:22.476 --> 00:01:25.196 align:middle
+Nuestra primera tarea es instalar
+el componente de seguridad.
+
+00:01:25.666 --> 00:01:36.526 align:middle
+En nuestro terminal, ejecuta el siguiente
+comando: symfony composer require security
+
+00:01:36.526 --> 00:01:40.826 align:middle
+Parece que se ha instalado el componente symfony/clock,
+una dependencia de los paquetes de seguridad,
+
+00:01:41.096 --> 00:01:45.796 align:middle
+junto con los componentes
+symfony/security-bundle y symfony/security-http.
+
+00:01:46.266 --> 00:01:50.076 align:middle
+El bundle se encarga de integrar los
+componentes de seguridad en Symfony
+
+00:01:50.386 --> 00:01:55.066 align:middle
+, mientras que el componente security-http se
+ocupa de los aspectos HTTP de la seguridad.
+
+00:01:55.686 --> 00:02:00.876 align:middle
+Para ver qué ha cambiado, ejecuta: git status Podemos
+ver actualizaciones en nuestros archivos composer.json
+
+00:02:00.876 --> 00:02:05.226 align:middle
+y composer.lock y se ha añadido el bundle
+a nuestro archivo config/bundles.php.
+
+00:02:05.856 --> 00:02:09.636 align:middle
+La receta de Flex añadió estos
+archivos config/packages/security.yaml
+
+00:02:09.876 --> 00:02:12.606 align:middle
+y config/routes/security.yaml.
+
+00:02:12.886 --> 00:02:13.896 align:middle
+Vamos a investigarlos.
+
+00:02:14.456 --> 00:02:18.056 align:middle
+De vuelta a nuestro código,
+abre config/routes/security.yaml.
+
+00:02:18.576 --> 00:02:21.946 align:middle
+Esto añade un cargador de rutas especial
+para añadir rutas de cierre de sesión.
+
+00:02:22.436 --> 00:02:26.826 align:middle
+Actualmente, no hace nada, pero una vez que configuremos
+el cierre de sesión en nuestros ajustes de seguridad,
+
+00:02:27.016 --> 00:02:30.246 align:middle
+se añadirá automáticamente
+una ruta de cierre de sesión.
+
+00:02:30.246 --> 00:02:33.596 align:middle
+A continuación, echa un vistazo
+a config/packages/security.yaml.
+
+00:02:34.356 --> 00:02:36.226 align:middle
+Este archivo es el corazón de la operación.
+
+00:02:36.746 --> 00:02:38.716 align:middle
+Bajo la clave security, tenemos opciones
+
+00:02:38.716 --> 00:02:41.666 align:middle
+para configurar password_hashers,
+de las que hablaremos más adelante.
+
+00:02:42.256 --> 00:02:47.056 align:middle
+Luego, tenemos esta clave providers - aquí es
+donde dictamos de dónde vienen nuestros usuarios.
+
+00:02:47.576 --> 00:02:51.726 align:middle
+La configuración por defecto utiliza un proveedor
+en memoria, perfecto para sitios más pequeños.
+
+00:02:52.026 --> 00:02:55.666 align:middle
+Sin embargo, en este curso nos centraremos en
+cargar los usuarios desde la base de datos.
+
+00:02:56.296 --> 00:02:58.696 align:middle
+Continuando, tenemos la sección firewalls.
+
+00:02:59.096 --> 00:03:03.356 align:middle
+Piensa en ellas como campos de fuerza que rodean
+toda tu aplicación o partes específicas de ella.
+
+00:03:03.916 --> 00:03:05.406 align:middle
+Ahora bien, el orden aquí es crucial.
+
+00:03:05.746 --> 00:03:07.396 align:middle
+El primero que coincida, gana.
+
+00:03:07.826 --> 00:03:12.166 align:middle
+Por defecto, tenemos dos cortafuegos, un
+cortafuegos dev y un cortafuegos main.
+
+00:03:12.696 --> 00:03:17.356 align:middle
+El cortafuegos dev se activa cuando accedemos a
+determinados patrones de ruta específicos de dev,
+
+00:03:17.416 --> 00:03:18.266 align:middle
+como el perfilador.
+
+00:03:18.876 --> 00:03:24.066 align:middle
+Esto security: false significa que cuando accedemos
+a esas rutas, se desactiva completamente la seguridad
+
+00:03:24.246 --> 00:03:26.066 align:middle
+y se ignora el siguiente cortafuegos.
+
+00:03:26.756 --> 00:03:28.996 align:middle
+Como el cortafuegos main no tiene un patrón,
+
+00:03:29.196 --> 00:03:32.196 align:middle
+significa que cubre toda la aplicación
+y es como un cajón de sastre.
+
+00:03:32.726 --> 00:03:35.756 align:middle
+Cualquier cortafuegos adicional
+por debajo nunca sería alcanzado.
+
+00:03:36.426 --> 00:03:39.356 align:middle
+Ahora bien, que toda la aplicación
+esté cubierta por el cortafuegos main
+
+00:03:39.616 --> 00:03:42.166 align:middle
+no significa que todos los
+usuarios deban autenticarse.
+
+00:03:42.646 --> 00:03:48.116 align:middle
+Esta opción de lazy: true significa que los usuarios
+anónimos (usuarios que no han iniciado sesión)
+
+00:03:48.116 --> 00:03:50.956 align:middle
+pueden acceder a la app, y ahora
+mismo, a cualquier página.
+
+00:03:51.546 --> 00:03:56.666 align:middle
+También es perezosa, por lo que la comprobación de
+la autenticación y autorización del usuario se aplaza
+
+00:03:56.666 --> 00:03:58.606 align:middle
+hasta que sea realmente
+necesaria para nuestro código.
+
+00:03:59.116 --> 00:04:00.956 align:middle
+Esto puede ayudar a mejorar el rendimiento y,
+
+00:04:00.956 --> 00:04:04.516 align:middle
+cuando se utiliza la autenticación de sesión,
+permite el almacenamiento en caché http.
+
+00:04:05.116 --> 00:04:09.136 align:middle
+Esta clave provider indica al cortafuegos desde
+dónde cargar los usuarios cuando se necesitan.
+
+00:04:09.696 --> 00:04:13.376 align:middle
+En este momento, está utilizando el proveedor
+users_in_memory configurado anteriormente.
+
+00:04:14.156 --> 00:04:17.136 align:middle
+A continuación configuraremos
+distintos métodos de autenticación.
+
+00:04:17.626 --> 00:04:22.456 align:middle
+Tomémonos un momento para aclarar la
+diferencia entre autenticación y autorización.
+
+00:04:23.106 --> 00:04:25.576 align:middle
+La autenticación responde a
+la pregunta: ¿quién eres?
+
+00:04:26.006 --> 00:04:27.986 align:middle
+Es el proceso de demostrar tu identidad,
+
+00:04:28.226 --> 00:04:31.326 align:middle
+como iniciar sesión con un formulario
+o presentar un token de API.
+
+00:04:32.076 --> 00:04:35.246 align:middle
+La autorización responde a la
+pregunta: ¿qué se te permite hacer?
+
+00:04:35.666 --> 00:04:40.176 align:middle
+Controla a qué partes de la aplicación
+puedes acceder y qué acciones se te
+
+00:04:40.176 --> 00:04:42.096 align:middle
+permite realizar una vez autenticado.
+
+00:04:42.726 --> 00:04:45.286 align:middle
+Por ejemplo, incluso después
+de iniciar sesión con éxito,
+
+00:04:45.486 --> 00:04:49.926 align:middle
+sólo los usuarios con el rol de administrador pueden
+acceder al tablero de mandos de la estación, o,
+
+00:04:50.056 --> 00:04:52.526 align:middle
+sólo el propietario de un ticket
+de reparación puede editarlo.
+
+00:04:53.256 --> 00:04:55.636 align:middle
+El cortafuegos sólo se
+encarga de la autenticación.
+
+00:04:56.286 --> 00:05:00.296 align:middle
+Esta sección de access_control es una
+forma de gestionar la autorización.
+
+00:05:00.766 --> 00:05:04.376 align:middle
+Te permite marcar ciertas rutas como
+que requieren roles específicos.
+
+00:05:04.916 --> 00:05:09.386 align:middle
+Los ejemplos comentados aquí muestran que al
+acceder a cualquier ruta que empiece por admin,
+
+00:05:09.616 --> 00:05:13.206 align:middle
+el usuario debe tener el rol admin,
+y al acceder a una ruta que empiece
+
+00:05:13.206 --> 00:05:15.866 align:middle
+por profile, se requiere el rol user.
+
+00:05:16.766 --> 00:05:20.006 align:middle
+Así que cuando se acceda a cualquiera de
+ellas, si el usuario no ha iniciado sesión,
+
+00:05:20.146 --> 00:05:21.516 align:middle
+se verá obligado a autenticarse.
+
+00:05:21.856 --> 00:05:26.736 align:middle
+Ya sea redirigiéndole a una página de inicio de
+sesión, o dándole una respuesta 401 No Autorizado,
+
+00:05:26.926 --> 00:05:28.876 align:middle
+dependiendo de cómo esté
+configurada la autenticación.
+
+00:05:29.836 --> 00:05:32.796 align:middle
+Si están autenticados, pero
+no tienen el rol correcto,
+
+00:05:33.056 --> 00:05:35.426 align:middle
+recibirán una respuesta 403 Prohibido.
+
+00:05:35.876 --> 00:05:37.476 align:middle
+De nuevo, el orden es importante.
+
+00:05:37.856 --> 00:05:39.576 align:middle
+Gana la primera regla que coincida.
+
+00:05:40.266 --> 00:05:43.926 align:middle
+Con la seguridad activada, vuelve a nuestra
+aplicación y actualiza la página de inicio...
+
+00:05:45.346 --> 00:05:48.236 align:middle
+Observa el nuevo icono de seguridad en la
+barra de herramientas de depuración web.
+
+00:05:48.846 --> 00:05:52.726 align:middle
+Esto nos da una visión rápida del estado
+de seguridad de la petición actual.
+
+00:05:53.226 --> 00:05:56.756 align:middle
+Muestra n/a porque no estamos autenticados
+y no tenemos nombre de usuario.
+
+00:05:57.386 --> 00:06:02.396 align:middle
+Al pasar el ratón por encima, podemos ver que estamos utilizando
+el cortafuegos main y que, efectivamente, no estamos autenticados.
+
+00:06:03.306 --> 00:06:07.836 align:middle
+A continuación, vamos a crear la entidad Usuario que
+proporcionará los usuarios para nuestro cortafuegos main.
