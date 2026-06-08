@@ -87,7 +87,9 @@ This out of the box Symfony feature is fantastic for future-proofing your app's 
 
 Alright, so now that we have our hashed password, let's put it to use. Copy
 the hash from the terminal and open `src/Story/AppStory.php`. Replace the
-plain text password for `makeitso` with the copied hash.
+plain text password for `makeitso` with the copied hash:
+
+[[[ code('d18f691117') ]]]
 
 Back in the terminal, reload our fixtures with:
 
@@ -113,14 +115,17 @@ I'd like to be able to use the plain text password when creating fixtures.
 We can do that! Open `src/Factory/UserFactory.php`. Foundry factories are *also*
 Symfony services, so we can inject other services into them!
 
-In the constructor, inject `private UserPasswordHasherInterface $passwordHasher`. This is
-the service that hashes the password based on our security configuration.
+In the constructor, inject `private UserPasswordHasherInterface $passwordHasher`:
+
+[[[ code('20067b51a0') ]]]
+
+This is the service that hashes the password based on our security configuration.
 
 Down in the `default()` method, we'll still keep this plain text password as the default value. We'll hash the
 password in a Foundry hook. These are defined in `initialize()`. Uncomment the
 `afterInstantiate()` line to enable the hook. This runs right after the object is
 created, but before it's saved to the database. This is the time to hash the password.
-The callback accepts the created object, in this cause, a `User`.
+The callback accepts the created object, in this case, a `User`.
 
 Inside, write `$user->setPassword()`, and inside that, `$this->passwordHasher->hashPassword()`. The
 first argument for this method is the `$user` object, this is needed to determine the correct
@@ -129,8 +134,13 @@ The second argument is the plain-text password. Use `$user->getPassword()`. Reme
 at this point, the password set to the user is still plain text. Finsh with a semicolon
 at the end, and that's it!
 
-In `AppStory`, when this user object is created, it will have its password set to `makeitso`. Our
-`afterInstantiate()` hook will replace that with the hashed version, *then* save it to the
+[[[ code('df9be89f27') ]]]
+
+In `AppStory`, when this user object is created, it will have its password set to `makeitso`:
+
+[[[ code('f12d791ad4') ]]]
+
+Our `afterInstantiate()` hook will replace that with the hashed version, *then* save it to the
 database.
 
 Back in the terminal, reload our fixtures again:

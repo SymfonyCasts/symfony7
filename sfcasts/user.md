@@ -112,7 +112,9 @@ symfony console make:migration
 ```
 
 Open the new migration in the `migrations` directory... In the `up()` method, we see the SQL to create the `user` table.
-Set the description to: `Add User entity`.
+Set the description to: `Add User entity`:
+
+[[[ code('c317523d93') ]]]
 
 Now, run the migration with:
 
@@ -137,17 +139,29 @@ Select our `User` entity.
 
 Open `src/Factory/UserFactory.php`. I think we can improve these defaults a bit!
 
-For `email`, use `self::faker()->unique()->email()`. Calling `unique()` before `email()` ensures that
-every email generated is unique.
+For `email`, use `self::faker()->unique()->email()`:
 
-For `name`, use `self::faker()->name()` to generate a realish-looking random name.
+[[[ code('512c2454b7') ]]]
 
-For `password`, instead of a random Faker string, set it to a known value, how about `engage`. This way, if we create
-a slew of users, we already know the password for them all!
+Calling `unique()` before `email()` ensures that every email generated is unique.
+
+For `name`, use `self::faker()->name()` to generate a realish-looking random name:
+
+[[[ code('bebb8e663f') ]]]
+
+For `password`, instead of a random Faker string, set it to a known value, how about `engage`:
+
+[[[ code('d2270de05a') ]]]
+
+This way, if we create a slew of users, we already know the password for them all!
 
 Finally, we need to create a user in our fixtures. Open `src/Story/AppStory.php`. At the top of the `build()` method, add
 `UserFactory::createOne()`. Inside an array, add `'email' => 'picard@enterprise.space'`, `'name' => 'Jean-Luc Picard'`,
-and `'password' =>`... How about `makeitso`? `earlgrayhot` would have been too obvious!
+and `'password' =>`... How about `makeitso`?
+
+[[[ code('6b8037eb8a') ]]]
+
+`earlgrayhot` would have been too obvious!
 
 Now load the fixtures at your terminal with:
 

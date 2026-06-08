@@ -106,7 +106,9 @@ Finally, here's the submit button.
 Let's see what this thing looks like! Over in our app, visit `/login`... This looks ok... but let's jazz it up!
 
 In the `tutorial` directory, open `login.html.twig` and copy everything. Go back to our
-template and replace everything with the copied code. This code is also in the script below.
+template and replace everything with the copied code. This code is also in the script below:
+
+[[[ code('f30d27a746') ]]]
 
 Refresh the login page... Nice, much better!
 
