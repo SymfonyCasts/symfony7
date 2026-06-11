@@ -232,8 +232,8 @@ Devuelve las propiedades y los
 valores del usuario como una matriz.
 
 00:03:45.466 --> 00:03:50.626 align:middle
-Esta cosa de la contraseña tan chula reemplaza
-la contraseña real por un hash de la contraseña.
+Esta lógica rara para generar la contraseña
+reemplaza la contraseña real por su hash.
 
 00:03:51.006 --> 00:03:55.286 align:middle
 Esta es una buena práctica para evitar que se
