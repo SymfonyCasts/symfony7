@@ -1,0 +1,431 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:05.546 align:middle
+Lo primero que necesitamos para autenticar
+a alguien es una clase de usuario especial.
+
+00:00:06.076 --> 00:00:09.926 align:middle
+Se trata de una clase que debe implementar la
+interfaz ` UserInterface ` proporcionada por Symfony.
+
+00:00:10.606 --> 00:00:15.776 align:middle
+Symfony ofrece algunas implementaciones listas para usar para
+casos especiales, pero para la mayoría de las aplicaciones,
+
+00:00:15.856 --> 00:00:17.826 align:middle
+te interesará crear tu
+propia clase de usuario.
+
+00:00:18.276 --> 00:00:20.936 align:middle
+La forma más sencilla de hacerlo
+es usando el bundle maker,
+
+00:00:21.146 --> 00:00:22.836 align:middle
+que ofrece un pequeño asistente para ayudarte.
+
+00:00:23.586 --> 00:00:25.126 align:middle
+Ve al terminal y ejecuta:
+
+00:00:25.286 --> 00:00:29.426 align:middle
+symfony console make:user
+¿Cómo llamamos a esta clase?
+
+00:00:29.786 --> 00:00:31.986 align:middle
+El nombre por defecto,
+User, tiene mucho sentido.
+
+00:00:32.576 --> 00:00:34.596 align:middle
+¿Queremos guardar este
+usuario en la base de datos?
+
+00:00:35.006 --> 00:00:35.816 align:middle
+¡Sí, claro que sí!
+
+00:00:36.276 --> 00:00:38.796 align:middle
+Esto convertirá nuestra clase de
+usuario en una entidad Doctrine.
+
+00:00:39.626 --> 00:00:42.656 align:middle
+A continuación, necesitamos una propiedad
+única para identificar a nuestros usuarios.
+
+00:00:43.016 --> 00:00:47.866 align:middle
+Esto es lo que Symfony, y en nuestro caso, Doctrine,
+utiliza para cargar usuarios desde la base de datos.
+
+00:00:48.386 --> 00:00:52.006 align:middle
+email es una opción habitual, ya que estos
+deben ser siempre únicos para el usuario.
+
+00:00:52.576 --> 00:00:55.666 align:middle
+En ciertas aplicaciones, donde los
+datos del usuario pueden ser públicos,
+
+00:00:55.926 --> 00:00:58.626 align:middle
+podrías considerar usar un nombre
+de usuario único en su lugar.
+
+00:00:58.966 --> 00:01:02.066 align:middle
+Como hacen GitHub, Slack y muchas
+otras plataformas sociales.
+
+00:01:02.826 --> 00:01:05.096 align:middle
+Ahora nos preguntan si nuestro
+User necesita una contraseña...
+
+00:01:05.396 --> 00:01:07.766 align:middle
+¿Eh? ¿De verdad es opcional la contraseña?
+
+00:01:08.306 --> 00:01:13.096 align:middle
+Más o menos. Con cosas como SSO o
+LDAP, Symfony en realidad no necesita
+
+00:01:13.096 --> 00:01:14.866 align:middle
+almacenar ni comprobar ninguna contraseña.
+
+00:01:15.216 --> 00:01:20.466 align:middle
+En su lugar, un sistema externo se encarga del inicio de sesión
+y, una vez que todo va bien, simplemente le dice a tu aplicación:
+
+00:01:20.736 --> 00:01:22.406 align:middle
+«Sí, este usuario está autenticado».
+
+00:01:22.916 --> 00:01:27.436 align:middle
+En ese momento, Symfony confía en el resultado y puedes
+saltarte por completo el almacenamiento de la contraseña.
+
+00:01:28.116 --> 00:01:32.686 align:middle
+Pero para nuestros propósitos, yes, sí queremos
+almacenar y verificar las contraseñas nosotros mismos.
+
+00:01:33.416 --> 00:01:38.356 align:middle
+Vale, si miramos qué se ha cambiado: se han
+creado una entidad User y UserRepository,
+
+00:01:38.646 --> 00:01:41.696 align:middle
+y se ha actualizado nuestra
+configuración security.yaml.
+
+00:01:42.416 --> 00:01:43.926 align:middle
+Echemos un vistazo a la entidad User.
+
+00:01:44.376 --> 00:01:48.206 align:middle
+En tu IDE, abre src/Entity/User.php.
+
+00:01:49.216 --> 00:01:52.786 align:middle
+Lo primero que hay que destacar es que
+la clase implementa dos interfaces.
+
+00:01:53.246 --> 00:01:55.446 align:middle
+Profundiza en la primera, ` UserInterface`.
+
+00:01:55.826 --> 00:01:59.036 align:middle
+Esta es la interfaz principal que todo
+usuario de seguridad debe implementar.
+
+00:01:59.656 --> 00:02:03.196 align:middle
+Solo tiene dos métodos: `
+getRoles()`, que devuelve una matriz
+
+00:02:03.196 --> 00:02:05.296 align:middle
+de roles; hablaremos de ellos más adelante.
+
+00:02:05.646 --> 00:02:07.766 align:middle
+El segundo es ` getUserIdentifier()`.
+
+00:02:08.106 --> 00:02:11.266 align:middle
+Este devuelve una cadena que
+identifica de forma única al usuario.
+
+00:02:12.166 --> 00:02:16.186 align:middle
+Echa un vistazo a la segunda interfaz,
+PasswordAuthenticatedUserInterface.
+
+00:02:16.586 --> 00:02:20.266 align:middle
+Esto le indica a Symfony que nuestro sistema
+de autenticación requiere una contraseña
+
+00:02:20.476 --> 00:02:22.626 align:middle
+y tiene un único método: getPassword().
+
+00:02:23.216 --> 00:02:27.866 align:middle
+Si antes hubiéramos respondido que no a la pregunta sobre
+la contraseña, esta interfaz no se habría implementado.
+
+00:02:28.766 --> 00:02:33.416 align:middle
+Volviendo a User, vemos el atributo estándar
+de la clase de entidad de Doctrine: ORM\Entity.
+
+00:02:33.936 --> 00:02:36.896 align:middle
+También tenemos este
+atributo ORM\UniqueConstraint.
+
+00:02:37.296 --> 00:02:40.706 align:middle
+Esto crea un índice único en la
+columna email de la base de datos.
+
+00:02:41.166 --> 00:02:43.896 align:middle
+Esto garantiza que no haya dos usuarios
+con el mismo correo electrónico.
+
+00:02:44.406 --> 00:02:47.696 align:middle
+Además, mejora el rendimiento al
+buscar usuarios por correo electrónico,
+
+00:02:47.916 --> 00:02:50.536 align:middle
+lo cual es importante, ya
+que lo haremos muy a menudo.
+
+00:02:50.896 --> 00:02:53.426 align:middle
+Básicamente, en cada petición en la
+que un usuario haya iniciado sesión.
+
+00:02:54.146 --> 00:02:58.156 align:middle
+Si bajamos un poco, tenemos nuestra propiedad
+estándar ` id ` y la propiedad ` email `.
+
+00:02:58.846 --> 00:03:03.946 align:middle
+La propiedad ` roles ` es una matriz (una lista de
+cadenas) que se almacena como JSON en la base de datos.
+
+00:03:04.556 --> 00:03:07.866 align:middle
+Luego tenemos nuestra propiedad ` password
+` y los getter y setter para estas.
+
+00:03:08.496 --> 00:03:11.126 align:middle
+Aquí hay algunas cosas interesantes que
+ha añadido el comando ` make:user `.
+
+00:03:11.846 --> 00:03:16.806 align:middle
+La implementación de getUserIdentifier()
+devuelve la propiedad email, que, si recuerdas,
+
+00:03:16.996 --> 00:03:19.276 align:middle
+es lo que elegimos como
+nuestro identificador único.
+
+00:03:20.726 --> 00:03:22.856 align:middle
+getRoles() tiene un poco de lógica adicional.
+
+00:03:23.166 --> 00:03:25.526 align:middle
+Recoge los roles que están
+guardados en la base de datos,
+
+00:03:25.736 --> 00:03:28.646 align:middle
+pero también añade siempre
+ROLE_USER a la lista.
+
+00:03:29.066 --> 00:03:32.566 align:middle
+Es una convención común que cada
+usuario tenga al menos este rol.
+
+00:03:33.516 --> 00:03:36.316 align:middle
+Justo al final hay un método
+mágico ` __serialize() `.
+
+00:03:36.736 --> 00:03:41.256 align:middle
+Cada vez que se serializa un usuario para
+guardarlo en la sesión, se llama a este método.
+
+00:03:41.686 --> 00:03:44.896 align:middle
+Devuelve las propiedades y los
+valores del usuario como una matriz.
+
+00:03:45.466 --> 00:03:50.626 align:middle
+Esta cosa de la contraseña tan chula reemplaza
+la contraseña real por un hash de la contraseña.
+
+00:03:51.006 --> 00:03:55.286 align:middle
+Esta es una buena práctica para evitar que se
+expongan datos confidenciales, como la contraseña.
+
+00:03:55.996 --> 00:03:59.556 align:middle
+Quiero que nuestros usuarios tengan un nombre,
+así que personalicemos nuestra entidad User.
+
+00:03:59.956 --> 00:04:02.196 align:middle
+Recuerda que nuestra User
+es una entidad Doctrine,
+
+00:04:02.316 --> 00:04:04.866 align:middle
+así que podemos usar el bundle
+maker para añadirle propiedades.
+
+00:04:05.446 --> 00:04:11.756 align:middle
+En tu terminal, ejecuta: symfony console make:entity
+Selecciona nuestra entidad User ya existente
+
+00:04:11.756 --> 00:04:12.526 align:middle
+para modificarla.
+
+00:04:13.166 --> 00:04:18.096 align:middle
+Añade una propiedad name como string y con
+la longitud de campo predeterminada 255.
+
+00:04:18.726 --> 00:04:22.356 align:middle
+Asegúrate de que no pueda ser nula en la base de
+datos: queremos que todos los usuarios tengan un nombre.
+
+00:04:23.006 --> 00:04:24.636 align:middle
+Comprueba que la entidad se ha actualizado...
+
+00:04:25.156 --> 00:04:26.786 align:middle
+Aquí están los métodos
+getter y setter para name...
+
+00:04:27.106 --> 00:04:28.196 align:middle
+y aquí arriba está la propiedad.
+
+00:04:28.636 --> 00:04:33.196 align:middle
+¡Genial! El comando make:user también ha
+actualizado nuestra configuración de seguridad.
+
+00:04:33.876 --> 00:04:37.526 align:middle
+Abre config/packages/security.yaml
+para ver los cambios.
+
+00:04:38.336 --> 00:04:43.326 align:middle
+En primer lugar, ha sustituido el proveedor de usuarios
+en memoria por app_user_provider, que está configurado
+
+00:04:43.326 --> 00:04:46.806 align:middle
+como proveedor entity para
+nuestra clase App\Entity\User.
+
+00:04:47.456 --> 00:04:51.036 align:middle
+El property para buscar usuarios se ha
+configurado según nuestra elección: email.
+
+00:04:51.646 --> 00:04:55.626 align:middle
+En nuestro firewall main, ha cambiado
+el antiguo proveedor users_in_memory
+
+00:04:55.686 --> 00:04:57.486 align:middle
+por nuestro nuevo app_user_provider.
+
+00:04:58.036 --> 00:05:01.536 align:middle
+Esto significa que cuando Symfony necesite
+cargar un usuario en nuestro firewall main,
+
+00:05:01.766 --> 00:05:06.466 align:middle
+lo obtendrá de nuestro UserRepository,
+básicamente llamando a findOneByEmail().
+
+00:05:06.906 --> 00:05:07.636 align:middle
+¡Qué ingenioso!
+
+00:05:08.496 --> 00:05:11.746 align:middle
+Antes de que se nos olvide, en nuestra
+terminal, hagamos una migración con:
+
+00:05:11.746 --> 00:05:17.596 align:middle
+symfony console make:migration Abre la nueva
+migración en el directorio migrations...
+
+00:05:18.696 --> 00:05:22.096 align:middle
+En el método up(), vemos el
+SQL para crear la tabla user.
+
+00:05:22.726 --> 00:05:27.676 align:middle
+Establece la descripción en: Add User
+entity: Ahora, ejecuta la migración con:
+
+00:05:27.676 --> 00:05:33.306 align:middle
+symfony console doctrine:migrations:migrate
+¡Genial, ha funcionado!
+
+00:05:34.126 --> 00:05:36.126 align:middle
+Entonces, ¿cómo incorporamos
+usuarios a nuestra app?
+
+00:05:36.586 --> 00:05:39.526 align:middle
+Más adelante veremos un formulario
+de registro, pero por ahora,
+
+00:05:39.526 --> 00:05:42.466 align:middle
+vamos a usar una fábrica de
+Foundry para el desarrollo local.
+
+00:05:43.106 --> 00:05:49.196 align:middle
+Crea la fábrica con: symfony console
+make:factory Selecciona nuestra entidad User.
+
+00:05:50.576 --> 00:05:53.746 align:middle
+Abre src/Factory/UserFactory.php.
+
+00:05:54.696 --> 00:05:56.666 align:middle
+¡Creo que podemos mejorar un poco
+estos valores predeterminados!
+
+00:05:57.546 --> 00:06:06.056 align:middle
+Para email, usa self::faker()->unique()->email():
+Llamar a unique() antes de email() garantiza
+
+00:06:06.056 --> 00:06:08.266 align:middle
+que cada correo electrónico
+generado sea único.
+
+00:06:09.046 --> 00:06:16.076 align:middle
+Para name, usa self::faker()->name() para generar
+un nombre aleatorio que parezca real: Para password,
+
+00:06:16.266 --> 00:06:22.416 align:middle
+en lugar de una cadena aleatoria de Faker, ponle un
+valor conocido, ¿qué tal engage?: De esta forma,
+
+00:06:22.496 --> 00:06:26.226 align:middle
+si creamos un montón de usuarios, ¡ya
+sabemos la contraseña de todos ellos!
+
+00:06:27.176 --> 00:06:29.526 align:middle
+Por último, tenemos que crear
+un usuario en nuestros fixtures.
+
+00:06:29.906 --> 00:06:32.336 align:middle
+Abre src/Story/AppStory.php.
+
+00:06:32.336 --> 00:06:37.796 align:middle
+En la parte superior del método
+build(), añade UserFactory::createOne().
+
+00:06:38.466 --> 00:06:44.406 align:middle
+Dentro de una matriz, añade 'email'
+=> 'picard@enterprise.space',
+
+00:06:45.626 --> 00:06:51.106 align:middle
+'name' => 'Jean-Luc
+Picard' y 'password' =>...
+
+00:06:51.476 --> 00:06:52.946 align:middle
+¿Qué tal makeitso?
+
+00:06:53.466 --> 00:06:55.786 align:middle
+earlgrayhot habría sido demasiado obvio.
+
+00:06:56.486 --> 00:07:01.866 align:middle
+Ahora carga los fixtures en tu terminal
+con: symfony console foundry:load-fixtures
+
+00:07:03.126 --> 00:07:05.696 align:middle
+Para comprobar que nuestro usuario se
+ha añadido correctamente, ejecuta:
+
+00:07:05.836 --> 00:07:13.986 align:middle
+symfony console dbal:run-sql 'select
+* from user' ¡Genial, aquí está!
+
+00:07:14.376 --> 00:07:15.266 align:middle
+Pero mmm...
+
+00:07:15.626 --> 00:07:17.596 align:middle
+tenemos un grave problema de seguridad aquí...
+
+00:07:18.086 --> 00:07:19.606 align:middle
+no te preocupes, lo arreglaremos pronto...
+
+00:07:19.866 --> 00:07:21.226 align:middle
+¿pero puedes adivinar cuál es?
+
+00:07:22.106 --> 00:07:25.736 align:middle
+A continuación, crearemos un formulario de inicio de sesión
+para que nuestros usuarios puedan iniciar sesión de verdad.
