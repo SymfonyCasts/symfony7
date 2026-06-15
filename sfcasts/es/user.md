@@ -66,8 +66,7 @@ elegimos como nuestro identificador único.
 `getRoles()` tiene un poco de lógica extra. Recoge los roles que están guardados en la base de datos, pero también añade siempre
 `ROLE_USER` a la lista. Es una convención común que todos los usuarios tengan al menos este rol.
 
-Justo al final hay un método mágico de ` `__serialize()` `. Cada vez que se serializa un usuario para guardarlo en la sesión, se llama a este método. Devuelve las propiedades y los valores del usuario como una matriz. Esta lógica rara para generar la contraseña reemplaza la contraseña real por su hash. Es una buena práctica para evitar que los datos sensibles, la contraseña,
-queden expuestos.
+Justo al final hay un método mágico de ` `__serialize()` `. Cada vez que se serializa un usuario para guardarlo en la sesión, se llama a este método. Devuelve las propiedades y los valores del usuario como una matriz. Esta lógica rara para generar la contraseña reemplaza la contraseña real por su hash. Esta es una buena práctica para evitar que se expongan datos confidenciales, como la contraseña.
 
 ## Personalización de la entidad User
 
