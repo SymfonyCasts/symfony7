@@ -126,3 +126,52 @@
 - `symfony composer recipe:update`
     - no recipes to update!
 - Check app, everything works!
+
+## Composer Audit and Security Updates
+
+- https://symfony.com/blog/claude-mythos-audited-symfony-and-found-19-vulnerabilities
+    - AI tooling has changed the game
+- `symfony composer audit`
+- `symfony composer install --audit`
+- For the most part - a `composer update` should resolve, but there are some cases this won't work:
+    - The change breaks your app!
+    - The change is in a version you can't upgrade to yet
+    - The solution? First, understand the vulnerability...
+- Look at the URL for the first one
+    - https://symfony.com/cve-2026-46634
+    - Redirects to blog post with details
+- CVE.org link - https://www.cve.org/CVERecord?id=CVE-2026-46634
+    - "reserved" github assigned CVE but hasn't pushed details yet
+- Advisory ID: https://packagist.org/security-advisories/PKSA-21g2-dzjv-sky5
+    - Packagist advisory with GH links
+    - GHSA link - https://github.com/advisories/GHSA-24x9-r6q4-q93w
+- Check all advisories for a package: https://github.com/twigphp/twig
+    - Possible CVE might not be created via GitHub...
+- Check all advisories https://github.com/twigphp/twig
+- Find a CVE that has an official cve.org link: https://www.cve.org/CVERecord?id=CVE-2026-24425
+    - What is a CVE? Common Vulnerabilities and Exposures
+    - CVE is a public database of vulnerabilities, each with a unique, standardized ID
+    - CVEs are assigned by organizations called CVE Numbering Authorities (CNAs)
+    - GitHub is a CNA, and they make it super easy for package maintainers to create CVEs for their vulnerabilities
+- Back to Github Twig advisory
+- Anatomy of a CVE
+    - Github ID, package, severity, affected versions, patched versions, description, CVE ID
+    - Description typically includes the issue and how the patched version fixes it
+- Ignoring, the potential solution... If going this route, understand the CVE
+    - in `compsoer.json`, under `config`
+    - `"audit": {
+         "ignore": {
+             "PKSA-21g2-dzjv-sky5": "Risk acceptable, remove when upgrading to Twig 4"
+         }
+       }`
+    - Can use the advisory id or CVE
+    - Explain why you ignored
+    - `symfony composer audit` - it's moved to the top under "ignored" and we see the reason
+    - remove ignore
+    - see our blog post for more details: https://symfonycasts.com/blog/composer-security-advisory
+- `symfony composer update`
+- `symfony composer audit` - no more vulns!
+- Schedule this check in your CI!
+    - Tip: create specific PRs for security updates, so your feature PRs aren't filled with them
+    - `.github/workflows/composer-audit.yaml`
+    - (paste and explain)
