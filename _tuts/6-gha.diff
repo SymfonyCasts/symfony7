@@ -1,0 +1,46 @@
+diff --git a/.github/workflows/composer-audit.yaml b/.github/workflows/composer-audit.yaml
+new file mode 100644
+index 0000000..3deaf96
+--- /dev/null
++++ b/.github/workflows/composer-audit.yaml
+@@ -0,0 +1,40 @@
++name: Composer Security Audit
++
++on:
++    schedule:
++        - cron: '0 12 * * 1' # Every Monday at 12:00 PM (Noon) UTC
++
++permissions:
++    contents: read
++
++jobs:
++    composer-audit:
++        runs-on: ubuntu-latest
++
++        steps:
++            - name: Checkout code
++              uses: actions/checkout@v6
++
++            - name: Setup Composer
++              uses: shivammathur/setup-php@v2
++              with:
++                  tools: composer
++
++            - name: Run Composer audit
++              run: composer audit --locked
++
++#      - name: Notify Slack on failure
++#        if: failure()
++#        uses: slackapi/slack-github-action@v3.0.3
++#        with:
++#          method: chat.postMessage
++#          token: ${{ secrets.SLACK_TOKEN }}
++#          payload: |
++#            channel: <CHANNEL_ID>
++#            username: "Composer Audit Failed"
++#            icon_emoji: ":rotating_light:"
++#            text: |
++#                Repo: ${{ github.repository }}
++#                Branch: ${{ github.ref_name }}
++#
++#                <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View details>

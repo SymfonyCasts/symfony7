@@ -1,0 +1,18 @@
+diff --git a/composer.json b/composer.json
+index a6e81fe..0dee844 100644
+--- a/composer.json
++++ b/composer.json
+@@ -47,7 +47,12 @@
+             "symfony/flex": true,
+             "symfony/runtime": true
+         },
+-        "sort-packages": true
++        "sort-packages": true,
++        "audit": {
++            "ignore": {
++                "PKSA-21g2-dzjv-sky5": "Risk acceptable, remove when upgrading to Twig 4"
++            }
++        }
+     },
+     "autoload": {
+         "psr-4": {

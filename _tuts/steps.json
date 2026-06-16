@@ -64,7 +64,27 @@
             "id": "5-symfony-8",
             "name": "5. symfony 8",
             "description": null
+        },
+        {
+            "id": "6-ignore-advisory",
+            "name": "6. ignore advisory",
+            "description": null
+        },
+        {
+            "id": "6-remove-ignore",
+            "name": "6. remove ignore",
+            "description": null
+        },
+        {
+            "id": "6-composer-update",
+            "name": "6. composer update",
+            "description": null
+        },
+        {
+            "id": "6-gha",
+            "name": "6. gha",
+            "description": null
         }
     ],
-    "sha": "8be88747c67a53af39e880218f4b37b48d8c522f"
+    "sha": "d19f9e036742661b799967d3c78b18a5f93bc52a"
 }
