@@ -127,6 +127,8 @@ as the key... and for the value, provide a reason for ignoring. This is importan
 future you and your teammates to understand why you accepted the risk. I also like
 to include *when* we can remove it.
 
+[[[ code('92b9949f7a') ]]]
+
 Now if I run:
 
 ```terminal
@@ -173,7 +175,9 @@ runs `composer audit` on a regular basis. Running that command will cause the ac
 if vulnerabilities are found, which can alert you and your team to the issue.
 
 I'll show you the one I use! Create a new file: `.github/workflows/composer-audit.yaml`. I'll paste
-the definition, but you can find it in the script below.
+the definition, but you can find it in the script below:
+
+[[[ code('ea4efff6ad') ]]]
 
 Let's go through this workflow. First, it's triggered on a schedule - every Monday at noon UTC.
 
