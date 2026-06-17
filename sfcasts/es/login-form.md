@@ -1,12 +1,15 @@
 # Crear un formulario de inicio de sesión
 
-Ya tenemos configurado nuestro proveedor de usuarios y un usuario en nuestra base de datos. ¡Ahora necesitamos una forma de iniciar sesión! Hay varias formas de hacerlo, pero nos centraremos en la autenticación basada en sesión con un formulario de inicio de sesión HTML.
+Ya tenemos configurado nuestro proveedor de usuarios y un usuario en nuestra base de datos. ¡Ahora necesitamos
+una forma de que inicien sesión! Hay varias formas de hacerlo, pero nos
+centraremos en la autenticación basada en sesiones con un formulario de inicio de sesión en HTML.
 
-Este es un método bastante común y Symfony tiene un autenticador incorporado para ello. Sólo tenemos que generar un poco de código para integrarlo en nuestra aplicación.
+Es un método bastante habitual y Symfony tiene un autenticador integrado para ello.
+Solo tenemos que generar un poco de código para integrarlo en nuestra app.
 
 ## `make:security:form-login`
 
-Por suerte, el maker-bundle proporciona un asistente para ayudarte
+Por suerte, el bundle «maker» ofrece un asistente que te echa una mano.
 
 En tu terminal, ejecuta:
 
@@ -14,98 +17,152 @@ En tu terminal, ejecuta:
 symfony console make:security:form-login
 ```
 
-Primero se nos pedirá que creemos una clase controladora para nuestras rutas de inicio/cierre de sesión.`SecurityController` es un buen nombre, ¡vamos con ello!
+Lo primero que nos pide es crear una clase de controlador para nuestras rutas de inicio y cierre de sesión.
+«`SecurityController` » es un buen nombre, ¡vamos a quedarnos con ese!
 
-¿Queremos una URL `/logout`? ¡Sí! Queremos que nuestros usuarios puedan cerrar la sesión.
+¿Queremos una URL `/logout`? ¡Sí! Queremos que nuestros usuarios puedan cerrar sesión.
 
-¿Generar pruebas PHPUnit? No, ahora no.
+¿Generar pruebas de PHPUnit? No, ahora mismo no.
 
-Vale, esto generó dos nuevos archivos en nuestro proyecto: el `SecurityController` y una plantilla`login.html.twig`. También actualizó nuestro archivo `security.yaml`.
+Vale, esto ha generado dos archivos nuevos en nuestro proyecto: el `SecurityController` y una
+plantilla`login.html.twig`. También ha actualizado nuestro archivo `security.yaml`.
 
-Vamos a explorarlos.
+Vamos a echarles un vistazo.
 
-## Examinando `SecurityController`
+## Al examinar el `SecurityController`
 
-En primer lugar, abre `src/Controller/SecurityController.php`. Éste tiene un método `login()` que gestiona la ruta `/login`. Estamos inyectando este servicio `AuthenticationUtils`, que es un ingenioso ayudante de autenticación.
+Primero, abre `src/Controller/SecurityController.php`. Este tiene un método `login()` que gestiona la ruta `/login`. Estamos inyectando este servicio `AuthenticationUtils`,
+que es un práctico ayudante de autenticación.
 
-Dentro, estamos estableciendo una variable `error` al último error de autenticación de esas utilidades. Si hubo un error durante el proceso de inicio de sesión, esto contendrá el mensaje de error específico, como "Credenciales no válidas" o "Cuenta desactivada". Si no hubo errores, será nulo.
+En su interior, asignamos la variable `error` al último error de autenticación de esas utilidades.
+Si se produjo un error durante el proceso de inicio de sesión, esta variable contendrá el mensaje de error específico,
+como «Credenciales no válidas» o «Cuenta desactivada». Si no hubo errores, será nula.
 
-A continuación, estableceremos la variable `lastUsername`, también de esas utilidades. Cada vez que un usuario intenta iniciar sesión, Symfony realiza un seguimiento del nombre de usuario que utilizó en su último intento de inicio de sesión. Como veremos más adelante, lo utilizamos para rellenar previamente el campo del nombre de usuario en el formulario de inicio de sesión, lo que evita que el usuario tenga que volver a rellenar ese campo si se equivoca al escribir su contraseña.
+A continuación, establecemos la variable ` `lastUsername` `, también de esas utilidades. Cada vez que un usuario intenta iniciar sesión,
+Symfony guarda el nombre de usuario que utilizó en su último intento de inicio de sesión. Como veremos enseguida, lo usamos
+para rellenar automáticamente el campo del nombre de usuario en el formulario de inicio de sesión; así, el usuario no tiene que volver a escribirlo si
+ha cometido un error al teclear la contraseña.
 
-Por último, estamos renderizando la nueva plantilla `login.html.twig`, pasándole las variables `last_username` y `error`.
+Por último, mostramos la nueva plantilla `login.html.twig`, pasándole las variables `last_username` y `error`.
 
-Es importante tener en cuenta que este método no maneja realmente la lógica de inicio de sesión en sí. Sólo se llama cuando el usuario visita la página `/login` como una petición GET normal (como hacer clic en un enlace). Cuando el usuario envía el formulario de inicio de sesión, el sistema de seguridad se hace cargo y procesa la petición de inicio de sesión. Si el inicio de sesión se realiza correctamente, el usuario se autentica e inicia sesión. Si el inicio de sesión falla, el usuario es redirigido de nuevo aquí con el mensaje de error correspondiente.
+Es importante señalar que este método no gestiona realmente la lógica de inicio de sesión en sí. Solo se llama cuando
+el usuario visita la página `/login` mediante una petición GET normal (por ejemplo, al hacer clic en un enlace). Cuando el usuario envía el formulario de inicio de sesión,
+el sistema de seguridad toma el control y procesa la petición de inicio de sesión. Si el inicio de sesión se realiza con éxito, el usuario queda autenticado
+y conectado. Si falla, se le redirige de nuevo aquí con el mensaje de error correspondiente.
 
-A continuación, tenemos este método y ruta `logout()`. Lo único que hace es lanzar una excepción. ¿Qué? ¿Significa esto que cada vez que un usuario cierra la sesión, recibe un error 500? ¡No! Esta ruta es básicamente un marcador de posición para que podamos personalizar la ruta y el nombre de `Route`. El sistema de seguridad de Symfony intercepta esta ruta antes de que llegue al método. Si algo está mal configurado con tus ajustes de cierre de sesión y se llega a este método, entonces se lanzará esta excepción, indicando que tienes un error.
+A continuación, tenemos este método y esta ruta `logout()`. Lo único que hace es lanzar una excepción. ¿Qué? ¿Significa esto que
+cada vez que un usuario cierre sesión, le salga un error 500?! ¡No! Esta ruta es básicamente un marcador de posición para que podamos
+personalizar la ruta y el nombre de `Route`. El sistema de seguridad de Symfony intercepta esta ruta antes de que llegue
+al método. Si hay algún error en la configuración de tu cierre de sesión y se ejecuta este método, se lanzará esta excepción,
+lo que indicará que tienes un error.
 
-## Comprobación del archivo `security.yaml` 
+## Revisando el archivo `security.yaml` 
 
-Comprobemos los cambios en la configuración de seguridad en `config/packages/security.yaml`. Bajo nuestro cortafuegos `main`, tenemos esta nueva configuración `form_login`. Esto le dice a Symfony que utilice el autenticador de inicio de sesión de formulario incorporado. Hay un montón de opciones que podemos configurar aquí, pero los valores por defecto son bastante buenos y estándar. El `login_path` se establece en nuestra ruta `app_login` que vimos en el `SecurityController`. Aquí es donde se envía a los usuarios cuando necesitan iniciar sesión - como cuando intentan acceder a una página protegida. El `check_path` también está configurado como `app_login`. Aquí es donde se envía el formulario de inicio de sesión. No es un problema que sea la misma ruta, porque envías las credenciales utilizando el método `POST`. Esto hace que el sistema de seguridad procese el intento de inicio de sesión en lugar de mostrar el formulario de inicio de sesión. Por último, vamos a activar la protección contra la Falsificación de Peticiones en Sitios Cruzados (CSRF) para nuestro formulario de inicio de sesión.
+Vamos a comprobar los cambios en la configuración de seguridad en `config/packages/security.yaml`. Bajo nuestro «firewall» `main`,
+tenemos esta nueva configuración `form_login`. Esto le indica a Symfony que utilice el autenticador de inicio de sesión mediante formulario integrado. Hay
+un montón de opciones que podemos configurar aquí, pero los valores por defecto son bastante buenos y estándar. El `login_path` está configurado
+en nuestra ruta `app_login` que vimos en el `SecurityController`. Aquí es donde se redirige a los usuarios cuando tienen que iniciar sesión,
+por ejemplo, cuando intentan acceder a una página protegida. El `check_path` también está configurado en `app_login`. Aquí es donde
+se envía el formulario de inicio de sesión. No supone ningún problema que sea la misma ruta, ya que envías las credenciales mediante el método `POST`.
+Esto hace que el sistema de seguridad procese el intento de inicio de sesión en lugar de mostrar el formulario de inicio de sesión. Por último, estamos
+activando la protección contra la falsificación de peticiones entre sitios (CSRF) para nuestro formulario de inicio de sesión.
 
-A continuación, habilitaremos y configuraremos la función de cierre de sesión estableciendo `logout_path` en la ruta`app_logout` que configuramos en `SecurityController`.
+A continuación, activamos y configuramos la función de cierre de sesión estableciendo `logout_path` en la
+ruta`app_logout` que hemos configurado en `SecurityController`.
 
 ## La plantilla `login.html.twig` 
 
-En cuanto al otro archivo nuevo, abre `templates/security/login.html.twig`. Amplía nuestro diseño base y configura el bloque del título.
+Pasemos al otro archivo nuevo: abre `templates/security/login.html.twig`. Este amplía nuestro diseño base y
+establece el bloque del título.
 
-En el bloque del cuerpo, estamos renderizando el formulario. Fíjate en el atributo `method="post"`. Esto es importante para activar el `check_path` al enviar. Recuerda que estamos pasando las variables `last_username` y `error` a esta plantilla desde nuestra `SecurityController`.
+En el bloque «body», mostramos el formulario. Fíjate en el atributo « `method="post"` ». Esto es importante para
+activar la ruta « `check_path` » al enviar el formulario. Recuerda que estamos pasando las variables « `last_username` » y « `error` » a esta
+plantilla desde nuestro « `SecurityController` ».
 
-Dentro, primero estamos comprobando si hay un error, y si es así, renderizándolo. Esto utiliza el sistema de traducción, de modo que si tu aplicación está localizada, los mensajes de error estándar se traducirán automáticamente a la configuración regional del usuario.
+En su interior, primero comprobamos si hay algún error y, si es así, lo mostramos. Para ello se utiliza el sistema de traducción, por lo que,
+si tu aplicación está localizada, los mensajes de error estándar se traducirán automáticamente al idioma del usuario.
 
-A continuación, comprobamos si un usuario ya ha iniciado sesión. `app.user` devuelve el usuario que ha iniciado sesión actualmente, o `null` si no hay ninguno. Si está conectado, muestra su `userIdentifier` (su correo electrónico en nuestro caso), y un enlace de cierre de sesión.
+A continuación, comprobamos si un usuario ya ha iniciado sesión. `app.user` devuelve el usuario que ha iniciado sesión actualmente, o `null` si
+no hay ninguno. Si ha iniciado sesión, muestra su `userIdentifier` (su correo electrónico en nuestro caso) y un enlace para cerrar sesión.
 
-A continuación se muestra un campo de entrada de tipo correo electrónico para el nombre de usuario, que se rellena previamente con la variable `last_username`. Fíjate en el atributo `name="_username"`. Esto es importante porque el autenticador de inicio de sesión del formulario busca este nombre de campo específico cuando procesa el intento de inicio de sesión.
+A continuación hay un campo de entrada de tipo correo electrónico para el nombre de usuario, que ya viene rellenado con la variable `last_username`. Fíjate
+en el atributo `name="_username"`. Esto es importante porque el autenticador de inicio de sesión busca este nombre de campo específico
+al procesar el intento de inicio de sesión.
 
-Lo mismo ocurre con el campo de la contraseña. Necesita llamarse `_password` para que el autenticador lo reconozca. Estos nombres pueden configurarse en las opciones `form_login` en `security.yaml`.
+Lo mismo ocurre con el campo de contraseña que hay más abajo. Tiene que llamarse `_password` para que el autenticador lo reconozca.
+Estos nombres se pueden configurar en las opciones de `form_login` en `security.yaml`.
 
-A continuación, tenemos un campo de entrada oculto para el token CSRF. El valor de este token se genera con la función `csrf_token()`. De nuevo, el atributo de nombre, `_csrf_token`, es importante para que el autenticador lo reconozca y puede configurarse también en `form_login` en `security.yaml`.
+A continuación, tenemos un campo de entrada oculto para el token CSRF. El valor de este token se genera con la función `csrf_token()`
+. De nuevo, el atributo «name», `_csrf_token`, es importante para que el autenticador lo reconozca y también se puede configurar
+en `form_login`, en `security.yaml`.
 
-Hay algo de código comentado relacionado con la funcionalidad "recuérdame" que trataremos más adelante.
+Hay algo de código comentado relacionado con la función «recordarme», que veremos más adelante.
 
-Por último, aquí está el botón de envío.
+Por último, aquí está el botón de enviar.
 
 ## Estilo del formulario de inicio de sesión
 
-Veamos qué aspecto tiene En nuestra aplicación, visita `/login`... Esto está bien... ¡pero mejorémoslo!
+¡Veamos qué pinta tiene esto! En nuestra app, entra en `/login`... Esto está bien... ¡pero vamos a darle un toque más chulo!
 
-En el directorio `tutorial`, abre `login.html.twig` y copia todo. Vuelve a nuestra plantilla y sustituye todo por el código copiado. Este código también está en el script de abajo:
+En el directorio `tutorial`, abre `login.html.twig` y copia todo. Vuelve a nuestra
+plantilla y sustituye todo por el código copiado. Este código también está en el script de abajo:
 
 [[[ code('f30d27a746') ]]]
 
-Actualiza la página de inicio de sesión... Bien, ¡mucho mejor!
+Actualiza la página de inicio de sesión... ¡Genial, mucho mejor!
 
-## Probar el formulario de inicio de sesión
+## Probando el formulario de inicio de sesión
 
-Probemos primero con unas credenciales erróneas. Correo electrónico: `invalid@invalid.com`. Contraseña: `invalid`. Pulsa intro para enviar y...
+Primero probemos con unas credenciales incorrectas. Correo: `invalid@invalid.com`. Contraseña: `invalid`. Pulsa Intro para enviar y...
 
-Vale, esta ventana emergente "Cambia tu contraseña" es de mi navegador web. No le gusta esta contraseña. Le daré a OK para cerrarlo - estamos en desarrollo. Uhh, no, ¡nunca lo guardes!
+Vale, esta ventana emergente de «Cambia tu contraseña» es de mi navegador. No le gusta esta contraseña. Voy a darle a «Aceptar» para
+cerrarla; solo estamos en fase de desarrollo. ¡Eh, no, nunca la guardes!
 
-Tenemos el esperado mensaje de error "Credenciales no válidas" y compruébalo, nuestro campo de correo electrónico se rellena previamente con el nombre de usuario que acabamos de probar. Incluso si actualizamos la página, recuerda nuestro último nombre de usuario. ¡Muy útil!
+Aparece el mensaje de error esperado: «Credenciales no válidas», y fíjate: el campo de correo electrónico ya está rellenado con el
+nombre de usuario que acabamos de probar. Aunque actualicemos la página, recuerda nuestro último nombre de usuario. ¡Qué práctico!
 
-Ahora vamos a probar la protección CSRF. Para ello tenemos que ensuciarnos las manos en las herramientas para desarrolladores. Haz clic con el botón derecho en algún lugar del formulario y elige "Inspeccionar". En el DOM, busca el campo de entrada oculto csrf_token. Cambia el valor a algo inválido, como `invalid`.
+Ahora probemos la protección CSRF. Para esto, tendremos que meternos de lleno en las herramientas de desarrollo. Haz clic con el botón derecho
+en cualquier parte del formulario y elige «Inspeccionar». En el DOM, busca el campo de entrada oculto «csrf_token». Cambia el valor por
+algo que no sea válido, como `invalid`.
 
-Rellena la contraseña con cualquier cosa... Vamos a cerrar las herramientas de desarrollador... y a darle a "Iniciar sesión". Volveré a cerrar el asqueroso popup de la contraseña... Y bien, vemos el error "Invalid CSRF token".
+Introduce cualquier cosa en la contraseña... Cerramos las herramientas de desarrollo... y pulsamos «Iniciar sesión». Voy a cerrar
+otra vez esa ventana emergente cutre de la contraseña... Y genial, aparece el error «Token CSRF no válido».
 
-Este mensaje de error es bastante técnico, no creo que el usuario medio lo entienda. Aquí tienes una tarea para ti: ¿cómo puedes personalizar este mensaje de error para que sea más fácil de usar? Por ejemplo "Lo sentimos, algo ha ido mal. Inténtalo de nuevo" Escribe tus respuestas en los comentarios
+Este mensaje de error es bastante técnico, no creo que un usuario normal lo entendiera. Aquí tienes una
+tarea para ti: ¿cómo podrías personalizar este mensaje de error para que sea más fácil de entender? Por ejemplo: «Lo sentimos, algo
+ha salido mal. Inténtalo de nuevo». ¡Deja tus respuestas en los comentarios de abajo!
 
 ## Tokens CSRF sin estado
 
-Puede que hayas notado algo en el valor del token csrf antes de que lo cambiáramos a `invalid`. Búscalo de nuevo en las herramientas de desarrollo y échale un vistazo. Es sólo "csrf-token"... ¿no debería ser algo aleatorio y único? Sí, si estuviéramos utilizando tokens CSRF tradicionales basados en sesión. Las versiones más recientes de Symfony te permiten utilizar los más modernos tokens CSRF sin estado (es decir, sin sesión).
+Quizá te hayas fijado en algo sobre el valor del token CSRF antes de que lo cambiáramos a `invalid`. Búscalo
+de nuevo en las herramientas de desarrollo y échale un vistazo. Es simplemente «csrf-token»... ¿no debería ser algo
+aleatorio y único? Sí, si estuviéramos usando tokens CSRF tradicionales basados en sesión. Las versiones más recientes de
+Symfony te permiten usar los tokens CSRF sin estado (es decir, sin sesión), que son más modernos.
 
-Echa un vistazo a nuestra plantilla `login.html.twig` y encuentra el campo de entrada oculto para el token. Observa que el valor se genera con `csrf_token('authenticate')`. `authenticate` es un identificador de token, utilizado para distinguir la intención de este token. Si abrimos `config/packages/csrf.yaml` y miramos esta configuración `stateless_token_ids`, veremos que `authenticate` aparece aquí. Esto significa que cualquier token csrf generado con el id `authenticate`utilizará el sistema sin estado.
+Echa un vistazo a nuestra plantilla `login.html.twig` y busca el campo de entrada oculto para el token. Fíjate en que el valor se
+genera con `csrf_token('authenticate')`. `authenticate` es un identificador de token, que se usa para distinguir la
+finalidad de este token. Si abrimos `config/packages/csrf.yaml` y miramos esta configuración de `stateless_token_ids`,
+vemos que `authenticate` aparece aquí. Esto significa que cualquier token CSRF generado con el identificador `authenticate`
+usará el sistema sin estado.
 
-Además, en nuestra plantilla de inicio de sesión, el campo oculto del token tiene un atributo `data-controller="csrf-protection"`. Se trata de un controlador Stimulus que proporciona la receta de Flex para el bundle Stimulus. Puedes encontrarlo en`assets/controllers/csrf_protection_controller.js`. Esto no es necesario para que funcione el sistema de token CSRF sin estado, pero endurece el sistema. Echa un vistazo a nuestro [corto de YouTube](https://www.youtube.com/shorts/URNBEATIzSQ) sobre el tema para saber más.
+Además, volviendo a nuestra plantilla de inicio de sesión, el campo oculto del token tiene un atributo `data-controller="csrf-protection"`.
+Se trata de un controlador de Stimulus que proporciona la receta Flex para el bundle Stimulus. Lo puedes encontrar en
+`assets/controllers/csrf_protection_controller.js`. No es necesario para que el sistema de tokens CSRF sin estado
+funcione, pero refuerza la seguridad del sistema. Échale un vistazo a nuestro [vídeo corto de YouTube](https://www.youtube.com/shorts/URNBEATIzSQ)
+sobre el tema para saber más.
 
-Bien, ¡volvamos a nuestro formulario de acceso! Intentemos iniciar sesión con un correo electrónico y una contraseña válidos.
+¡Vale, volvamos a nuestro formulario de inicio de sesión! Intentemos iniciar sesión con un correo y una contraseña válidos.
 
-En el terminal, comprueba nuestra base de datos para refrescar la memoria sobre el usuario:
+En la terminal, echa un vistazo a nuestra base de datos para refrescar la memoria sobre el usuario:
 
 ```terminal
 symfony console dbal:run-sql 'select * from user'
 ```
 
-Ah, sí, es nuestro amigo Jean-Luc Picard. De vuelta al formulario, oculta las herramientas de desarrollo, actualiza la página... e introduce su correo electrónico: `picard@enterprise.space`. Contraseña: `makeitso`. Pulsa "Iniciar sesión"... Sí, sí, ésta también es una mala contraseña...
+Ah, sí, es nuestro amigo Jean-Luc Picard. Vuelve al formulario, oculta las herramientas de desarrollo, actualiza la página... e introduce su
+correo: `picard@enterprise.space`. Contraseña: `makeitso`. Pulsa «Iniciar sesión»... Sí, sí, esta contraseña tampoco es válida...
 
-Hmm, aparece el error "Credenciales no válidas". Sé que no he cometido un error tipográfico... ¿Recuerdas la vulnerabilidad de seguridad que mencioné en el último capítulo? ¿Has averiguado cuál es?
+Mmm, nos sale el error «Credenciales no válidas». Sé que no me he equivocado al escribir... ¿Te acuerdas de esa
+vulnerabilidad de seguridad que mencioné en el último capítulo...? ¿Ya has averiguado cuál es?
 
-¡Lo arreglaremos a continuación!
+¡La arreglaremos a continuación!
