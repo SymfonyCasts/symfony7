@@ -1,3 +1,3 @@
-# `app.user` and Login/Logout Links
+# app.user and Login/Logout Links
 
 Coming soon!
