@@ -54,15 +54,18 @@ implements `PasswordAuthenticatedUserInterface`, it *is* covered by the `auto` h
 So what's the `auto` hasher? You're going to love this! `auto` tells Symfony to "choose the best hasher available".
 Security is a moving target and new hashing algorithms are developed over time. Currently, the best hasher
 algorithm is `bcrypt`. When a new, better algorithm comes out, Symfony will automatically start hashing passwords
-using it! This is the behavior `auto` gives us. It's important to note that upgrading your Symfony version is
+using it! Uhh, ok, does that mean all my users on the old hash can no longer log in? Nope! `auto` has knowledge
+of not just the new hasher, but also the old ones. It can verify passwords hashed with the old algorithm, but
+all new passwords will be hashed with the new one.
+
+This is the behavior `auto` gives us. It's important to note that upgrading your Symfony version is
 what allows you to take advantage of this. Another good reason to keep your Symfony version up to date!
 
 Ok, so a new hashing algorithm comes out in a few years, and new users start to use it, what about our
 old users? Are they stuck with the old, less secure hash? 
 
-You're going to doubly love this! `auto` also enables the `MigratingPasswordHasher`.
-As user's log in, if it's determined their password is using an old hashing algorithm, Symfony will upgrade them
-to the new one automatically!
+You're going to doubly love this! User providers have the concept of *password upgrading*. As user's log in, if it's
+determined their password is using an old hashing algorithm, Symfony will upgrade them to the new one automatically!
 
 ## Rehashing Passwords on Login
 
