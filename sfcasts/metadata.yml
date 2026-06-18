@@ -11,3 +11,18 @@ chapters:
     password-hashing:
         tutsFirstStep: 4-hashed-password
         tutsLastStep: 4-auto-hash-in-factory
+    login-logout-links:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    logout-csrf:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    email-or-username:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    custom-error-messages:
+        tutsFirstStep: ~
+        tutsLastStep: ~
+    remember-me:
+        tutsFirstStep: ~
+        tutsLastStep: ~
