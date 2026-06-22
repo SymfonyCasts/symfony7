@@ -142,6 +142,51 @@
 - Next, let's add a login/logout to our topbar!
 
 ## Login/Logout Links
+- Open base.html.twig
+    - add `{{ dump(app.user) }}` to show the user variable
+    - see null in browser
+    - login, see user
+    - remove dump
+    - add if/else blocks after "contact"
+    - Copy "contact" link and paste in each block and adjust
+    - Test...
+    - use `logout_path()`
+        - dig in and explain firewall detection (advanced scenario)
+    - all still works...
+- See our user's roles. these are... all users have a single role: ROLE_USER
+- use `is_granted('ROLE_USER')` instead of the app.user check
+- next, csrf protection for logout
+
+## Logout CSRF
+- Malicious site could send a GET request to our logout URL and log users out without their consent
+- change logout route method to POST
+- link no longer works... use need to use form
+- ```html
+  <form action="{{ logout_path() }}" method="post" class="inline">
+        <button type="submit" class="hover:text-amber-400 pt-2">
+           Logout
+        </button>
+  </form>
+  ```
+- test...
+- login again
+- Logout button should feel more like a link: add "cursor-pointer" class to the button
+- In `security.yaml` add `enable_csrf: true` to the `logout` section
+- Logout no longer works... CSRF is failing... we need the token in our form
+- what's the default name?
+- at our terminal
+    - `symfony console config:dump security` - big list
+    - `symfony console config:dump security firewalls`
+    - scroll up and find it... `_csrf_token` is the default name
+    - Same as our login form
+- Copy from `login.html.twig`...
+- Keep the data-controller as we want session-less
+- open `csrf.yaml`... "logout" is the name and it's already configured for sessionless
+- name the token id "logout"
+- Refresh and logout again... success!
+- next, add username allow logging in with either email or username
+
+## Login/Logout Links
   - But you know what, let's add login/logout buttons in the header of our template
 - Open `base.html.twig` template
     - We need a logout link for users, because they don't see dev's logout link in WDT
