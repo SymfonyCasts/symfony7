@@ -1,0 +1,32 @@
+diff --git a/src/Controller/SecurityController.php b/src/Controller/SecurityController.php
+index 76bf5c4..4837d8b 100644
+--- a/src/Controller/SecurityController.php
++++ b/src/Controller/SecurityController.php
+@@ -24,7 +24,7 @@ class SecurityController extends AbstractController
+         ]);
+     }
+ 
+-    #[Route(path: '/logout', name: 'app_logout')]
++    #[Route(path: '/logout', name: 'app_logout', methods: 'POST')]
+     public function logout(): void
+     {
+         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index 6ee8cad..c13c87e 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -62,9 +62,11 @@
+                             Contact
+                         </a>
+                         {% if is_granted('ROLE_USER') %}
+-                            <a class="hover:text-amber-400 pt-2" href="{{ logout_path() }}">
+-                                Logout
+-                            </a>
++                            <form action="{{ logout_path() }}" method="post" class="inline">
++                                <button type="submit" class="hover:text-amber-400 pt-2">
++                                    Logout
++                                </button>
++                            </form>
+                         {% else %}
+                             <a class="hover:text-amber-400 pt-2" href="{{ path('app_login') }}">
+                                 Login

@@ -1,0 +1,12 @@
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index bc375dd..619324b 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -66,7 +66,6 @@
+                         </a>
+                     </nav>
+                 </header>
+-                {{ dump(app.user) }}
+                 {% block body %}{% endblock %}
+             </div>
+             <div class="p-5 bg-white/5 mt-3 text-center">

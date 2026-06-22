@@ -1,0 +1,26 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index f41f50f..48e8577 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -25,6 +25,7 @@ security:
+                 enable_csrf: true
+             logout:
+                 path: app_logout
++                enable_csrf: true
+                 # where to redirect after logout
+                 # target: app_any_route
+ 
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index c13c87e..e7014d3 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -63,7 +63,8 @@
+                         </a>
+                         {% if is_granted('ROLE_USER') %}
+                             <form action="{{ logout_path() }}" method="post" class="inline">
+-                                <button type="submit" class="hover:text-amber-400 pt-2">
++                                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('logout') }}">
++                                <button type="submit" class="hover:text-amber-400 pt-2 cursor-pointer">
+                                     Logout
+                                 </button>
+                             </form>

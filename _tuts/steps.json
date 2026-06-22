@@ -54,7 +54,37 @@
             "id": "4-auto-hash-in-factory",
             "name": "4. auto-hash in factory",
             "description": null
+        },
+        {
+            "id": "5-app-user-dump",
+            "name": "5. app.user dump",
+            "description": null
+        },
+        {
+            "id": "5-remove-app-user-dump",
+            "name": "5. remove app.user dump",
+            "description": null
+        },
+        {
+            "id": "5-login-logout-links",
+            "name": "5. login\/logout links",
+            "description": null
+        },
+        {
+            "id": "5-logout-path",
+            "name": "5. logout_path",
+            "description": null
+        },
+        {
+            "id": "6-post-logout",
+            "name": "6. post logout",
+            "description": null
+        },
+        {
+            "id": "6-logout-csrf",
+            "name": "6. logout csrf",
+            "description": null
         }
     ],
-    "sha": "c14513a8d3ee0368609297ea9ccd4baf700cfecb"
+    "sha": "5fd011ce4f16ac0ece6400bc833797485253a688"
 }
