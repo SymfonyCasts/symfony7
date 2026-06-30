@@ -5,11 +5,13 @@ Vamos a profundizar un poco más en ella. `app` es una variable global de Twig, 
 que está disponible en todas nuestras plantillas. Contiene mucha información útil sobre
 la petición actual, incluido el usuario actual (si está disponible).
 
-En `base.html.twig`, justo antes del bloque «body», muestra su contenido con `{{ dump(app.user) }}`.
+En `base.html.twig`, justo antes del bloque «body», muestra su contenido con `{{ dump(app.user) }}`:
+
+[[[ code('ed0f45765b') ]]]
 
 Vuelve al navegador y actualiza la página de inicio. Se muestra el contenido de `null`. Tiene sentido, ya que
 aún no hemos iniciado sesión. Ve a `/login` e inicia sesión con nuestro buen amigo `picard@enterprise.space`,
-contraseña: `makeitso`. Volvemos a la página de inicio y ahora el volcado contiene una instancia
+contraseña: `makeitso`. Estamos de nuevo en la página de inicio, y ahora el volcado contiene una instancia
 de nuestro objeto `User`. Concretamente, el objeto de usuario de Jean-Luc. Esta es una forma rapidísima
 de acceder a cualquier información sobre el usuario que haya iniciado sesión actualmente. Pero también es una forma fácil
 de comprobar si un usuario ha iniciado sesión. Si `app.user` es nulo, el usuario no ha iniciado sesión.
@@ -28,9 +30,11 @@ mostrar el enlace de cierre de sesión. Cambia el texto del enlace a «Cerrar se
 Recuerda que esta ruta `app_logout` proviene del método `logout()` de nuestro `SecurityController`.
 
 A continuación, copia el enlace «Cerrar sesión» y pégalo dentro de `else`. Cambia `path` por `app_login` y el texto
-del enlace por «Iniciar sesión».
+del enlace por «Iniciar sesión»:
 
-Ya está, ¡vamos a probarlo!
+[[[ code('43f1d0c5f7') ]]]
+
+¡Ya está, probémoslo!
 
 Actualiza la página de inicio... Seguimos conectados y, efectivamente, vemos el enlace de cierre de sesión. Haz clic en él...
 nos hemos desconectado y ahora vemos el enlace de inicio de sesión. Haz clic en él... y vuelve a iniciar sesión...
@@ -40,7 +44,11 @@ nos hemos desconectado y ahora vemos el enlace de inicio de sesión. Haz clic en
 ## Generar el enlace de cierre de sesión
 
 Hay otra forma de generar el enlace de cierre de sesión. Vuelve a `base.html.twig` y sustituye `path('app_logout')`
-por `logout_path()`. Fíjate en que también hay una función `logout_url()`. La diferencia es que `logout_path()`
+por `logout_path()`:
+
+[[[ code('1587c1069c') ]]]
+
+Fíjate en que también hay una función `logout_url()`. La diferencia es que `logout_path()`
 genera una ruta absoluta, como `/logout`, mientras que `logout_url()` genera una URL absoluta, como
 `https://starshop.dev/logout`. En la mayoría de los casos, `logout_path()` es suficiente.
 
@@ -61,8 +69,11 @@ Hay otro método habitual para comprobar si un usuario ha iniciado sesión. Nues
 barra de herramientas de depuración web, si pasas el cursor por la pestaña «Usuario», verás que nuestro usuario actual tiene un rol: `ROLE_USER`. Hemos
 configurado que todos los usuarios autenticados tengan este rol.
 
-Volviendo a nuestra instrucción « `if` » en `base.html.twig`, sustituye `app.user` por `is_granted('ROLE_USER')`. Esta función
-comprueba si el usuario actual tiene el rol especificado. Solo los usuarios autenticados tendrán este rol.
+Volviendo a nuestra instrucción « `if` » en `base.html.twig`, sustituye `app.user` por `is_granted('ROLE_USER')`:
+
+[[[ code('ed39b83a4c') ]]]
+
+Esta función comprueba si el usuario actual tiene el rol especificado. Solo los usuarios autenticados tendrán este rol.
 
 Si actualizamos la página de inicio, todo sigue funcionando como se espera. Podemos cerrar sesión... iniciar sesión... y los enlaces
 cambian como se espera.
