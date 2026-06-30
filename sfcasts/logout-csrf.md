@@ -27,7 +27,11 @@ logout link to use a `POST` request.
 ## Changing the Logout Link to a POST Request
 
 In our `SecurityController`, find the `Route` attribute for the `logout()` method. Add
-`methods: 'POST'`. Does that solve it? Let's see.
+`methods: 'POST'`:
+
+[[[ code('3d6d04854c') ]]]
+
+Does that solve it? Let's see.
 
 Back in our app, login... Now click "Logout"...
 
@@ -43,7 +47,9 @@ Head over to `base.html.twig`. Right after the logout link, add a `<form>` tag. 
 and `method="post"`. By default, forms are block elements, so add `class="inline"` to make it an inline element.
 
 Inside, add a `<button>`, `type="submit"`. I want this to have the same styles as the nearby links, so add
-`class=""` and copy/paste the classes from the link above. For the button text? `Logout`.
+`class=""` and copy/paste the classes from the link above. For the button text? `Logout`:
+
+[[[ code('c87b7accbd') ]]]
 
 That should be it, remove the old logout link above.
 
@@ -53,7 +59,9 @@ Back to the browser and refresh... Now click "Logout"... Sure enough, we're logg
 
 Login again... and hover over the `Logout` link - now a button. Notice it doesn't have
 the same cursor as the other links. By default, buttons don't have the same cursor as links.
-To make it completely transparent to the user, in the button's class, add `cursor-pointer`.
+To make it completely transparent to the user, in the button's class, add `cursor-pointer`:
+
+[[[ code('15c067871d') ]]]
 
 Refresh the page... now the Logout button is completely indistinguishable from the other links.
 
@@ -63,7 +71,9 @@ Now just because our logout route now requires a `POST` request, doesn't mean ot
 trigger it. To completely prevent this, we need to implement CSRF protection for it.
 
 Open `config/packages/security.yaml`. Under the `main` firewall section, find the `logout` key.
-Add `enable_csrf: true`.
+Add `enable_csrf: true`:
+
+[[[ code('3d6e805494') ]]]
 
 Let's try it out. Back in the browser, click "Logout"... Hmm, nothing happened...
 It didn't log us out... but that's good! Our logout requires a CSRF token, but
@@ -99,7 +109,9 @@ This just shows the `firewalls` section. Scroll up until you find the `logout` k
 what we have in our logout form.
 
 I want to use stateless CSRF protection, so I'll keep this `data-controller` attribute.
-For the value, inside `csrf_token()`, use `logout` for the token ID.
+For the value, inside `csrf_token()`, use `logout` for the token ID:
+
+[[[ code('513647de33') ]]]
 
 Now we need to enable stateless CSRF protection for this ID. Open
 `config/packages/csrf.yaml` and... nice, `logout` is enabled by default.

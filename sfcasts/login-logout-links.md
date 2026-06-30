@@ -5,7 +5,9 @@ Twig variable. Let's explore it further. `app` is a global Twig variable - meani
 it's available in all our templates. It contains a lot of useful context on
 the current request, including the current user (if available).
 
-In `base.html.twig`, just before the body block, dump it with `{{ dump(app.user) }}`.
+In `base.html.twig`, just before the body block, dump it with `{{ dump(app.user) }}`:
+
+[[[ code('ed0f45765b') ]]]
 
 Back in our browser, refresh the homepage. It dumped `null`. Makes sense, as we're
 not logged in yet. Go to `/login` and login with our good buddy `picard@enterprise.space`,
@@ -28,7 +30,9 @@ to show the logout link. Change the link text to "Logout" and it's href to `{{ p
 Remember, this `app_logout` route is from our `SecurityController`'s `logout()` method.
 
 Next, copy the "Logout" link and paste it inside the `else`. Change the `path` to `app_login` and the link
-text to "Login".
+text to "Login":
+
+[[[ code('43f1d0c5f7') ]]]
 
 That should be it, let's give it a whirl!
 
@@ -40,7 +44,11 @@ Sweet! Our user experience is much better!
 ## Generating the Logout Link
 
 There's another way to generate the logout link. Back in `base.html.twig`, replace `path('app_logout')`
-with `logout_path()`. Notice there's a `logout_url()` function as well. The difference is that `logout_path()`
+with `logout_path()`:
+
+[[[ code('1587c1069c') ]]]
+
+Notice there's a `logout_url()` function as well. The difference is that `logout_path()`
 generates an *absolute path*, like `/logout`, while `logout_url()` generates an *absolute URL*, like
 `https://starshop.dev/logout`. In most cases, `logout_path()` is good enough.
 
@@ -61,8 +69,11 @@ There's another common method to check if a user is logged in. Our users have th
 web debug toolbar, if we hover over the "User" tab, we see our current user has one role: `ROLE_USER`. We've
 configured *every* authenticated user to have this role.
 
-Back in our `if` statement in `base.html.twig`, replace `app.user` with `is_granted('ROLE_USER')`. This function
-checks if the current user has the specified role. Only authenticated users will have this role.
+Back in our `if` statement in `base.html.twig`, replace `app.user` with `is_granted('ROLE_USER')`:
+
+[[[ code('ed39b83a4c') ]]]
+
+This function checks if the current user has the specified role. Only authenticated users will have this role.
 
 If we refresh the homepage, everything still works as expected. We can logout... login... and the links
 change as expected.
