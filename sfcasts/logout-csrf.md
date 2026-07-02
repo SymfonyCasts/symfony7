@@ -75,7 +75,7 @@ Add `enable_csrf: true`:
 
 [[[ code('3d6e805494') ]]]
 
-Let's try it out. Back in the browser, click "Logout"... Hmm, nothing happened...
+Let's try it out. Back in the browser, refresh... and click "Logout"... Hmm, nothing happened...
 It didn't log us out... but that's good! Our logout requires a CSRF token, but
 we didn't pass one. This is what would happen if another site tried to log us
 out - it couldn't.
