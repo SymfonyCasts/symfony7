@@ -16,7 +16,7 @@ se espera que sean seguras.
 Recuerdo haber leído sobre alguien que creó una app web para controlar el abridor inteligente de la puerta de su garaje
 . Quería una forma fácil de abrirla y cerrarla a distancia, así que creó una ruta `/toggle-garage-door`
 . Al acceder a esa ruta, la puerta del garaje se abría si estaba cerrada, o se cerraba si estaba abierta.
-Por desgracia, como aceptaba peticiones `GET`, una precarga del navegador o una vista previa del enlace demasiado entusiasta podían
+Por desgracia, como aceptaba peticiones `GET`, una precarga del navegador o una vista previa de enlace demasiado entusiasta podían
 activarla automáticamente. Es gracioso… hasta que estás de vacaciones, compruebas que la puerta del garaje
 está cerrada y, en cambio, tu navegador la abre.
 
@@ -35,7 +35,7 @@ En nuestro `SecurityController`, busca el atributo ` `Route` ` para el método `
 
 Vuelve a nuestra app, inicia sesión... Ahora haz clic en «Cerrar sesión»...
 
-¡Error! Un error 405 «Método no permitido». ¿Por qué? Nuestro enlace de cierre de sesión es solo un enlace normal, así que utiliza `GET`.
+¡Error! Un error 405 «Método no permitido». ¿Por qué? Nuestro enlace de cierre de sesión es solo un enlace normal, así que usa `GET`.
 Hemos solucionado el problema del cambio de estado, ¡pero ahora nuestra propia web no nos deja cerrar sesión!
 
 ¿Cómo podemos convertirlo en un enlace de envío? La forma más sencilla es convertirlo en un botón de envío dentro de un
@@ -59,7 +59,7 @@ Vuelve al navegador y actualiza la página... Ahora haz clic en «Cerrar sesión
 
 Vuelve a iniciar sesión… y pasa el cursor por encima del enlace `Logout`, que ahora es un botón. Fíjate en que no tiene
 el mismo cursor que los demás enlaces. Por defecto, los botones no tienen el mismo cursor que los enlaces.
-Para que el usuario no note la diferencia, en la clase del botón, añade `cursor-pointer`:
+Para que el usuario no note ninguna diferencia, en la clase del botón, añade `cursor-pointer`:
 
 [[[ code('15c067871d') ]]]
 
@@ -70,13 +70,13 @@ Actualiza la página... ahora el botón de cierre de sesión es totalmente indis
 El hecho de que nuestra ruta de cierre de sesión requiera ahora una petición `POST` no significa que otros sitios no puedan 
 activarla. Para evitarlo por completo, tenemos que implementar la protección CSRF para ella.
 
-Abre `config/packages/security.yaml`. En la sección del cortafuegos « `main` », busca la clave « `logout` ».
-Añade « `enable_csrf: true` »:
+Abre `config/packages/security.yaml`. En la sección del cortafuegos de `main`, busca la clave `logout`.
+Añade `enable_csrf: true`:
 
 [[[ code('3d6e805494') ]]]
 
-Probémoslo. Vuelve al navegador y haz clic en «Cerrar sesión»... Mmm, no ha pasado nada...
-No nos ha desconectado… ¡pero eso es bueno! Nuestra desconexión requiere un token CSRF, pero
+Probémoslo. Vuelve al navegador, actualiza la página... y haz clic en «Cerrar sesión»... Mmm, no ha pasado nada...
+No nos ha desconectado... ¡pero eso es bueno! Nuestra desconexión requiere un token CSRF, pero
 no hemos pasado ninguno. Esto es lo que pasaría si otra web intentara desconectarnos:
 no podría.
 
