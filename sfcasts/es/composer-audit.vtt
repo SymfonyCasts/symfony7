@@ -1,0 +1,468 @@
+WEBVTT
+
+00:00:01.056 --> 00:00:01.766 align:middle
+¡Una última cosa!
+
+00:00:01.946 --> 00:00:04.266 align:middle
+Un tema extra: las
+actualizaciones de seguridad.
+
+00:00:04.836 --> 00:00:07.716 align:middle
+Esto no tiene por qué estar relacionado
+con la actualización a Symfony 8,
+
+00:00:07.996 --> 00:00:10.236 align:middle
+pero es un tema importante,
+ahora más que nunca.
+
+00:00:10.856 --> 00:00:14.636 align:middle
+Hace poco, el ecosistema de Symfony se
+sometió a una gran revisión de seguridad
+
+00:00:14.866 --> 00:00:17.996 align:middle
+que sacó a la luz muchas
+vulnerabilidades en varios paquetes.
+
+00:00:18.456 --> 00:00:19.026 align:middle
+¿El motivo?
+
+00:00:19.526 --> 00:00:20.726 align:middle
+La IA ha cambiado las reglas del juego.
+
+00:00:21.366 --> 00:00:26.626 align:middle
+Las modernas herramientas de auditoría asistidas por IA pueden ayudar
+a los investigadores de seguridad a analizar grandes bases de código
+
+00:00:26.806 --> 00:00:30.366 align:middle
+e identificar posibles vulnerabilidades
+mucho más rápido que antes.
+
+00:00:30.946 --> 00:00:35.306 align:middle
+Esto está dando lugar a más descubrimientos, más
+revelaciones y, en última instancia, más correcciones.
+
+00:00:35.676 --> 00:00:36.466 align:middle
+Y eso es algo bueno.
+
+00:00:36.926 --> 00:00:40.366 align:middle
+Encontrar estas vulnerabilidades no
+significa que Symfony sea menos seguro.
+
+00:00:40.666 --> 00:00:42.166 align:middle
+Más bien al contrario. Contar con
+
+00:00:42.476 --> 00:00:46.066 align:middle
+mejores herramientas significa que los problemas
+se identifican y se corrigen más rápido.
+
+00:00:46.686 --> 00:00:51.316 align:middle
+Como desarrolladores, eso significa que es más importante que
+nunca estar al día con las actualizaciones de las dependencias
+
+00:00:51.516 --> 00:00:54.176 align:middle
+y prestar atención cuando se
+publiquen avisos de seguridad.
+
+00:00:54.766 --> 00:00:58.036 align:middle
+Por suerte, Composer tiene una herramienta
+integrada que lo hace súper fácil.
+
+00:00:58.586 --> 00:01:00.866 align:middle
+Para verla en acción, en tu terminal, ejecuta:
+
+00:01:01.056 --> 00:01:06.166 align:middle
+symfony composer audit Esto comprueba los paquetes
+que tienes instalados actualmente en tu proyecto
+
+00:01:06.246 --> 00:01:08.466 align:middle
+con los avisos de seguridad conocidos.
+
+00:01:08.736 --> 00:01:10.296 align:middle
+Y… ¡parece que tengo unos cuantos!
+
+00:01:10.946 --> 00:01:13.196 align:middle
+Este resultado se ve bastante mal
+en esta pantalla tan pequeña,
+
+00:01:13.366 --> 00:01:16.726 align:middle
+así que volveré a ejecutar
+el comando con --format=plain.
+
+00:01:17.656 --> 00:01:22.006 align:middle
+Para cada vulnerabilidad, Composer muestra
+el paquete afectado, el nivel de gravedad
+
+00:01:22.186 --> 00:01:23.996 align:middle
+y enlaces donde podemos obtener
+más información sobre el problema.
+
+00:01:24.646 --> 00:01:28.066 align:middle
+La mayoría de las veces, la solución
+es sencilla: actualiza tus dependencias.
+
+00:01:28.556 --> 00:01:31.016 align:middle
+Composer suele actualizar el paquete vulnerable
+
+00:01:31.226 --> 00:01:33.536 align:middle
+a una versión parcheada
+y el problema desaparece.
+
+00:01:33.916 --> 00:01:34.866 align:middle
+Pero no siempre.
+
+00:01:35.216 --> 00:01:40.066 align:middle
+A veces, la corrección solo está disponible en una versión principal
+más reciente a la que aún no estás preparado para actualizar.
+
+00:01:40.516 --> 00:01:43.836 align:middle
+A veces, la actualización introduce cambios
+que hacen que tu aplicación deje de funcionar.
+
+00:01:44.356 --> 00:01:48.546 align:middle
+Si te encuentras en cualquiera de estos casos,
+es importante que entiendas la vulnerabilidad
+
+00:01:48.546 --> 00:01:50.726 align:middle
+y el riesgo que supone para tu aplicación.
+
+00:01:51.516 --> 00:01:53.766 align:middle
+Empecemos por la última
+vulnerabilidad de mi lista.
+
+00:01:54.276 --> 00:01:57.136 align:middle
+Cada aviso incluye una
+URL con más información.
+
+00:01:57.856 --> 00:02:00.716 align:middle
+Si abrimos esta, nos redirige
+a una entrada de blog
+
+00:02:00.716 --> 00:02:03.196 align:middle
+en la web de Symfony con todos los detalles.
+
+00:02:03.756 --> 00:02:06.336 align:middle
+Normalmente, este es el mejor sitio
+para empezar nuestra investigación.
+
+00:02:06.906 --> 00:02:11.176 align:middle
+La entrada explica: en qué consiste la
+vulnerabilidad; qué versiones se ven afectadas;
+
+00:02:11.506 --> 00:02:16.366 align:middle
+en qué circunstancias se puede explotar;
+y qué versiones contienen la corrección.
+
+00:02:17.026 --> 00:02:20.796 align:middle
+No todos los paquetes utilizan una entrada de blog
+para compartir los detalles de la vulnerabilidad.
+
+00:02:21.536 --> 00:02:24.706 align:middle
+Volviendo a nuestro terminal, podemos
+seguir el enlace del ID del aviso,
+
+00:02:24.916 --> 00:02:27.596 align:middle
+y nos lleva al aviso en packagist.org.
+
+00:02:28.156 --> 00:02:31.126 align:middle
+Aquí nos muestra los detalles
+relacionados con el paquete y,
+
+00:02:31.126 --> 00:02:34.436 align:middle
+si se creó a través de GitHub,
+el enlace al aviso de GitHub.
+
+00:02:34.966 --> 00:02:36.766 align:middle
+Es este enlace GHSA de aquí.
+
+00:02:37.326 --> 00:02:40.626 align:middle
+Si lo sigues, verás una página
+estandarizada sobre la vulnerabilidad.
+
+00:02:41.096 --> 00:02:46.056 align:middle
+Aquí tenemos el nombre del paquete, las versiones
+afectadas, las versiones parcheadas, la gravedad,
+
+00:02:46.266 --> 00:02:49.256 align:middle
+y una descripción del problema y
+cómo lo resuelve la corrección.
+
+00:02:50.006 --> 00:02:53.116 align:middle
+Para ver todos los avisos de seguridad
+publicados para un paquete de GitHub,
+
+00:02:53.336 --> 00:02:56.606 align:middle
+desde la página de su repositorio,
+haz clic en «Seguridad y calidad».
+
+00:02:57.526 --> 00:02:58.496 align:middle
+Aquí está la lista completa.
+
+00:02:59.106 --> 00:03:01.166 align:middle
+Al hacer clic en uno de ellos,
+se abre su página de aviso.
+
+00:03:01.826 --> 00:03:05.406 align:middle
+Seguramente te habrás dado cuenta de que cada vulnerabilidad tiene un identificador
+CVE. CVE son las siglas de «Common Vulnerabilities and Exposures» ( Vulnerabilidades y
+
+00:03:05.786 --> 00:03:06.336 align:middle
+¿Qué es eso?
+
+00:03:06.836 --> 00:03:10.326 align:middle
+exposiciones comunes).
+
+00:03:10.796 --> 00:03:13.556 align:middle
+Es una base de datos pública
+de vulnerabilidades de seguridad
+
+00:03:13.556 --> 00:03:16.306 align:middle
+en la que a cada problema se le
+asigna un identificador único.
+
+00:03:17.016 --> 00:03:21.396 align:middle
+El objetivo es sencillo: ofrecer a todo el mundo una
+forma común de referirse a la misma vulnerabilidad.
+
+00:03:21.986 --> 00:03:26.306 align:middle
+Y esto no es específico de PHP, Composer
+ni siquiera del software de código abierto.
+
+00:03:26.716 --> 00:03:29.896 align:middle
+Los CVE se utilizan en todo
+el sector del software.
+
+00:03:30.276 --> 00:03:35.846 align:middle
+Los sistemas operativos, los navegadores web, las bases de
+datos, las plataformas en la nube, los dispositivos de hardware
+
+00:03:36.116 --> 00:03:39.496 align:middle
+y las bibliotecas de código
+abierto pueden tener asignados CVE.
+
+00:03:40.266 --> 00:03:47.666 align:middle
+Por ejemplo, si alguien menciona CVE-2026-46634, los
+desarrolladores, los investigadores de seguridad,
+
+00:03:47.766 --> 00:03:52.586 align:middle
+los mantenedores de paquetes y las herramientas de seguridad
+saben que se están refiriendo exactamente al mismo problema.
+
+00:03:53.546 --> 00:03:59.036 align:middle
+Los CVE los asignan unas organizaciones llamadas «Autoridades
+de Numeración de CVE» (CNA, por sus siglas en inglés).
+
+00:03:59.546 --> 00:04:03.126 align:middle
+GitHub es una CNA, lo cual es una gran noticia
+para los mantenedores de código abierto
+
+00:04:03.416 --> 00:04:05.516 align:middle
+porque pueden crear avisos de seguridad
+
+00:04:05.686 --> 00:04:09.366 align:middle
+y realizar peticiones de identificadores CVE
+directamente a través de las herramientas de GitHub.
+
+00:04:09.926 --> 00:04:13.296 align:middle
+Puedes consultar los registros
+oficiales de CVE en cve.org.
+
+00:04:14.146 --> 00:04:18.476 align:middle
+En el caso de las vulnerabilidades creadas a través de GitHub,
+me parece que su interfaz es un poco más fácil de usar
+
+00:04:18.476 --> 00:04:21.436 align:middle
+que la de cve.org, pero es
+bueno conocer ambos sitios.
+
+00:04:22.186 --> 00:04:26.796 align:middle
+Si no puedes actualizar a una versión parcheada
+de inmediato, y entiendes la vulnerabilidad
+
+00:04:26.796 --> 00:04:30.106 align:middle
+y el riesgo que supone, tienes la
+opción de ignorarla con Composer.
+
+00:04:30.846 --> 00:04:36.666 align:middle
+Copia el ID del aviso (el identificador CVE
+también sirve) y abre tu archivo ` composer.json `.
+
+00:04:37.466 --> 00:04:41.056 align:middle
+Bajo la clave ` config `, añade una
+sección ` audit ` con una clave ` ignore `.
+
+00:04:42.286 --> 00:04:43.896 align:middle
+Usa el ID que has copiado como clave...
+
+00:04:44.136 --> 00:04:46.456 align:middle
+y, como valor, indica el
+motivo por el que la ignoras.
+
+00:04:47.056 --> 00:04:49.696 align:middle
+Esto es importante para que , en el
+futuro, tú y tus compañeros de equipo
+
+00:04:49.696 --> 00:04:51.826 align:middle
+entendáis por qué aceptasteis el riesgo.
+
+00:04:52.456 --> 00:04:54.696 align:middle
+A mí también me gusta incluir
+cuándo podremos eliminarla.
+
+00:04:55.766 --> 00:05:00.656 align:middle
+Ahora, si ejecutas: symfony composer audit
+La vulnerabilidad no ha desaparecido.
+
+00:05:01.086 --> 00:05:05.096 align:middle
+En cambio, se ha trasladado a la sección «Avisos
+ignorados», justo al principio de la página.
+
+00:05:06.166 --> 00:05:07.506 align:middle
+Aquí también se muestra el motivo.
+
+00:05:08.216 --> 00:05:10.036 align:middle
+Es importante que no la ocultemos por completo.
+
+00:05:10.396 --> 00:05:13.466 align:middle
+Simplemente debe quedar constancia de que
+la hemos revisado, entendemos el riesgo
+
+00:05:13.466 --> 00:05:15.866 align:middle
+y hemos decidido, de forma
+temporal, no abordarla.
+
+00:05:16.426 --> 00:05:19.866 align:middle
+Por supuesto, ignorar una vulnerabilidad
+debería ser la excepción, no la norma.
+
+00:05:20.476 --> 00:05:24.026 align:middle
+Siempre que sea posible, actualizar a una
+versión parcheada es la opción más segura.
+
+00:05:24.756 --> 00:05:27.866 align:middle
+Vamos a eliminar esta configuración de ignorar
+y a solucionar el problema como es debido.
+
+00:05:28.566 --> 00:05:36.506 align:middle
+Actualiza nuestras dependencias con: symfony composer update
+No se han encontrado avisos de vulnerabilidades de seguridad.
+
+00:05:37.886 --> 00:05:39.526 align:middle
+Genial, parece que ha funcionado.
+
+00:05:39.966 --> 00:05:42.006 align:middle
+Compruébalo de nuevo ejecutando
+el comando de auditoría otra vez.
+
+00:05:42.796 --> 00:05:43.306 align:middle
+¡Perfecto!
+
+00:05:43.366 --> 00:05:44.886 align:middle
+Ya no hay vulnerabilidades.
+
+00:05:45.626 --> 00:05:48.666 align:middle
+Por último, no confíes en que te acordarás
+de ejecutar las auditorías manualmente.
+
+00:05:48.946 --> 00:05:49.636 align:middle
+Automatízalas.
+
+00:05:50.316 --> 00:05:54.906 align:middle
+Si usas GitHub para alojar tu código, una solución
+estupenda es una acción programada de GitHub
+
+00:05:55.096 --> 00:05:57.696 align:middle
+que ejecute composer audit de forma periódica.
+
+00:05:58.146 --> 00:06:01.896 align:middle
+Al ejecutar ese comando, la acción
+fallará si se encuentran vulnerabilidades,
+
+00:06:02.166 --> 00:06:04.056 align:middle
+lo que os alertará a ti y
+a tu equipo del problema.
+
+00:06:04.736 --> 00:06:06.126 align:middle
+¡Te voy a enseñar la que yo uso!
+
+00:06:06.396 --> 00:06:11.996 align:middle
+Crea un nuevo archivo:
+.github/workflows/composer-audit.yaml.
+
+00:06:12.996 --> 00:06:14.996 align:middle
+Te voy a pegar la definición,
+pero también la puedes encontrar
+
+00:06:14.996 --> 00:06:17.666 align:middle
+en el script que aparece a continuación:
+Repasemos este flujo de trabajo.
+
+00:06:18.056 --> 00:06:25.466 align:middle
+En primer lugar, se activa según una
+programación: todos los lunes a mediodía (UTC).
+
+00:06:26.106 --> 00:06:27.536 align:middle
+Vale, pasemos a la tarea en sí.
+
+00:06:27.956 --> 00:06:29.416 align:middle
+Primero, hacemos un checkout del código.
+
+00:06:29.926 --> 00:06:33.196 align:middle
+Después, configuramos PHP y Composer
+usando una acción muy habitual.
+
+00:06:33.696 --> 00:06:35.696 align:middle
+Por último, ejecutamos composer audit.
+
+00:06:36.476 --> 00:06:37.806 align:middle
+Fíjate en esta opción « --locked ».
+
+00:06:38.116 --> 00:06:40.406 align:middle
+Esto le dice a Composer que
+compruebe las versiones instaladas
+
+00:06:40.406 --> 00:06:42.876 align:middle
+en composer.lock con respecto
+a los avisos de seguridad.
+
+00:06:43.316 --> 00:06:47.116 align:middle
+Así nos ahorramos tener que ejecutar composer
+install, lo que nos ahorra unos minutos de acción.
+
+00:06:47.676 --> 00:06:52.136 align:middle
+Además, así no tienes que especificar la versión de
+PHP en el paso anterior, lo que simplifica el proceso.
+
+00:06:52.686 --> 00:06:56.076 align:middle
+Esta tarea fallará si se encuentra alguna
+vulnerabilidad que no se haya ignorado.
+
+00:06:56.576 --> 00:07:00.196 align:middle
+Si tú y tu equipo usáis Slack,
+esta sección comentada es un ejemplo
+
+00:07:00.196 --> 00:07:02.296 align:middle
+de cómo puedes publicar una
+alerta allí en failure().
+
+00:07:03.146 --> 00:07:03.996 align:middle
+Y ahí lo tienes.
+
+00:07:04.226 --> 00:07:07.396 align:middle
+Actualizar tu aplicación es
+solo una parte de la historia.
+
+00:07:07.396 --> 00:07:17.776 align:middle
+El mantenimiento continuo implica estar atento a
+tus dependencias, entender los avisos de seguridad
+
+00:07:17.776 --> 00:07:22.366 align:middle
+y aplicar las actualizaciones
+cuando sea necesario.
+
+00:07:22.366 --> 00:07:29.566 align:middle
+Por suerte, Composer nos ofrece herramientas
+excelentes para facilitar mucho ese proceso.
+
+00:07:30.286 --> 00:07:37.676 align:middle
+Hasta la próxima, ¡feliz
+programación sin vulnerabilidades!
