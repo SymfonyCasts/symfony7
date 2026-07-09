@@ -1,4 +1,4 @@
-## Auditoría de Composer y actualizaciones de seguridad
+# Auditoría de Composer y actualizaciones de seguridad
 
 ¡Una última cosa! Un tema extra: las actualizaciones de seguridad.
 Esto no tiene por qué estar relacionado con la actualización a Symfony 8, pero es un
@@ -63,7 +63,7 @@ Empecemos por la última vulnerabilidad de mi lista.
 Cada aviso incluye una URL con más información. Si abrimos esta,
 nos redirige a una entrada de blog en la web de Symfony con todos los detalles.
 
-Normalmente, este es el mejor punto de partida para nuestra investigación.
+Normalmente, este es el mejor sitio para empezar nuestra investigación.
 
 La entrada explica:
 * en qué consiste la vulnerabilidad;
@@ -72,15 +72,15 @@ La entrada explica:
 * y qué versiones incluyen la corrección.
 
 No todos los paquetes utilizan una entrada de blog para compartir los detalles de la vulnerabilidad. Volviendo a nuestra terminal,
-podemos seguir el enlace «Advisory ID», que nos lleva al aviso en packagist.org. Aquí se muestran
+podemos seguir el enlace del ID del aviso, que nos lleva al aviso en packagist.org. Aquí se muestran
 los detalles relacionados con el paquete y, si se creó a través de GitHub, el enlace al aviso de GitHub.
 
-Es este enlace de GHSA de aquí. Si lo sigues, verás una página estandarizada sobre la vulnerabilidad.
-Aquí tienes el nombre del paquete, las versiones afectadas, las versiones parcheadas, el nivel de gravedad y una
+Es este enlace de GHSA de aquí. Si lo sigues, verás una página de vulnerabilidad estandarizada.
+Aquí tienes el nombre del paquete, las versiones afectadas, las versiones parcheadas, la gravedad y una
 descripción del problema y cómo lo resuelve la corrección.
 
-Para ver todos los avisos de seguridad publicados sobre un paquete de GitHub, desde la página de su repositorio, haz clic en
-«Seguridad y calidad». Aquí está la lista completa. Al hacer clic en uno de ellos, se abre su página de aviso.
+Para ver todos los avisos de seguridad publicados para un paquete de GitHub, desde la página de su repositorio, haz clic en
+«Seguridad y calidad». Aquí está la lista completa. Al hacer clic en uno de ellos, te lleva a su página de aviso.
 
 ## ¿Qué es un CVE?
 
@@ -104,7 +104,7 @@ están hablando exactamente del mismo problema.
 Los CVE los asignan unas organizaciones llamadas «Autoridades de Numeración de CVE»
 o CNA.
 
-GitHub es una CNA, lo cual es una gran noticia para los mantenedores de código abierto, ya que
+GitHub es una CNA, lo cual es una gran noticia para los mantenedores de código abierto porque
 pueden crear avisos de seguridad y realizar peticiones para obtener identificadores CVE directamente
 a través de las herramientas de GitHub.
 
@@ -123,7 +123,7 @@ Copia el ID del aviso (el identificador CVE también sirve) y abre tu archivo ` 
 
 Bajo la clave « `config` », añade una sección « `audit` » con una clave « `ignore` ». Usa el ID que has copiado
 como clave... y, como valor, indica el motivo por el que la ignoras. Esto es importante para que
-tú mismo en el futuro y tus compañeros de equipo entendáis por qué aceptasteis el riesgo. A mí también me gusta
+tú y tus compañeros de equipo entendáis en el futuro por qué aceptasteis el riesgo. A mí también me gusta
 incluir cuándo podremos eliminarla.
 
 [[[ code('92b9949f7a') ]]]
@@ -169,7 +169,7 @@ symfony composer audit
 
 Por último, no te fíes de tu memoria para ejecutar las auditorías manualmente. Automatízalas.
 
-Si usas GitHub para alojar tu código, una solución estupenda es una acción programada de GitHub que
+Si usas GitHub para alojar tu código, una solución genial es una acción programada de GitHub que
 ejecute `composer audit` de forma periódica. Al ejecutar ese comando, la acción fallará
 si se encuentran vulnerabilidades, lo que os alertará a ti y a tu equipo del problema.
 
@@ -184,7 +184,7 @@ Repasemos este flujo de trabajo. En primer lugar, se activa según una programac
 Ten en cuenta que las tareas programadas se ejecutan en tu rama predeterminada.
 ***
 
-Vale, pasemos a la tarea en sí. Primero, hacemos un checkout del código. Luego configuramos PHP y Composer usando una acción muy habitual.
+Vale, pasemos a la tarea en sí. Primero, hacemos un checkout del código. Luego configuramos PHP y Composer usando una acción muy común.
 Por último, ejecutamos `composer audit`. Fíjate en este indicador « `--locked` ». Esto le indica a Composer que compruebe las versiones instaladas
 en `composer.lock` con respecto a los avisos de seguridad. Así nos ahorramos tener que ejecutar `composer install`, lo que nos ahorra unos
 minutos de acción. Además, significa que no tenemos que especificar la versión de PHP en el paso anterior, lo que simplifica el proceso.
@@ -195,18 +195,18 @@ Si tú y tu equipo usáis Slack, esta sección comentada es un ejemplo de cómo 
 en `failure()`.
 
 ***TIP
-Un último consejo: cuando sea posible, crea pull requests específicas para las actualizaciones de seguridad. Mantenerlas separadas de
-el resto del trabajo facilita las revisiones y ayuda a garantizar que las correcciones de seguridad se fusionen rápidamente.
+Un último consejo: cuando puedas, crea pull requests específicas para las actualizaciones de seguridad. Mantenerlas separadas de
+el resto del trabajo facilita las revisiones y ayuda a que las correcciones de seguridad se fusionen rápidamente.
 ***
 
-Y ya está.
+Y ahí lo tienes.
 
-Actualizar tu aplicación es solo una parte del proceso. El mantenimiento continuo
+Actualizar tu aplicación es solo una parte de la historia. El mantenimiento continuo
 implica estar atento a tus dependencias, entender los avisos de seguridad
 y aplicar las actualizaciones cuando sea necesario.
 
 Por suerte, Composer nos ofrece herramientas excelentes para que ese proceso sea mucho
-más sencillo.
+más fácil.
 
 ***SEEALSO
 Para más información, echa un vistazo a nuestra entrada del blog sobre
