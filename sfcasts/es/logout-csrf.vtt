@@ -1,0 +1,330 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:03.006 align:middle
+Tenemos un pequeño problema con
+nuestro enlace para cerrar sesión.
+
+00:00:03.386 --> 00:00:06.516 align:middle
+Puedes cerrar sesión simplemente
+yendo a /logout en tu navegador.
+
+00:00:06.876 --> 00:00:10.956 align:middle
+Esto significa que, en teoría, otra web
+podría enviar esta petición en tu nombre,
+
+00:00:10.956 --> 00:00:12.696 align:middle
+lo que te obligaría a salir de tu sesión.
+
+00:00:13.376 --> 00:00:17.296 align:middle
+Para verlo, copia la dirección del
+enlace y pégala en una nueva pestaña.
+
+00:00:18.046 --> 00:00:19.966 align:middle
+Cierra esta pestaña y actualiza la original.
+
+00:00:20.806 --> 00:00:21.796 align:middle
+Ya hemos cerrado sesión.
+
+00:00:21.796 --> 00:00:25.536 align:middle
+Lo primero que debemos hacer es dejar
+de permitir GET para la ruta /logout.
+
+00:00:26.086 --> 00:00:29.106 align:middle
+Las peticiones que cambian el estado
+nunca deberían usar el método GET.
+
+00:00:29.446 --> 00:00:32.846 align:middle
+Los navegadores, rastreadores, previsualizadores
+de enlaces y otras herramientas pueden
+
+00:00:32.846 --> 00:00:37.046 align:middle
+realar peticiones GET automáticamente,
+ya que se supone que son seguras.
+
+00:00:37.046 --> 00:00:41.176 align:middle
+Recuerdo haber leído sobre alguien que creó una aplicación web para
+controlar el sistema de apertura de su puerta de garaje inteligente.
+
+00:00:41.716 --> 00:00:44.446 align:middle
+Quería una forma fácil de
+abrirla y cerrarla a distancia,
+
+00:00:44.446 --> 00:00:47.206 align:middle
+así que creó una ruta /toggle-garage-door.
+
+00:00:47.696 --> 00:00:51.896 align:middle
+Al acceder a esa ruta, la puerta del garaje se abría
+si estaba cerrada, o se cerraba si estaba abierta.
+
+00:00:52.316 --> 00:00:56.116 align:middle
+Por desgracia, como aceptaba peticiones
+GET, una precarga del navegador
+
+00:00:56.116 --> 00:00:59.126 align:middle
+o una vista previa de enlace demasiado
+entusiasta podían activarla automáticamente.
+
+00:00:59.126 --> 00:01:03.276 align:middle
+Es gracioso… hasta que estás de vacaciones,
+compruebas que la puerta del garaje esté cerrada
+
+00:01:03.276 --> 00:01:04.806 align:middle
+y, en cambio, tu navegador la abre.
+
+00:01:05.346 --> 00:01:08.766 align:middle
+Cerrar sesión no es tan dramático,
+pero se aplica el mismo principio.
+
+00:01:09.086 --> 00:01:12.456 align:middle
+Al cerrar sesión se cambia el estado de la
+aplicación, así que no debería ocurrir
+
+00:01:12.456 --> 00:01:14.466 align:middle
+solo porque algo haya
+decidido seguir un enlace.
+
+00:01:15.076 --> 00:01:18.576 align:middle
+Vamos a solucionarlo cambiando nuestro enlace de
+cierre de sesión para que utilice una petición POST.
+
+00:01:19.246 --> 00:01:23.506 align:middle
+En nuestro archivo SecurityController, busca
+el atributo Route del método logout().
+
+00:01:23.506 --> 00:01:26.386 align:middle
+Añade methods: 'POST': ¿Se soluciona así?
+
+00:01:26.766 --> 00:01:27.226 align:middle
+Veamos.
+
+00:01:27.716 --> 00:01:29.306 align:middle
+Vuelve a nuestra app, inicia sesión...
+
+00:01:33.636 --> 00:01:34.676 align:middle
+Ahora haz clic en «Cerrar sesión»...
+
+00:01:35.346 --> 00:01:38.106 align:middle
+¡Error! Un error 405 «Método no permitido».
+
+00:01:38.566 --> 00:01:42.506 align:middle
+¿Por qué? Nuestro enlace de cierre de sesión
+es solo un enlace normal, así que usa GET.
+
+00:01:43.066 --> 00:01:47.056 align:middle
+Hemos solucionado el problema del cambio de estado, ¡pero
+ahora nuestra propia web no nos deja cerrar sesión!
+
+00:01:47.056 --> 00:01:49.466 align:middle
+¿Cómo podemos convertirlo en un enlace POST?
+
+00:01:50.026 --> 00:01:53.266 align:middle
+La forma más sencilla es convertirlo en un
+botón de envío dentro de un formulario.
+
+00:01:53.796 --> 00:01:55.876 align:middle
+Ve a base.html.twig.
+
+00:01:55.876 --> 00:01:59.536 align:middle
+Justo después del enlace de cierre de
+sesión, añade una etiqueta <form>.
+
+00:01:59.866 --> 00:02:04.236 align:middle
+action="{{ logout_path() }}" y method="post".
+
+00:02:04.786 --> 00:02:10.266 align:middle
+Por defecto, los formularios son elementos de bloque, así que
+añade class="inline" para convertirlo en un elemento en línea.
+
+00:02:10.976 --> 00:02:13.616 align:middle
+Dentro, añade un
+<button>, type="submit".
+
+00:02:13.616 --> 00:02:18.766 align:middle
+Quiero que tenga los mismos estilos que los
+enlaces de al lado, así que añade class=""
+
+00:02:19.016 --> 00:02:21.146 align:middle
+y copia y pega las clases del enlace de arriba.
+
+00:02:21.146 --> 00:02:23.026 align:middle
+¿Y el texto del botón?
+
+00:02:23.216 --> 00:02:27.076 align:middle
+Logout: Ya está, elimina el antiguo
+enlace de cerrar sesión de arriba.
+
+00:02:27.946 --> 00:02:29.596 align:middle
+Vuelve al navegador y actualiza la página...
+
+00:02:30.396 --> 00:02:31.346 align:middle
+Ahora haz clic en «Cerrar sesión»...
+
+00:02:32.106 --> 00:02:33.376 align:middle
+¡Efectivamente, ya hemos cerrado sesión!
+
+00:02:34.076 --> 00:02:34.906 align:middle
+Vuelve a iniciar sesión...
+
+00:02:37.546 --> 00:02:39.766 align:middle
+y pasa el cursor por encima del
+enlace Logout, que ahora es un botón.
+
+00:02:40.326 --> 00:02:43.106 align:middle
+Fíjate en que no tiene el mismo
+cursor que los demás enlaces.
+
+00:02:43.506 --> 00:02:46.206 align:middle
+Por defecto, los botones no tienen
+el mismo cursor que los enlaces.
+
+00:02:46.526 --> 00:02:50.316 align:middle
+Para que el usuario no note la
+diferencia, en la clase del botón,
+
+00:02:50.316 --> 00:02:54.116 align:middle
+añade « cursor-pointer
+»: Actualiza la página...
+
+00:02:55.526 --> 00:02:59.136 align:middle
+ahora el botón «Cerrar sesión» es
+totalmente indistinguible de los demás enlaces.
+
+00:02:59.136 --> 00:03:03.026 align:middle
+Pero el hecho de que nuestra ruta de cierre
+de sesión requiera ahora una petición POST,
+
+00:03:03.296 --> 00:03:05.406 align:middle
+no significa que otros
+sitios no puedan activarla.
+
+00:03:05.896 --> 00:03:09.846 align:middle
+Para evitarlo por completo, tenemos que
+implementar protección CSRF para ello.
+
+00:03:10.396 --> 00:03:13.406 align:middle
+Abre config/packages/security.yaml.
+
+00:03:14.096 --> 00:03:17.036 align:middle
+En la sección « main » del
+cortafuegos, busca la clave « logout ».
+
+00:03:17.466 --> 00:03:21.086 align:middle
+Añade enable_csrf: true: Probémoslo.
+
+00:03:21.356 --> 00:03:23.316 align:middle
+Vuelve al navegador, actualiza la página...
+
+00:03:23.906 --> 00:03:24.846 align:middle
+y haz clic en «Cerrar sesión»...
+
+00:03:25.656 --> 00:03:27.016 align:middle
+Mmm, no ha pasado nada...
+
+00:03:27.016 --> 00:03:28.326 align:middle
+No nos ha desconectado...
+
+00:03:28.716 --> 00:03:29.416 align:middle
+¡pero eso es bueno!
+
+00:03:29.456 --> 00:03:33.466 align:middle
+Nuestra desconexión requiere un token
+CSRF, pero no hemos pasado ninguno.
+
+00:03:34.136 --> 00:03:37.586 align:middle
+Esto es lo que pasaría si otra web
+intentara desconectarnos: no podría.
+
+00:03:38.256 --> 00:03:40.816 align:middle
+Por supuesto, queremos que nuestro propio
+sitio pueda cerrarnos la sesión...
+
+00:03:41.416 --> 00:03:44.526 align:middle
+Podemos hacerlo con un campo de entrada oculto
+en nuestro formulario de cierre de sesión.
+
+00:03:45.086 --> 00:03:47.566 align:middle
+Será muy parecido al de nuestro
+formulario de inicio de sesión.
+
+00:03:47.566 --> 00:03:54.516 align:middle
+Así que abre templates/security/login.html.twig,
+busca el campo oculto y cópialo.
+
+00:03:56.366 --> 00:04:00.436 align:middle
+En base.html.twig, busca el formulario de
+cierre de sesión y pégalo ahí dentro.
+
+00:04:01.016 --> 00:04:02.876 align:middle
+El valor del atributo ` name ` es importante.
+
+00:04:03.446 --> 00:04:06.666 align:middle
+Vamos a confirmar cuál debe ser echando
+un vistazo a la configuración por defecto.
+
+00:04:07.186 --> 00:04:13.946 align:middle
+En tu terminal, ejecuta: symfony console config:dump
+security Esta es la configuración completa por defecto
+
+00:04:13.946 --> 00:04:15.666 align:middle
+del bundle security...
+
+00:04:15.796 --> 00:04:16.716 align:middle
+¡y es enorme!
+
+00:04:17.106 --> 00:04:21.176 align:middle
+Redúcelo ejecutando de nuevo el mismo comando,
+pero añadiendo « firewalls » al final:
+
+00:04:21.996 --> 00:04:23.826 align:middle
+Esto solo muestra la sección « firewalls ».
+
+00:04:23.826 --> 00:04:26.236 align:middle
+Desplázate hacia arriba hasta que
+encuentres la clave « logout »...
+
+00:04:26.576 --> 00:04:28.756 align:middle
+«csrf_parameter » es lo
+que estamos buscando...
+
+00:04:29.116 --> 00:04:31.886 align:middle
+y « _csrf_token » es el valor por defecto.
+
+00:04:31.886 --> 00:04:34.726 align:middle
+Y eso es lo que tenemos en nuestro
+formulario de cierre de sesión.
+
+00:04:34.726 --> 00:04:39.246 align:middle
+Quiero usar la protección CSRF sin estado, así
+que mantendré este atributo « data-controller ».
+
+00:04:39.246 --> 00:04:43.776 align:middle
+Para el valor, dentro de « csrf_token()
+», usa « logout » como ID del token:
+
+00:04:44.756 --> 00:04:47.866 align:middle
+Ahora tenemos que habilitar la
+protección CSRF sin estado para este ID.
+
+00:04:48.426 --> 00:04:52.536 align:middle
+Abre « config/packages/csrf.yaml » y...
+
+00:04:52.856 --> 00:04:55.306 align:middle
+¡Genial! « logout » está
+habilitado por defecto.
+
+00:04:55.826 --> 00:04:56.476 align:middle
+¡Con eso debería bastar!
+
+00:04:57.016 --> 00:04:58.746 align:middle
+Vuelve al navegador, actualiza la página...
+
+00:04:59.156 --> 00:05:00.086 align:middle
+y haz clic en «Cerrar sesión»...
+
+00:05:00.786 --> 00:05:06.186 align:middle
+¡Genial! Ha funcionado, nos hemos desconectado, lo que significa
+que nuestra configuración de CSRF funciona como esperábamos.
+
+00:05:06.896 --> 00:05:10.306 align:middle
+A continuación, vamos a habilitar la función
+«recordarme» para nuestro formulario de inicio de sesión.
