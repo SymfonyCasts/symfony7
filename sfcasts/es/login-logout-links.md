@@ -80,4 +80,4 @@ cambian como se espera.
 
 Profundizaremos más en los roles y en `is_granted()` en un capítulo futuro.
 
-Todavía nos queda un pequeño problema de seguridad con nuestro enlace de cierre de sesión. ¡Vamos a solucionarlo ahora mismo!
+Todavía nos queda un pequeño problema de seguridad con nuestro enlace de cierre de sesión. ¡Vamos a solucionarlo ahora!
