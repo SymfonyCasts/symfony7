@@ -61,8 +61,8 @@
                         <a class="hover:text-amber-400 pt-2" href="#">
                             Contact
                         </a>
-                        {% if app.user %}
-                            <a class="hover:text-amber-400 pt-2" href="{{ path('app_logout') }}">
+                        {% if is_granted('ROLE_USER') %}
+                            <a class="hover:text-amber-400 pt-2" href="{{ logout_path() }}">
                                 Logout
                             </a>
                         {% else %}
