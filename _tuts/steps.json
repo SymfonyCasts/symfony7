@@ -84,7 +84,12 @@
             "id": "6-logout-csrf",
             "name": "6. logout csrf",
             "description": null
+        },
+        {
+            "id": "7-remember-me",
+            "name": "7. remember me",
+            "description": null
         }
     ],
-    "sha": "5fd011ce4f16ac0ece6400bc833797485253a688"
+    "sha": "015f48eed31647f03cc06d5d08bd9baa8b5246da"
 }
