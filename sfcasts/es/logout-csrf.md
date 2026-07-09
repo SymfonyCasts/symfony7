@@ -5,7 +5,7 @@ yendo a `/logout` en tu navegador. Esto significa que, en teoría, otra web
 podría enviar esta petición en tu nombre, lo que te obligaría a salir de
 tu sesión. Para verlo en acción, copia la dirección del enlace y pégala en
 una nueva pestaña. Cierra esta pestaña y actualiza la original. Ahora ya
-estamos desconectados.
+estamos fuera de sesión.
 
 Lo primero que debemos hacer es dejar de permitir `GET` para la ruta `/logout`.
 
@@ -16,7 +16,7 @@ se espera que sean seguras.
 Recuerdo haber leído sobre alguien que creó una app web para controlar el abridor inteligente de la puerta de su garaje
 . Quería una forma fácil de abrirla y cerrarla a distancia, así que creó una ruta `/toggle-garage-door`
 . Al acceder a esa ruta, la puerta del garaje se abría si estaba cerrada, o se cerraba si estaba abierta.
-Por desgracia, como aceptaba peticiones `GET`, una precarga del navegador o una vista previa de enlace demasiado entusiasta podían
+Por desgracia, como aceptaba peticiones `GET`, una precarga del navegador o una vista previa del enlace demasiado entusiasta podían
 activarla automáticamente. Es gracioso… hasta que estás de vacaciones, compruebas que la puerta del garaje
 está cerrada y, en cambio, tu navegador la abre.
 
@@ -26,8 +26,8 @@ enlace de cierre de sesión para que utilice una petición `POST`.
 
 ## Cambiar el enlace de cierre de sesión a una petición POST
 
-En nuestro `SecurityController`, busca el atributo ` `Route` ` para el método ` `logout()` `. Añade
-``methods: 'POST'``:
+En nuestro `SecurityController`, busca el atributo `Route` para el método `logout()`. Añade
+`methods: 'POST'`:
 
 [[[ code('3d6d04854c') ]]]
 
@@ -53,17 +53,17 @@ Dentro, añade un `<button>` y un `type="submit"`. Quiero que tenga los mismos e
 
 Ya está, elimina el antiguo enlace de cierre de sesión de arriba.
 
-Vuelve al navegador y actualiza la página... Ahora haz clic en «Cerrar sesión»... ¡Efectivamente, ya hemos cerrado la sesión!
+Vuelve al navegador y actualiza la página... Ahora haz clic en «Cerrar sesión»... ¡Efectivamente, ya hemos cerrado sesión!
 
 ## Personalizar el estilo del botón de cerrar sesión
 
 Vuelve a iniciar sesión… y pasa el cursor por encima del enlace `Logout`, que ahora es un botón. Fíjate en que no tiene
 el mismo cursor que los demás enlaces. Por defecto, los botones no tienen el mismo cursor que los enlaces.
-Para que el usuario no note ninguna diferencia, en la clase del botón, añade `cursor-pointer`:
+Para que el usuario no note la diferencia, en la clase del botón, añade `cursor-pointer`:
 
 [[[ code('15c067871d') ]]]
 
-Actualiza la página... ahora el botón de cierre de sesión es totalmente indistinguible de los demás enlaces.
+Actualiza la página... ahora el botón «Cerrar sesión» es totalmente indistinguible de los demás enlaces.
 
 ## Implementación de la protección CSRF
 
