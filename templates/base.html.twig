@@ -62,9 +62,11 @@
                             Contact
                         </a>
                         {% if is_granted('ROLE_USER') %}
-                            <a class="hover:text-amber-400 pt-2" href="{{ logout_path() }}">
-                                Logout
-                            </a>
+                            <form action="{{ logout_path() }}" method="post" class="inline">
+                                <button type="submit" class="hover:text-amber-400 pt-2">
+                                    Logout
+                                </button>
+                            </form>
                         {% else %}
                             <a class="hover:text-amber-400 pt-2" href="{{ path('app_login') }}">
                                 Login
