@@ -18,8 +18,8 @@ chapters:
         tutsFirstStep: 6-post-logout
         tutsLastStep: 6-logout-csrf
     remember-me:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 7-remember-me
+        tutsLastStep: 7-remember-me
     email-or-username:
         tutsFirstStep: null
         tutsLastStep: null
