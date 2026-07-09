@@ -17,7 +17,7 @@ final class AppStory extends Story
     {
         UserFactory::createOne([
             'email' => 'picard@enterprise.space',
-            'password' => 'makeitso',
+            'password' => '$2y$13$6cc13KLC0uRJLnrUU5yi6.VKUgUJY/L4HlmcLop/8Zh2tO51eMtyu',
             'name' => 'Jean-Luc Picard',
         ]);
 
