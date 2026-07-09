@@ -186,6 +186,39 @@
 - Refresh and logout again... success!
 - next, add username allow logging in with either email or username
 
+## Remember Me
+
+- How login persists across pages?
+    - PHP Sessions - id is stored in a session cookie
+    - The session data is stored on the server
+    - Session data can be used for any data, not just auth details
+- Inspect page and choose the Application tab
+    - Notice the cookies for this site - it's a "session" cookie
+        - is removed when you close the browser
+    - Delete the cookie
+    - Reload the page, we're logged out
+- You can customize the session cookie details
+- `symfony console config:dump framework session`
+    - The defaults are good for most apps
+- Remember me allows users to stay logged in between sessions
+- `symfony console config:dump security firewalls`
+    - Find the `remember_me` section
+    - Discuss all the options
+    - Scroll up to the `form_login` section
+    - `remember_me: true` - the default
+        - we just need to pass a `_remember_me` parameter (configured in the `remember_me` section)
+- Open `config/packages/security.yaml`
+    - Add `remember_me: ~` to the `main` firewall (to use the defaults)
+- Open `templates/security/login.html.twig`
+    - uncomment the remember me section
+    - add `checked` to the input to make it checked by default
+- Go back to the login page and log in (keeping the checkbox checked)
+- Inspect page, and choose the Application tab
+    - A new `REMEMBERME` cookie, discuss the details
+    - Delete the PHP session cookie and reload the page
+    - We're still logged in!
+- Next, let's talk about some special authentication ROLES
+
 ## Login/Logout Links
   - But you know what, let's add login/logout buttons in the header of our template
 - Open `base.html.twig` template
