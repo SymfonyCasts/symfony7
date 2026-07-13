@@ -89,7 +89,17 @@
             "id": "7-remember-me",
             "name": "7. remember me",
             "description": null
+        },
+        {
+            "id": "8-dump-attributes",
+            "name": "8. dump attributes",
+            "description": null
+        },
+        {
+            "id": "8-remove-dump",
+            "name": "8. remove dump",
+            "description": null
         }
     ],
-    "sha": "015f48eed31647f03cc06d5d08bd9baa8b5246da"
+    "sha": "dbeef86afaece441c92efac0dd45e8c44e71943f"
 }

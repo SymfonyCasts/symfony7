@@ -1,0 +1,28 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index b3e8ab3..9470f12 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -7,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+-use Symfony\Component\Security\Core\Authorization\Voter\AuthenticatedVoter;
+ 
+ class MainController extends AbstractController
+ {
+@@ -16,15 +15,6 @@ class MainController extends AbstractController
+         StarshipRepository $repository,
+         Request $request,
+     ): Response {
+-        dump([
+-            'ROLE_USER' => $this->isGranted('ROLE_USER'),
+-            AuthenticatedVoter::IS_AUTHENTICATED_FULLY => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY),
+-            AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED),
+-            AuthenticatedVoter::IS_AUTHENTICATED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED),
+-            AuthenticatedVoter::IS_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_REMEMBERED),
+-            AuthenticatedVoter::PUBLIC_ACCESS => $this->isGranted(AuthenticatedVoter::PUBLIC_ACCESS),
+-        ]);
+-
+         $ships = $repository->findIncomplete();
+         $ships->setMaxPerPage(5);
+         $ships->setCurrentPage($request->query->get('page', 1));
