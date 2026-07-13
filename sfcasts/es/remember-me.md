@@ -35,7 +35,7 @@ nivel del framework.
 Aquí puedes ver que podemos cambiar el almacenamiento. Por defecto, utiliza el
 sistema de archivos, que es el valor predeterminado de PHP. Pero tienes opciones como
 Redis o una base de datos. Puedes configurar un montón de opciones relacionadas con las cookies, como
-el nombre, la ruta, el dominio y mucho más. Los valores por defecto son adecuados para la mayoría de los casos,
+el nombre, la ruta, el dominio y mucho más. Los valores por defecto suelen bastar en la mayoría de los casos,
 pero las opciones están ahí por si necesitas ajustarlas.
 
 ## Función «Recordarme»
@@ -43,8 +43,11 @@ pero las opciones están ahí por si necesitas ajustarlas.
 Una función muy popular en muchos sitios web es «recordarme», que garantiza que los usuarios
 sigan conectados, incluso entre sesiones (al cerrar y abrir el
 navegador). Vamos a activarla. En tu IDE, abre `config/packages/security.yaml`.
-Debajo de nuestro firewall principal, añade `remember_me: ~`. La tilde significa: activa esta
-función y usa la configuración por defecto.
+Debajo de nuestro firewall principal, añade `remember_me: ~`:
+
+[[[ code('5e1569ab0e') ]]]
+
+La tilde significa: activa esta función y usa la configuración por defecto.
 
 Para ver la configuración predeterminada, en tu terminal, ejecuta:
 
@@ -59,12 +62,13 @@ para garantizar que no se haya manipulado. Por defecto, utiliza nuestro secreto 
 la firma.
 
 La opción « `signature_properties` » es interesante. Son las propiedades del
-usuario que, si cambian, invalidarán la cookie. Por defecto, solo usa `password`. ¿Te acuerdas de cuando hablamos antes de cerrar la sesión de los usuarios en diferentes dispositivos?
+usuario que, si cambian, invalidarán la cookie. Por defecto, solo utiliza
+el « `password` ». ¿Te acuerdas de cuando hablamos antes de cerrar la sesión de los usuarios en diferentes dispositivos?
 Siempre que la contraseña esté incluida en las propiedades de la firma, la función
 de la que hablamos también cerrará la sesión de los usuarios recordados.
 
 Puedes añadir aquí propiedades adicionales, como el correo electrónico o el nombre de usuario. Así, cuando cualquiera
-de ellas cambie, la cookie se invalidará (y el usuario se desconectará).
+de ellas cambie, la cookie se invalidará (y el usuario será desconectado).
 
 Esta opción « `token_provider` » te permite personalizar el almacenamiento del token «recordarme».
 Por defecto, utiliza un enfoque sin estado, por lo que no se almacena nada en el servidor. La cookie
@@ -72,19 +76,19 @@ contiene toda la información necesaria para iniciar sesión. Aquí puedes perso
 comportamiento con tu propio servicio, o usar el proveedor integrado `doctrine`, que guarda el token en una
 tabla de la base de datos. Creo que la configuración por defecto es suficiente para la mayoría de los casos, pero está bien saber que tienes opciones.
 
-A continuación están todas las opciones de las cookies. De nuevo, los valores por defecto son adecuados para la mayoría de los casos, pero
+A continuación están todas las opciones de las cookies. De nuevo, los valores por defecto están bien para la mayoría de los casos, pero
 merece la pena mencionar el «lifetime». Es el tiempo que durará la cookie, en segundos, antes de que caduque.
 El valor por defecto es de 1 año, así que quizá quieras cambiarlo a algo más corto, como 1 mes.
 
 `always_remember_me` te permite recordar siempre al usuario, sin necesidad de esa casilla de inicio de sesión.
-Esto es útil en algunas aplicaciones, pero en la mayoría de los casos preferimos que el usuario pueda elegir.
+Esto es útil en algunas aplicaciones, pero en la mayoría de los casos queremos que el usuario pueda elegir.
 Así que dejaremos el valor por defecto en «false».
 
 Este « `remember_me_parameter` » es el nombre del parámetro que hay que pasar al iniciar sesión
 para activar la función «Recordarme».
 
-La opción «Recordarme» también tiene que estar activada en nuestro autenticador `login_form`. Desplázate hacia arriba para encontrar su configuración
-por defecto... Aquí está: `remember_me`, y el valor por defecto es `true`. Perfecto, así que siempre
+La opción «Recordarme» también debe estar habilitada en nuestro autenticador `login_form`. Desplázate hacia arriba para encontrar su configuración predeterminada...
+Aquí está: `remember_me`, y el valor por defecto es `true`. Perfecto, así que siempre
 que pasemos el parámetro `_remember_me` al iniciar sesión, se activará la opción «Recordarme».
 
 Añadamos esta casilla de selección a nuestro formulario de inicio de sesión. Abre `templates/security/login.html.twig` y
@@ -92,13 +96,15 @@ desplázate hacia abajo hasta que encuentres este `div` comentado. Lo añadió e
 Descoméntalo.
 
 Aquí tenemos un campo de casilla de selección, y el nombre es `_remember_me`. ¡Perfecto! Solo voy a
-cambiar una cosa: añadir el atributo `checked` al campo para que venga marcado por defecto.
+cambiar una cosa: añadir el atributo `checked` al campo para que venga marcado por defecto:
+
+[[[ code('fb27db2fda') ]]]
 
 Probemos esto. Vuelve al navegador y ve a la página de inicio de sesión. ¡Genial! Aquí está
 nuestra casilla «Recordarme» ya marcada de antemano. Inicia sesión con `picard@enterprise.space`...
 contraseña: `makeitso`.
 
-Ya hemos iniciado sesión... y, en realidad, no se nota ningún cambio... 
+Ya hemos iniciado sesión... y, en realidad, no se ve nada diferente... 
 
 Inspecciona la página, ve a la pestaña «Aplicación» y busca las cookies de este sitio. Efectivamente,
 tenemos una nueva cookie llamada `REMEMBERME`. Fíjate en la fecha de caducidad: está configurada para una fecha futura,
