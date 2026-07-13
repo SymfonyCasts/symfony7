@@ -43,8 +43,11 @@ but the options are there if you need to tweak them.
 A popular feature on many sites is 'remember me', which ensures users
 remain logged in, even between sessions (closing and opening their
 browser). Let's enable that. In your IDE, open `config/packages/security.yaml`.
-Under our main firewall, add `remember_me: ~`. The tilde says: enable this
-feature, and use the default config.
+Under our main firewall, add `remember_me: ~`:
+
+[[[ code('5e1569ab0e') ]]]
+
+The tilde says: enable this feature, and use the default config.
 
 To see the default config, at your terminal, run:
 
@@ -93,7 +96,9 @@ scroll down until you find this commented out `div`. This was added by the `make
 Uncomment it.
 
 Here we have a checkbox input, and the name is `_remember_me`. Perfect! One thing I'll
-change, add the `checked` attribute to the input to default it to checked.
+change, add the `checked` attribute to the input to default it to checked:
+
+[[[ code('fb27db2fda') ]]]
 
 Let's give this a whirl. Back in our browser, go to the login page. Nice! Here's
 our pre-checked remember me checkbox. Login with `picard@enterprise.space`...

@@ -34,7 +34,9 @@ I'm using the constants here but using the raw string values would work just as 
 Then, `AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)`,
 `AuthenticatedVoter::IS_AUTHENTICATED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED)`,
 `AuthenticatedVoter::IS_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_REMEMBERED)`, and finally,
-`AuthenticatedVoter::PUBLIC_ACCESS => $this->isGranted(AuthenticatedVoter::PUBLIC_ACCESS)`.
+`AuthenticatedVoter::PUBLIC_ACCESS => $this->isGranted(AuthenticatedVoter::PUBLIC_ACCESS)`:
+
+[[[ code('acf64538a7') ]]]
 
 Did I get them all? 1, 2, 3, 4, 5, and in `AuthenticatedVoter`... 1, 2, 3, 4, 5, 6. I'm skipping
 `IS_IMPERSONATOR` for now, as it's related to impersonating users, and we'll cover that in
