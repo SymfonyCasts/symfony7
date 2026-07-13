@@ -1,0 +1,348 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.996 align:middle
+Hagamos un pequeño recorrido entre bastidores
+para entender cómo nuestro usuario sigue conectado
+
+00:00:04.996 --> 00:00:07.276 align:middle
+mientras navega de una página a otra.
+
+00:00:07.816 --> 00:00:12.576 align:middle
+Como puedes ver, cuando vas de una página a
+otra, sigues conectado, tal y como esperábamos.
+
+00:00:13.066 --> 00:00:14.596 align:middle
+Pero, ¿cómo se produce esa magia?
+
+00:00:15.106 --> 00:00:19.416 align:middle
+El truco está en las sesiones de PHP,
+que guardan los datos del usuario actual.
+
+00:00:20.116 --> 00:00:24.526 align:middle
+Echa un vistazo a la página, ve a la pestaña
+«Aplicación» y busca las cookies de nuestra web.
+
+00:00:25.286 --> 00:00:27.796 align:middle
+PHPSESSID es nuestra cookie de sesión.
+
+00:00:28.336 --> 00:00:30.956 align:middle
+Este valor es un identificador
+único para nuestra sesión.
+
+00:00:31.626 --> 00:00:33.766 align:middle
+Apunta a unos datos almacenados
+en nuestro servidor.
+
+00:00:34.206 --> 00:00:37.666 align:middle
+El navegador envía esta cookie
+al servidor con cada petición,
+
+00:00:37.796 --> 00:00:40.136 align:middle
+lo que permite al servidor
+recuperar los datos relacionados.
+
+00:00:40.936 --> 00:00:45.456 align:middle
+Estos datos pueden ser de cualquier tipo, como mensajes
+flash o algún tipo de configuración guardada del sitio.
+
+00:00:46.106 --> 00:00:48.536 align:middle
+Y como estamos usando el
+autenticador form_login,
+
+00:00:48.776 --> 00:00:51.226 align:middle
+este almacena al usuario
+autenticado en la sesión.
+
+00:00:52.126 --> 00:00:54.566 align:middle
+Fíjate en que el valor de «Caducidad»
+está establecido en «Sesión».
+
+00:00:55.096 --> 00:00:57.866 align:middle
+Esto significa que la cookie se
+borra cuando cerramos el navegador.
+
+00:00:58.136 --> 00:01:01.336 align:middle
+Y si no hay cookie, no hay forma de encontrar
+nuestra sesión: nos hemos desconectado.
+
+00:01:02.106 --> 00:01:05.136 align:middle
+Pruébalo: borra la cookie (para
+simular que cierras el navegador)...
+
+00:01:05.506 --> 00:01:06.566 align:middle
+y vuelve a cargar la página...
+
+00:01:07.716 --> 00:01:08.396 align:middle
+¡Ya estamos desconectados!
+
+00:01:09.106 --> 00:01:12.436 align:middle
+Solo una nota rápida: puedes
+ajustar esta cookie a tu gusto.
+
+00:01:13.046 --> 00:01:15.896 align:middle
+Para ver las opciones, ejecuta
+lo siguiente en tu terminal:
+
+00:01:16.276 --> 00:01:23.726 align:middle
+symfony console config:dump framework session Recuerda
+que la sesión no es específica de seguridad,
+
+00:01:24.016 --> 00:01:25.996 align:middle
+por eso se configura a nivel del framework.
+
+00:01:26.756 --> 00:01:29.006 align:middle
+Aquí puedes ver que podemos
+cambiar el almacenamiento.
+
+00:01:29.306 --> 00:01:32.526 align:middle
+Por defecto, utiliza el sistema de archivos,
+que es la opción predeterminada de PHP.
+
+00:01:33.186 --> 00:01:35.486 align:middle
+Pero tienes opciones como
+Redis o una base de datos.
+
+00:01:35.996 --> 00:01:38.406 align:middle
+Puedes configurar un montón
+de opciones relacionadas con
+
+00:01:38.406 --> 00:01:40.866 align:middle
+las cookies, como el nombre, la
+ruta, el dominio y mucho más.
+
+00:01:41.296 --> 00:01:44.956 align:middle
+Estos valores predeterminados están bien para la mayoría de los
+casos, pero las opciones están ahí por si necesitas ajustarlas.
+
+00:01:45.716 --> 00:01:50.506 align:middle
+Una función muy habitual en muchos sitios web es
+«recordarme», que garantiza que los usuarios sigan conectados,
+
+00:01:50.696 --> 00:01:53.696 align:middle
+incluso entre sesiones (al
+cerrar y abrir el navegador).
+
+00:01:54.336 --> 00:01:55.136 align:middle
+Vamos a activarla.
+
+00:01:55.686 --> 00:02:00.096 align:middle
+En tu IDE, abre config/packages/security.yaml.
+
+00:02:00.936 --> 00:02:07.116 align:middle
+Debajo de nuestro firewall principal,
+añade remember_me: ~: La tilde significa:
+
+00:02:07.156 --> 00:02:09.656 align:middle
+activa esta función y usa la
+configuración por defecto.
+
+00:02:10.346 --> 00:02:13.196 align:middle
+Para ver la configuración por
+defecto, en tu terminal, ejecuta:
+
+00:02:13.506 --> 00:02:21.096 align:middle
+symfony console config:dump security firewalls Desplázate
+hacia arriba hasta encontrar la sección «remember_me».
+
+00:02:21.706 --> 00:02:25.666 align:middle
+Los datos de la cookie consisten en el
+identificador del usuario, una fecha de caducidad
+
+00:02:25.666 --> 00:02:27.966 align:middle
+y una firma para garantizar
+que no se haya manipulado.
+
+00:02:28.606 --> 00:02:31.796 align:middle
+Por defecto, utiliza nuestro secreto
+del kernel para generar la firma.
+
+00:02:32.716 --> 00:02:34.926 align:middle
+La opción « signature_properties
+» es interesante.
+
+00:02:35.446 --> 00:02:39.556 align:middle
+Son las propiedades del usuario que, si
+se modifican, invalidarán la cookie.
+
+00:02:40.096 --> 00:02:42.106 align:middle
+Por defecto, solo usa « password ».
+
+00:02:42.546 --> 00:02:45.986 align:middle
+¿Te acuerdas de cuando hablamos antes de cerrar la
+sesión de los usuarios en diferentes dispositivos?
+
+00:02:46.466 --> 00:02:49.196 align:middle
+Siempre que la contraseña esté
+incluida en las propiedades de la firma,
+
+00:02:49.406 --> 00:02:52.756 align:middle
+¡la función de la que hablamos también
+cerrará la sesión de los usuarios recordados!
+
+00:02:53.416 --> 00:02:56.316 align:middle
+Aquí puedes añadir propiedades adicionales, como
+el correo electrónico o el nombre de usuario.
+
+00:02:56.616 --> 00:03:00.896 align:middle
+Así, cuando cambie cualquiera de ellas, la cookie
+se invalidará (y el usuario se desconectará).
+
+00:03:01.736 --> 00:03:05.996 align:middle
+Esta opción token_provider te permite personalizar
+el almacenamiento del token «recordarme».
+
+00:03:06.666 --> 00:03:10.596 align:middle
+Por defecto, utiliza un enfoque sin estado,
+por lo que no se almacena nada en el servidor.
+
+00:03:11.106 --> 00:03:14.296 align:middle
+La cookie contiene toda la información
+necesaria para iniciar sesión.
+
+00:03:14.886 --> 00:03:17.666 align:middle
+Aquí puedes personalizar este
+comportamiento con tu propio servicio,
+
+00:03:17.826 --> 00:03:21.866 align:middle
+o usar el proveedor integrado doctrine, que
+guarda el token en una tabla de la base de datos.
+
+00:03:22.456 --> 00:03:26.266 align:middle
+Creo que la configuración por defecto es suficiente para la
+mayoría de los casos, pero está bien saber que tienes opciones.
+
+00:03:27.106 --> 00:03:28.706 align:middle
+A continuación están todas
+las opciones de cookies.
+
+00:03:28.966 --> 00:03:32.966 align:middle
+De nuevo, los valores por defecto son adecuados para la mayoría
+de los casos, pero vale la pena mencionar el tiempo de vida.
+
+00:03:33.516 --> 00:03:37.396 align:middle
+Es el tiempo que durará la cookie,
+en segundos, antes de que caduque.
+
+00:03:37.916 --> 00:03:42.276 align:middle
+El valor por defecto es de 1 año, así que quizá
+quieras cambiarlo a algo más corto, como 1 mes.
+
+00:03:42.976 --> 00:03:47.986 align:middle
+La opción «always_remember_me » te permite recordar siempre
+al usuario, sin necesidad de esa casilla de inicio de sesión.
+
+00:03:48.476 --> 00:03:53.206 align:middle
+Esto es útil en algunas aplicaciones, pero en la mayoría
+de los casos queremos que el usuario pueda elegir.
+
+00:03:53.546 --> 00:03:54.946 align:middle
+Así que dejaremos el valor
+por defecto en «false».
+
+00:03:55.766 --> 00:04:00.306 align:middle
+Este « remember_me_parameter » es el nombre del
+parámetro que hay que pasar al iniciar sesión
+
+00:04:00.306 --> 00:04:02.296 align:middle
+para activar la función «recordarme».
+
+00:04:02.956 --> 00:04:06.436 align:middle
+La opción «recordarme» también tiene que estar
+activada en nuestro autenticador « login_form ».
+
+00:04:06.806 --> 00:04:08.786 align:middle
+Desplázate hacia arriba para encontrar
+su configuración por defecto...
+
+00:04:10.176 --> 00:04:13.126 align:middle
+Aquí está: remember_me, y
+el valor por defecto es true.
+
+00:04:13.646 --> 00:04:18.106 align:middle
+Perfecto, así que siempre que pasemos el
+parámetro _remember_me al iniciar sesión,
+
+00:04:18.366 --> 00:04:19.856 align:middle
+se activará la función «Recordarme».
+
+00:04:20.706 --> 00:04:22.526 align:middle
+Añadamos esta casilla de selección a
+nuestro formulario de inicio de sesión.
+
+00:04:22.986 --> 00:04:27.356 align:middle
+Abre templates/security/login.html.twig
+y desplázate
+
+00:04:27.356 --> 00:04:29.356 align:middle
+hacia abajo hasta que
+encuentres esto comentado: div.
+
+00:04:30.006 --> 00:04:31.536 align:middle
+Esto lo añadió el maker-bundle.
+
+00:04:31.956 --> 00:04:32.696 align:middle
+Quítale el comentario.
+
+00:04:33.886 --> 00:04:37.266 align:middle
+Aquí tenemos un campo de casilla de
+selección, y el nombre es _remember_me.
+
+00:04:37.666 --> 00:04:43.016 align:middle
+¡Perfecto! Solo voy a cambiar una cosa: añadir el
+atributo checked al campo para que venga marcado por defecto
+
+00:04:43.016 --> 00:04:45.236 align:middle
+: Vamos a probarlo.
+
+00:04:45.606 --> 00:04:47.786 align:middle
+Vuelve al navegador y ve a la
+página de inicio de sesión.
+
+00:04:48.476 --> 00:04:51.556 align:middle
+¡Genial! Aquí está nuestra
+casilla «Recordarme» ya marcada.
+
+00:04:52.046 --> 00:04:54.976 align:middle
+Inicia sesión con picard@enterprise.space...
+
+00:04:55.356 --> 00:04:56.596 align:middle
+contraseña: makeitso.
+
+00:04:57.556 --> 00:04:58.226 align:middle
+Ya hemos iniciado sesión...
+
+00:04:58.506 --> 00:04:59.766 align:middle
+y, en realidad, no se ve nada diferente...
+
+00:05:00.766 --> 00:05:05.476 align:middle
+Inspecciona la página, ve a la pestaña
+«Aplicación» y busca las cookies de este sitio.
+
+00:05:06.306 --> 00:05:08.786 align:middle
+Efectivamente, tenemos una
+nueva cookie llamada REMEMBERME.
+
+00:05:09.496 --> 00:05:14.146 align:middle
+Fíjate en la fecha de caducidad: está configurada para una
+fecha futura, dentro de un año según nuestra configuración.
+
+00:05:14.996 --> 00:05:18.266 align:middle
+Lo importante es que esta cookie
+no está vinculada a la sesión.
+
+00:05:18.886 --> 00:05:22.626 align:middle
+Elimina la cookie PHPSESSID para
+simular que cierras el navegador...
+
+00:05:22.866 --> 00:05:23.946 align:middle
+y actualiza la página...
+
+00:05:24.696 --> 00:05:25.626 align:middle
+¡Seguimos conectados!
+
+00:05:25.696 --> 00:05:27.766 align:middle
+¡Nuestro sistema de «recordarme» funciona!
+
+00:05:28.386 --> 00:05:31.756 align:middle
+A continuación, vamos a ver algunos
+atributos especiales de autenticación.
