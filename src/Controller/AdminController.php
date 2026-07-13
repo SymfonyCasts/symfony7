@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\StarshipPartDto;
 use App\Entity\StarshipPart;
 use App\Form\StarshipPartType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -9,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/admin')]
@@ -18,12 +20,12 @@ class AdminController extends AbstractController
     public function newStarshipPart(
         Request $request,
         EntityManagerInterface $entityManager,
+        ObjectMapperInterface $objectMapper,
     ): Response {
         $form = $this->createForm(StarshipPartType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var StarshipPart $part */
-            $part = $form->getData();
+            $part = $objectMapper->map($form->getData(), StarshipPart::class);
             $entityManager->persist($part);
             $entityManager->flush();
 

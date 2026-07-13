@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Dto\StarshipPartDto;
 use App\Entity\Starship;
 use App\Entity\StarshipPart;
 use Doctrine\Common\Collections\Order;
@@ -54,7 +55,7 @@ class StarshipPartType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => StarshipPart::class,
+            'data_class' => StarshipPartDto::class,
         ]);
     }
 }

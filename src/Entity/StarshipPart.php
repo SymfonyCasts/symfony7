@@ -20,12 +20,12 @@ class StarshipPart
 
     #[Assert\NotBlank(message: 'Every part should have a name!')]
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    private string $name;
 
     #[Assert\NotBlank(message: 'You forgot to set the price!')]
     #[Assert\GreaterThan(value: 0, message: 'Starship part cannot be free')]
     #[ORM\Column]
-    private ?int $price = null;
+    private int $price;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $notes = null;
@@ -34,12 +34,19 @@ class StarshipPart
     #[ORM\JoinColumn(nullable: false)]
     private ?Starship $starship = null;
 
+    public function __construct(string $name, int $price)
+    {
+        $this->name = $name;
+        $this->price = $price;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -51,7 +58,7 @@ class StarshipPart
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): int
     {
         return $this->price;
     }
