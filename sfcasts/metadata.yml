@@ -21,8 +21,8 @@ chapters:
         tutsFirstStep: 7-remember-me
         tutsLastStep: 7-remember-me
     authentication-attributes:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 8-dump-attributes
+        tutsLastStep: 8-remove-dump
     roles:
         tutsFirstStep: null
         tutsLastStep: null

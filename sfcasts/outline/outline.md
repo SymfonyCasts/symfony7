@@ -221,6 +221,30 @@
 
 ## Authentication Attributes
 
+- Open `AuthenticatedVoter`
+    - built in auth attributes
+    - similar to roles, in that you can use them with is_granted()
+    - but these are not attached to a user, just the current auth state
+- Open `MainController`
+    - Let's dump some attributes to see how they change in different states
+    - `dump([])`
+        - `ROLE_USER => $this->isGranted('ROLE_USER')`
+            - look at isGranted()
+        - `AuthenticatedVoter::IS_AUTHENTICATED_FULLY => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)`
+        - `AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)`
+        - `AuthenticatedVoter::IS_AUTHENTICATED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED)`
+        - `AuthenticatedVoter::IS_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_REMEMBERED)`
+        - `AuthenticatedVoter::PUBLIC_ACCESS => $this->isGranted(AuthenticatedVoter::PUBLIC_ACCESS)`
+        - We'll talk about `IS_IMPERSONATOR` later
+- app homepage, logged out, check dump
+- login WITH remember me, check dump
+    - `IS_REMEMBERED` is false
+        - We are not a remembered user right now, we are fully authenticated
+    - trick to delete the PHPSESSID cookie and refresh, check dump
+- logout, login again w/0 remember me, check dump
+    - `IS_AUTHENTICATED_REMEMBERED` is true?
+        - historical naming quirks, authenticated at least as much as a remembered user
+
 ## Roles and Role Hierarchy
 
 - Explain roles
