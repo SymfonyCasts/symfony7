@@ -3,7 +3,7 @@
 Echemos un vistazo entre bastidores para entender cómo nuestro
 usuario permanece conectado mientras navega de una página a otra. Como puedes ver,
 cuando vamos de una página a otra, seguimos conectados, tal y como esperamos.
-Pero, ¿cómo ocurre esa magia? El truco está en las sesiones de PHP, que almacenan
+Pero, ¿cómo se produce esa magia? El truco está en las sesiones de PHP, que almacenan
 los datos del usuario actual.
 
 Echa un vistazo a la página, ve a la pestaña «Aplicación» y busca las cookies de
@@ -68,7 +68,7 @@ Siempre que la contraseña esté incluida en las propiedades de la firma, la fun
 de la que hablamos también cerrará la sesión de los usuarios recordados.
 
 Puedes añadir aquí propiedades adicionales, como el correo electrónico o el nombre de usuario. Así, cuando cualquiera
-de ellas cambie, la cookie se invalidará (y el usuario será desconectado).
+de ellas cambie, la cookie se invalidará (y el usuario se desconectará).
 
 Esta opción « `token_provider` » te permite personalizar el almacenamiento del token «recordarme».
 Por defecto, utiliza un enfoque sin estado, por lo que no se almacena nada en el servidor. La cookie
@@ -81,13 +81,13 @@ merece la pena mencionar el «lifetime». Es el tiempo que durará la cookie, en
 El valor por defecto es de 1 año, así que quizá quieras cambiarlo a algo más corto, como 1 mes.
 
 `always_remember_me` te permite recordar siempre al usuario, sin necesidad de esa casilla de inicio de sesión.
-Esto es útil en algunas aplicaciones, pero en la mayoría de los casos queremos que el usuario pueda elegir.
+Esto es útil en algunas aplicaciones, pero en la mayoría de los casos preferimos que el usuario pueda elegir.
 Así que dejaremos el valor por defecto en «false».
 
 Este « `remember_me_parameter` » es el nombre del parámetro que hay que pasar al iniciar sesión
 para activar la función «Recordarme».
 
-La opción «Recordarme» también debe estar habilitada en nuestro autenticador `login_form`. Desplázate hacia arriba para encontrar su configuración predeterminada...
+La opción «Recordarme» también tiene que estar activada en nuestro autenticador `login_form`. Desplázate hacia arriba para encontrar su configuración predeterminada...
 Aquí está: `remember_me`, y el valor por defecto es `true`. Perfecto, así que siempre
 que pasemos el parámetro `_remember_me` al iniciar sesión, se activará la opción «Recordarme».
 
@@ -107,7 +107,7 @@ contraseña: `makeitso`.
 Ya hemos iniciado sesión... y, en realidad, no se ve nada diferente... 
 
 Inspecciona la página, ve a la pestaña «Aplicación» y busca las cookies de este sitio. Efectivamente,
-tenemos una nueva cookie llamada `REMEMBERME`. Fíjate en la fecha de caducidad: está configurada para una fecha futura,
+tenemos una nueva cookie llamada `REMEMBERME`. Fíjate en la fecha de caducidad: está fijada en una fecha futura,
 dentro de un año según nuestra configuración. Lo importante es que esta cookie no está
 vinculada a la sesión.
 
