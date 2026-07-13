@@ -20,6 +20,12 @@ chapters:
     remember-me:
         tutsFirstStep: 7-remember-me
         tutsLastStep: 7-remember-me
+    authentication-attributes:
+        tutsFirstStep: null
+        tutsLastStep: null
+    roles:
+        tutsFirstStep: null
+        tutsLastStep: null
     email-or-username:
         tutsFirstStep: null
         tutsLastStep: null
