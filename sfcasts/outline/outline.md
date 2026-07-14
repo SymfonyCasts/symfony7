@@ -97,3 +97,34 @@
 - Now go refresh the page, fill in the form, and submit it
 - Go search the created part - here it is! It worked as before
 - But now our PHP code is more correct and reflects the database setup
+
+## Сonditionally show/hide form fields based on the underlying data (instead of passing those via constructor directly).
+- If you go to /admin/starship/edit
+- And we allow choosing a status
+- But for new ships the status should be always `waiting`
+- While we should allow changing it for existing ships when edit
+- However, we should remember that this form is used for both creating and editing ships
+- We could duplicate form type: one for new and one for edit
+- But it's not a good idea - we will have to maintain two forms types instead of one
+- Instead, we can conditionally show/hide the `status` field
+- Passing a bool flag via form type constructor is not a good idea either
+- Instead, we can leverage the underlying data to determine if the form is for creating or editing
+- But first, open `StarshipType`
+- Let's dump that `$options` var, add `dd($options);`
+- And reload /admin/starship/edit
+- Aha, there's `data` that is set to the `Starship` object we are editing!
+- Open /admin/starship/new - the same Starship object but an empty one
+- We can clearly leverage it to determine if the form is for creating or editing base on the ID
+- Comment out the dump
+- Below, add `$starship = $options['data'];`
+- I will also add `/** @var Starship $starship */`
+- But `data` does not guarantee to be a `Starship` object - it can be null sometimes
+- Below, write safe `$isEdit = $starship && $starship->getId();`
+- Below, add `if ($isEdit)`
+- Move the `status` field inside this `if` block
+- We will show it only for editing existing ships
+- Final tweak, open `Starship`
+- Update `private ?StarshipStatusEnum $status = StarshipStatusEnum::WAITING;`
+- Go create a new starship - no status field, as expected
+- But when you edit the created starship - the status field is there, and you can edit it
+...

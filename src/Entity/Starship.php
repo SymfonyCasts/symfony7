@@ -32,7 +32,7 @@ class Starship
     private ?string $captain = null;
 
     #[ORM\Column]
-    private ?StarshipStatusEnum $status = null;
+    private ?StarshipStatusEnum $status = StarshipStatusEnum::WAITING;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $arrivedAt = null;
