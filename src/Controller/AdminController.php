@@ -25,6 +25,7 @@ class AdminController extends AbstractController
         $form = $this->createForm(StarshipPartType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+//            $part = $form->getData();
             $part = $objectMapper->map($form->getData(), StarshipPart::class);
             $entityManager->persist($part);
             $entityManager->flush();

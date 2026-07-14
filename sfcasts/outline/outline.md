@@ -7,20 +7,70 @@
 - Upgrade recipes
 - Apply missing TutsHero steps from ep6-security at the moment of forking 
 
-## DTO
+## Configure empty_data for a form type class
+- Open /admin/starship-part/new form
+- Who creates a new `StarshipPart` object when we submit the form?
+- Symfony does it for us
+- But what if our `StarshipPart` has a constructor w/ requires arguments?
+- Let's check it
+- Open `src/Entity/StarshipPart`
+- You can see that `name` and `price` are required according to our validation rules
+- Let's ask for them in the constructor
+- Add `public function __construct(string $name, int $price)`
+- And set the properties in the constructor
+- Now go submit the form again - it will fail!
+  > Too few arguments to function App\Entity\StarshipPart::__construct(), 0 passed
+- Symfony doesn't know how to create a new `StarshipPart` object because it
+  doesn't know what to pass to the constructor
+- We can fix this by configuring the `empty_data` option in the form type class
+- Open `src/Form/StarshipPartType.php`
+- Add `empty_data` option to the form type class
+- Set it to `fn (FormInterface $form) => new StarshipPart()`
+- And pass `$form->get('name')->getData()`
+- And `$form->get('price')->getData()`
+- Submit the form again - starship part successfully created!
+
+### Configure empty_data for a form field
+- We can also use `empty_data` for a single form field
+- Open `StarshipPartRepository::findAllOrderedByPrice()`
+- We allow nullable serch term
+- Let's make it more strict and require it to be a `string` only
+- Change method signature to `findAllOrderedByPrice(string $search)`
+- Below, fix the if statement to `if ($search !== '')`
+- That's an important fix because if someone will search for `0` it will automatically
+  be converted to false with just `if ($search)` check - we don't need that
+- Now open `PartController`
+- Inside `index()` change to: `$query = '';`
+- let's search a part on the website - it works
+- But if you submit an empty search form - the error!
+  > StarshipPartRepository::findAllOrderedByPrice(): Argument #1 ($search) must be of type string, null given
+- Yeah, we should either explicitly typecast null to string in `$query = $searchForm->get('query')->getData();`
+- Or we can leverage `empty_data` option again... but now for the form field only
+- Open `src/Form/PartSearchType.php`
+- Add `'empty_data' => '',` to the `query` field
+- Submit the empty search form again - it works now!
+- Instead of null, the form uses empty string as the default value for the `query` field
+
+## Data Transfer Object (DTO) instead of entities in form types
+- But if you go back to /admin/starship-part/new form
+- And submit an empty form - it will fail again
+  > StarshipPart::__construct(): Argument #1 ($name) must be of type string, null given
+- We could do the same `empty_data` trick for `name` & `price`
+- But instead, let's think a bit
 - Let's open `src/Entity/StarshipPart`
 - We say name and price are required according to our validation rules
-- But in the database, we do not allow nullable (`nullable=false`)
+- And in the database, we do not allow nullable (`nullable=false`)
+- Though PHP code tell us the different story - it says those properties can be null!
 - Let's be honest and fix property types in the PHP code
     - Change to: `private string $name;`
     - And to: `private int $price;`
     - Not it perfectly reflects the DB setup
 - Fix setters and getters:
-    - Change to `public function getName(): string`
+    - We already require those properties in the constructor - great!
+    - Change to: `public function getName(): string`
     - And to:  `public function getPrice(): int`
-    - Now for clarity we can add `public function __construct(string $name, int $price)`
-- But now if you go to /admin/starship-part/new - form will fail on submit
-- For forms, we still need to allow invalid states
+- Now PHP code tell us the truth - those properties cannot be null
+- But for the forms, we still need to allow invalid states
 - For this, create DTO class `src/Dto/StarshipPartDto.php`
     - Make it `final`
     - Copy all the properties from the entity including asserts
@@ -31,6 +81,7 @@
     - And to: `public ?int $price = null;`
 - Back to `StarshipPartType` form
     - Set `'data_class' => StarshipPartDto::class,`
+    - And comment out `empty_data` there - we don't need it anymore
 - Now back to `AdminController::newStarshipPart()`
     - This `$form->getData()` will return our DTO object now
     - We should map it to the entity before persisting
@@ -40,9 +91,9 @@
     - Now, inject it in `newStarshipPart()` as `ObjectMapperInterface $objectMapper`
     - Inside `if`, I will drop `$part = $form->getData();` w/ the related PHPDoc
     - Instead, add `$part = $objectMapper->map($form->getData(), StarshipPart::class);`
+    - We can use it the other direction too, i.e. map from entity to DTO if needed
     - PhpStorm should already know it's a `StarshipPart` object now
     - If your IDE doesn't know about it, you can leave a PHPDoc for `$part`
 - Now go refresh the page, fill in the form, and submit it
 - Go search the created part - here it is! It worked as before
 - But now our PHP code is more correct and reflects the database setup
-- 

@@ -14,6 +14,7 @@ class PartSearchType extends AbstractType
     {
         $builder
             ->add('query', SearchType::class, [
+                'empty_data' => '',
                 'required' => false,
                 'label' => false,
                 'attr' => [
