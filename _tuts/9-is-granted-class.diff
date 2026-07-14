@@ -1,0 +1,16 @@
+diff --git a/src/Controller/PartController.php b/src/Controller/PartController.php
+index 06ae0ed..6a3bcaa 100644
+--- a/src/Controller/PartController.php
++++ b/src/Controller/PartController.php
+@@ -10,10 +10,10 @@ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+ use Symfony\Component\Security\Http\Attribute\IsGranted;
+ 
++#[IsGranted('ROLE_CAPTAIN')]
+ final class PartController extends AbstractController
+ {
+     #[Route('/parts', name: 'app_part_index')]
+-    #[IsGranted('ROLE_CAPTAIN')]
+     public function index(StarshipPartRepository $repository, Request $request,): Response
+     {
+         $searchForm = $this->createForm(PartSearchType::class);

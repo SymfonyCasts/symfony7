@@ -1,0 +1,13 @@
+diff --git a/src/Controller/PartController.php b/src/Controller/PartController.php
+index 6a3bcaa..2cbcfe3 100644
+--- a/src/Controller/PartController.php
++++ b/src/Controller/PartController.php
+@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+ use Symfony\Component\Security\Http\Attribute\IsGranted;
+ 
+-#[IsGranted('ROLE_CAPTAIN')]
++#[IsGranted('ROLE_CAPTAIN', statusCode: 404)]
+ final class PartController extends AbstractController
+ {
+     #[Route('/parts', name: 'app_part_index')]

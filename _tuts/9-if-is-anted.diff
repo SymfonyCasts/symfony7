@@ -1,0 +1,28 @@
+diff --git a/src/Controller/PartController.php b/src/Controller/PartController.php
+index 5eb708c..3737493 100644
+--- a/src/Controller/PartController.php
++++ b/src/Controller/PartController.php
+@@ -14,6 +14,10 @@ final class PartController extends AbstractController
+     #[Route('/parts', name: 'app_part_index')]
+     public function index(StarshipPartRepository $repository, Request $request,): Response
+     {
++        if (!$this->isGranted('ROLE_CAPTAIN')) {
++            throw $this->createAccessDeniedException('Only captains allowed!');
++        }
++
+         $searchForm = $this->createForm(PartSearchType::class);
+         //$query = $request->query->getString('query');
+         $query = null;
+diff --git a/templates/security/login.html.twig b/templates/security/login.html.twig
+index bc70043..e55d57f 100644
+--- a/templates/security/login.html.twig
++++ b/templates/security/login.html.twig
+@@ -12,7 +12,7 @@
+                     <p class="mt-3 text-sm text-white/70">Use your email and password to continue.</p>
+                 </div>
+ 
+-                <form method="post" class="space-y-6">
++                <form method="post" class="space-y-6" data-turbo="false">
+                     {% if error %}
+                         <div class="rounded-lg border border-red-400/40 bg-red-500/10 px-4 py-3 text-sm text-red-100">
+                             {{ error.messageKey|trans(error.messageData, 'security') }}

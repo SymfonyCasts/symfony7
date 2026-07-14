@@ -99,7 +99,42 @@
             "id": "8-remove-dump",
             "name": "8. remove dump",
             "description": null
+        },
+        {
+            "id": "9-if-is-anted",
+            "name": "9. if is anted",
+            "description": null
+        },
+        {
+            "id": "9-deny-unless-granted",
+            "name": "9. deny unless granted",
+            "description": null
+        },
+        {
+            "id": "9-is-granted-method",
+            "name": "9. is granted method",
+            "description": null
+        },
+        {
+            "id": "9-is-granted-class",
+            "name": "9. is granted class",
+            "description": null
+        },
+        {
+            "id": "9-is-granted-404",
+            "name": "9. is granted 404",
+            "description": null
+        },
+        {
+            "id": "9-is-granteddefault-status",
+            "name": "9. is granteddefault status",
+            "description": null
+        },
+        {
+            "id": "10-role-admin",
+            "name": "10. role admin",
+            "description": null
         }
     ],
-    "sha": "dbeef86afaece441c92efac0dd45e8c44e71943f"
+    "sha": "86df5c77d090ad461e96df2d7f4df235b6ce6bf9"
 }

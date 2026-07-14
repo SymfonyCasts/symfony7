@@ -1,0 +1,25 @@
+diff --git a/src/Controller/PartController.php b/src/Controller/PartController.php
+index 2cbcfe3..6a3bcaa 100644
+--- a/src/Controller/PartController.php
++++ b/src/Controller/PartController.php
+@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+ use Symfony\Component\Security\Http\Attribute\IsGranted;
+ 
+-#[IsGranted('ROLE_CAPTAIN', statusCode: 404)]
++#[IsGranted('ROLE_CAPTAIN')]
+ final class PartController extends AbstractController
+ {
+     #[Route('/parts', name: 'app_part_index')]
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index a142ac2..80a1a95 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -19,6 +19,7 @@ final class AppStory extends Story
+             'email' => 'picard@enterprise.space',
+             'password' => 'makeitso',
+             'name' => 'Jean-Luc Picard',
++            'roles' => ['ROLE_CAPTAIN'],
+         ]);
+ 
+         StarshipFactory::createOne([

@@ -1,0 +1,37 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index ebd39f7..9963371 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -38,9 +38,13 @@ security:
+ 
+     # Note: Only the *first* matching rule is applied
+     access_control:
+-        # - { path: ^/admin, roles: ROLE_ADMIN }
++        - { path: ^/admin, roles: ROLE_ADMIN }
+         # - { path: ^/profile, roles: ROLE_USER }
+ 
++    role_hierarchy:
++        ROLE_ADMIN:
++            - ROLE_CAPTAIN
++
+ when@test:
+     security:
+         password_hashers:
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 80a1a95..e99ba41 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -22,6 +22,13 @@ final class AppStory extends Story
+             'roles' => ['ROLE_CAPTAIN'],
+         ]);
+ 
++        UserFactory::createOne([
++            'email' => 'janeway@starfleet.space',
++            'password' => 'coffeeblack',
++            'name' => 'Kathryn Janeway',
++            'roles' => ['ROLE_ADMIN'],
++        ]);
++
+         StarshipFactory::createOne([
+             'name' => 'USS LeafyCruiser (NCC-0001)',
+             'class' => 'Garden',

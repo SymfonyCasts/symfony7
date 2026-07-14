@@ -1,0 +1,15 @@
+diff --git a/src/Controller/PartController.php b/src/Controller/PartController.php
+index 3737493..18c9d41 100644
+--- a/src/Controller/PartController.php
++++ b/src/Controller/PartController.php
+@@ -14,9 +14,7 @@ final class PartController extends AbstractController
+     #[Route('/parts', name: 'app_part_index')]
+     public function index(StarshipPartRepository $repository, Request $request,): Response
+     {
+-        if (!$this->isGranted('ROLE_CAPTAIN')) {
+-            throw $this->createAccessDeniedException('Only captains allowed!');
+-        }
++        $this->denyAccessUnlessGranted('ROLE_CAPTAIN');
+ 
+         $searchForm = $this->createForm(PartSearchType::class);
+         //$query = $request->query->getString('query');
