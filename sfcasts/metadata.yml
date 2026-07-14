@@ -24,8 +24,11 @@ chapters:
         tutsFirstStep: 8-dump-attributes
         tutsLastStep: 8-remove-dump
     roles:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 9-if-is-anted
+        tutsLastStep: 9-is-granteddefault-status
+    role-hierarchy-access-control:
+        tutsFirstStep: 10-role-admin
+        tutsLastStep: 10-role-admin
     email-or-username:
         tutsFirstStep: null
         tutsLastStep: null

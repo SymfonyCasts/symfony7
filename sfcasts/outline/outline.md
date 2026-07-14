@@ -222,94 +222,90 @@
 ## Authentication Attributes
 
 - Open `AuthenticatedVoter`
-    - built in auth attributes
-    - similar to roles, in that you can use them with is_granted()
-    - but these are not attached to a user, just the current auth state
+  - built in auth attributes
+  - similar to roles, in that you can use them with is_granted()
+  - but these are not attached to a user, just the current auth state
 - Open `MainController`
-    - Let's dump some attributes to see how they change in different states
-    - `dump([])`
-        - `ROLE_USER => $this->isGranted('ROLE_USER')`
-            - look at isGranted()
-        - `AuthenticatedVoter::IS_AUTHENTICATED_FULLY => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)`
-        - `AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)`
-        - `AuthenticatedVoter::IS_AUTHENTICATED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED)`
-        - `AuthenticatedVoter::IS_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_REMEMBERED)`
-        - `AuthenticatedVoter::PUBLIC_ACCESS => $this->isGranted(AuthenticatedVoter::PUBLIC_ACCESS)`
-        - We'll talk about `IS_IMPERSONATOR` later
+  - Let's dump some attributes to see how they change in different states
+  - `dump([])`
+    - `ROLE_USER => $this->isGranted('ROLE_USER')`
+      - look at isGranted()
+    - `AuthenticatedVoter::IS_AUTHENTICATED_FULLY => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)`
+    - `AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)`
+    - `AuthenticatedVoter::IS_AUTHENTICATED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED)`
+    - `AuthenticatedVoter::IS_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_REMEMBERED)`
+    - `AuthenticatedVoter::PUBLIC_ACCESS => $this->isGranted(AuthenticatedVoter::PUBLIC_ACCESS)`
+    - We'll talk about `IS_IMPERSONATOR` later
 - app homepage, logged out, check dump
 - login WITH remember me, check dump
-    - `IS_REMEMBERED` is false
-        - We are not a remembered user right now, we are fully authenticated
-    - trick to delete the PHPSESSID cookie and refresh, check dump
+  - `IS_REMEMBERED` is false
+    - We are not a remembered user right now, we are fully authenticated
+  - trick to delete the PHPSESSID cookie and refresh, check dump
 - logout, login again w/0 remember me, check dump
-    - `IS_AUTHENTICATED_REMEMBERED` is true?
-        - historical naming quirks, authenticated at least as much as a remembered user
+  - `IS_AUTHENTICATED_REMEMBERED` is true?
+    - historical naming quirks, authenticated at least as much as a remembered user
 
-## Roles and Role Hierarchy
+## User Roles
 
-- Explain roles
-    - Let's talk about user *roles*
-    - Right now every user has `ROLE_USER` role by default, see `getRoles()` method in User class
-    - You can see it in the WDT
-    - But what else roles can we have? E.g. `ROLE_ADMIN` for admin users who should have access to admin parts of the website
-    - OK, log out and then click "Parts" -> "Create a new part"
-    - We're on the "Register a New Starship Part" page and still can add parts
-    - That's a black hole in our security.
-    - First of all, let's allow only `ROLE_ADMIN` for that page
-    - Open the `AdminController::newStarshipPart()` action responsible for that page.
-    - We can check for any role inside the action using special `isGranted()` method.
-    - Mention that we can even call this from Twig template with `{{ is_granted() }}` Twig function to show some parts of the template only to specific users - we will see it later
-    - Let's wrap it with `if (!$this->isGranted('ROLE_ADMIN'))`.
-    - And if so, `throw $this->createAccessDeniedException('Access Denied!');`.
-    - This `createAccessDeniedException()` is just a fancy shortcut that creates a special `AccessDeniedException` exception.
-    - If you hold Cmd and click this method - you will see it yourself.
-    - Actually, we can throw it from any place in our code, e.g. from a service, and it will work the same way.
-    - But while we're in the controller - let's use this shortcut.
-    - Refresh the page - we're redirected to the login form!
-    - That's because the system does not know if we have access or no to that page, so it asks us to authenticate first
-    - Log in and you're redirected back to the `/admin/starship-part/new`
-    - But now because the system knows who we're and see that the user does not have the required `ROLE_ADMIN` - it shows us our: "Access Denied!"
-    - Well, let's go create a new (admin) user in fixtures
-    - Open `AppStory`
-    - Below the first user, add another one with `UserFactory::createOne([])`
-    - With next credentials: `admin@example.com`, Admin, `adminpass`
-    - And also add `'roles' => ['ROLE_ADMIN'],`
-    - And while we're here - let's add one more user
-    - With credentials: `superadmin@example.com`, Super Admin, `superadminpass`, and `ROLE_SUPER_ADMIN`
-    - Reload fixtures w/ `symfony console foundry:load-fixtures` command
-    - The user IDs are changed in the DB that's why we're automatically logged out
-    - Log in with the new *admin* credentials
-    - And we have access to the /admin page!
-    - Check the WDT to see 2 roles are presented on the user - you can see more details of you open the profiler.
-    - Actually, I was showing a longer way to you for learning purposes
-- But we can do it even short using `#[IsGranted()]` PHP attribute.
-    - I will comment out this code for the reference.
-    - And above this method add: `#[IsGranted('ROLE_ADMIN')]`.
-    - If you refresh the page - we're still on this page because we're authenticated as an admin, but if you log out and refresh - we're on the login page again!
-    - Buuuut if you open another page: `/admin/starship` - that page has no security!
-    - We can add this `#[IsGranted('ROLE_ADMIN')]` to the methods in `StarshipAdminController` too
-    - Or even better add this only once to the whole controller class, so that all the actions in it will be protected
-    - But there's a better solution
-- Open `security.yaml`
-- In the `access_control` section, uncomment `- { path: ^/admin, roles: ROLE_ADMIN }`
-    - Now all the URLs that start with `/admin` will require `ROLE_ADMIN` role
-    - Refresh the page - we're asked to log in again
-    - Log in as an admin - access granted!
-    - We can keep that PHP attribute as well, no harm, but I will comment it out so that we control this only from access_control spot
-    - But it's important to understand how `access_control` works with the URL patterns
-    - As soon as it found the first match - it stops and does not check the rest of the rules
-    - So remember this rule: only 1 `access_control` match per request!
-    - So you should place rules in the correct order, .e.g. write  `path: ^/admin/starship` before `path: ^/admin` if you want to have different access rules for those URLs
-    - In short, don't forget about testing your endpoints to make sure your rules are working as expected
-- But if you log out and log in as a super admin - you won't have access to the /admin
-- But clearly our ROLE_SUPER_ADMIN should have access to everything that ROLE_ADMIN has and even more
-- Of course, we can also add `ROLE_ADMIN` to our super admin user.
-- But there's a better solution called *role hierarchy*.
-    - Open the `security.yaml` again
-    - Below `access_control:`, add `role_hierarchy:` section
-    - Inside, add `ROLE_SUPER_ADMIN: ROLE_ADMIN`
-    - Go refresh the page again and vualà, super admin has access to the /admin page as well!
-    - WDT will show us that it has its own roles, but also inherited roles.
+- Check out `/parts`
+- We want only "captains" to be able to visit this page
+- In `PartController::index()`
+  - `if (!$this->isGranted('ROLE_CAPTAIN')) { throw $this->createAccessDeniedException('Only captains allowed!'); }`
+- Access `/parts` now
+  - redirected to `/login`
+  - login as picard
+  - back on `/login`... I expected to be on `/parts`
+- This is a turbo thing
+  - open `login.html.twig`, add `data-turbo="false"` to the form
+  - You may want to disable turbo for your login form
+- Retry flow
+  - back on `/parts`! This is a cool feature we get for free with `form_login`
+  - 403 error, we don't have this role...
+  - Look at the security panel in wdt, access decision, ROLE_CAPTAIN - DENIED
+- In `PartController::index()`, simplify
+  - `$this->denyAccessUnlessGranted('ROLE_CAPTAIN');` (we can add our message here if we want)
+  - refresh... same thing, default message
+- In `PartController::index()`
+  - use `#[IsGranted('ROLE_CAPTAIN')]` to the method instead
+  - refresh... same thing
+- In `PartController`, move to class level, refresh... same thing
+  - covers all methods in this class
+- status code 403, but we can change to 404 (like GitHub does)
+  - add `statusCode: 404` to attribute
+  - refresh... 404 page
+  - revert the status code
+- Let's add this role to Picard
+- Open `AppStory`
+  - Add `'roles' => ['ROLE_CAPTAIN'],` to the user creation
+- `symfony console foundry:load-fixtures`
+- Go to `/parts`... login again...
+- Success! Check wdt, access decision, ROLE_CAPTAIN - GRANTED
+  - Also the `ROLE_USER` check - that's from our template
+
+## Role Hierarchy & Access Control
+
+- Let's create the concept of "admin" users
+- In `AppStory`, duplicate picard
+  - email: `janeway@starfleet.space`
+  - password: `coffeeblack`
+  - name: `Kathryn Janeway`
+  - roles: `['ROLE_ADMIN']`
+- `symfony console foundry:load-fixtures`
+- Login and visit `/parts`... access denied
+- In `security.yaml`, under `security`
+  - add `role_hierarchy: ROLE_ADMIN: - ROLE_CAPTAIN`
+- Refresh... access granted!
+- Look at wdt, "inherited roles"
+- We have some routes prefixed with `/admin`
+  - Look at `AdminController` and `StarshipAdminController`
+  - We could add `IsGranted` attributes to both classes...
+  - But there's a nicer way
+- In `security.yaml`, under `access_control`
+  - uncomment `- { path: ^/admin, roles: ROLE_ADMIN }`
+- Visit `/admin/starship` access granted
+- Logout and visit `/admin/starship`
+- Login as picard... access denied
+
 - We have the "remember me" feature, and when session is over it still keeps us authenticated.
     - This is called that user is authenticated as "remembered".
     - But for security reasons, for some parts of our website, we may want to force users to authenticate fully.

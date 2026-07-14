@@ -29,12 +29,9 @@ The `isGranted()` method is available to us because our controller class extends
 This base class provides us with a lot of useful methods, including security helpers.
 
 Next item, `AuthenticatedVoter::IS_AUTHENTICATED_FULLY => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY)`.
-I'm using the constants here but using the raw string values would work just as well.
+I'm using the constants here but the raw string values would work just as well.
 
-Then, `AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_REMEMBERED)`,
-`AuthenticatedVoter::IS_AUTHENTICATED => $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED)`,
-`AuthenticatedVoter::IS_REMEMBERED => $this->isGranted(AuthenticatedVoter::IS_REMEMBERED)`, and finally,
-`AuthenticatedVoter::PUBLIC_ACCESS => $this->isGranted(AuthenticatedVoter::PUBLIC_ACCESS)`:
+I'll just speed through the rest...
 
 [[[ code('acf64538a7') ]]]
 
