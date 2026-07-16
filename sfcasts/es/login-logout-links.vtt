@@ -238,8 +238,8 @@ Hemos configurado que todos los
 usuarios autenticados tengan este rol.
 
 00:03:52.586 --> 00:04:00.076 align:middle
-Volviendo a nuestra instrucción ` if ` en ` base.html.twig`,
-sustituye ` app.user ` por ` is_granted('ROLE_USER')`:
+Volviendo a nuestra instrucción « if » en base.html.twig,
+sustituye app.user por is_granted('ROLE_USER'):
 
 00:04:00.956 --> 00:04:04.306 align:middle
 Esta función comprueba si el usuario
