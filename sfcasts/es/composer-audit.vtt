@@ -429,8 +429,8 @@ Así nos ahorramos tener que ejecutar composer
 install, lo que nos ahorra unos minutos de acción.
 
 00:06:47.676 --> 00:06:52.136 align:middle
-Además, así no tienes que especificar la versión de
-PHP en el paso anterior, lo que simplifica el proceso.
+Además, significa que no tenemos que especificar la
+versión de PHP en el paso anterior, lo que simplifica el proceso.
 
 00:06:52.686 --> 00:06:56.076 align:middle
 Esta tarea fallará si se encuentra alguna
