@@ -134,7 +134,42 @@
             "id": "10-role-admin",
             "name": "10. role admin",
             "description": null
+        },
+        {
+            "id": "11-user-relationship",
+            "name": "11. user relationship",
+            "description": null
+        },
+        {
+            "id": "11-get-user",
+            "name": "11. get user",
+            "description": null
+        },
+        {
+            "id": "12-token-storage",
+            "name": "12. token storage",
+            "description": null
+        },
+        {
+            "id": "12-user-instanceof",
+            "name": "12. user instanceof",
+            "description": null
+        },
+        {
+            "id": "12-inject-userinterface",
+            "name": "12. inject userinterface",
+            "description": null
+        },
+        {
+            "id": "12-nullable-userinterface",
+            "name": "12. nullable userinterface",
+            "description": null
+        },
+        {
+            "id": "12-current-user",
+            "name": "12. current user",
+            "description": null
         }
     ],
-    "sha": "86df5c77d090ad461e96df2d7f4df235b6ce6bf9"
+    "sha": "5018e6ebada326ebfbd78f7d1c91dd4bef3c76aa"
 }

@@ -1,0 +1,166 @@
+diff --git a/migrations/Version20260720181136.php b/migrations/Version20260720181136.php
+new file mode 100644
+index 0000000..a29a45d
+--- /dev/null
++++ b/migrations/Version20260720181136.php
+@@ -0,0 +1,42 @@
++<?php
++
++declare(strict_types=1);
++
++namespace DoctrineMigrations;
++
++use Doctrine\DBAL\Schema\Schema;
++use Doctrine\Migrations\AbstractMigration;
++
++/**
++ * Auto-generated Migration: Please modify to your needs!
++ */
++final class Version20260720181136 extends AbstractMigration
++{
++    public function getDescription(): string
++    {
++        return 'Add starship to user';
++    }
++
++    public function up(Schema $schema): void
++    {
++        // this up() migration is auto-generated, please modify it to your needs
++        $this->addSql('CREATE TEMPORARY TABLE __temp__user AS SELECT id, email, roles, password, name FROM user');
++        $this->addSql('DROP TABLE user');
++        $this->addSql('CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles CLOB NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, starship_id INTEGER DEFAULT NULL, CONSTRAINT FK_8D93D6499B24DF5 FOREIGN KEY (starship_id) REFERENCES starship (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
++        $this->addSql('INSERT INTO user (id, email, roles, password, name) SELECT id, email, roles, password, name FROM __temp__user');
++        $this->addSql('DROP TABLE __temp__user');
++        $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON user (email)');
++        $this->addSql('CREATE INDEX IDX_8D93D6499B24DF5 ON user (starship_id)');
++    }
++
++    public function down(Schema $schema): void
++    {
++        // this down() migration is auto-generated, please modify it to your needs
++        $this->addSql('CREATE TEMPORARY TABLE __temp__user AS SELECT id, email, roles, password, name FROM user');
++        $this->addSql('DROP TABLE user');
++        $this->addSql('CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles CLOB NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL)');
++        $this->addSql('INSERT INTO user (id, email, roles, password, name) SELECT id, email, roles, password, name FROM __temp__user');
++        $this->addSql('DROP TABLE __temp__user');
++        $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON user (email)');
++    }
++}
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 9470f12..65c1a9f 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -19,7 +19,7 @@ class MainController extends AbstractController
+         $ships->setMaxPerPage(5);
+         $ships->setCurrentPage($request->query->get('page', 1));
+ 
+-        $myShip = $repository->findMyShip();
++        $myShip = null;
+ 
+         return $this->render('main/homepage.html.twig', [
+             'myShip' => $myShip,
+diff --git a/src/Entity/Starship.php b/src/Entity/Starship.php
+index f8c189c..a80dc58 100644
+--- a/src/Entity/Starship.php
++++ b/src/Entity/Starship.php
+@@ -54,10 +54,17 @@ class Starship
+     #[ORM\OneToMany(targetEntity: StarshipDroid::class, mappedBy: 'starship', cascade: ['persist'])]
+     private Collection $starshipDroids;
+ 
++    /**
++     * @var Collection<int, User>
++     */
++    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'starship')]
++    private Collection $users;
++
+     public function __construct()
+     {
+         $this->parts = new ArrayCollection();
+         $this->starshipDroids = new ArrayCollection();
++        $this->users = new ArrayCollection();
+     }
+ 
+     public function getId(): ?int
+@@ -261,4 +268,34 @@ class Starship
+ 
+         return $this;
+     }
++
++    /**
++     * @return Collection<int, User>
++     */
++    public function getUsers(): Collection
++    {
++        return $this->users;
++    }
++
++    public function addUser(User $user): static
++    {
++        if (!$this->users->contains($user)) {
++            $this->users->add($user);
++            $user->setStarship($this);
++        }
++
++        return $this;
++    }
++
++    public function removeUser(User $user): static
++    {
++        if ($this->users->removeElement($user)) {
++            // set the owning side to null (unless already changed)
++            if ($user->getStarship() === $this) {
++                $user->setStarship(null);
++            }
++        }
++
++        return $this;
++    }
+ }
+diff --git a/src/Entity/User.php b/src/Entity/User.php
+index 67934e3..5722de1 100644
+--- a/src/Entity/User.php
++++ b/src/Entity/User.php
+@@ -34,6 +34,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+     #[ORM\Column(length: 255)]
+     private ?string $name = null;
+ 
++    #[ORM\ManyToOne(inversedBy: 'users')]
++    private ?Starship $starship = null;
++
+     public function getId(): ?int
+     {
+         return $this->id;
+@@ -120,4 +123,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+ 
+         return $this;
+     }
++
++    public function getStarship(): ?Starship
++    {
++        return $this->starship;
++    }
++
++    public function setStarship(?Starship $starship): static
++    {
++        $this->starship = $starship;
++
++        return $this;
++    }
+ }
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index e99ba41..6a04855 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -20,6 +20,12 @@ final class AppStory extends Story
+             'password' => 'makeitso',
+             'name' => 'Jean-Luc Picard',
+             'roles' => ['ROLE_CAPTAIN'],
++            'starship' => StarshipFactory::new([
++                'name' => 'USS Enterprise (NCC-1701-D)',
++                'class' => 'Galaxy',
++                'captain' => 'Jean-Luc Picard',
++                'status' => StarshipStatusEnum::IN_PROGRESS,
++            ]),
+         ]);
+ 
+         UserFactory::createOne([

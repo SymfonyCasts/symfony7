@@ -1,0 +1,21 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 92d7bab..d71a3a1 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -5,7 +5,6 @@ namespace App\Controller;
+ use App\Entity\User;
+ use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+-use Symfony\Bundle\SecurityBundle\Security;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -17,7 +16,7 @@ class MainController extends AbstractController
+     public function homepage(
+         StarshipRepository $repository,
+         Request $request,
+-        UserInterface $user,
++        ?UserInterface $user,
+     ): Response {
+         $ships = $repository->findIncomplete();
+         $ships->setMaxPerPage(5);

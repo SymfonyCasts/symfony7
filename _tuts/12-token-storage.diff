@@ -1,0 +1,27 @@
+diff --git a/src/Controller/MainController.php b/src/Controller/MainController.php
+index 44b72c3..dfe9f04 100644
+--- a/src/Controller/MainController.php
++++ b/src/Controller/MainController.php
+@@ -4,6 +4,7 @@ namespace App\Controller;
+ 
+ use App\Repository\StarshipRepository;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Bundle\SecurityBundle\Security;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+@@ -14,12 +15,13 @@ class MainController extends AbstractController
+     public function homepage(
+         StarshipRepository $repository,
+         Request $request,
++        Security $security,
+     ): Response {
+         $ships = $repository->findIncomplete();
+         $ships->setMaxPerPage(5);
+         $ships->setCurrentPage($request->query->get('page', 1));
+ 
+-        $myShip = $this->getUser()?->getStarship();
++        $myShip = $security->getUser()?->getStarship();
+ 
+         return $this->render('main/homepage.html.twig', [
+             'myShip' => $myShip,
