@@ -84,4 +84,4 @@ good! Now login as Picard with `picard@enterprise.space`, password `makeitso`. R
 
 403 access denied... Perfect!
 
-Next, we'll delve further into authorization with voters and permissions!
+Next, we'll see how to access the currently logged-in user in our services and controllers.

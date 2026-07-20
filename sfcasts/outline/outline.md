@@ -306,6 +306,56 @@
 - Logout and visit `/admin/starship`
 - Login as picard... access denied
 
+## User Doctrine Relationship
+
+- "My Ship" is just a placeholder
+- In `MainController`, set `$myShip = null`
+- Hides the "aside"
+- `symfony console make:entity User`
+    - `starship`, `relation`, `nullable`
+- `symfony console make:migration`
+    - open, set description to `Add starship to user`
+- `symfony console doctrine:migrations:migrate`
+- In `AppStory`, add to Picard user:
+    - ```
+    'starship' => StarshipFactory::new([
+        'name' => 'USS Enterprise (NCC-1701-D)',
+        'class' => 'Galaxy',
+        'captain' => 'Jean-Luc Picard',
+        'status' => StarshipStatusEnum::IN_PROGRESS,
+    ]),```
+- In `MainController`, `$myShip = $this->getUser()?->getStarship();`
+- Test, login as Picard, see our ship in the aside
+- `getStarship()` as a warning, check `getUser()`, returns `UserInterface`
+
+## Fetching the User in Services/Controllers
+
+- In `MainController::index()`
+    - Inject `Security $security`
+    - `$myShip = $security->` - see the available methods
+    - `$security->getUser()?->getStarship()`
+    - Same problem as before...
+    - `$myShip = null`
+    - `$user = $security->getUser()`
+    - `if ($user instanceof User) { $myShip = $user->getStarship(); }`
+- Refresh... Still works... logout
+- Aside is gone
+- In `MainController::index()` - trick for controllers only (doesn't work with services)
+    - Inject `UserInterface $user` instead of `$security`
+- Refresh... redirected to login...
+    - Non-nullable `UserInterface` is the same as `IsGranted('IS_AUTHENTICATED')`
+    - We want this page to be public
+    - `?UserInterface $user` instead
+- Back to homepage, all good!
+- Login as picard, see the proper aside again
+- Annoying to use the `instanceof` check...
+- In `MainController::index()`
+    - inject `?User $user`
+    - add `#[CurrentUser]` attribute
+    - `$myShip = $user?->getStarship()`
+- Refresh... works!
+- Logout... aside gone
+
 - We have the "remember me" feature, and when session is over it still keeps us authenticated.
     - This is called that user is authenticated as "remembered".
     - But for security reasons, for some parts of our website, we may want to force users to authenticate fully.
