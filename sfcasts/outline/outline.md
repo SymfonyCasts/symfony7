@@ -147,4 +147,20 @@
 - If you open Dev Tools and remove `disabled="disabled"`, update the field and submit - no changes are done
 - This is the proper secured way if you don't want user input, or just do not render the field at all - you can just print the plain value in the template
 
-
+## Custom form type options
+- But what if we want to pass some data from outside of the form type
+- What if we still want to allow editing `slug` field for admins?
+- We know we can check for admin w/ `$this->isGranted('ROLE_ADMIN')`
+- But this info does not exist in `$options` or on the entity
+- How to pass this value to the form type? 
+- Passing it into form type constructor is not a good idea
+- Instead, we can leverage custom form type options
+- In `configureOptions()`, `setDefaults()` add `'is_admin' => false,`
+- Below add `$resolver->setAllowedTypes('is_admin', 'bool');`
+- Yes, Symfony Forms can even validate the type for us, so handy!
+- This way we created a new option, check it with `dd($options)`
+- Comment the dump line out
+- Tweak `slug` field logic to `'disabled' => $isEdit && !$options['is_admin'],`
+- Now go to `StarshipAdminController::edit()`
+- Add `'is_admin' => $this->isGranted('ROLE_ADMIN'),` as options to `createForm()`
+- Reload the page to see the field can be still  edited by admins

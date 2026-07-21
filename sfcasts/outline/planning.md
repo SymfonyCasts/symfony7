@@ -24,9 +24,9 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 - Form data
 //    - Data Transfer Object (DTO) instead of entities in form types  
 //    - Configure empty data for a form type class
-    - Custom form field options
 //    - Сonditionally change/show/hide form fields
 //      based on the underlying data (instead of passing those via constructor directly).
+//    - Custom form field options
     - Form mapping getter/setter callbacks
     - Form data transformers
     - Model transformer vs View transformer

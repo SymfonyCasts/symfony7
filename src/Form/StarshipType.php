@@ -29,7 +29,7 @@ class StarshipType extends AbstractType
                 'attr' => [
                     //'readonly' => $isEdit,
                 ],
-                'disabled' => $isEdit,
+                'disabled' => $isEdit && !$options['is_admin'],
             ])
             ->add('name')
             ->add('class')
@@ -46,6 +46,8 @@ class StarshipType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Starship::class,
+            'is_admin' => false,
         ]);
+        $resolver->setAllowedTypes('is_admin', 'bool');
     }
 }
