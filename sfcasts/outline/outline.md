@@ -127,4 +127,24 @@
 - Update `private ?StarshipStatusEnum $status = StarshipStatusEnum::WAITING;`
 - Go create a new starship - no status field, as expected
 - But when you edit the created starship - the status field is there, and you can edit it
+- TODO Print the field value manually via vars
 ...
+- ### ...
+- Let's allow writing in `slug` field only on creation to avoid URL changes for existing starships for SEO purposes
+- With text fields - we can make them readonly
+- Add options with `attr` set to an empty array
+- Inside, add `'readonly' => $isEdit,`
+- Open the new form - we can write in that field
+- If you open existing starship for editing - the field is readonly now
+- But tricky users can easily bypass this editing HTML in the browser
+- Open Chrome Dev Tools, remove `readonly` attr, and submit the form - the value is updated!
+- You should keep it in mind working with readonly fields - they are not secure
+- TODO Show how to edit theme to make readonly fields look slightly dimmed
+- I will comment `readonly` attr out, though it's not required
+- Below `attr`, add also `'disabled' => $isEdit,` option
+- Try `readonly` attr first, then show `disabled` option for slug
+- Update the page - now the field is disabled
+- If you open Dev Tools and remove `disabled="disabled"`, update the field and submit - no changes are done
+- This is the proper secured way if you don't want user input, or just do not render the field at all - you can just print the plain value in the template
+
+

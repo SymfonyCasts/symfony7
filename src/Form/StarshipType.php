@@ -25,13 +25,18 @@ class StarshipType extends AbstractType
         }
 
         $builder
+            ->add('slug', null, [
+                'attr' => [
+                    //'readonly' => $isEdit,
+                ],
+                'disabled' => $isEdit,
+            ])
             ->add('name')
             ->add('class')
             ->add('captain')
             ->add('arrivedAt', null, [
                 'widget' => 'single_text',
             ])
-            ->add('slug')
             ->add('createdAt')
             ->add('updatedAt')
         ;
