@@ -59,8 +59,7 @@ marcada la opción «Recordarme».
 Ahora echa un vistazo al volcado. `ROLE_USER` es `true`, nada de extrañar, todos los usuarios tienen este rol.
 
 `IS_AUTHENTICATED_FULLY` `true` solo aparece cuando el usuario ha iniciado sesión durante la sesión actual,
-como acabamos de hacer. es porque no solo estamos «recordados», sino que estamos totalmente autenticados. 
- es siempre que estés autenticado, ya sea totalmente o como usuario «recordado». `IS_REMEMBERED` `false``IS_AUTHENTICATED` `true` 
+como acabamos de hacer. `IS_REMEMBERED` es `false` porque no solo estamos «recordados», sino que estamos totalmente autenticados. 
 
 Repitamos nuestro truco para borrar la cookie de sesión. Inspecciona la página, abre la pestaña «Aplicación»,
 busca la cookie `PHPSESSID` y bórrala. Ahora actualiza la página y comprueba el volcado.
