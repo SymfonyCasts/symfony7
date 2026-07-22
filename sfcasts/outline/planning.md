@@ -5,7 +5,7 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 - Form rendering
 //    - Cover form rendering variables via `form.field.vars`
     - Cover more form field helpers left uncovered: `form_(id|name|value|label|help|choices)` - an iterator for choice fields
-    - Allow HTML contents in form labels w/ `label_html` option
+//    - Allow HTML contents in form labels w/ `label_html` option
     - Translatable help messages w/ `new TranslatableMessage()` that include all the information needed
 - Form theming
     - Form theme blocks

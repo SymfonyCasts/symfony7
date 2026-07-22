@@ -26,6 +26,8 @@ class StarshipPartType extends AbstractType
 //                ],
             ])
             ->add('price', null, [
+                'label' => 'Price <span class="text-gray-500 text-sm">(in credits)</span>',
+                'label_html' => true,
                 'help' => 'We don\'t allow free parts! Set up a price',
             ])
             ->add('starship', EntityType::class, [

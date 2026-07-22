@@ -185,3 +185,15 @@
 - Print the status w/ `Status: {{ form.vars.data.status.value }}`
 - Wrap it w/ a `<div class="mb-6 text-gray-800">`
 - Refresh the page to see the "waiting" status
+
+## Allow HTML contents in form labels w/ `label_html` option
+- Open /admin/starship-part/new
+- I want to be clear say that the price should be in credits
+- We can easily change field's label to clarify it
+- Open `StarshipPartType`
+- Set `label` option to `Price (in credits)`
+- I will also wrap it in a span with some styles `<span class="text-gray-500 text-sm">`
+- Reload the page - HTML is escaped in label for security reasons
+- If we're sure there's no potential XSS there - we can enable HTML in label
+- Below, add one more option: `'label_html' => true,`
+- Refresh again - much better
