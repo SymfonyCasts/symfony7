@@ -27,7 +27,7 @@ Antes hablamos un poco de los roles: todos
 nuestros usuarios tienen un « ROLE_USER ».
 
 00:00:24.916 --> 00:00:29.366 align:middle
-Luego usamos la función de Twig « is_granted()
+Luego usamos la función Twig « is_granted()
 » para comprobar si el usuario tiene ese rol.
 
 00:00:29.956 --> 00:00:34.196 align:middle
@@ -82,17 +82,17 @@ Esta clase base nos ofrece un montón de métodos
 útiles, incluidos los ayudantes de seguridad.
 
 00:01:26.886 --> 00:01:27.526 align:middle
-Siguiente punto:
+Siguiente punto,
 
 00:01:27.526 --> 00:01:33.026 align:middle
 AuthenticatedVoter::IS_AUTHENTICATED_FULLY =>
 $this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY).
 
 00:01:33.026 --> 00:01:36.456 align:middle
-Aquí estoy usando
+estoy usando
 
 00:01:37.186 --> 00:01:40.896 align:middle
-las constantes, pero los valores de cadena sin
+Aquí las constantes, pero los valores de cadena sin
 formato también funcionarían igual de bien. Voy a
 
 00:01:40.896 --> 00:01:42.716 align:middle
@@ -112,7 +112,7 @@ IS_IMPERSONATOR por ahora, ya que tiene que ver
 con suplantar la identidad de usuarios, y lo
 
 00:01:57.566 --> 00:01:59.106 align:middle
-veremos en detalle más adelante. Es hora de
+trataremos en detalle más adelante. Es hora de
 
 00:01:59.806 --> 00:02:01.326 align:middle
 ver estos atributos en acción. Ve a
@@ -145,7 +145,7 @@ usuario actual. Se usa principalmente
 
 00:02:19.136 --> 00:02:23.936 align:middle
 en tu configuración de seguridad para marcar
-específicamente una ruta o camino como público. Como
+específicamente una ruta o un camino como público. Como
 
 00:02:24.646 --> 00:02:29.206 align:middle
 comprobación deisGranted(), es básicamente inútil
@@ -153,10 +153,11 @@ porque casi siempre devolverá true. Ahora, ve
 
 00:02:29.986 --> 00:02:36.566 align:middle
 a la página de inicio de sesión e inicia sesión con el nombre de
-usuario picard@enterprise.space y la contraseña: makeitso. Deja marcada la
+usuario picard@enterprise.space y la contraseña: makeitso. Mantén
 
 00:02:37.156 --> 00:02:38.746 align:middle
-opción «Recordarme». Ahora comprueba
+marcada la opción
+«Recordarme». Ahora comprueba
 
 00:02:39.626 --> 00:02:40.506 align:middle
 el volcado. ROLE_USER es
@@ -232,7 +233,7 @@ visita nuestra web. ¡ Seguiría
 
 00:03:47.316 --> 00:03:49.536 align:middle
 iniciada sesión como el usuario
-anterior! Probablemente habrás
+anterior! Probablemente hayas
 
 00:03:50.226 --> 00:03:53.756 align:middle
 visto cómo algunas webs te piden que vuelvas
@@ -251,8 +252,8 @@ restringir ciertas acciones solo a usuarios
 totalmente autenticados asegurándote de que
 
 00:04:04.966 --> 00:04:09.886 align:middle
-tengan el atributo « IS_AUTHENTICATED_FULLY »,
-mientras permites a los usuarios recordados realizar
+tengan el atributo « IS_AUTHENTICATED_FULLY », mientras
+permites a los usuarios que han marcado «Recordarme» realizar
 
 00:04:09.886 --> 00:04:14.636 align:middle
 acciones menos delicadas simplemente comprobando
@@ -274,10 +275,10 @@ los mismos valores que cuando iniciamos sesión con
 «Recordarme» marcado... incluso IS_AUTHENTICATED_REMEMBERED...
 
 00:04:30.116 --> 00:04:32.176 align:middle
-¿ Qué pasa con
+Qué pasa con
 
 00:04:32.606 --> 00:04:33.276 align:middle
-eso? « IS_AUTHENTICATED_REMEMBERED » es
+¿ eso? « IS_AUTHENTICATED_REMEMBERED » es
 
 00:04:34.006 --> 00:04:38.236 align:middle
 una pequeña peculiaridad histórica
