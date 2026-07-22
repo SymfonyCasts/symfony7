@@ -1,4 +1,15 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_errors(form) }}
+
+{#    {{ dump(form) }}#}
+    {% if form.status is defined %}
+        {{ form_row(form.status) }}
+    {% else %}
+        <div class="mb-6 text-gray-800">
+            Status: <span class="text-white">{{ form.vars.data.status.value }}</span>
+        </div>
+    {% endif %}
+
+    {{ form_rest(form) }}
     <button class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

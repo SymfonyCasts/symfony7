@@ -98,7 +98,7 @@
 - Go search the created part - here it is! It worked as before
 - But now our PHP code is more correct and reflects the database setup
 
-## Сonditionally show/hide form fields based on the underlying data (instead of passing those via constructor directly).
+## Conditionally show/hide form fields based on the underlying data (instead of passing those via constructor directly).
 - If you go to /admin/starship/edit
 - And we allow choosing a status
 - But for new ships the status should be always `waiting`
@@ -127,8 +127,6 @@
 - Update `private ?StarshipStatusEnum $status = StarshipStatusEnum::WAITING;`
 - Go create a new starship - no status field, as expected
 - But when you edit the created starship - the status field is there, and you can edit it
-- TODO Print the field value manually via vars
-...
 - ### ...
 - Let's allow writing in `slug` field only on creation to avoid URL changes for existing starships for SEO purposes
 - With text fields - we can make them readonly
@@ -164,3 +162,26 @@
 - Now go to `StarshipAdminController::edit()`
 - Add `'is_admin' => $this->isGranted('ROLE_ADMIN'),` as options to `createForm()`
 - Reload the page to see the field can be still  edited by admins
+
+## Cover form rendering variables via `form.vars.value`
+- But we completely hide status for create form
+- It may be clearer if we still print the status in the form for clarity
+- Open `starship_admin/new.html.twig`
+- Aha, the form is actually rendered in `templates/starship_admin/_form.html.twig` - open that
+- Instead of rendering the whole form let's just render errors first: `{{ form_errors(form) }}`
+  You should remember from the Basic Forms it renders global form errors,
+  we don't want to miss them.
+- Then `{{ form_rest(form) }}`
+- Between, we're going to render either status as a text or select field
+- We can render a specific field as `{{ form_row(form.status) }}`
+- How can we check if the form has status field?
+- Let's wrap it in `if form.status is defined` check is enough
+- In `else`, we need to print the status as text
+- But how to get access to the entity? Should we pass it from the controller to this template?
+- Well, there's an easier way. Dump the form object w/ `dump(form)`
+- Aha, we have `vars`... open it
+- The `form.vars.data` contain the Starship object that we can use
+- There's also `form.vars.value` that has a bit different meaning, we need data in this case
+- Print the status w/ `Status: {{ form.vars.data.status.value }}`
+- Wrap it w/ a `<div class="mb-6 text-gray-800">`
+- Refresh the page to see the "waiting" status
