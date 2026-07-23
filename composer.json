@@ -35,6 +35,7 @@
         "symfony/security-csrf": "8.1.*",
         "symfony/serializer": "8.1.*",
         "symfony/stimulus-bundle": "^2.34",
+        "symfony/translation": "8.1.*",
         "symfony/twig-bundle": "8.1.*",
         "symfony/ux-turbo": "^2.34",
         "symfony/validator": "8.1.*",

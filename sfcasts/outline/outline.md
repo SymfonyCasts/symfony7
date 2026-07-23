@@ -197,3 +197,31 @@
 - If we're sure there's no potential XSS there - we can enable HTML in label
 - Below, add one more option: `'label_html' => true,`
 - Refresh again - much better
+
+## Translatable help messages w/ `new TranslatableMessage()` that include all the information needed
+- Let's add a help message for `captain` field on the `StarshipType`
+- Add options, `'help'` option
+- And set its value to `sprintf('The captain will command %s droids on the starship', $starship->getStarshipDroids()->count())`
+- If you try to create a new Starship - it will say 0 droids
+- If uoi edit existing - it will say xx droids
+- But what if I want to say "1 droid" instead of "1 droids"?
+- Yeah, we can use if-else to change that part, but Symfony has a special component that can help with this job perfectly
+- Translation component is integrated perfectly in Symfony forms
+- It can translate labels, help, and other attrs.
+- Even though we have a single-locale website, it still can be perfectly used for pluralization
+- Install w/ `symfony composer req translations`
+- It will add `symfony/translation` to `composer.json` though the package was already installed as indirect dep
+- Next, create a translation file `translations/messages+intl-icu.en.yaml`
+- There are a few syntaxes, but ICU is the most flexible
+- Note: Watch our Translations tutorial to know more!
+- Add `form.starship.captain_droids: > {count, plural,`
+- Next, `add =0 {No droids on the starship yet}`
+  Then `one {The captain will command a single droid on the starship}`
+  And `other {The captain will command # droids on the starship}`
+- To pass the actual number, add `help_translation_parameters` below
+- And set it to `[]`, inside: `'count' => $starship->getStarshipDroids()->count(),`
+- Go reload the page - now the message is translated
+- But instead of passing all this data separately, Symfony now allow you to pass it as a single object
+- Set `help` to `new TranslatableMessage()` and pass the values there
+- Relaod the page to see everything still works
+- 

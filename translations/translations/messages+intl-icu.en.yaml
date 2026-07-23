@@ -1,0 +1,6 @@
+form.starship.captain_droids: >
+    {count, plural,
+        =0 {No droids on the starship yet}
+        one {The captain will command a single droid on the starship}
+        other {The captain will command # droids on the starship}
+    }

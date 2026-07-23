@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 
 class StarshipType extends AbstractType
 {
@@ -33,7 +34,16 @@ class StarshipType extends AbstractType
             ])
             ->add('name')
             ->add('class')
-            ->add('captain')
+            ->add('captain', null, [
+//                'help' => sprintf('The captain will command %s droids on the starship', $starship->getStarshipDroids()->count()),
+//                'help' => 'form.starship.captain_droids',
+//                'help_translation_parameters' => [
+//                    'count' => $starship->getStarshipDroids()->count(),
+//                ],
+                'help' => new TranslatableMessage('form.starship.captain_droids', [
+                    'count' => $starship->getStarshipDroids()->count(),
+                ]),
+            ])
             ->add('arrivedAt', null, [
                 'widget' => 'single_text',
             ])
