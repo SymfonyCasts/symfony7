@@ -205,8 +205,7 @@ Actualizar tu aplicación es solo una parte de la historia. El mantenimiento con
 implica estar atento a tus dependencias, entender los avisos de seguridad
 y aplicar las actualizaciones cuando sea necesario.
 
-Por suerte, Composer nos ofrece herramientas excelentes para que ese proceso sea mucho
-más fácil.
+Por suerte, Composer nos ofrece herramientas excelentes para facilitar mucho ese proceso.
 
 ***SEEALSO
 Para más información, echa un vistazo a nuestra entrada del blog sobre
