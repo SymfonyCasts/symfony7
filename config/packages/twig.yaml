@@ -1,7 +1,8 @@
 twig:
     file_name_pattern: '*.twig'
     form_themes:
-        - tailwind_2_layout.html.twig
+        #- tailwind_2_layout.html.twig
+        - _form-theme.html.twig
 
 when@test:
     twig:

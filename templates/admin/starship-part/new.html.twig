@@ -1,12 +1,22 @@
 {% extends 'base.html.twig' %}
 
 {#{% form_theme form 'tailwind_2_layout.html.twig' %}#}
+{% form_theme form _self %}
+
+{% block credits_widget %}
+    <div class="flex border border-gray-300 overflow-hidden">
+        <span class="px-3 flex items-center bg-gray-100 text-gray-500">₡</span>
+{#        {{ parent() }}#}
+        {{ block('form_widget') }}
+    </div>
+{% endblock %}
 
 {% block title %}Admin : New Starship Part{% endblock %}
 
 {% block body %}
     <div class="max-w-4xl mx-auto">
         <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Register a New Starship Part</h1>
+{#        {{ dump(form.price.vars) }}#}
 
         {{ form_start(form) }}
             {{ form_errors(form) }}

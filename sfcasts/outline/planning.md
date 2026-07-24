@@ -2,17 +2,17 @@
 
 Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94 
 
-- Form rendering
+//- Form rendering
 //    - Cover form rendering variables via `form.field.vars`
     - Cover more form field helpers left uncovered: `form_(id|name|value|label|help|choices)` - an iterator for choice fields
 //    - Allow HTML contents in form labels w/ `label_html` option
 //    - Translatable help messages w/ `new TranslatableMessage()` that include all the information needed
-- Form theming
-    - Form theme blocks
-    - Form theme block variables
-    - The `block_prefix` option for easier form customization
-    - Kevin: One thing I wanted to mention is: let's show a rock solid method to find the different block names - maybe from the profiler? This trips me up a lot (
-    - Custom form theme based on core one
+//- Form theming
+//    - Form theme blocks
+//    - Form theme block variables
+//    - The `block_prefix` option for easier form customization
+//    - Kevin: One thing I wanted to mention is: let's show a rock solid method to find the different block names - maybe from the profiler? This trips me up a lot (
+//    - Custom form theme based on core one
     - Custom reusable form field type based on core one
     - Custom type /w theme (a custom widget)
 - Advanced validation

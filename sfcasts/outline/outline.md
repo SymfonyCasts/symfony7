@@ -223,5 +223,86 @@
 - Go reload the page - now the message is translated
 - But instead of passing all this data separately, Symfony now allow you to pass it as a single object
 - Set `help` to `new TranslatableMessage()` and pass the values there
-- Relaod the page to see everything still works
-- 
+- Reload the page to see everything still works
+
+## Form theme blocks
+- Open /admin/starship-part/new and view the page source
+- Notice all the wrapping `<div>`s, labels, and classes around each field
+- We never wrote any of that markup, but you know from Basics course where it comes from
+- It comes from the default Tailwind form theme
+- Open `config/packages/twig.yaml`
+- See `form_themes` set to `tailwind_2_layout.html.twig`
+- This is a built-in theme shipped with Symfony
+- Every single piece of a field is rendered by a Twig block
+- `form_row` is the outer block - it calls `form_label`, `form_widget`, `form_errors` and `form_help`
+- Let's peek at the source
+- Open `vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig`
+- It's just a bunch of `{% block ... %}` - and it extends `form_div_layout.html.twig` which holds the base markup
+- Key concept: Symfony picks the block to render a field by its name, walking a hierarchy from the most specific to the most generic (fallback)
+- Our goal for this section: add a "credits" addon right inside the `price` field's input
+
+## Find form theme block names with the Profiler
+- To customize the `price` widget, we first need to know which block renders it
+- Guessing block names is painful - let's do it the rock-solid way instead
+- Reload /admin/starship-part/new and open the profiler for that request (click the request in the WDT)
+- Click the "Forms" panel on the left
+- Expand the form tree and click the `price` field
+- On the right, find the "View Vars" section
+- Look at `block_prefixes` - it's an ordered array from generic to specific
+  e.g. something like `['form', 'number', '_starship_part_price']`
+- Here's the rule: ANY entry in `block_prefixes` + a suffix (`_row`, `_widget`, `_label`, `_help`, `_errors`) is a valid block name you can override
+- The last entry is the most specific one - it wins over the earlier ones
+- No more guessing: the profiler tells you the exact names
+- Bonus: you can also print them right in the template
+- In the `templates/admin/starship-part/new.html.twig`, add `{{ dump(form.price.vars) }}`
+- And search for `block_prefixes` 
+
+## Override a form theme block and its block variables
+- Now let's actually override a block
+- Two ways to register a theme: a separate theme file, or inline in the current template
+- Let's do it inline - open `templates/admin/starship-part/new.html.twig`
+- At the top, add `{% form_theme form _self %}` - this tells the form to look for blocks in THIS template
+- Let's override `_starship_part_price_widget` to prepend a currency icon to the *price* field
+- Add `{% block _starship_part_price_widget %}` ... `{% endblock %}`
+- Inside, add `<div class="flex rounded-lg border border-gray-300 overflow-hidden">`
+- And inside of that: `<span class="px-3 flex items-center bg-gray-100 text-gray-500">₡</span>`
+- Then `{{ parent() }}` to keep the original help markup
+- Reload the page - an error:
+  > Block "_starship_part_price_widget" should not call parent()
+- Yes, this block is special, so we need to call the "parent" block via `{{ block('form_widget') }}`
+- Reload again - the help message for price field has currency icon now
+
+## The `block_prefix` option for easier form customization
+- It works, but better: give the field its own stable block prefix
+- We don't want to accidentaly change form type or field names and break our custome styles
+- Open `StarshipPartType`
+- On the `price` field, add `'block_prefix' => 'credits',`
+- Check the profiler again - `block_prefixes` now includes `credits`
+- Back in `new.html.twig`, override `{% block credits_widget %}` instead
+- Reload - it still works
+- Bonus: because the prefix is a name we chose, we can reuse `credits_widget` on ANY field
+  on this form just by setting the same `'block_prefix' => 'credits'`
+
+## Custom form theme based on core one
+- This way we can customize not only widgets but any block like row, label, errors, even `help` message block
+- E.g. we can add an ℹ️ icon in front of the help message
+- But if we do it the way we show above - it will apply only to the current form
+- Instead, I would like to apply globally for all forms
+- The proper approach would be to create our custom theme which will "extend" that code default Tailwind theme
+- Create `templates/_form-theme.html.twig`
+- Inside add `{% use 'tailwind_2_layout.html.twig' %}`
+- Now in `config/packages/twig.yaml` use this theme instead of `tailwind_2_layout.html.twig`
+- If you reload the page - nothing is changed
+- Out custom form theme just uses the Tailwind one
+- But now we can customize what we need in it
+- In our custom theme file, create `{% block form_help %}`
+- Inside add `<div class="flex items-start gap-2">`
+- Then inside that `<span class="mt-1">ℹ️</span>` and call `{{ parent() }}`
+- If you reload now - every field has this icon
+- We should only show it when the help message actually set
+- If you track `form_help` widget down to `form_div_layout.html.twig`
+- You will see it uses `if help` check
+- Let's wrap our custom layout in this simple check
+- Reload again - now the icon is only shown on fields where we set `help` message
+- If you open /admin/starship/new - there it is!
+- Done! Now this works globally for all forms

@@ -1,0 +1,10 @@
+{% use 'tailwind_2_layout.html.twig' %}
+
+{% block form_help %}
+    {%- if help -%}
+        <div class="flex items-start gap-2">
+            <span class="mt-1">ℹ️</span>
+            {{ parent() }}
+        </div>
+    {%- endif -%}
+{% endblock %}
