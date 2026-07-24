@@ -68,7 +68,7 @@ from the defaults in `StarshipFactory`:
 Same thing for the `ScoutFactory`, `extends StarshipFactory`, `@extends StarshipFactory<Scout>`,
 and in `defaults()`, merge with `parent::defaults()` and only include the `sensorRange`:
 
-[[[ code('587d4db71b') ]]]
+[[[ code('da3fd0b8d4') ]]]
 
 Nice!
 
