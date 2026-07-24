@@ -1,0 +1,313 @@
+WEBVTT
+
+00:00:00.036 --> 00:00:04.786 align:middle
+Symfony Security tiene algunos
+atributos especiales de autenticación.
+
+00:00:04.786 --> 00:00:08.376 align:middle
+Están definidos como constantes
+en la clase ` AuthenticatedVoter `.
+
+00:00:08.376 --> 00:00:10.886 align:middle
+Los encontrarás en el
+componente Symfony Security.
+
+00:00:10.886 --> 00:00:15.976 align:middle
+Estoy en PhpStorm, así que voy a usar la tecla «Shift»
+dos veces para activar la función de búsqueda.
+
+00:00:16.566 --> 00:00:18.636 align:middle
+Ahora voy a buscar « AuthenticatedVoter »...
+
+00:00:19.136 --> 00:00:19.656 align:middle
+¡Ahí está!
+
+00:00:20.106 --> 00:00:24.306 align:middle
+Antes hablamos un poco de los roles: todos
+nuestros usuarios tienen un « ROLE_USER ».
+
+00:00:24.916 --> 00:00:29.366 align:middle
+Luego usamos la función Twig « is_granted()
+» para comprobar si el usuario tiene ese rol.
+
+00:00:29.956 --> 00:00:34.196 align:middle
+Estos atributos son parecidos a los roles, en el sentido
+de que son cadenas de texto, pero no son lo mismo.
+
+00:00:34.856 --> 00:00:37.236 align:middle
+Los roles están asociados
+al objeto de usuario.
+
+00:00:37.726 --> 00:00:42.906 align:middle
+Estos atributos de autenticación se determinan en tiempo de
+ejecución en función del estado actual de inicio de sesión.
+
+00:00:43.356 --> 00:00:47.406 align:middle
+Nos indican si el usuario ha iniciado
+sesión, pero también cómo lo ha hecho.
+
+00:00:47.916 --> 00:00:50.696 align:middle
+La mejor forma de entender estos
+atributos es verlos en acción.
+
+00:00:51.346 --> 00:00:55.536 align:middle
+Abre src/Controller/MainController
+y busca nuestro método homepage.
+
+00:00:56.596 --> 00:01:01.606 align:middle
+Añade dump() y, dentro, tendrás un
+array asociativo con las siguientes claves
+
+00:01:01.606 --> 00:01:08.106 align:middle
+y valores: ROLE_USER =>
+$this->isGranted('ROLE_USER').
+
+00:01:08.766 --> 00:01:13.266 align:middle
+Sé que dijimos que estos atributos no son
+roles, pero se usan de la misma manera, así que
+
+00:01:13.266 --> 00:01:15.006 align:middle
+primero comprobaremos si
+tienes el rol « ROLE_USER ».
+
+00:01:15.716 --> 00:01:17.766 align:middle
+El método isGranted() está disponible
+
+00:01:17.766 --> 00:01:21.266 align:middle
+porque nuestra clase de controlador
+hereda de AbstractController.
+
+00:01:21.736 --> 00:01:26.036 align:middle
+Esta clase base nos ofrece un montón de métodos
+útiles, incluidos los ayudantes de seguridad.
+
+00:01:26.886 --> 00:01:27.526 align:middle
+Siguiente punto,
+
+00:01:27.526 --> 00:01:33.026 align:middle
+AuthenticatedVoter::IS_AUTHENTICATED_FULLY =>
+$this->isGranted(AuthenticatedVoter::IS_AUTHENTICATED_FULLY).
+
+00:01:33.026 --> 00:01:36.456 align:middle
+estoy usando
+
+00:01:37.186 --> 00:01:40.896 align:middle
+Aquí las constantes, pero los valores de cadena sin
+formato también funcionarían igual de bien. Voy a
+
+00:01:40.896 --> 00:01:42.716 align:middle
+pasarme rápido por el resto... ¿Los he
+
+00:01:45.856 --> 00:01:46.606 align:middle
+incluido todos? 1, 2,
+
+00:01:47.116 --> 00:01:50.376 align:middle
+3, 4, 5, y en AuthenticatedVoter... 1, 2,
+
+00:01:50.646 --> 00:01:53.446 align:middle
+3, 4, 5, 6. Me salto
+
+00:01:53.446 --> 00:01:57.566 align:middle
+IS_IMPERSONATOR por ahora, ya que tiene que ver
+con suplantar la identidad de usuarios, y lo
+
+00:01:57.566 --> 00:01:59.106 align:middle
+trataremos en detalle más adelante. Es hora de
+
+00:01:59.806 --> 00:02:01.326 align:middle
+ver estos atributos en acción. Ve a
+
+00:02:01.746 --> 00:02:03.136 align:middle
+la página de inicio de nuestra
+app... asegúrate de que
+
+00:02:03.366 --> 00:02:04.506 align:middle
+no has iniciado sesión...
+y actualiza la página.
+
+00:02:04.716 --> 00:02:05.476 align:middle
+Genial, aquí está
+
+00:02:06.166 --> 00:02:07.306 align:middle
+nuestro volcado. Todos son
+
+00:02:07.726 --> 00:02:11.156 align:middle
+«false», excepto PUBLIC_ACCESS,
+que es «true». PUBLIC_ACCESS es
+
+00:02:11.946 --> 00:02:13.806 align:middle
+el que se sale de la tónica. A
+diferencia de IS_AUTHENTICATED_FULLY
+
+00:02:13.926 --> 00:02:18.906 align:middle
+o IS_REMEMBERED, no describe al
+usuario actual. Se usa principalmente
+
+00:02:19.136 --> 00:02:23.936 align:middle
+en tu configuración de seguridad para marcar
+específicamente una ruta o un camino como público. Como
+
+00:02:24.646 --> 00:02:29.206 align:middle
+comprobación deisGranted(), es básicamente inútil
+porque casi siempre devolverá true. Ahora, ve
+
+00:02:29.986 --> 00:02:36.566 align:middle
+a la página de inicio de sesión e inicia sesión con el nombre de
+usuario picard@enterprise.space y la contraseña: makeitso. Mantén
+
+00:02:37.156 --> 00:02:38.746 align:middle
+marcada la opción
+«Recordarme». Ahora comprueba
+
+00:02:39.626 --> 00:02:40.506 align:middle
+el volcado. ROLE_USER es
+
+00:02:41.356 --> 00:02:45.266 align:middle
+true, nada de extrañar, todos los usuarios
+tienen este rol. IS_AUTHENTICATED_FULLY es
+
+00:02:45.996 --> 00:02:48.936 align:middle
+true solo cuando el usuario
+ha iniciado sesión durante
+
+00:02:48.936 --> 00:02:51.196 align:middle
+la sesión actual, como acabamos
+de hacer. IS_REMEMBERED es
+
+00:02:51.986 --> 00:02:56.386 align:middle
+false porque no solo estamos «recordados», sino que
+estamos totalmente autenticados. IS_AUTHENTICATED es
+
+00:02:57.056 --> 00:03:01.546 align:middle
+true siempre que estés autenticado, ya sea
+totalmente o como «recordado». Vamos a
+
+00:03:01.546 --> 00:03:04.146 align:middle
+repetir nuestro truco para borrar
+la cookie de sesión. Inspecciona la
+
+00:03:04.696 --> 00:03:10.736 align:middle
+página, abre la pestaña «Aplicación», busca
+la cookie PHPSESSID y bórrala. Ahora actualiza
+
+00:03:11.896 --> 00:03:13.806 align:middle
+la página y comprueba el
+volcado. ¿Qué ha cambiado?
+
+00:03:14.356 --> 00:03:15.076 align:middle
+Bueno, ROLE_USER
+
+00:03:15.526 --> 00:03:18.566 align:middle
+y IS_AUTHENTICATED siguen siendo
+verdaderos, pero IS_AUTHENTICATED_FULLY
+
+00:03:18.836 --> 00:03:23.266 align:middle
+ahora es falso, y IS_REMEMBERED
+ahora es verdadero. Puedes
+
+00:03:24.016 --> 00:03:27.796 align:middle
+ver cómo se pueden usar estos atributos para saber
+cómo está autenticado el usuario. ¿ Por qué es
+
+00:03:28.276 --> 00:03:29.246 align:middle
+esto importante? ¿ Por qué no
+
+00:03:29.516 --> 00:03:32.496 align:middle
+limitarse simplemente a
+IS_AUTHENTICATED y ya está? Bueno, un
+
+00:03:32.496 --> 00:03:36.876 align:middle
+usuario «recordado» se considera menos seguro
+que uno totalmente autenticado. Imagina a un
+
+00:03:37.556 --> 00:03:41.796 align:middle
+usuario que ha iniciado sesión en un ordenador
+público y ha marcado la opción «Recordarme». Cierra
+
+00:03:42.186 --> 00:03:43.766 align:middle
+el navegador y se marcha. La siguiente
+
+00:03:44.256 --> 00:03:46.946 align:middle
+persona abre el navegador y
+visita nuestra web. ¡ Seguiría
+
+00:03:47.316 --> 00:03:49.536 align:middle
+iniciada sesión como el usuario
+anterior! Probablemente hayas
+
+00:03:50.226 --> 00:03:53.756 align:middle
+visto cómo algunas webs te piden que vuelvas
+a introducir tu contraseña al realizar
+
+00:03:53.756 --> 00:03:57.756 align:middle
+acciones delicadas, como cambiar tu dirección
+de correo o tu contraseña. ¡ Así es
+
+00:03:58.266 --> 00:04:01.146 align:middle
+como puedes hacer lo mismo
+en tus aplicaciones! Puedes
+
+00:04:01.146 --> 00:04:04.696 align:middle
+restringir ciertas acciones solo a usuarios
+totalmente autenticados asegurándote de que
+
+00:04:04.966 --> 00:04:09.886 align:middle
+tengan el atributo « IS_AUTHENTICATED_FULLY », mientras
+permites a los usuarios que han marcado «Recordarme» realizar
+
+00:04:09.886 --> 00:04:14.636 align:middle
+acciones menos delicadas simplemente comprobando
+el atributo « IS_AUTHENTICATED ». Probemos
+
+00:04:15.506 --> 00:04:18.246 align:middle
+una última combinación: cierra
+sesión... y vuelve a iniciar sesión,
+
+00:04:18.616 --> 00:04:22.346 align:middle
+pero esta vez desmarca la opción
+«Recordarme»... Echa un vistazo al
+
+00:04:25.156 --> 00:04:25.846 align:middle
+volcado. Son
+
+00:04:26.416 --> 00:04:29.806 align:middle
+los mismos valores que cuando iniciamos sesión con
+«Recordarme» marcado... incluso IS_AUTHENTICATED_REMEMBERED...
+
+00:04:30.116 --> 00:04:32.176 align:middle
+Qué pasa con
+
+00:04:32.606 --> 00:04:33.276 align:middle
+¿ eso? « IS_AUTHENTICATED_REMEMBERED » es
+
+00:04:34.006 --> 00:04:38.236 align:middle
+una pequeña peculiaridad histórica
+en la nomenclatura de Symfony. No
+
+00:04:38.806 --> 00:04:42.166 align:middle
+significa: «¿está este usuario autenticado
+mediante la opción “Recordarme”?». Significa:
+
+00:04:42.516 --> 00:04:46.706 align:middle
+«¿Está este usuario autenticado al menos tanto como un usuario
+con la opción “Recordarme”?». « IS_AUTHENTICATED » se
+
+00:04:47.276 --> 00:04:51.636 align:middle
+añadió más tarde para significar lo mismo,
+pero sin ese nombre tan confuso. Puede que
+
+00:04:52.296 --> 00:04:55.836 align:middle
+veas IS_AUTHENTICATED_REMEMBERED
+en código antiguo de Symfony, pero
+
+00:04:56.126 --> 00:04:58.596 align:middle
+a partir de ahora deberías usar
+IS_AUTHENTICATED. ¡Uf! ¡Con esto
+
+00:04:58.596 --> 00:05:02.186 align:middle
+terminamos con estos atributos
+especiales! A continuación,
+
+00:05:02.186 --> 00:05:05.896 align:middle
+profundizaremos en los roles y el
+sistema de jerarquía de roles.
