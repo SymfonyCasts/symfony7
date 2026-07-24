@@ -1,75 +1,129 @@
-# Fijaciones de Fundición para Herencia
+# Fixtures de Foundry para Inheritance
 
-Vale, nos quedamos con un error cuando intentamos cargar nuestros fixtures. Abre`src/Factory/StarshipFactory`. Básicamente, ahora que hemos hecho de `Starship` una MappedSuperclass abstracta, ya no se puede instanciar y persistir por sí misma.
+Vale, nos quedamos con un error cuando intentamos cargar nuestros fixtures. Abre
+`src/Factory/StarshipFactory`. Básicamente, ahora que hemos convertido `Starship` en una
+clase abstracta MappedSuperclass, ya no se puede instanciar ni persistir por sí misma.
 
-Tenemos que crear fábricas independientes para nuestras dos nuevas entidades subestelares: `Freighter` y `Scout`. ¡Fácil! Ejecuta en el terminal:
+Tenemos que crear fábricas independientes para nuestras dos nuevas entidades de subnaves espaciales:
+la `Freighter` y la `Scout`. ¡Pan comido! En la terminal, ejecuta:
 
 ```terminal
 symfony console make:factory
 ```
 
-Una característica ingeniosa de Foundry es que puedes crear fábricas individualmente, o puedes elegir "todas" y creará fábricas para todas las entidades que aún no tengan una. Selecciona "todas" y... ¡voilá! Ahora, si volvemos a nuestro código, tenemos dos nuevas y relucientes fábricas.
+Una característica genial de Foundry es que puedes crear fábricas individualmente,
+o simplemente puedes elegir «all» y creará fábricas para todas las
+entidades que aún no tengan una. Selecciona «all» y... ¡voilà! Ahora, si
+volvemos a nuestro código, tenemos dos fábricas nuevas y relucientes.
 
-## Gestión de los valores predeterminados duplicados
+## Gestión de valores predeterminados duplicados
 
-Verás que nuestros valores predeterminados están básicamente duplicados, excepto la capacidad de carga del `Freighter` y el alcance de los sensores del `Scout`.
+Te darás cuenta de que nuestros valores por defecto están básicamente duplicados, excepto la
+capacidad de carga del `Freighter` y el alcance de los sensores del `Scout`.
 
-Podemos llevar los valores predeterminados compartidos hasta `StarshipFactory` y luego anular los valores predeterminados específicos en `FreighterFactory` y `ScoutFactory`.
+Podemos trasladar los valores predeterminados compartidos a la « `StarshipFactory` » y luego simplemente sobrescribir
+los valores específicos en la « `FreighterFactory` » y la « `ScoutFactory` ».
 
-Para ello, necesitamos reflejar la estructura de herencia que tenemos con nuestras entidades para las fábricas de Foundry.
+Para ello, tenemos que replicar la estructura de herencia que tenemos con nuestras entidades
+para las fábricas de Foundry.
 
-## Hacer abstracta la StarshipFactory
+## Convertir StarshipFactory en abstracta
 
-Empieza con `StarshipFactory`. Hazlo abstracto para que quede claro que no debe utilizarse directamente. En el docblock, espolvorearemos algunos genéricos PHP para ayudar con el autocompletado. Añade nuestra propia plantilla con `@template T of Starship`. Esto indica que nuestra plantilla `T` sólo puede ser del tipo `Starship`, o cualquier subclase de `Starship`. A continuación, modifica la `@extends` a `PersistentProxyObjectFactory<T>` para que utilice nuestra plantilla. Ahora, cualquier subfábrica que extienda `StarshipFactory` puede especificar su propio tipo de nave estelar para `T`, y obtendremos autocompletado para ese tipo de nave estelar cuando utilicemos la fábrica.
+Empieza por `StarshipFactory`. Hazla abstracta para que quede claro que no debe
+usarse directamente. En el docblock, añadiremos algunos genéricos de PHP para ayudar
+con el autocompletado. Añade nuestra propia plantilla con `@template T of Starship`.
+Esto indica que nuestra plantilla `T` solo puede ser de tipo `Starship`, o cualquier
+subclase de `Starship`. A continuación, modifica `@extends` por `PersistentProxyObjectFactory<T>` para
+usar nuestra plantilla:
+
+[[[ code('748965f26b') ]]]
+
+Ahora, cualquier subfábrica que extienda ` `StarshipFactory` ` puede especificar su propio
+tipo `Starship` para ` `T``, y tendrás autocompletado para ese tipo `Starship` cuando uses la fábrica.
 
 ***TIP
-Si utilizas herramientas de análisis estático como PHPStan, esto también le ayudará a comprender mejor los tipos y a detectar cualquier problema relacionado con ellos.
+Si usas herramientas de análisis estático como PHPStan, esto también les ayudará a entender mejor los tipos
+y a detectar cualquier problema relacionado con ellos.
 ***
 
-Además, como es abstracto, podemos prescindir del método `class()`, que siempre tendrá que ser invocado por las subfábricas.
+Además, como es abstracto, podemos prescindir del método ` `class()` `: siempre tendrá que ser
+sobrescrito desde las subfábricas.
 
-## Modificar FreighterFactory y ScoutFactory
+## Modificando FreighterFactory y ScoutFactory
 
-Es hora de una de mis cosas favoritas, ¡eliminar código duplicado!
+¡Es hora de hacer una de mis cosas favoritas: eliminar código duplicado!
 
-En `FreighterFactory`, que sea `extends StarshipFactory`, y en el docblock, cambia el `@extends` por `StarshipFactory<Freighter>`. Abajo, en `defaults()`, envuelve el array devuelto en un `array_merge()`. Primer argumento:`parent::defaults()`, ¡no olvides cerrar los paréntesis! Para el segundo argumento, podemos reducirlo a sólo `cargoCapacity`, ya que es lo único que difiere de los valores predeterminados en `StarshipFactory`.
+En ` `FreighterFactory``, ponlo así: ` `extends StarshipFactory``,
+y en el docblock, cambia ` `@extends` ` por ` `StarshipFactory<Freighter>``:
 
-Lo mismo para el `ScoutFactory`, `extends StarshipFactory`, `@extends StarshipFactory<Scout>`, y en `defaults()`, fusionar con `parent::defaults()` e incluir sólo el `sensorRange`.
+[[[ code('9df947dcad') ]]]
 
-¡Qué bien!
+Más abajo, en `defaults()`, envuelve el array devuelto en un `array_merge()`. Primer argumento:
+`parent::defaults()`, ¡no te olvides de cerrar los paréntesis! Para el segundo argumento,
+podemos reducirlo solo a `cargoCapacity`, ya que es lo único que difiere
+de los valores por defecto en `StarshipFactory`:
 
-## Cargando de nuevo los accesorios
+[[[ code('f0e9345f84') ]]]
 
-De vuelta en el terminal, ¡vamos a cargar de nuevo estos dispositivos!
+Lo mismo con `ScoutFactory`, `extends StarshipFactory`, `@extends StarshipFactory<Scout>`,
+y en `defaults()`, fusiona con `parent::defaults()` e incluye solo `sensorRange`:
+
+[[[ code('da3fd0b8d4') ]]]
+
+¡Genial!
+
+## Cargando los fixtures de nuevo
+
+Volvamos a la terminal y probemos a cargar estos fixtures otra vez.
 
 ```terminal
 symfony console foundry:load-fixtures
 ```
 
-El mismo error. Oh, duh... ¡hemos creado las nuevas fábricas, pero aún no las estamos utilizando!
+Mmm, el mismo error. Ah, claro… ¡hemos creado las nuevas fábricas, pero aún no las estamos usando!
 
-Abre `src/Story/AppStory`. Esta es la historia por defecto que Foundry carga al cargar las instalaciones. Abajo, en el método `build()`, sustituye `StarshipFactory::createMany(3)`por `FreighterFactory::createMany(3)`. Además, duplica esta línea y cámbiala por`ScoutFactory::createMany(3)` para cargar también algunas Exploradoras. 6 naves estelares en total.
+Abre `src/Story/AppStory`. Esta es la historia predeterminada que carga Foundry al
+cargar los fixtures. En el método `build()`, sustituye `StarshipFactory::createMany(3)`
+por `FreighterFactory::createMany(3)`. Además, duplica esta línea y cámbiala por
+`ScoutFactory::createMany(3)` para cargar también algunos Scouts. 6 naves espaciales en total:
 
-Ejecuta de nuevo el comando cargar accesorios:
+[[[ code('ea54781502') ]]]
+
+Ejecuta nuevamente el comando de carga de fixtures:
 
 ```terminal-silent
 symfony console foundry:load-fixtures
 ```
 
-Fantástico, ¡está totalmente cargado!
+¡Genial, ya está todo cargado!
 
-## Corregir el error del controlador y mostrar las naves estelares
+## Corregir el error del controlador y mostrar las naves espaciales
 
-Vuelve a la página de inicio, donde aparecen las naves estelares, y mira lo que tenemos.
+Vuelve a nuestra página de inicio, donde aparecen las naves espaciales, y echa un vistazo a lo que tenemos.
 
-Uy, tenemos un error. Nuestro controlador sigue intentando cargar naves estelares desde nuestro `StarshipRepository`. Esto no funciona porque `Starship` ya no es una entidad válida. Es el mismo problema que tuvimos antes al utilizar directamente `StarshipFactory`.
+Vaya, tenemos un error. Nuestro controlador sigue intentando cargar naves espaciales
+desde nuestro `StarshipRepository`. Esto no funciona porque `Starship` ya no es
+una entidad válida. Es el mismo problema que tuvimos al usar directamente `StarshipFactory`
+antes.
 
-Para solucionarlo, abre `src/Controller/MainController`. En el método `homepage()`, sustituye el`StarshipRepository` inyectado por `ScoutRepository`. Esto debería recuperar todas las naves exploradoras.
+Para solucionarlo, abre `src/Controller/MainController`. En el método `homepage()`, sustituye el`StarshipRepository` inyectado por `ScoutRepository`:
 
-Actualiza la página de inicio... ¡y ya está! Éstas son nuestras tres Exploradoras.
+[[[ code('acf8d6bf0b') ]]]
 
-¿Y los Cargueros? Bueno, también podríamos inyectar el `FreighterRepository`, buscarlos también y fusionarlos con los exploradores. Pero esto no es lo ideal, no se escalaría bien. Imagina que tuviéramos 20 tipos diferentes de naves estelares: tendríamos que inyectar 20 repositorios diferentes... ¡Qué asco!
+Ahora debería cargar todas las naves espaciales Scout.
 
-Así es como tendrías que hacerlo con las Superclases Mapeadas. En realidad no es una limitación de las Superclases Mapeadas, simplemente no es su propósito. Están más pensadas para compartir propiedades comunes y mapeos entre entidades, no para consultar una jerarquía de entidades.
+Actualiza la página de inicio... ¡y ya está! Estas son nuestras tres naves Scout.
 
-¿No sería estupendo poder inyectar la `StarshipRepository` y que devolviera tanto Exploradores como Cargueros? ¡Pues sí! Pero para ello tenemos que utilizar otro tipo de herencia. ¡Eso a continuación!
+¿Y qué hay de los cargueros? Bueno, también podríamos inyectar el `FreighterRepository`,
+recogerlos también y fusionarlos con los Scout. Pero esto no es lo ideal,
+no se adaptaría bien a un mayor volumen. Imagina que tuviéramos 20 tipos diferentes de naves espaciales: tendríamos
+que inyectar 20 repositorios diferentes... ¡Qué asco!
+
+Así es como tendrías que hacerlo con las superclases mapeadas. En realidad no es una
+limitación de las superclases mapeadas, simplemente no es para lo que sirven. Están pensadas más bien
+para compartir propiedades y mapeos comunes entre entidades, no para realizar consultas a través de
+una jerarquía de entidades.
+
+¿No sería genial si pudiéramos seguir inyectando la clase « `StarshipRepository` » y que devolviera
+tanto «Scouts» como «Freighters»? ¡Pues sí que podemos! Pero para ello, tenemos que usar un tipo diferente
+de herencia. ¡Eso a continuación!
