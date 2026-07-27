@@ -1,0 +1,254 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:02.796 align:middle
+¿Sabías que los roles pueden
+tener roles secundarios?
+
+00:00:03.256 --> 00:00:06.726 align:middle
+¡Sí! Y un rol principal hereda
+todos los roles secundarios.
+
+00:00:07.096 --> 00:00:08.736 align:middle
+A esto se le llama jerarquía de roles.
+
+00:00:09.506 --> 00:00:13.336 align:middle
+Para ilustrar la jerarquía de roles, vamos
+a crear el rol principal más habitual:
+
+00:00:13.646 --> 00:00:14.536 align:middle
+ROLE_ADMIN.
+
+00:00:15.066 --> 00:00:18.776 align:middle
+Los usuarios con este rol se considerarán
+administradores y podrán hacer más cosas
+
+00:00:18.776 --> 00:00:20.566 align:middle
+que un usuario estándar, como un capitán.
+
+00:00:21.266 --> 00:00:23.066 align:middle
+Primero, vamos a crear
+un usuario administrador.
+
+00:00:23.536 --> 00:00:28.936 align:middle
+Abre src/Story/AppStory, busca dónde
+estamos creando a Picard y duplícalo.
+
+00:00:29.976 --> 00:00:32.636 align:middle
+Para el nombre, usa Kathryn Janeway... y para
+
+00:00:32.906 --> 00:00:36.126 align:middle
+el correo electrónico,
+janeway@starfleet.space.
+
+00:00:36.526 --> 00:00:40.716 align:middle
+Es almirante en el mando de la Flota Estelar, así que
+tiene sentido que tenga privilegios de administrador.
+
+00:00:41.426 --> 00:00:46.966 align:middle
+Ponle como contraseña « coffeeblack » y
+como rol « ROLE_ADMIN »: En tu terminal,
+
+00:00:47.056 --> 00:00:53.626 align:middle
+vuelve a cargar los fixtures con:
+symfony console foundry:load-fixtures Ve
+
+00:00:53.626 --> 00:00:55.766 align:middle
+al navegador y haz clic en el enlace «Parts».
+
+00:00:56.246 --> 00:01:00.936 align:middle
+Aunque no sea capitana, Janeway debería poder
+acceder a la página de piezas como administradora.
+
+00:01:01.676 --> 00:01:07.736 align:middle
+Inicia sesión como ella con el correo electrónico:
+janeway@starfleet.space y la contraseña: coffeeblack.
+
+00:01:09.066 --> 00:01:12.906 align:middle
+Estamos en la página de piezas, pero
+nos sale un error 403 de acceso denegado
+
+00:01:13.136 --> 00:01:15.236 align:middle
+porque Janeway no tiene ROLE_CAPTAIN.
+
+00:01:15.936 --> 00:01:19.536 align:middle
+Aunque tiene ROLE_ADMIN, ese
+rol aún no tiene nada especial.
+
+00:01:19.956 --> 00:01:24.296 align:middle
+Lo que tenemos que hacer es configurar
+ROLE_CAPTAIN como un rol secundario de ROLE_ADMIN.
+
+00:01:25.046 --> 00:01:28.896 align:middle
+Para ello, abre config/packages/security.yaml,
+
+00:01:29.066 --> 00:01:33.696 align:middle
+y en la sección « security
+», añade role_hierarchy.
+
+00:01:34.436 --> 00:01:36.966 align:middle
+Debajo de eso, añade la clave ROLE_ADMIN.
+
+00:01:37.766 --> 00:01:39.066 align:middle
+Esta clave es el rol principal.
+
+00:01:39.656 --> 00:01:42.286 align:middle
+Debajo de esa, podemos añadir
+una lista de roles secundarios.
+
+00:01:42.436 --> 00:01:46.466 align:middle
+Así que añade ROLE_CAPTAIN como rol
+secundario: Ahora actualiza la página /parts...
+
+00:01:47.916 --> 00:01:49.426 align:middle
+¡Genial! ¡Ya tenemos acceso!
+
+00:01:49.926 --> 00:01:53.376 align:middle
+Si abres el panel del perfilador de
+seguridad, puedes ver que, efectivamente,
+
+00:01:53.416 --> 00:01:55.966 align:middle
+sus roles son ROLE_ADMIN y ROLE_USER.
+
+00:01:56.276 --> 00:01:59.196 align:middle
+Pero hay una nueva sección
+más abajo: «Roles heredados».
+
+00:01:59.696 --> 00:02:02.256 align:middle
+Esto muestra que ha heredado ROLE_CAPTAIN.
+
+00:02:02.946 --> 00:02:07.866 align:middle
+En el registro de decisiones de acceso, puedes ver que
+cuando se comprobó ROLE_CAPTAIN, se concedió el acceso.
+
+00:02:08.526 --> 00:02:10.766 align:middle
+Nuestra web tiene el concepto de
+una sección de administración.
+
+00:02:11.276 --> 00:02:14.436 align:middle
+Son páginas cuyas URL empiezan por /admin.
+
+00:02:14.886 --> 00:02:17.586 align:middle
+Estas páginas están repartidas
+entre varias clases de controladores.
+
+00:02:18.186 --> 00:02:20.576 align:middle
+Volviendo al IDE, voy a
+cerrar algunos archivos...
+
+00:02:22.286 --> 00:02:25.336 align:middle
+Ahora, abre src/Controller/AdminController.
+
+00:02:25.856 --> 00:02:30.766 align:middle
+Esta ruta a nivel de clase añade el prefijo
+/admin a todas las rutas de este controlador:
+
+00:02:31.466 --> 00:02:37.536 align:middle
+Si ahora abres StarshipAdminController, verás
+que esta tiene el prefijo /admin/starship:
+
+00:02:38.336 --> 00:02:43.006 align:middle
+Todos estos controladores son públicos ahora, pero en realidad
+solo deberían estar disponibles para los administradores.
+
+00:02:43.676 --> 00:02:48.106 align:middle
+Del último capítulo ya sabes que podríamos
+añadir el atributo #[IsGranted('ROLE_ADMIN')]
+
+00:02:48.106 --> 00:02:49.336 align:middle
+a cada una de estas clases.
+
+00:02:49.716 --> 00:02:52.916 align:middle
+Pero… eso podría generar mucha
+duplicación, y si tuvieras docenas
+
+00:02:52.916 --> 00:02:54.836 align:middle
+de controladores de administración,
+podrías olvidarte de alguno.
+
+00:02:55.546 --> 00:02:59.256 align:middle
+Una alternativa es indicarle a
+Symfony que cualquier URL que empiece
+
+00:02:59.256 --> 00:03:02.616 align:middle
+por /admin requiere ROLE_ADMIN para acceder.
+
+00:03:03.036 --> 00:03:07.566 align:middle
+Esto se llama «control de acceso» y se
+configura en nuestro archivo security.yaml:
+
+00:03:08.336 --> 00:03:11.846 align:middle
+En security, Flex ha añadido este
+esbozo de la sección access_control.
+
+00:03:12.586 --> 00:03:14.456 align:middle
+Como lo que queremos hacer es muy habitual,
+
+00:03:14.456 --> 00:03:17.846 align:middle
+Flex ya tiene un ejemplo
+comentado de cómo hacerlo.
+
+00:03:18.216 --> 00:03:23.596 align:middle
+Descomenta el primer ejemplo: aquí estamos
+configurando el path para que sea ^/admin.
+
+00:03:24.056 --> 00:03:26.766 align:middle
+Se trata de una expresión regular
+para coincidir con la ruta.
+
+00:03:27.046 --> 00:03:33.096 align:middle
+El ^ significa «empieza por», así que esta expresión
+coincidirá con cualquier ruta que «empieza por /admin »,
+
+00:03:33.436 --> 00:03:40.036 align:middle
+pero no coincidirá si /admin aparece en medio
+de la ruta, como en /starship/admin/edit.
+
+00:03:40.666 --> 00:03:44.966 align:middle
+La clave « roles » es donde especificamos el
+rol que se necesita para acceder a esta ruta.
+
+00:03:45.516 --> 00:03:48.206 align:middle
+Y sí, « ROLE_ADMIN » es
+el rol que queremos exigir.
+
+00:03:49.106 --> 00:03:53.036 align:middle
+Volviendo al navegador, estamos autenticados
+como Janeway, y ella tiene ROLE_ADMIN.
+
+00:03:53.226 --> 00:03:55.676 align:middle
+Así que debería poder acceder a
+las páginas de administración.
+
+00:03:56.096 --> 00:03:59.196 align:middle
+Pruébalo visitando /admin/startship.
+
+00:04:00.016 --> 00:04:01.336 align:middle
+¡Sí, tenemos acceso!
+
+00:04:01.896 --> 00:04:04.006 align:middle
+Para comprobar que esto
+funciona, cierra sesión...
+
+00:04:04.506 --> 00:04:07.316 align:middle
+e intenta acceder a /admin/starship.
+
+00:04:07.816 --> 00:04:09.996 align:middle
+Nos redirige a la página de
+inicio de sesión, ¡genial!
+
+00:04:10.706 --> 00:04:15.366 align:middle
+Ahora inicia sesión como Picard con
+picard@enterprise.space y la contraseña makeitso.
+
+00:04:15.726 --> 00:04:17.536 align:middle
+Recuerda que él no tiene ROLE_ADMIN.
+
+00:04:18.266 --> 00:04:19.766 align:middle
+403, acceso denegado...
+
+00:04:19.966 --> 00:04:23.996 align:middle
+¡Perfecto! A continuación, veremos cómo
+acceder al usuario que está conectado actualmente
+
+00:04:23.996 --> 00:04:25.816 align:middle
+en nuestros servicios y controladores.
