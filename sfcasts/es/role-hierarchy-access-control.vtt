@@ -45,8 +45,8 @@ Es almirante en el mando de la Flota Estelar, así que
 tiene sentido que tenga privilegios de administrador.
 
 00:00:41.426 --> 00:00:46.966 align:middle
-Ponle como contraseña « coffeeblack » y
-como rol « ROLE_ADMIN »: En tu terminal,
+Pon su contraseña como coffeeblack
+y como rol ROLE_ADMIN: En tu terminal,
 
 00:00:47.056 --> 00:00:53.626 align:middle
 vuelve a cargar los fixtures con:
