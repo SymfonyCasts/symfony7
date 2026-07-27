@@ -10,12 +10,12 @@ hacer más cosas que un usuario estándar, como un capitán.
 Primero, vamos a crear un usuario administrador. Abre `src/Story/AppStory`, busca dónde estamos creando
 a Picard y duplícalo. Para el nombre, usa `Kathryn Janeway`... el correo electrónico,
 `janeway@starfleet.space`. Es almirante en el mando de la Flota Estelar, así que tiene
-sentido que tenga privilegios de administrador. Pon su contraseña en `coffeeblack` y su rol
+sentido que tenga privilegios de administrador. Pon su contraseña como `coffeeblack` y su rol
 en `ROLE_ADMIN`:
 
 [[[ code('10228e1bca') ]]]
 
-En tu terminal, vuelve a cargar los ajustes con:
+En tu terminal, vuelve a cargar los fixtures con:
 
 ```terminal
 symfony console foundry:load-fixtures
