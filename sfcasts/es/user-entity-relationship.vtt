@@ -1,0 +1,263 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.136 align:middle
+En la página de inicio de nuestra
+app, tenemos el concepto de «MyShip».
+
+00:00:04.716 --> 00:00:07.216 align:middle
+Se supone que es la nave
+espacial del usuario actual.
+
+00:00:07.626 --> 00:00:09.846 align:middle
+Sin embargo, por ahora, solo
+es un marcador de posición.
+
+00:00:10.426 --> 00:00:14.546 align:middle
+Abre src/Controller/MainController
+y, en el método index(),
+
+00:00:14.716 --> 00:00:19.116 align:middle
+estamos estableciendo $myShip
+= $repository->findMyShip():
+
+00:00:19.116 --> 00:00:24.556 align:middle
+Si nos metemos en este método, vemos que el código
+simplemente está cogiendo la primera nave de la base de datos:
+
+00:00:24.906 --> 00:00:27.676 align:middle
+¿No sería genial que esto estuviera
+realmente vinculado al usuario?
+
+00:00:27.676 --> 00:00:31.636 align:middle
+Primero, vuelve a MainController
+y cambia $myShip por null:
+
+00:00:32.506 --> 00:00:37.256 align:middle
+Esto simula que no hay ningún usuario conectado
+o que el usuario actual no tiene ninguna nave.
+
+00:00:38.046 --> 00:00:39.896 align:middle
+Vuelve a la página de inicio
+y actualiza la página...
+
+00:00:40.606 --> 00:00:44.216 align:middle
+Perfecto, la sección «Mi nave»
+desaparece cuando no hay ninguna nave.
+
+00:00:44.976 --> 00:00:47.076 align:middle
+Recuerda que nuestra « User
+» es una entidad de Doctrine.
+
+00:00:47.426 --> 00:00:50.106 align:middle
+Esto significa que podemos añadirle
+relaciones normales de Doctrine.
+
+00:00:50.496 --> 00:00:52.976 align:middle
+Quiero que « User » pueda
+tener un « Starship ».
+
+00:00:53.576 --> 00:00:56.246 align:middle
+¡Podemos usar el generador de
+entidades para crear esta relación!
+
+00:00:56.726 --> 00:01:03.226 align:middle
+En tu terminal, ejecuta: symfony console
+make:entity User « User » ya existe,
+
+00:01:03.226 --> 00:01:05.736 align:middle
+así que el generador solo te
+pide que le añadas campos.
+
+00:01:05.736 --> 00:01:08.356 align:middle
+Para la nueva propiedad,
+llámala « starship ».
+
+00:01:08.356 --> 00:01:09.896 align:middle
+¿Tipo de campo?
+
+00:01:09.896 --> 00:01:11.766 align:middle
+Escribe « ? » para ver todas las opciones.
+
+00:01:11.766 --> 00:01:13.826 align:middle
+Desplázate hacia arriba
+hasta «Relaciones»...
+
+00:01:14.246 --> 00:01:15.566 align:middle
+¡Vaya, vamos a usar el asistente!
+
+00:01:16.086 --> 00:01:17.096 align:middle
+Escribe « relation ».
+
+00:01:17.776 --> 00:01:19.936 align:middle
+¿Con qué clase debería
+relacionarse esta entidad?
+
+00:01:20.256 --> 00:01:23.266 align:middle
+Starship. ¿Qué tipo de relación es esta?
+
+00:01:23.656 --> 00:01:28.826 align:middle
+La primera: «Cada usuario tiene una nave espacial»
+y «Cada nave espacial puede tener varios usuarios».
+
+00:01:28.966 --> 00:01:29.736 align:middle
+ManyToOne.
+
+00:01:30.076 --> 00:01:30.606 align:middle
+Elige esa.
+
+00:01:31.376 --> 00:01:33.666 align:middle
+¿Queremos que « User.starship » sea nulo?
+
+00:01:34.136 --> 00:01:37.376 align:middle
+Sí, porque un usuario no tiene por
+qué estar asignado a una nave espacial.
+
+00:01:38.006 --> 00:01:40.826 align:middle
+¿Queremos que Starship pueda
+acceder a todos sus usuarios?
+
+00:01:41.276 --> 00:01:43.566 align:middle
+¡Sí! ¿Cómo se llama el
+campo para el lado inverso?
+
+00:01:43.906 --> 00:01:44.646 align:middle
+users está bien.
+
+00:01:45.316 --> 00:01:49.916 align:middle
+Listo. Como hemos actualizado una entidad, tenemos
+que añadir una migración, así que ejecuta:
+
+00:01:49.916 --> 00:01:55.706 align:middle
+symfony console make:migration Genial,
+busquemos esa migración en nuestro código.
+
+00:01:56.256 --> 00:01:56.806 align:middle
+Aquí está.
+
+00:01:57.386 --> 00:02:00.336 align:middle
+Pon la descripción como
+« Add starship to user ».
+
+00:02:01.416 --> 00:02:05.096 align:middle
+Aquí abajo está el SQL para actualizar
+la tabla de usuarios en la base de datos.
+
+00:02:05.896 --> 00:02:08.056 align:middle
+Vuelve a la terminal y
+ejecuta la migración con:
+
+00:02:08.186 --> 00:02:14.366 align:middle
+symfony console doctrine:migrations:migrate
+Quiero que Jean-Luc
+
+00:02:14.366 --> 00:02:16.406 align:middle
+tenga la Enterprise como nave espacial.
+
+00:02:16.406 --> 00:02:18.106 align:middle
+Así que vamos a actualizar nuestros fixtures.
+
+00:02:18.456 --> 00:02:22.396 align:middle
+Voy a cerrar esta migración
+y abrir src/Story/AppStory.
+
+00:02:22.396 --> 00:02:24.506 align:middle
+Busca dónde creamos a Picard.
+
+00:02:24.936 --> 00:02:27.686 align:middle
+Podemos crear su nave espacial
+directamente aquí, en createOne().
+
+00:02:28.316 --> 00:02:32.986 align:middle
+Añade 'starship' =>
+StarshipFactory::new() con un array dentro.
+
+00:02:32.986 --> 00:02:37.706 align:middle
+Si te preguntas en qué se diferencia el método
+new() de createOne(), ¡buena observación!
+
+00:02:38.236 --> 00:02:42.396 align:middle
+createOne() creará el objeto y lo
+guardará en la base de datos al instante.
+
+00:02:43.096 --> 00:02:47.856 align:middle
+new() crea la fábrica, pero el objeto no se creará hasta
+que se haya creado el objeto de la fábrica principal,
+
+00:02:48.036 --> 00:02:50.556 align:middle
+en este caso, UserFactory.
+
+00:02:50.556 --> 00:02:55.746 align:middle
+Lo mejor es usar new() cuando
+crees fábricas de esta forma.
+
+00:02:55.746 --> 00:03:03.096 align:middle
+Vale, dentro de: 'name' =>
+'USS Enterprise (NCC-1701-D)',
+
+00:03:04.396 --> 00:03:09.706 align:middle
+'class' => 'Galaxy', 'captain'
+=> 'Jean-Luc Picard'.
+
+00:03:10.336 --> 00:03:12.496 align:middle
+El campo «captain» de
+Starship es solo una cadena,
+
+00:03:12.666 --> 00:03:15.336 align:middle
+¡pero esto podría ser perfectamente
+otra relación con User!
+
+00:03:15.336 --> 00:03:21.736 align:middle
+Por último, 'status' =>
+StarshipStatusEnum::IN_PROGRESS: ¡Genial!
+
+00:03:21.936 --> 00:03:29.316 align:middle
+Vuelve a la terminal y recarga los fixtures
+con: symfony console foundry:load-fixtures Ahora
+
+00:03:29.316 --> 00:03:31.776 align:middle
+¡vamos a recuperar «my ship» del
+usuario que está conectado actualmente!
+
+00:03:32.406 --> 00:03:40.206 align:middle
+Vuelve a MainController::index() y cambia $myShip
+por $this->getUser()?->getStarship():
+
+00:03:40.986 --> 00:03:44.746 align:middle
+El método getUser() es otro helper
+que te ofrece AbstractController.
+
+00:03:45.326 --> 00:03:48.576 align:middle
+Devuelve el usuario que está conectado
+ahora mismo o null si no hay ninguno.
+
+00:03:49.176 --> 00:03:53.366 align:middle
+?-> es el operador a prueba de nulos,
+así que si getUser() devuelve null,
+
+00:03:53.556 --> 00:03:55.376 align:middle
+no intentará llamar a getStarship().
+
+00:03:55.466 --> 00:03:56.606 align:middle
+Simplemente devolverá null.
+
+00:03:57.416 --> 00:03:58.606 align:middle
+Ahora actualiza la página de inicio.
+
+00:03:59.236 --> 00:04:01.196 align:middle
+No hay ningún error, así que
+inicia sesión como Picard.
+
+00:04:01.656 --> 00:04:05.676 align:middle
+Correo electrónico: picard@enterprise.space,
+contraseña: makeitso.
+
+00:04:05.676 --> 00:04:10.746 align:middle
+¡Genial! ¡La barra lateral ha vuelto y
+podemos ver nuestra nave, la Enterprise!
+
+00:04:11.636 --> 00:04:13.276 align:middle
+A continuación, veremos algunas formas más
+
+00:04:13.276 --> 00:04:16.946 align:middle
+de acceder al usuario que ha iniciado sesión
+actualmente en nuestros servicios y controladores.
