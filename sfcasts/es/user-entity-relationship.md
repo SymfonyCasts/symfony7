@@ -24,8 +24,8 @@ simplemente desaparece cuando no hay ninguna nave.
 
 ## Relación con la nave
 
-Recuerda que nuestra « `User` » es una entidad de Doctrine. Esto significa que podemos añadirle
-relaciones normales de Doctrine. Quiero que « `User` » pueda tener una « `Starship` ».
+Recuerda que nuestra `User` es una entidad de Doctrine. Esto significa que podemos añadirle
+relaciones normales de Doctrine. Quiero que `User` pueda tener un `Starship`.
 
 ¡Podemos usar la herramienta Maker para crear esta relación! En tu terminal,
 ejecuta:
@@ -75,7 +75,7 @@ symfony console doctrine:migrations:migrate
 
 Quiero que Jean-Luc tenga la Enterprise como nave espacial. Así que vamos a actualizar nuestros fixtures.
 Voy a cerrar esta migración y abrir `src/Story/AppStory`. Busca dónde creamos a Picard.
-Podemos crear su nave espacial justo aquí, dentro de este `createOne()`.
+Podemos crear su nave espacial directamente aquí, en `createOne()`.
 
 Añade ` `'starship' => StarshipFactory::new()` ` con un array dentro. Si te estás preguntando en qué
 se diferencia el método `new()` de `createOne()`, ¡buena observación! `createOne()` creará el
@@ -108,8 +108,7 @@ Devuelve el usuario que ha iniciado sesión actualmente o `null` si no hay ningu
 el operador a prueba de nulos, así que si `getUser()` devuelve `null`, no intentará llamar a
 `getStarship()`. Simplemente devolverá `null`.
 
-Ahora actualiza la página de inicio. No hay ningún error, así que inicia sesión como Picard. Correo electrónico: `picard@enterprise.space`, contraseña:
-`makeitso`. ¡Genial! ¡La barra lateral ha vuelto y podemos ver nuestra nave, la Enterprise!
+Ahora actualiza la página de inicio. No hay ningún error, así que inicia sesión como Picard. Correo electrónico: `picard@enterprise.space`, contraseña:`makeitso`. ¡Genial! ¡La barra lateral ha vuelto y podemos ver nuestra nave, la Enterprise!
 
 A continuación, veremos otras formas de acceder al usuario que ha iniciado sesión actualmente en nuestros servicios y
 controladores.
