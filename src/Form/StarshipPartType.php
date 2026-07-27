@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Dto\StarshipPartDto;
 use App\Entity\Starship;
 use App\Entity\StarshipPart;
+use App\Form\Type\CreditsType;
 use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -25,11 +26,12 @@ class StarshipPartType extends AbstractType
 //                    new NotBlank([], 'Every part should have a name!'),
 //                ],
             ])
-            ->add('price', null, [
+            ->add('price', CreditsType::class, [
                 'label' => 'Price <span class="text-gray-500 text-sm">(in credits)</span>',
                 'label_html' => true,
                 'help' => 'We don\'t allow free parts! Set up a price',
-                'block_prefix' => 'credits',
+//                'block_prefix' => 'credits',
+                'units_symbol' => '₵',
             ])
             ->add('starship', EntityType::class, [
                 'class' => Starship::class,

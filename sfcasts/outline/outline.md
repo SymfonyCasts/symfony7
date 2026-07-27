@@ -306,3 +306,58 @@
 - Reload again - now the icon is only shown on fields where we set `help` message
 - If you open /admin/starship/new - there it is!
 - Done! Now this works globally for all forms
+
+## Custom reusable form field type based on core one
+- Our `credits` styling is nice, but to reuse it we must repeat stuff on every field:
+  the `'block_prefix' => 'credits'` option, the label, etc.
+- "An amount in credits" is a concept we'll want on more fields (part price, ship cost, etc)
+- Let's bundle it into a real, reusable *form field type*
+- Create it w/ `symfony console make:form Type\\CreditsType`, then trim it down
+- I use `Type\\` prefix to put it into `src/Form/Type/`
+- And we don't need `data_class` here - it's a single field type, not a whole form
+- Open that `src/Form/Type/CreditsType.php`
+- First, remove the whole `buildForm()` - we don't need for a simple type
+- Then, make it extend a core type - I will open "Generate" meny (`Cmd + N`) -> "Override methods"
+- Override `getParent()`
+- Return `IntegerType::class` - our type IS an integer field, we just layer on top of it
+- Credits are whole numbers, so `IntegerType` fits perfectly
+- Now open `StarshipPartType`
+- Change to `->add('price', CreditsType::class)`
+- The default block prefix of this type is ALREADY `credits`, so we don't need it
+- Run `symfony console debug:form CreditsType` to inspect it
+- You'll see the parent type, the resolved options, and the `credits` block prefix
+- I will comment out redundant `'block_prefix' => 'credits'` option
+- Since we made `IntegerType` parent, we can pass its options
+- Reload /admin/starship-part/new - still works, the `credits_widget` block still applies
+- One thing to notice: the widget markup STILL lives in the template
+- If we used `CreditsType` in another form in another template, we'd get a plain input - let's fix that next
+
+## Custom type w/ theme (a custom widget)
+- The `credits_widget` block still sits in `new.html.twig` via `{% form_theme form _self %}`
+- That means the markup is NOT bundled with the type - use `CreditsType` elsewhere and it's gone
+- A proper custom widget should carry its own markup - let's move it to the theme
+- Cut the `{% block credits_widget %}` out of `new.html.twig`
+- Also remove the now-unused `{% form_theme form _self %}` line there
+- Paste the block into our global theme `templates/_form-theme.html.twig`
+- Since `_form-theme.html.twig` is already registered globally in `twig.yaml`,
+  the `credits_widget` now applies everywhere automatically
+- Reload /admin/starship-part/new - the ₡ addon is still there, but `new.html.twig` is clean now
+- That's the whole point: `CreditsType` + its theme block = a self-contained widget,
+  usable anywhere with a single line and zero template work
+- Capstone: let's make the currency symbol configurable via a custom option
+- Back in `CreditsType::configureOptions()`, add `'units_symbol' => '₡',` to the defaults
+- Custom options don't reach the template automatically - we must expose it on the view
+- Go to "Generate" menu (Cmd + N) -> "Override Methods"
+- Override `buildView()` this time
+- Inside: `$view->vars['units_symbol'] = $options['units_symbol'];`
+- Open `credits_widget`, and write `{{ dump() }}` inside
+- Aha, `units_symbol` are vars now
+- Comment dump out
+- In the theme block, replace the hardcoded `credits` w/ `₡` with `{{ units_symbol }}`
+- Reload - looks the same
+- Run `symfony console debug:form CreditsType` to see new options are available on this type
+- Now if you want to override defaults, you can do it!
+- Try `'units_symbol' => '₵',` option to the `price` field
+- Reload the page - symbol changed
+- Done! `CreditsType` now bundles behavior (from `IntegerType`), its own `units_symbol` option,
+  and its own markup - a complete, reusable custom widget

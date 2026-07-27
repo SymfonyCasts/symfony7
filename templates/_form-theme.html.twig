@@ -8,3 +8,11 @@
         </div>
     {%- endif -%}
 {% endblock %}
+
+{% block credits_widget %}
+{#    {{ dump() }}#}
+    <div class="flex border border-gray-300 overflow-hidden">
+        <span class="px-3 flex items-center bg-gray-100 text-gray-500">{{ units_symbol }}</span>
+        {{ block('form_widget') }}
+    </div>
+{% endblock %}

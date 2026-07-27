@@ -13,8 +13,8 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 //    - The `block_prefix` option for easier form customization
 //    - Kevin: One thing I wanted to mention is: let's show a rock solid method to find the different block names - maybe from the profiler? This trips me up a lot (
 //    - Custom form theme based on core one
-    - Custom reusable form field type based on core one
-    - Custom type /w theme (a custom widget)
+//    - Custom reusable form field type based on core one
+//    - Custom type /w theme (a custom widget)
 - Advanced validation
     - Flexible validation callback constraint
     - Configure form validation groups

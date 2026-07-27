@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {#{% form_theme form 'tailwind_2_layout.html.twig' %}#}
-{% form_theme form _self %}
+{#{% form_theme form _self %}#}
 
-{% block credits_widget %}
-    <div class="flex border border-gray-300 overflow-hidden">
-        <span class="px-3 flex items-center bg-gray-100 text-gray-500">₡</span>
+{#{% block credits_widget %}#}
+{#    <div class="flex border border-gray-300 overflow-hidden">#}
+{#        <span class="px-3 flex items-center bg-gray-100 text-gray-500">₡</span>#}
 {#        {{ parent() }}#}
-        {{ block('form_widget') }}
-    </div>
-{% endblock %}
+{#        {{ block('form_widget') }}#}
+{#    </div>#}
+{#{% endblock %}#}
 
 {% block title %}Admin : New Starship Part{% endblock %}
 
