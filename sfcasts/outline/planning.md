@@ -15,13 +15,13 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 //    - Custom form theme based on core one
 //    - Custom reusable form field type based on core one
 //    - Custom type /w theme (a custom widget)
-- Advanced validation
-    - Flexible validation callback constraint
-    - Configure form validation groups
-    - Custom validation constraint
-        - The `make:validator` command
-        - The `debug:validator` command
-- Form data
+//- Advanced validation
+//    - Flexible validation callback constraint
+//    - Configure form validation groups
+//    - Custom validation constraint
+//        - The `make:validator` command
+//        - The `debug:validator` command
+//- Form data
 //    - Data Transfer Object (DTO) instead of entities in form types  
 //    - Configure empty data for a form type class
 //    - Сonditionally change/show/hide form fields

@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Translation\TranslatableMessage;
 
@@ -45,10 +46,11 @@ class StarshipType extends AbstractType
                 ]),
             ])
             ->add('arrivedAt', null, [
+                'required' => false,
                 'widget' => 'single_text',
             ])
-            ->add('createdAt')
-            ->add('updatedAt')
+//            ->add('createdAt')
+//            ->add('updatedAt')
         ;
     }
 
@@ -57,6 +59,16 @@ class StarshipType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Starship::class,
             'is_admin' => false,
+            'attr' => [
+                'novalidate' => true,
+            ],
+            'validation_groups' => function (FormInterface $form) {
+                /** @var Starship $starship */
+                $starship = $form->getData();
+                $isEdit = $starship && $starship->getId();
+
+                return $isEdit ? ['Default', 'edit'] : ['Default'];
+            },
         ]);
         $resolver->setAllowedTypes('is_admin', 'bool');
     }

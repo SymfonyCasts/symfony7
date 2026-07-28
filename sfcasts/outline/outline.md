@@ -361,3 +361,101 @@
 - Reload the page - symbol changed
 - Done! `CreditsType` now bundles behavior (from `IntegerType`), its own `units_symbol` option,
   and its own markup - a complete, reusable custom widget
+
+## Flexible validation callback constraint
+- Open /admin/starship-part/new and submit empty form - validation errors
+- In previous course we've added some validation constraints to the fields
+- But those constraints were related to specific fields only
+- However, some rules may span MULTIPLE fields at once - and those attributes can't express that
+- Example rule: an expensive part (price over 1000) must explain itself in `notes`
+- Attributes validate one property at a time, so we need something more flexible
+- Meet the `Callback` constraint! It runs a method with access to the WHOLE object
+- Open `StarshipPartDto`
+- Add a method `public function validate(ExecutionContextInterface $context): void`
+- Add the `#[Assert\Callback]` attribute above it
+- Inside: `if ($this->price < 1000 || $this->notes)`
+- Inside if - just `return`
+- Below if, build the violation and attach it to the `notes` field:
+  ```php
+  $context->buildViolation('Expensive parts must include notes explaining the price')
+      ->atPath('notes')
+      ->addViolation();
+  ```
+- The `->atPath('notes')` is the key - it shows the error under the `notes` field, not globally
+- Reload, set price to `5000`, leave `notes` empty, submit - the error shows right on `notes`
+- Fill in `notes` and submit - it passes. A rule across two fields, done in plain PHP
+
+## Configure form validation groups
+- Now open /admin/starship/new - some rules should differ between creating and editing
+- Example: a brand-new ship may not have arrived yet (`arrivedAt` can be empty)
+- But an existing ship we're editing MUST have an arrival date
+- Same form, two different rule sets - this is exactly what validation groups are for
+- Open `src/Entity/Starship.php` (it has no constraints yet - these are the first)
+- For `name`, `class`, `captain`, and `slug` - let's add `#[Assert\NotNull]`
+- I will go with the default message for them
+- This will work by default now
+- Now, on `arrivedAt`, add `#[Assert\NotNull(message: 'An existing ship must have an arrival date', groups: ['edit'])]`
+- A constraint in a named group only runs when that group is active
+- By default, a form only validates the `Default` group - yep, first letter capitalized
+- So `edit` never runs yet
+- Open `StarshipType`
+- First, delete `createdAt` and `updatedAt` fields - those are set automatically
+- Next, allow null for `arrivedAt`, for this set `'required' => false,`
+- In `StarshipPartType`, we disabled HTML5 validation for the specific button only
+- Here, I will disable HTML5 validation for the entire form completely so that we could check server-side validation
+- In `configureOptions()`, add `'attr' => ['novalidate' => true,],` 
+- That's a nice trick that skips HHTML5 validation entirely when clicked
+- Right now, if you reload /admin/starship/new and submit empty form
+- We will see "Every starship needs a name" error
+- Back to `StarshipType`, in `configureOptions()`
+- Add a `validation_groups` option set to a closure:
+  ```php
+  'validation_groups' => function (FormInterface $form) {
+      /** @var Starship $starship */
+      $starship = $form->getData();
+      $isEdit = $starship && $starship->getId();
+
+      return $isEdit ? ['Default', 'edit'] : ['Default'];
+  },
+  ```
+- We reuse the same new-vs-edit logic from before, but now to pick validation groups
+- Go to /admin/starship/new, leave arrival empty, submit - only `Default` runs, so only empty name complains
+- Now edit an existing ship, clear the arrival date, submit - the `edit` group runs now
+
+## Custom validation constraint
+- Callbacks are flexible, but they live inside ONE class and can't be reused
+- And they can't easily use services - what if a rule needs a repository or a standalone service? or specific config?
+- For that, we build our own reusable constraint with its own validator class
+- Some ship names are reserved (say "Death Star", "Imperial Star Destroyer", "Executor" - no service for those!) - let's forbid them
+- Run `symfony console make:validator`
+- Call it `ForbiddenName`
+- It generates two files in `src/Validator/`: `ForbiddenName` (the constraint) and `ForbiddenNameValidator`
+- Open `ForbiddenName` - this is just PHP attr config: tweak the `$message`
+  e.g. `public string $message = 'The name "{{ value }}" is not allowed to be registered on our shop - go away!';`
+- Explain `#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]`
+- That fits our case perfectly, so no changes needed
+- Open `ForbiddenNameValidator` - this is where the logic lives
+- Here's the whole point: we can inject services here (impossible in a callback/attribute)
+- Add a constructor with the forbidden list injected, e.g. `public function __construct(private array $forbiddenNames = ['Death Star', 'Imperial Star Destroyer', 'Executor'])`
+  (in real life this could be a service, a repository, or a bound parameter because `ForbiddenNameValidator` is just a service and can inject other services)
+- In `validate()`, guard the empty case - this default if is good, then add ours:
+  ```php
+  if (!in_array(strtolower($value), array_map('strtolower', $this->forbiddenNames), true)) {
+      return;
+  }
+  ```
+- At the very end we already have a perfect `buildViolation()` code - I will just drop the TODO:
+  ```php
+      $this->context->buildViolation($constraint->message)
+          ->setParameter('{{ value }}', $value)
+          ->addViolation();
+  ```
+- Now use it: open `src/Entity/Starship.php`
+- Add `#[ForbiddenName]` on the `$name` property and import the constraint
+- Finally, verify everything landed with `symfony console debug:validator "App\\Entity\\Starship"`
+- You'll see all constraints per property, including our `ForbiddenName` and the group'd `NotNull`
+- `debug:validator` is your rock-solid way to see exactly which rules apply to a class
+- Time to try it in action!
+- Go create a ship named `DEATH STAR` - blocked with our message!
+> The name "DEATH STAR" is not allowed to be registered on our shop - go away!
+- Any other name works fine

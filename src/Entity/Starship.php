@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\StarshipPartRepository;
 use App\Repository\StarshipRepository;
+use App\Validator\ForbiddenName;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
 use Gedmo\Mapping\Annotation\Timestampable;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: StarshipRepository::class)]
 class Starship
@@ -22,21 +24,28 @@ class Starship
     #[ORM\Column]
     private ?int $id = null;
 
+
+    #[Assert\NotNull]
+    #[ForbiddenName]
     #[ORM\Column]
     private ?string $name = null;
 
+    #[Assert\NotNull]
     #[ORM\Column]
     private ?string $class = null;
 
+    #[Assert\NotNull]
     #[ORM\Column]
     private ?string $captain = null;
 
     #[ORM\Column]
     private ?StarshipStatusEnum $status = StarshipStatusEnum::WAITING;
 
+    #[Assert\NotNull(message: 'An existing ship must have an arrival date', groups: ['edit'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $arrivedAt = null;
 
+    #[Assert\NotNull]
     #[ORM\Column(unique: true)]
     #[Slug(fields: ['name'])]
     private ?string $slug = null;
@@ -118,7 +127,7 @@ class Starship
         return $this->arrivedAt;
     }
 
-    public function setArrivedAt(\DateTimeImmutable $arrivedAt): static
+    public function setArrivedAt(?\DateTimeImmutable $arrivedAt): static
     {
         $this->arrivedAt = $arrivedAt;
 
