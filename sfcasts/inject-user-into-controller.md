@@ -24,7 +24,9 @@ First, we'll use an alternative way to get the current user. You may need to acc
 current user in another service. And that service won't have access to the `AbstractController`
 helper methods.
 
-In our `index()` method, inject `Security`, the one from the SecurityBundle, `$security`.
+In our `index()` method, inject `Security`, the one from the SecurityBundle, `$security`:
+
+[[[ code('80ce3be22b') ]]]
 
 This is a helper service that can access the currently logged-in user.
 
@@ -36,7 +38,9 @@ There's a few other helpers for more advanced use cases... And check out these l
 `login()` and `logout()`. These are for programmatically logging in and out users without
 needing to go through the standard flow. We'll take a look at these a bit later.
 
-Choose `getUser()` and then write `?->getStarship()` to fetch the user's starship (if there is one).
+Choose `getUser()` and then write `?->getStarship()` to fetch the user's starship (if there is one):
+
+[[[ code('184dba5cd3') ]]]
 
 This is basically the exact same logic we had before, but using a service. We're no longer relying
 on the `AbstractController`.
@@ -47,7 +51,9 @@ We still have the same warning though. So let's fix that.
 
 First, add `$myShip = null`, and below, `$user = $security->getUser()`. Now add
 `if ($user instanceof User)` and inside, `$myShip = $user->getStarship()`. The `instanceof`
-protects us against a `null` user and ensures the object is indeed our `User` entity.
+protects us against a `null` user and ensures the object is indeed our `User` entity:
+
+[[[ code('57c12f8ec8') ]]]
 
 Now we can delete the old code below.
 
@@ -63,8 +69,11 @@ the controller, even if they aren't services. The `Request` object is one of the
 a service, so you can't inject it into another service, but you can inject it into a controller.
 There's a *request* argument resolver that enables this. There's also a *user* argument resolver.
 
-Replace injecting `Security` with `UserInterface $user`. This parameter will now use the *user*
-argument resolver! Below, we can remove the `$user =` line.
+Replace injecting `Security` with `UserInterface $user`:
+
+[[[ code('7a064d7edd') ]]]
+
+This parameter will now use the *user* argument resolver! Below, we can remove the `$user =` line.
 
 Go back to the browser and refresh the homepage... Hmm, we're redirected to the login page...
 
@@ -74,7 +83,9 @@ the same behavior as if we had added an `IS_AUTHENTICATED` check.
 
 This isn't what we want for our homepage though, it should be accessible to anyone, logged in or not.
 How can we allow this while still using the user argument resolver? Make the user argument nullable
-by prefixing `UserInterface` with a `?`.
+by prefixing `UserInterface` with a `?`:
+
+[[[ code('7a987e0a18') ]]]
 
 Now go back to the homepage... no more redirect, and no sidebar. Now login as Picard... Email:
 `picard@enterprise.space`, password: `makeitso`. Sweet, the sidebar is back and showing our ship!
@@ -88,10 +99,16 @@ We can do even better though!
 Replace the `UserInterface` type-hint with our actual `User` entity... be sure to keep it nullable.
 
 This won't quite work yet. We have to help the user argument resolver along. Above the parameter,
-add the `#[CurrentUser]` attribute. I think this is still expressive, it's saying to inject the *current user*
+add the `#[CurrentUser]` attribute:
+
+[[[ code('3e1885c606') ]]]
+
+I think this is still expressive, it's saying to inject the *current user*
 for this parameter. And we for sure have the correct user object, the method type-hint enforces this.
 
-Below, we can simplify all this logic with just `$myShip = $user?->getStarship()`.
+Below, we can simplify all this logic with just `$myShip = $user?->getStarship()`:
+
+[[[ code('bdedb42bc6') ]]]
 
 Beautiful!
 
