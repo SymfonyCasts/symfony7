@@ -34,6 +34,12 @@
                         <p class="text-slate-400 text-sm">{{ part.notes }}</p>
                     </div>
                 </div>
+
+                <a href="{{ path('app_admin_starship_part_delete', {'id': part.id}) }}"
+                   title="Delete part"
+                   class="mt-4 min-[1174px]:mt-0 inline-flex items-center gap-2 text-red-400 border border-red-500/40 hover:text-white hover:bg-red-700 hover:border-red-700 rounded-lg px-4 py-2 transition-colors">
+                    🗑️ <span>Delete</span>
+                </a>
             </div>
         {% endfor %}
     </div>

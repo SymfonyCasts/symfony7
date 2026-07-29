@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Delete "{{ starshipPart.name }}"?
+{% endblock %}
+
+{% block body %}
+    <div class="max-w-xl mx-auto my-10">
+        <div class="rounded-2xl border border-red-500/40 bg-[#16202A] p-8">
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-3xl">⚠️</span>
+                <h1 class="text-2xl font-semibold text-red-400">Delete "{{ starshipPart.name }}"?</h1>
+            </div>
+
+            <p class="text-slate-400 mb-6">
+                This action <span class="font-semibold text-slate-200">cannot be undone</span>.
+                This will permanently delete the
+                <span class="font-semibold text-slate-200">{{ starshipPart.name }}</span> part
+                assigned to {{ starshipPart.starship.name }}.
+            </p>
+
+            {{ form_start(form) }}
+                {{ form_row(form.confirmName) }}
+
+                <div class="flex items-center gap-3 mt-6">
+                    {{ form_widget(form.delete, {
+                        label: 'I understand, delete this part',
+                        attr: { class: 'text-white bg-red-700 hover:bg-red-800 rounded-lg px-5 py-2.5 cursor-pointer' }
+                    }) }}
+                    <a href="{{ path('app_part_index') }}" class="text-slate-400 hover:text-slate-200 px-5 py-2.5">Cancel</a>
+                </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

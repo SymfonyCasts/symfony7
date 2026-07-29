@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\StarshipPartDto;
 use App\Entity\StarshipPart;
+use App\Form\DeleteStarshipPartType;
 use App\Form\StarshipPartType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,6 +43,30 @@ class AdminController extends AbstractController
         }
 
         return $this->render('admin/starship-part/new.html.twig', [
+            'form' => $form,
+        ]);
+    }
+
+    #[Route('/starship-part/{id}/delete', name: 'app_admin_starship_part_delete', methods: ['GET', 'POST'])]
+    public function deleteStarshipPart(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        StarshipPart $starshipPart,
+    ): Response
+    {
+        $form = $this->createForm(DeleteStarshipPartType::class, $starshipPart);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->remove($starshipPart);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'The part was successfully deleted.');
+
+            return $this->redirectToRoute('app_part_index');
+        }
+
+        return $this->render('admin/starship-part/delete.html.twig', [
+            'starshipPart' => $starshipPart,
             'form' => $form,
         ]);
     }
