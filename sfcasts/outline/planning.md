@@ -39,8 +39,8 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 - How to unit-test your forms - a chapter or two
 
 ## Extra / Bonus
-- Create a custom type extension (behaviour added to all forms types) e.g.
-  similar to `help` extension from Symfony core
+//- Create a custom type extension (behaviour added to all forms types) e.g.
+//  similar to `help` extension from Symfony core
 - Create a custom type guesser
 
 ## Possible mini-courses

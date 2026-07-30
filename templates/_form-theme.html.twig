@@ -16,3 +16,10 @@
         {{ block('form_widget') }}
     </div>
 {% endblock %}
+
+{% block form_label_content %}
+    {{ parent() }}
+    {% if tooltip is defined and tooltip %}
+        <span class="ml-1 cursor-help text-gray-400" title="{{ tooltip }}">ℹ️</span>
+    {% endif %}
+{% endblock %}

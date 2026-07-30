@@ -25,6 +25,7 @@ class StarshipPartType extends AbstractType
 //                'constraints' => [
 //                    new NotBlank([], 'Every part should have a name!'),
 //                ],
+                'tooltip' => 'Give your part a short, creative name',
             ])
             ->add('price', CreditsType::class, [
                 'label' => 'Price <span class="text-gray-500 text-sm">(in credits)</span>',
@@ -32,6 +33,7 @@ class StarshipPartType extends AbstractType
                 'help' => 'We don\'t allow free parts! Set up a price',
 //                'block_prefix' => 'credits',
                 'units_symbol' => '₵',
+                'tooltip' => 'Prices are in galactic credits',
             ])
             ->add('starship', EntityType::class, [
                 'class' => Starship::class,

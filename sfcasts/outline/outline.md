@@ -523,3 +523,48 @@
 - Type the correct name, submit - the part is gone, no ancient JS `confirm()` popup needed
 - Bonus: if you ever need the raw typed value, it's `$form->get('confirmName')->getData()`
   (unmapped fields never touch your object, so this is the only way to read them)
+
+## Create a custom type extension
+- Quick question: where did the `constraints` option we just used come from?
+- It's NOT part of `FormType` - open its source and search, you won't find it
+- Symfony adds it to EVERY field type via a "type extension" - same story for CSRF and `help`
+- A type extension lets you add options/behaviour to existing types without a new type
+- Let's build our own: a `tooltip` option available on every single field
+- Create `src/Form/Extension/TooltipTypeExtension.php`
+- Make it extend `AbstractTypeExtension`
+- Tell it which types to hook into:
+  ```php
+  public static function getExtendedTypes(): iterable
+  {
+      return [FormType::class];
+  }
+  ```
+- `FormType::class` means ALL fields, because every built-in type ultimately extends it
+  (if we wanted only text inputs, we'd return `TextType::class` instead)
+- Now declare the option in `configureOptions()`:
+  ```php
+  $resolver->setDefault('tooltip', null);
+  $resolver->setAllowedTypes('tooltip', ['null', 'string']);
+  ```
+- Options don't reach the template by themselves - expose it on the view, override `buildView()`:
+  `$view->vars['tooltip'] = $options['tooltip'];`
+- That's it - thanks to autoconfigure, the extension registers itself (tag `form.type_extension`)
+- Verify it's live: run `symfony console debug:form FormType`
+- Search the options list - our `tooltip` is now there, on the base type
+- Now let's actually render it - open our global theme `templates/_form-theme.html.twig`
+- Override the `form_label` block to append an info icon when a tooltip is set:
+  ```twig
+  {% block form_label_content %}
+      {{ parent() }}
+      {% if tooltip is defined and tooltip %}
+          <span class="ml-1 cursor-help text-gray-400" title="{{ tooltip }}">ℹ️</span>
+      {% endif %}
+  {% endblock %}
+  ```
+- `parent()` works here - `form_label_content` exists in the Tailwind theme we `use`
+- Time to try it - open `StarshipPartType`
+- On the `name` field, add `'tooltip' => 'Give your part a short, creative name',`
+- On the `price` field, add `'tooltip' => 'Prices are in galactic credits',`
+- Reload /admin/starship-part/new - hover the ℹ️ next to the label, the tooltip shows!
+- The magic: this option now works on ANY field of ANY form, zero changes to the field types
+- Don't believe me? Try `'tooltip' => ...` on a field in `StarshipType`
