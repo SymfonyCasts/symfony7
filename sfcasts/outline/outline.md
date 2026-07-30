@@ -568,3 +568,41 @@
 - Reload /admin/starship-part/new - hover the ℹ️ next to the label, the tooltip shows!
 - The magic: this option now works on ANY field of ANY form, zero changes to the field types
 - Don't believe me? Try `'tooltip' => ...` on a field in `StarshipType`
+
+## Embed forms
+- Open /admin/starship/{id}/edit - we can edit the ship, but its parts live on a totally separate page
+- Wouldn't it be nice to tweak a ship's parts right here, and save everything at once?
+- A `Starship` has a `parts` collection (a `OneToMany`), so let's embed a sub-form for each part
+- First, we need a form for a SINGLE part - run `symfony console make:form EmbeddedStarshipPartType`
+- Type `StarshipPart` for the entity
+- Yep, this time we need `StarshipPart` as you will see soon
+- Open `src/Form/EmbeddedStarshipPartType.php`
+- Trim it down to the fields we want to edit inline: `name`, `price`, `notes`
+- Remove the `starship` field - the parent ship IS the starship, picking it here makes no sense
+- Remove any generated submit button too - the parent form owns the submit
+- Keep `'data_class' => StarshipPart::class,` - note this maps the ENTITY this time, not the DTO
+- Now embed it - open `StarshipType`
+- Add a collection field:
+  ```php
+  ->add('parts', CollectionType::class, [
+      'entry_type' => EmbeddedStarshipPartType::class,
+      'label' => false,
+  ])
+  ```
+- `entry_type` is the form rendered for EACH item in the collection
+- Reload /admin/starship/{id}/edit
+- Every existing part now renders as its own little sub-form, right inside the ship form
+- Peek at the HTML - the field names are indexed: `starship[parts][0][price]`, `starship[parts][1][price]`...
+- That's how Symfony keeps each embedded entry separate
+- Try it: change a part's price, submit the ship form - the part is updated!
+- All embedded forms are validated and saved together, in one request
+- And notice: ZERO JavaScript - this is pure server-side form embedding
+- Why no cascade needed? Existing parts are managed Doctrine entities, so editing them just flushes
+- Adding brand-new parts also needs `cascade: ['persist']` on the relation that we already have from the past tutorial
+- About dynamic add/remove - that's a whole topic on its own - we cover it in a dedicated tutorial
+- For now, the takeaway: you can embed and edit an entire collection of forms with no JS at all
+- If you try to set price to 0 - it allows us!
+- It was not validated because of the embed form
+- To fix, we need to add `#[Assert\Valid]` on `$parts` prop
+- Try again - a validation error now!
+- 

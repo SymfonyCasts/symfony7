@@ -32,7 +32,7 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
     - Model transformer vs View transformer
     - Custom data mapper
     - Inherit form data from parent form w/ `inherit_data` option
-- Embed forms
+//- Embed forms
 //- Access unmapped fields. Show a "confirm" checkbox as an unmapped field,
 //  or maybe like a GitHub confirmation input for deleting repos?
 //  E.g. you need to type capitan name to remove the ship
@@ -41,7 +41,7 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 ## Extra / Bonus
 //- Create a custom type extension (behaviour added to all forms types) e.g.
 //  similar to `help` extension from Symfony core
-- Create a custom type guesser
+- Create a custom type guesser - TODO, do we really want it? Super rare case IMO
 
 ## Possible mini-courses
 1. File uploads:

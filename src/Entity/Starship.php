@@ -53,6 +53,7 @@ class Starship
     /**
      * @var Collection<int, StarshipPart>
      */
+    #[Assert\Valid]
     #[ORM\OneToMany(targetEntity: StarshipPart::class, mappedBy: 'starship', fetch: 'EXTRA_LAZY', orphanRemoval: true)]
     #[ORM\OrderBy(['name' => 'ASC'])]
     private Collection $parts;

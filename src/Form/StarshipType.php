@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Starship;
 use App\Entity\StarshipStatusEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -51,6 +52,10 @@ class StarshipType extends AbstractType
             ])
 //            ->add('createdAt')
 //            ->add('updatedAt')
+            ->add('parts', CollectionType::class, [
+                'entry_type' => EmbeddedStarshipPartType::class,
+                'label' => false,
+            ])
         ;
     }
 
