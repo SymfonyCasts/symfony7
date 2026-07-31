@@ -64,10 +64,17 @@ class Starship
     #[ORM\OneToMany(targetEntity: StarshipDroid::class, mappedBy: 'starship', cascade: ['persist'])]
     private Collection $starshipDroids;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'starship')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->parts = new ArrayCollection();
         $this->starshipDroids = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -232,7 +239,7 @@ class Starship
 
     public function removeDroid(Droid $droid): static
     {
-        $this->droids->removeElement($droid);
+        $this->starshipDroids->removeElement($droid);
 
         return $this;
     }
@@ -266,6 +273,36 @@ class Starship
             // set the owning side to null (unless already changed)
             if ($starshipDroid->getStarship() === $this) {
                 $starshipDroid->setStarship(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setStarship($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getStarship() === $this) {
+                $user->setStarship(null);
             }
         }
 

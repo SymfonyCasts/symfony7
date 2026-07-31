@@ -19,6 +19,20 @@ final class AppStory extends Story
             'email' => 'picard@enterprise.space',
             'password' => 'makeitso',
             'name' => 'Jean-Luc Picard',
+            'roles' => ['ROLE_CAPTAIN'],
+            'starship' => StarshipFactory::new([
+                'name' => 'USS Enterprise (NCC-1701-D)',
+                'class' => 'Galaxy',
+                'captain' => 'Jean-Luc Picard',
+                'status' => StarshipStatusEnum::IN_PROGRESS,
+            ]),
+        ]);
+
+        UserFactory::createOne([
+            'email' => 'janeway@starfleet.space',
+            'password' => 'coffeeblack',
+            'name' => 'Kathryn Janeway',
+            'roles' => ['ROLE_ADMIN'],
         ]);
 
         StarshipFactory::createOne([

@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\StarshipRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class MainController extends AbstractController
 {
@@ -14,12 +16,14 @@ class MainController extends AbstractController
     public function homepage(
         StarshipRepository $repository,
         Request $request,
+        #[CurrentUser]
+        ?User $user,
     ): Response {
         $ships = $repository->findIncomplete();
         $ships->setMaxPerPage(5);
         $ships->setCurrentPage($request->query->get('page', 1));
 
-        $myShip = $repository->findMyShip();
+        $myShip = $user?->getStarship();
 
         return $this->render('main/homepage.html.twig', [
             'myShip' => $myShip,

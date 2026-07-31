@@ -34,6 +34,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?Starship $starship = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -117,6 +120,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getStarship(): ?Starship
+    {
+        return $this->starship;
+    }
+
+    public function setStarship(?Starship $starship): static
+    {
+        $this->starship = $starship;
 
         return $this;
     }
