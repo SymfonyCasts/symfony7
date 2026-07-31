@@ -31,7 +31,7 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
     - Form data transformers
     - Model transformer vs View transformer
     - Custom data mapper
-    - Inherit form data from parent form w/ `inherit_data` option
+    - Inherit form data from parent form w/ `inherit_data` option: https://symfony.com/doc/current/form/inherit_data_option.html
 //- Embed forms
 //- Access unmapped fields. Show a "confirm" checkbox as an unmapped field,
 //  or maybe like a GitHub confirmation input for deleting repos?
