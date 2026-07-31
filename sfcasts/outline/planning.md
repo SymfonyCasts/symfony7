@@ -28,8 +28,8 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 //      based on the underlying data (instead of passing those via constructor directly).
 //    - Custom form field options
     - Form mapping getter/setter callbacks
-    - Form data transformers
-    - Model transformer vs View transformer
+//    - Form data transformers
+//    - Model transformer vs View transformer
     - Custom data mapper
     - Inherit form data from parent form w/ `inherit_data` option: https://symfony.com/doc/current/form/inherit_data_option.html
 //- Embed forms

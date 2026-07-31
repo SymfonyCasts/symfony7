@@ -8,6 +8,7 @@ use App\Validator\ForbiddenName;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\Slug;
 use Gedmo\Mapping\Annotation\Timestampable;
@@ -69,6 +70,9 @@ class Starship
      */
     #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'starship')]
     private Collection $users;
+
+    #[ORM\Column]
+    private array $tags = [];
 
     public function __construct()
     {
@@ -305,6 +309,18 @@ class Starship
                 $user->setStarship(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
+
+    public function setTags(array $tags): static
+    {
+        $this->tags = $tags;
 
         return $this;
     }

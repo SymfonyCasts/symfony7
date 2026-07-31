@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Starship;
 use App\Entity\StarshipStatusEnum;
+use App\Form\DataTransformer\TagsToStringTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -52,11 +53,17 @@ class StarshipType extends AbstractType
             ])
 //            ->add('createdAt')
 //            ->add('updatedAt')
+            ->add('tags', null, [
+                'invalid_message' => 'No more than 3 tags allowed',
+            ])
             ->add('parts', CollectionType::class, [
                 'entry_type' => EmbeddedStarshipPartType::class,
                 'label' => false,
             ])
         ;
+
+        $builder->get('tags')
+            ->addViewTransformer(new TagsToStringTransformer());
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -605,4 +605,75 @@
 - It was not validated because of the embed form
 - To fix, we need to add `#[Assert\Valid]` on `$parts` prop
 - Try again - a validation error now!
-- 
+
+## Form data transformers
+- Let's give ships some tags, like `flagship`, `medical`, `stealth`
+- Open `src/Entity/Starship.php`
+- Run `symfony console make:entity`
+- Update `Starship` entity
+- Add `tags` property
+- Choose `json` type
+- Nullable - no
+- Make a migration and run it: `symfony console make:migration`
+- Then `symfony console doctrine:migrations:migrate`
+- Now add the `tags` field - open `StarshipType`
+- Add `->add('tags')` - it renders as a text input
+- Go to /admin/starship/new
+- Fill in the forms, add a tag and submit - an error:
+  > Expected argument of type "array", "string" given at property path "tags".
+- The model data is an ARRAY, but a text `<input>` needs a STRING - they don't match
+- Sidenote: yes, we COULD add a string-ish setter to the entity and `explode()` there
+- But that leaks a form-only format into our domain model, breaks our honest `array` type,
+  and can't turn bad input into a clean form error - a transformer fixes all three (more on errors soon)
+- A data transformer converts the value between the object and the input, both ways
+- Create `src/Form/DataTransformer/TagsToStringTransformer.php`
+- Make it implement `DataTransformerInterface`
+- `transform()` - runs when RENDERING (array -> string):
+  ```php
+  return implode(', ', $value ?? []);
+  ```
+- Tweak return type to `string`
+- `reverseTransform()` - runs on SUBMIT (string -> array):
+  ```php
+  return array_filter(array_map('trim', explode(',', $value)));
+  ```
+- Tweak return type to `array`
+- Also, `explode()` expects value to be a string, so let's make sure we don't have null at that spot
+- For this, before that line, add `if (null === $value || '' === trim($value))`
+- And `return []`
+- Now attach it - back in `StarshipType::buildForm()`
+- `$builder->get('tags')->addViewTransformer(new TagsToStringTransformer());`
+- (why `addViewTransformer` and not `addModelTransformer`? that's the next chapter)
+- Reload - the tags show as a comma-separated string, editable
+- Type `flagship, medical`, submit - check the DB, it's stored as a JSON array!
+- If there's a transformation error - you can use a special `TransformationFailedException`
+- Customize the default text with the `'invalid_message'` option on the field if needed
+- This is the transformer's superpower: a failed conversion becomes a clean FORM error, not a 500
+
+## Model transformer vs View transformer
+- We just called `addViewTransformer()` - but there's also `addModelTransformer()`. What's the difference?
+- Every form field has THREE representations of its value, let's SEE them
+- Reload /admin/starship/{id}/edit and open the profiler for the request
+- Click the "Forms" panel, then click the `tags` field
+- Look at the "Default Data" section - three rows: Model data, Normalized (norm) data, View data
+- Right now: Model = `array`, Norm = `array`, View = `"flagship, medical"` string
+- Our VIEW transformer sits between Norm and View - it only changed how the value is DISPLAYED
+- Norm stays the "real" array - that's the whole idea of a view transformer
+- Little experiment: change `addViewTransformer` to `addModelTransformer`, reload the profiler
+- Now: Model = `array`, Norm = `"flagship, medical"` string, View = `"flagship, medical"`
+- One word changed, and the Norm layer flipped from array to string - see it live!
+- A MODEL transformer sits between Model and Norm - it changes the value's TYPE earlier in the chain
+- Here's the mental model, from your object to the input:
+  ```
+  Model data  <—(model transformer)—>  Norm data  <—(view transformer)—>  View data
+  ```
+- Rule of thumb:
+  - Changing the DISPLAY format (array/date/number -> string) -> VIEW transformer (norm keeps the real value)
+  - Bridging your OBJECT's type to a scalar the field works with -> MODEL transformer (e.g. `EntityType`: entity <-> id)
+- For our tags, either technically works, but a view transformer is correct: the array is the real value, only the string is presentation
+- Switch it back to `addViewTransformer`
+- Proof it's everywhere: click the `arrivedAt` field in the profiler
+- Model = `DateTimeImmutable`, Norm = `DateTime`, View = `"2026-07-30"` string
+- Core's DateType uses a built-in VIEW transformer - exactly the same idea as our tags, just shipped with Symfony
+- And to be clear: this is NOT `buildView()` - transformers PRODUCE the view data both ways,
+  `buildView()` only EXPOSES it to Twig at render time
