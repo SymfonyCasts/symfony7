@@ -32,4 +32,9 @@ final class Version20260731142632 extends AbstractMigration
         $this->addSql('DROP INDEX IDX_8D93D6499B24DF5 ON user');
         $this->addSql('ALTER TABLE user DROP starship_id');
     }
+
+    public function isTransactional(): bool
+    {
+        return false;
+    }
 }
