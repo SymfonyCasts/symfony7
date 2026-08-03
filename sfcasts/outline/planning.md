@@ -36,7 +36,7 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 //- Access unmapped fields. Show a "confirm" checkbox as an unmapped field,
 //  or maybe like a GitHub confirmation input for deleting repos?
 //  E.g. you need to type capitan name to remove the ship
-- How to unit-test your forms - a chapter or two
+//- How to unit-test your forms - a chapter or two
 
 ## Extra / Bonus
 //- Create a custom type extension (behaviour added to all forms types) e.g.

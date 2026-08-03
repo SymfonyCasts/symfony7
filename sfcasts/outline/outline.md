@@ -669,7 +669,11 @@
   ```
 - Rule of thumb:
   - Changing the DISPLAY format (array/date/number -> string) -> VIEW transformer (norm keeps the real value)
-  - Bridging your OBJECT's type to a scalar the field works with -> MODEL transformer (e.g. `EntityType`: entity <-> id)
+  - Adapting your STORED type to the field's canonical (norm) type -> MODEL transformer
+    (e.g. `DateType`'s `input` option: `DateTimeImmutable`/timestamp <-> the canonical `DateTime` norm;
+    our `arrivedAt` above is exactly this)
+- Heads up: `EntityType`'s entity <-> id is actually a VIEW transformer (norm stays the entity),
+  the id string only appears at the view layer - so don't use it as the "model transformer" example
 - For our tags, either technically works, but a view transformer is correct: the array is the real value, only the string is presentation
 - Switch it back to `addViewTransformer`
 - Proof it's everywhere: click the `arrivedAt` field in the profiler
@@ -677,3 +681,55 @@
 - Core's DateType uses a built-in VIEW transformer - exactly the same idea as our tags, just shipped with Symfony
 - And to be clear: this is NOT `buildView()` - transformers PRODUCE the view data both ways,
   `buildView()` only EXPOSES it to Twig at render time
+
+## Unit-testing forms: start with the isolated pieces
+- What about testing forms?
+- Before testing a whole form type, notice how much form LOGIC we pushed into tiny standalone classes
+- Those are the easiest and most valuable things to test - no framework bootstrapping needed
+- This is a hidden payoff of transformers/validators: they're trivially unit-testable
+- Make sure the test tools are installed: `symfony composer require --dev symfony/test-pack`
+- First, test the transformer
+- Run `symfony console make:test`
+- Choose `TestCase` (plain PHPUnit test, no Symfony dependencies)
+- For the file name: `Form\DataTransformer\TagsToStringTransformerTest`
+- It will create `tests/Form/DataTransformer/TagsToStringTransformerTest.php` - open it
+- It extends plain `PHPUnit\Framework\TestCase` - this class has zero dependencies on Symfony, ideal for our case
+- Create `testTransform()`
+- Inside: `$transformer = new TagsToStringTransformer();`
+- Check for `$this->assertEquals($transformer->transform(['flagship', 'cargo']), 'flagship, cargo');`
+- Test the empty cases:
+  - `$this->assertEquals($transformer->transform([]), '');`
+  - `$this->assertEquals($transformer->transform(null), null');`
+- Run it with `symfony php bin/phpunit --filter=testTransform`
+- Whoops, failed:
+  > TypeError: implode(): If argument #1 ($separator) is of type string, argument #2 ($array) must be of type array, null given
+- Yeah, fair, let's fix our transformer: `if (null === $value) { return ''; }`
+- Run again - now tests pass!
+- Create `testReverseTransform()`.
+- Inside, `$transformer = new TagsToStringTransformer();`
+- Check good path: `$this->assertEquals($transformer->reverseTransform('flagship, cargo'), ['flagship', 'cargo']);`
+- Check trimming: `$this->assertEquals($transformer->reverseTransform('flagship , , stealth ,'), ['flagship', 'stealth']);`
+- Also `$this->assertEquals($transformer->reverseTransform(''), []);`
+- And `$this->assertEquals($transformer->reverseTransform(null), []);`
+- If we throw a `TransformationFailedException` in the transformer, we can test it too
+- We could use: `expectException(TransformationFailedException::class)`
+- OK, run the whole suite: `symfony php bin/phpunit` - passed!
+- Green! A pure, fast test with no DB, no container, no HTTP
+- Next, the custom validator
+- Run `symfony console make:test`
+- Choose `TestCase` again
+- For the file name: `Validator\ForbiddenNameValidatorTest`
+- It will create `tests/Validator/ForbiddenNameValidatorTest.php` - open it
+- Actually, Symfony ships a special base class for this
+- Instead, extend `ConstraintValidatorTestCase`
+- Implement `createValidator()` to return `new ForbiddenNameValidator(['bad', 'forbidden'])`
+- Next, create `testAllowedName()`
+- Inside, test successful path: `$this->validate('foo', new ForbiddenName());`
+- Below `$this->assertNoViolation();`
+- Now create `testForbiddenName()`
+- Inside, test failure: `$this->validate('bad', new ForbiddenName());`
+- Then `$this->buildViolation('The name "{{ value }}" is not allowed to be registered on our shop - go away!')`
+- Chain with `->setParameter('{{ value }}', 'bad')`
+- And finish w/ `->assertRaised();`
+- Run the suite again: `symfony php bin/phpunit` - green!
+- Two small classes, fully covered, and we haven't even touched the form yet

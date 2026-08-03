@@ -9,6 +9,10 @@ final class TagsToStringTransformer implements DataTransformerInterface
 {
     public function transform(mixed $value): string
     {
+        if (null === $value) {
+            return '';
+        }
+
         return implode(', ', $value);
     }
 
