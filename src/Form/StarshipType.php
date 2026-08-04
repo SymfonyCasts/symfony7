@@ -7,6 +7,7 @@ use App\Entity\StarshipStatusEnum;
 use App\Form\DataTransformer\TagsToStringTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -47,14 +48,14 @@ class StarshipType extends AbstractType
                     'count' => $starship->getStarshipDroids()->count(),
                 ]),
             ])
-            ->add('arrivedAt', null, [
+            ->add('arrivedAt', DateTimeType::class, [
                 'required' => false,
                 'widget' => 'single_text',
             ])
 //            ->add('createdAt')
 //            ->add('updatedAt')
             ->add('tags', null, [
-                'invalid_message' => 'No more than 3 tags allowed',
+                'invalid_message' => sprintf('An unknown tag is used. Known tags: %s.', implode(', ', TagsToStringTransformer::KNOWN_TAGS)),
             ])
             ->add('parts', CollectionType::class, [
                 'entry_type' => EmbeddedStarshipPartType::class,

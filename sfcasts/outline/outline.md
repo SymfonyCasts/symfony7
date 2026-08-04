@@ -647,7 +647,26 @@
 - Reload - the tags show as a comma-separated string, editable
 - Type `flagship, medical`, submit - check the DB, it's stored as a JSON array!
 - If there's a transformation error - you can use a special `TransformationFailedException`
-- Customize the default text with the `'invalid_message'` option on the field if needed
+- Let's allow only known tags
+- In `reverseTransform()`, change logic to: 
+```php
+        $tags = [];
+        foreach (array_filter(array_map('trim', explode(',', $value))) as $input) {
+            $canonical = strtolower($input);
+            if (!in_array($canonical, self::KNOWN_TAGS, true)) {
+                throw new TransformationFailedException(sprintf('"%s" is not a known tag. Known tags: %s.', $input, implode(', ', self::KNOWN_TAGS)));
+            }
+            $tags[] = $canonical;
+        }
+```
+- Now transformer is responsible for transforming tags into known tags - this justifies the use of TransformationFailedException
+- Refresh the page and type `flagship, medical, unknown`
+- It gives us an error now:
+  > This value is not valid.
+- We can even customize it, open `StarshipType` and add `[]` for options for `tags` field 
+- Customize the default error message with the `'invalid_message'`
+- I will set it to `sprintf('An unknown tag is used. Known tags: %s.', implode(', ', TagsToStringTransformer::KNOWN_TAGS))`
+- Try to submit the form again with an unknown tag - the error message is now customized!
 - This is the transformer's superpower: a failed conversion becomes a clean FORM error, not a 500
 
 ## Model transformer vs View transformer
@@ -711,10 +730,12 @@
 - Check trimming: `$this->assertEquals($transformer->reverseTransform('flagship , , stealth ,'), ['flagship', 'stealth']);`
 - Also `$this->assertEquals($transformer->reverseTransform(''), []);`
 - And `$this->assertEquals($transformer->reverseTransform(null), []);`
-- If we throw a `TransformationFailedException` in the transformer, we can test it too
-- We could use: `expectException(TransformationFailedException::class)`
-- OK, run the whole suite: `symfony php bin/phpunit` - passed!
+- Finally, let's `$this->expectException(TransformationFailedException::class);`
+- And `$this->expectExceptionMessageIsOrContains('"unknown" is not a known tag');`
+- Finish with `$transformer->reverseTransform('flagship, unknown');` that should throw
+- OK, run the whole suite: `symfony php bin/phpunit`
 - Green! A pure, fast test with no DB, no container, no HTTP
+### Test custom validator
 - Next, the custom validator
 - Run `symfony console make:test`
 - Choose `TestCase` again
@@ -733,3 +754,55 @@
 - And finish w/ `->assertRaised();`
 - Run the suite again: `symfony php bin/phpunit` - green!
 - Two small classes, fully covered, and we haven't even touched the form yet
+
+## Unit-testing a form type with TypeTestCase
+- Now the form type itself - Symfony has a dedicated base class: `Symfony\Component\Form\Test\TypeTestCase`
+- Let's create one more test: `symfony console make:test`
+- Choose `TestCase` again
+- For the file name: `Form\StarshipTypeTest`
+- It will create `tests/Form/StarshipTypeTest.php`
+- Open it and extend `TypeTestCase` instead
+- The core pattern: build an object, submit an array, assert the object got populated
+- First, rename method to `testSubmitValidData()`
+- Inside, add:
+  ```php
+  $starship = new Starship();
+  $form = $this->factory->create(StarshipType::class, $starship);
+
+  $form->submit(['name' => 'Nostromo', 'tags' => 'flagship, cargo'], false); // false = don't clear missing fields
+
+  $this->assertTrue($form->isSynchronized());
+  $this->assertSame('Nostromo', $starship->getName());
+  $this->assertSame(['flagship', 'cargo'], $starship->getTags());
+  ```
+- Note the `false` 2nd arg to `submit()` - a partial submit, so we skip the noise of every other field
+- Run the test: `symfony php bin/phpunit --filter StarshipTypeTest`
+- An error:
+  > UndefinedOptionsException: The option "widget" does not exist
+- Yep, that's because type guessers works only in a real container, not in `TypeTestCase`
+- And our DateTimeType field becomes just simple TextType in tests, which does not have that `widget` option
+- Best practice is to declare types explicitly in form types
+- Open the type and change `->add('arrivedAt', DateTimeType::class, [...])`
+- Run again: `symfony php bin/phpunit --filter StarshipTypeTest`
+- Now it says:OK, but there were issues!
+  > OK, but there were issues!
+  > Tests: 1, Assertions: 3, PHPUnit Notices: 1.
+- Hm, rerun the command with `--display-phpunit-notices`
+  > No expectations were configured for the mock object for Symfony\Component\EventDispatcher\EventDispatcherInterface. Consider refactoring your test code to use a test stub instead. The #[AllowMockObjectsWithoutExpectations] attribute can be used to opt out of this check.
+- Yeah, that's from the internals of `TypeTestCase` because of the recent changes in PHPUnit behavior
+- The easiest - add that attribute to the test class: `#[AllowMockObjectsWithoutExpectations]`
+- Rerun again `symfony php bin/phpunit --filter StarshipTypeTest` - green!
+- Don't test the validation: it is applied by a listener that is not active in the test case
+  and it relies on validation configuration. Instead, unit test your custom constraints directly
+  as we did above
+- It has low value to test other simple fields like `class, captain, slug, arrivedAt`
+  they are just simple fields with no custom logic, so we can skip this noise,
+  because it's more like we're testing Symfony Form component than our own code
+- Now test the transformer's FAILURE at the form level
+- Submit an unknown tag: `$form->submit(['tags' => 'unknown']);`
+- Assert `$this->assertFalse($form->isSynchronized());` - the `TransformationFailedException` desyncs the form
+- Run the tests again - oh, it's failed!
+- Ah, yes... the problem is that `isSynchronized()` works per-field, and
+  no transformation was to the form but only to the `tags`
+- Fix both calls to `$form->get('tags')->isSynchronized()`
+- Run tests again - green!

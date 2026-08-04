@@ -4,6 +4,7 @@ namespace App\Tests\Form\DataTransformer;
 
 use App\Form\DataTransformer\TagsToStringTransformer;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Exception\TransformationFailedException;
 
 class TagsToStringTransformerTest extends TestCase
 {
@@ -24,5 +25,10 @@ class TagsToStringTransformerTest extends TestCase
         $this->assertEquals($transformer->reverseTransform('flagship ,   stealth , , '), ['flagship', 'stealth']);
         $this->assertEquals($transformer->reverseTransform(''), []);
         $this->assertEquals($transformer->reverseTransform(null), []);
+
+        // Unknown tags should throw a TransformationFailedException
+        $this->expectException(TransformationFailedException::class);
+        $this->expectExceptionMessageIsOrContains('"unknown" is not a known tag');
+        $transformer->reverseTransform('flagship, unknown');
     }
 }

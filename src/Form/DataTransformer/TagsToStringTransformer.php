@@ -7,6 +7,14 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 
 final class TagsToStringTransformer implements DataTransformerInterface
 {
+    public const array KNOWN_TAGS = [
+        'flagship',
+        'medical',
+        'stealth',
+        'cargo',
+        'science',
+    ];
+
     public function transform(mixed $value): string
     {
         if (null === $value) {
@@ -22,6 +30,15 @@ final class TagsToStringTransformer implements DataTransformerInterface
             return [];
         }
 
-        return array_filter(array_map('trim', explode(',', $value)));
+        $tags = [];
+        foreach (array_filter(array_map('trim', explode(',', $value))) as $input) {
+            $canonical = strtolower($input); // transformation, this justifies the use of TransformationFailedException
+            if (!in_array($canonical, self::KNOWN_TAGS, true)) {
+                throw new TransformationFailedException(sprintf('"%s" is not a known tag. Known tags: %s.', $input, implode(', ', self::KNOWN_TAGS)));
+            }
+            $tags[] = $canonical;
+        }
+
+        return array_values(array_unique($tags));
     }
 }
