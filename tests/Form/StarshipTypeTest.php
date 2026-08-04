@@ -46,4 +46,27 @@ class StarshipTypeTest extends TypeTestCase
         $this->assertSame('Nostromo', $starship->getName());
         $this->assertSame([], $starship->getTags());
     }
+
+    public function testIsEditMode(): void
+    {
+        $starship = new Starship();
+        $form = $this->factory->create(StarshipType::class, $starship);
+
+        // The status field should not be present for a new starship
+        $this->assertFalse($form->has('status'));
+        $this->assertFalse($form->get('slug')->isDisabled());
+
+        // Now simulate editing an existing starship
+        $starship->setId(1); // Simulate that the starship has an ID (i.e., it's being edited)
+        $form = $this->factory->create(StarshipType::class, $starship);
+
+        // The status field should now be present
+        $this->assertTrue($form->has('status'));
+        $this->assertTrue($form->get('slug')->isDisabled());
+
+        $form = $this->factory->create(StarshipType::class, $starship, [
+            'is_admin' => true,
+        ]);
+        $this->assertFalse($form->get('slug')->isDisabled());
+    }
 }

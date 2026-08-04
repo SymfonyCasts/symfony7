@@ -763,7 +763,7 @@
 - It will create `tests/Form/StarshipTypeTest.php`
 - Open it and extend `TypeTestCase` instead
 - The core pattern: build an object, submit an array, assert the object got populated
-- First, rename method to `testSubmitValidData()`
+- First, rename method to `testSubmitValidTags()`
 - Inside, add:
   ```php
   $starship = new Starship();
@@ -798,11 +798,57 @@
 - It has low value to test other simple fields like `class, captain, slug, arrivedAt`
   they are just simple fields with no custom logic, so we can skip this noise,
   because it's more like we're testing Symfony Form component than our own code
-- Now test the transformer's FAILURE at the form level
-- Submit an unknown tag: `$form->submit(['tags' => 'unknown']);`
-- Assert `$this->assertFalse($form->isSynchronized());` - the `TransformationFailedException` desyncs the form
-- Run the tests again - oh, it's failed!
+- Now test the transformer's FAILURE at the invalid tags
+- Create `testSubmitInvalidTags()`
+- Inside, `$starship = new Starship();`
+- `$form = $this->factory->create(StarshipType::class, $starship);`
+- Submit an unknown tag: `$form->submit(['name' => 'Nostromo', 'tags' => 'flagship, foobar',]);`
+- But now Assert `$this->assertFalse($form->isSynchronized());` - the `TransformationFailedException` desyncs the form
+- Run the tests again - oh, it's failed! But why? The transformer is throwing, so the form should be desynced
 - Ah, yes... the problem is that `isSynchronized()` works per-field, and
   no transformation was to the form but only to the `tags`
 - Fix both calls to `$form->get('tags')->isSynchronized()`
 - Run tests again - green!
+- Now test conditional `status` field
+- Create a new method `testIsEditMode()`
+- Create the form again: `$form = $this->factory->create(StarshipType::class, $starship);`
+- Next, `$this->assertFalse($form->has('status'))`
+- And `$this->assertFalse($form->get('slug')->isDisabled());`
+- Below, let's check for the existent entity
+- But for this we need to add a `setId()` method to the entity, just for testing purposes:
+    ```php
+    /**
+     * @internal use in tests only
+     */
+    public function setId(int $int)
+    {
+        $this->id = $int;
+    }
+    ```
+- Back in test, set the id w/ `$starship->setId(1);`
+- Create the form again: `$form = $this->factory->create(StarshipType::class, $starship);`
+- Assert `$this->assertTrue($form->has('status'))`
+- And `$this->assertTrue($form->get('slug')->isDisabled());`
+- Another approach would be to use reflection in the test to set the private `id` prop
+- Finally, create another form passing `'is_admin' => true,`
+- And now `$this->assertFalse($form->get('slug')->isDisabled());`
+- Important notes:
+  - CSRF is OFF here by default (no session), so submit without a token - that's expected
+  - Validation does NOT run in `TypeTestCase` - it's about DATA BINDING, not constraints,
+    so `price > 0`, `Assert\Valid`, `EqualTo`... none of those fire here - that needs a functional test
+
+TODO I'm not sure we should show it too, too much coding on this topic, probably just mention it and link to the dedicated testing courses?
+## Functional test: where validation actually runs
+- To test validation end-to-end, we go through the real app with booted kernel
+- For this, create another test w/ `symfony console make:test`
+- Choose `WebTestCase`
+- Let's try to check another form: the StarshipPart delete confirmation
+- Name the file `Controller\StarshipPartDeleteTest`
+- It will create `tests/Controller/StarshipPartDeleteTest.php` extending `WebTestCase`
+- Load a part - we have Foundry that could help with it!
+- Then request its delete page
+- Submit the form with the WRONG name -> assert the part still exists and an error is shown
+- Submit with the CORRECT name -> assert a redirect and the part is gone from the DB
+- This is the layer where the validator is fully wired - exactly what `TypeTestCase` can't cover
+- Takeaway: unit-test the pieces and the type (fast, isolated), functional-test the validation (real, end-to-end)
+- Want to go deep in tests - look at our dedicated testing courses! (link to it)

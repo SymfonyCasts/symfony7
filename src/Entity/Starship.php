@@ -81,6 +81,15 @@ class Starship
         $this->users = new ArrayCollection();
     }
 
+    /**
+     * @internal use in tests only
+     */
+    public function setId(int $int)
+    {
+        $this->id = $int;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
