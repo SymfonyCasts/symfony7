@@ -38,7 +38,15 @@ class StarshipType extends AbstractType
             ])
             ->add('name')
             ->add('class')
-            ->add('captain', null, [
+            ->add('commander', null, [
+//                'getter' => function (Starship $starship): ?string {
+//                    return $starship->getCaptain();
+//                },
+//                'setter' => function (Starship $starship, ?string $value): void {
+//                    $starship->setCaptain($value ?? '');
+//                },
+                'property_path' => 'captain',
+                'required' => true,
 //                'help' => sprintf('The captain will command %s droids on the starship', $starship->getStarshipDroids()->count()),
 //                'help' => 'form.starship.captain_droids',
 //                'help_translation_parameters' => [

@@ -27,7 +27,8 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 //    - Сonditionally change/show/hide form fields
 //      based on the underlying data (instead of passing those via constructor directly).
 //    - Custom form field options
-    - Form mapping getter/setter callbacks
+//    - Form mapping getter/setter callbacks
+//    - property_path option
 //    - Form data transformers
 //    - Model transformer vs View transformer
     - Custom data mapper

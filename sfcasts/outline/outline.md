@@ -144,6 +144,36 @@
 - Update the page - now the field is disabled
 - If you open Dev Tools and remove `disabled="disabled"`, update the field and submit - no changes are done
 - This is the proper secured way if you don't want user input, or just do not render the field at all - you can just print the plain value in the template
+###...
+- What if I want the `captian` field called `commander` in the form?
+- Well, yes, we can update the label, but the field would remain `captain` in the form data
+- Let's try to rename the form field - update it to `commander`
+- If you open `/admin/starship/new` - you will see:
+  > Can't get a way to read the property "commander" in class "App\Entity\Starship".
+- That makes sense, but how can we fix it?
+- Rename the property on the entity? Yes, but it would require a migration,
+  and I do want internally that field to be called `captain` for clarity
+- We can use custom getter/setter for that field
+- Add getter `'getter' => function (Starship $starship): ?string {}`
+- Inside, return `$starship->getCaptain();`
+- Below add `'setter' => function (Starship $starship, ?string $value): void {}`
+- Inside, call `$starship->setCaptain($value ?? '');`
+- Go refresh the page and submit the form - no errors, but also no validation error on the field
+- Yes, this field isn't mapped to the property automatically so Form component does not know about our constraints
+- We should import the validation constaints from the entity to the form field manually
+- But wait! Let's see another approach
+- I will comment out the custom getter/setter
+- And instead add `'property_path' => 'captain',`
+- Reload the page - it still works
+- But if you submit an empty field - you will see the validation error now, so our validation constraint on the `captain` field was hooked up
+- The only problem you may still notice - the required `*` icon is gone
+- We can fix it by adding `'required' => true,` option to the field explicitly
+- Reload the page - the `*` is back!
+- So, custom setters/getters are great, and they gave you access to the whole object
+- This might be useful if you want to render a few fields into one
+- E.g. in getter you can join user's first and last names and render them as a single field 
+- And in setter you can split the value back into two properties setting them accordingly
+- But if all you need to do is to map the field to existent property - `property_path` is the right way to go
 
 ## Custom form type options
 - But what if we want to pass some data from outside of the form type
