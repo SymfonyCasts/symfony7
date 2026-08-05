@@ -12,19 +12,19 @@ class TagsToStringTransformerTest extends TestCase
     {
         $transformer = new TagsToStringTransformer();
 
-        $this->assertEquals($transformer->transform(['flagship', 'cargo']), 'flagship, cargo');
-        $this->assertEquals($transformer->transform([]), '');
-        $this->assertEquals($transformer->transform(null), '');
+        $this->assertSame('flagship, cargo', $transformer->transform(['flagship', 'cargo']));
+        $this->assertSame('', $transformer->transform([]));
+        $this->assertSame('', $transformer->transform(null));
     }
 
     public function testReverseTransform(): void
     {
         $transformer = new TagsToStringTransformer();
 
-        $this->assertEquals($transformer->reverseTransform('flagship, cargo'), ['flagship', 'cargo']);
-        $this->assertEquals($transformer->reverseTransform('flagship ,   stealth , , '), ['flagship', 'stealth']);
-        $this->assertEquals($transformer->reverseTransform(''), []);
-        $this->assertEquals($transformer->reverseTransform(null), []);
+        $this->assertSame(['flagship', 'cargo'], $transformer->reverseTransform('flagship, cargo'));
+        $this->assertSame(['flagship', 'stealth'], $transformer->reverseTransform('flagship ,   stealth , , '));
+        $this->assertSame([], $transformer->reverseTransform(''));
+        $this->assertSame([], $transformer->reverseTransform(null));
 
         // Unknown tags should throw a TransformationFailedException
         $this->expectException(TransformationFailedException::class);

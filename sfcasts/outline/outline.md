@@ -428,7 +428,7 @@
 - In previous course we've added some validation constraints to the fields
 - But those constraints were related to specific fields only
 - However, some rules may span MULTIPLE fields at once - and those attributes can't express that
-- Example rule: an expensive part (price over 1000) must explain itself in `notes`
+- Example rule: an expensive part (price of 1000 or more) must explain itself in `notes`
 - Attributes validate one property at a time, so we need something more flexible
 - Meet the `Callback` constraint! It runs a method with access to the WHOLE object
 - Open `StarshipPartDto`
@@ -777,10 +777,10 @@
 - It extends plain `PHPUnit\Framework\TestCase` - this class has zero dependencies on Symfony, ideal for our case
 - Create `testTransform()`
 - Inside: `$transformer = new TagsToStringTransformer();`
-- Check for `$this->assertEquals($transformer->transform(['flagship', 'cargo']), 'flagship, cargo');`
+- Check for `$this->assertSame('flagship, cargo', $transformer->transform(['flagship', 'cargo']));`
 - Test the empty cases:
-  - `$this->assertEquals($transformer->transform([]), '');`
-  - `$this->assertEquals($transformer->transform(null), '');`
+  - `$this->assertSame('', $transformer->transform([]));`
+  - `$this->assertSame('', $transformer->transform(null));`
 - Run it with `symfony php bin/phpunit --filter=testTransform`
 - Whoops, failed:
   > TypeError: implode(): If argument #1 ($separator) is of type string, argument #2 ($array) must be of type array, null given
@@ -788,10 +788,10 @@
 - Run again - now tests pass!
 - Create `testReverseTransform()`.
 - Inside, `$transformer = new TagsToStringTransformer();`
-- Check good path: `$this->assertEquals($transformer->reverseTransform('flagship, cargo'), ['flagship', 'cargo']);`
-- Check trimming: `$this->assertEquals($transformer->reverseTransform('flagship , , stealth ,'), ['flagship', 'stealth']);`
-- Also `$this->assertEquals($transformer->reverseTransform(''), []);`
-- And `$this->assertEquals($transformer->reverseTransform(null), []);`
+- Check good path: `$this->assertSame(['flagship', 'cargo'], $transformer->reverseTransform('flagship, cargo'));`
+- Check trimming: `$this->assertSame(['flagship', 'stealth'], $transformer->reverseTransform('flagship , , stealth ,'));`
+- Also `$this->assertSame([], $transformer->reverseTransform(''));`
+- And `$this->assertSame([], $transformer->reverseTransform(null));`
 - Finally, let's `$this->expectException(TransformationFailedException::class);`
 - And `$this->expectExceptionMessageIsOrContains('"unknown" is not a known tag');`
 - Finish with `$transformer->reverseTransform('flagship, unknown');` that should throw
