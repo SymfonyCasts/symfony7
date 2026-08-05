@@ -3,7 +3,21 @@
 
 {#    {{ dump(form) }}#}
     {% if form.status is defined %}
-        {{ form_row(form.status) }}
+{#        {{ form_row(form.status) }}#}
+        <fieldset>
+            <legend>{{ field_label(form.status) }}</legend>
+            {% for label, value in field_choices(form.status) %}
+                <label for="{{ field_id(form.status) }}_{{ loop.index0 }}" class="mr-5">
+                    <input type="radio"
+                           id="{{ field_id(form.status) }}_{{ loop.index0 }}"
+                           name="{{ field_name(form.status) }}"
+                           value="{{ value }}"
+                           {{ value == field_value(form.status) ? 'checked' }}
+                    >
+                    {{ label }}
+                </label>
+            {% endfor %}
+        </fieldset>
     {% else %}
         <div class="mb-6 text-gray-800">
             Status: <span class="text-white">{{ form.vars.data.status.value }}</span>

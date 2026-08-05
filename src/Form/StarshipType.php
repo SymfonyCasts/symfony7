@@ -25,6 +25,7 @@ class StarshipType extends AbstractType
         $isEdit = $starship && $starship->getId();
         if ($isEdit) {
             $builder->add('status', EnumType::class, [
+                'expanded' => true,
                 'class' => StarshipStatusEnum::class,
             ]);
         }

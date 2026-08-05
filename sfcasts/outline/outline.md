@@ -392,6 +392,39 @@
 - Done! `CreditsType` now bundles behavior (from `IntegerType`), its own `units_symbol` option,
   and its own markup - a complete, reusable custom widget
 
+## ...
+- Status field for the Starship is rendered as a select list by default
+- But we can easily change it
+- Open `StarshipType`, for `status` field, add `'expanded' => true,`
+- Reload the page - now it's rendered as radio buttons instead of a select list
+- But if you want total control over rendering - along with `form_*()` Twig helpers there are more low-level `field_*()` Twig helpers 
+- That makes form field rendering even more flexible
+- Let's try to render the `Starship::status` field manually and see how they can help you
+- Open `templates/starship_admin/_form.html.twig`
+- Go inside the `if form.status is defined` block
+- First, I will start with `<fieldset></fieldset>` wrapper
+- Next, `<legend>{{ field_label(form.status) }}</legend>`
+- `form_label()` is a high-level helper that renders the label and its wrapper
+- `field_label()` is a low-level helper that renders only the label as a text, no wrapper
+- Next, we need iterate over the `form.status` field's errors and render them manually
+- We can do it with `{% for label, value in field_choices(form.status) %}`
+- Below, render `<label></label>`
+- Inside, `<input type="radio">`
+- Below, render the label text: `{{ label }}`
+- Each input should have the name - we can render it as `name="{{ field_name(form.status) }}"`
+- This way Symfony forms will know what this field it is when the form is submitted
+- Also, we need the value: `value="{{ value }}"`
+- Input type radio is a special, it needs `checked` attr on the chosen input
+- Add it with `{{ value == field_value(form.status) ? 'checked' }}`
+- And it would be useful to have an id attr as well
+- Add `id="{{ field_id(form.status) }}"`
+- But since we're in the loop all inputs will have the same id that is not valid
+- Let's append a loop index with `id="{{ field_id(form.status) }}_{{ loop.index0 }}"`
+- And now we can refer to this id in the label: `<label for="{{ field_id(form.status) }}_{{ loop.index0 }}">`
+- Done! Reload the page to see our custom-rendered radio buttons
+- I would add `class="mr-5">` to the label to add some spacing between the buttons
+- Reload - much better
+
 ## Flexible validation callback constraint
 - Open /admin/starship-part/new and submit empty form - validation errors
 - In previous course we've added some validation constraints to the fields

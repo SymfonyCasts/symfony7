@@ -4,7 +4,7 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 
 //- Form rendering
 //    - Cover form rendering variables via `form.field.vars`
-    - Cover more form field helpers left uncovered: `form_(id|name|value|label|help|choices)` - an iterator for choice fields
+//    - Cover more form field helpers left uncovered: `form_(id|name|value|label|help|choices)` - an iterator for choice fields
 //    - Allow HTML contents in form labels w/ `label_html` option
 //    - Translatable help messages w/ `new TranslatableMessage()` that include all the information needed
 //- Form theming
@@ -31,8 +31,8 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 //    - property_path option
 //    - Form data transformers
 //    - Model transformer vs View transformer
-    - Custom data mapper
-    - Inherit form data from parent form w/ `inherit_data` option: https://symfony.com/doc/current/form/inherit_data_option.html
+//    - Custom data mapper
+    - Inherit form data from parent form w/ `inherit_data` option: https://symfony.com/doc/current/form/inherit_data_option.html - TODO Do we really need it? I don't see a good example for this, I would ignore
 //- Embed forms
 //- Access unmapped fields. Show a "confirm" checkbox as an unmapped field,
 //  or maybe like a GitHub confirmation input for deleting repos?
@@ -42,7 +42,7 @@ Related PR: https://github.com/SymfonyCasts/tutorial-planning/pull/94
 ## Extra / Bonus
 //- Create a custom type extension (behaviour added to all forms types) e.g.
 //  similar to `help` extension from Symfony core
-- Create a custom type guesser - TODO, do we really want it? Super rare case IMO
+- Create a custom type guesser - TODO, do we really want it? Super rare case IMO, I would ignore
 
 ## Possible mini-courses
 1. File uploads:
