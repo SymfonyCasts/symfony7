@@ -55,12 +55,15 @@
 - Submit the empty search form again - it works now!
 - Instead of null, the form uses empty string as the default value for the `query` field
 
+
 # Binding a Form to a DTO
 - But if you go back to /admin/starship-part/new form
 - And submit an empty form - it will fail again
   > StarshipPart::__construct(): Argument #1 ($name) must be of type string, null given
 - We could do the same `empty_data` trick for `name` & `price`
 - But instead, let's think a bit
+
+## Making the Entity Types Honest
 - Let's open `src/Entity/StarshipPart`
 - We say name and price are required according to our validation rules
 - And in the database, we do not allow nullable (`nullable=false`)
@@ -75,6 +78,8 @@
     - And to:  `public function getPrice(): int`
 - Now PHP code tell us the truth - those properties cannot be null
 - But for the forms, we still need to allow invalid states
+
+## Creating the DTO
 - For this, create DTO class `src/Dto/StarshipPartDto.php`
     - Make it `final`
     - Copy all the properties from the entity including asserts
@@ -86,6 +91,8 @@
 - Back to `StarshipPartType` form
     - Set `'data_class' => StarshipPartDto::class,`
     - And comment out `empty_data` there - we don't need it anymore
+
+## Mapping the DTO with `ObjectMapper`
 - Now back to `AdminController::newStarshipPart()`
     - This `$form->getData()` will return our DTO object now
     - We should map it to the entity before persisting
@@ -101,6 +108,7 @@
 - Now go refresh the page, fill in the form, and submit it
 - Go search the created part - here it is! It worked as before
 - But now our PHP code is more correct and reflects the database setup
+
 
 # Conditional Fields: New vs Edit
 
@@ -181,7 +189,10 @@
 - And in setter you can split the value back into two properties setting them accordingly
 - But if all you need to do is to map the field to existent property - `property_path` is the right way to go
 
+
 # Passing Custom Options to a Form
+
+## Declaring a Custom Option
 - But what if we want to pass some data from outside of the form type
 - What if we still want to allow editing `slug` field for admins?
 - We know we can check for admin w/ `$this->isGranted('ROLE_ADMIN')`
@@ -195,11 +206,13 @@
 - This way we created a new option, check it with `dd($options)`
 - Comment the dump line out
 - Tweak `slug` field logic to `'disabled' => $isEdit && !$options['is_admin'],`
+
+## Passing the Option from the Controller
 - Now go to `StarshipAdminController::edit()`
 - Add `'is_admin' => $this->isGranted('ROLE_ADMIN'),` as options to `createForm()`
 - Reload the page to see the field can be still  edited by admins
 
-# Reading Form Data in Templates with `form.vars`
+## Rendering Fields Individually
 - But we completely hide status for create form
 - It may be clearer if we still print the status in the form for clarity
 - Open `starship_admin/new.html.twig`
@@ -214,6 +227,8 @@
 - Let's wrap it in `if form.status is defined` check is enough
 - In `else`, we need to print the status as text
 - But how to get access to the entity? Should we pass it from the controller to this template?
+
+## Grabbing the Object from `form.vars`
 - Well, there's an easier way. Dump the form object w/ `dump(form)`
 - Aha, we have `vars`... open it
 - The `form.vars.data` contain the Starship object that we can use
@@ -222,7 +237,10 @@
 - Wrap it w/ a `<div class="mb-6 text-gray-800">`
 - Refresh the page to see the "waiting" status
 
-# Allow HTML code in Labels with `label_html`
+
+# Custom Labels & Help Text
+
+## Allow HTML code in Labels with `label_html`
 - Open /admin/starship-part/new
 - I want to be clear say that the price should be in credits
 - We can easily change field's label to clarify it
@@ -234,7 +252,7 @@
 - Below, add one more option: `'label_html' => true,`
 - Refresh again - much better
 
-# Translatable, Pluralized Help Messages
+## Translatable, Pluralized Help Messages
 - Let's add a help message for `captain` field on the `StarshipType`
 - Add options, `'help'` option
 - And set its value to `sprintf('The captain will command %s droids on the starship', $starship->getStarshipDroids()->count())`
@@ -261,7 +279,10 @@
 - Set `help` to `new TranslatableMessage()` and pass the values there
 - Reload the page to see everything still works
 
-# How Form Theming Works
+
+# Form Theme Blocks
+
+## How Form Theming Works
 - Open /admin/starship-part/new and view the page source
 - Notice all the wrapping `<div>`s, labels, and classes around each field
 - We never wrote any of that markup, but you know from Basics course where it comes from
@@ -277,7 +298,7 @@
 - Key concept: Symfony picks the block to render a field by its name, walking a hierarchy from the most specific to the most generic (fallback)
 - Our goal for this section: add a "credits" addon right inside the `price` field's input
 
-# Finding Block Names in the Profiler
+## Finding Block Names in the Profiler
 - To customize the `price` widget, we first need to know which block renders it
 - Guessing block names is painful - let's do it the rock-solid way instead
 - Reload /admin/starship-part/new and open the profiler for that request (click the request in the WDT)
@@ -293,7 +314,10 @@
 - In the `templates/admin/starship-part/new.html.twig`, add `{{ dump(form.price.vars) }}`
 - And search for `block_prefixes` 
 
-# Overriding a Form Theme Block
+
+# Overriding a Theme Block
+
+## Overriding the Widget Block
 - Now let's actually override a block
 - Two ways to register a theme: a separate theme file, or inline in the current template
 - Let's do it inline - open `templates/admin/starship-part/new.html.twig`
@@ -308,7 +332,7 @@
 - Yes, this block is special, so we need to call the "parent" block via `{{ block('form_widget') }}`
 - Reload again - the help message for price field has currency icon now
 
-# Stable Block Names with `block_prefix`
+## A Stable Name with `block_prefix`
 - It works, but better: give the field its own stable block prefix
 - We don't want to accidentaly change form type or field names and break our custome styles
 - Open `StarshipPartType`
@@ -319,7 +343,10 @@
 - Bonus: because the prefix is a name we chose, we can reuse `credits_widget` on ANY field
   on this form just by setting the same `'block_prefix' => 'credits'`
 
+
 # A Global, Reusable Form Theme
+
+## Extending the Base Tailwind Theme
 - This way we can customize not only widgets but any block like row, label, errors, even `help` message block
 - E.g. we can add an ℹ️ icon in front of the help message
 - But if we do it the way we show above - it will apply only to the current form
@@ -331,6 +358,8 @@
 - If you reload the page - nothing is changed
 - Out custom form theme just uses the Tailwind one
 - But now we can customize what we need in it
+
+## Customizing the `help` Block
 - In our custom theme file, create `{% block form_help %}`
 - Inside add `<div class="flex items-start gap-2">`
 - Then inside that `<span class="mt-1">ℹ️</span>` and call `{{ parent() }}`
@@ -343,7 +372,10 @@
 - If you open /admin/starship/new - there it is!
 - Done! Now this works globally for all forms
 
+
 # Building a Custom Field Type
+
+## Creating the `CreditsType`
 - Our `credits` styling is nice, but to reuse it we must repeat stuff on every field:
   the `'block_prefix' => 'credits'` option, the label, etc.
 - "An amount in credits" is a concept we'll want on more fields (part price, ship cost, etc)
@@ -357,6 +389,8 @@
 - Override `getParent()`
 - Return `IntegerType::class` - our type IS an integer field, we just layer on top of it
 - Credits are whole numbers, so `IntegerType` fits perfectly
+
+## Using the New Type on the Field
 - Now open `StarshipPartType`
 - Change to `->add('price', CreditsType::class)`
 - The default block prefix of this type is ALREADY `credits`, so we don't need it
@@ -368,7 +402,10 @@
 - One thing to notice: the widget markup STILL lives in the template
 - If we used `CreditsType` in another form in another template, we'd get a plain input - let's fix that next
 
+
 # Giving the Type Its Own Widget
+
+## Moving the Widget into the Theme
 - The `credits_widget` block still sits in `new.html.twig` via `{% form_theme form _self %}`
 - That means the markup is NOT bundled with the type - use `CreditsType` elsewhere and it's gone
 - A proper custom widget should carry its own markup - let's move it to the theme
@@ -380,6 +417,7 @@
 - Reload /admin/starship-part/new - the ₡ addon is still there, but `new.html.twig` is clean now
 - That's the whole point: `CreditsType` + its theme block = a self-contained widget,
   usable anywhere with a single line and zero template work
+
 ## A Configurable Currency Symbol
 - Capstone: let's make the currency symbol configurable via a custom option
 - Back in `CreditsType::configureOptions()`, add `'units_symbol' => '₡',` to the defaults
@@ -398,6 +436,7 @@
 - Reload the page - symbol changed
 - Done! `CreditsType` now bundles behavior (from `IntegerType`), its own `units_symbol` option,
   and its own markup - a complete, reusable custom widget
+
 
 # Total Control with the `field_*()` Helpers
 
@@ -436,7 +475,10 @@
 - I would add `class="mr-5">` to the label to add some spacing between the buttons
 - Reload - much better
 
+
 # Cross-Field Validation with a Callback
+
+## Rules That Span Multiple Fields
 - Open /admin/starship-part/new and submit empty form - validation errors
 - In previous course we've added some validation constraints to the fields
 - But those constraints were related to specific fields only
@@ -444,6 +486,8 @@
 - Example rule: an expensive part (price of 1000 or more) must explain itself in `notes`
 - Attributes validate one property at a time, so we need something more flexible
 - Meet the `Callback` constraint! It runs a method with access to the WHOLE object
+
+## Adding a Callback Method
 - Open `StarshipPartDto`
 - Add a method `public function validate(ExecutionContextInterface $context): void`
 - Add the `#[Assert\Callback]` attribute above it
@@ -459,7 +503,10 @@
 - Reload, set price to `5000`, leave `notes` empty, submit - the error shows right on `notes`
 - Fill in `notes` and submit - it passes. A rule across two fields, done in plain PHP
 
+
 # Validation Groups
+
+## Constraints in a Named Group
 - Now open /admin/starship/new - some rules should differ between creating and editing
 - Example: a brand-new ship may not have arrived yet (`arrivedAt` can be empty)
 - But an existing ship we're editing MUST have an arrival date
@@ -481,6 +528,8 @@
 - That's a nice trick that skips HHTML5 validation entirely when clicked
 - Right now, if you reload /admin/starship/new and submit empty form
 - We will see "Every starship needs a name" error
+
+## Activating Groups with a Closure
 - Back to `StarshipType`, in `configureOptions()`
 - Add a `validation_groups` option set to a closure:
   ```php
@@ -496,11 +545,14 @@
 - Go to /admin/starship/new, leave arrival empty, submit - only `Default` runs, so only empty name complains
 - Now edit an existing ship, clear the arrival date, submit - the `edit` group runs now
 
+
 # A Custom Validation Constraint
 - Callbacks are flexible, but they live inside ONE class and can't be reused
 - And they can't easily use services - what if a rule needs a repository or a standalone service? or specific config?
 - For that, we build our own reusable constraint with its own validator class
 - Some ship names are reserved (say "Death Star", "Imperial Star Destroyer", "Executor" - no service for those!) - let's forbid them
+
+## Generating the Constraint & Validator
 - Run `symfony console make:validator`
 - Call it `ForbiddenName`
 - It generates two files in `src/Validator/`: `ForbiddenName` (the constraint) and `ForbiddenNameValidator`
@@ -508,6 +560,8 @@
   e.g. `public string $message = 'The name "{{ value }}" is not allowed to be registered on our shop - go away!';`
 - Explain `#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]`
 - That fits our case perfectly, so no changes needed
+
+## Writing the Validator Logic
 - Open `ForbiddenNameValidator` - this is where the logic lives
 - Here's the whole point: we can inject services here (impossible in a callback/attribute)
 - Add a constructor with the forbidden list injected, e.g. `public function __construct(private array $forbiddenNames = ['Death Star', 'Imperial Star Destroyer', 'Executor'])`
@@ -524,6 +578,8 @@
           ->setParameter('{{ value }}', $value)
           ->addViolation();
   ```
+
+## Applying & Verifying It
 - Now use it: open `src/Entity/Starship.php`
 - Add `#[ForbiddenName]` on the `$name` property and import the constraint
 - Finally, verify everything landed with `symfony console debug:validator "App\\Entity\\Starship"`
@@ -534,11 +590,14 @@
 > The name "DEATH STAR" is not allowed to be registered on our shop - go away!
 - Any other name works fine
 
+
 # Unmapped Fields
 - We can create starship parts, but can't delete them, let's fix it
 - Deleting stuff is dangerous, so let's build a proper confirmation
 - But instead of the JS style that was generated by Maker for Starships, I'd like GitHub style
 - On GitHub, to delete a repo you must type its name - let's do the same for a part
+
+## Building the Delete Form and Page
 - First, the form - run `symfony console make:form DeleteStarshipPartType`
 - Type `StarshipPart` for the entity
 - Open `src/Form/DeleteStarshipPartType.php`
@@ -571,11 +630,15 @@
 - Inside if: `remove($starshipPart)` & `flush()`
 - I will also add a flash message: `$this->addFlash('success', 'The part was successfully deleted.');`
 - And don't forget about `return $this->redirectToRoute('app_part_index');` at the end
+
+## Making `confirmName` Unmapped
 - Reload the delete page - an error:
   > Can't get a way to read the property "confirmName" in class "App\Entity\StarshipPart".
 - Right - there's no `confirmName` on `StarshipPart`, and we don't WANT one
 - This is a throw-away confirmation input, not something to persist
 - Fix it with `'mapped' => false,` - now the form won't read/write it to the object
+
+## Validating the Typed Name with `EqualTo`
 - But how do we validate the typed value matches the real name?
 - Grab the part first: at the top of `buildForm()`, add `$part = $options['data'];`
 - Add `/** @var StarshipPart $part */` above it
@@ -598,11 +661,14 @@
 - Bonus: if you ever need the raw typed value, it's `$form->get('confirmName')->getData()`
   (unmapped fields never touch your object, so this is the only way to read them)
 
+
 # Custom Form Type Extensions
 - Quick question: where did the `constraints` option we just used come from?
 - It's NOT part of `FormType` - open its source and search, you won't find it
 - Symfony adds it to EVERY field type via a "type extension" - same story for CSRF and `help`
 - A type extension lets you add options/behaviour to existing types without a new type
+
+## Building the `tooltip` Extension
 - Let's build our own: a `tooltip` option available on every single field
 - Create `src/Form/Extension/TooltipTypeExtension.php`
 - Make it extend `AbstractTypeExtension`
@@ -625,6 +691,8 @@
 - That's it - thanks to autoconfigure, the extension registers itself (tag `form.type_extension`)
 - Verify it's live: run `symfony console debug:form FormType`
 - Search the options list - our `tooltip` is now there, on the base type
+
+## Rendering the Tooltip
 - Now let's actually render it - open our global theme `templates/_form-theme.html.twig`
 - Override the `form_label` block to append an info icon when a tooltip is set:
   ```twig
@@ -643,10 +711,13 @@
 - The magic: this option now works on ANY field of ANY form, zero changes to the field types
 - Don't believe me? Try `'tooltip' => ...` on a field in `StarshipType`
 
+
 # Embedding a Collection of Forms
 - Open /admin/starship/{id}/edit - we can edit the ship, but its parts live on a totally separate page
 - Wouldn't it be nice to tweak a ship's parts right here, and save everything at once?
 - A `Starship` has a `parts` collection (a `OneToMany`), so let's embed a sub-form for each part
+
+## Creating the Embedded Form Type
 - First, we need a form for a SINGLE part - run `symfony console make:form EmbeddedStarshipPartType`
 - Type `StarshipPart` for the entity
 - Yep, this time we need `StarshipPart` as you will see soon
@@ -655,6 +726,8 @@
 - Remove the `starship` field - the parent ship IS the starship, picking it here makes no sense
 - Remove any generated submit button too - the parent form owns the submit
 - Keep `'data_class' => StarshipPart::class,` - note this maps the ENTITY this time, not the DTO
+
+## Embedding the Collection
 - Now embed it - open `StarshipType`
 - Add a collection field:
   ```php
@@ -679,7 +752,9 @@
 - To fix, we need to add `#[Assert\Valid]` on `$parts` prop
 - Try again - a validation error now!
 
+
 # Data Transformers
+
 - Let's give ships some tags, like `flagship`, `medical`, `stealth`
 - Open `src/Entity/Starship.php`
 - Run `symfony console make:entity`
@@ -701,6 +776,8 @@
 - But that leaks a form-only format into our domain model, breaks our honest `array` type,
   and can't turn bad input into a clean form error - a transformer fixes all three (more on errors soon)
 - A data transformer converts the value between the object and the input, both ways
+
+## Writing the Transformer
 - Create `src/Form/DataTransformer/TagsToStringTransformer.php`
 - Make it implement `DataTransformerInterface`
 - `transform()` - runs when RENDERING (array -> string):
@@ -716,6 +793,8 @@
 - Also, `explode()` expects value to be a string, so let's make sure we don't have null at that spot
 - For this, before that line, add `if (null === $value || '' === trim($value))`
 - And `return []`
+
+## Attaching the Transformer to the Field
 - Now attach it - back in `StarshipType::buildForm()`
 - `$builder->get('tags')->addViewTransformer(new TagsToStringTransformer());`
 - (why `addViewTransformer` and not `addModelTransformer`? that's the next chapter)
@@ -746,7 +825,7 @@
 - Try to submit the form again with an unknown tag - the error message is now customized!
 - This is the transformer's superpower: a failed conversion becomes a clean FORM error, not a 500
 
-# Model vs View Transformers
+## Model vs View Transformers
 - We just called `addViewTransformer()` - but there's also `addModelTransformer()`. What's the difference?
 - Every form field has THREE representations of its value, let's SEE them
 - Reload /admin/starship/{id}/edit and open the profiler for the request
@@ -763,6 +842,8 @@
   ```
   Model data  <—(model transformer)—>  Norm data  <—(view transformer)—>  View data
   ```
+
+## Which One Should You Use?
 - Rule of thumb:
   - Changing the DISPLAY format (array/date/number -> string) -> VIEW transformer (norm keeps the real value)
   - Adapting your STORED type to the field's canonical (norm) type -> MODEL transformer
@@ -777,6 +858,7 @@
 - Core's DateType uses a built-in VIEW transformer - exactly the same idea as our tags, just shipped with Symfony
 - And to be clear: this is NOT `buildView()` - transformers PRODUCE the view data both ways,
   `buildView()` only EXPOSES it to Twig at render time
+
 
 # Unit Testing Isolated Pieces
 - What about testing forms?
@@ -814,6 +896,7 @@
 - Finish with `$transformer->reverseTransform('flagship, unknown');` that should throw
 - OK, run the whole suite: `symfony php bin/phpunit`
 - Green! A pure, fast test with no DB, no container, no HTTP
+
 ## Testing a Custom Validator
 - Next, the custom validator
 - Run `symfony console make:test`
@@ -834,7 +917,10 @@
 - Run the suite again: `symfony php bin/phpunit` - green!
 - Two small classes, fully covered, and we haven't even touched the form yet
 
+
 # Testing a Form Type with `TypeTestCase`
+
+## Submitting Valid Data
 - Now the form type itself - Symfony has a dedicated base class: `Symfony\Component\Form\Test\TypeTestCase`
 - Let's create one more test: `symfony console make:test`
 - Choose `TestCase` again
@@ -877,6 +963,7 @@
 - It has low value to test other simple fields like `class, captain, slug, arrivedAt`
   they are just simple fields with no custom logic, so we can skip this noise,
   because it's more like we're testing Symfony Form component than our own code
+
 ## Testing a Transformation Failure
 - Now test the transformer's FAILURE at the invalid tags
 - Create `testSubmitInvalidTags()`
