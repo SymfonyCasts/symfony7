@@ -404,7 +404,7 @@
 - Next, `<legend>{{ field_label(form.status) }}</legend>`
 - `form_label()` is a high-level helper that renders the label and its wrapper
 - `field_label()` is a low-level helper that renders only the label as a text, no wrapper
-- Next, we need iterate over the `form.status` field's errors and render them manually
+- Next, we need iterate over the `form.status` field's values and render them manually
 - We can do it with `{% for label, value in field_choices(form.status) %}`
 - Below, render `<label></label>`
 - Inside, `<input type="radio">`
@@ -529,7 +529,7 @@
 - First, the form - run `symfony console make:form DeleteStarshipPartType`
 - Type `StarshipPart` for the entity
 - Open `src/Form/DeleteStarshipPartType.php`
-//- Set `'data_class' => StarshipPart::class,` so we get the part in `$options['data']`
+- Set `'data_class' => StarshipPart::class,` so we get the part in `$options['data']`
 - I will drop all the auto-generated fields, we don't need them
 - Now add a text field where the user must retype the part's name
 - Add `->add('confirmName', TextType::class)`
