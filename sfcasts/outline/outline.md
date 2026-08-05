@@ -158,14 +158,12 @@
 - Inside, return `$starship->getCaptain();`
 - Below add `'setter' => function (Starship $starship, ?string $value): void {}`
 - Inside, call `$starship->setCaptain($value ?? '');`
-- Go refresh the page and submit the form - no errors, but also no validation error on the field
-- Yes, this field isn't mapped to the property automatically so Form component does not know about our constraints
-- We should import the validation constaints from the entity to the form field manually
+- Go refresh the page and submit the form - it works, the value is saved to the `captain` property
+- Custom getter/setter give us full control, but we wire the reading and writing by hand - a bit verbose if all we want is to rename a field
 - But wait! Let's see another approach
 - I will comment out the custom getter/setter
 - And instead add `'property_path' => 'captain',`
-- Reload the page - it still works
-- But if you submit an empty field - you will see the validation error now, so our validation constraint on the `captain` field was hooked up
+- Reload the page - it still works, and it's much simpler: the field just maps to the `captain` property
 - The only problem you may still notice - the required `*` icon is gone
 - We can fix it by adding `'required' => true,` option to the field explicitly
 - Reload the page - the `*` is back!
@@ -661,7 +659,6 @@
 - All embedded forms are validated and saved together, in one request
 - And notice: ZERO JavaScript - this is pure server-side form embedding
 - Why no cascade needed? Existing parts are managed Doctrine entities, so editing them just flushes
-- Adding brand-new parts also needs `cascade: ['persist']` on the relation that we already have from the past tutorial
 - About dynamic add/remove - that's a whole topic on its own - we cover it in a dedicated tutorial
 - For now, the takeaway: you can embed and edit an entire collection of forms with no JS at all
 - If you try to set price to 0 - it allows us!
@@ -695,7 +692,7 @@
 - Make it implement `DataTransformerInterface`
 - `transform()` - runs when RENDERING (array -> string):
   ```php
-  return implode(', ', $value ?? []);
+  return implode(', ', $value);
   ```
 - Tweak return type to `string`
 - `reverseTransform()` - runs on SUBMIT (string -> array):
@@ -783,7 +780,7 @@
 - Check for `$this->assertEquals($transformer->transform(['flagship', 'cargo']), 'flagship, cargo');`
 - Test the empty cases:
   - `$this->assertEquals($transformer->transform([]), '');`
-  - `$this->assertEquals($transformer->transform(null), null');`
+  - `$this->assertEquals($transformer->transform(null), '');`
 - Run it with `symfony php bin/phpunit --filter=testTransform`
 - Whoops, failed:
   > TypeError: implode(): If argument #1 ($separator) is of type string, argument #2 ($array) must be of type array, null given
