@@ -1,13 +1,17 @@
 # Symfony 8 Forms Advanced Outline
 
-## Prerequisites
+## Project Setup
 - Fork TutsHero last step of https://github.com/SymfonyCasts/symfony7/tree/ep6-security
 - Upgrade PHP version to `>=8.4.1` in composer.json
 - Upgrade Symfony to the latest 8.1 w/ deps: w/ `symfony composer update`
 - Upgrade recipes
 - Apply missing TutsHero steps from ep6-security at the moment of forking 
 
-## Configure empty_data for a form type class
+---------------------------
+
+# The `empty_data` Option
+
+## `empty_data` on the Whole Form
 - Open /admin/starship-part/new form
 - Who creates a new `StarshipPart` object when we submit the form?
 - Symfony does it for us
@@ -30,7 +34,7 @@
 - And `$form->get('price')->getData()`
 - Submit the form again - starship part successfully created!
 
-### Configure empty_data for a form field
+## `empty_data` for a Single Field
 - We can also use `empty_data` for a single form field
 - Open `StarshipPartRepository::findAllOrderedByPrice()`
 - We allow nullable serch term
@@ -51,7 +55,7 @@
 - Submit the empty search form again - it works now!
 - Instead of null, the form uses empty string as the default value for the `query` field
 
-## Data Transfer Object (DTO) instead of entities in form types
+# Binding a Form to a DTO
 - But if you go back to /admin/starship-part/new form
 - And submit an empty form - it will fail again
   > StarshipPart::__construct(): Argument #1 ($name) must be of type string, null given
@@ -98,7 +102,9 @@
 - Go search the created part - here it is! It worked as before
 - But now our PHP code is more correct and reflects the database setup
 
-## Conditionally show/hide form fields based on the underlying data (instead of passing those via constructor directly).
+# Conditional Fields: New vs Edit
+
+## Showing the `status` Field Only When Editing
 - If you go to /admin/starship/edit
 - And we allow choosing a status
 - But for new ships the status should be always `waiting`
@@ -127,7 +133,8 @@
 - Update `private ?StarshipStatusEnum $status = StarshipStatusEnum::WAITING;`
 - Go create a new starship - no status field, as expected
 - But when you edit the created starship - the status field is there, and you can edit it
-- ### ...
+
+## Making a Field `readonly` or `disabled`
 - Let's allow writing in `slug` field only on creation to avoid URL changes for existing starships for SEO purposes
 - With text fields - we can make them readonly
 - Add options with `attr` set to an empty array
@@ -144,7 +151,8 @@
 - Update the page - now the field is disabled
 - If you open Dev Tools and remove `disabled="disabled"`, update the field and submit - no changes are done
 - This is the proper secured way if you don't want user input, or just do not render the field at all - you can just print the plain value in the template
-###...
+
+## Renaming a Field: `property_path` vs getter/setter
 - What if I want the `captian` field called `commander` in the form?
 - Well, yes, we can update the label, but the field would remain `captain` in the form data
 - Let's try to rename the form field - update it to `commander`
@@ -173,7 +181,7 @@
 - And in setter you can split the value back into two properties setting them accordingly
 - But if all you need to do is to map the field to existent property - `property_path` is the right way to go
 
-## Custom form type options
+# Passing Custom Options to a Form
 - But what if we want to pass some data from outside of the form type
 - What if we still want to allow editing `slug` field for admins?
 - We know we can check for admin w/ `$this->isGranted('ROLE_ADMIN')`
@@ -191,7 +199,7 @@
 - Add `'is_admin' => $this->isGranted('ROLE_ADMIN'),` as options to `createForm()`
 - Reload the page to see the field can be still  edited by admins
 
-## Cover form rendering variables via `form.vars.value`
+# Reading Form Data in Templates with `form.vars`
 - But we completely hide status for create form
 - It may be clearer if we still print the status in the form for clarity
 - Open `starship_admin/new.html.twig`
@@ -214,7 +222,7 @@
 - Wrap it w/ a `<div class="mb-6 text-gray-800">`
 - Refresh the page to see the "waiting" status
 
-## Allow HTML contents in form labels w/ `label_html` option
+# Allow HTML code in Labels with `label_html`
 - Open /admin/starship-part/new
 - I want to be clear say that the price should be in credits
 - We can easily change field's label to clarify it
@@ -226,7 +234,7 @@
 - Below, add one more option: `'label_html' => true,`
 - Refresh again - much better
 
-## Translatable help messages w/ `new TranslatableMessage()` that include all the information needed
+# Translatable, Pluralized Help Messages
 - Let's add a help message for `captain` field on the `StarshipType`
 - Add options, `'help'` option
 - And set its value to `sprintf('The captain will command %s droids on the starship', $starship->getStarshipDroids()->count())`
@@ -253,7 +261,7 @@
 - Set `help` to `new TranslatableMessage()` and pass the values there
 - Reload the page to see everything still works
 
-## Form theme blocks
+# How Form Theming Works
 - Open /admin/starship-part/new and view the page source
 - Notice all the wrapping `<div>`s, labels, and classes around each field
 - We never wrote any of that markup, but you know from Basics course where it comes from
@@ -269,7 +277,7 @@
 - Key concept: Symfony picks the block to render a field by its name, walking a hierarchy from the most specific to the most generic (fallback)
 - Our goal for this section: add a "credits" addon right inside the `price` field's input
 
-## Find form theme block names with the Profiler
+# Finding Block Names in the Profiler
 - To customize the `price` widget, we first need to know which block renders it
 - Guessing block names is painful - let's do it the rock-solid way instead
 - Reload /admin/starship-part/new and open the profiler for that request (click the request in the WDT)
@@ -285,7 +293,7 @@
 - In the `templates/admin/starship-part/new.html.twig`, add `{{ dump(form.price.vars) }}`
 - And search for `block_prefixes` 
 
-## Override a form theme block and its block variables
+# Overriding a Form Theme Block
 - Now let's actually override a block
 - Two ways to register a theme: a separate theme file, or inline in the current template
 - Let's do it inline - open `templates/admin/starship-part/new.html.twig`
@@ -300,7 +308,7 @@
 - Yes, this block is special, so we need to call the "parent" block via `{{ block('form_widget') }}`
 - Reload again - the help message for price field has currency icon now
 
-## The `block_prefix` option for easier form customization
+# Stable Block Names with `block_prefix`
 - It works, but better: give the field its own stable block prefix
 - We don't want to accidentaly change form type or field names and break our custome styles
 - Open `StarshipPartType`
@@ -311,7 +319,7 @@
 - Bonus: because the prefix is a name we chose, we can reuse `credits_widget` on ANY field
   on this form just by setting the same `'block_prefix' => 'credits'`
 
-## Custom form theme based on core one
+# A Global, Reusable Form Theme
 - This way we can customize not only widgets but any block like row, label, errors, even `help` message block
 - E.g. we can add an ℹ️ icon in front of the help message
 - But if we do it the way we show above - it will apply only to the current form
@@ -335,7 +343,7 @@
 - If you open /admin/starship/new - there it is!
 - Done! Now this works globally for all forms
 
-## Custom reusable form field type based on core one
+# Building a Custom Field Type
 - Our `credits` styling is nice, but to reuse it we must repeat stuff on every field:
   the `'block_prefix' => 'credits'` option, the label, etc.
 - "An amount in credits" is a concept we'll want on more fields (part price, ship cost, etc)
@@ -360,7 +368,7 @@
 - One thing to notice: the widget markup STILL lives in the template
 - If we used `CreditsType` in another form in another template, we'd get a plain input - let's fix that next
 
-## Custom type w/ theme (a custom widget)
+# Giving the Type Its Own Widget
 - The `credits_widget` block still sits in `new.html.twig` via `{% form_theme form _self %}`
 - That means the markup is NOT bundled with the type - use `CreditsType` elsewhere and it's gone
 - A proper custom widget should carry its own markup - let's move it to the theme
@@ -372,6 +380,7 @@
 - Reload /admin/starship-part/new - the ₡ addon is still there, but `new.html.twig` is clean now
 - That's the whole point: `CreditsType` + its theme block = a self-contained widget,
   usable anywhere with a single line and zero template work
+## A Configurable Currency Symbol
 - Capstone: let's make the currency symbol configurable via a custom option
 - Back in `CreditsType::configureOptions()`, add `'units_symbol' => '₡',` to the defaults
 - Custom options don't reach the template automatically - we must expose it on the view
@@ -390,11 +399,15 @@
 - Done! `CreditsType` now bundles behavior (from `IntegerType`), its own `units_symbol` option,
   and its own markup - a complete, reusable custom widget
 
-## ...
+# Total Control with the `field_*()` Helpers
+
+## From a Select List to Radio Buttons
 - Status field for the Starship is rendered as a select list by default
 - But we can easily change it
 - Open `StarshipType`, for `status` field, add `'expanded' => true,`
 - Reload the page - now it's rendered as radio buttons instead of a select list
+
+## Rendering the Radio Buttons by Hand
 - But if you want total control over rendering - along with `form_*()` Twig helpers there are more low-level `field_*()` Twig helpers 
 - That makes form field rendering even more flexible
 - Let's try to render the `Starship::status` field manually and see how they can help you
@@ -423,7 +436,7 @@
 - I would add `class="mr-5">` to the label to add some spacing between the buttons
 - Reload - much better
 
-## Flexible validation callback constraint
+# Cross-Field Validation with a Callback
 - Open /admin/starship-part/new and submit empty form - validation errors
 - In previous course we've added some validation constraints to the fields
 - But those constraints were related to specific fields only
@@ -446,7 +459,7 @@
 - Reload, set price to `5000`, leave `notes` empty, submit - the error shows right on `notes`
 - Fill in `notes` and submit - it passes. A rule across two fields, done in plain PHP
 
-## Configure form validation groups
+# Validation Groups
 - Now open /admin/starship/new - some rules should differ between creating and editing
 - Example: a brand-new ship may not have arrived yet (`arrivedAt` can be empty)
 - But an existing ship we're editing MUST have an arrival date
@@ -483,7 +496,7 @@
 - Go to /admin/starship/new, leave arrival empty, submit - only `Default` runs, so only empty name complains
 - Now edit an existing ship, clear the arrival date, submit - the `edit` group runs now
 
-## Custom validation constraint
+# A Custom Validation Constraint
 - Callbacks are flexible, but they live inside ONE class and can't be reused
 - And they can't easily use services - what if a rule needs a repository or a standalone service? or specific config?
 - For that, we build our own reusable constraint with its own validator class
@@ -521,7 +534,7 @@
 > The name "DEATH STAR" is not allowed to be registered on our shop - go away!
 - Any other name works fine
 
-## Access unmapped fields
+# Unmapped Fields
 - We can create starship parts, but can't delete them, let's fix it
 - Deleting stuff is dangerous, so let's build a proper confirmation
 - But instead of the JS style that was generated by Maker for Starships, I'd like GitHub style
@@ -585,7 +598,7 @@
 - Bonus: if you ever need the raw typed value, it's `$form->get('confirmName')->getData()`
   (unmapped fields never touch your object, so this is the only way to read them)
 
-## Create a custom type extension
+# Custom Form Type Extensions
 - Quick question: where did the `constraints` option we just used come from?
 - It's NOT part of `FormType` - open its source and search, you won't find it
 - Symfony adds it to EVERY field type via a "type extension" - same story for CSRF and `help`
@@ -630,7 +643,7 @@
 - The magic: this option now works on ANY field of ANY form, zero changes to the field types
 - Don't believe me? Try `'tooltip' => ...` on a field in `StarshipType`
 
-## Embed forms
+# Embedding a Collection of Forms
 - Open /admin/starship/{id}/edit - we can edit the ship, but its parts live on a totally separate page
 - Wouldn't it be nice to tweak a ship's parts right here, and save everything at once?
 - A `Starship` has a `parts` collection (a `OneToMany`), so let's embed a sub-form for each part
@@ -666,7 +679,7 @@
 - To fix, we need to add `#[Assert\Valid]` on `$parts` prop
 - Try again - a validation error now!
 
-## Form data transformers
+# Data Transformers
 - Let's give ships some tags, like `flagship`, `medical`, `stealth`
 - Open `src/Entity/Starship.php`
 - Run `symfony console make:entity`
@@ -708,6 +721,8 @@
 - (why `addViewTransformer` and not `addModelTransformer`? that's the next chapter)
 - Reload - the tags show as a comma-separated string, editable
 - Type `flagship, medical`, submit - check the DB, it's stored as a JSON array!
+
+## Rejecting Unknown Values with a Transformation Error
 - If there's a transformation error - you can use a special `TransformationFailedException`
 - Let's allow only known tags
 - In `reverseTransform()`, change logic to: 
@@ -731,7 +746,7 @@
 - Try to submit the form again with an unknown tag - the error message is now customized!
 - This is the transformer's superpower: a failed conversion becomes a clean FORM error, not a 500
 
-## Model transformer vs View transformer
+# Model vs View Transformers
 - We just called `addViewTransformer()` - but there's also `addModelTransformer()`. What's the difference?
 - Every form field has THREE representations of its value, let's SEE them
 - Reload /admin/starship/{id}/edit and open the profiler for the request
@@ -763,12 +778,14 @@
 - And to be clear: this is NOT `buildView()` - transformers PRODUCE the view data both ways,
   `buildView()` only EXPOSES it to Twig at render time
 
-## Unit-testing forms: start with the isolated pieces
+# Unit Testing Isolated Pieces
 - What about testing forms?
 - Before testing a whole form type, notice how much form LOGIC we pushed into tiny standalone classes
 - Those are the easiest and most valuable things to test - no framework bootstrapping needed
 - This is a hidden payoff of transformers/validators: they're trivially unit-testable
 - Make sure the test tools are installed: `symfony composer require --dev symfony/test-pack`
+
+## Testing the Data Transformer
 - First, test the transformer
 - Run `symfony console make:test`
 - Choose `TestCase` (plain PHPUnit test, no Symfony dependencies)
@@ -797,7 +814,7 @@
 - Finish with `$transformer->reverseTransform('flagship, unknown');` that should throw
 - OK, run the whole suite: `symfony php bin/phpunit`
 - Green! A pure, fast test with no DB, no container, no HTTP
-### Test custom validator
+## Testing a Custom Validator
 - Next, the custom validator
 - Run `symfony console make:test`
 - Choose `TestCase` again
@@ -817,7 +834,7 @@
 - Run the suite again: `symfony php bin/phpunit` - green!
 - Two small classes, fully covered, and we haven't even touched the form yet
 
-## Unit-testing a form type with TypeTestCase
+# Testing a Form Type with `TypeTestCase`
 - Now the form type itself - Symfony has a dedicated base class: `Symfony\Component\Form\Test\TypeTestCase`
 - Let's create one more test: `symfony console make:test`
 - Choose `TestCase` again
@@ -860,6 +877,7 @@
 - It has low value to test other simple fields like `class, captain, slug, arrivedAt`
   they are just simple fields with no custom logic, so we can skip this noise,
   because it's more like we're testing Symfony Form component than our own code
+## Testing a Transformation Failure
 - Now test the transformer's FAILURE at the invalid tags
 - Create `testSubmitInvalidTags()`
 - Inside, `$starship = new Starship();`
@@ -871,6 +889,8 @@
   no transformation was to the form but only to the `tags`
 - Fix both calls to `$form->get('tags')->isSynchronized()`
 - Run tests again - green!
+
+## Testing the New-vs-Edit Logic
 - Now test conditional `status` field
 - Create a new method `testIsEditMode()`
 - Create the form again: `$form = $this->factory->create(StarshipType::class, $starship);`
@@ -899,20 +919,18 @@
   - Validation does NOT run in `TypeTestCase` - it's about DATA BINDING, not constraints,
     so `price > 0`, `Assert\Valid`, `EqualTo`... none of those fire here - that needs a functional test
 
-
-
-# TODO I'm not sure we should show it too, too much coding on this topic, probably just mention it and link to the dedicated testing courses?
-## Functional test: where validation actually runs
-- To test validation end-to-end, we go through the real app with booted kernel
-- For this, create another test w/ `symfony console make:test`
-- Choose `WebTestCase`
-- Let's try to check another form: the StarshipPart delete confirmation
-- Name the file `Controller\StarshipPartDeleteTest`
-- It will create `tests/Controller/StarshipPartDeleteTest.php` extending `WebTestCase`
-- Load a part - we have Foundry that could help with it!
-- Then request its delete page
-- Submit the form with the WRONG name -> assert the part still exists and an error is shown
-- Submit with the CORRECT name -> assert a redirect and the part is gone from the DB
-- This is the layer where the validator is fully wired - exactly what `TypeTestCase` can't cover
-- Takeaway: unit-test the pieces and the type (fast, isolated), functional-test the validation (real, end-to-end)
-- Want to go deep in tests - look at our dedicated testing courses! (link to it)
+> **Author note (TODO):** I'm not sure we should show this one too - too much coding on this topic, probably just mention it and link to the dedicated testing courses?
+//# Functional Testing: Where Validation Runs
+//- To test validation end-to-end, we go through the real app with booted kernel
+//- For this, create another test w/ `symfony console make:test`
+//- Choose `WebTestCase`
+//- Let's try to check another form: the StarshipPart delete confirmation
+//- Name the file `Controller\StarshipPartDeleteTest`
+//- It will create `tests/Controller/StarshipPartDeleteTest.php` extending `WebTestCase`
+//- Load a part - we have Foundry that could help with it!
+//- Then request its delete page
+//- Submit the form with the WRONG name -> assert the part still exists and an error is shown
+//- Submit with the CORRECT name -> assert a redirect and the part is gone from the DB
+//- This is the layer where the validator is fully wired - exactly what `TypeTestCase` can't cover
+//- Takeaway: unit-test the pieces and the type (fast, isolated), functional-test the validation (real, end-to-end)
+//- Want to go deep in tests - look at our dedicated testing courses! (link to it)
