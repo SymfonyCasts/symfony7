@@ -614,10 +614,12 @@
 - Add `tags` property
 - Choose `json` type
 - Nullable - no
+- Go check the new prop on entity - open `Starship`
 - Make a migration and run it: `symfony console make:migration`
 - Then `symfony console doctrine:migrations:migrate`
 - Now add the `tags` field - open `StarshipType`
 - Add `->add('tags')` - it renders as a text input
+- I don't want this field be required, so I will add `'required' => false,`
 - Go to /admin/starship/new
 - Fill in the forms, add a tag and submit - an error:
   > Expected argument of type "array", "string" given at property path "tags".
@@ -837,7 +839,9 @@
   - Validation does NOT run in `TypeTestCase` - it's about DATA BINDING, not constraints,
     so `price > 0`, `Assert\Valid`, `EqualTo`... none of those fire here - that needs a functional test
 
-TODO I'm not sure we should show it too, too much coding on this topic, probably just mention it and link to the dedicated testing courses?
+
+
+# TODO I'm not sure we should show it too, too much coding on this topic, probably just mention it and link to the dedicated testing courses?
 ## Functional test: where validation actually runs
 - To test validation end-to-end, we go through the real app with booted kernel
 - For this, create another test w/ `symfony console make:test`

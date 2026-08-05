@@ -55,6 +55,7 @@ class StarshipType extends AbstractType
 //            ->add('createdAt')
 //            ->add('updatedAt')
             ->add('tags', null, [
+                'required' => false,
                 'invalid_message' => sprintf('An unknown tag is used. Known tags: %s.', implode(', ', TagsToStringTransformer::KNOWN_TAGS)),
             ])
             ->add('parts', CollectionType::class, [
