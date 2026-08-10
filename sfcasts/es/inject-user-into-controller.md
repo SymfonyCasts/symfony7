@@ -21,8 +21,8 @@ Vamos a asegurarnos de que sepa que se trata de este objeto.
 ## Inyectar User en un servicio
 
 Primero, usaremos una forma alternativa de obtener el usuario actual. Puede que necesites acceder al
-usuario actual en otro servicio. Y ese servicio no tendrá acceso a los métodos auxiliares de `AbstractController`
-.
+usuario actual en otro servicio. Y ese servicio no tendrá acceso a los 
+métodos auxiliares de `AbstractController`.
 
 En nuestro método ` `index()` `, inyecta ` `Security``, el de `SecurityBundle`, ` `$security``:
 
@@ -38,7 +38,7 @@ Hay otros ayudantes para casos de uso más avanzados... Y échales un vistazo a 
 `login()` y `logout()`. Sirven para iniciar y cerrar sesión de los usuarios mediante programación sin
 tener que pasar por el flujo estándar. Los veremos un poco más adelante.
 
-Elige `getUser()` y luego escribe `?->getStarship()` para recuperar la nave espacial del usuario (si tiene alguna):
+Elige `getUser()` y, a continuación, escribe `?->getStarship()` para obtener la nave espacial del usuario (si tiene alguna):
 
 [[[ code('184dba5cd3') ]]]
 
