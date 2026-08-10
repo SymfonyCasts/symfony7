@@ -1,0 +1,331 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:04.926 align:middle
+Nos quedamos en el punto en el que usábamos el
+método auxiliar ` getUser() ` de AbstractController
+
+00:00:04.956 --> 00:00:06.596 align:middle
+para obtener el usuario que
+está conectado actualmente.
+
+00:00:07.096 --> 00:00:11.466 align:middle
+Después, sacamos el `Starship` del usuario con
+getStarship() (usando el operador a prueba de `null`
+
+00:00:11.616 --> 00:00:13.266 align:middle
+por si no hay ningún usuario conectado).
+
+00:00:14.016 --> 00:00:16.606 align:middle
+Fíjate en esta advertencia que
+te da PhpStorm al respecto...
+
+00:00:16.816 --> 00:00:18.866 align:middle
+«Llamada potencialmente polimórfica...»
+
+00:00:19.496 --> 00:00:21.516 align:middle
+Básicamente, te está
+diciendo que el objeto devuelto
+
+00:00:21.516 --> 00:00:24.766 align:middle
+por getUser() podría no tener
+el método getStarship().
+
+00:00:25.326 --> 00:00:27.796 align:middle
+Para ver por qué, ve a la
+definición de getUser().
+
+00:00:28.666 --> 00:00:31.366 align:middle
+Su tipo de retorno es UserInterface (o null).
+
+00:00:31.946 --> 00:00:33.896 align:middle
+Esto devuelve nuestra entidad User,
+
+00:00:33.896 --> 00:00:37.796 align:middle
+que implementa UserInterface,
+pero PhpStorm no lo sabe.
+
+00:00:38.326 --> 00:00:42.036 align:middle
+Ve que hay un objeto en nuestra app
+que sí implementa UserInterface
+
+00:00:42.146 --> 00:00:44.676 align:middle
+con un método getStarship():
+nuestra entidad User.
+
+00:00:45.256 --> 00:00:48.786 align:middle
+Simplemente te avisa de que no puede estar
+seguro de que se trate, de hecho, de este objeto.
+
+00:00:49.366 --> 00:00:51.366 align:middle
+Vamos a asegurarnos de que sepa
+que se trata de este objeto.
+
+00:00:52.086 --> 00:00:54.896 align:middle
+Primero, usaremos una forma alternativa
+de obtener el usuario actual.
+
+00:00:55.246 --> 00:00:57.906 align:middle
+Puede que necesites acceder al
+usuario actual en otro servicio.
+
+00:00:58.086 --> 00:01:01.666 align:middle
+Y ese servicio no tendrá acceso a los
+métodos auxiliares de AbstractController.
+
+00:01:02.326 --> 00:01:06.956 align:middle
+En nuestro método ` index() `, inyecta ` Security`,
+el que viene del `SecurityBundle`, ` $security`:
+
+00:01:07.656 --> 00:01:10.766 align:middle
+Este es un servicio auxiliar que puede acceder
+al usuario que está conectado actualmente.
+
+00:01:11.386 --> 00:01:14.136 align:middle
+A continuación, asigna la variable
+` $myShip ` a ` $security->`.
+
+00:01:14.136 --> 00:01:18.766 align:middle
+Echa un vistazo a los métodos disponibles:
+` getUser() ` recupera al usuario actual.
+
+00:01:19.236 --> 00:01:22.556 align:middle
+También tenemos ` isGranted() ` para
+realizar comprobaciones de autorización.
+
+00:01:23.236 --> 00:01:25.806 align:middle
+Hay otros ayudantes para
+casos de uso más avanzados...
+
+00:01:26.086 --> 00:01:28.596 align:middle
+Y échales un vistazo a estos
+dos últimos: login() y logout().
+
+00:01:29.186 --> 00:01:31.896 align:middle
+Sirven para iniciar y cerrar sesión
+de los usuarios mediante programación
+
+00:01:31.896 --> 00:01:34.056 align:middle
+sin tener que seguir el flujo estándar.
+
+00:01:34.576 --> 00:01:36.036 align:middle
+Los veremos un poco más adelante.
+
+00:01:36.516 --> 00:01:42.196 align:middle
+Elige « getUser() » y, a continuación, escribe « ?->getStarship()
+» para recuperar la nave espacial del usuario (si tiene alguna):
+
+00:01:43.056 --> 00:01:47.346 align:middle
+Básicamente, es exactamente la misma lógica
+que teníamos antes, pero utilizando un servicio.
+
+00:01:47.456 --> 00:01:49.936 align:middle
+Ya no dependemos de AbstractController.
+
+00:01:50.556 --> 00:01:51.996 align:middle
+Sin embargo, seguimos
+teniendo la misma advertencia.
+
+00:01:52.056 --> 00:01:52.996 align:middle
+Así que vamos a solucionarlo.
+
+00:01:53.456 --> 00:01:59.796 align:middle
+Primero, añade $myShip = null y, justo
+debajo, $user = $security->getUser().
+
+00:02:00.536 --> 00:02:07.686 align:middle
+Ahora añade if ($user instanceof User) y,
+dentro, $myShip = $user->getStarship().
+
+00:02:08.306 --> 00:02:10.766 align:middle
+El instanceof nos protege
+contra un usuario null
+
+00:02:10.936 --> 00:02:15.806 align:middle
+y garantiza que el objeto sea efectivamente nuestra entidad
+User: Ahora ya puedes borrar el código antiguo de abajo.
+
+00:02:16.796 --> 00:02:20.326 align:middle
+Es hora de probarlo: ve al navegador
+y actualiza la página de inicio.
+
+00:02:21.266 --> 00:02:23.266 align:middle
+Genial, la barra lateral sigue funcionando.
+
+00:02:23.686 --> 00:02:25.866 align:middle
+Cierra sesión... y la barra
+lateral ha desaparecido.
+
+00:02:26.116 --> 00:02:27.326 align:middle
+Sigue funcionando como esperábamos.
+
+00:02:28.056 --> 00:02:32.166 align:middle
+Para obtener el usuario actual en un servicio,
+es necesario usar el servicio Security...
+
+00:02:32.506 --> 00:02:36.956 align:middle
+Pero como estamos en un controlador, podemos hacer
+algo más sencillo y, en mi opinión, más elegante.
+
+00:02:37.646 --> 00:02:40.876 align:middle
+Los controladores tienen una característica
+especial llamada «resolventes de argumentos».
+
+00:02:41.156 --> 00:02:45.736 align:middle
+Te permiten inyectar ciertos objetos en
+el controlador, aunque no sean servicios.
+
+00:02:46.236 --> 00:02:48.036 align:middle
+El objeto ` Request ` es uno de ellos.
+
+00:02:48.436 --> 00:02:51.896 align:middle
+No es un servicio, así que no
+puedes inyectarlo en otro servicio,
+
+00:02:52.056 --> 00:02:54.356 align:middle
+pero sí puedes inyectarlo en un controlador.
+
+00:02:54.726 --> 00:02:57.746 align:middle
+Hay un resolutor de argumentos de
+petición que permite hacer esto.
+
+00:02:58.186 --> 00:03:00.536 align:middle
+También hay un resolutor
+de argumentos de usuario.
+
+00:03:01.296 --> 00:03:04.596 align:middle
+Sustituye la inyección de ` Security
+` por ` UserInterface $user`:
+
+00:03:05.146 --> 00:03:08.206 align:middle
+¡Ahora este parámetro usará el
+resolutor de argumentos de usuario!
+
+00:03:08.956 --> 00:03:11.236 align:middle
+A continuación, podemos
+eliminar la línea ` $user = `.
+
+00:03:12.186 --> 00:03:14.416 align:middle
+Vuelve al navegador y actualiza
+la página de inicio...
+
+00:03:15.256 --> 00:03:17.716 align:middle
+Mmm, nos redirige a la página
+de inicio de sesión...
+
+00:03:18.176 --> 00:03:22.566 align:middle
+Cuando inyectas el usuario de esta forma, hace que este
+controlador requiera un usuario que haya iniciado sesión.
+
+00:03:22.936 --> 00:03:25.526 align:middle
+Si no hay ninguno, se lanza una
+excepción de acceso denegado,
+
+00:03:25.686 --> 00:03:27.646 align:middle
+por lo que nos redirige a la
+página de inicio de sesión.
+
+00:03:27.856 --> 00:03:31.756 align:middle
+Básicamente, es el mismo comportamiento que si
+hubiéramos añadido una comprobación de IS_AUTHENTICATED.
+
+00:03:32.426 --> 00:03:34.636 align:middle
+Sin embargo, esto no es lo que queremos
+para nuestra página de inicio,
+
+00:03:35.136 --> 00:03:37.896 align:middle
+debería ser accesible para
+cualquiera, haya iniciado sesión o no.
+
+00:03:38.576 --> 00:03:41.786 align:middle
+¿Cómo podemos permitir esto sin dejar de
+usar el resolutor de argumentos de usuario?
+
+00:03:42.196 --> 00:03:45.886 align:middle
+Haz que el argumento «user» sea nulo
+añadiendo « ? » antes de « UserInterface
+
+00:03:45.886 --> 00:03:48.846 align:middle
+»: Ahora vuelve a la página de inicio...
+
+00:03:49.786 --> 00:03:51.736 align:middle
+ya no hay redirección, ni barra lateral.
+
+00:03:52.256 --> 00:03:53.426 align:middle
+Ahora inicia sesión como Picard...
+
+00:03:53.896 --> 00:03:58.116 align:middle
+Correo electrónico: picard@enterprise.space,
+contraseña: makeitso.
+
+00:03:59.376 --> 00:04:01.866 align:middle
+¡Genial, la barra lateral ha
+vuelto y muestra nuestra nave!
+
+00:04:02.326 --> 00:04:03.146 align:middle
+¡Me encanta!
+
+00:04:03.446 --> 00:04:06.196 align:middle
+¡La definición de nuestro método
+` index() ` es clara y expresiva!
+
+00:04:07.106 --> 00:04:08.496 align:middle
+¡Pero podemos mejorarlo aún más!
+
+00:04:08.916 --> 00:04:12.456 align:middle
+Sustituye la indicación de tipo ` UserInterface
+` por nuestra entidad real ` User `...
+
+00:04:12.886 --> 00:04:14.036 align:middle
+asegúrate de que siga siendo nula.
+
+00:04:14.706 --> 00:04:16.166 align:middle
+Esto todavía no funciona del todo.
+
+00:04:16.436 --> 00:04:18.796 align:middle
+Tenemos que echarle una mano al
+resolutor de argumentos de usuario.
+
+00:04:19.426 --> 00:04:24.466 align:middle
+Encima del parámetro, añade el atributo
+#[CurrentUser]: creo que sigue siendo expresivo,
+
+00:04:24.696 --> 00:04:27.506 align:middle
+ya que indica que hay que inyectar
+el usuario actual en este parámetro.
+
+00:04:27.796 --> 00:04:31.956 align:middle
+Y seguro que tenemos el objeto de usuario correcto,
+la indicación de tipo del método lo garantiza.
+
+00:04:32.656 --> 00:04:41.226 align:middle
+A continuación, podemos simplificar toda esta lógica
+con solo un $myShip = $user?->getStarship(): ¡Genial!
+
+00:04:41.696 --> 00:04:42.626 align:middle
+Volvamos al navegador...
+
+00:04:42.626 --> 00:04:43.886 align:middle
+y actualicemos la página de inicio...
+
+00:04:44.546 --> 00:04:46.626 align:middle
+vemos la barra lateral correcta
+porque hemos iniciado sesión.
+
+00:04:47.126 --> 00:04:49.426 align:middle
+Cerramos sesión... y la
+barra lateral desaparece.
+
+00:04:49.976 --> 00:04:52.856 align:middle
+No creo que este método ` index()
+` pueda ser más expresivo.
+
+00:04:53.316 --> 00:04:56.686 align:middle
+Los objetos ` StarshipRepository
+` y ` Request ` son obligatorios.
+
+00:04:56.856 --> 00:04:59.036 align:middle
+Y ahora, el ` User ` actual es opcional.
+
+00:04:59.746 --> 00:05:02.316 align:middle
+A continuación, ¡veremos los
+votantes de seguridad y los permisos!
