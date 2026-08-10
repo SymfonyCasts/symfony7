@@ -356,6 +356,42 @@
 - Refresh... works!
 - Logout... aside gone
 
+## Creating a Custom Voter
+
+## Denying Access with a Voter
+
+## User Impersonation
+
+## Limiting Login Attempts
+
+## Security Events: Tracking the Last Login
+
+## Registration Form
+
+---
+
+# Security Extra
+
+## Super Admin Voter
+
+## Sudo Mode: Requiring Full Authentication
+
+## Customizing Authentication Error Messages
+
+## Redirecting After Login with `_target_path`
+
+## IsGranted 404
+
+## Login with Username or Email
+
+## Custom Impersonation Voter
+
+## `logout_form()` Helper (8.2)
+
+## Hardening Impersonation (8.2)
+
+---
+
 - We have the "remember me" feature, and when session is over it still keeps us authenticated.
     - This is called that user is authenticated as "remembered".
     - But for security reasons, for some parts of our website, we may want to force users to authenticate fully.
