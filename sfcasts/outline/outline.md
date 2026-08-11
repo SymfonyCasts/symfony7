@@ -358,6 +358,28 @@
 
 ## Creating a Custom Voter
 
+- open `StarshipAdminController`
+    - remove the /admin prefix to make it public
+- visit /starship
+    - explain plan
+- in `templates/starship_admin`
+    - `index`
+        - wrap "create" behind `ROLE_ADMIN`
+        - wrap "edit" behind `is_granted('edit', starship)`
+    - `show`
+        - wrap "edit" behind `is_granted('edit', starship)`
+        - wrap "delete" behind `is_granted('delete', starship)`
+- refresh list, visit show, missing actions
+- login as picard and visit /starship, we still don't see actions
+- `symfony console make:voter`, `StarshipVoter`, open
+    - rename constants (edit/delete)
+    - explain/adjust `supports()`
+    - explain/adjust `voteOnAttribute()`
+        - add docblock with Starship as subject
+        - `instanceof User`
+        - `return $subject->getId() === $user->getStarship()?->getId();`
+- refresh list, actions show for picards ship
+
 ## Denying Access with a Voter
 
 ## User Impersonation

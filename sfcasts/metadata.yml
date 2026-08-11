@@ -36,8 +36,8 @@ chapters:
         tutsFirstStep: 12-token-storage
         tutsLastStep: 12-current-user
     custom-voter:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 13-voter
+        tutsLastStep: 13-voter
     deny-access-voter:
         tutsFirstStep: null
         tutsLastStep: null
