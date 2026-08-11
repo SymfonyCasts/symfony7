@@ -169,7 +169,12 @@
             "id": "12-current-user",
             "name": "12. current user",
             "description": null
+        },
+        {
+            "id": "13-voter",
+            "name": "13. voter",
+            "description": null
         }
     ],
-    "sha": "5018e6ebada326ebfbd78f7d1c91dd4bef3c76aa"
+    "sha": "8d61d5e729f396bd55afeeccd60c3e200c5d9703"
 }

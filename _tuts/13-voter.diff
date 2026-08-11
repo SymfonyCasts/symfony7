@@ -1,0 +1,103 @@
+diff --git a/src/Controller/StarshipAdminController.php b/src/Controller/StarshipAdminController.php
+index 20e9a09..b569602 100644
+--- a/src/Controller/StarshipAdminController.php
++++ b/src/Controller/StarshipAdminController.php
+@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
+ 
+-#[Route('/admin/starship')]
++#[Route('/starship')]
+ final class StarshipAdminController extends AbstractController
+ {
+     #[Route(name: 'app_starship_admin_index', methods: ['GET'])]
+diff --git a/src/Security/Voter/StarshipVoter.php b/src/Security/Voter/StarshipVoter.php
+new file mode 100644
+index 0000000..f05de90
+--- /dev/null
++++ b/src/Security/Voter/StarshipVoter.php
+@@ -0,0 +1,38 @@
++<?php
++
++namespace App\Security\Voter;
++
++use App\Entity\Starship;
++use App\Entity\User;
++use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
++use Symfony\Component\Security\Core\Authorization\Voter\Vote;
++use Symfony\Component\Security\Core\Authorization\Voter\Voter;
++
++final class StarshipVoter extends Voter
++{
++    public const EDIT = 'edit';
++    public const DELETE = 'delete';
++
++    protected function supports(string $attribute, mixed $subject): bool
++    {
++        return in_array($attribute, [self::EDIT, self::DELETE])
++            && $subject instanceof Starship;
++    }
++
++    /**
++     * @param Starship $subject
++     */
++    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
++    {
++        $user = $token->getUser();
++        // if the user is anonymous, do not grant access
++        if (!$user instanceof User) {
++            $vote?->addReason('The user must be logged in to access this resource.');
++
++            return false;
++        }
++
++        // ... (check conditions and return true to grant permission) ...
++        return $subject->getId() === $user->getStarship()?->getId();
++    }
++}
+diff --git a/templates/starship_admin/index.html.twig b/templates/starship_admin/index.html.twig
+index 14f7506..8b708f5 100644
+--- a/templates/starship_admin/index.html.twig
++++ b/templates/starship_admin/index.html.twig
+@@ -6,7 +6,9 @@
+     <div class="max-w-7xl mx-auto px-5">
+         <div class="flex justify-between">
+             <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">Starship index</h1>
+-            <a class="bg-blue-500 hover:bg-blue-600 text-white self-center py-2 px-2.5 rounded-xl" href="{{ path('app_starship_admin_new') }}">Create new</a>
++            {% if is_granted('ROLE_ADMIN') %}
++                <a class="bg-blue-500 hover:bg-blue-600 text-white self-center py-2 px-2.5 rounded-xl" href="{{ path('app_starship_admin_new') }}">Create new</a>
++            {% endif %}
+         </div>
+ 
+         <div class="overflow-x-auto">
+@@ -40,7 +42,10 @@
+                         <td class="border-b p-4 border-gray-700 text-white">
+                             <div class="flex gap-2">
+                                 <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_starship_admin_show', {'id': starship.id}) }}">show</a>
+-                                <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
++
++                                {% if is_granted('edit', starship) %}
++                                    <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">edit</a>
++                                {% endif %}
+                             </div>
+                         </td>
+                     </tr>
+diff --git a/templates/starship_admin/show.html.twig b/templates/starship_admin/show.html.twig
+index 33ab562..7006d5a 100644
+--- a/templates/starship_admin/show.html.twig
++++ b/templates/starship_admin/show.html.twig
+@@ -49,8 +49,12 @@
+             </tbody>
+         </table>
+         <div class="flex gap-3 mt-5">
+-            <a class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">Edit</a>
+-            {{ include('starship_admin/_delete_form.html.twig') }}
++            {% if is_granted('edit', starship) %}
++                <a class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">Edit</a>
++            {% endif %}
++            {% if is_granted('delete', starship) %}
++                {{ include('starship_admin/_delete_form.html.twig') }}
++            {% endif %}
+         </div>
+     </div>
+ {% endblock %}
