@@ -1,0 +1,81 @@
+diff --git a/src/Controller/StarshipAdminController.php b/src/Controller/StarshipAdminController.php
+index b569602..204108b 100644
+--- a/src/Controller/StarshipAdminController.php
++++ b/src/Controller/StarshipAdminController.php
+@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\Routing\Attribute\Route;
++use Symfony\Component\Security\Http\Attribute\IsGranted;
+ 
+ #[Route('/starship')]
+ final class StarshipAdminController extends AbstractController
+@@ -23,6 +24,7 @@ final class StarshipAdminController extends AbstractController
+     }
+ 
+     #[Route('/new', name: 'app_starship_admin_new', methods: ['GET', 'POST'])]
++    #[IsGranted('ROLE_ADMIN')]
+     public function new(Request $request, EntityManagerInterface $entityManager): Response
+     {
+         $starship = new Starship();
+@@ -51,6 +53,7 @@ final class StarshipAdminController extends AbstractController
+     }
+ 
+     #[Route('/{id}/edit', name: 'app_starship_admin_edit', methods: ['GET', 'POST'])]
++    #[IsGranted('edit', subject: 'starship')]
+     public function edit(Request $request, Starship $starship, EntityManagerInterface $entityManager): Response
+     {
+         $form = $this->createForm(StarshipType::class, $starship);
+@@ -69,6 +72,7 @@ final class StarshipAdminController extends AbstractController
+     }
+ 
+     #[Route('/{id}', name: 'app_starship_admin_delete', methods: ['POST'])]
++    #[IsGranted('delete', subject: 'starship')]
+     public function delete(Request $request, Starship $starship, EntityManagerInterface $entityManager): Response
+     {
+         if ($this->isCsrfTokenValid('delete'.$starship->getId(), $request->getPayload()->getString('_token'))) {
+diff --git a/src/Security/Voter/StarshipVoter.php b/src/Security/Voter/StarshipVoter.php
+index f05de90..a419374 100644
+--- a/src/Security/Voter/StarshipVoter.php
++++ b/src/Security/Voter/StarshipVoter.php
+@@ -5,6 +5,7 @@ namespace App\Security\Voter;
+ use App\Entity\Starship;
+ use App\Entity\User;
+ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
++use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
+ use Symfony\Component\Security\Core\Authorization\Voter\Vote;
+ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+ 
+@@ -13,6 +14,11 @@ final class StarshipVoter extends Voter
+     public const EDIT = 'edit';
+     public const DELETE = 'delete';
+ 
++    public function __construct(
++        private AccessDecisionManagerInterface $accessDecisionManager,
++    ) {
++    }
++
+     protected function supports(string $attribute, mixed $subject): bool
+     {
+         return in_array($attribute, [self::EDIT, self::DELETE])
+@@ -24,6 +30,10 @@ final class StarshipVoter extends Voter
+      */
+     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
+     {
++        if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) {
++            return true;
++        }
++
+         $user = $token->getUser();
+         // if the user is anonymous, do not grant access
+         if (!$user instanceof User) {
+@@ -35,4 +45,9 @@ final class StarshipVoter extends Voter
+         // ... (check conditions and return true to grant permission) ...
+         return $subject->getId() === $user->getStarship()?->getId();
+     }
++
++    public function supportsType(string $subjectType): bool
++    {
++        return is_a($subjectType, Starship::class, true);
++    }
+ }

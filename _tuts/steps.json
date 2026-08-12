@@ -174,7 +174,12 @@
             "id": "13-voter",
             "name": "13. voter",
             "description": null
+        },
+        {
+            "id": "14-voter-restrict",
+            "name": "14. voter restrict",
+            "description": null
         }
     ],
-    "sha": "8d61d5e729f396bd55afeeccd60c3e200c5d9703"
+    "sha": "752ef03be86fe56777b46c4f078673bbb90921a2"
 }
