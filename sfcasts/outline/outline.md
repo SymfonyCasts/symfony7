@@ -382,6 +382,34 @@
 
 ## Denying Access with a Voter
 
+- set url to /2/edit
+- set to /starship/new
+- can edit starships that aren't ours and create new one
+- is_granted() in twig just hid the buttons, but we can still access the routes
+- open `StarshipAdminController`
+    - index() = ok
+    - new() = `#[IsGranted('ROLE_ADMIN')]`
+    - show() = ok
+    - edit() = `#[IsGranted('edit', 'starship')]` - starship matches the argument name in the method signature
+    - delete() = `#[IsGranted('delete', 'starship')]`
+- refresh new page - access denied
+- `/starship` edit our ship - change status to waiting - ok
+- `/starship/2/edit` access denied
+- Another requirement, admins can do anything
+- Logout and login as admin janeway@starfleet.space, coffeeblack
+- `/starship` - should see the edit button for all ships...
+- Open `StarshipVoter`
+    - add constructor
+    - `private AccessDecisionManagerInterface $accessDecisionManager,`
+        - can't use "Security" here - might not be the same "Token"
+    - in `voteOnAttribute()`
+        - `if ($this->accessDecisionManager->decide($token, ['ROLE_ADMIN'])) { return true; }`
+- Refresh page, now we can edit all ships
+- Performance optimization, back in StarshipVoter, override `supportsType()`
+- `supportsType()` - `return is_a($subjectType, Starship::class, true);`
+- Now the voter is skipped if the subject is not a starship
+- only really needed if you have a ton of voters
+
 ## User Impersonation
 
 ## Limiting Login Attempts
