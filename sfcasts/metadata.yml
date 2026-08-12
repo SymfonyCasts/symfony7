@@ -39,8 +39,8 @@ chapters:
         tutsFirstStep: 13-voter
         tutsLastStep: 13-voter
     deny-access-voter:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 14-voter-restrict
+        tutsLastStep: 14-voter-restrict
     impersonation:
         tutsFirstStep: null
         tutsLastStep: null
