@@ -2,7 +2,7 @@
 
 Abre `src/Controller/StarshipAdminController.php`. Aquí tenemos una configuración CRUD bastante estándar
 para nuestras naves espaciales. Y ahora mismo, el prefijo de ruta para todas ellas es
-`/admin`. Si te acuerdas, todo lo que empieza por `/admin` queda restringido a
+`/admin`. Si te acuerdas, todo lo que empiece por `/admin` queda restringido a
 `ROLE_ADMIN` gracias a nuestro `access_control`.
 
 Lo primero que quiero hacer es hacer esto público… y luego añadir un
@@ -21,8 +21,7 @@ la base de datos las que requerirán permisos especiales.
 
 ## Ocultar acciones con `is_granted()`
 
-Empieza por ocultar estas acciones tras algunas llamadas a `is_granted()` en nuestras plantillas de Twig
-.
+Empieza por ocultar estas acciones tras algunas llamadas a `is_granted()` en nuestras plantillas de Twig.
 
 Ve a `templates/starship_admin/` —aquí es donde están todas las plantillas para este
 CRUD— y abre primero `index.html.twig`. Justo en la parte superior, esta etiqueta de anclaje es
@@ -37,19 +36,19 @@ desaparecido. Ahora elimina ese botón de editar para los usuarios anónimos.
 
 Aquí abajo tenemos los botones «Mostrar» y «Editar». Envuelve el botón de edición en una
   comprobación de`is_granted()`. Y para este, no vamos a usar un rol. Vamos
-  a usar un atributo personalizado genérico —a veces llamado «permiso»—. Ponle un nombre
+  a usar un atributo personalizado genérico, a veces llamado «permiso». Ponle un nombre
   sencillo y claro: `edit`.
 
 Pero aún no hemos terminado: pasa un segundo argumento a ` `is_granted()``. Este segundo
 argumento se llama «sujeto», y nuestro sujeto va a ser ` `starship``. Ahora
 cierra todo con un ` `{% endif %}``.
 
-Actualiza la página... y ese botón de editar desaparece.
+Actualiza la página... y ese botón de editar desaparecerá.
 
 Hay otro sitio más: la página de visualización. Si haces clic en «Mostrar», queremos excluir
 estas acciones si no tienes permiso, con esas mismas comprobaciones de `is_granted()`. Así que
 ve a la plantilla de visualización y desplázate hasta el final, donde encontramos el enlace de edición
-. Envuélvelo en `{% if is_granted('edit', starship) %}` y, a continuación, ciérralo con
+. Encuadra este enlace entre `{% if is_granted('edit', starship) %}` y, a continuación, ciérralo con
 `{% endif %}`.
 
 El botón de borrar va a usar un permiso diferente:
@@ -61,9 +60,9 @@ Vuelve atrás y actualiza esta página... y ya no están, porque somos anónimos
 
 Vale, inicia sesión como Picard: `picard@enterprise.space`, contraseña `makeitso`.
 
-Ahora echa un vistazo a la lista de naves espaciales... y tenemos exactamente los mismos permisos que un
+Ahora visita la lista de naves espaciales... y tenemos exactamente los mismos permisos que un
 usuario anónimo. De hecho, esta de aquí es nuestra nave, pero lo único que podemos hacer es mostrarla
-— no podemos editarla ni borrarla.
+; no podemos editarla ni borrarla.
 
 Para gestionar esos permisos tan específicos, necesitamos un votante personalizado.
 
@@ -79,8 +78,8 @@ Llámalo « `StarshipVoter` ».
 
 Ahora echa un vistazo a lo que se ha creado: `src/Security/Voter/StarshipVoter.php`.
 
-Te ha añadido algo de código predeterminado, incluyendo dos constantes de permisos. Para la primera,
-cambia el valor real a simplemente « `edit` », igual que lo que usamos en nuestra
+Te ha añadido algo de código estándar, incluyendo dos constantes de permisos. Para la primera,
+cambia el valor actual a simplemente « `edit` », igual que lo que usamos en nuestra
 plantilla.
 
 ¿Y esta constante « `VIEW` »? No vamos a tener permisos tan detallados para
@@ -100,8 +99,8 @@ segundo argumento.
 
 En este caso, el código generado ya está casi correcto. Tenemos
 `in_array($attribute, [self::EDIT, self::VIEW])` —cambia `VIEW` por `DELETE` — y
-luego `$subject instanceof Starship`. Eso es justo lo que queremos. Solo voy a
-ordenarlo un poco importando `Starship`.
+luego `$subject instanceof Starship`. Eso es exactamente lo que queremos. Solo voy a
+limpiarlo un poco importando `Starship`.
 
 ## `voteOnAttribute()`
 
@@ -110,15 +109,15 @@ Cuando `supports()` devuelve `true`, se llama a `voteOnAttribute()`.
 Aquí también hay un poco de código repetitivo. Este método tiene un
 argumento ``TokenInterface $token` `. Lo único que realmente necesitas saber sobre el
 token ahora mismo es que es lo que usa el sistema de seguridad para envolver al usuario. Puedes obtener
-el usuario a partir de él con ` `getUser()` `, y eso es lo que está pasando aquí.
+al usuario a partir de él con ` `getUser()` `, y eso es lo que está pasando aquí.
 
 Esta comprobación de ` `instanceof` ` garantiza que ` `$user` ` no sea nulo. Como solo tenemos una clase de usuario,
 cámbiala por nuestra entidad ` `User` `. Eso te ayudará con el autocompletado más adelante.
 
-Si no tenemos ningún usuario, añadimos un motivo para la depuración y devolvemos `false`, lo que significa que
-la comprobación de `is_granted()` fallará.
+Si no tenemos ningún usuario, añadimos un motivo para la depuración y devolvemos `false`, lo que significa
+que la comprobación de `is_granted()` fallará.
 
-Aquí abajo, activamos el atributo. Así que puedes tener una lógica totalmente diferente
+Aquí abajo, activamos el atributo. Así puedes tener una lógica totalmente diferente
 para `EDIT` a la hora de determinar si alguien debería poder editar, y
 otra lógica diferente para borrar. Y si ninguna de ellas coincide, hacemos `return false`, con lo que
 la comprobación falla.
@@ -141,7 +140,7 @@ comprobar si el usuario forma parte de la nave espacial:
 Picard.
 
 ¡Perfecto! Parece que funciona. Podemos editar solo esta nave, porque es la nuestra.
-¿Y todas las demás? No tienen botón de editar. Si pulsamos «Mostrar» en nuestra nave, las acciones se
+¿Y todas las demás? No hay botón de editar. Si pulsamos «Mostrar» en nuestra nave, las acciones se
 hacen visibles. Haz clic en «Editar».
 
 Tenemos un pequeño problema… bueno, en realidad no tan pequeño… a ver si adivinas cuál es. Lo
