@@ -179,7 +179,17 @@
             "id": "14-voter-restrict",
             "name": "14. voter restrict",
             "description": null
+        },
+        {
+            "id": "15-impersonation",
+            "name": "15. impersonation",
+            "description": null
+        },
+        {
+            "id": "15-impersonation-path",
+            "name": "15. impersonation path",
+            "description": null
         }
     ],
-    "sha": "b97e9de6026539fc7bb6142112015210f0b4d041"
+    "sha": "ed0a2128cee7efeee8f9e1c4f20477c32b782ce2"
 }

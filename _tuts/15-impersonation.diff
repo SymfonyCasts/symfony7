@@ -1,0 +1,315 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 9963371..95985fb 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -34,7 +34,8 @@ security:
+             # https://symfony.com/doc/current/security.html#the-firewall
+ 
+             # https://symfony.com/doc/current/security/impersonating_user.html
+-            # switch_user: true
++            switch_user:
++                target_route: app_homepage
+ 
+     # Note: Only the *first* matching rule is applied
+     access_control:
+@@ -44,6 +45,7 @@ security:
+     role_hierarchy:
+         ROLE_ADMIN:
+             - ROLE_CAPTAIN
++            - ROLE_ALLOWED_TO_SWITCH
+ 
+ when@test:
+     security:
+diff --git a/src/Controller/UserAdminController.php b/src/Controller/UserAdminController.php
+new file mode 100644
+index 0000000..b6bcd72
+--- /dev/null
++++ b/src/Controller/UserAdminController.php
+@@ -0,0 +1,83 @@
++<?php
++
++namespace App\Controller;
++
++use App\Entity\User;
++use App\Form\UserType;
++use App\Repository\UserRepository;
++use Doctrine\ORM\EntityManagerInterface;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\HttpFoundation\Request;
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Component\Routing\Attribute\Route;
++use Symfony\Component\Security\Http\Attribute\IsGranted;
++
++#[Route('/admin/user')]
++#[IsGranted('ROLE_ADMIN')]
++final class UserAdminController extends AbstractController
++{
++    #[Route(name: 'app_user_admin_index', methods: ['GET'])]
++    public function index(UserRepository $userRepository): Response
++    {
++        return $this->render('user_admin/index.html.twig', [
++            'users' => $userRepository->findAll(),
++        ]);
++    }
++
++    #[Route('/new', name: 'app_user_admin_new', methods: ['GET', 'POST'])]
++    public function new(Request $request, EntityManagerInterface $entityManager): Response
++    {
++        $user = new User();
++        $form = $this->createForm(UserType::class, $user);
++        $form->handleRequest($request);
++
++        if ($form->isSubmitted() && $form->isValid()) {
++            $entityManager->persist($user);
++            $entityManager->flush();
++
++            return $this->redirectToRoute('app_user_admin_index', [], Response::HTTP_SEE_OTHER);
++        }
++
++        return $this->render('user_admin/new.html.twig', [
++            'user' => $user,
++            'form' => $form,
++        ]);
++    }
++
++    #[Route('/{id}', name: 'app_user_admin_show', methods: ['GET'])]
++    public function show(User $user): Response
++    {
++        return $this->render('user_admin/show.html.twig', [
++            'user' => $user,
++        ]);
++    }
++
++    #[Route('/{id}/edit', name: 'app_user_admin_edit', methods: ['GET', 'POST'])]
++    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
++    {
++        $form = $this->createForm(UserType::class, $user);
++        $form->handleRequest($request);
++
++        if ($form->isSubmitted() && $form->isValid()) {
++            $entityManager->flush();
++
++            return $this->redirectToRoute('app_user_admin_index', [], Response::HTTP_SEE_OTHER);
++        }
++
++        return $this->render('user_admin/edit.html.twig', [
++            'user' => $user,
++            'form' => $form,
++        ]);
++    }
++
++    #[Route('/{id}', name: 'app_user_admin_delete', methods: ['POST'])]
++    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
++    {
++        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
++            $entityManager->remove($user);
++            $entityManager->flush();
++        }
++
++        return $this->redirectToRoute('app_user_admin_index', [], Response::HTTP_SEE_OTHER);
++    }
++}
+diff --git a/src/Form/UserType.php b/src/Form/UserType.php
+new file mode 100644
+index 0000000..c9fa6b8
+--- /dev/null
++++ b/src/Form/UserType.php
+@@ -0,0 +1,34 @@
++<?php
++
++namespace App\Form;
++
++use App\Entity\Starship;
++use App\Entity\User;
++use Symfony\Bridge\Doctrine\Form\Type\EntityType;
++use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\FormBuilderInterface;
++use Symfony\Component\OptionsResolver\OptionsResolver;
++
++class UserType extends AbstractType
++{
++    public function buildForm(FormBuilderInterface $builder, array $options): void
++    {
++        $builder
++            ->add('email')
++            ->add('roles')
++            ->add('password')
++            ->add('name')
++            ->add('starship', EntityType::class, [
++                'class' => Starship::class,
++                'choice_label' => 'id',
++            ])
++        ;
++    }
++
++    public function configureOptions(OptionsResolver $resolver): void
++    {
++        $resolver->setDefaults([
++            'data_class' => User::class,
++        ]);
++    }
++}
+diff --git a/templates/user_admin/_delete_form.html.twig b/templates/user_admin/_delete_form.html.twig
+new file mode 100644
+index 0000000..4975b22
+--- /dev/null
++++ b/templates/user_admin/_delete_form.html.twig
+@@ -0,0 +1,4 @@
++<form method="post" action="{{ path('app_user_admin_delete', {'id': user.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
++    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
++    <button class="btn">Delete</button>
++</form>
+diff --git a/templates/user_admin/_form.html.twig b/templates/user_admin/_form.html.twig
+new file mode 100644
+index 0000000..bf20b98
+--- /dev/null
++++ b/templates/user_admin/_form.html.twig
+@@ -0,0 +1,4 @@
++{{ form_start(form) }}
++    {{ form_widget(form) }}
++    <button class="btn">{{ button_label|default('Save') }}</button>
++{{ form_end(form) }}
+diff --git a/templates/user_admin/edit.html.twig b/templates/user_admin/edit.html.twig
+new file mode 100644
+index 0000000..9ded58e
+--- /dev/null
++++ b/templates/user_admin/edit.html.twig
+@@ -0,0 +1,13 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}Edit User{% endblock %}
++
++{% block body %}
++    <h1>Edit User</h1>
++
++    {{ include('user_admin/_form.html.twig', {'button_label': 'Update'}) }}
++
++    <a href="{{ path('app_user_admin_index') }}">back to list</a>
++
++    {{ include('user_admin/_delete_form.html.twig') }}
++{% endblock %}
+diff --git a/templates/user_admin/index.html.twig b/templates/user_admin/index.html.twig
+new file mode 100644
+index 0000000..2ef1a62
+--- /dev/null
++++ b/templates/user_admin/index.html.twig
+@@ -0,0 +1,58 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}User index{% endblock %}
++
++{% block body %}
++    <div class="max-w-7xl mx-auto px-5">
++        <div class="flex justify-between items-center">
++            <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">User index</h1>
++            <a class="bg-blue-500 hover:bg-blue-600 text-white self-center py-2 px-2.5 rounded-xl" href="{{ path('app_user_admin_new') }}">Create new</a>
++        </div>
++
++        <div class="overflow-x-auto w-full">
++            <table class="w-full table-fixed border-collapse border border-gray-400">
++                <thead class="bg-gray-50 dark:bg-gray-700">
++                    <tr>
++                        <th class="p-4 text-left font-semibold text-gray-200">Id</th>
++                        <th class="p-4 text-left font-semibold text-gray-200">Email</th>
++                        <th class="p-4 text-left font-semibold text-gray-200">Roles</th>
++                        <th class="p-4 text-left font-semibold text-gray-200">Name</th>
++                        <th class="p-4 text-left font-semibold text-gray-200">Actions</th>
++                    </tr>
++                </thead>
++                <tbody>
++                {% for user in users %}
++                    {% set roles = user.roles|filter(role => role != 'ROLE_USER') %}
++                    <tr class="hover:bg-blue-500/5">
++                        <td class="border-b p-4 pl-8 border-gray-700 text-gray-400">{{ user.id }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ user.email }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">
++                            {% if roles is empty %}
++                                <span class="inline-flex items-center rounded-full bg-slate-500/20 px-2.5 py-1 text-xs font-medium text-slate-200">No roles</span>
++                            {% else %}
++                                <div class="flex flex-wrap gap-2">
++                                    {% for role in roles %}
++                                        <span class="inline-flex items-center rounded-full bg-blue-500/20 px-2.5 py-1 text-xs font-medium text-blue-100">{{ role }}</span>
++                                    {% endfor %}
++                                </div>
++                            {% endif %}
++                        </td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ user.name }}</td>
++                        <td class="border-b p-4 border-gray-700 text-white">
++                            <div class="flex gap-2">
++                                <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_user_admin_show', {'id': user.id}) }}">show</a>
++                                <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_user_admin_edit', {'id': user.id}) }}">edit</a>
++                                <a class="bg-indigo-500 hover:bg-indigo-600 rounded p-1.5" href="#">switch to</a>
++                            </div>
++                        </td>
++                    </tr>
++                {% else %}
++                    <tr>
++                        <td colspan="5" class="border-b p-4 border-gray-700 text-gray-400">no records found</td>
++                    </tr>
++                {% endfor %}
++                </tbody>
++            </table>
++        </div>
++    </div>
++{% endblock %}
+diff --git a/templates/user_admin/new.html.twig b/templates/user_admin/new.html.twig
+new file mode 100644
+index 0000000..bc42d2f
+--- /dev/null
++++ b/templates/user_admin/new.html.twig
+@@ -0,0 +1,11 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}New User{% endblock %}
++
++{% block body %}
++    <h1>Create new User</h1>
++
++    {{ include('user_admin/_form.html.twig') }}
++
++    <a href="{{ path('app_user_admin_index') }}">back to list</a>
++{% endblock %}
+diff --git a/templates/user_admin/show.html.twig b/templates/user_admin/show.html.twig
+new file mode 100644
+index 0000000..2747df7
+--- /dev/null
++++ b/templates/user_admin/show.html.twig
+@@ -0,0 +1,38 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}User{% endblock %}
++
++{% block body %}
++    <h1>User</h1>
++
++    <table class="table">
++        <tbody>
++            <tr>
++                <th>Id</th>
++                <td>{{ user.id }}</td>
++            </tr>
++            <tr>
++                <th>Email</th>
++                <td>{{ user.email }}</td>
++            </tr>
++            <tr>
++                <th>Roles</th>
++                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
++            </tr>
++            <tr>
++                <th>Password</th>
++                <td>{{ user.password }}</td>
++            </tr>
++            <tr>
++                <th>Name</th>
++                <td>{{ user.name }}</td>
++            </tr>
++        </tbody>
++    </table>
++
++    <a href="{{ path('app_user_admin_index') }}">back to list</a>
++
++    <a href="{{ path('app_user_admin_edit', {'id': user.id}) }}">edit</a>
++
++    {{ include('user_admin/_delete_form.html.twig') }}
++{% endblock %}

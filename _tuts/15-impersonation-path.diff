@@ -1,0 +1,13 @@
+diff --git a/templates/user_admin/index.html.twig b/templates/user_admin/index.html.twig
+index 2ef1a62..22f732e 100644
+--- a/templates/user_admin/index.html.twig
++++ b/templates/user_admin/index.html.twig
+@@ -42,7 +42,7 @@
+                             <div class="flex gap-2">
+                                 <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_user_admin_show', {'id': user.id}) }}">show</a>
+                                 <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_user_admin_edit', {'id': user.id}) }}">edit</a>
+-                                <a class="bg-indigo-500 hover:bg-indigo-600 rounded p-1.5" href="#">switch to</a>
++                                <a class="bg-indigo-500 hover:bg-indigo-600 rounded p-1.5" href="{{ impersonation_path(user.userIdentifier) }}">switch to</a>
+                             </div>
+                         </td>
+                     </tr>
