@@ -1,4 +1,4 @@
-# Impersonating Users with `switch_user`
+# Impersonating Users with switch_user
 
 Time to look at user impersonation - also called *switching users*. This is
 the feature of having one user temporarily impersonate another.

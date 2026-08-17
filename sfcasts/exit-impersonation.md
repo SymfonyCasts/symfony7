@@ -1,3 +1,3 @@
-# Exiting Impersonation & `IS_IMPERSONATOR`
+# Exiting Impersonation & IS_IMPERSONATOR
 
 Coming soon!
