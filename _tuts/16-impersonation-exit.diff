@@ -1,0 +1,32 @@
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index e7014d3..8bbbe57 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -19,6 +19,14 @@
+         {% endif %}
+     </head>
+     <body class="text-white" style="background: radial-gradient(102.21% 102.21% at 50% 28.75%, #00121C 42.62%, #013954 100%);">
++        {% if is_granted('IS_IMPERSONATOR') %}
++            <div class="pointer-events-none fixed inset-0 z-50 border-4 border-red-600">
++                <span class="absolute top-0 left-0 bg-red-600 px-3 py-1 text-sm font-semibold rounded-br-md">
++                    Impersonating {{ app.user.name }}
++                </span>
++            </div>
++        {% endif %}
++
+         {% set flashBgColors = {
+             'success': 'bg-green-400/30',
+             'warning': 'bg-yellow-400/30',
+@@ -61,7 +69,11 @@
+                         <a class="hover:text-amber-400 pt-2" href="#">
+                             Contact
+                         </a>
+-                        {% if is_granted('ROLE_USER') %}
++                        {% if is_granted('IS_IMPERSONATOR') %}
++                            <a class="hover:text-amber-400 pt-2" href="{{ impersonation_exit_path() }}">
++                                Exit Impersonation
++                            </a>
++                        {% elseif is_granted('ROLE_USER') %}
+                             <form action="{{ logout_path() }}" method="post" class="inline">
+                                 <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('logout') }}">
+                                 <button type="submit" class="hover:text-amber-400 pt-2 cursor-pointer">

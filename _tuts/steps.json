@@ -189,7 +189,17 @@
             "id": "15-impersonation-path",
             "name": "15. impersonation path",
             "description": null
+        },
+        {
+            "id": "16-impersonation-exit",
+            "name": "16. impersonation exit",
+            "description": null
+        },
+        {
+            "id": "16-exit-target",
+            "name": "16. exit target",
+            "description": null
         }
     ],
-    "sha": "c25a8a7024c2fdc2cd0ddd3adb674cb8c072cae3"
+    "sha": "09fd9c5d18deefe44ae5d42ddabc5b95fbdad971"
 }

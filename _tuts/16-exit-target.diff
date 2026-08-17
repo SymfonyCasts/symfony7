@@ -1,0 +1,13 @@
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index 8bbbe57..c0126d9 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -70,7 +70,7 @@
+                             Contact
+                         </a>
+                         {% if is_granted('IS_IMPERSONATOR') %}
+-                            <a class="hover:text-amber-400 pt-2" href="{{ impersonation_exit_path() }}">
++                            <a class="hover:text-amber-400 pt-2" href="{{ impersonation_exit_path(path('app_user_admin_index')) }}">
+                                 Exit Impersonation
+                             </a>
+                         {% elseif is_granted('ROLE_USER') %}
