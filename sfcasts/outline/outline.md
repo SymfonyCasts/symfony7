@@ -437,6 +437,29 @@
 - on homepage,
 - check web debug toolbar
 
+## Exiting Impersonation & IS_IMPERSONATOR
+
+- knowing your impersonating is important!
+- Open `AuthenticatedVoter`: `IS_IMPERSONATOR` attribute
+- Open `templates/base.html.twig`
+    - right after the body: `{% if is_granted('IS_IMPERSONATOR') %}{% endif %}`
+    - paste code... and explain
+- Refresh
+- Now for exiting impersonation, let's swap the Logout link
+- `templates/base.html.twig`
+    - above the logout form, add `{% if is_granted('IS_IMPERSONATOR') %}`
+    - change the `if` below to `elseif
+    - Copy the login link, paste inside, text "Exit Impersonation"
+    - href: `{{ impersonation_exit_path() }}`
+- Refresh, click exit
+- Click "Parts" - explain nuance about exiting not following `target_route`
+- Click Exit - switched back and still on /parts
+- In `templates/base.html.twig`, inside `impersonation_exit_path()`
+    - `path('app_user_admin_index')`
+- Visit `/admin/user`, switch to picard
+- Visit Parts, click exit
+- Back on /admin/user
+
 ## Limiting Login Attempts
 
 ## Security Events: Tracking the Last Login

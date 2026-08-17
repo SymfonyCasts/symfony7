@@ -45,8 +45,8 @@ chapters:
         tutsFirstStep: 15-impersonation
         tutsLastStep: 15-impersonation-path
     exit-impersonation:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 16-impersonation-exit
+        tutsLastStep: 16-exit-target
     login-throttling:
         tutsFirstStep: null
         tutsLastStep: null
