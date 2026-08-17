@@ -22,10 +22,10 @@ index 9963371..95985fb 100644
      security:
 diff --git a/src/Controller/UserAdminController.php b/src/Controller/UserAdminController.php
 new file mode 100644
-index 0000000..b6bcd72
+index 0000000..d4abc79
 --- /dev/null
 +++ b/src/Controller/UserAdminController.php
-@@ -0,0 +1,83 @@
+@@ -0,0 +1,81 @@
 +<?php
 +
 +namespace App\Controller;
@@ -38,10 +38,8 @@ index 0000000..b6bcd72
 +use Symfony\Component\HttpFoundation\Request;
 +use Symfony\Component\HttpFoundation\Response;
 +use Symfony\Component\Routing\Attribute\Route;
-+use Symfony\Component\Security\Http\Attribute\IsGranted;
 +
 +#[Route('/admin/user')]
-+#[IsGranted('ROLE_ADMIN')]
 +final class UserAdminController extends AbstractController
 +{
 +    #[Route(name: 'app_user_admin_index', methods: ['GET'])]
