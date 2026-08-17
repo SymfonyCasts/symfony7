@@ -42,6 +42,9 @@ chapters:
         tutsFirstStep: 14-voter-restrict
         tutsLastStep: 14-voter-restrict
     impersonation:
+        tutsFirstStep: 15-impersonation
+        tutsLastStep: 15-impersonation-path
+    exit-impersonation:
         tutsFirstStep: null
         tutsLastStep: null
     login-throttling:

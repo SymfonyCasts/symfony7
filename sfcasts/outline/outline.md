@@ -412,6 +412,31 @@
 
 ## User Impersonation
 
+- user impersonation benefits
+- start with a user crud
+- `symfony console make:crud`
+    - User, UserAdminController
+- Open `UserAdminController`
+    - Change route prefix to `/admin/user`
+    - Add `#[IsGranted('ROLE_ADMIN')]` to the class
+- Logged in as janeway, visit /admin/user in the browser
+- open `user_admin/index.html.twig`, paste in updated template
+- refresh, "switch to" button - does nothing
+- `symfony console config:dump security firewalls`
+    - scroll up to `switch_user` section and explain
+    - Dangerous, so a role is always required to use it
+- Open `security.yaml`
+    - add `ROLE_ALLOWED_TO_SWITCH` to the `ROLE_ADMIN` in the role hierarchy
+    - above, uncomment `switch_user: true`
+        - add `target_route: app_homepage`
+- Open `index.html.twig` and find the switch to link
+    - `{{ impersonation_path(user.userIdentifier) }}`
+    - Remember, the `userIdentifier` is the email in our case
+- Refresh user listing
+- Click switch to picard
+- on homepage,
+- check web debug toolbar
+
 ## Limiting Login Attempts
 
 ## Security Events: Tracking the Last Login
