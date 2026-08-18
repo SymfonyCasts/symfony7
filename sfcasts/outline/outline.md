@@ -462,6 +462,35 @@
 
 ## Limiting Login Attempts
 
+- prevent brute forcing your login page
+- in `security.yaml`
+    - under our `main` firewall
+    - `login_throttling: true`
+- refresh login page... error
+- `composer require symfony/rate-limiter`
+- login throttling uses cache
+- `config/cache.yaml`
+    - we're in dev, so array adapter is used (no persistence between requests)
+    - change to `filesystem` so we can test
+- visit `/login`
+    - attempt to login with the wrong password 6 times
+- Defaults (2 rate limiters)
+    - IP+Username: 5 attempts in 1 minute "Local"
+    - IP: 25 attempts in 1 minute "Global"
+- look at the options
+    - `symfony console config:dump security firewalls`
+        - `max_attempts` and `interval` - MOST IMPORTANT
+        - `cache_pool`: configure the cache pool to use, if it doesn't exist, created from default app cache
+        - `lock_factory`: small race window, utilize if you have a lot of concurrent requests
+        - `storage_service`: override the storage mechanism entirely (cache_pool ignored)
+        - `limiter`: override the limiter service that implements `RequestRateLimiterInterface`
+- `security.yaml`
+    - `max_attempts: 3` (local = 3, global = 15)
+    - `interval: '10 minutes'`
+- As with any application-level rate limiting, does not prevent DDOS attacks, even if
+  the request is rejected, it still had to utilize server resources. Use a service
+  like Cloudflare to mitigate DDOS attacks.
+
 ## Security Events: Tracking the Last Login
 
 ## Registration Form
