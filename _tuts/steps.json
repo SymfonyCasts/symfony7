@@ -199,7 +199,17 @@
             "id": "16-exit-target",
             "name": "16. exit target",
             "description": null
+        },
+        {
+            "id": "17-login-throttling",
+            "name": "17. login throttling",
+            "description": null
+        },
+        {
+            "id": "17-login-throttling-customize",
+            "name": "17. login throttling customize",
+            "description": null
         }
     ],
-    "sha": "09fd9c5d18deefe44ae5d42ddabc5b95fbdad971"
+    "sha": "c1366a16b049f9a7826b6d74d82049fa28d276a2"
 }

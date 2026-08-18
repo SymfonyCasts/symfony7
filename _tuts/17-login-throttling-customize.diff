@@ -1,0 +1,28 @@
+diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
+index ba3bfb7..6336df2 100644
+--- a/config/packages/cache.yaml
++++ b/config/packages/cache.yaml
+@@ -14,7 +14,7 @@ framework:
+         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
+         #app: cache.adapter.apcu
+ 
+-        app: cache.adapter.filesystem
++        app: cache.adapter.array
+ 
+         # Namespaced pools use the above "app" backend by default
+         # pools:
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 49fc9ab..78c0597 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -30,7 +30,9 @@ security:
+                 # target: app_any_route
+             remember_me: ~
+ 
+-            login_throttling: true
++            login_throttling:
++                max_attempts: 3
++                interval: '15 minutes'
+ 
+             # Activate different ways to authenticate:
+             # https://symfony.com/doc/current/security.html#the-firewall

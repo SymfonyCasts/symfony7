@@ -1,0 +1,132 @@
+diff --git a/composer.json b/composer.json
+index 8f20aab..c8bf71b 100644
+--- a/composer.json
++++ b/composer.json
+@@ -29,6 +29,7 @@
+         "symfony/monolog-bundle": "^4.0",
+         "symfony/property-access": "8.0.*",
+         "symfony/property-info": "8.0.*",
++        "symfony/rate-limiter": "8.0.*",
+         "symfony/runtime": "8.0.*",
+         "symfony/security-bundle": "8.0.*",
+         "symfony/security-csrf": "8.0.*",
+diff --git a/composer.lock b/composer.lock
+index ad1a486..72be9d2 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "4996cb65b6c6c3765cda53833f08a5cd",
++    "content-hash": "091e61b004d2d83f6351f68b3318ff1f",
+     "packages": [
+         {
+             "name": "babdev/pagerfanta-bundle",
+@@ -5272,6 +5272,80 @@
+             ],
+             "time": "2026-03-30T15:14:47+00:00"
+         },
++        {
++            "name": "symfony/rate-limiter",
++            "version": "v8.0.14",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/rate-limiter.git",
++                "reference": "ebbcbc99afbecbd619f21c0c7e0a3c59760a6248"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/rate-limiter/zipball/ebbcbc99afbecbd619f21c0c7e0a3c59760a6248",
++                "reference": "ebbcbc99afbecbd619f21c0c7e0a3c59760a6248",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=8.4",
++                "symfony/options-resolver": "^7.4|^8.0"
++            },
++            "require-dev": {
++                "psr/cache": "^1.0|^2.0|^3.0",
++                "symfony/lock": "^7.4|^8.0"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Component\\RateLimiter\\": ""
++                },
++                "exclude-from-classmap": [
++                    "/Tests/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Wouter de Jong",
++                    "email": "wouter@wouterj.nl"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Provides a Token Bucket implementation to rate limit input and output in your application",
++            "homepage": "https://symfony.com",
++            "keywords": [
++                "limiter",
++                "rate-limiter"
++            ],
++            "support": {
++                "source": "https://github.com/symfony/rate-limiter/tree/v8.0.14"
++            },
++            "funding": [
++                {
++                    "url": "https://symfony.com/sponsor",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://github.com/fabpot",
++                    "type": "github"
++                },
++                {
++                    "url": "https://github.com/nicolas-grekas",
++                    "type": "github"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2026-06-09T10:20:00+00:00"
++        },
+         {
+             "name": "symfony/routing",
+             "version": "v8.0.12",
+diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
+index 6336df2..ba3bfb7 100644
+--- a/config/packages/cache.yaml
++++ b/config/packages/cache.yaml
+@@ -14,7 +14,7 @@ framework:
+         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
+         #app: cache.adapter.apcu
+ 
+-        app: cache.adapter.array
++        app: cache.adapter.filesystem
+ 
+         # Namespaced pools use the above "app" backend by default
+         # pools:
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 95985fb..49fc9ab 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -30,6 +30,8 @@ security:
+                 # target: app_any_route
+             remember_me: ~
+ 
++            login_throttling: true
++
+             # Activate different ways to authenticate:
+             # https://symfony.com/doc/current/security.html#the-firewall
+ 
