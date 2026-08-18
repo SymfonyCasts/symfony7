@@ -6,7 +6,9 @@ setup for our starships here. And right now, the route prefix for all of these i
 `ROLE_ADMIN` by our `access_control`.
 
 The first thing I want to do is make this public... and *then* add a more
-fine-grained permission system on top. So remove the `/admin` prefix.
+fine-grained permission system on top. So remove the `/admin` prefix:
+
+[[[ code('d05672c206') ]]]
 
 Head over to the browser, make sure we're *not* logged in, and go to `/starship`.
 There's our CRUD... but it's completely public. We can edit ships, delete them, and
@@ -28,7 +30,9 @@ Jump over to `templates/starship_admin/` - this is where all the templates for t
 CRUD live - and open `index.html.twig` first. At the very top, this anchor tag is
 the "Create new" button. For creating, we're going to keep it simple: only admins
 can create new ships. So wrap it in `{% if is_granted('ROLE_ADMIN') %}` and
-`{% endif %}`.
+`{% endif %}`:
+
+[[[ code('1ecdab3788') ]]]
 
 Perfect. Now only admins can actually create new starships.
 
@@ -42,7 +46,9 @@ and simple: `edit`.
 
 But we're not done: pass a *second* argument to `is_granted()`. This second
 argument is called the **subject**, and our subject is going to be `starship`. Now
-close everything up with an `{% endif %}`.
+close everything up with an `{% endif %}`:
+
+[[[ code('aaffa8d444') ]]]
 
 Refresh the page... and that edit button disappears.
 
@@ -50,10 +56,14 @@ There's one other place: the show page. If you click "Show", we want to exclude
 these actions if you don't have permission - with those same `is_granted()` checks. So
 go to the show *template* and scroll to the very bottom, where we find the edit
 link. Wrap this one in `{% if is_granted('edit', starship) %}`, then close it with
-`{% endif %}`.
+`{% endif %}`:
+
+[[[ code('619c053edc') ]]]
 
 The delete button is going to use a different permission:
-`{% if is_granted('delete', starship) %}`.
+`{% if is_granted('delete', starship) %}`:
+
+[[[ code('92db7250eb') ]]]
 
 Go back and refresh this page... and they're gone, because we're anonymous.
 
@@ -85,7 +95,9 @@ template.
 
 And this `VIEW` constant? We're not going to have fine-grained permissions on
 viewing: anyone can view a starship. So change this constant to `DELETE`... and
-change its value also to `delete`.
+change its value also to `delete`:
+
+[[[ code('a2b6b7907e') ]]]
 
 ## `supports()`
 
@@ -101,7 +113,9 @@ second argument.
 In this case, the generated code is almost correct already. We have
 `in_array($attribute, [self::EDIT, self::VIEW])` - change `VIEW` to `DELETE` - and
 then `$subject instanceof Starship`. That's exactly what we want. I'm just going to
-clean this up a little bit by importing `Starship`.
+clean this up a little bit by importing `Starship`:
+
+[[[ code('f30591b3fc') ]]]
 
 ## `voteOnAttribute()`
 
@@ -129,11 +143,15 @@ this.
 But first, up at the top, for this subject: because `supports()` already ensured
 this is an instance of `Starship`, we can be assured that this `mixed $subject` is
 in fact a `Starship`. So generate a docblock. Delete everything except for the
-subject... and type it as `Starship`.
+subject... and type it as `Starship`:
+
+[[[ code('de16dfb53c') ]]]
 
 Down below, we have the user, *and* we have the starship (as the subject). Which means we can now
 check whether the user is part of the starship:
-`return $user->getStarship()?->getId() === $subject->getId()`.
+`return $user->getStarship()?->getId() === $subject->getId()`:
+
+[[[ code('d63073d9af') ]]]
 
 ## Trying It Out
 

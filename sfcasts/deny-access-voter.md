@@ -21,21 +21,27 @@ Start with the `index()` method. We don't need any permissions here: anyone can
 access the index.
 
 But for `new()`, our rule was that you need to be an admin. So add
-`#[IsGranted('ROLE_ADMIN')]`.
+`#[IsGranted('ROLE_ADMIN')]`:
+
+[[[ code('766adfc27a') ]]]
 
 Keep going down to `show()`. Show is fine - anyone can view a starship, no problem.
 
 But then `edit()`. And remember, for the `edit` permission, we need the starship as
 the *subject*. So use that same `#[IsGranted]` attribute. The permission was
 `edit`... and then pass a second argument: the subject. Just pass the string
-`starship`.
+`starship`:
+
+[[[ code('b9dc859bbe') ]]]
 
 As long as that references an object that's injected into your controller, it will
 be used as the subject. So this will use the `Starship` that we injected into this
 controller. Exactly what we want!
 
 Then there's one more place: `delete()`. Same thing - `#[IsGranted]`, `delete`, and
-the subject: `starship`.
+the subject: `starship`:
+
+[[[ code('5c61e58267') ]]]
 
 Back to the browser and try going to the new page again... Access denied. Perfect.
 We can still edit our own ship, but if we change the ID to `2`... we now get an
@@ -64,7 +70,9 @@ service? Add a constructor.
 Now, you might think to use the `Security` helper service that we talked about earlier... but
 you actually shouldn't do that here. We'll see why in a second.
 
-Instead, inject `private AccessDecisionManagerInterface $accessDecisionManager`.
+Instead, inject `private AccessDecisionManagerInterface $accessDecisionManager`:
+
+[[[ code('d111220041') ]]]
 
 Down below, before any of our `voteOnAttribute()` logic happens, check if the user
 has `ROLE_ADMIN`. Write `if ($this->accessDecisionManager->decide())` - and the first
@@ -72,7 +80,9 @@ argument is the `$token`.
 
 For the second argument, use `ROLE_ADMIN` wrapped in an array.
 
-Inside the `if` statement, `return true`.
+Inside the `if` statement, `return true`:
+
+[[[ code('80d453a22d') ]]]
 
 ## Why Not the `Security` Service?
 
@@ -96,15 +106,21 @@ permission check. That... can get expensive, but there are ways to improve perfo
 Back in `StarshipVoter`, override the `supportsType()` method.
 
 This `$subjectType` gives us the PHP type of the subject - in our case, the class name.
-So write `return is_a($subjectType, Starship::class, true)`. We need that `true`
-because you have to pass it when you're checking a class as a *string* with `is_a()`.
+So write `return is_a($subjectType, Starship::class, true)`:
+
+[[[ code('0a5e86f3b3') ]]]
+
+We need that `true` because you have to pass it when you're checking a class as a *string*
+with `is_a()`.
 
 That's going to gain us a little bit of performance.
 
 Now override `supportsAttribute()`. It takes the `$attribute` being checked as an argument.
 Copy the logic for this from `supports()` above...
 
-And `return in_array($attribute, [self::EDIT, self::DELETE])`.
+And `return in_array($attribute, [self::EDIT, self::DELETE])`:
+
+[[[ code('05ee6745c4') ]]]
 
 As you can see, we basically split the logic of `supports()` into two methods... and we still
 need `supports()`. The extra work and duplication only really pays off if you have a ton of voters

@@ -24,7 +24,9 @@ Do we want tests? No.
 Ok, it generated all of these files. Jump over to your IDE and find the new
 `UserAdminController`.
 
-Only thing we'll change here is the route prefix. Change it to `/admin/user`.
+Only thing we'll change here is the route prefix. Change it to `/admin/user`:
+
+[[[ code('9ec23052ee') ]]]
 
 Since these routes are now prefixed with `/admin`, our `access_control` configuration already
 restricts them to just admins. So we get that for free here.
@@ -35,7 +37,9 @@ the login page. We need an admin, so use `janeway@starfleet.space`, password
 
 This CRUD... doesn't look too hot... so let's pretty-ify it a bit. Open
 `templates/user_admin/index.html.twig`. I'm going to select all and paste in
-some nicer HTML, you can find this in the script below.
+some nicer HTML, you can find this in the script below:
+
+[[[ code('ed5e55b002') ]]]
 
 Back to the browser and refresh. Much better!
 
@@ -71,12 +75,18 @@ Finally, `target_route` is where you want to send the user after the switch occu
 ## Enabling `switch_user`
 
 Time to configure this. First, go to `config/packages/security.yaml`. Down in `role_hierarchy`, under
-`ROLE_ADMIN`, add `ROLE_ALLOWED_TO_SWITCH`. Now our admins will have this role.
+`ROLE_ADMIN`, add `ROLE_ALLOWED_TO_SWITCH`:
+
+[[[ code('1277fdb16a') ]]]
+
+Now our admins will have this role.
 
 And then up here, uncomment `switch_user: true` - the `true` just enables the feature with
 all the defaults.
 
-I want to override one thing: `target_route`. Send them to `app_homepage`.
+I want to override one thing: `target_route`. Send them to `app_homepage`:
+
+[[[ code('6e3a3f9563') ]]]
 
 If you don't set this, then by default, they'll switch on whatever page they're
 currently on. And you can imagine: if we switch to Picard on *this* page, he wouldn't
@@ -87,7 +97,9 @@ page to land them on, that everyone has access to.
 
 Now to wire up that button. Go back to the index template and find that "switch to"
 link... here it is. Clear out the `href`. There's a nifty Twig function to generate
-the URL for us! Output `impersonation_path(user.userIdentifier)`.
+the URL for us! Output `impersonation_path(user.userIdentifier)`:
+
+[[[ code('4cfab28e2e') ]]]
 
 Click through to find this on our `User` entity. If you remember, `getUserIdentifier()` comes
 from the `UserInterface` and our `User`'s implementation returns the email address.

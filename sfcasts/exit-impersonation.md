@@ -27,7 +27,10 @@ Close that and open `templates/base.html.twig`. Right at the top, just under the
 opening `<body>` tag, add `{% if is_granted('IS_IMPERSONATOR') %}`... and close it with
 `{% endif %}`.
 
-Inside, I'm going to paste a little bit of code that you can find in the script below.
+Inside, I'm going to paste a little bit of code that you can find in the script below:
+
+[[[ code('4721134241') ]]]
+
 And... I'll clean this up a little bit.
 
 What this is doing is adding a red border around the whole page, plus a little text in
@@ -50,7 +53,9 @@ an `elseif`.
 Then, down here, copy the login link HTML and paste it inside our new `if` so it's styled
 similar. For the text, write "Exit Impersonation".
 
-And for the `href`, we can render another Twig function: `impersonation_exit_path()`.
+And for the `href`, we can render another Twig function: `impersonation_exit_path()`:
+
+[[[ code('1dee17d592') ]]]
 
 By the way, there's `url` versions of these functions. These do the exact same thing
 but generate an absolute URL instead of just the path.
@@ -73,8 +78,11 @@ If you remember, over in `config/packages/security.yaml`, we configured this
 
 But the first argument to `impersonation_exit_path()` is the path you want to send the
 user to after exiting. So what I like to do is send them back to where they chose
-the impersonated user: `impersonation_exit_path(path('app_user_admin_index'))`. Then
-they can switch to someone else if they want.
+the impersonated user: `impersonation_exit_path(path('app_user_admin_index'))`:
+
+[[[ code('f514b27909') ]]]
+
+Then they can switch to someone else if they want.
 
 Try that out. Manually go to `/admin/user`... find Picard and hit "switch to". That
 all works. Now go to Parts... and hit "Exit impersonation". Cool! We're right back at
