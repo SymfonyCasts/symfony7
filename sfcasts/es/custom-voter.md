@@ -1,29 +1,30 @@
 # Crear un votante personalizado
 
-Abre `src/Controller/StarshipAdminController.php`. Aquí tenemos una configuración CRUD bastante estándar
-para nuestras naves espaciales. Y ahora mismo, el prefijo de ruta para todas ellas es
-`/admin`. Si te acuerdas, todo lo que empiece por `/admin` queda restringido a
+Abre `src/Controller/StarshipAdminController.php`. Tenemos una configuración CRUD bastante estándar
+para nuestras naves espaciales aquí. Y ahora mismo, el prefijo de ruta para todas ellas es
+`/admin`. Si te acuerdas, todo lo que empieza por `/admin` queda restringido a
 `ROLE_ADMIN` gracias a nuestro `access_control`.
 
-Lo primero que quiero hacer es hacer esto público... y luego añadir un
+Lo primero que quiero hacer es hacer esto público… y luego añadir un
 sistema de permisos más detallado encima. Así que quita el prefijo `/admin`:
 
 [[[ code('d05672c206') ]]]
 
-Ve al navegador, asegúrate de que no hemos iniciado sesión y ve a `/starship`.
-Ahí está nuestro CRUD... pero es totalmente público. Podemos editar naves, eliminarlas y
-crearlas como usuario anónimo. Definitivamente no es lo que queremos.
+Ve al navegador, asegúrate de que no has iniciado sesión y entra en `/starship`.
+Ahí está nuestro CRUD… pero es totalmente público. Podemos editar naves, eliminarlas y
+crearlas como usuario anónimo. Desde luego, no es lo que queremos.
 
 Este es el objetivo: los usuarios que hayan iniciado sesión solo deberían poder editar su propia nave, si
 tienen una. Recuerda que añadimos una propiedad `starship` a nuestra clase `User`. Así que si
 Picard hubiera iniciado sesión, solo podría editar y eliminar esta fila superior, porque
-esa es su nave espacial. La visualización puede seguir siendo pública para todo el mundo: usuarios anónimos,
+esa es su nave estelar. La visualización puede seguir siendo pública para todo el mundo: usuarios anónimos,
 otros usuarios que hayan iniciado sesión, cualquiera. Son las operaciones que realmente cambian los datos en
 la base de datos las que requerirán permisos especiales.
 
 ## Ocultar acciones con `is_granted()`
 
-Empieza por ocultar estas acciones tras algunas llamadas a `is_granted()` en nuestras plantillas de Twig.
+Empieza por ocultar estas acciones tras algunas llamadas a ` `is_granted()` ` en nuestras plantillas de Twig
+.
 
 Ve a `templates/starship_admin/` —aquí es donde están todas las plantillas para este
 CRUD— y abre primero `index.html.twig`. Justo en la parte superior, esta etiqueta de anclaje es
@@ -38,7 +39,7 @@ Perfecto. Ahora solo los administradores pueden crear nuevas naves espaciales.
 Lo siguiente es el botón de editar. Pero primero, actualiza la página... «Crear nuevo» ha
 desaparecido. Ahora elimina ese botón de editar para los usuarios anónimos.
 
-Aquí abajo tenemos un botón «Mostrar» y otro «Editar». Envuelve el botón de edición en una
+Aquí abajo tenemos los botones «Mostrar» y «Editar». Envuelve el botón de edición en una
 comprobación de`is_granted()`. Y para este, no vamos a usar un rol. Vamos
 a usar un atributo personalizado genérico, a veces llamado «permiso». Ponle un nombre
 sencillo y claro: `edit`.
@@ -72,9 +73,9 @@ Vale, inicia sesión como Picard: `picard@enterprise.space`, contraseña `makeit
 
 Ahora visita la lista de naves espaciales... y tenemos exactamente los mismos permisos que un
 usuario anónimo. De hecho, esta de aquí es nuestra nave, pero lo único que podemos hacer es mostrarla
-; no podemos editarla ni eliminarla.
+; no podemos editarla ni borrarla.
 
-Para gestionar esos permisos tan detallados, necesitamos un votante personalizado.
+Para gestionar esos permisos tan detallados, necesitamos un «votante» personalizado.
 
 ## `make:voter`
 
@@ -88,13 +89,13 @@ Llámalo « `StarshipVoter` ».
 
 Ahora echa un vistazo a lo que se ha creado: `src/Security/Voter/StarshipVoter.php`.
 
-Te ha añadido algo de código predeterminado, incluyendo dos constantes de permisos. Para la primera,
-cambia el valor actual a simplemente « `edit` », igual que lo que usamos en nuestra
+Te ha añadido algo de código estándar, incluyendo dos constantes de permisos. Para la primera,
+cambia el valor real a simplemente « `edit` », igual que lo que usamos en nuestra
 plantilla.
 
-¿Y esta constante ` `VIEW` `? No vamos a tener permisos tan detallados para
-la visualización: cualquiera puede ver una nave espacial. Así que cambia esta constante a ` `DELETE``... y
-cambia también su valor a ` `delete``:
+¿Y esta constante `VIEW`? No vamos a tener permisos tan detallados para
+la visualización: cualquiera puede ver una nave espacial. Así que cambia esta constante a `DELETE`... y
+cambia también su valor a `delete`:
 
 [[[ code('a2b6b7907e') ]]]
 
@@ -105,7 +106,7 @@ configura automáticamente con Symfony. No tienes que hacer nada en cuanto a ser
 ya está registrado automáticamente.
 
 Cada vez que el sistema de seguridad calcula qué «voter» debe usarse, llama a
-`supports()`. Ahí es donde le indicamos cuándo debe usar este «voter». El `$attribute` es
+`supports()`. Ahí es donde le indicamos cuándo usar este «voter». El `$attribute` es
 lo que pasamos a `is_granted()` como primer argumento, y el `$subject` es el
 segundo argumento.
 
@@ -121,25 +122,25 @@ ordenarlo un poco importando `Starship`:
 Cuando `supports()` devuelve `true`, se llama a `voteOnAttribute()`.
 
 Aquí también hay un poco de código repetitivo. Este método tiene un
-argumento`TokenInterface $token`. Lo único que realmente necesitas saber sobre el
-token ahora mismo es que es lo que usa el sistema de seguridad para envolver al usuario. Puedes
-obtener el usuario a partir de él con `getUser()`, y eso es lo que está pasando aquí.
+argumento ``TokenInterface $token` `. Lo único que realmente necesitas saber sobre el
+token ahora mismo es que es lo que utiliza el sistema de seguridad para envolver al usuario. Puedes obtener
+el usuario a partir de él con ` `getUser()` `, y eso es lo que está pasando aquí.
 
-Esta comprobación de ` `instanceof` ` garantiza que ` `$user` ` no sea nulo. Como solo tenemos una clase de usuario,
-cámbiala por nuestra entidad ` `User` `. Eso te ayudará con el autocompletado más adelante.
+Esta comprobación de `instanceof` garantiza que `$user` no sea nulo. Como solo tenemos una clase de usuario,
+cámbiala por nuestra entidad `User`. Eso te ayudará con el autocompletado más abajo.
 
-Si no tenemos ningún usuario, añadimos un motivo de depuración y devolvemos ` `false``, lo que significa
-que la comprobación de ` `is_granted()` ` fallará.
+Si no tenemos ningún usuario, añadimos un motivo para la depuración y devolvemos `false`, lo que significa
+que la comprobación de `is_granted()` fallará.
 
-Aquí abajo, activamos el atributo. Así que puedes tener una lógica completamente diferente
+Aquí abajo, activamos el atributo. Así puedes tener una lógica completamente diferente
 para `EDIT` a la hora de determinar si alguien debería poder editar, y
-otra lógica diferente para borrar. Y si ninguna de ellas coincide, hacemos `return false`, con lo que
-falla la comprobación.
+otra lógica diferente para borrar. Y si ninguna de ellas coincide, `return false`, lo que hace que
+la comprobación falle.
 
 En nuestro caso, `EDIT` y `DELETE` van a tener la misma lógica, así que podemos agrupar todo
 esto.
 
-Pero primero, arriba, para este tema: como `supports()` ya garantizó
+Pero primero, en la parte de arriba, para este tema: como `supports()` ya ha garantizado
 que se trata de una instancia de `Starship`, podemos estar seguros de que este `mixed $subject` es
 de hecho un `Starship`. Así que genera un docblock. Borra todo menos el
 tema... y escríbelo como `Starship`:
@@ -158,8 +159,8 @@ comprobar si el usuario forma parte de la nave espacial:
 Picard.
 
 ¡Perfecto! Parece que funciona. Podemos editar solo esta nave, porque es la nuestra.
-¿Y todas las demás? No hay botón de editar. Si pulsamos «Mostrar» en nuestra nave, las acciones se
-hacen visibles. Haz clic en «Editar».
+¿Y todas las demás? No tienen botón de edición. Si pulsamos «Mostrar» en nuestra nave, se ven las acciones.
+Haz clic en «Editar».
 
-Tenemos un pequeño problema... bueno, en realidad no tan pequeño... a ver si adivinas cuál es. Lo
+Tenemos un pequeño problema… bueno, en realidad no tan pequeño… a ver si adivinas cuál es. Lo
 arreglaremos en el próximo capítulo.
