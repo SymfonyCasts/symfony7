@@ -1,0 +1,402 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.396 align:middle
+Abre
+src/Controller/StarshipAdminController.php.
+
+00:00:04.396 --> 00:00:07.936 align:middle
+Aquí tenemos una configuración CRUD bastante
+estándar para nuestras naves espaciales.
+
+00:00:08.206 --> 00:00:11.806 align:middle
+Y ahora mismo, el prefijo de
+ruta para todas ellas es /admin.
+
+00:00:11.806 --> 00:00:17.966 align:middle
+Si te acuerdas, todo lo que empiece por /admin queda
+restringido a ROLE_ADMIN gracias a nuestro access_control.
+
+00:00:18.696 --> 00:00:20.606 align:middle
+Lo primero que quiero hacer es
+hacer que esto sea público...
+
+00:00:20.826 --> 00:00:23.856 align:middle
+y luego añadir un sistema de
+permisos más detallado encima.
+
+00:00:23.856 --> 00:00:28.006 align:middle
+Así que quita el prefijo
+/admin: ve al navegador,
+
+00:00:28.096 --> 00:00:31.176 align:middle
+asegúrate de que no hemos
+iniciado sesión y ve a /starship.
+
+00:00:31.636 --> 00:00:32.376 align:middle
+Ahí está nuestro CRUD...
+
+00:00:32.566 --> 00:00:33.936 align:middle
+pero es totalmente público.
+
+00:00:34.246 --> 00:00:37.736 align:middle
+Podemos editar naves, borrarlas
+y crearlas como usuario anónimo.
+
+00:00:37.736 --> 00:00:39.476 align:middle
+Desde luego, eso no es lo que queremos.
+
+00:00:40.206 --> 00:00:45.466 align:middle
+Este es el objetivo: los usuarios que hayan iniciado sesión
+solo deberían poder editar su propia nave, si es que tienen una.
+
+00:00:45.926 --> 00:00:49.206 align:middle
+Recuerda que añadimos una propiedad
+starship a nuestra clase User.
+
+00:00:49.206 --> 00:00:52.346 align:middle
+Así que, si Picard hubiera iniciado
+sesión, solo podría editar
+
+00:00:52.346 --> 00:00:55.336 align:middle
+y eliminar esta fila superior,
+porque esa es su nave estelar.
+
+00:00:55.986 --> 00:01:00.566 align:middle
+La visualización puede seguir siendo pública para todo el mundo:
+usuarios anónimos, otros usuarios que hayan iniciado sesión, cualquiera.
+
+00:01:01.096 --> 00:01:04.146 align:middle
+Son las operaciones que realmente
+cambian los datos en la base de datos
+
+00:01:04.146 --> 00:01:06.156 align:middle
+las que requerirán permisos especiales.
+
+00:01:06.156 --> 00:01:11.996 align:middle
+Empieza por restringir estas acciones mediante llamadas
+a ` is_granted() ` en nuestras plantillas Twig.
+
+00:01:11.996 --> 00:01:15.496 align:middle
+Ve a templates/starship_admin/ —ahí
+es donde están todas las plantillas
+
+00:01:15.496 --> 00:01:19.566 align:middle
+para este CRUD— y abre
+primero index.html.twig.
+
+00:01:20.096 --> 00:01:23.186 align:middle
+Justo en la parte superior, esta etiqueta
+de anclaje es el botón «Crear nuevo».
+
+00:01:23.186 --> 00:01:28.166 align:middle
+Para crear, lo vamos a mantener sencillo: solo
+los administradores pueden crear nuevas naves.
+
+00:01:28.166 --> 00:01:34.766 align:middle
+Así que envuélvelo en {% if
+is_granted('ROLE_ADMIN') %} y {% endif %}: Perfecto.
+
+00:01:34.766 --> 00:01:38.286 align:middle
+Ahora solo los administradores
+pueden crear nuevas naves espaciales.
+
+00:01:38.286 --> 00:01:39.506 align:middle
+Lo siguiente es el botón de editar.
+
+00:01:39.756 --> 00:01:41.306 align:middle
+Pero primero, actualiza la página...
+
+00:01:41.976 --> 00:01:43.606 align:middle
+«Crear nuevo» ha desaparecido.
+
+00:01:44.196 --> 00:01:46.736 align:middle
+Ahora elimina ese botón de edición
+para los usuarios anónimos.
+
+00:01:47.596 --> 00:01:49.946 align:middle
+Aquí abajo, tenemos un botón
+«Mostrar» y otro «Editar».
+
+00:01:51.946 --> 00:01:54.346 align:middle
+Envuelve el botón de edición en
+una comprobación de is_granted().
+
+00:01:54.346 --> 00:01:56.806 align:middle
+Y para este, no vamos a usar un rol.
+
+00:01:57.266 --> 00:02:01.356 align:middle
+Vamos a usar un atributo personalizado
+genérico, que a veces se llama «permiso».
+
+00:02:02.126 --> 00:02:03.746 align:middle
+Ponle un nombre sencillo y claro: « edit ».
+
+00:02:03.746 --> 00:02:07.546 align:middle
+Pero aún no hemos terminado: pasa un
+segundo argumento a « is_granted() ».
+
+00:02:07.786 --> 00:02:12.216 align:middle
+Este segundo argumento se llama «subject»,
+y el nuestro va a ser « starship ».
+
+00:02:14.086 --> 00:02:17.846 align:middle
+Ahora cierra todo con un ` {%
+endif %}`: Actualiza la página...
+
+00:02:18.136 --> 00:02:20.476 align:middle
+y ese botón de editar desaparecerá.
+
+00:02:21.196 --> 00:02:23.356 align:middle
+Hay otro sitio más: la
+página de visualización.
+
+00:02:23.696 --> 00:02:27.646 align:middle
+Si haces clic en «Mostrar», queremos
+excluir estas acciones si no tienes permiso,
+
+00:02:27.886 --> 00:02:29.866 align:middle
+con esas mismas comprobaciones
+de ` is_granted() `.
+
+00:02:29.866 --> 00:02:34.586 align:middle
+Así que ve a la plantilla de visualización y desplázate
+hasta el final, donde encontramos el enlace de edición.
+
+00:02:36.036 --> 00:02:42.986 align:middle
+Envuélvelo con {% if is_granted('edit',
+starship) %} y luego ciérralo con {% endif %}:
+
+00:02:42.986 --> 00:02:47.846 align:middle
+El botón de eliminar va a usar un permiso
+diferente: {% if is_granted('delete',
+
+00:02:47.846 --> 00:02:53.106 align:middle
+starship) %}: Vuelve atrás
+y actualiza esta página....
+
+00:02:53.886 --> 00:02:55.916 align:middle
+y ya no están, porque somos anónimos.
+
+00:02:56.396 --> 00:03:01.446 align:middle
+Vale, inicia sesión como Picard:
+picard@enterprise.space, contraseña makeitso.
+
+00:03:02.496 --> 00:03:03.966 align:middle
+Ahora visita la lista de naves espaciales...
+
+00:03:04.196 --> 00:03:07.306 align:middle
+y tenemos exactamente los mismos
+permisos que un usuario anónimo.
+
+00:03:07.826 --> 00:03:12.746 align:middle
+De hecho, esta de aquí es nuestra nave, pero lo único que
+podemos hacer es mostrarla; no podemos editarla ni borrarla.
+
+00:03:13.296 --> 00:03:16.766 align:middle
+Para gestionar esos permisos tan detallados,
+necesitamos un votante personalizado.
+
+00:03:17.006 --> 00:03:18.376 align:middle
+¡Y hay un generador para eso!
+
+00:03:18.756 --> 00:03:24.376 align:middle
+En tu terminal, ejecuta: symfony console
+make:voter Llámalo StarshipVoter.
+
+00:03:25.166 --> 00:03:31.686 align:middle
+Ahora echa un vistazo a lo que se ha creado:
+src/Security/Voter/StarshipVoter.php.
+
+00:03:31.686 --> 00:03:35.716 align:middle
+Nos ha añadido algo de código predeterminado,
+incluyendo dos constantes de permisos.
+
+00:03:35.716 --> 00:03:39.366 align:middle
+Para la primera, cambia el nombre
+del valor real a simplemente edit,
+
+00:03:39.526 --> 00:03:41.036 align:middle
+para que coincida con lo que
+usamos en nuestra plantilla.
+
+00:03:41.566 --> 00:03:42.806 align:middle
+¿Y esta constante VIEW?
+
+00:03:43.026 --> 00:03:46.966 align:middle
+No vamos a tener permisos tan detallados para la
+visualización: cualquiera puede ver una nave espacial.
+
+00:03:46.966 --> 00:03:49.366 align:middle
+Así que cambia esta constante a DELETE...
+
+00:03:49.526 --> 00:03:54.046 align:middle
+y cambia también su valor a delete:
+¿Y qué hace realmente un «voter»?
+
+00:03:54.486 --> 00:03:58.166 align:middle
+Como esta clase hereda de Voter, se
+configura automáticamente con Symfony.
+
+00:03:58.316 --> 00:04:03.036 align:middle
+No tienes que hacer nada en cuanto al
+servicio: ya está registrado automáticamente.
+
+00:04:03.546 --> 00:04:08.806 align:middle
+Cada vez que el sistema de seguridad calcula
+qué «voter» debe usarse, llama a supports().
+
+00:04:09.296 --> 00:04:11.506 align:middle
+Ahí es donde le indicamos
+cuándo usar este «voter».
+
+00:04:11.996 --> 00:04:15.606 align:middle
+El $attribute es lo que pasamos a
+is_granted() como primer argumento,
+
+00:04:15.606 --> 00:04:17.796 align:middle
+y el $subject es el segundo argumento.
+
+00:04:18.456 --> 00:04:21.296 align:middle
+En este caso, el código
+generado ya está casi correcto.
+
+00:04:21.666 --> 00:04:27.666 align:middle
+Tenemos in_array($attribute, [self::EDIT,
+self::VIEW]) —cambia VIEW por DELETE —
+
+00:04:27.666 --> 00:04:30.536 align:middle
+y luego $subject instanceof Starship.
+
+00:04:30.896 --> 00:04:32.136 align:middle
+Eso es exactamente lo que queremos.
+
+00:04:32.196 --> 00:04:35.316 align:middle
+Voy a limpiar esto un poco importando Starship:
+
+00:04:36.066 --> 00:04:39.566 align:middle
+Cuando supports() devuelve true,
+se llama a voteOnAttribute().
+
+00:04:40.296 --> 00:04:42.156 align:middle
+Aquí también hay un poco
+de código repetitivo.
+
+00:04:42.636 --> 00:04:45.766 align:middle
+Este método tiene un argumento
+« TokenInterface $token ».
+
+00:04:45.766 --> 00:04:49.126 align:middle
+Lo único que realmente necesitas
+saber sobre el token ahora mismo es
+
+00:04:49.126 --> 00:04:52.176 align:middle
+que es lo que usa el sistema de
+seguridad para envolver al usuario.
+
+00:04:52.776 --> 00:04:56.266 align:middle
+Puedes obtener el usuario a partir de él con «
+getUser() », y eso es lo que está pasando aquí.
+
+00:04:57.106 --> 00:04:59.896 align:middle
+Esta comprobación instanceof
+garantiza que $user no sea nulo.
+
+00:04:59.896 --> 00:05:04.166 align:middle
+Como solo tenemos una clase de usuario,
+cámbialo por nuestra entidad User.
+
+00:05:04.636 --> 00:05:06.396 align:middle
+Eso te ayudará con el
+autocompletado más abajo.
+
+00:05:07.146 --> 00:05:11.576 align:middle
+Si no tenemos ningún usuario, añadimos un
+motivo para la depuración y devolvemos false,
+
+00:05:11.636 --> 00:05:13.526 align:middle
+lo que significa que la
+comprobación is_granted() fallará.
+
+00:05:14.176 --> 00:05:16.646 align:middle
+Aquí abajo, activamos el atributo.
+
+00:05:16.646 --> 00:05:18.856 align:middle
+Así puedes tener una lógica totalmente
+diferente para EDIT a la hora de
+
+00:05:18.856 --> 00:05:22.326 align:middle
+determinar si alguien debería poder editar,
+y otra lógica diferente para borrar.
+
+00:05:22.326 --> 00:05:25.786 align:middle
+Y si ninguna de ellas coincide, hacemos return
+false, con lo que la comprobación falla.
+
+00:05:25.866 --> 00:05:30.766 align:middle
+En nuestro caso, EDIT y DELETE van a tener la
+misma lógica, así que podemos simplificarlo todo.
+
+00:05:31.096 --> 00:05:33.346 align:middle
+Pero primero, arriba, para este sujeto:
+
+00:05:33.656 --> 00:05:37.246 align:middle
+como supports() ya se ha asegurado de
+que esto es una instancia de Starship,
+
+00:05:37.556 --> 00:05:41.496 align:middle
+podemos estar seguros de que este mixed
+$subject es, de hecho, un Starship.
+
+00:05:41.496 --> 00:05:43.186 align:middle
+Así que genera un docblock.
+
+00:05:43.656 --> 00:05:45.686 align:middle
+Borra todo menos el sujeto...
+
+00:05:46.626 --> 00:05:52.906 align:middle
+y escríbelo así: Starship: Abajo, tenemos al
+usuario y tenemos la nave espacial (como sujeto).
+
+00:05:53.186 --> 00:05:56.706 align:middle
+Lo que significa que ahora podemos comprobar
+si el usuario forma parte de la nave espacial:
+
+00:05:57.306 --> 00:06:07.016 align:middle
+return $user->getStarship()?->getId()
+=== $subject->getId(): ¡Ya está!
+
+00:06:07.296 --> 00:06:10.846 align:middle
+Vuelve al navegador y actualiza la página;
+recuerda que hemos iniciado sesión como Picard.
+
+00:06:11.516 --> 00:06:13.246 align:middle
+¡Perfecto! Parece que funciona.
+
+00:06:13.556 --> 00:06:16.256 align:middle
+Podemos editar solo esta
+nave, porque es la nuestra.
+
+00:06:16.816 --> 00:06:17.916 align:middle
+¿Y todas las demás?
+
+00:06:18.036 --> 00:06:18.836 align:middle
+No hay botón de editar.
+
+00:06:19.326 --> 00:06:22.166 align:middle
+Si pulsamos «Mostrar» en
+nuestra nave, se ven las acciones.
+
+00:06:22.516 --> 00:06:23.186 align:middle
+Haz clic en «Editar».
+
+00:06:23.736 --> 00:06:25.036 align:middle
+Tenemos un pequeño problema...
+
+00:06:25.096 --> 00:06:26.366 align:middle
+bueno, en realidad no tan pequeño...
+
+00:06:26.366 --> 00:06:28.086 align:middle
+a ver si adivinas cuál es.
+
+00:06:28.366 --> 00:06:29.786 align:middle
+Lo arreglaremos en el próximo capítulo.
