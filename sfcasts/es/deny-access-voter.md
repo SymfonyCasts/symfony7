@@ -106,14 +106,14 @@ comprobación de permisos. Eso… puede resultar caro, pero hay formas de mejora
 Vuelve a `StarshipVoter` y sobrescribe el método `supportsType()`.
 
 Este `$subjectType` nos da el tipo PHP del sujeto; en nuestro caso, el nombre de la clase.
-Así que escribe `return is_a($subjectType, Starship::class, true)` de la siguiente manera:
+Así que escribe `return is_a($subjectType, Starship::class, true)`:
 
 [[[ code('0a5e86f3b3') ]]]
 
 Necesitamos ese `true` porque tienes que pasarlo cuando compruebas si una clase es una cadena
 con `is_a()`.
 
-Esto nos va a dar un pequeño aumento de rendimiento.
+Esto nos va a dar un poco más de rendimiento.
 
 Ahora sobrescribe `supportsAttribute()`. Toma como argumento el `$attribute` que se está comprobando.
 Copia la lógica de esto de `supports()` más arriba...
