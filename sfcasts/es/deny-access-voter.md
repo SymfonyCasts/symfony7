@@ -74,9 +74,9 @@ En su lugar, inyecta `private AccessDecisionManagerInterface $accessDecisionMana
 
 [[[ code('d111220041') ]]]
 
-Más abajo, antes de que se ejecute ninguna de nuestras lógicas de ` `voteOnAttribute()` `, comprueba si el usuario
-tiene ` `ROLE_ADMIN``. Escribe ` `if ($this->accessDecisionManager->decide())` ` —y el primer
-argumento es ` `$token``.
+Más abajo, antes de que se ejecute ninguna de nuestras lógicas de `voteOnAttribute()`, comprueba si el usuario
+tiene `ROLE_ADMIN`. Escribe `if ($this->accessDecisionManager->decide())` —y el primer
+argumento es `$token`.
 
 Para el segundo argumento, usa `ROLE_ADMIN` envuelto en un array.
 
@@ -86,7 +86,7 @@ Dentro de la instrucción `if`, `return true`:
 
 ## ¿Por qué no el servicio « `Security` »?
 
-En esencia, es la misma lógica que el método ` `isGranted()` ` del helper ` `Security` `...
+En esencia, es la misma lógica que el método `isGranted()` del helper `Security`...
 
 Entonces, ¿por qué no podemos usarlo sin más?
 
@@ -100,18 +100,18 @@ Janeway...—; ahora vemos las acciones de editar y eliminar, y podemos usarlas.
 ## Optimización del rendimiento de los «voters»
 
 Una última cosita que quiero enseñarte. En una app compleja, imagínate
-tener cientos de «voters», y que se llame a ` `supports()` ` en todos ellos para cada
+tener cientos de «voters», y que se llame a `supports()` en todos ellos para cada
 comprobación de permisos. Eso… puede resultar caro, pero hay formas de mejorar el rendimiento.
 
 Vuelve a `StarshipVoter` y sobrescribe el método `supportsType()`.
 
-Este ` `$subjectType` ` nos da el tipo PHP del sujeto; en nuestro caso, el nombre de la clase.
-Así que escribe ` `return is_a($subjectType, Starship::class, true)`` de la siguiente manera:
+Este `$subjectType` nos da el tipo PHP del sujeto; en nuestro caso, el nombre de la clase.
+Así que escribe `return is_a($subjectType, Starship::class, true)` de la siguiente manera:
 
 [[[ code('0a5e86f3b3') ]]]
 
-Necesitamos ese ` `true` ` porque tienes que pasarlo cuando compruebas si una clase es una cadena
-con ` `is_a()``.
+Necesitamos ese `true` porque tienes que pasarlo cuando compruebas si una clase es una cadena
+con `is_a()`.
 
 Esto nos va a dar un pequeño aumento de rendimiento.
 
@@ -122,8 +122,8 @@ Y `return in_array($attribute, [self::EDIT, self::DELETE])`:
 
 [[[ code('05ee6745c4') ]]]
 
-Como ves, básicamente hemos dividido la lógica de ` `supports()` ` en dos métodos… y seguimos
-necesitando ` `supports()``. El trabajo extra y la duplicación solo merecen la pena si tienes un montón de votantes
+Como ves, básicamente hemos dividido la lógica de `supports()` en dos métodos… y seguimos
+necesitando `supports()`. El trabajo extra y la duplicación solo merecen la pena si tienes un montón de votantes
 y realizas muchas comprobaciones de permisos.
 
 ¡Vale, lo siguiente: la suplantación de identidad de usuario!
