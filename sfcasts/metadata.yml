@@ -51,8 +51,8 @@ chapters:
         tutsFirstStep: 17-login-throttling
         tutsLastStep: 17-login-throttling-customize
     security-events:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 18-last-login
+        tutsLastStep: 18-last-login
     registration-form:
         tutsFirstStep: null
         tutsLastStep: null

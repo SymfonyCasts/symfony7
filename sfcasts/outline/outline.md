@@ -493,6 +493,58 @@
 
 ## Security Events: Tracking the Last Login
 
+- Most common Security events (there are more for more advanced use-cases):
+  - `LoginSuccessEvent`
+      - **When it's called:** **After** an authenticator successfully authenticates a user.
+        With a stateless authenticator, this may happen on every request.
+      - **Example use case:** React to any successful authentication, regardless of how it
+        happened.
+
+  - `InteractiveLoginEvent`
+      - **When it's called:** **After** a user successfully authenticates through an
+        interactive authenticator, like submitting a login form.
+      - **Example use case:** Record a "last login" timestamp when the user explicitly logs
+        in.
+
+  - `LoginFailureEvent`
+      - **When it's called:** **After** an authenticator fails to authenticate a user.
+      - **Example use case:** Log failed authentication attempts or customize the failure
+        response.
+
+  - `LogoutEvent`
+      - **When it's called:** **Before** the user is logged out.
+      - **Example use case:** Perform cleanup or customize the logout response.
+
+  - `SwitchUserEvent`
+      - **When it's called:** **After** switching to or exiting an impersonated user.
+      - **Example use case:** Log when an admin starts or stops impersonating someone.
+- Want to store a user's "last login" timestamp
+- `symfony console make:entity`
+    - `User`
+    - `lastLogin`
+    - `datetime_immutable`
+    - nullable
+- `symfony console make:migration`
+    - 'add last login to user'
+- `symfony console doctrine:migrations:migrate`
+- `templates/user_admin/index.html.twig`
+    - duplicate "Name" table heading - text: "Last Login"
+    - duplicate "Name" table data
+        - `{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : 'Never' }}`
+- `symfony console make:listener`
+    - `LastLoginListener`
+    - `security.interactive_login`
+- Open `LastLoginListener`
+    - remove the `event: ...` from the attribute - determined from typehint
+    - Double check it's registered by running `symfony console debug:event`
+    - Inject `private EntityManagerInterface $em` in a constructor
+    - `$user = $event->getAuthenticationToken()->getUser();`
+    - `if (!$user instanceof User) { return; }`
+    - `$user->setLastLogin(new \DateTimeImmutable('now'));`
+    - `$this->em->flush();`
+- Logout and login as `janeway@starfleet.space` to trigger the listener
+- Visit `/admin/user` - see the timestamp!
+
 ## Registration Form
 
 ---
