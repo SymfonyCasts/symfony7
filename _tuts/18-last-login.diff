@@ -1,0 +1,131 @@
+diff --git a/migrations/Version20260820150319.php b/migrations/Version20260820150319.php
+new file mode 100644
+index 0000000..924cedc
+--- /dev/null
++++ b/migrations/Version20260820150319.php
+@@ -0,0 +1,37 @@
++<?php
++
++declare(strict_types=1);
++
++namespace DoctrineMigrations;
++
++use Doctrine\DBAL\Schema\Schema;
++use Doctrine\Migrations\AbstractMigration;
++
++/**
++ * Auto-generated Migration: Please modify to your needs!
++ */
++final class Version20260820150319 extends AbstractMigration
++{
++    public function getDescription(): string
++    {
++        return 'add last login to user';
++    }
++
++    public function up(Schema $schema): void
++    {
++        // this up() migration is auto-generated, please modify it to your needs
++        $this->addSql('ALTER TABLE user ADD COLUMN last_login DATETIME DEFAULT NULL');
++    }
++
++    public function down(Schema $schema): void
++    {
++        // this down() migration is auto-generated, please modify it to your needs
++        $this->addSql('CREATE TEMPORARY TABLE __temp__user AS SELECT id, email, roles, password, name, starship_id FROM user');
++        $this->addSql('DROP TABLE user');
++        $this->addSql('CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles CLOB NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, starship_id INTEGER DEFAULT NULL, CONSTRAINT FK_8D93D6499B24DF5 FOREIGN KEY (starship_id) REFERENCES starship (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
++        $this->addSql('INSERT INTO user (id, email, roles, password, name, starship_id) SELECT id, email, roles, password, name, starship_id FROM __temp__user');
++        $this->addSql('DROP TABLE __temp__user');
++        $this->addSql('CREATE INDEX IDX_8D93D6499B24DF5 ON user (starship_id)');
++        $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON user (email)');
++    }
++}
+diff --git a/src/Entity/User.php b/src/Entity/User.php
+index 5722de1..cfac7eb 100644
+--- a/src/Entity/User.php
++++ b/src/Entity/User.php
+@@ -37,6 +37,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+     #[ORM\ManyToOne(inversedBy: 'users')]
+     private ?Starship $starship = null;
+ 
++    #[ORM\Column(nullable: true)]
++    private ?\DateTimeImmutable $lastLogin = null;
++
+     public function getId(): ?int
+     {
+         return $this->id;
+@@ -135,4 +138,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+ 
+         return $this;
+     }
++
++    public function getLastLogin(): ?\DateTimeImmutable
++    {
++        return $this->lastLogin;
++    }
++
++    public function setLastLogin(?\DateTimeImmutable $lastLogin): static
++    {
++        $this->lastLogin = $lastLogin;
++
++        return $this;
++    }
+ }
+diff --git a/src/EventListener/LastLoginListener.php b/src/EventListener/LastLoginListener.php
+new file mode 100644
+index 0000000..3c5e7f8
+--- /dev/null
++++ b/src/EventListener/LastLoginListener.php
+@@ -0,0 +1,29 @@
++<?php
++
++namespace App\EventListener;
++
++use App\Entity\User;
++use Doctrine\ORM\EntityManagerInterface;
++use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
++use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
++
++final class LastLoginListener
++{
++    public function __construct(
++        private EntityManagerInterface $em,
++    ) {
++    }
++
++    #[AsEventListener]
++    public function onSecurityInteractiveLogin(InteractiveLoginEvent $event): void
++    {
++        $user = $event->getAuthenticationToken()->getUser();
++
++        if (!$user instanceof User) {
++            return;
++        }
++
++        $user->setLastLogin(new \DateTimeImmutable('now'));
++        $this->em->flush();
++    }
++}
+diff --git a/templates/user_admin/index.html.twig b/templates/user_admin/index.html.twig
+index 22f732e..179b973 100644
+--- a/templates/user_admin/index.html.twig
++++ b/templates/user_admin/index.html.twig
+@@ -17,6 +17,7 @@
+                         <th class="p-4 text-left font-semibold text-gray-200">Email</th>
+                         <th class="p-4 text-left font-semibold text-gray-200">Roles</th>
+                         <th class="p-4 text-left font-semibold text-gray-200">Name</th>
++                        <th class="p-4 text-left font-semibold text-gray-200">Last Login</th>
+                         <th class="p-4 text-left font-semibold text-gray-200">Actions</th>
+                     </tr>
+                 </thead>
+@@ -38,6 +39,9 @@
+                             {% endif %}
+                         </td>
+                         <td class="border-b p-4 border-gray-700 text-gray-400">{{ user.name }}</td>
++                        <td class="border-b p-4 border-gray-700 text-gray-400">
++                            {{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : 'Never' }}
++                        </td>
+                         <td class="border-b p-4 border-gray-700 text-white">
+                             <div class="flex gap-2">
+                                 <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_user_admin_show', {'id': user.id}) }}">show</a>
