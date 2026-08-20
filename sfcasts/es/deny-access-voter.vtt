@@ -258,22 +258,22 @@ Este $subjectType nos da el tipo PHP del
 sujeto; en nuestro caso, el nombre de la clase.
 
 00:04:00.496 --> 00:04:05.726 align:middle
-Así que escribe « return
-is_a($subjectType, Starship::class, true) »:
+Así que escribe return
+is_a($subjectType, Starship::class, true):
 
 00:04:06.456 --> 00:04:08.546 align:middle
-Necesitamos ese « true »
+Necesitamos ese true
 porque tienes que pasarlo
 
 00:04:08.546 --> 00:04:11.206 align:middle
-cuando compruebas una clase
-como cadena con « is_a() ».
+cuando compruebas si una clase
+es una cadena con is_a().
 
 00:04:12.146 --> 00:04:14.296 align:middle
 Esto nos va a dar un poco más de rendimiento.
 
 00:04:14.646 --> 00:04:16.736 align:middle
-Ahora sobrescribe « supportsAttribute() ».
+Ahora sobrescribe supportsAttribute().
 
 00:04:17.106 --> 00:04:19.666 align:middle
 Toma como argumento el « $attribute
