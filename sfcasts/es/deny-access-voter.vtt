@@ -12,18 +12,18 @@ de seguridad bastante grave.
 Mira esto.
 
 00:00:06.666 --> 00:00:11.286 align:middle
-Estamos conectados como Picard y estamos editando la
-Enterprise; esa es nuestra nave, así que no pasa nada.
+Hemos iniciado sesión como Picard y estamos editando
+la Enterprise; es nuestra nave, así que no pasa nada.
 
 00:00:11.616 --> 00:00:15.076 align:middle
 Pero fíjate en esto: cambia
-el ID de la URL por 2...
+el ID de la URL a 2...
 
 00:00:16.136 --> 00:00:17.896 align:middle
 y ahora podemos editar la nave de otra persona.
 
 00:00:18.096 --> 00:00:25.136 align:middle
-¡Qué mal! Además, si vamos a /starship/new, podemos
+¡Mal asunto! Además, si vamos a /starship/new, podemos
 crear una nave espacial nueva sin ningún problema.
 
 00:00:25.556 --> 00:00:27.336 align:middle
@@ -35,11 +35,11 @@ Así que en nuestras plantillas de Twig
 usamos esas comprobaciones de is_granted()
 
 00:00:31.336 --> 00:00:33.646 align:middle
-, pero en este caso solo
+pero en este caso solo
 están ocultando los enlaces.
 
 00:00:33.926 --> 00:00:36.266 align:middle
-En realidad, no nos impiden seguirles.
+En realidad no nos impiden seguirles.
 
 00:00:36.946 --> 00:00:39.376 align:middle
 Para hacerlo, tenemos que
@@ -50,7 +50,7 @@ en esos mismos permisos directamente
 dentro de StarshipAdminController.
 
 00:00:43.426 --> 00:00:44.626 align:middle
-Empieza por el método index().
+Empieza con el método index().
 
 00:00:45.076 --> 00:00:48.316 align:middle
 Aquí no necesitamos ningún permiso:
@@ -72,7 +72,7 @@ ver una nave espacial, sin problema.
 Pero luego está edit().
 
 00:01:01.766 --> 00:01:05.646 align:middle
-Y recuerda, para el permiso edit,
+Y recuerda que, para el permiso edit,
 necesitamos la nave espacial como sujeto.
 
 00:01:06.146 --> 00:01:08.126 align:middle
@@ -85,21 +85,21 @@ El permiso era edit...
 y luego pasa un segundo argumento: el sujeto.
 
 00:01:13.066 --> 00:01:18.016 align:middle
-Solo tienes que pasar la cadena « starship »: siempre
+Solo tienes que pasar la cadena starship: siempre
 que haga referencia a un objeto que se haya inyectado
 
 00:01:18.016 --> 00:01:20.956 align:middle
 en tu controlador, se usará como sujeto.
 
 00:01:21.246 --> 00:01:24.396 align:middle
-Así que esto usará el « Starship
-» que inyectamos en este controlador.
+Así que esto usará el Starship
+que inyectamos en este controlador.
 
 00:01:24.666 --> 00:01:25.796 align:middle
 ¡Justo lo que queremos!
 
 00:01:26.606 --> 00:01:28.666 align:middle
-Luego hay un sitio más: delete().
+Luego hay otro sitio más: delete().
 
 00:01:29.046 --> 00:01:35.106 align:middle
 Lo mismo: #[IsGranted], delete y el
@@ -127,7 +127,7 @@ Una última cosa que quiero hacer: si has iniciado
 sesión como administrador, deberías poder
 
 00:01:52.546 --> 00:01:57.076 align:middle
-hacerlo todo: editar cualquier nave, borrar
+hacerlo todo: editar cualquier nave, eliminar
 cualquier nave y, por supuesto, crear naves.
 
 00:01:57.726 --> 00:01:59.026 align:middle
@@ -138,16 +138,15 @@ Cierra sesión en Picard e inicia sesión como Janeway:
 janeway@starfleet.space, contraseña coffeeblack.
 
 00:02:07.216 --> 00:02:08.526 align:middle
-Ahora ve a la administración
-de naves espaciales.
+Ahora ve al administrador de naves estelares.
 
 00:02:08.986 --> 00:02:13.116 align:middle
-Vemos el botón «Crear nueva», eso está bien,
+Vemos el botón «Crear nueva» —eso está bien—
 y podemos hacer clic en él para ir a la página.
 
 00:02:13.416 --> 00:02:17.466 align:middle
 Perfecto. Pero no vemos las opciones de
-edición para ninguna de las naves espaciales.
+edición para ninguna de las naves estelares.
 
 00:02:18.076 --> 00:02:21.796 align:middle
 La mejor forma de solucionar esto es añadir una
@@ -157,15 +156,15 @@ comprobación del rol dentro de nuestro «voter».
 Así que ve a StarshipVoter.
 
 00:02:24.056 --> 00:02:28.506 align:middle
-Aquí arriba, ¿te acuerdas de cómo podemos
+Aquí arriba… ¿te acuerdas de cómo podemos
 comprobar roles o atributos dentro de un servicio?
 
 00:02:28.966 --> 00:02:29.816 align:middle
 Añade un constructor.
 
 00:02:31.336 --> 00:02:35.006 align:middle
-Ahora, quizá se te ocurra usar el servicio
-auxiliar ` Security ` del que hablamos antes...
+Ahora, quizá pienses en usar el servicio
+auxiliar « Security » del que hablamos antes…
 
 00:02:35.356 --> 00:02:37.126 align:middle
 pero, en realidad, aquí no deberías hacerlo.
@@ -185,30 +184,30 @@ ejecute ninguna de nuestras lógicas de voteOnAttribute(),
 comprueba si el usuario tiene ROLE_ADMIN.
 
 00:02:51.606 --> 00:02:56.996 align:middle
-Escribe ` if
-($this->accessDecisionManager->decide()) ` —
+Escribe if
+($this->accessDecisionManager->decide()) —
 
 00:02:57.506 --> 00:02:59.296 align:middle
-y el primer argumento es ` $token`.
+y el primer argumento es $token`.
 
 00:03:00.086 --> 00:03:03.266 align:middle
-Para el segundo argumento, usa `
-ROLE_ADMIN ` envuelto en un array.
+Para el segundo argumento, usa
+ROLE_ADMIN envuelto en un array.
 
 00:03:04.136 --> 00:03:08.466 align:middle
-Dentro de la instrucción ` if `, ` return
+Dentro de la instrucción if, return
 true`: Esta es, en esencia, la misma lógica
 
 00:03:08.466 --> 00:03:10.796 align:middle
-que el método ` isGranted()
-` del helper ` Security `...
+que el método isGranted()
+del helper Security...
 
 00:03:11.156 --> 00:03:12.336 align:middle
 Entonces, ¿por qué no
 podemos simplemente usarlo?
 
 00:03:13.026 --> 00:03:16.366 align:middle
-Cuando usas el servicio ` Security
+Cuando usas el servicio Security
 `, este utiliza el token actual.
 
 00:03:16.736 --> 00:03:19.466 align:middle
@@ -220,8 +219,8 @@ Esto puede pasar en algunos
 casos extremos, así que lo mejor
 
 00:03:22.496 --> 00:03:26.466 align:middle
-es usar ` AccessDecisionManagerInterface
-` cuando estés dentro de un «voter».
+es usar AccessDecisionManagerInterface
+cuando estés dentro de un «voter».
 
 00:03:27.256 --> 00:03:29.126 align:middle
 Vale, volvamos a nuestra
@@ -229,7 +228,7 @@ lista de naves espaciales.
 
 00:03:29.476 --> 00:03:31.996 align:middle
 Actualiza la página —y recuerda que
-hemos iniciado sesión como Janeway...
+hemos iniciado sesión como Janeway...—
 
 00:03:32.796 --> 00:03:35.766 align:middle
 ahora vemos las acciones de editar
@@ -240,14 +239,14 @@ Una última cosita que quiero enseñarte.
 
 00:03:38.376 --> 00:03:43.056 align:middle
 En una app compleja, imagínate tener cientos
-de «voters», y que se llame a ` supports() `
+de «votantes», y que se llame a supports()
 
 00:03:43.056 --> 00:03:45.666 align:middle
 en todos ellos para cada
 comprobación de permisos.
 
 00:03:46.186 --> 00:03:49.846 align:middle
-Eso... puede resultar muy costoso, pero
+Eso… puede resultar costoso, pero
 hay formas de mejorar el rendimiento.
 
 00:03:50.596 --> 00:03:54.026 align:middle
@@ -259,33 +258,34 @@ Este $subjectType nos da el tipo PHP del
 sujeto; en nuestro caso, el nombre de la clase.
 
 00:04:00.496 --> 00:04:05.726 align:middle
-Así que escribe return
-is_a($subjectType, Starship::class, true):
+Así que escribe « return
+is_a($subjectType, Starship::class, true) »:
 
 00:04:06.456 --> 00:04:08.546 align:middle
-Necesitamos eso true porque tienes que pasarlo
+Necesitamos ese « true »
+porque tienes que pasarlo
 
 00:04:08.546 --> 00:04:11.206 align:middle
 cuando compruebas una clase
-como cadena con is_a().
+como cadena con « is_a() ».
 
 00:04:12.146 --> 00:04:14.296 align:middle
-Eso nos va a dar un poco más de rendimiento.
+Esto nos va a dar un poco más de rendimiento.
 
 00:04:14.646 --> 00:04:16.736 align:middle
-Ahora sobrescribe supportsAttribute().
+Ahora sobrescribe « supportsAttribute() ».
 
 00:04:17.106 --> 00:04:19.666 align:middle
-Toma el $attribute que se está
-comprobando como argumento.
+Toma como argumento el « $attribute
+» que se está comprobando.
 
 00:04:20.176 --> 00:04:22.456 align:middle
-Copia la lógica para esto
-de supports() más arriba...
+Copia la lógica para esto de
+« supports() » de arriba...
 
 00:04:23.036 --> 00:04:28.976 align:middle
-Y return in_array($attribute, [self::EDIT,
-self::DELETE]): Como puedes ver,
+Y return in_array($attribute,
+[self::EDIT, self::DELETE]): Como ves,
 
 00:04:28.976 --> 00:04:32.356 align:middle
 básicamente hemos dividido la lógica
