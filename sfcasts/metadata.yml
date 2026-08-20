@@ -48,8 +48,8 @@ chapters:
         tutsFirstStep: 16-impersonation-exit
         tutsLastStep: 16-exit-target
     login-throttling:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 17-login-throttling
+        tutsLastStep: 17-login-throttling-customize
     security-events:
         tutsFirstStep: null
         tutsLastStep: null
