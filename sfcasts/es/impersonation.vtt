@@ -1,0 +1,299 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:05.036 align:middle
+Es hora de hablar de la suplantación de identidad de
+usuario, también conocida como «cambio de usuario».
+
+00:00:05.456 --> 00:00:09.536 align:middle
+Se trata de la función que permite que un
+usuario se haga pasar temporalmente por otro.
+
+00:00:10.276 --> 00:00:14.696 align:middle
+Esto es muy útil para que los administradores del sitio
+puedan depurar un problema que tenga un usuario concreto.
+
+00:00:15.326 --> 00:00:19.356 align:middle
+Puedes suplantar su identidad para ver exactamente lo
+mismo que verían ellos al iniciar sesión en la web...
+
+00:00:19.496 --> 00:00:21.176 align:middle
+sin necesidad de saber su contraseña.
+
+00:00:21.856 --> 00:00:24.236 align:middle
+Lo primero que vamos a hacer
+es crear un CRUD de usuarios,
+
+00:00:24.426 --> 00:00:28.356 align:middle
+para que los administradores puedan elegir en la base de
+datos al usuario del que quieren suplantar la identidad.
+
+00:00:28.856 --> 00:00:33.766 align:middle
+En tu terminal, ejecuta: symfony
+console make:crud Esto va
+
+00:00:33.766 --> 00:00:35.306 align:middle
+a ser para la clase « User ».
+
+00:00:35.496 --> 00:00:37.666 align:middle
+Y la llamaremos « UserAdminController ».
+
+00:00:38.106 --> 00:00:38.986 align:middle
+¿Queremos pruebas?
+
+00:00:39.226 --> 00:00:42.376 align:middle
+No. Vale, ya ha generado todos estos archivos.
+
+00:00:42.866 --> 00:00:46.506 align:middle
+Ve a tu IDE y busca el nuevo
+archivo « UserAdminController ».
+
+00:00:47.206 --> 00:00:49.846 align:middle
+Lo único que vamos a cambiar
+aquí es el prefijo de la ruta.
+
+00:00:50.086 --> 00:00:55.816 align:middle
+Cámbialo a /admin/user: como estas
+rutas ahora llevan el prefijo /admin,
+
+00:00:56.006 --> 00:01:00.206 align:middle
+nuestra configuración de access_control ya
+las restringe solo a los administradores.
+
+00:01:00.406 --> 00:01:01.626 align:middle
+Así que eso lo tenemos ya hecho.
+
+00:01:02.316 --> 00:01:03.396 align:middle
+¡Veamos este nuevo CRUD!
+
+00:01:03.756 --> 00:01:07.066 align:middle
+En la app, ve a /admin/user...
+
+00:01:07.336 --> 00:01:09.256 align:middle
+y nos redirige a la página
+de inicio de sesión.
+
+00:01:09.776 --> 00:01:15.346 align:middle
+Necesitamos un administrador, así que usa
+janeway@starfleet.space, contraseña coffeeblack.
+
+00:01:16.666 --> 00:01:17.396 align:middle
+Este CRUD...
+
+00:01:17.606 --> 00:01:18.706 align:middle
+no tiene muy buena pinta...
+
+00:01:18.986 --> 00:01:20.336 align:middle
+así que vamos a darle un poco de estilo.
+
+00:01:20.706 --> 00:01:24.396 align:middle
+Abre templates/user_admin/index.html.twig.
+
+00:01:24.396 --> 00:01:28.066 align:middle
+Voy a seleccionar todo y pegar
+un código HTML más bonito,
+
+00:01:28.446 --> 00:01:32.396 align:middle
+lo puedes encontrar en el script de abajo:
+Vuelve al navegador y actualiza la página.
+
+00:01:33.056 --> 00:01:33.696 align:middle
+¡Mucho mejor!
+
+00:01:34.286 --> 00:01:37.966 align:middle
+Ya ves que he añadido los enlaces
+«cambiar a», pero todavía no hacen nada.
+
+00:01:38.246 --> 00:01:41.036 align:middle
+Así es como un administrador
+cambia a otro usuario.
+
+00:01:41.766 --> 00:01:46.676 align:middle
+Para ver cómo se habilita y configura la función
+de suplantación de identidad, ve a tu terminal
+
+00:01:46.676 --> 00:01:54.046 align:middle
+y ejecuta: symfony console config:dump
+security firewalls Desplázate hacia arriba...
+
+00:01:54.226 --> 00:01:56.086 align:middle
+hasta que encuentres la
+sección « switch_user »...
+
+00:01:58.686 --> 00:01:59.196 align:middle
+aquí lo tenemos.
+
+00:01:59.626 --> 00:02:01.046 align:middle
+Aquí están las opciones de configuración.
+
+00:02:01.306 --> 00:02:04.896 align:middle
+«provider » sirve si, por alguna razón,
+quieres usar un proveedor de usuarios diferente.
+
+00:02:05.366 --> 00:02:09.476 align:middle
+Recuerda que el proveedor de usuarios es la forma
+en que el sistema de seguridad carga a los usuarios.
+
+00:02:09.866 --> 00:02:14.326 align:middle
+La mayoría de las apps, como la nuestra, solo tienen un
+proveedor, así que podemos dejarlo como está por defecto.
+
+00:02:15.096 --> 00:02:19.006 align:middle
+«parameter » es el parámetro de
+consulta de la URL que activa el cambio.
+
+00:02:19.386 --> 00:02:21.276 align:middle
+También está bien dejarlo
+como está por defecto.
+
+00:02:22.016 --> 00:02:26.876 align:middle
+Cambiar de usuario es una acción peligrosa:
+no querrás que cualquier usuario pueda
+
+00:02:26.876 --> 00:02:28.856 align:middle
+hacerse pasar por un administrador de tu sitio.
+
+00:02:29.426 --> 00:02:34.526 align:middle
+Así que... por defecto, esta función está
+restringida a un rol: ROLE_ALLOWED_TO_SWITCH.
+
+00:02:34.996 --> 00:02:37.686 align:middle
+Cualquiera que no tenga ese rol
+no podrá cambiar de usuario.
+
+00:02:38.356 --> 00:02:42.966 align:middle
+Por último, target_route es la página a la que quieres
+enviar al usuario una vez que se haya producido el cambio.
+
+00:02:43.596 --> 00:02:44.726 align:middle
+Es hora de configurarlo.
+
+00:02:45.116 --> 00:02:48.466 align:middle
+Primero, ve a config/packages/security.yaml.
+
+00:02:49.186 --> 00:02:53.656 align:middle
+En la sección « role_hierarchy », bajo «
+ROLE_ADMIN », añade ROLE_ALLOWED_TO_SWITCH:
+
+00:02:54.196 --> 00:02:55.866 align:middle
+Ahora nuestros administradores
+tendrán este rol.
+
+00:02:56.526 --> 00:02:59.356 align:middle
+Y luego, aquí arriba, quita el
+comentario de « switch_user: true » —
+
+00:02:59.866 --> 00:03:02.896 align:middle
+lo de « true » solo activa la función
+con todos los valores por defecto.
+
+00:03:02.896 --> 00:03:06.136 align:middle
+Quiero cambiar una cosa: « target_route ».
+
+00:03:06.636 --> 00:03:11.106 align:middle
+Redirígelos a « app_homepage »:
+si no configuras esto, por defecto,
+
+00:03:11.236 --> 00:03:13.696 align:middle
+se conectarán desde la página
+en la que estén en ese momento.
+
+00:03:14.126 --> 00:03:16.956 align:middle
+Y ya te puedes imaginar: si
+cambiamos a Picard en esta página,
+
+00:03:17.156 --> 00:03:20.166 align:middle
+él no tendría acceso, así que
+nos saldría inmediatamente un 403.
+
+00:03:20.726 --> 00:03:25.176 align:middle
+Creo que siempre es mejor elegir una página a la que
+redirigirlos, a la que todo el mundo tenga acceso.
+
+00:03:25.986 --> 00:03:27.136 align:middle
+Ahora vamos a configurar ese botón.
+
+00:03:27.596 --> 00:03:30.696 align:middle
+Vuelve a la plantilla de índice y
+busca ese enlace «cambiar a»...
+
+00:03:31.256 --> 00:03:31.796 align:middle
+aquí está.
+
+00:03:32.226 --> 00:03:33.266 align:middle
+Borra lo de href.
+
+00:03:33.816 --> 00:03:37.266 align:middle
+¡Hay una función de Twig muy
+útil que nos genera la URL!
+
+00:03:37.616 --> 00:03:44.566 align:middle
+Salida impersonation_path(user.userIdentifier):
+haz clic para encontrarlo en nuestra entidad User.
+
+00:03:45.526 --> 00:03:49.556 align:middle
+Si te acuerdas, getUserIdentifier()
+viene de UserInterface
+
+00:03:49.556 --> 00:03:52.926 align:middle
+y nuestra implementación de User devuelve
+la dirección de correo electrónico.
+
+00:03:53.596 --> 00:03:56.786 align:middle
+Ahora vuelve al navegador y actualiza esta
+página de administración de usuarios.
+
+00:03:57.306 --> 00:03:59.106 align:middle
+Pasa el cursor por encima de
+«cambiar a» de Picard…
+
+00:03:59.366 --> 00:04:02.956 align:middle
+y, abajo, el navegador muestra
+la URL que se ha creado.
+
+00:04:03.486 --> 00:04:04.006 align:middle
+¡Haz clic en el botón!
+
+00:04:04.006 --> 00:04:05.896 align:middle
+Hemos vuelto a la página de inicio...
+
+00:04:06.106 --> 00:04:06.976 align:middle
+eso era de esperar...
+
+00:04:07.166 --> 00:04:08.676 align:middle
+pero ¿nos hemos cambiado a Picard?
+
+00:04:09.306 --> 00:04:10.766 align:middle
+Echa un vistazo a la barra de
+herramientas de depuración web.
+
+00:04:11.016 --> 00:04:14.216 align:middle
+¡Estamos autenticados como
+picard@enterprise.space!
+
+00:04:14.496 --> 00:04:15.086 align:middle
+¡Ha funcionado!
+
+00:04:15.756 --> 00:04:17.726 align:middle
+Aquí incluso hay un poco más de información.
+
+00:04:18.066 --> 00:04:21.526 align:middle
+Nos muestra quién está suplantando la
+identidad: es nuestra cuenta de usuario original.
+
+00:04:21.806 --> 00:04:24.536 align:middle
+Y tenemos este enlace especial «Salir
+de la suplantación de identidad».
+
+00:04:25.166 --> 00:04:26.546 align:middle
+Todo esto está muy bien para el desarrollo.
+
+00:04:26.726 --> 00:04:31.556 align:middle
+Pero en producción no hay barra de herramientas de depuración web,
+así que necesitamos nuestra propia forma de salir de la suplantación.
+
+00:04:32.036 --> 00:04:36.566 align:middle
+Y deberíamos dejar muy claro que estás
+suplantando a alguien, por si se te olvida.
+
+00:04:36.956 --> 00:04:37.956 align:middle
+¡Lo veremos a continuación!
