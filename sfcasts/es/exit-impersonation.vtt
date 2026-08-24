@@ -1,0 +1,253 @@
+WEBVTT
+
+00:00:01.096 --> 00:00:04.726 align:middle
+Ahora mismo, hemos iniciado sesión como
+Janeway y nos estamos haciendo pasar por Picard.
+
+00:00:05.006 --> 00:00:08.816 align:middle
+Pero en producción, sin esta barra de
+herramientas de depuración web, no quedaría claro
+
+00:00:08.816 --> 00:00:10.126 align:middle
+que te estás haciendo pasar por otra persona.
+
+00:00:10.606 --> 00:00:12.066 align:middle
+¡Y la verdad es que ya me ha pasado esto!
+
+00:00:12.236 --> 00:00:16.166 align:middle
+Es muy fácil suplantar a alguien,
+olvidarte de que lo estás haciendo,
+
+00:00:16.376 --> 00:00:19.836 align:middle
+y luego hacer un montón de cosas en la web que
+nunca deberías haber hecho como ese usuario.
+
+00:00:20.526 --> 00:00:24.426 align:middle
+Por eso me gusta dejar muy claro en
+producción que estás suplantando a alguien,
+
+00:00:24.866 --> 00:00:27.966 align:middle
+y también ofrecer una forma clara
+de salir de esa suplantación.
+
+00:00:28.616 --> 00:00:32.296 align:middle
+Lo primero que hay que averiguar es cómo podemos
+comprobar si estamos suplantando a alguien.
+
+00:00:32.876 --> 00:00:36.826 align:middle
+¿Te acuerdas de cuando, al principio del curso,
+hablamos de los atributos de seguridad integrados?
+
+00:00:37.296 --> 00:00:40.726 align:middle
+Abre la clase ` AuthenticatedVoter
+` del componente ` Security `.
+
+00:00:41.226 --> 00:00:45.716 align:middle
+Ya hablamos de la mayoría de ellos, pero nos
+saltamos un poco este atributo ` IS_IMPERSONATOR `.
+
+00:00:46.186 --> 00:00:48.696 align:middle
+Este es el atributo que
+compruebas con ` is_granted() `
+
+00:00:48.786 --> 00:00:50.586 align:middle
+para ver si estás suplantando a alguien.
+
+00:00:51.036 --> 00:00:52.026 align:middle
+Así es como podemos saberlo.
+
+00:00:52.736 --> 00:00:56.126 align:middle
+Cierra esa pestaña y abre
+templates/base.html.twig.
+
+00:00:56.756 --> 00:00:59.266 align:middle
+Justo en la parte superior, justo debajo
+de la etiqueta de apertura <body>,
+
+00:00:59.266 --> 00:01:03.576 align:middle
+añade {% if
+is_granted('IS_IMPERSONATOR') %}...
+
+00:01:03.576 --> 00:01:05.766 align:middle
+y ciérrala con {% endif %}.
+
+00:01:05.766 --> 00:01:09.706 align:middle
+Dentro, voy a pegar un trocito de código que
+puedes encontrar en el script de abajo: Y...
+
+00:01:09.706 --> 00:01:10.746 align:middle
+Voy a limpiarlo un poco.
+
+00:01:11.496 --> 00:01:15.516 align:middle
+Lo que hace esto es añadir un borde rojo alrededor
+de toda la página, además de un pequeño texto
+
+00:01:15.516 --> 00:01:17.736 align:middle
+en la esquina superior izquierda que
+dice a quién estamos suplantando.
+
+00:01:18.616 --> 00:01:20.436 align:middle
+Vuelve a la página de inicio y actualiza...
+
+00:01:21.066 --> 00:01:21.796 align:middle
+¡Ya está!
+
+00:01:22.006 --> 00:01:23.076 align:middle
+Ahora queda muy claro.
+
+00:01:23.346 --> 00:01:23.996 align:middle
+Aviso importante.
+
+00:01:24.166 --> 00:01:24.906 align:middle
+Me gusta esto.
+
+00:01:25.316 --> 00:01:29.256 align:middle
+Vayas a la página que vayas, queda claro que
+nos estamos haciendo pasar por Jean-Luc Picard.
+
+00:01:30.026 --> 00:01:33.826 align:middle
+A continuación, si nos estamos haciendo pasar por
+alguien, quiero cambiar este botón de cerrar sesión
+
+00:01:33.826 --> 00:01:35.596 align:middle
+por un enlace de «salir de la suplantación».
+
+00:01:36.236 --> 00:01:41.486 align:middle
+Sigue en base.html.twig, desplázate hacia abajo hasta donde
+estamos mostrando los botones de iniciar y cerrar sesión.
+
+00:01:42.076 --> 00:01:48.246 align:middle
+Arriba... antes de comprobar si es ROLE_USER,
+añade {% if is_granted('IS_IMPERSONATOR') %}.
+
+00:01:48.246 --> 00:01:50.656 align:middle
+Y para el if de abajo, cámbialo por elseif.
+
+00:01:51.366 --> 00:01:54.256 align:middle
+Luego, aquí abajo, copia el código
+HTML del enlace de inicio de sesión
+
+00:01:54.486 --> 00:01:57.236 align:middle
+y pégalo dentro de nuestro nuevo
+if para que tenga un estilo similar.
+
+00:01:58.126 --> 00:02:00.426 align:middle
+En el texto, escribe «Salir
+de la suplantación».
+
+00:02:01.286 --> 00:02:07.916 align:middle
+Y para el href, podemos utilizar otra función
+de Twig: impersonation_exit_path(): Por cierto,
+
+00:02:08.116 --> 00:02:10.246 align:middle
+hay versiones de estas funciones en url.
+
+00:02:10.726 --> 00:02:15.396 align:middle
+Hacen exactamente lo mismo, pero generan
+una URL absoluta en lugar de solo la ruta.
+
+00:02:15.826 --> 00:02:19.106 align:middle
+Así que usa impersonation_exit_path()
+sin argumentos.
+
+00:02:19.256 --> 00:02:19.936 align:middle
+Y ya está.
+
+00:02:20.706 --> 00:02:22.396 align:middle
+Vuelve al navegador y actualiza la página.
+
+00:02:23.576 --> 00:02:25.996 align:middle
+¡Genial! Ahí está nuestro enlace
+«Salir de la suplantación de identidad».
+
+00:02:26.336 --> 00:02:29.836 align:middle
+Pasa el cursor por encima y, abajo a la
+izquierda, puedes ver el enlace especial que
+
+00:02:29.836 --> 00:02:31.466 align:middle
+activará la salida de la
+suplantación de identidad.
+
+00:02:32.216 --> 00:02:33.226 align:middle
+Un pequeño matiz.
+
+00:02:33.436 --> 00:02:36.626 align:middle
+Imagina que estamos en una página que no es la
+página de inicio… como la página «Piezas»…
+
+00:02:36.826 --> 00:02:38.496 align:middle
+y hacemos clic en «Salir
+de la suplantación».
+
+00:02:39.006 --> 00:02:41.076 align:middle
+Ha salido correctamente: hemos vuelto
+
+00:02:41.076 --> 00:02:44.056 align:middle
+a ser nuestro usuario real, Janeway,
+y ese borde rojo ha desaparecido.
+
+00:02:44.506 --> 00:02:48.186 align:middle
+Pero seguimos en la página de piezas; no
+nos ha redirigido a la página de inicio.
+
+00:02:48.766 --> 00:02:49.536 align:middle
+Si te acuerdas,
+
+00:02:49.726 --> 00:02:54.696 align:middle
+en config/packages/security.yaml,
+configuramos esto: target_route.
+
+00:02:55.096 --> 00:02:58.186 align:middle
+Eso no se activa cuando sales de
+la suplantación de identidad.
+
+00:02:58.716 --> 00:03:02.706 align:middle
+Pero el primer argumento de
+impersonation_exit_path() es la ruta a la que quieres
+
+00:03:02.706 --> 00:03:04.566 align:middle
+enviar al usuario tras salir.
+
+00:03:05.086 --> 00:03:09.006 align:middle
+Así que lo que me gusta hacer es enviarlos de vuelta
+al sitio donde eligieron al usuario suplantado:
+
+00:03:09.626 --> 00:03:14.566 align:middle
+impersonation_exit_path(path('app_user_admin_index')):
+Así
+
+00:03:15.166 --> 00:03:16.876 align:middle
+pueden cambiar a otra
+persona si quieren. Pruébalo
+
+00:03:17.366 --> 00:03:17.936 align:middle
+tú mismo. Ve manualmente
+
+00:03:18.276 --> 00:03:20.796 align:middle
+a /admin/user... busca
+
+00:03:21.086 --> 00:03:22.826 align:middle
+a Picard y pulsa «cambiar a». Todo
+
+00:03:23.436 --> 00:03:24.256 align:middle
+funciona. Ahora
+
+00:03:24.536 --> 00:03:25.456 align:middle
+ve a «Parts»... y
+
+00:03:25.676 --> 00:03:27.126 align:middle
+pulsa «Salir de la suplantación». ¡Genial!
+
+00:03:27.696 --> 00:03:29.946 align:middle
+Ya estamos de vuelta en la lista
+de administradores para cambiar a
+
+00:03:29.946 --> 00:03:32.266 align:middle
+otra persona, más o menos
+donde empezamos. Y eso es
+
+00:03:33.016 --> 00:03:34.226 align:middle
+todo sobre la suplantación. A continuación:
+
+00:03:34.466 --> 00:03:36.216 align:middle
+¡la limitación de inicios de sesión!
