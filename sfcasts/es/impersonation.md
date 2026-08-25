@@ -95,8 +95,8 @@ página de destino a la que todo el mundo tenga acceso.
 ## Configurar el botón de cambio
 
 Ahora vamos a configurar ese botón. Vuelve a la plantilla de índice y busca ese enlace «cambiar a»
-... aquí está. Borra « `href` ». ¡Hay una función muy útil de Twig que genera
-la URL por ti! Escribe « `impersonation_path(user.userIdentifier)` »:
+... aquí está. Borra « `href` ». ¡Hay una función muy útil de Twig muy útil que nos genera la
+URL! Salida `impersonation_path(user.userIdentifier)`:
 
 [[[ code('4cfab28e2e') ]]]
 
