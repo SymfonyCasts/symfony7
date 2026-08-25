@@ -74,7 +74,7 @@ by IP address *only*, and its limit is `max_attempts` multiplied by five - so 25
 It's another layer, to stop someone trying thousands of *different* username
 combinations from the same IP.
 
-Keep going down. The rate limiter can optionally use a lock, it's optional and `lock_factory`
+Keep going down. The rate limiter can optionally use a lock, `lock_factory`
 is how you can configure it. A lock helps when multiple requests hit the same rate limiter at
 basically the same time. Without it, two requests could both see that the limit hasn't been
 reached yet, and both be allowed through.
