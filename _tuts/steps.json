@@ -214,7 +214,22 @@
             "id": "18-last-login",
             "name": "18. last login",
             "description": null
+        },
+        {
+            "id": "19-make-registration-form",
+            "name": "19. make registration form",
+            "description": null
+        },
+        {
+            "id": "19-pretty-form",
+            "name": "19. pretty form",
+            "description": null
+        },
+        {
+            "id": "19-validation",
+            "name": "19. validation",
+            "description": null
         }
     ],
-    "sha": "08fd96e02fe414bf208976ec7d84f0e3700daa31"
+    "sha": "cc39262ff39e5910ae36cad2d845dca421e4310a"
 }

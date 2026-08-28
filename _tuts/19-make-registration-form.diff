@@ -1,0 +1,169 @@
+diff --git a/src/Controller/RegistrationController.php b/src/Controller/RegistrationController.php
+new file mode 100644
+index 0000000..b44f556
+--- /dev/null
++++ b/src/Controller/RegistrationController.php
+@@ -0,0 +1,43 @@
++<?php
++
++namespace App\Controller;
++
++use App\Entity\User;
++use App\Form\RegistrationFormType;
++use Doctrine\ORM\EntityManagerInterface;
++use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Bundle\SecurityBundle\Security;
++use Symfony\Component\HttpFoundation\Request;
++use Symfony\Component\HttpFoundation\Response;
++use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
++use Symfony\Component\Routing\Attribute\Route;
++
++class RegistrationController extends AbstractController
++{
++    #[Route('/register', name: 'app_register')]
++    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
++    {
++        $user = new User();
++        $form = $this->createForm(RegistrationFormType::class, $user);
++        $form->handleRequest($request);
++
++        if ($form->isSubmitted() && $form->isValid()) {
++            /** @var string $plainPassword */
++            $plainPassword = $form->get('plainPassword')->getData();
++
++            // encode the plain password
++            $user->setPassword($userPasswordHasher->hashPassword($user, $plainPassword));
++
++            $entityManager->persist($user);
++            $entityManager->flush();
++
++            // do anything else you need here, like send an email
++
++            return $security->login($user);
++        }
++
++        return $this->render('registration/register.html.twig', [
++            'registrationForm' => $form,
++        ]);
++    }
++}
+diff --git a/src/Entity/User.php b/src/Entity/User.php
+index cfac7eb..0d9e208 100644
+--- a/src/Entity/User.php
++++ b/src/Entity/User.php
+@@ -4,11 +4,13 @@ namespace App\Entity;
+ 
+ use App\Repository\UserRepository;
+ use Doctrine\ORM\Mapping as ORM;
++use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+ use Symfony\Component\Security\Core\User\UserInterface;
+ 
+ #[ORM\Entity(repositoryClass: UserRepository::class)]
+ #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
++#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+ class User implements UserInterface, PasswordAuthenticatedUserInterface
+ {
+     #[ORM\Id]
+diff --git a/src/Form/RegistrationFormType.php b/src/Form/RegistrationFormType.php
+new file mode 100644
+index 0000000..93e90e9
+--- /dev/null
++++ b/src/Form/RegistrationFormType.php
+@@ -0,0 +1,56 @@
++<?php
++
++namespace App\Form;
++
++use App\Entity\User;
++use Symfony\Component\Form\AbstractType;
++use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
++use Symfony\Component\Form\Extension\Core\Type\PasswordType;
++use Symfony\Component\Form\FormBuilderInterface;
++use Symfony\Component\OptionsResolver\OptionsResolver;
++use Symfony\Component\Validator\Constraints\IsTrue;
++use Symfony\Component\Validator\Constraints\Length;
++use Symfony\Component\Validator\Constraints\NotBlank;
++
++class RegistrationFormType extends AbstractType
++{
++    public function buildForm(FormBuilderInterface $builder, array $options): void
++    {
++        $builder
++            ->add('email')
++            ->add('name')
++            ->add('agreeTerms', CheckboxType::class, [
++                'mapped' => false,
++                'constraints' => [
++                    new IsTrue(
++                        message: 'You should agree to our terms.',
++                    ),
++                ],
++            ])
++            ->add('plainPassword', PasswordType::class, [
++                // instead of being set onto the object directly,
++                // this is read and encoded in the controller
++                'mapped' => false,
++                'attr' => ['autocomplete' => 'new-password'],
++                'constraints' => [
++                    new NotBlank(
++                        message: 'Please enter a password',
++                    ),
++                    new Length(
++                        min: 6,
++                        minMessage: 'Your password should be at least {{ limit }} characters',
++                        // max length allowed by Symfony for security reasons
++                        max: 4096,
++                    ),
++                ],
++            ])
++        ;
++    }
++
++    public function configureOptions(OptionsResolver $resolver): void
++    {
++        $resolver->setDefaults([
++            'data_class' => User::class,
++        ]);
++    }
++}
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index c0126d9..94ca155 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -81,6 +81,9 @@
+                                 </button>
+                             </form>
+                         {% else %}
++                            <a class="hover:text-amber-400 pt-2" href="{{ path('app_register') }}">
++                                Register
++                            </a>
+                             <a class="hover:text-amber-400 pt-2" href="{{ path('app_login') }}">
+                                 Login
+                             </a>
+diff --git a/templates/registration/register.html.twig b/templates/registration/register.html.twig
+new file mode 100644
+index 0000000..f315674
+--- /dev/null
++++ b/templates/registration/register.html.twig
+@@ -0,0 +1,20 @@
++{% extends 'base.html.twig' %}
++
++{% block title %}Register{% endblock %}
++
++{% block body %}
++    <h1>Register</h1>
++
++    {{ form_errors(registrationForm) }}
++
++    {{ form_start(registrationForm) }}
++        {{ form_row(registrationForm.email) }}
++        {{ form_row(registrationForm.name) }}
++        {{ form_row(registrationForm.plainPassword, {
++            label: 'Password'
++        }) }}
++        {{ form_row(registrationForm.agreeTerms) }}
++
++        <button type="submit" class="btn">Register</button>
++    {{ form_end(registrationForm) }}
++{% endblock %}
