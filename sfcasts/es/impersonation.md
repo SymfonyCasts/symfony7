@@ -9,8 +9,7 @@ sitio... sin necesidad de saber su contraseña.
 
 ## Creación de un CRUD de usuarios
 
-Lo primero que vamos a hacer es crear un CRUD de usuarios, para que los administradores puedan elegir el
-usuario del que quieren suplantar la identidad en la base de datos.
+Lo primero que vamos a hacer es crear un CRUD de usuarios, para que los administradores puedan elegir en la base de datos al usuario del que quieren suplantar la identidad.
 
 En tu terminal, ejecuta:
 
@@ -18,7 +17,7 @@ En tu terminal, ejecuta:
 symfony console make:crud
 ```
 
-Esto va a ser para la clase ` `User` `. Y la llamaremos ` `UserAdminController``.
+Esto va a ser para la clase `User`. Y la llamaremos `UserAdminController`.
 ¿Queremos pruebas? No.
 
 Vale, ya ha generado todos estos archivos. Ve a tu IDE y busca el nuevo
@@ -96,8 +95,8 @@ página de destino a la que todo el mundo tenga acceso.
 ## Configurar el botón de cambio
 
 Ahora vamos a configurar ese botón. Vuelve a la plantilla de índice y busca ese enlace «cambiar a»
-... aquí está. Borra « `href` ». ¡Hay una función muy útil de Twig que genera
-la URL por ti! Escribe « `impersonation_path(user.userIdentifier)` »:
+... aquí está. Borra « `href` ». ¡Hay una función muy útil de Twig muy útil que nos genera la
+URL! Salida `impersonation_path(user.userIdentifier)`:
 
 [[[ code('4cfab28e2e') ]]]
 
