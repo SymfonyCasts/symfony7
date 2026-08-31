@@ -547,6 +547,55 @@
 
 ## Registration Form
 
+- new users? fixtures? registration form:
+- There's a maker for that: `symfony console make:registration-form`
+    - unique entity on email? Yes
+    - verify email? no
+    - auto-authenticate? yes
+    - phpunit tests? no
+- `User`: `UniqueEntity` attribute
+- `RegistrationFormType`
+    - `->add('name')` after `email`
+- `RegistrationController`
+    - ...
+    - `$security->login($user)` (can remove the extra stuff)
+        - this runs through the login process and triggers InteractiveLoginEvent
+            - `LastLoginListener` will update the last login timestamp
+- `register.html.twig`
+    - manually renders the form rows here
+    - add `{{ form_row(registrationForm.name) }}` below email
+- `base.html.twig`
+    - in the login link else, duplicate
+        - `path('app_register')`
+        - "Register"
+- Visit `/`, click register... ugly
+- Paste nicer code and refresh
+- To test validation manually, I like to disable html5 validation
+- `register.html.twig` form: `novalidate: true` in attr
+- Refresh and submit errors, but not enough
+- In `User`
+    - `#[Assert\NotBlank]` on `name` and `email`
+- Submit again... proper errors
+- For email, use `picard` and submit... no error for email
+- `User`
+    - `#[Assert\Email]` on `email`
+- Submit again... proper error for email
+- Try and submit `picard@enterprise.space` (an existing user)
+- UniqueEntity constraint triggered
+- Let's go!
+    - email: natasha@enterprise.space
+    - name: Natasha Yar
+    - password: stayawayfromarmus
+    - accept terms
+    - submit
+- Success and logged in. Still on the registration page though...
+- `RegistrationController`: logic here: redirect, add flash message
+- Logout, and login as `janeway@starfleet.space` (password: `coffeeblack`)
+- Visit `/admin/user` - see Natasha and her last login timestamp
+- Logout, go to register
+- Email: `picard@enterprise.space`, submit
+- Discuss the problem of discovering users exist...
+
 ---
 
 # Security Extra
@@ -565,9 +614,13 @@
 
 ## Custom Impersonation Voter
 
+## `NotCompromisedPassword` Validator
+
 ## `logout_form()` Helper (8.2)
 
 ## Hardening Impersonation (8.2)
+
+## `#[RateLimit]` Registration (8.1)
 
 ---
 

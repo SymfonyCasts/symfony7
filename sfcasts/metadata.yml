@@ -54,5 +54,5 @@ chapters:
         tutsFirstStep: 18-last-login
         tutsLastStep: 18-last-login
     registration-form:
-        tutsFirstStep: null
-        tutsLastStep: null
+        tutsFirstStep: 19-make-registration-form
+        tutsLastStep: 19-validation
