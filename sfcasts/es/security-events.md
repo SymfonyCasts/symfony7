@@ -1,15 +1,15 @@
 # Eventos de seguridad: seguimiento del último inicio de sesión
 
-El sistema de seguridad de Symfony genera un montón de eventos a los que puedes estar atento y reaccionar
-. Estos son los más comunes:
+El sistema de seguridad de Symfony genera un montón de eventos a los que puedes prestar atención y reaccionar.
+Estos son los más comunes:
 
-El método `InteractiveLoginEvent` se invoca después de que un usuario se autentique correctamente
+El método `InteractiveLoginEvent` se activa después de que un usuario se autentique correctamente
 de forma interactiva, por ejemplo, al enviar un formulario de inicio de sesión.
 
 El método ` `LoginFailureEvent` ` se invoca tras un intento fallido de autenticación. Puedes utilizarlo para
 registrar los intentos fallidos o personalizar la respuesta de error.
 
-El método ` `LogoutEvent` ` se activa antes de que un usuario cierre sesión. Puedes usarlo para realizar tareas de limpieza
+El método `LogoutEvent` se invoca antes de que un usuario cierre sesión. Puedes utilizarlo para realizar tareas de limpieza
 o personalizar la respuesta al cierre de sesión.
 
 El método `SwitchUserEvent` se invoca tras cambiar a un usuario suplantado o salir de él.
@@ -34,7 +34,7 @@ campo ser nulo? Sí, si alguien nunca ha iniciado sesión, será nulo. Y ya est�
 
 Por cierto, siempre deberías usar `datetime_immutable` en lugar de `datetime` para tus campos de fecha y hora
 . La versión inmutable es más segura y menos propensa a errores: si modificas una fecha mutable
-in situ, Doctrine no lo verá como un cambio y tu actualización nunca se guardará.
+in situ, Doctrine no lo considerará un cambio y tu actualización nunca se guardará.
 
 Ahora genera la migración:
 
@@ -43,7 +43,9 @@ symfony console make:migration
 ```
 
 Vuelve a tu editor y busca esa migración. Aquí la tienes. Establece la descripción en
-`add last login to user`.
+`add last login to user`:
+
+[[[ code('c11d898f6a') ]]]
 
 Vuelve a la terminal y ejecuta:
 
@@ -56,15 +58,20 @@ symfony console doctrine:migrations:migrate
 ## Mostrarlo en la gestión de usuarios
 
 Cuando un administrador esté en la página de lista de usuarios, quiero que esto aparezca como una columna. Abre
-`templates/user_admin/index.html.twig`... y busca el encabezado de la tabla «Name». Duplícalo
-y llámalo «Último inicio de sesión».
+`templates/user_admin/index.html.twig`... y busca el encabezado de la tabla «Nombre». Duplícalo
+y llámalo «Último inicio de sesión»:
+
+[[[ code('34b1addd65') ]]]
 
 A continuación, más abajo, donde mostramos el nombre del usuario, duplica también esa línea.
-Dentro, escribe `{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : 'Never' }}`.
-Esto comprueba primero si `user.lastLogin` tiene algún valor. Si lo tiene, lo formatea con el filtro `date`
-. Si no lo tiene, muestra «never».
+Dentro, muestra `{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : 'Never' }}`:
 
-Vuelve a ese listado en tu navegador y actualízalo. Vale, eso ha desbordado un poco nuestra columna «acciones»,
+[[[ code('c412614efc') ]]]
+
+Esto comprueba primero si `user.lastLogin` tiene algún valor. Si lo tiene, lo formatea con el filtro `date`.
+Si no lo tiene, muestra «nunca».
+
+Vuelve a ese listado en tu navegador y actualiza la página. Vale, eso ha desbordado un poco nuestra columna «Acciones»,
 pero no nos preocupemos por eso ahora mismo. Podemos ver la columna «Último inicio de sesión», y pone
 «nunca» para cada usuario.
 
@@ -76,7 +83,7 @@ Ahora necesitamos un detector de eventos… y hay un «maker» para eso. En tu t
 symfony console make:listener
 ```
 
-Llámalo « `LastLoginListener` ». Esto nos da una lista enorme de eventos entre los que elegir… y
+Llámalo « `LastLoginListener` ». Esto nos da una lista enorme de eventos entre los que elegir... y
 el que queremos es « `security.interactive_login` ».
 
 Este es el evento que se activa después de que un usuario inicie sesión de forma activa. Por ejemplo, al enviar nuestro
@@ -86,9 +93,12 @@ que te recuerden entre sesiones no es realmente iniciar sesión.
 
 Ve a buscar la nueva clase en `src/EventListener/LastLoginListener.php`.
 
-Lo único que en realidad no necesitamos aquí es el argumento `event` en el
-atributo`#[AsEventListener]`: Symfony puede determinar el evento a partir de la indicación de tipo del
-método.
+Una cosa que, de hecho, no necesitamos aquí es el argumento « `event` » en el
+atributo «`#[AsEventListener]` »:
+
+[[[ code('65971c0ecc') ]]]
+
+Symfony puede determinar el evento a partir de la indicación de tipo del método.
 
 Antes de escribir nada de lógica, comprueba bien que esto esté realmente registrado. En tu
 terminal, ejecuta:
@@ -97,35 +107,45 @@ terminal, ejecuta:
 symfony console debug:event
 ```
 
-Esto muestra todos nuestros oyentes y el evento al que están atentos. El último de la lista es
+Esto muestra todos nuestros escuchas y el evento al que están atentos. El último de la lista es
 `security.interactive_login`... y, efectivamente, ahí está nuestro `LastLoginListener`. Ya estamos listos.
 
 ## Configurar la marca de tiempo
 
 Ahora vamos a conectarlo todo. Primero, añade un constructor... e inyecta
-`private EntityManagerInterface $em`.
+`private EntityManagerInterface $em`:
 
-Aquí abajo, para ver qué podemos extraer del evento, entra en `InteractiveLoginEvent`.
-Podemos obtener el `Request`... y podemos obtener el token de autenticación; recuerda que es un objeto que envuelve al
-usuario. Así que extrae el usuario de ahí:
-`$user = $event->getAuthenticationToken()->getUser();`
+[[[ code('b87f9e6cda') ]]]
+
+Aquí abajo, para ver qué podemos extraer del evento, ve a `InteractiveLoginEvent`.
+Podemos obtener el `Request` … y podemos obtener el token de autenticación; recuerda que es un objeto que envuelve al
+usuario. Así que saca el usuario de ahí:
+`$user = $event->getAuthenticationToken()->getUser();`:
+
+[[[ code('73367b5f10') ]]]
 
 Esto podría ser nulo. Probablemente nunca lo será —no tendría mucho sentido
-en un evento de inicio de sesión—, pero técnicamente es posible. Así que añade `if (!$user instanceof User)`, incorporando
-nuestra entidad `User`, y simplemente `return`. No hagas nada.
+en un evento de inicio de sesión—, pero técnicamente es posible. Así que añade ` `if (!$user instanceof User)``, incorporando
+nuestra entidad ` `User` `, y simplemente ` `return``. No hagas nada:
 
-Y si sí que tenemos un usuario, establece la marca de tiempo:
-`$user->setLastLogin(new \DateTimeImmutable('now'));`
+[[[ code('b6b847f859') ]]]
 
-Lo último que nos queda es guardar ese cambio en la base de datos:
-`$this->em->flush();`
+Y si sí tenemos un usuario, establece la marca de tiempo:
+`$user->setLastLogin(new \DateTimeImmutable('now'));`:
+
+[[[ code('12ab8251ec') ]]]
+
+Lo último que tenemos que hacer es guardar ese cambio en la base de datos:
+`$this->em->flush();`:
+
+[[[ code('5ed3735765') ]]]
 
 ## Probémoslo
 
-¡Pruébalo! Ahora mismo estamos conectados como Janeway, así que primero cierra la sesión... y luego vuelve a iniciar sesión
+¡Pruébalo! Ahora mismo estamos conectados como Janeway, así que primero cierra la sesión... y luego vuelve a conectarte
 como `janeway@starfleet.space`, con la contraseña `coffeeblack`.
 
-Ahora vuelve a esa página de `/admin/user` otra vez… ¡y ya está! Nuestro último inicio de sesión se ha
+Ahora vuelve a esa lista de `/admin/user`... ¡y ya está! Tu último inicio de sesión se ha
 registrado y guardado. Una función muy chula.
 
 Próximo paso: ¡crear un sistema de registro de usuarios!
