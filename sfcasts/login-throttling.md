@@ -10,7 +10,7 @@ in.
 To enable this feature, over in your IDE, open `config/packages/security.yaml`. Down
 in our `main` firewall, add `login_throttling: true`:
 
-[[[ code(a3ce12bb52) ]]]
+[[[ code('a3ce12bb52') ]]]
 
 Now refresh the login page... and we get an error! Login throttling requires Symfony's rate
 limiter component. Copy the `composer require` from the error message, jump over to
@@ -34,7 +34,7 @@ In production, the default is `filesystem` which does persist between requests.
 Because I want to demo how login throttling works locally, I'm going to temporarily change this
 to `filesystem`:
 
-[[[ code(32ca77dbca) ]]]
+[[[ code('32ca77dbca') ]]]
 
 For the most part, you *don't* want this: login throttling getting in your way during
 development is annoying.
@@ -100,7 +100,7 @@ You can see in the comment that it has to be a service implementing
 Now fiddle with these a bit. Go to `security.yaml` and set `max_attempts` to `3`, and
 `interval` to `10 minutes`:
 
-[[[ code(607b5a451f) ]]]
+[[[ code('607b5a451f') ]]]
 
 So now the IP-and-username limiter allows three attempts within 10 minutes... and the
 global IP limiter - remember, times five - allows 15 attempts in 10 minutes from the

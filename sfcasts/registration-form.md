@@ -54,7 +54,7 @@ to the field itself. That's why these constraints live here.
 
 The one thing I want to add is our `name` field: `->add('name')`:
 
-[[[ code(a62bdeece7) ]]]
+[[[ code('a62bdeece7') ]]]
 
 This is a mapped field, so it will be set on the user entity.
 
@@ -104,7 +104,7 @@ The maker generated a form that renders each field individually. The one thing I
 to do is render our `name` field as well. Duplicate the email one... and change it to
 `name`:
 
-[[[ code(ce3165cfa8) ]]]
+[[[ code('ce3165cfa8') ]]]
 
 Now, if you look at the homepage, nothing looks different yet. What I want is a
 "Register" button beside the login button - and of course, only if you're *not*
@@ -115,14 +115,14 @@ for our links. We have the impersonation link, the logout button, and this login
 Copy the login link, paste a copy right above it, call it "Register", and set the path
 to `app_register`:
 
-[[[ code(11b4e3aef6) ]]]
+[[[ code('11b4e3aef6') ]]]
 
 Jump back to the browser and refresh the homepage. Cool - there's "Register".
 Click it and... this looks a little nasty.
 
 In `register.html.twig`, I'll paste a nicer version... You can find this in the script below:
 
-[[[ code(f95a551b1f) ]]]
+[[[ code('f95a551b1f') ]]]
 
 ## Turning Off HTML5 Validation
 
@@ -133,7 +133,7 @@ When I'm testing validation manually, I like to disable HTML5 validation so I ca
 actually see the Symfony validators working. Over in the template, on `form_start`,
 pass a `novalidate` attribute set to `true`...
 
-[[[ code(1276ce042e) ]]]
+[[[ code('1276ce042e') ]]]
 
 Refresh... and error. Twig didn't like that. I forgot a comma... Nope... still not right...
 
@@ -149,7 +149,7 @@ name too. They're both required fields, and they need to be configured in our `U
 
 Open `src/Entity/User.php` and start with the `$email` property. Add `#[Assert\NotBlank]`:
 
-[[[ code(a34ba95cb6) ]]]
+[[[ code('a34ba95cb6') ]]]
 
 It added a doubled-up `Assert` here, so I'll take that out. This imported an
 `Assert` alias, so we don't have to import every individual constraint.
@@ -159,7 +159,7 @@ but leave the default for now.
 
 The other one is `name`, so add the same thing there: `#[Assert\NotBlank]`:
 
-[[[ code(0921b3a2e9) ]]]
+[[[ code('0921b3a2e9') ]]]
 
 Back to the form, refresh, and hit "Register"... we see a validation error on each
 field. Perfect!
@@ -171,7 +171,7 @@ The other fields gave us validation errors, but this one didn't. We need an emai
 constraint. So jump back to the `User` entity, up to `email` property, and add
 `#[Assert\Email]`:
 
-[[[ code(bad35806d3) ]]]
+[[[ code('bad35806d3') ]]]
 
 Submit again... great: "This value is not a valid email address."
 
