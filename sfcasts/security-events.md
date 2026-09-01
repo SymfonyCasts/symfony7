@@ -45,7 +45,7 @@ symfony console make:migration
 Jump back to your editor and find that migration. Here it is. Set the description to
 `add last login to user`:
 
-[[[ code(c11d898f6a) ]]]
+[[[ code('c11d898f6a') ]]]
 
 Back in the terminal, run it:
 
@@ -61,12 +61,12 @@ When an admin is on the user listing page, I want to show this as a column. Open
 `templates/user_admin/index.html.twig`... and find the "Name" table header. Duplicate
 it, and call this one "Last Login":
 
-[[[ code(34b1addd65) ]]]
+[[[ code('34b1addd65') ]]]
 
 Then, down below, where we're outputting the user's name, duplicate that line too.
 Inside, output `{{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : 'Never' }}`:
 
-[[[ code(c412614efc) ]]]
+[[[ code('c412614efc') ]]]
 
 This first checks if `user.lastLogin` has a value. If it does, it formats it with the `date`
 filter. If it doesn't, it prints "never".
@@ -96,7 +96,7 @@ Go find the new class in `src/EventListener/LastLoginListener.php`.
 One thing we actually *don't* need here is the `event` argument on the
 `#[AsEventListener]` attribute:
 
-[[[ code(65971c0ecc) ]]]
+[[[ code('65971c0ecc') ]]]
 
 Symfony can determine the event from the type-hint on the method.
 
@@ -115,30 +115,30 @@ This lists all of our listeners and the event they listen to. The last one here 
 Now wire this up. First, add a constructor... and inject
 `private EntityManagerInterface $em`:
 
-[[[ code(b87f9e6cda) ]]]
+[[[ code('b87f9e6cda') ]]]
 
 Down here, to see what we can grab off the event, jump into `InteractiveLoginEvent`.
 We can get the `Request`... and we can get the authentication token - remember, that's an object that wraps the
 user. So grab the user from it:
 `$user = $event->getAuthenticationToken()->getUser();`:
 
-[[[ code(73367b5f10) ]]]
+[[[ code('73367b5f10') ]]]
 
 This *might* be null. It probably never will be - that wouldn't make a lot of sense
 for a login event - but it's technically possible. So add `if (!$user instanceof User)`, pulling
 in our `User` entity, and just `return`. Do nothing:
 
-[[[ code(b6b847f859) ]]]
+[[[ code('b6b847f859') ]]]
 
 And if we *do* have a user, set the timestamp:
 `$user->setLastLogin(new \DateTimeImmutable('now'));`:
 
-[[[ code(12ab8251ec) ]]]
+[[[ code('12ab8251ec') ]]]
 
 The last thing we need is to persist that change to the database:
 `$this->em->flush();`:
 
-[[[ code(5ed3735765) ]]]
+[[[ code('5ed3735765') ]]]
 
 ## Trying It Out
 
