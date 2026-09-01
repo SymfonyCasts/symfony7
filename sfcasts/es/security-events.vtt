@@ -1,0 +1,319 @@
+WEBVTT
+
+00:00:01.136 --> 00:00:05.416 align:middle
+El sistema de seguridad de Symfony genera un montón
+de eventos a los que puedes estar atento y reaccionar.
+
+00:00:05.976 --> 00:00:09.836 align:middle
+Estos son los más comunes: El `
+InteractiveLoginEvent ` se activa
+
+00:00:09.836 --> 00:00:14.566 align:middle
+después de que un usuario se autentique correctamente de forma
+interactiva, como al enviar un formulario de inicio de sesión.
+
+00:00:15.306 --> 00:00:19.206 align:middle
+El evento LoginFailureEvent se activa
+tras un intento fallido de autenticación.
+
+00:00:19.556 --> 00:00:23.406 align:middle
+Puedes usarlo para registrar los intentos
+fallidos o personalizar la respuesta de error.
+
+00:00:23.996 --> 00:00:26.946 align:middle
+El evento LogoutEvent se activa antes
+de que un usuario cierre sesión.
+
+00:00:27.266 --> 00:00:30.796 align:middle
+Puedes usarlo para realizar tareas de limpieza o
+personalizar la respuesta al cierre de sesión.
+
+00:00:31.296 --> 00:00:36.176 align:middle
+El método SwitchUserEvent se activa tras
+cambiar a un usuario suplantado o salir de él.
+
+00:00:36.786 --> 00:00:40.276 align:middle
+Hay más eventos además de estos, pero
+son para situaciones más avanzadas.
+
+00:00:40.936 --> 00:00:45.136 align:middle
+Lo que quiero hacer en nuestra app es llevar un registro de la
+última marca de tiempo de inicio de sesión de cada usuario.
+
+00:00:45.416 --> 00:00:46.736 align:middle
+Es una función bastante habitual.
+
+00:00:47.356 --> 00:00:51.376 align:middle
+Lo primero que necesitamos es un campo en nuestra
+entidad « User » para guardar esa marca de tiempo.
+
+00:00:51.826 --> 00:00:56.606 align:middle
+En tu terminal, ejecuta: symfony
+console make:entity Esto será
+
+00:00:56.606 --> 00:00:58.676 align:middle
+para nuestro « User », así
+que lo vamos a modificar.
+
+00:00:59.276 --> 00:01:00.656 align:middle
+Llámalo « lastLogin ».
+
+00:01:00.656 --> 00:01:02.826 align:middle
+Para el tipo de campo, pulsa ?
+
+00:01:02.826 --> 00:01:04.196 align:middle
+para ver todas las opciones...
+
+00:01:04.456 --> 00:01:05.866 align:middle
+y utiliza « datetime_immutable ».
+
+00:01:06.536 --> 00:01:07.496 align:middle
+¿Este campo puede ser nulo?
+
+00:01:07.926 --> 00:01:10.636 align:middle
+Sí, si alguien nunca ha
+iniciado sesión, será nulo.
+
+00:01:11.146 --> 00:01:11.776 align:middle
+Y eso es todo.
+
+00:01:12.286 --> 00:01:15.176 align:middle
+Por cierto, siempre deberías
+usar datetime_immutable en lugar
+
+00:01:15.176 --> 00:01:17.276 align:middle
+de datetime para tus campos de fecha y hora.
+
+00:01:17.276 --> 00:01:22.596 align:middle
+La versión inmutable es más segura y menos
+propensa a errores: si modificas una fecha mutable
+
+00:01:22.596 --> 00:01:26.806 align:middle
+in situ, Doctrine no lo verá como un cambio
+y tu actualización nunca se guardará.
+
+00:01:27.956 --> 00:01:33.156 align:middle
+Ahora genera la migración: symfony
+console make:migration Vuelve
+
+00:01:33.156 --> 00:01:34.936 align:middle
+a tu editor y busca esa migración.
+
+00:01:35.546 --> 00:01:36.096 align:middle
+Aquí está.
+
+00:01:36.096 --> 00:01:42.746 align:middle
+Pon la descripción como « add last login to
+user »: De vuelta en la terminal, ejecuta:
+
+00:01:42.746 --> 00:01:48.716 align:middle
+symfony console
+doctrine:migrations:migrate ¡Perfecto!
+
+00:01:49.166 --> 00:01:52.996 align:middle
+Cuando un administrador esté en la página de listado
+de usuarios, quiero que esto aparezca como una columna.
+
+00:01:53.536 --> 00:01:57.466 align:middle
+Abre templates/user_admin/index.html.twig...
+
+00:01:57.736 --> 00:01:59.416 align:middle
+y busca el encabezado de la tabla «Name».
+
+00:02:01.646 --> 00:02:06.306 align:middle
+Duplícalo y llámalo «Último inicio de
+sesión»: A continuación, más abajo,
+
+00:02:06.306 --> 00:02:09.656 align:middle
+donde mostramos el nombre del
+usuario, duplica también esa línea.
+
+00:02:10.706 --> 00:02:16.166 align:middle
+Dentro, escribe {{ user.lastLogin ?
+
+00:02:16.516 --> 00:02:27.916 align:middle
+user.lastLogin|date('Y-m-d H:i:s') : 'Nunca' }}:
+Primero comprueba si user.lastLogin tiene algún valor.
+
+00:02:27.916 --> 00:02:30.836 align:middle
+Si lo tiene, le aplica el
+formato con el filtro date.
+
+00:02:30.836 --> 00:02:32.676 align:middle
+Si no lo tiene, muestra «nunca».
+
+00:02:33.486 --> 00:02:35.766 align:middle
+Vuelve a esa lista en tu
+navegador y actualízala.
+
+00:02:36.466 --> 00:02:39.936 align:middle
+Vale, eso ha hecho que nuestra columna de acciones se
+desborde un poco, pero no nos preocupemos por eso ahora mismo.
+
+00:02:40.686 --> 00:02:44.006 align:middle
+Podemos ver la columna «Último inicio de
+sesión», y pone «nunca» para cada usuario.
+
+00:02:44.706 --> 00:02:46.006 align:middle
+Ahora necesitamos un detector de eventos...
+
+00:02:46.106 --> 00:02:47.316 align:middle
+y hay un generador para eso.
+
+00:02:47.776 --> 00:02:53.906 align:middle
+En tu terminal, ejecuta: symfony console
+make:listener Llámalo « LastLoginListener ».
+
+00:02:54.636 --> 00:02:56.756 align:middle
+Esto nos da una gran lista de
+eventos entre los que elegir...
+
+00:02:56.756 --> 00:03:00.186 align:middle
+y el que queremos es «
+security.interactive_login ».
+
+00:03:00.186 --> 00:03:04.826 align:middle
+Este es el evento que se dispara después de
+que un usuario inicie sesión de forma activa.
+
+00:03:05.096 --> 00:03:06.536 align:middle
+Como al enviar nuestro
+formulario de inicio de sesión.
+
+00:03:07.066 --> 00:03:09.876 align:middle
+No se activa cuando alguien
+se autentifica de otra forma,
+
+00:03:09.876 --> 00:03:11.696 align:middle
+como por ejemplo mediante
+la cookie «recordarme».
+
+00:03:12.086 --> 00:03:15.176 align:middle
+Y para una marca de tiempo de «último inicio
+de sesión», eso es justo lo que queremos:
+
+00:03:15.476 --> 00:03:18.136 align:middle
+que te recuerden de una sesión a
+otra no es realmente iniciar sesión.
+
+00:03:18.916 --> 00:03:25.006 align:middle
+Ve a buscar la nueva clase en
+src/EventListener/LastLoginListener.php.
+
+00:03:25.006 --> 00:03:27.656 align:middle
+Una cosa que, de hecho, no necesitamos
+aquí es el argumento event
+
+00:03:27.656 --> 00:03:31.496 align:middle
+en el atributo #[AsEventListener]:
+Symfony puede determinar el evento
+
+00:03:31.496 --> 00:03:32.876 align:middle
+a partir de la indicación de tipo del método.
+
+00:03:33.776 --> 00:03:37.216 align:middle
+Antes de escribir cualquier lógica, comprueba
+bien que esto esté realmente registrado.
+
+00:03:37.616 --> 00:03:43.236 align:middle
+En tu terminal, ejecuta: symfony console
+debug:event Esto muestra una lista de todos
+
+00:03:43.236 --> 00:03:45.176 align:middle
+nuestros oyentes y el evento
+al que están atentos.
+
+00:03:45.586 --> 00:03:48.656 align:middle
+El último de la lista es
+security.interactive_login...
+
+00:03:48.936 --> 00:03:51.306 align:middle
+y, efectivamente, ahí está
+nuestro LastLoginListener.
+
+00:03:51.726 --> 00:03:52.366 align:middle
+Ya estamos listos.
+
+00:03:52.996 --> 00:03:53.916 align:middle
+Ahora vamos a conectarlo todo.
+
+00:03:53.916 --> 00:03:55.746 align:middle
+Primero, añade un constructor...
+
+00:03:58.226 --> 00:04:03.136 align:middle
+e inyecta private
+EntityManagerInterface $em: Aquí abajo,
+
+00:04:03.136 --> 00:04:06.996 align:middle
+para ver qué podemos sacar del
+evento, ve a InteractiveLoginEvent.
+
+00:04:07.586 --> 00:04:08.776 align:middle
+Podemos obtener el Request...
+
+00:04:08.896 --> 00:04:13.796 align:middle
+y podemos obtener el token de autenticación;
+recuerda que es un objeto que envuelve al usuario.
+
+00:04:13.796 --> 00:04:15.506 align:middle
+Así que saca el usuario de ahí:
+
+00:04:16.536 --> 00:04:22.246 align:middle
+$user =
+$event->getAuthenticationToken()->getUser();:
+
+00:04:22.986 --> 00:04:24.236 align:middle
+Esto podría ser nulo.
+
+00:04:24.636 --> 00:04:27.276 align:middle
+Probablemente nunca lo será
+—no tendría mucho sentido
+
+00:04:27.276 --> 00:04:29.666 align:middle
+en un evento de inicio de sesión—,
+pero técnicamente es posible.
+
+00:04:29.666 --> 00:04:36.666 align:middle
+Así que añade if (!$user instanceof User),
+recuperando nuestra entidad User, y simplemente return.
+
+00:04:36.866 --> 00:04:40.206 align:middle
+No hagas nada: Y si sí tenemos un
+usuario, establece la marca de tiempo:
+
+00:04:40.206 --> 00:04:45.466 align:middle
+$user->setLastLogin(new
+\DateTimeImmutable('now'));:
+
+00:04:45.606 --> 00:04:48.736 align:middle
+Lo último que necesitamos
+es guardar ese cambio
+
+00:04:48.736 --> 00:04:54.146 align:middle
+en la base de datos:
+$this->em->flush();: ¡Pruébalo!
+
+00:04:54.576 --> 00:04:57.146 align:middle
+Ahora mismo estamos conectados como Janeway,
+así que primero cierra la sesión...
+
+00:04:58.226 --> 00:05:03.236 align:middle
+luego vuelve a iniciar sesión como
+janeway@starfleet.space, con la contraseña coffeeblack.
+
+00:05:04.276 --> 00:05:06.436 align:middle
+Ahora vuelve a esa página /admin/user...
+
+00:05:06.946 --> 00:05:07.786 align:middle
+¡Y ya está!
+
+00:05:07.786 --> 00:05:10.056 align:middle
+Se ha registrado y guardado
+tu último inicio de sesión.
+
+00:05:10.476 --> 00:05:11.376 align:middle
+Una función muy chula.
+
+00:05:12.056 --> 00:05:14.696 align:middle
+Próximo paso: ¡crear un
+sistema de registro de usuarios!
