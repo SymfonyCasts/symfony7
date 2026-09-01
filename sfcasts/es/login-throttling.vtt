@@ -1,0 +1,330 @@
+WEBVTT
+
+00:00:01.076 --> 00:00:05.666 align:middle
+Es hora de hablar de la limitación de intentos de inicio de
+sesión: una forma de restringir el número de intentos fallidos.
+
+00:00:06.136 --> 00:00:08.396 align:middle
+Esto protege tu app, a nivel de aplicación,
+
+00:00:08.556 --> 00:00:10.626 align:middle
+contra alguien que intente
+forzar el acceso a una cuenta —
+
+00:00:10.796 --> 00:00:14.036 align:middle
+probando todas las combinaciones de
+contraseñas posibles hasta que lo consiga—.
+
+00:00:14.796 --> 00:00:20.206 align:middle
+Para activar esta función, en tu IDE,
+abre config/packages/security.yaml.
+
+00:00:20.936 --> 00:00:26.596 align:middle
+En la sección « main » del cortafuegos, añade login_throttling:
+true: Ahora actualiza la página de inicio de sesión...
+
+00:00:27.236 --> 00:00:28.176 align:middle
+¡y nos sale un error!
+
+00:00:28.626 --> 00:00:31.586 align:middle
+La limitación de intentos de inicio de sesión requiere
+el componente de limitación de frecuencia de Symfony.
+
+00:00:31.896 --> 00:00:34.286 align:middle
+Copia el enlace composer
+require del mensaje de error,
+
+00:00:34.526 --> 00:00:37.426 align:middle
+ve a tu terminal, añádele
+el prefijo symfony...
+
+00:00:37.656 --> 00:00:43.536 align:middle
+y pega: symfony composer require
+symfony/rate-limiter Perfecto.
+
+00:00:44.236 --> 00:00:46.896 align:middle
+De vuelta en nuestro IDE,
+hay otra cosa que cambiar.
+
+00:00:47.346 --> 00:00:51.546 align:middle
+Por defecto, el limitador de tasa usa nuestra
+configuración de caché para almacenar su estado.
+
+00:00:51.546 --> 00:00:54.696 align:middle
+Así que abre config/packages/cache.yaml.
+
+00:00:55.416 --> 00:01:00.186 align:middle
+Aquí abajo, nuestra caché app usa el
+adaptador de matriz, una caché en memoria
+
+00:01:00.186 --> 00:01:02.266 align:middle
+que no se mantiene entre peticiones.
+
+00:01:02.656 --> 00:01:04.636 align:middle
+Esta es la configuración predeterminada
+para nuestro entorno de desarrollo.
+
+00:01:04.966 --> 00:01:10.026 align:middle
+En producción, la configuración predeterminada es
+filesystem, que sí se mantiene entre peticiones.
+
+00:01:10.026 --> 00:01:12.566 align:middle
+Como quiero mostrarte cómo funciona la
+limitación de inicios de sesión a nivel local,
+
+00:01:12.686 --> 00:01:16.496 align:middle
+voy a cambiarlo temporalmente
+a filesystem: en general,
+
+00:01:16.496 --> 00:01:20.776 align:middle
+no te conviene esto: que la limitación de inicios de
+sesión te estorbe durante el desarrollo es un rollo.
+
+00:01:20.776 --> 00:01:25.896 align:middle
+Actualiza la página e intenta iniciar
+sesión como picard@enterprise.space.
+
+00:01:25.896 --> 00:01:29.786 align:middle
+Para la contraseña, usa makeitgo —una
+contraseña incorrecta a propósito—.
+
+00:01:29.926 --> 00:01:30.486 align:middle
+Pulsa Intro.
+
+00:01:31.006 --> 00:01:32.216 align:middle
+Eso cuenta como un intento fallido.
+
+00:01:32.596 --> 00:01:34.046 align:middle
+makeitgo. Dos.
+
+00:01:35.636 --> 00:01:38.076 align:middle
+Tres. Cuatro.
+
+00:01:39.886 --> 00:01:42.266 align:middle
+Cinco. Seis...
+
+00:01:42.536 --> 00:01:43.946 align:middle
+Y ahora hemos activado el
+limitador de frecuencia:
+
+00:01:44.266 --> 00:01:47.546 align:middle
+Demasiados intentos fallidos de inicio de
+sesión, vuelve a intentarlo dentro de 1 minuto.
+
+00:01:47.546 --> 00:01:50.886 align:middle
+Así que el valor por defecto son
+cinco intentos fallidos por minuto.
+
+00:01:50.886 --> 00:01:53.466 align:middle
+Al cabo de un minuto, se reinicia
+y puedes volver a intentarlo.
+
+00:01:53.826 --> 00:01:57.466 align:middle
+Esto realmente evita que alguien
+lance miles de peticiones por segundo
+
+00:01:57.466 --> 00:01:59.646 align:middle
+a esta página para intentar forzar
+el inicio de sesión por fuerza bruta.
+
+00:01:59.646 --> 00:02:02.676 align:middle
+Echemos un vistazo a las opciones de
+configuración que tenemos para esta función.
+
+00:02:03.086 --> 00:02:10.346 align:middle
+Vuelve a tu terminal y ejecuta: ` symfony console `
+`config:dump security firewalls ` A continuación, desplázate
+
+00:02:10.346 --> 00:02:12.416 align:middle
+hacia arriba hasta encontrar la
+sección « login_throttling »...
+
+00:02:15.906 --> 00:02:16.426 align:middle
+Ahí está.
+
+00:02:16.986 --> 00:02:20.476 align:middle
+Las dos opciones más importantes
+son ` max_attempts ` y ` interval`.
+
+00:02:20.946 --> 00:02:25.906 align:middle
+Como te he dicho, el valor por defecto es de cinco
+intentos en un minuto, y así es como puedes ajustarlo.
+
+00:02:26.556 --> 00:02:31.326 align:middle
+Ahora bien, así es como funciona realmente el limitador de intentos
+de inicio de sesión por defecto: crea dos limitadores de frecuencia.
+
+00:02:31.636 --> 00:02:36.976 align:middle
+El primero se basa en la dirección IP y el nombre de
+usuario; ese es el que aplica los cinco intentos por minuto.
+
+00:02:36.976 --> 00:02:42.456 align:middle
+Así que no se puede intentar iniciar sesión con el mismo nombre de usuario
+desde la misma IP más de cinco veces antes de que se active el límite.
+
+00:02:43.086 --> 00:02:46.276 align:middle
+Pero también crea un segundo limitador,
+llamado «limitador de tasa global».
+
+00:02:46.756 --> 00:02:49.026 align:middle
+Este se basa solo en la dirección IP,
+
+00:02:49.306 --> 00:02:54.206 align:middle
+y su límite es max_attempts multiplicado
+por cinco, es decir, 25 por defecto.
+
+00:02:54.776 --> 00:02:57.176 align:middle
+Es otra capa de seguridad para
+evitar que alguien pruebe miles
+
+00:02:57.176 --> 00:02:59.556 align:middle
+de combinaciones diferentes de
+nombres de usuario desde la misma IP.
+
+00:02:59.556 --> 00:03:01.206 align:middle
+Sigue bajando.
+
+00:03:01.726 --> 00:03:06.486 align:middle
+El limitador de tasa puede usar opcionalmente
+un bloqueo; en lock_factory puedes configurarlo.
+
+00:03:06.486 --> 00:03:11.636 align:middle
+El bloqueo es útil cuando varias peticiones llegan al
+mismo limitador de tasa prácticamente al mismo tiempo.
+
+00:03:12.136 --> 00:03:14.156 align:middle
+Sin él, dos peticiones podrían ver
+
+00:03:14.156 --> 00:03:17.156 align:middle
+que aún no se ha alcanzado el límite
+y que a ambas se les permita pasar.
+
+00:03:17.956 --> 00:03:20.966 align:middle
+Encache_pool es donde eliges la
+caché que usa el limitador de tasa.
+
+00:03:21.386 --> 00:03:24.366 align:middle
+En producción, lo ideal es
+que sea algo persistente;
+
+00:03:24.366 --> 00:03:26.766 align:middle
+por defecto, se basa en
+nuestro grupo de cache.app.
+
+00:03:27.356 --> 00:03:29.166 align:middle
+Es importante que se trate
+de una caché compartida
+
+00:03:29.166 --> 00:03:31.606 align:middle
+entre todos tus servidores de
+aplicaciones (si tienes varios),
+
+00:03:32.016 --> 00:03:34.146 align:middle
+y que no se reinicie
+durante la implementación.
+
+00:03:34.146 --> 00:03:38.736 align:middle
+storage_service te permite anular por completo el
+sistema de almacenamiento del limitador de tasa.
+
+00:03:39.326 --> 00:03:41.466 align:middle
+Y, por último, justo al
+principio, en limiter es
+
+00:03:41.466 --> 00:03:44.376 align:middle
+donde puedes pasar tu propio servicio
+y tomar el control por completo.
+
+00:03:44.376 --> 00:03:47.746 align:middle
+Si usas esto, ninguna de las
+otras opciones tiene sentido.
+
+00:03:48.366 --> 00:03:49.846 align:middle
+Como ves en el comentario, tiene
+
+00:03:49.846 --> 00:03:53.946 align:middle
+que ser un servicio que implemente
+RequestRateLimiterInterface.
+
+00:03:53.946 --> 00:03:55.076 align:middle
+Ahora juega un poco con estas opciones.
+
+00:03:55.346 --> 00:04:03.036 align:middle
+Ve a security.yaml y configura max_attempts
+como 3, y interval como 10 minutes:
+
+00:04:03.036 --> 00:04:08.376 align:middle
+Así que ahora el limitador de IP y nombre de
+usuario permite tres intentos en 10 minutos...
+
+00:04:08.376 --> 00:04:11.546 align:middle
+y el limitador de IP global
+—recuerda, multiplicado por cinco—
+
+00:04:11.726 --> 00:04:14.716 align:middle
+permite 15 intentos en 10
+minutos desde la misma IP.
+
+00:04:15.536 --> 00:04:17.306 align:middle
+algo con lo que debes tener
+cuidado —y la razón
+
+00:04:17.306 --> 00:04:20.966 align:middle
+Hay por la que existe ese limitador
+global—: las direcciones IP compartidas.
+
+00:04:21.526 --> 00:04:24.556 align:middle
+Si uno de tus clientes es una
+gran empresa, como un banco,
+
+00:04:24.816 --> 00:04:28.046 align:middle
+es posible que todos sus empleados se
+conecten a Internet a través de la misma IP.
+
+00:04:28.046 --> 00:04:30.226 align:middle
+Así que no lo restrinjas demasiado.
+
+00:04:30.556 --> 00:04:32.596 align:middle
+Imagina que todo el mundo inicia
+sesión a las nueve de la mañana
+
+00:04:32.596 --> 00:04:35.006 align:middle
+y un montón de ellos se equivoca
+al teclear la contraseña:
+
+00:04:35.326 --> 00:04:37.336 align:middle
+podrías bloquear a un
+montón de gente a la vez.
+
+00:04:37.656 --> 00:04:41.526 align:middle
+Por eso precisamente el limitador global
+es más generoso que el de por usuario.
+
+00:04:42.226 --> 00:04:45.806 align:middle
+Una cosa más que debes tener en cuenta: se trata de
+una limitación de velocidad a nivel de aplicación.
+
+00:04:46.236 --> 00:04:48.226 align:middle
+Todas las peticiones siguen
+llegando a tu aplicación
+
+00:04:48.226 --> 00:04:51.436 align:middle
+y siguen consumiendo recursos del servidor,
+incluso cuando se les limita el ancho de banda.
+
+00:04:51.436 --> 00:04:54.576 align:middle
+Así que no confíes en esto como una
+verdadera protección contra DDoS.
+
+00:04:54.576 --> 00:04:57.236 align:middle
+Para eso, necesitas algo como Cloudflare,
+
+00:04:57.236 --> 00:04:59.836 align:middle
+que detiene el ataque antes
+de que llegue a tu servidor.
+
+00:05:00.786 --> 00:05:02.136 align:middle
+Esto es todo sobre la limitación de accesos.
+
+00:05:02.536 --> 00:05:05.256 align:middle
+A continuación: ¡los eventos de seguridad!
