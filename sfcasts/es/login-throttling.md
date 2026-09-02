@@ -14,7 +14,7 @@ en nuestro cortafuegos « `main` », añade `login_throttling: true`:
 
 Ahora actualiza la página de inicio de sesión… ¡y nos sale un error! La limitación de accesos requiere el componente limitador de
 tasa de Symfony. Copia el `composer require` del mensaje de error, ve a
-tu terminal, anteponle `symfony` … y pégalo:
+tu terminal, añádele `symfony` … y pega:
 
 ```terminal
 symfony composer require symfony/rate-limiter
