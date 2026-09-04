@@ -56,21 +56,20 @@ Lo único que quiero añadir es nuestro campo « `name` »: `->add('name')`:
 
 [[[ code('a62bdeece7') ]]]
 
-Este es un campo mapeado, así que se establecerá en la entidad de usuario.
+Este es un campo mapeado, así que se establecerá en la entidad «`user`».
 
 ## `RegistrationController`
 
 Ahora busca « `src/Controller/RegistrationController.php` » y analicémoslo.
 
-En este método ` `register()` `, lo primero que hacemos es crear un nuevo ` `User``... y luego
-crear nuestro formulario ` `RegistrationFormType` ` para ese usuario. A continuación, dejamos que el formulario se encargue de la
+En este método `register()`  lo primero que hacemos es crear un nuevo `User`... y luego
+crear nuestro formulario `RegistrationFormType` para ese usuario. A continuación, dejamos que el formulario se encargue de la
 petición y comprobamos si se ha enviado y es válida.
 
 Si es así, sacamos `plainPassword` de los datos del formulario para obtener su valor sin procesar. Todos los
 campos asignados —en nuestro caso, el correo electrónico y el nombre— ya están configurados en el usuario.
 
-No hace falta que hagamos nada con `agreeTerms`. No está mapeado y solo tiene una restricción `IsTrue`
-. Así que, si el formulario es válido, sabemos que el usuario ha aceptado los términos.
+No hace falta que hagamos nada con `agreeTerms`. No está mapeado y solo tiene una restricción `IsTrue`. Así que, si el formulario es válido, sabemos que el usuario ha aceptado los términos.
 
 Lo que está pasando aquí es que estamos usando el generador de contraseñas para cifrar la
 contraseña sin cifrar. Si nunca lo has hecho a mano: introduces
