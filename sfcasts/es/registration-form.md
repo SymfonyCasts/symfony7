@@ -152,7 +152,7 @@ Abre « `src/Entity/User.php` » y empieza por la propiedad `$email`. Añade `#[
 Aquí se ha añadido un `Assert` por duplicado, así que lo voy a quitar. Esto ha importado un
 alias `Assert`, así que no hace falta que importemos cada restricción por separado.
 
-No necesitamos ningún argumento. Podrías pasar un ` `message` ` para que sea un poco más intuitivo,
+No necesitamos ningún argumento. Podrías pasar un `message` para que sea un poco más intuitivo,
 pero deja el valor por defecto por ahora.
 
 El otro es `name`, así que añade lo mismo ahí: `#[Assert\NotBlank]`:
@@ -162,8 +162,7 @@ El otro es `name`, así que añade lo mismo ahí: `#[Assert\NotBlank]`:
 Vuelve al formulario, actualiza la página y pulsa «Registrarse»... vemos un error de validación en cada
 campo. ¡Perfecto!
 
-Ahora, el campo de correo electrónico debería contener realmente una dirección de correo. Escribe algo que no sea
-una dirección de correo —como `picard` — y pulsa «Registrarse».
+Ahora, el campo de correo electrónico debería contener realmente una dirección de correo. Escribe algo que no sea una dirección de correo —como `picard` — y pulsa «Registrarse».
 
 Los otros campos nos han dado errores de validación, pero este no. Necesitamos una
 restricción de correo electrónico. Así que vuelve a la entidad `User`, ve a la propiedad `email` y añade
@@ -191,12 +190,10 @@ registro y el inicio de sesión programático funcionan correctamente.
 
 ## ¿El inicio de sesión programático cuenta como interactivo?
 
-Asegurémonos de que el inicio de sesión programático se considera un inicio de sesión interactivo y activa
+Vamos a asegurarnos de que el inicio de sesión programático se considera un inicio de sesión interactivo y activa
 nuestro detector de último inicio de sesión.
 
-Pulsa «Cerrar sesión» y, a continuación, inicia sesión como `janeway@starfleet.space`, con la contraseña `coffeeblack`. Después, ve
-a `/admin/user` … y aquí abajo, ¡nuestro nuevo usuario tiene su último inicio de sesión configurado correctamente! Así que
-un inicio de sesión programático se considera un inicio de sesión interactivo.
+Pulsa «Cerrar sesión» y, a continuación, inicia sesión como `janeway@starfleet.space`, con la contraseña `coffeeblack`. Después, ve a `/admin/user` … y aquí abajo, ¡nuestro nuevo usuario tiene su último inicio de sesión configurado correctamente! Así que un inicio de sesión programático se considera un inicio de sesión interactivo.
 
 ## Una última cosa: enumeración de usuarios
 
