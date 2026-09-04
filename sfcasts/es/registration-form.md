@@ -60,7 +60,7 @@ Este es un campo mapeado, así que se establecerá en la entidad «`user`».
 
 ## `RegistrationController`
 
-Ahora busca « `src/Controller/RegistrationController.php` » y analicémoslo.
+Ahora busca `src/Controller/RegistrationController.php` y analicémoslo.
 
 En este método `register()`  lo primero que hacemos es crear un nuevo `User`... y luego
 crear nuestro formulario `RegistrationFormType` para ese usuario. A continuación, dejamos que el formulario se encargue de la
