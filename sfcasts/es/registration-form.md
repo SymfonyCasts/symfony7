@@ -190,7 +190,7 @@ registro y el inicio de sesión programático funcionan correctamente.
 
 ## ¿El inicio de sesión programático cuenta como interactivo?
 
-Vamos a asegurarnos de que el inicio de sesión programático se considera un inicio de sesión interactivo y activa
+Vamos a asegurarnos de que el inicio de sesión programático se considere un inicio de sesión interactivo, y activa
 nuestro detector de último inicio de sesión.
 
 Pulsa «Cerrar sesión» y, a continuación, inicia sesión como `janeway@starfleet.space`, con la contraseña `coffeeblack`. Después, ve a `/admin/user` … y aquí abajo, ¡nuestro nuevo usuario tiene su último inicio de sesión configurado correctamente! Así que un inicio de sesión programático se considera un inicio de sesión interactivo.
