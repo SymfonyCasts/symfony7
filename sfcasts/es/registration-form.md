@@ -145,12 +145,12 @@ el nombre. Ambos son campos obligatorios y hay que configurarlos en nuestra enti
 
 ## Añadir restricciones de validación
 
-Abre « `src/Entity/User.php` » y empieza por la propiedad « `$email` ». Añade « `#[Assert\NotBlank]` »:
+Abre « `src/Entity/User.php` » y empieza por la propiedad `$email`. Añade `#[Assert\NotBlank]`:
 
 [[[ code('a34ba95cb6') ]]]
 
-Aquí se ha añadido un « `Assert` » por duplicado, así que lo voy a quitar. Esto ha importado un
-alias «`Assert` », así que no hace falta que importemos cada restricción por separado.
+Aquí se ha añadido un `Assert` por duplicado, así que lo voy a quitar. Esto ha importado un
+alias `Assert`, así que no hace falta que importemos cada restricción por separado.
 
 No necesitamos ningún argumento. Podrías pasar un ` `message` ` para que sea un poco más intuitivo,
 pero deja el valor por defecto por ahora.
