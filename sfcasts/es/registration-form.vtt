@@ -138,7 +138,7 @@ Ahora busca
 src/Controller/RegistrationController.php
 
 00:02:07.386 --> 00:02:09.426 align:middle
-y vamos a analizarlo.
+y analicémoslo.
 
 00:02:10.246 --> 00:02:13.506 align:middle
 En este método register(), lo primero
