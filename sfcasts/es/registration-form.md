@@ -185,13 +185,11 @@ la contraseña puede ser cualquiera. Yo usaré `stayawayfromarmus`. Marca «Acep
 ¡y regístrate!
 
 Volvemos a la página de inicio, vemos el botón de cerrar sesión y, si miramos hacia abajo en la
-barra de herramientas de depuración web... efectivamente, estamos autenticados como `natasha@enterprise.space`. Nuestro
-registro y el inicio de sesión programático funcionan correctamente.
+barra de herramientas de depuración web... efectivamente, estamos autenticados como `natasha@enterprise.space`. Nuestro registro y el inicio de sesión programático funcionan correctamente.
 
 ## ¿El inicio de sesión programático cuenta como interactivo?
 
-Vamos a asegurarnos de que el inicio de sesión programático se considere un inicio de sesión interactivo, y activa
-nuestro detector de último inicio de sesión.
+Vamos a asegurarnos de que el inicio de sesión programático se considere un inicio de sesión interactivo, y active nuestro detector de último inicio de sesión.
 
 Pulsa «Cerrar sesión» y, a continuación, inicia sesión como `janeway@starfleet.space`, con la contraseña `coffeeblack`. Después, ve a `/admin/user` … y aquí abajo, ¡nuestro nuevo usuario tiene su último inicio de sesión configurado correctamente! Así que un inicio de sesión programático se considera un inicio de sesión interactivo.
 
