@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+
+/* Tailwind CSS safelist */
+@source "./../../vendor/symfony/twig-bridge/Resources/views/Form/tailwind_2_layout.html.twig";
+
+input, textarea, select {
+    background-color: inherit;
+}
+
+label.required::after {
+    content: " *";
+    color: #c10007;
+}

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <section class="px-6 py-10 sm:py-16">
+        <div class="mx-auto max-w-md">
+            <div class="rounded-2xl border border-white/10 bg-[#16202A]/80 p-8 shadow-2xl shadow-black/30 backdrop-blur-sm">
+                <div class="mb-8">
+                    <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Security</p>
+                    <h1 class="mt-3 text-4xl font-semibold">Register</h1>
+                    <p class="mt-3 text-sm text-white/70">Create a new account to continue.</p>
+                </div>
+
+                {{ form_errors(registrationForm) }}
+
+                {{ form_start(registrationForm, { attr: { novalidate: true, class: 'space-y-6' } }) }}
+                    {{ form_row(registrationForm.email, { label_attr: { class: 'text-sm font-medium text-white/80' } }) }}
+                    {{ form_row(registrationForm.name, { label_attr: { class: 'text-sm font-medium text-white/80' } }) }}
+                    {{ form_row(registrationForm.plainPassword, {
+                        label: 'Password',
+                        label_attr: { class: 'text-sm font-medium text-white/80' }
+                    }) }}
+                    {{ form_row(registrationForm.agreeTerms, {
+                        label: 'I agree to the terms',
+                        label_attr: { class: 'text-sm text-white/80' }
+                    }) }}
+
+                    <button type="submit" class="w-full rounded-lg bg-green-700 px-5 py-3 font-semibold text-white transition hover:bg-green-800 cursor-pointer">
+                        Register
+                    </button>
+                {{ form_end(registrationForm) }}
+            </div>
+        </div>
+    </section>
+{% endblock %}

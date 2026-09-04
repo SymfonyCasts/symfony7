@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <div class="max-w-7xl mx-auto px-5">
+        <div class="flex justify-between items-center">
+            <h1 class="text-4xl font-semibold mb-3 my-6 pb-4">User index</h1>
+            <a class="bg-blue-500 hover:bg-blue-600 text-white self-center py-2 px-2.5 rounded-xl" href="{{ path('app_user_admin_new') }}">Create new</a>
+        </div>
+
+        <div class="overflow-x-auto w-full">
+            <table class="w-full table-fixed border-collapse border border-gray-400">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th class="p-4 text-left font-semibold text-gray-200">Id</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Email</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Roles</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Name</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Last Login</th>
+                        <th class="p-4 text-left font-semibold text-gray-200">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    {% set roles = user.roles|filter(role => role != 'ROLE_USER') %}
+                    <tr class="hover:bg-blue-500/5">
+                        <td class="border-b p-4 pl-8 border-gray-700 text-gray-400">{{ user.id }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ user.email }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">
+                            {% if roles is empty %}
+                                <span class="inline-flex items-center rounded-full bg-slate-500/20 px-2.5 py-1 text-xs font-medium text-slate-200">No roles</span>
+                            {% else %}
+                                <div class="flex flex-wrap gap-2">
+                                    {% for role in roles %}
+                                        <span class="inline-flex items-center rounded-full bg-blue-500/20 px-2.5 py-1 text-xs font-medium text-blue-100">{{ role }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">{{ user.name }}</td>
+                        <td class="border-b p-4 border-gray-700 text-gray-400">
+                            {{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : 'Never' }}
+                        </td>
+                        <td class="border-b p-4 border-gray-700 text-white">
+                            <div class="flex gap-2">
+                                <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_user_admin_show', {'id': user.id}) }}">show</a>
+                                <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_user_admin_edit', {'id': user.id}) }}">edit</a>
+                                <a class="bg-indigo-500 hover:bg-indigo-600 rounded p-1.5" href="{{ impersonation_path(user.userIdentifier) }}">switch to</a>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="border-b p-4 border-gray-700 text-gray-400">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
