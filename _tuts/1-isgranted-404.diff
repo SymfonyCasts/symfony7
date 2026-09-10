@@ -1,0 +1,22 @@
+diff --git a/src/Controller/StarshipAdminController.php b/src/Controller/StarshipAdminController.php
+index 204108b..a852294 100644
+--- a/src/Controller/StarshipAdminController.php
++++ b/src/Controller/StarshipAdminController.php
+@@ -53,7 +53,7 @@ final class StarshipAdminController extends AbstractController
+     }
+ 
+     #[Route('/{id}/edit', name: 'app_starship_admin_edit', methods: ['GET', 'POST'])]
+-    #[IsGranted('edit', subject: 'starship')]
++    #[IsGranted('edit', subject: 'starship', statusCode: 404)]
+     public function edit(Request $request, Starship $starship, EntityManagerInterface $entityManager): Response
+     {
+         $form = $this->createForm(StarshipType::class, $starship);
+@@ -72,7 +72,7 @@ final class StarshipAdminController extends AbstractController
+     }
+ 
+     #[Route('/{id}', name: 'app_starship_admin_delete', methods: ['POST'])]
+-    #[IsGranted('delete', subject: 'starship')]
++    #[IsGranted('delete', subject: 'starship', statusCode: 404)]
+     public function delete(Request $request, Starship $starship, EntityManagerInterface $entityManager): Response
+     {
+         if ($this->isCsrfTokenValid('delete'.$starship->getId(), $request->getPayload()->getString('_token'))) {
