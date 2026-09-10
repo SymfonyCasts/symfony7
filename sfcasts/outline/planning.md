@@ -1,97 +1,128 @@
 # Security Extra
 
 ## Preconditions
-- Based on the finished code from "Symfony 7 Security": https://symfonycasts.com/screencast/symfony-security
-- Already upgraded to Symfony 8
-- Foundry fixtures: `picard@enterprise.space` (`ROLE_CAPTAIN`, owns a ship), `janeway@starfleet.space` (`ROLE_ADMIN`)
+- Starts from the finished "Symfony 7 Security" code, upgraded to Symfony 8
+- Fixtures: `picard` (`ROLE_CAPTAIN`, owns a ship), `janeway` (`ROLE_ADMIN`)
 
 ## IsGranted 404
-- Problem: `/starship/{id}/edit` on someone else's ship returns 403, which tells an attacker the ship exists
-- Add `statusCode: 404` to `#[IsGranted('edit', subject: 'starship')]` in `StarshipAdminController`
-- Mention the sibling options: `message` and `exceptionCode`
-
-## Customizing Authentication Error Messages
-- Where the message comes from: `error.messageKey|trans(error.messageData, 'security')` in `login.html.twig`
-- Create `translations/security.en.yaml` and override `Invalid credentials.` with our own wording
-- Show `security.expose_security_errors` (default `none`) to surface the *real* reason - bad password vs unknown user vs account status - and why that's a dev-only / account-status-only setting
-- Mention `CustomUserMessageAuthenticationException` for when we throw our own errors (user checkers, custom authenticators)
-
-## Super Admin Voter
-- Motivate it: `StarshipVoter` starts with a "is this user an admin?" escape hatch - every new voter has to repeat that, and `role_hierarchy` can't say "can do literally everything"
-- Add `ROLE_SUPER_ADMIN` to a fixture user in `AppStory` (new user, or promote Janeway)
-- `make:voter` -> `src/Security/Voter/SuperAdminVoter.php`: `supports()` returns true for *every* attribute and subject
-- Grant by reading the roles off the token (`$token->getRoleNames()`, or `RoleHierarchyInterface::getReachableRoleNames()` so `role_hierarchy` still applies)
-- Big gotcha: do *not* call `isGranted('ROLE_SUPER_ADMIN')`/`AccessDecisionManager` inside the voter - it supports every attribute, so it would vote on itself forever
-- Skip the `IS_AUTHENTICATED_*`, `IS_IMPERSONATOR` and `PUBLIC_ACCESS` attributes - a super admin shouldn't be able to fake full authentication (this matters for the next chapter)
-- Add `$vote?->addReason('...')` and show the decision in the profiler's security panel
-- Delete the `ROLE_ADMIN` shortcut from `StarshipVoter` and let `role_hierarchy` give `ROLE_SUPER_ADMIN` -> `ROLE_ADMIN`
-
-## Sudo Mode: Requiring Full Authentication
-- Log in with "remember me" checked, delete the `PHPSESSID` cookie, refresh: still logged in via the `REMEMBERME` cookie
-- Add `#[IsGranted('IS_AUTHENTICATED_FULLY')]` to something sensitive - `UserAdminController::edit()` (or the whole class)
-- Refresh as the remembered user: bounced to the login form, log in, land back on the page
-- Compare `IS_AUTHENTICATED_FULLY` vs `IS_AUTHENTICATED_REMEMBERED` vs `IS_AUTHENTICATED`
-- Mention the `access_control` version for locking down a whole URL section
+- A 403 on someone else's ship edit page proves the ship exists
+- Add `statusCode: 404` to `#[IsGranted('edit', subject: 'starship')]`
+- Mention the `message` and `exceptionCode` options
 
 ## Disabled Users: a Custom `UserChecker`
-- Add an `isActive` (or `disabled`) boolean to `User` with `make:entity`, make the migration, default it in `UserFactory`
-- Add a checkbox to `UserType` so an admin can deactivate someone from `/admin/user/{id}/edit`
-- Create `src/Security/UserChecker` implementing `UserCheckerInterface` and wire it with `user_checker: App\Security\UserChecker` on the `main` firewall
-- Throw `CustomUserMessageAccountStatusException` from `checkPreAuth()` - explain `checkPreAuth()` (before the password is verified) vs `checkPostAuth()` (after)
-- Important tie-in with the previous chapter: `expose_security_errors: none` normally masks `AccountStatusException` as "Invalid credentials", but a `CustomUserMessageAccountStatusException` always gets through - which is why we throw that one
-- Show the gap: the checker only runs while *authenticating*, so a user who is already logged in stays logged in
-- Fix it by making `User implement EquatableInterface` and returning `false` from `isEqualTo()` when deactivated - `ContextListener` compares the session user to the fresh one on every request and deauthenticates
-- Deactivate Picard while he's logged in, refresh... and he's out
-- Mention the built-in `DisabledException`/`LockedException` and that `switch_user` runs `checkPostAuth()` too, so you can't impersonate a disabled user
+- Add an `isActive` bool to `User`, migrate, default it in `UserFactory`
+- Add the checkbox to `UserType` so an admin can deactivate someone
+- Create `src/Security/UserChecker` implementing `UserCheckerInterface`
+- Wire it with `user_checker:` on the `main` firewall
+- Throw `DisabledException` from `checkPreAuth()`
+- `checkPreAuth()` = before the password check, `checkPostAuth()` = after
+- Note the login page only shows a generic error - a later chapter fixes that
+- Mention `LockedException` and the other built-ins
+- The checker also runs on remember-me logins and on `switch_user`
+- Cliffhanger: someone already logged in stays logged in
+
+## Forcing Logout with EquatableInterface
+- Deactivate Picard while he's logged in, refresh... nothing happens
+- Every request, `ContextListener` refreshes the user from the DB
+- Then `hasUserChanged()` compares the session user to the fresh one
+- Default comparison: password hash, roles, user identifier
+- So changing his roles in the admin *already* logs him out - demo it
+- Add `EquatableInterface` to `User`
+- `isEqualTo()` returns `false` when the fresh user is deactivated
+- Refresh... and he's at the login page
+- Mention `TokenDeauthenticatedEvent` for adding a flash message
+- Warning: `isEqualTo()` replaces the default comparison entirely
+- Aside: `remember_me.signature_properties` is the cookie version of this
+- Defaults to `['password']`; no need to add `isActive`, the checker has it
+
+## Customizing Authentication Error Messages
+- The message: `error.messageKey|trans(error.messageData, 'security')`
+- Override `Invalid credentials.` in `translations/security.en.yaml`
+- Now the masking: failures get swapped for a `BadCredentialsException`
+- `expose_security_errors` levels: `none`, `account_status`, `all`
+- `account_status`: real status message, unknown emails stay generic
+- That's the setting most apps want
+- Payoff: our `DisabledException` message finally reaches the login page
+- But `checkPreAuth()` leaks: probe any email, no password needed
+- Move the check to `checkPostAuth()` to close it
+- `all` unmasks `UserNotFoundException` too - enumeration, dev only
+- Mention `CustomUserMessageAuthenticationException` for custom authenticators
+
+## Super Admin Voter
+- `StarshipVoter` opens with an admin escape hatch - every voter repeats it
+- And `role_hierarchy` can't express "can do literally everything"
+- Give a fixture user `ROLE_SUPER_ADMIN` in `AppStory`
+- `make:voter` -> `SuperAdminVoter`, `supports()` returns true for everything
+- Grant from `$token->getRoleNames()`
+- Or `RoleHierarchyInterface` so `role_hierarchy` still applies
+- Gotcha: never call `isGranted()` inside - it would vote on itself forever
+- Skip `IS_AUTHENTICATED_*`, `IS_IMPERSONATOR` and `PUBLIC_ACCESS`
+- A super admin shouldn't be able to fake full authentication
+- Add `$vote?->addReason()` and show it in the profiler
+- Drop the `ROLE_ADMIN` shortcut from `StarshipVoter`
+
+## Sudo Mode: Requiring Full Authentication
+- Log in with "remember me", delete `PHPSESSID`, refresh: still logged in
+- Add `#[IsGranted('IS_AUTHENTICATED_FULLY')]` to `UserAdminController::edit()`
+- Refresh: bounced to the login form, log in, land back on the page
+- Compare it to `IS_AUTHENTICATED_REMEMBERED` and `IS_AUTHENTICATED`
+- Mention the `access_control` version
 
 ## Redirecting After Login with `_target_path`
-- Today, login always dumps you on the homepage
-- Show what already works: hit a protected URL, get sent to login, and Symfony returns you there (the target path is stashed in the session)
-- Add a hidden `_target_path` input to the login form so a "Login" link from any page comes back to that page
-- Config options to mention: `default_target_path`, `always_use_default_target_path`, `use_referer`
-- Ties back to sudo mode: re-authenticating returns you to the page you were on
+- Login always dumps you on the homepage
+- But hit a protected URL first and Symfony returns you there
+- The target path is stashed in the session
+- Add a hidden `_target_path` input to the login form
+- Also: `default_target_path`, `always_use_default_target_path`, `use_referer`
+- Ties back to sudo mode
 
 ## Login with Username or Email
-- Add a unique `username` field to `User` with `make:entity`, make the migration, fill it in `UserFactory` + `AppStory`
-- Make `UserRepository` implement `UserLoaderInterface` with a `loadUserByIdentifier()` query matching email *or* username
-- Drop `property: email` from the `app_user_provider` config so Symfony uses the loader instead
-- Update the login form: `type="text"`, label "Email or Username"
-- Note that `getUserIdentifier()` is what ends up in the session and in `app.user.userIdentifier`
+- Add a unique `username` to `User`, migrate, fill it in the fixtures
+- `UserRepository implements UserLoaderInterface`
+- `loadUserByIdentifier()` queries email *or* username
+- Drop `property: email` from `app_user_provider` so the loader is used
+- Login form: `type="text"`, label "Email or Username"
+- `getUserIdentifier()` is what lands in the session
 
 ## Custom Impersonation Voter
-- Problem: anyone with `ROLE_ALLOWED_TO_SWITCH` can impersonate *anyone* - including an admin, or themselves
-- `SwitchUserListener` decides on `ROLE_ALLOWED_TO_SWITCH` with the *target user* as the subject - so a voter can see who we're switching to
-- New voter: deny switching to yourself, deny switching to anyone who has `ROLE_ADMIN`/`ROLE_SUPER_ADMIN` (check the target's reachable roles)
-- Use the same check to hide the "switch to" link in `user_admin/index.html.twig`: `is_granted('ROLE_ALLOWED_TO_SWITCH', user)`
-- Point out that `SuperAdminVoter` deliberately overrides this - a super admin can still impersonate anyone
+- Anyone with `ROLE_ALLOWED_TO_SWITCH` can impersonate anyone - even an admin
+- `SwitchUserListener` votes on that role with the target user as the subject
+- So a voter can see who we're switching to
+- Deny switching to yourself
+- Deny switching to a `ROLE_ADMIN`/`ROLE_SUPER_ADMIN` target
+- Hide the "switch to" link with `is_granted('ROLE_ALLOWED_TO_SWITCH', user)`
+- `SuperAdminVoter` overrides this on purpose
 
 ## `NotCompromisedPassword` Validator
-- Add `new NotCompromisedPassword()` to `plainPassword` in `RegistrationFormType`
-- Register with `password123` and watch it get rejected
-- How it works: k-anonymity against the haveibeenpwned API - only the first 5 chars of the SHA-1 hash are sent - and it needs `symfony/http-client`
-- Turn it off in the test env with `framework.validation.not_compromised_password.enabled: false`; mention `skipOnError`
-- Good spot to also mention `PasswordStrength`
+- Add `new NotCompromisedPassword()` to `plainPassword` in registration
+- Register with `password123` and watch it fail
+- k-anonymity: only the first 5 chars of the SHA-1 hash are sent
+- Needs `symfony/http-client`
+- Disable it in tests: `framework.validation.not_compromised_password`
+- Mention `skipOnError` and `PasswordStrength`
 
 ## `#[RateLimit]` Registration (8.1)
-- Requires Symfony 8.1 - park this chapter until it's released
-- Login is throttled (`login_throttling`) but registration is wide open
-- Define a limiter under `framework.rate_limiter` and add `#[RateLimit]` to `RegistrationController::register()`
-- Default bucket key is client IP + method + path; show `methods`, an expression-based key, and stacking multiple attributes
+- Park until Symfony 8.1 is released
+- Login is throttled, registration is wide open
+- Define a limiter under `framework.rate_limiter`
+- Add `#[RateLimit]` to `RegistrationController::register()`
+- Default bucket key: client IP + method + path
+- Show `methods`, an expression key and stacking attributes
 - Show the automatic 429 + `Retry-After` response
 
 ## `logout_form()` Helper (8.2)
-- Requires Symfony 8.2 - park until released
-- Our layout hand-rolls the POST logout form plus the CSRF hidden input
-- Replace it all with `{{ logout_form() }}`
-- Also mention the new `target: null` logout option (no redirect)
+- Park until Symfony 8.2 is released
+- Our layout hand-rolls the POST logout form and CSRF input
+- Replace it with `{{ logout_form() }}`
+- Mention the new `target: null` logout option
 
 ## Hardening Impersonation (8.2)
-- Requires Symfony 8.2 - park until released
-- Problem: impersonation is a `?_switch_user=` GET link, so it's CSRF-able
-- New `switch_user` options: `path`, `enable_csrf`, `csrf_token_id`, `csrf_parameter` - a dedicated POST-only route
-- Swap `impersonation_path()`/`impersonation_exit_path()` for the new `impersonation_form()` / `impersonation_exit_form()` Twig functions
+- Park until Symfony 8.2 is released
+- Impersonation is a `?_switch_user=` GET link, so it's CSRF-able
+- New `switch_user` options: `path`, `enable_csrf`, `csrf_token_id`
+- A dedicated POST-only route
+- Swap in `impersonation_form()` / `impersonation_exit_form()`
 
 ## Advanced bonus topics
-- `debug:roles` command + the role hierarchy graph in the profiler (8.2)
+- `debug:roles` + the role hierarchy graph in the profiler (8.2)
 - Reset password w/ `symfonycasts/reset-password-bundle`
-

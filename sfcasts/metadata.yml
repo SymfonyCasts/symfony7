@@ -1,1 +1,40 @@
-chapters: []
+chapters:
+    is-granted-404:
+        tutsFirstStep: null
+        tutsLastStep: null
+    user-checker:
+        tutsFirstStep: null
+        tutsLastStep: null
+    equatable-user:
+        tutsFirstStep: null
+        tutsLastStep: null
+    auth-error-messages:
+        tutsFirstStep: null
+        tutsLastStep: null
+    super-admin-voter:
+        tutsFirstStep: null
+        tutsLastStep: null
+    sudo-mode:
+        tutsFirstStep: null
+        tutsLastStep: null
+    target-path:
+        tutsFirstStep: null
+        tutsLastStep: null
+    username-or-email:
+        tutsFirstStep: null
+        tutsLastStep: null
+    impersonation-voter:
+        tutsFirstStep: null
+        tutsLastStep: null
+    not-compromised-password:
+        tutsFirstStep: null
+        tutsLastStep: null
+    rate-limit-registration:
+        tutsFirstStep: null
+        tutsLastStep: null
+    logout-form:
+        tutsFirstStep: null
+        tutsLastStep: null
+    hardening-impersonation:
+        tutsFirstStep: null
+        tutsLastStep: null
