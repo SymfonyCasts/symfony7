@@ -5,7 +5,7 @@ chapters:
     user-checker:
         tutsFirstStep: null
         tutsLastStep: null
-    equatable-user:
+    force-logout-on-disable:
         tutsFirstStep: null
         tutsLastStep: null
     auth-error-messages:

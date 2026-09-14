@@ -10,30 +10,35 @@
 - Mention the `message` and `exceptionCode` options
 
 ## Disabled Users: a Custom `UserChecker`
-- Add an `isActive` bool to `User`, migrate, default it in `UserFactory`
-- Add the checkbox to `UserType` so an admin can deactivate someone
+- Disabled users are a kind of soft delete
+- Add a nullable `disabledAt` datetime to `User` - auditable, unlike a bool
+- Add `isActive()`: true when `disabledAt` is null
+- Migrate, add a `disabled()` state to `UserFactory`, use it in `AppStory`
 - Create `src/Security/UserChecker` implementing `UserCheckerInterface`
 - Wire it with `user_checker:` on the `main` firewall
 - Throw `DisabledException` from `checkPreAuth()`
 - `checkPreAuth()` = before the password check, `checkPostAuth()` = after
 - Note the login page only shows a generic error - a later chapter fixes that
 - Mention `LockedException` and the other built-ins
-- The checker also runs on remember-me logins and on `switch_user`
+- It also runs on a remember-me login
+- But `switch_user` only calls `checkPostAuth()` - check there too
 - Cliffhanger: someone already logged in stays logged in
 
-## Forcing Logout with EquatableInterface
-- Deactivate Picard while he's logged in, refresh... nothing happens
+## Forcing Logout on Disabled Users
+- Make picard active again, reload the fixtures, log in
+- Disable him with `dbal:run-sql`, refresh... still logged in
 - Every request, `ContextListener` refreshes the user from the DB
 - Then `hasUserChanged()` compares the session user to the fresh one
-- Default comparison: password hash, roles, user identifier
-- So changing his roles in the admin *already* logs him out - demo it
-- Add `EquatableInterface` to `User`
-- `isEqualTo()` returns `false` when the fresh user is deactivated
-- Refresh... and he's at the login page
-- Mention `TokenDeauthenticatedEvent` for adding a flash message
-- Warning: `isEqualTo()` replaces the default comparison entirely
-- Aside: `remember_me.signature_properties` is the cookie version of this
-- Defaults to `['password']`; no need to add `isActive`, the checker has it
+- It looks at the password hash, the roles and the user identifier
+- So something on the user has to change - roles is the easy one
+- In `getRoles()`, add `ROLE_DISABLED` when `isActive()` is false
+- Refresh - logged out. And he can't log back in either
+- Why not `EquatableInterface`: it replaces that comparison wholesale
+- `__serialize()` crc32c-hashes the password, so that check is subtle
+- Now remember me: reload fixtures, log in with the box checked
+- Delete the session cookie, refresh - still in via `REMEMBERME`
+- Disable him again, refresh... logged out
+- `RememberMeListener` clears the cookie on `TokenDeauthenticatedEvent`
 
 ## Customizing Authentication Error Messages
 - The message: `error.messageKey|trans(error.messageData, 'security')`
