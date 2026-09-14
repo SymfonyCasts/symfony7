@@ -1,0 +1,153 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 78c0597..8165716 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -19,6 +19,7 @@ security:
+         main:
+             lazy: true
+             provider: app_user_provider
++            user_checker: App\Security\UserChecker
+             form_login:
+                 login_path: app_login
+                 check_path: app_login
+diff --git a/migrations/Version20260914111424.php b/migrations/Version20260914111424.php
+new file mode 100644
+index 0000000..8687d86
+--- /dev/null
++++ b/migrations/Version20260914111424.php
+@@ -0,0 +1,37 @@
++<?php
++
++declare(strict_types=1);
++
++namespace DoctrineMigrations;
++
++use Doctrine\DBAL\Schema\Schema;
++use Doctrine\Migrations\AbstractMigration;
++
++/**
++ * Auto-generated Migration: Please modify to your needs!
++ */
++final class Version20260914111424 extends AbstractMigration
++{
++    public function getDescription(): string
++    {
++        return 'add user.disabledAt column';
++    }
++
++    public function up(Schema $schema): void
++    {
++        // this up() migration is auto-generated, please modify it to your needs
++        $this->addSql('ALTER TABLE user ADD COLUMN disabled_at DATETIME DEFAULT NULL');
++    }
++
++    public function down(Schema $schema): void
++    {
++        // this down() migration is auto-generated, please modify it to your needs
++        $this->addSql('CREATE TEMPORARY TABLE __temp__user AS SELECT id, email, roles, password, name, last_login, starship_id FROM user');
++        $this->addSql('DROP TABLE user');
++        $this->addSql('CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles CLOB NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, last_login DATETIME DEFAULT NULL, starship_id INTEGER DEFAULT NULL, CONSTRAINT FK_8D93D6499B24DF5 FOREIGN KEY (starship_id) REFERENCES starship (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
++        $this->addSql('INSERT INTO user (id, email, roles, password, name, last_login, starship_id) SELECT id, email, roles, password, name, last_login, starship_id FROM __temp__user');
++        $this->addSql('DROP TABLE __temp__user');
++        $this->addSql('CREATE INDEX IDX_8D93D6499B24DF5 ON user (starship_id)');
++        $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON user (email)');
++    }
++}
+diff --git a/src/Entity/User.php b/src/Entity/User.php
+index 0b08125..2c3aaeb 100644
+--- a/src/Entity/User.php
++++ b/src/Entity/User.php
+@@ -46,6 +46,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+     #[ORM\Column(nullable: true)]
+     private ?\DateTimeImmutable $lastLogin = null;
+ 
++    #[ORM\Column(nullable: true)]
++    private ?\DateTimeImmutable $disabledAt = null;
++
+     public function getId(): ?int
+     {
+         return $this->id;
+@@ -156,4 +159,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+ 
+         return $this;
+     }
++
++    public function isEnabled(): bool
++    {
++        return null === $this->disabledAt;
++    }
++
++    public function getDisabledAt(): ?\DateTimeImmutable
++    {
++        return $this->disabledAt;
++    }
++
++    public function setDisabledAt(?\DateTimeImmutable $disabledAt): static
++    {
++        $this->disabledAt = $disabledAt;
++
++        return $this;
++    }
+ }
+diff --git a/src/Factory/UserFactory.php b/src/Factory/UserFactory.php
+index 10c9578..e8243bc 100644
+--- a/src/Factory/UserFactory.php
++++ b/src/Factory/UserFactory.php
+@@ -20,6 +20,11 @@ final class UserFactory extends PersistentObjectFactory
+     {
+     }
+ 
++    public function disabled(): self
++    {
++        return $this->with(['disabledAt' => new \DateTimeImmutable()]);
++    }
++
+     #[\Override]
+     public static function class(): string
+     {
+diff --git a/src/Security/UserChecker.php b/src/Security/UserChecker.php
+new file mode 100644
+index 0000000..f655b3d
+--- /dev/null
++++ b/src/Security/UserChecker.php
+@@ -0,0 +1,27 @@
++<?php
++
++namespace App\Security;
++
++use App\Entity\User;
++use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
++use Symfony\Component\Security\Core\Exception\DisabledException;
++use Symfony\Component\Security\Core\User\UserCheckerInterface;
++use Symfony\Component\Security\Core\User\UserInterface;
++
++final class UserChecker implements UserCheckerInterface
++{
++    public function checkPreAuth(UserInterface $user): void
++    {
++        if (!$user instanceof User) {
++            return;
++        }
++
++        if (!$user->isEnabled()) {
++            throw new DisabledException();
++        }
++    }
++
++    public function checkPostAuth(UserInterface $user, ?TokenInterface $token = null): void
++    {
++    }
++}
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 6a04855..72b529a 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -15,7 +15,7 @@ final class AppStory extends Story
+ {
+     public function build(): void
+     {
+-        UserFactory::createOne([
++        UserFactory::new()->disabled()->create([
+             'email' => 'picard@enterprise.space',
+             'password' => 'makeitso',
+             'name' => 'Jean-Luc Picard',

@@ -1,0 +1,28 @@
+diff --git a/src/Entity/User.php b/src/Entity/User.php
+index 2c3aaeb..640ffa2 100644
+--- a/src/Entity/User.php
++++ b/src/Entity/User.php
+@@ -85,6 +85,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+         // guarantee every user at least has ROLE_USER
+         $roles[] = 'ROLE_USER';
+ 
++        if (!$this->isEnabled()) {
++            $roles[] = 'ROLE_DISABLED';
++        }
++
+         return array_unique($roles);
+     }
+ 
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 72b529a..6a04855 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -15,7 +15,7 @@ final class AppStory extends Story
+ {
+     public function build(): void
+     {
+-        UserFactory::new()->disabled()->create([
++        UserFactory::createOne([
+             'email' => 'picard@enterprise.space',
+             'password' => 'makeitso',
+             'name' => 'Jean-Luc Picard',
