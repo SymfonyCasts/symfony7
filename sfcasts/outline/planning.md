@@ -12,7 +12,7 @@
 ## Disabled Users: a Custom `UserChecker`
 - Disabled users are a kind of soft delete
 - Add a nullable `disabledAt` datetime to `User` - auditable, unlike a bool
-- Add `isActive()`: true when `disabledAt` is null
+- Add `isEnabled()`: true when `disabledAt` is null
 - Migrate, add a `disabled()` state to `UserFactory`, use it in `AppStory`
 - Create `src/Security/UserChecker` implementing `UserCheckerInterface`
 - Wire it with `user_checker:` on the `main` firewall
@@ -31,7 +31,7 @@
 - Then `hasUserChanged()` compares the session user to the fresh one
 - It looks at the password hash, the roles and the user identifier
 - So something on the user has to change - roles is the easy one
-- In `getRoles()`, add `ROLE_DISABLED` when `isActive()` is false
+- In `getRoles()`, add `ROLE_DISABLED` when `isEnabled()` is false
 - Refresh - logged out. And he can't log back in either
 - Why not `EquatableInterface`: it replaces that comparison wholesale
 - `__serialize()` crc32c-hashes the password, so that check is subtle
