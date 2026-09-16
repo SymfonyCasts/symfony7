@@ -38,3 +38,6 @@ chapters:
     hardening-impersonation:
         tutsFirstStep: null
         tutsLastStep: null
+    check-refreshed-user-event:
+        tutsFirstStep: null
+        tutsLastStep: null
