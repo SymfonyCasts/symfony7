@@ -36,13 +36,17 @@ symfony console make:migration
 ```
 
 Jump back to our IDE and find the migration. For the description, put
-`add user.disabledAt column`.
+`add user.disabledAt column`:
+
+[[[ code('2e404a663f') ]]]
 
 Over in `src/Entity/User.php`, sure enough, there's our `disabledAt` property, and
 it's `null` by default - exactly what we want. When users are created, we want them
 to be enabled. Down here we have the setter and getter. I'm going to add one helper
 method to make it easier to ask whether they're enabled or disabled,
 `public function isEnabled(): bool` and inside, `return null === $this->disabledAt;`:
+
+[[[ code('235cffb08d') ]]]
 
 ## A `disabled()` State for Foundry
 
@@ -53,9 +57,13 @@ who are disabled when they're created.
 Go to `src/Factory/UserFactory.php` and add `public function disabled(): self`.
 Inside: `return $this->with(['disabledAt' => new \DateTimeImmutable()]);`:
 
+[[[ code('6df4503981') ]]]
+
 Now make Picard a disabled user by default. Go to `src/Story/AppStory.php`. For
 Jean-Luc Picard, `UserFactory::createOne()` is directly creating the user. To add a
 state, change `createOne` to `new()`, call `disabled()` on it, then call `create()`:
+
+[[[ code('6c0c8589dc') ]]]
 
 We could have kept the `createOne()` and set the `disabledAt` property in the array,
 but using states is reusable and, I think, more readable.
@@ -87,6 +95,8 @@ We're not going to use `checkPostAuth()`, so clear that out. Inside `checkPreAut
 first `if (!$user instanceof User)`, then `return`. Below that,
 `if (!$user->isEnabled())`, and inside `throw new DisabledException();`:
 
+[[[ code('23b07073ee') ]]]
+
 ## Account Status Exceptions
 
 `DisabledException` is an *account status* exception. Dive into it and you can see
@@ -109,6 +119,8 @@ This service exists, but it doesn't actually do anything yet: it's not auto-conf
 in any way. We need to enable it in our security config. Open
 `config/packages/security.yaml` and, under our `main` firewall, add
 `user_checker: App\Security\UserChecker`:
+
+[[[ code('846c7c6c58') ]]]
 
 That's the service ID. Remember, when Symfony autowires classes, it makes the class
 name the service ID.

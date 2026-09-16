@@ -50,7 +50,9 @@ We can mimic that behavior really easily with our `#[IsGranted]` attribute. Open
 require `ROLE_ADMIN`. That's ok to leave as a normal 403, it doesn't leak anything.
 
 But down on `edit()`, we have this `#[IsGranted('edit', subject: 'starship')]`. Pass
-another parameter to that attribute: `statusCode: 404`
+another parameter to that attribute: `statusCode: 404`:
+
+[[[ code('1e868656b5') ]]]
 
 Refresh the page... and we get the same error message... But look up here: it's a 404 now!
 
@@ -71,7 +73,9 @@ There are a few other exception-related parameters on this attribute. Jump into
 that's the real PHP exception code. It usually isn't necessary to set these.
 And remember, by default, the exception messages aren't shown to end users. But be aware that they're there.
 
-One more spot: we also have this `delete()` action, so do the same thing here: `statusCode: 404`.
+One more spot: we also have this `delete()` action, so do the same thing here: `statusCode: 404`:
+
+[[[ code('3c1c4914d3') ]]]
 
 Cool - we've completely hidden these two endpoints to non-authorized users.
 

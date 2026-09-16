@@ -11,6 +11,8 @@ Let's look at how we can achieve this.
 First, go into `src/Story/AppStory.php` and *don't* make Picard disabled by default:
 switch this back to `createOne()`:
 
+[[[ code('782e0dd6dc') ]]]
+
 Now reload our fixtures:
 
 ```terminal
@@ -50,6 +52,8 @@ password of a user, that user automatically gets logged out. That's how we could
 So the easiest way to achieve this is in our `User` entity. We have this `getRoles()`
 method, and *that* is checked on every request. Add `if (!$this->isEnabled())` and
 inside, `$roles[] = 'ROLE_DISABLED';`:
+
+[[[ code('dafa6eb46b') ]]]
 
 Now, this role doesn't really mean anything. All we're using it for is to change the
 return value of `getRoles()`, and that's enough to say "hey, this user has changed, so
