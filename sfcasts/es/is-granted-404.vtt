@@ -1,0 +1,233 @@
+WEBVTT
+
+00:00:00.096 --> 00:00:06.166 align:middle
+¡Hola, amigos! Bienvenidos a «Seguridad
+en Symfony: ¡Vamos más allá!»
+
+00:00:06.746 --> 00:00:10.386 align:middle
+Este curso es la continuación directa de
+nuestro curso «Seguridad: conceptos básicos»;
+
+00:00:10.746 --> 00:00:15.026 align:middle
+empieza justo donde acabó aquel, así que te
+recomiendo encarecidamente que lo hagas primero.
+
+00:00:15.696 --> 00:00:19.706 align:middle
+Este curso trata los temas adicionales: las funciones
+más avanzadas que no pudimos abordar allí.
+
+00:00:20.366 --> 00:00:22.936 align:middle
+Si has seguido ese curso
+y aún tienes el código,
+
+00:00:23.196 --> 00:00:24.986 align:middle
+puedes retomar justo donde lo dejamos.
+
+00:00:25.596 --> 00:00:29.146 align:middle
+Si lo necesitas, descárgate el código de
+este curso en la parte superior de la página.
+
+00:00:29.556 --> 00:00:32.996 align:middle
+En el archivo zip, abre el directorio
+« start/ » en tu IDE favorito,
+
+00:00:33.256 --> 00:00:35.096 align:middle
+y sigue las instrucciones de
+README para configurarlo todo.
+
+00:00:35.576 --> 00:00:38.896 align:middle
+Ejecuta: ` symfony serve -d `
+...para poner la app en marcha.
+
+00:00:39.856 --> 00:00:40.966 align:middle
+Aquí está nuestra Starshop.
+
+00:00:41.376 --> 00:00:44.356 align:middle
+Si has seguido el curso «Conceptos básicos
+de seguridad», ya estás acostumbrado a esto:
+
+00:00:44.796 --> 00:00:49.466 align:middle
+tenemos un enlace de registro, uno de inicio de sesión
+y algunos usuarios predefinidos en nuestros fixtures.
+
+00:00:50.026 --> 00:00:53.626 align:middle
+Abre ` src/Story/AppStory.php ` para verlos.
+
+00:00:54.296 --> 00:01:00.136 align:middle
+Tenemos a picard@enterprise.space, con la contraseña makeitso
+—un capitán que es dueño de su propia nave espacial—
+
+00:01:00.456 --> 00:01:05.016 align:middle
+y a janeway@starfleet.space, con la contraseña
+coffeeblack, que es un administrador.
+
+00:01:05.616 --> 00:01:07.266 align:middle
+También hemos creado un
+montón de naves espaciales.
+
+00:01:08.266 --> 00:01:12.796 align:middle
+Inicia sesión como picard@enterprise.space
+con la contraseña makeitso.
+
+00:01:13.826 --> 00:01:17.076 align:middle
+Ahora ve a /starship para ver una
+lista de todas las naves espaciales.
+
+00:01:17.796 --> 00:01:19.346 align:middle
+Si te acuerdas del último curso,
+
+00:01:19.376 --> 00:01:22.266 align:middle
+lo configuramos para que solo el propietario
+de una nave espacial pueda editarla.
+
+00:01:22.266 --> 00:01:28.626 align:middle
+Pulsa el botón «Editar» y fíjate
+en la URL: estamos en /starship/1/edit.
+
+00:01:29.226 --> 00:01:33.266 align:middle
+Añadimos autorización para que los usuarios no
+puedan editar la nave espacial de otra persona.
+
+00:01:33.906 --> 00:01:35.196 align:middle
+Cambia ese ID por 2...
+
+00:01:35.546 --> 00:01:37.686 align:middle
+y nos sale un error 403.
+
+00:01:37.736 --> 00:01:43.296 align:middle
+Una cosa que tiene el error 403 es que
+sí que revela un poco de información:
+
+00:01:43.816 --> 00:01:47.256 align:middle
+nos dice que esta nave espacial
+probablemente sí existe en el sistema.
+
+00:01:47.556 --> 00:01:50.286 align:middle
+Se filtra. Quizá hayas visto esto en GitHub.
+
+00:01:50.546 --> 00:01:55.276 align:middle
+Ve a un repositorio que sepas que existe pero
+que sea privado —cuando no tengas autorización
+
+00:01:55.276 --> 00:01:57.766 align:middle
+para verlo—, GitHub te da un 404.
+
+00:01:58.236 --> 00:02:03.616 align:middle
+Eso evita que se filtre qué repositorios, o en nuestro
+caso, qué naves espaciales, existen en el sistema.
+
+00:02:04.326 --> 00:02:08.226 align:middle
+Podemos imitar ese comportamiento muy fácilmente
+con nuestro atributo « #[IsGranted] ».
+
+00:02:08.856 --> 00:02:12.866 align:middle
+Abre
+src/Controller/StarshipAdminController.php.
+
+00:02:14.246 --> 00:02:17.226 align:middle
+Para crear una nueva nave
+espacial, necesitamos ROLE_ADMIN.
+
+00:02:17.656 --> 00:02:20.896 align:middle
+No pasa nada si lo dejamos como
+un 403 normal, no se filtra nada.
+
+00:02:21.646 --> 00:02:26.276 align:middle
+Pero más abajo, en edit(), tenemos esto:
+#[IsGranted('edit', subject: 'starship')].
+
+00:02:27.046 --> 00:02:32.906 align:middle
+Pasa otro parámetro a ese atributo:
+statusCode: 404: actualiza la página...
+
+00:02:33.846 --> 00:02:35.456 align:middle
+y nos sale el mismo mensaje de error...
+
+00:02:35.686 --> 00:02:38.026 align:middle
+Pero fíjate aquí arriba: ¡ahora es un 404!
+
+00:02:38.726 --> 00:02:41.226 align:middle
+Recuerda que esta es nuestra
+página de excepción de desarrollo.
+
+00:02:41.556 --> 00:02:46.906 align:middle
+En producción, esto sería un 404 totalmente genérico
+—como cualquier otra página 404 del sitio—
+
+00:02:47.166 --> 00:02:48.586 align:middle
+así que no verías este mensaje.
+
+00:02:49.126 --> 00:02:53.096 align:middle
+Es una forma estupenda de evitar que se filtre
+la existencia del contenido de tu sitio web.
+
+00:02:53.776 --> 00:02:56.356 align:middle
+Comprueba una cosa más: copia esta URL...
+
+00:02:56.756 --> 00:02:57.456 align:middle
+y cierra sesión.
+
+00:02:59.166 --> 00:03:01.246 align:middle
+Pégala en el navegador mientras
+estamos en modo anónimo.
+
+00:03:01.836 --> 00:03:03.406 align:middle
+También vemos un 404.
+
+00:03:03.946 --> 00:03:08.446 align:middle
+Si se hubiera devuelto el error predeterminado, un 403,
+te habríamos redirigido a la página de inicio de sesión
+
+00:03:08.446 --> 00:03:10.516 align:middle
+tal y como está configurada
+nuestra seguridad ahora mismo,
+
+00:03:10.776 --> 00:03:13.096 align:middle
+y eso aún podría considerarse
+una pequeña filtración.
+
+00:03:13.686 --> 00:03:15.096 align:middle
+En cambio: un 404.
+
+00:03:15.386 --> 00:03:19.656 align:middle
+Nadie que no esté autorizado a editar esta nave
+espacial puede ni siquiera saber que existe.
+
+00:03:20.346 --> 00:03:23.496 align:middle
+Hay algunos otros parámetros relacionados
+con excepciones en este atributo.
+
+00:03:23.956 --> 00:03:25.186 align:middle
+Echa un vistazo a IsGranted.
+
+00:03:25.756 --> 00:03:29.626 align:middle
+Podemos configurar un « message » personalizado y
+también podemos establecer « exceptionCode » —
+
+00:03:29.956 --> 00:03:32.226 align:middle
+ese es el código real de la excepción en PHP.
+
+00:03:32.706 --> 00:03:34.826 align:middle
+Normalmente no hace falta configurarlos.
+
+00:03:35.046 --> 00:03:39.426 align:middle
+Y recuerda que, por defecto, los mensajes de
+excepción no se muestran a los usuarios finales.
+
+00:03:39.736 --> 00:03:41.556 align:middle
+Pero ten en cuenta que están ahí.
+
+00:03:42.266 --> 00:03:47.456 align:middle
+Una cosa más: también tenemos esta acción
+delete(), así que haz lo mismo aquí: statusCode:
+
+00:03:47.456 --> 00:03:53.246 align:middle
+404: Genial, hemos ocultado por completo
+estas dos rutas a los usuarios no autorizados.
+
+00:03:53.856 --> 00:03:55.916 align:middle
+Siguiente paso: ¡los estados de las cuentas!
+
+00:03:56.196 --> 00:03:59.056 align:middle
+Vamos a crear el concepto
+de desactivar usuarios.
