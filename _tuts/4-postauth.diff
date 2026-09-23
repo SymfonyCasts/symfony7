@@ -1,0 +1,60 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index ff14357..b2408db 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -1,5 +1,5 @@
+ security:
+-    expose_security_errors: all
++    expose_security_errors: account_status
+ 
+     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+     password_hashers:
+diff --git a/sfcasts/outline/planning.md b/sfcasts/outline/planning.md
+index 436d530..8b29aea 100644
+--- a/sfcasts/outline/planning.md
++++ b/sfcasts/outline/planning.md
+@@ -66,13 +66,6 @@
+ - Add `$vote?->addReason()` and show it in the profiler
+ - Drop the `ROLE_ADMIN` shortcut from `StarshipVoter`
+ 
+-## Sudo Mode: Requiring Full Authentication
+-- Log in with "remember me", delete `PHPSESSID`, refresh: still logged in
+-- Add `#[IsGranted('IS_AUTHENTICATED_FULLY')]` to `UserAdminController::edit()`
+-- Refresh: bounced to the login form, log in, land back on the page
+-- Compare it to `IS_AUTHENTICATED_REMEMBERED` and `IS_AUTHENTICATED`
+-- Mention the `access_control` version
+-
+ ## Redirecting After Login with `_target_path`
+ - Login always dumps you on the homepage
+ - But hit a protected URL first and Symfony returns you there
+diff --git a/src/Security/UserChecker.php b/src/Security/UserChecker.php
+index f655b3d..bf8b82b 100644
+--- a/src/Security/UserChecker.php
++++ b/src/Security/UserChecker.php
+@@ -11,6 +11,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
+ final class UserChecker implements UserCheckerInterface
+ {
+     public function checkPreAuth(UserInterface $user): void
++    {
++    }
++
++    public function checkPostAuth(UserInterface $user, ?TokenInterface $token = null): void
+     {
+         if (!$user instanceof User) {
+             return;
+@@ -20,8 +24,4 @@ final class UserChecker implements UserCheckerInterface
+             throw new DisabledException();
+         }
+     }
+-
+-    public function checkPostAuth(UserInterface $user, ?TokenInterface $token = null): void
+-    {
+-    }
+ }
+diff --git a/translations/security.en.yaml b/translations/security.en.yaml
+new file mode 100644
+index 0000000..6724b90
+--- /dev/null
++++ b/translations/security.en.yaml
+@@ -0,0 +1 @@
++'Invalid credentials.': 'Your email or password is incorrect.'

@@ -24,7 +24,17 @@
             "id": "3-equatable",
             "name": "3. equatable",
             "description": null
+        },
+        {
+            "id": "4-customize-auth-errors",
+            "name": "4. customize auth errors",
+            "description": null
+        },
+        {
+            "id": "4-postauth",
+            "name": "4. postauth",
+            "description": null
         }
     ],
-    "sha": "885628676342b63754739841bda727ae1eb68ec6"
+    "sha": "8058985b6fef5459bedec8cca0ca1acb3e365bc6"
 }

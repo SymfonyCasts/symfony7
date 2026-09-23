@@ -1,0 +1,11 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 8165716..ff14357 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -1,4 +1,6 @@
+ security:
++    expose_security_errors: all
++
+     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+     password_hashers:
+         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
