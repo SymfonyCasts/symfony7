@@ -1,0 +1,337 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:03.346 align:middle
+Vamos a añadir el concepto
+de usuarios desactivados.
+
+00:00:03.806 --> 00:00:07.326 align:middle
+Son usuarios que tienen algún tipo de
+indicador que los marca como desactivados.
+
+00:00:07.866 --> 00:00:09.956 align:middle
+Cuando están desactivados,
+no pueden iniciar sesión.
+
+00:00:09.956 --> 00:00:13.166 align:middle
+Y si ya han iniciado sesión, se les
+cerrará la sesión de inmediato.
+
+00:00:13.626 --> 00:00:15.316 align:middle
+Puedes pensar en esto como
+una eliminación temporal.
+
+00:00:15.836 --> 00:00:19.026 align:middle
+Eliminar al usuario de nuestra base de datos
+tendría, en la práctica, el mismo efecto,
+
+00:00:19.516 --> 00:00:23.146 align:middle
+pero desactivarlo te permite volver a
+activarlo más adelante por cualquier motivo.
+
+00:00:23.796 --> 00:00:26.276 align:middle
+Lo primero que necesitamos es un
+indicador en nuestra entidad ` User `.
+
+00:00:26.766 --> 00:00:32.066 align:middle
+Añádelo con el bundle Maker: symfony
+console make:entity Elige « User ».
+
+00:00:32.796 --> 00:00:33.966 align:middle
+Ahora, para el nombre de la propiedad...
+
+00:00:34.436 --> 00:00:38.196 align:middle
+podríamos añadir un indicador booleano « enabled
+», pero lo que me gusta hacer con este tipo
+
+00:00:38.196 --> 00:00:40.406 align:middle
+de indicadores es convertirlos
+en marcas de tiempo.
+
+00:00:40.756 --> 00:00:42.966 align:middle
+Si tienen una fecha y hora,
+eso significa «true».
+
+00:00:43.216 --> 00:00:45.026 align:middle
+Si es nulo, significa «false».
+
+00:00:45.506 --> 00:00:46.696 align:middle
+Usa « disabledAt ».
+
+00:00:47.346 --> 00:00:49.066 align:middle
+Esto te da un poco de control de auditoría.
+
+00:00:49.466 --> 00:00:52.426 align:middle
+Con un «verdadero/falso», no
+puedes ver cuándo se desactivaron.
+
+00:00:52.426 --> 00:00:56.556 align:middle
+Pero con esto, disabledAt es la hora
+exacta en la que se desactivaron,
+
+00:00:56.556 --> 00:00:59.616 align:middle
+así que tienes más visibilidad
+sobre cuándo cambió el estado.
+
+00:01:00.176 --> 00:01:01.666 align:middle
+Conviértelo en un datetime_immutable.
+
+00:01:02.226 --> 00:01:03.266 align:middle
+¿Puede este campo ser null?
+
+00:01:03.626 --> 00:01:07.286 align:middle
+¡Sí! Porque recuerda, un valor
+null significa que están activados.
+
+00:01:07.906 --> 00:01:08.506 align:middle
+Y… eso es todo.
+
+00:01:09.216 --> 00:01:14.706 align:middle
+Ahora crea rápidamente la migración:
+symfony console make:migration Vuelve
+
+00:01:14.706 --> 00:01:16.566 align:middle
+a nuestro IDE y busca la migración.
+
+00:01:17.686 --> 00:01:25.076 align:middle
+En la descripción, pon « add user.disabledAt
+column »: En src/Entity/User.php,
+
+00:01:26.636 --> 00:01:31.766 align:middle
+efectivamente, ahí está nuestra propiedad « disabledAt
+», y está en « null » por defecto, justo lo que queremos.
+
+00:01:32.276 --> 00:01:34.846 align:middle
+Cuando se crean usuarios,
+queremos que estén habilitados.
+
+00:01:35.766 --> 00:01:37.706 align:middle
+Aquí abajo tenemos el setter y el getter.
+
+00:01:38.076 --> 00:01:41.856 align:middle
+Voy a añadir un método auxiliar para que
+sea más fácil saber si están habilitados
+
+00:01:41.856 --> 00:01:51.866 align:middle
+o deshabilitados: public function isEnabled(): bool
+y, dentro, return null === $this->disabledAt;:
+
+00:01:52.646 --> 00:01:56.976 align:middle
+Foundry te permite añadir estados a tu
+fábrica, y es bastante sencillo de hacer.
+
+00:01:57.416 --> 00:02:01.696 align:middle
+Quiero añadir un estado « disabled » a nuestra
+fábrica de usuarios para que podamos crear usuarios
+
+00:02:01.696 --> 00:02:03.346 align:middle
+que estén desactivados desde
+el momento de su creación.
+
+00:02:03.966 --> 00:02:11.496 align:middle
+Ve a « src/Factory/UserFactory.php » y
+añade « public function disabled(): self ».
+
+00:02:12.176 --> 00:02:19.876 align:middle
+Dentro: « return $this->with(['disabledAt'
+=> new \DateTimeImmutable()]); »:
+
+00:02:21.586 --> 00:02:24.236 align:middle
+Ahora haz que Picard sea un
+usuario desactivado por defecto.
+
+00:02:24.656 --> 00:02:27.466 align:middle
+Ve a src/Story/AppStory.php.
+
+00:02:28.226 --> 00:02:32.996 align:middle
+Para Jean-Luc Picard, UserFactory::createOne()
+crea directamente el usuario.
+
+00:02:33.436 --> 00:02:39.166 align:middle
+Para añadir un estado, cambia createOne por new(), llama a
+disabled() sobre él y, a continuación, llama a create():
+
+00:02:39.776 --> 00:02:43.726 align:middle
+Podríamos haber mantenido createOne() y haber
+establecido la propiedad disabledAt en el array,
+
+00:02:44.086 --> 00:02:47.136 align:middle
+pero usar estados es reutilizable
+y, en mi opinión, más legible.
+
+00:02:47.746 --> 00:02:49.996 align:middle
+Vuelve a la consola y recarga los fixtures:
+
+00:02:50.376 --> 00:02:56.076 align:middle
+symfony console foundry:load-fixtures Picard
+debería aparecer marcado como desactivado.
+
+00:02:56.076 --> 00:02:59.866 align:middle
+Pero ese indicador aún no hace
+nada; hay que comprobarlo...
+
+00:03:00.106 --> 00:03:02.796 align:middle
+¡Y para eso sirve precisamente
+un servicio de UserChecker!
+
+00:03:03.666 --> 00:03:05.826 align:middle
+Crea una nueva clase en
+nuestro directorio src/.
+
+00:03:06.136 --> 00:03:10.046 align:middle
+Llámala « UserChecker », y el espacio
+de nombres será « App\Security »,
+
+00:03:10.086 --> 00:03:12.416 align:middle
+por lo que se encuentra en un
+subespacio de nombres « Security ».
+
+00:03:13.026 --> 00:03:17.036 align:middle
+Defínela como « final » y añade
+« implements UserCheckerInterface ».
+
+00:03:17.826 --> 00:03:20.136 align:middle
+Esta interfaz tiene dos métodos
+que tienes que implementar.
+
+00:03:20.586 --> 00:03:24.536 align:middle
+Está « checkPreAuth() », que se ejecuta
+cuando se ha obtenido el usuario correcto,
+
+00:03:24.816 --> 00:03:27.036 align:middle
+pero antes de que se compruebe
+que la contraseña es válida.
+
+00:03:27.696 --> 00:03:29.856 align:middle
+Y está « checkPostAuth() », que se llama
+
+00:03:29.856 --> 00:03:32.336 align:middle
+una vez que se ha comprobado que
+las credenciales son correctas.
+
+00:03:33.096 --> 00:03:35.806 align:middle
+No vamos a usar « checkPostAuth()
+», así que elimínalo.
+
+00:03:36.336 --> 00:03:43.026 align:middle
+Dentro de « checkPreAuth() », primero « if
+(!$user instanceof User) », y luego « return ».
+
+00:03:43.736 --> 00:03:51.066 align:middle
+Debajo de eso, « if (!$user->isEnabled()) »,
+y dentro de « throw new DisabledException(); »:
+
+00:03:51.786 --> 00:03:54.536 align:middle
+«DisabledException » es una
+excepción de estado de la cuenta.
+
+00:03:54.956 --> 00:03:58.626 align:middle
+Si lo analizas, verás que
+hereda de AccountStatusException:
+
+00:03:59.216 --> 00:04:02.036 align:middle
+este es el tipo de excepción que
+lanzas en un verificador de usuario,
+
+00:04:02.446 --> 00:04:04.736 align:middle
+ya sea en el método
+pre-auth o en el post-auth.
+
+00:04:05.476 --> 00:04:07.766 align:middle
+Puedes implementar tu propia
+excepción de estado de cuenta,
+
+00:04:08.056 --> 00:04:10.336 align:middle
+pero hay un montón de ellas listas para usar.
+
+00:04:10.986 --> 00:04:14.556 align:middle
+CredentialsExpiredException, por ejemplo,
+se podría lanzar si tienes un sistema
+
+00:04:14.556 --> 00:04:17.466 align:middle
+que caduca las credenciales
+a los 30 o 60 días.
+
+00:04:18.096 --> 00:04:21.466 align:middle
+También están AccountExpiredException
+y LockedException.
+
+00:04:22.026 --> 00:04:24.066 align:middle
+La que estamos usando es DisabledException.
+
+00:04:24.726 --> 00:04:28.236 align:middle
+Además está
+CustomUserMessageAccountStatusException —
+
+00:04:28.466 --> 00:04:32.026 align:middle
+todo un trabalenguas — que te permite
+lanzar una excepción de estado genérica.
+
+00:04:32.626 --> 00:04:35.326 align:middle
+Yo elegiría una de las
+específicas o crearía una propia,
+
+00:04:35.326 --> 00:04:38.596 align:middle
+para que quede más claro cuál
+es el estado real de la cuenta.
+
+00:04:39.306 --> 00:04:42.396 align:middle
+Este servicio existe, pero
+de momento no hace nada:
+
+00:04:42.536 --> 00:04:44.196 align:middle
+no está configurado
+automáticamente de ninguna manera.
+
+00:04:44.686 --> 00:04:47.006 align:middle
+Tenemos que habilitarlo en nuestra
+configuración de seguridad.
+
+00:04:47.716 --> 00:04:54.266 align:middle
+Abre config/packages/security.yaml y, en
+nuestro firewall main, añade user_checker:
+
+00:04:54.686 --> 00:04:58.396 align:middle
+App\Security\UserChecker:
+Ese es el ID del servicio.
+
+00:04:58.696 --> 00:05:03.246 align:middle
+Recuerda que, cuando Symfony realiza el autowiring de
+clases, utiliza el nombre de la clase como ID del servicio.
+
+00:05:03.246 --> 00:05:04.866 align:middle
+¡Y eso debería ser todo!
+
+00:05:05.216 --> 00:05:06.506 align:middle
+Intenta iniciar sesión como Picard.
+
+00:05:06.826 --> 00:05:12.096 align:middle
+Ve a la página de inicio de sesión,
+introduce picard@enterprise.space y makeitso.
+
+00:05:13.056 --> 00:05:15.296 align:middle
+Aparece el mensaje genérico
+«Credenciales no válidas».
+
+00:05:15.566 --> 00:05:18.076 align:middle
+En este caso, sí que he
+usado la contraseña correcta.
+
+00:05:18.376 --> 00:05:24.266 align:middle
+Pero como Picard está desactivado, no puede iniciar
+sesión: hemos lanzado esa excepción de estado de cuenta.
+
+00:05:24.936 --> 00:05:27.596 align:middle
+Hablaremos de cómo personalizar los
+mensajes de error un poco más adelante.
+
+00:05:28.366 --> 00:05:30.896 align:middle
+Así que, por ahora, los usuarios
+desactivados no pueden iniciar sesión.
+
+00:05:31.186 --> 00:05:35.166 align:middle
+Pero, ¿qué pasa si ya han iniciado sesión
+y se les desactiva durante la sesión?
+
+00:05:35.766 --> 00:05:40.146 align:middle
+A continuación: vamos a asegurarnos de que a un usuario desactivado
+se le cierre la sesión en el momento en que se le desactive.
