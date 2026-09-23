@@ -11,10 +11,10 @@ chapters:
     auth-error-messages:
         tutsFirstStep: null
         tutsLastStep: null
-    super-admin-voter:
+    sudo-mode:
         tutsFirstStep: null
         tutsLastStep: null
-    sudo-mode:
+    super-admin-voter:
         tutsFirstStep: null
         tutsLastStep: null
     target-path:

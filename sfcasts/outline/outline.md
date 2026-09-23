@@ -68,3 +68,36 @@
 - Login as picard with remember me, delete session cookie, refresh
 - `symfony console dbal:run-sql "UPDATE user SET disabled_at = datetime('now') WHERE email = 'picard@enterprise.space'"`
 - Refresh... logged out
+
+## Customizing Authentication Error Messages
+
+- visit `/login`
+    - picard@enterprise.space, password: `enterprise` - "Invalid credentials."
+    - picard@voyager.space, password: `makeitso` - "Invalid credentials."
+- `symfony console dbal:run-sql "UPDATE user SET disabled_at = datetime('now') WHERE email = 'picard@enterprise.space'"`
+- picard@enterprise.space, `makeitso` - "Invalid credentials."
+- in `security.yml`
+    - `expose_security_errors: all`
+- picard@enterprise.space, `makeitso` - "Account is disabled."
+- `symfony console foundry:load-fixtures` - picard is active again
+- picard@enterprise.space, `enterprise` - "Invalid credentials."
+- picard@voyager.space, `makeitso` - "Username could not be found." - user enumeration
+- `ExposeSecurityLevel`
+- in `security.yml`
+    - `expose_security_errors: account_status`
+- picard@enterprise.space, `enterprise` - "Invalid credentials."
+- picard@voyager.space, `makeitso` - "Invalid credentials."
+- disable picard again
+- picard@enterprise.space, makeitso - "Account is disabled."
+- picard@enterprise.space, enterprise - "Account is disabled."
+- still a small enumeration
+- open `src/Security/UserChecker.php`
+    - move the check to `checkPostAuth()
+- picard@enterprise.space, enterprise - "Invalid credentials." - perfect!
+- Now to customize the message
+- `templates/security/login.html.twig` - error message is being translated
+- Copy "Invalid credentials." and search the vendor dir
+    - used in exception and in `security.<locale>.xlf`
+- Create `translations/security.en.yaml`
+    - `Invalid credentials.`: 'Your email or password is incorrect.'
+- login with bad password

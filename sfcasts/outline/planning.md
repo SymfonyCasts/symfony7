@@ -53,6 +53,13 @@
 - `all` unmasks `UserNotFoundException` too - enumeration, dev only
 - Mention `CustomUserMessageAuthenticationException` for custom authenticators
 
+## Sudo Mode: Requiring Full Authentication
+- Log in with "remember me", delete `PHPSESSID`, refresh: still logged in
+- Add `#[IsGranted('IS_AUTHENTICATED_FULLY')]` to `UserAdminController::edit()`
+- Refresh: bounced to the login form, log in, land back on the page
+- Compare it to `IS_AUTHENTICATED_REMEMBERED` and `IS_AUTHENTICATED`
+- Mention the `access_control` version
+
 ## Super Admin Voter
 - `StarshipVoter` opens with an admin escape hatch - every voter repeats it
 - And `role_hierarchy` can't express "can do literally everything"
@@ -65,13 +72,6 @@
 - A super admin shouldn't be able to fake full authentication
 - Add `$vote?->addReason()` and show it in the profiler
 - Drop the `ROLE_ADMIN` shortcut from `StarshipVoter`
-
-## Sudo Mode: Requiring Full Authentication
-- Log in with "remember me", delete `PHPSESSID`, refresh: still logged in
-- Add `#[IsGranted('IS_AUTHENTICATED_FULLY')]` to `UserAdminController::edit()`
-- Refresh: bounced to the login form, log in, land back on the page
-- Compare it to `IS_AUTHENTICATED_REMEMBERED` and `IS_AUTHENTICATED`
-- Mention the `access_control` version
 
 ## Redirecting After Login with `_target_path`
 - Login always dumps you on the homepage
