@@ -1,0 +1,197 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:04.636 align:middle
+Hemos conseguido que un usuario
+inhabilitado ya no pueda iniciar sesión.
+
+00:00:05.196 --> 00:00:07.976 align:middle
+Pero, ¿qué pasa si ya ha iniciado
+sesión y está navegando por la web
+
+00:00:07.976 --> 00:00:10.316 align:middle
+y un administrador decide
+inhabilitar su cuenta?
+
+00:00:10.906 --> 00:00:14.236 align:middle
+Lo que queremos es que se le
+cierre la sesión automáticamente.
+
+00:00:14.796 --> 00:00:17.636 align:middle
+En cuanto te desactiven, ya
+no deberías poder hacer nada,
+
+00:00:17.826 --> 00:00:19.636 align:middle
+independientemente de si ya
+has iniciado sesión o no.
+
+00:00:20.216 --> 00:00:21.766 align:middle
+Veamos cómo podemos conseguirlo.
+
+00:00:22.156 --> 00:00:28.436 align:middle
+Primero, ve a src/Story/AppStory.php
+y no desactives a Picard por defecto:
+
+00:00:28.836 --> 00:00:32.336 align:middle
+vuelve a cambiarlo a createOne():
+Ahora recarga nuestros fixtures:
+
+00:00:32.556 --> 00:00:39.036 align:middle
+symfony console foundry:load-fixtures
+Picard ya no está desactivado.
+
+00:00:39.516 --> 00:00:45.596 align:middle
+Vuelve a la página de inicio de sesión e inicia sesión
+como picard@enterprise.space con la contraseña makeitso.
+
+00:00:46.796 --> 00:00:48.466 align:middle
+Genial, hemos iniciado sesión como Picard.
+
+00:00:49.126 --> 00:00:52.036 align:middle
+Ahora quiero simular que un
+administrador desactiva su cuenta.
+
+00:00:52.406 --> 00:00:58.266 align:middle
+Ejecuta un poco de SQL sin procesar para
+hacerlo: symfony console dbal:run-sql
+
+00:00:58.706 --> 00:01:04.526 align:middle
+"UPDATE user SET disabled_at = datetime('now')
+
+00:01:05.046 --> 00:01:11.486 align:middle
+WHERE email = 'picard@enterprise.space'"
+Estoy usando SQLite,
+
+00:01:11.486 --> 00:01:14.896 align:middle
+así que la función para obtener la
+marca de tiempo actual es datetime('now').
+
+00:01:15.416 --> 00:01:20.306 align:middle
+Si usas MySQL o Postgres, es NOW(), así
+que, dependiendo de tu configuración,
+
+00:01:20.306 --> 00:01:21.866 align:middle
+quizá tengas que ajustarlo un poco.
+
+00:01:22.456 --> 00:01:23.006 align:middle
+Pulsa Intro...
+
+00:01:23.556 --> 00:01:24.536 align:middle
+una fila afectada.
+
+00:01:24.906 --> 00:01:26.896 align:middle
+Perfecto. Picard ya debería estar desactivado.
+
+00:01:27.556 --> 00:01:29.716 align:middle
+Vuelve a la app en el navegador
+y actualiza la página...
+
+00:01:30.916 --> 00:01:32.006 align:middle
+y seguimos conectados.
+
+00:01:32.356 --> 00:01:35.606 align:middle
+Así que ese verificador de usuarios
+no se ejecuta en cada petición.
+
+00:01:36.376 --> 00:01:39.566 align:middle
+Hay un par de formas de forzar el cierre
+de sesión cuando se desactiva un usuario.
+
+00:01:39.906 --> 00:01:44.466 align:middle
+La más fácil es cambiar algo del
+usuario que se detecte en cada petición.
+
+00:01:45.026 --> 00:01:49.566 align:middle
+Quizá recuerdes que hicimos algo parecido en
+el último curso: cuando cambias la contraseña
+
+00:01:49.566 --> 00:01:52.796 align:middle
+de un usuario, ese usuario se
+desconecta automáticamente.
+
+00:01:53.246 --> 00:01:57.816 align:middle
+Así es como podríamos gestionar una función de «cerrar sesión en
+otros dispositivos»: basta con volver a generar el hash de la contraseña.
+
+00:01:58.586 --> 00:02:01.406 align:middle
+La forma más fácil de lograrlo
+es en nuestra entidad ` User `.
+
+00:02:02.426 --> 00:02:06.466 align:middle
+Tenemos este método ` getRoles() `,
+que se comprueba en cada petición.
+
+00:02:07.186 --> 00:02:15.706 align:middle
+Añade ` if (!$this->isEnabled()) ` y, dentro,
+` $roles[] = 'ROLE_DISABLED';`: Ahora bien,
+
+00:02:15.706 --> 00:02:17.496 align:middle
+este rol no significa realmente nada.
+
+00:02:17.816 --> 00:02:22.716 align:middle
+Lo único para lo que lo usamos es para cambiar el valor
+de retorno de ` getRoles()`, y eso basta para decir
+
+00:02:22.716 --> 00:02:25.906 align:middle
+«oye, este usuario ha cambiado, así
+que tenemos que cerrarle la sesión».
+
+00:02:26.496 --> 00:02:27.996 align:middle
+Vuelve a nuestra app y actualiza la página...
+
+00:02:28.776 --> 00:02:31.486 align:middle
+Efectivamente, nos han cerrado la
+sesión, porque ese usuario ha cambiado.
+
+00:02:32.386 --> 00:02:35.226 align:middle
+Hay una cosa que quiero comprobar bien: que
+esto funcione con la opción «Recordarme».
+
+00:02:35.626 --> 00:02:37.106 align:middle
+Debería funcionar, pero asegurémonos.
+
+00:02:37.816 --> 00:02:45.426 align:middle
+Vuelve a la consola y vuelve a cargar los fixtures:
+Inicia sesión como picard@enterprise.space
+
+00:02:45.456 --> 00:02:49.296 align:middle
+con la contraseña makeitso y, esta vez, asegúrate
+de que la casilla «Recordarme» esté marcada.
+
+00:02:49.996 --> 00:02:50.866 align:middle
+Ya hemos vuelto a iniciar sesión.
+
+00:02:51.506 --> 00:02:57.266 align:middle
+Ahora inspecciona la página, ve a la pestaña
+«Aplicación», busca la cookie « PHPSESSID » y elimínala.
+
+00:02:58.016 --> 00:03:01.966 align:middle
+Así solo queda la cookie de «Recordarme», así
+que deberíamos activar el sistema de «Recordarme».
+
+00:03:02.636 --> 00:03:04.376 align:middle
+Cierra esto y actualiza la página.
+
+00:03:05.086 --> 00:03:09.796 align:middle
+Pasa el cursor por encima del usuario en la barra de herramientas de
+depuración web: como era de esperar, estamos usando el token de «Recordarme».
+
+00:03:10.546 --> 00:03:15.896 align:middle
+Ahora aplica nuestro pequeño truco de la base de datos para
+desactivar al usuario: la misma consulta SQL: una fila afectada.
+
+00:03:16.496 --> 00:03:18.016 align:middle
+Vuelve atrás, actualiza...
+
+00:03:19.126 --> 00:03:20.036 align:middle
+y ya hemos cerrado sesión.
+
+00:03:20.356 --> 00:03:23.926 align:middle
+Funciona tanto con la autenticación basada
+en sesión como con la de «recordarme».
+
+00:03:24.766 --> 00:03:27.966 align:middle
+A continuación: los mensajes que mostramos
+cuando hay un error de autenticación,
+
+00:03:28.086 --> 00:03:29.626 align:middle
+y cómo podemos personalizarlos.
