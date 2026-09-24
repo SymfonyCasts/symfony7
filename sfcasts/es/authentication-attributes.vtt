@@ -275,10 +275,10 @@ los mismos valores que cuando iniciamos sesión con
 «Recordarme» marcado... incluso IS_AUTHENTICATED_REMEMBERED...
 
 00:04:30.116 --> 00:04:32.176 align:middle
-Qué pasa con
+¿Qué pasa aquí?
 
 00:04:32.606 --> 00:04:33.276 align:middle
-¿ eso? « IS_AUTHENTICATED_REMEMBERED » es
+IS_AUTHENTICATED_REMEMBERED Es
 
 00:04:34.006 --> 00:04:38.236 align:middle
 una pequeña peculiaridad histórica
