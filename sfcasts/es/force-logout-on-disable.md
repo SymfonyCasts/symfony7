@@ -49,14 +49,13 @@ Quizá recuerdes que ya hicimos algo parecido en el último curso: cuando cambia
 contraseña de un usuario, ese usuario se desconecta automáticamente. Así es como podríamos gestionar una
 función de «desconectarse de otros dispositivos»: basta con volver a generar el hash de la contraseña.
 
-Así que la forma más fácil de lograrlo es en nuestra entidad ` `User` `. Tenemos este método ` `getRoles()`` 
-, que se comprueba en cada petición. Añade ` `if (!$this->isEnabled())` ` y,
-dentro, ` `$roles[] = 'ROLE_DISABLED';``:
+Así que la forma más fácil de lograrlo es en nuestra entidad `User`. Tenemos este método `getRoles()`, que se comprueba en cada petición. Añade `if (!$this->isEnabled())` y,
+dentro, `$roles[] = 'ROLE_DISABLED';`:
 
 [[[ code('dafa6eb46b') ]]]
 
 Ahora bien, este rol en realidad no significa nada. Solo lo usamos para cambiar el
-valor de retorno de ` `getRoles()``, y eso basta para decir «oye, este usuario ha cambiado, así que
+valor de retorno de `getRoles()`, y eso basta para decir «oye, este usuario ha cambiado, así que
 tenemos que cerrarle la sesión».
 
 Vuelve a nuestra app y actualiza la página... Efectivamente, nos hemos desconectado, porque ese usuario
