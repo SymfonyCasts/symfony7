@@ -30,18 +30,18 @@ activarlo más adelante por cualquier motivo.
 
 00:00:23.796 --> 00:00:26.276 align:middle
 Lo primero que necesitamos es un
-indicador en nuestra entidad ` User `.
+indicador en nuestra entidad `User`.
 
 00:00:26.766 --> 00:00:32.066 align:middle
 Añádelo con el bundle Maker: symfony
-console make:entity Elige « User ».
+console make:entity Elige User.
 
 00:00:32.796 --> 00:00:33.966 align:middle
 Ahora, para el nombre de la propiedad...
 
 00:00:34.436 --> 00:00:38.196 align:middle
-podríamos añadir un indicador booleano « enabled
-», pero lo que me gusta hacer con este tipo
+podríamos añadir un indicador booleano « enabled»,
+pero lo que me gusta hacer con este tipo
 
 00:00:38.196 --> 00:00:40.406 align:middle
 de indicadores es convertirlos
