@@ -10,13 +10,13 @@ por cualquier motivo.
 
 ## Añadir el indicador « `disabledAt` »
 
-Lo primero que necesitamos es un indicador en nuestra entidad « `User` ». Añádelo con el bundle Maker:
+Lo primero que necesitamos es un indicador en nuestra entidad `User`. Añádelo con el bundle Maker:
 
 ```terminal
 symfony console make:entity
 ```
 
-Elige « `User` ». Ahora, para el nombre de la propiedad… podríamos añadir un indicador booleano « `enabled` »,
+Elige `User`. Ahora, para el nombre de la propiedad… podríamos añadir un indicador booleano « `enabled` »,
 pero lo que me gusta hacer con este tipo de indicadores es convertirlos en marcas de tiempo. Si
 tienen una fecha y hora, significa «true». Si es nulo, significa «false».
 
