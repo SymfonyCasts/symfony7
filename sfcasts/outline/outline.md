@@ -101,3 +101,31 @@
 - Create `translations/security.en.yaml`
     - `Invalid credentials.`: 'Your email or password is incorrect.'
 - login with bad password
+
+# Sudo Mode: Requiring Full Authentication
+
+- When performing sensitive operations, confirm the users password
+- `AuthenticatedVoter::IS_AUTHENTICATED_FULLY` - user has provided their password
+- Can use with any IsGranted call
+- Let's use access_control
+- `config/packages/security.yaml`
+    - `access_control: { path: ^/admin, roles: [ROLE_ADMIN, IS_AUTHENTICATED_FULLY] }`?
+    - No, this is an OR, not an AND
+    - `allow_if: "is_granted('ROLE_ADMIN') and is_granted('IS_AUTHENTICATED_FULLY')"`
+- visit app and refresh... error
+- `composer require symfony/expression-language`
+- refresh... login as `janeway@starfleet.space`, `coffeeblack`
+- visit `/admin/user`
+- delete session cookie, refresh... redirected to login
+- `janeway@starfleet.space`, `coffeeblack`
+- All good, but let's make it a little more user friendly
+- visit `/admin/user`, delete cookie and refresh
+- we don't need to refill email, just the password
+- `templates/security/login.html.twig`
+    - adjust header if app.user - "Confirm your password"
+    - Delete the already logged in message
+    - swap email div: `<input type="hidden" name="_username" value="{{ app.user.userIdentifier }}">`
+    - swap remember me div: `<input type="hidden" name="_remember_me" value="1">`
+    - `{{ app.user ? 'Confirm' : 'Sign in' }}`
+- refresh... `coffeeblack`, confirm... all good!
+- logout and login again as janeway
