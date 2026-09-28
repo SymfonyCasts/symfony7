@@ -1,0 +1,195 @@
+diff --git a/composer.json b/composer.json
+index c8bf71b..9f266b4 100644
+--- a/composer.json
++++ b/composer.json
+@@ -22,6 +22,7 @@
+         "symfony/asset-mapper": "8.0.*",
+         "symfony/console": "8.0.*",
+         "symfony/dotenv": "8.0.*",
++        "symfony/expression-language": "8.0.*",
+         "symfony/flex": "^2.10",
+         "symfony/form": "8.0.*",
+         "symfony/framework-bundle": "8.0.*",
+diff --git a/composer.lock b/composer.lock
+index 72be9d2..d5d6a5a 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "091e61b004d2d83f6351f68b3318ff1f",
++    "content-hash": "90c08e09c3147b7d7ddd404fc0fe0b1b",
+     "packages": [
+         {
+             "name": "babdev/pagerfanta-bundle",
+@@ -3431,6 +3431,73 @@
+             ],
+             "time": "2026-01-05T13:30:16+00:00"
+         },
++        {
++            "name": "symfony/expression-language",
++            "version": "v8.0.14",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/symfony/expression-language.git",
++                "reference": "05852d82e9a1ae3fb52a53d2998904f058e4cd81"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/symfony/expression-language/zipball/05852d82e9a1ae3fb52a53d2998904f058e4cd81",
++                "reference": "05852d82e9a1ae3fb52a53d2998904f058e4cd81",
++                "shasum": ""
++            },
++            "require": {
++                "php": ">=8.4",
++                "symfony/cache": "^7.4|^8.0",
++                "symfony/service-contracts": "^2.5|^3"
++            },
++            "type": "library",
++            "autoload": {
++                "psr-4": {
++                    "Symfony\\Component\\ExpressionLanguage\\": ""
++                },
++                "exclude-from-classmap": [
++                    "/Tests/"
++                ]
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "authors": [
++                {
++                    "name": "Fabien Potencier",
++                    "email": "fabien@symfony.com"
++                },
++                {
++                    "name": "Symfony Community",
++                    "homepage": "https://symfony.com/contributors"
++                }
++            ],
++            "description": "Provides an engine that can compile and evaluate expressions",
++            "homepage": "https://symfony.com",
++            "support": {
++                "source": "https://github.com/symfony/expression-language/tree/v8.0.14"
++            },
++            "funding": [
++                {
++                    "url": "https://symfony.com/sponsor",
++                    "type": "custom"
++                },
++                {
++                    "url": "https://github.com/fabpot",
++                    "type": "github"
++                },
++                {
++                    "url": "https://github.com/nicolas-grekas",
++                    "type": "github"
++                },
++                {
++                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
++                    "type": "tidelift"
++                }
++            ],
++            "time": "2026-06-09T10:20:00+00:00"
++        },
+         {
+             "name": "symfony/filesystem",
+             "version": "v8.0.11",
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index b2408db..51d04a9 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -46,7 +46,7 @@ security:
+ 
+     # Note: Only the *first* matching rule is applied
+     access_control:
+-        - { path: ^/admin, roles: ROLE_ADMIN }
++        - { path: ^/admin, allow_if: "is_granted('ROLE_ADMIN') and is_granted('IS_AUTHENTICATED_FULLY')" }
+         # - { path: ^/profile, roles: ROLE_USER }
+ 
+     role_hierarchy:
+diff --git a/templates/security/login.html.twig b/templates/security/login.html.twig
+index e55d57f..f6a2ed5 100644
+--- a/templates/security/login.html.twig
++++ b/templates/security/login.html.twig
+@@ -8,8 +8,12 @@
+             <div class="rounded-2xl border border-white/10 bg-[#16202A]/80 p-8 shadow-2xl shadow-black/30 backdrop-blur-sm">
+                 <div class="mb-8">
+                     <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Security</p>
+-                    <h1 class="mt-3 text-4xl font-semibold">Sign in</h1>
+-                    <p class="mt-3 text-sm text-white/70">Use your email and password to continue.</p>
++                    {% if app.user %}
++                        <h1 class="mt-3 text-4xl font-semibold">Confirm your password</h1>
++                    {% else %}
++                        <h1 class="mt-3 text-4xl font-semibold">Sign in</h1>
++                        <p class="mt-3 text-sm text-white/70">Use your email and password to continue.</p>
++                    {% endif %}
+                 </div>
+ 
+                 <form method="post" class="space-y-6" data-turbo="false">
+@@ -20,26 +24,23 @@
+                     {% endif %}
+ 
+                     {% if app.user %}
+-                        <div class="rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
+-                            You are logged in as {{ app.user.userIdentifier }},
+-                            <a class="font-semibold text-cyan-300 hover:text-cyan-200" href="{{ logout_path() }}">logout</a>
++                        <input type="hidden" name="_username" value="{{ app.user.userIdentifier }}">
++                    {% else %}
++                        <div>
++                            <label for="username" class="mb-2 block text-sm font-medium text-white/80">Email</label>
++                            <input
++                                type="email"
++                                value="{{ last_username }}"
++                                name="_username"
++                                id="username"
++                                class="block w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 focus:border-cyan-400 focus:ring-cyan-400"
++                                autocomplete="email"
++                                required
++                                autofocus
++                            >
+                         </div>
+                     {% endif %}
+ 
+-                    <div>
+-                        <label for="username" class="mb-2 block text-sm font-medium text-white/80">Email</label>
+-                        <input
+-                            type="email"
+-                            value="{{ last_username }}"
+-                            name="_username"
+-                            id="username"
+-                            class="block w-full rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 focus:border-cyan-400 focus:ring-cyan-400"
+-                            autocomplete="email"
+-                            required
+-                            autofocus
+-                        >
+-                    </div>
+-
+                     <div>
+                         <label for="password" class="mb-2 block text-sm font-medium text-white/80">Password</label>
+                         <input
+@@ -54,13 +55,17 @@
+ 
+                     <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+ 
+-                    <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
+-                        <input type="checkbox" checked name="_remember_me" id="_remember_me" class="rounded border-white/20 bg-transparent text-cyan-400 focus:ring-cyan-400">
+-                        <label for="_remember_me">Remember me</label>
+-                    </div>
++                    {% if app.user %}
++                        <input type="hidden" name="_remember_me" value="1">
++                    {% else %}
++                        <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
++                            <input type="checkbox" checked name="_remember_me" id="_remember_me" class="rounded border-white/20 bg-transparent text-cyan-400 focus:ring-cyan-400">
++                            <label for="_remember_me">Remember me</label>
++                        </div>
++                    {% endif %}
+ 
+                     <button class="w-full rounded-lg bg-green-700 px-5 py-3 font-semibold text-white transition hover:bg-green-800 cursor-pointer" type="submit">
+-                        Sign in
++                        {{ app.user ? 'Confirm' : 'Sign in' }}
+                     </button>
+                 </form>
+             </div>

@@ -34,7 +34,12 @@
             "id": "4-postauth",
             "name": "4. postauth",
             "description": null
+        },
+        {
+            "id": "5-sudo",
+            "name": "5. sudo",
+            "description": null
         }
     ],
-    "sha": "8058985b6fef5459bedec8cca0ca1acb3e365bc6"
+    "sha": "324a86d34e431564c6645abada6e605bcc0dc77e"
 }

@@ -9,24 +9,6 @@ index ff14357..b2408db 100644
  
      # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
      password_hashers:
-diff --git a/sfcasts/outline/planning.md b/sfcasts/outline/planning.md
-index 436d530..8b29aea 100644
---- a/sfcasts/outline/planning.md
-+++ b/sfcasts/outline/planning.md
-@@ -66,13 +66,6 @@
- - Add `$vote?->addReason()` and show it in the profiler
- - Drop the `ROLE_ADMIN` shortcut from `StarshipVoter`
- 
--## Sudo Mode: Requiring Full Authentication
--- Log in with "remember me", delete `PHPSESSID`, refresh: still logged in
--- Add `#[IsGranted('IS_AUTHENTICATED_FULLY')]` to `UserAdminController::edit()`
--- Refresh: bounced to the login form, log in, land back on the page
--- Compare it to `IS_AUTHENTICATED_REMEMBERED` and `IS_AUTHENTICATED`
--- Mention the `access_control` version
--
- ## Redirecting After Login with `_target_path`
- - Login always dumps you on the homepage
- - But hit a protected URL first and Symfony returns you there
 diff --git a/src/Security/UserChecker.php b/src/Security/UserChecker.php
 index f655b3d..bf8b82b 100644
 --- a/src/Security/UserChecker.php
