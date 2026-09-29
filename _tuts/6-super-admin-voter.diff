@@ -1,0 +1,39 @@
+diff --git a/src/Security/Voter/SuperAdminVoter.php b/src/Security/Voter/SuperAdminVoter.php
+new file mode 100644
+index 0000000..3fc062f
+--- /dev/null
++++ b/src/Security/Voter/SuperAdminVoter.php
+@@ -0,0 +1,20 @@
++<?php
++
++namespace App\Security\Voter;
++
++use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
++use Symfony\Component\Security\Core\Authorization\Voter\Vote;
++use Symfony\Component\Security\Core\Authorization\Voter\Voter;
++
++final class SuperAdminVoter extends Voter
++{
++    protected function supports(string $attribute, mixed $subject): bool
++    {
++        return true;
++    }
++
++    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
++    {
++        return in_array('ROLE_SUPER_ADMIN', $token->getRoleNames(), true);
++    }
++}
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 6a04855..377cdf0 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -32,7 +32,7 @@ final class AppStory extends Story
+             'email' => 'janeway@starfleet.space',
+             'password' => 'coffeeblack',
+             'name' => 'Kathryn Janeway',
+-            'roles' => ['ROLE_ADMIN'],
++            'roles' => ['ROLE_SUPER_ADMIN'],
+         ]);
+ 
+         StarshipFactory::createOne([

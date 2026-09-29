@@ -39,7 +39,17 @@
             "id": "5-sudo",
             "name": "5. sudo",
             "description": null
+        },
+        {
+            "id": "6-super-admin-voter",
+            "name": "6. super admin voter",
+            "description": null
+        },
+        {
+            "id": "6-super-admin-supports",
+            "name": "6. super admin supports",
+            "description": null
         }
     ],
-    "sha": "324a86d34e431564c6645abada6e605bcc0dc77e"
+    "sha": "7a5efcd9aec94cf7624d1ffad904793444e74e2b"
 }
