@@ -129,3 +129,25 @@
     - `{{ app.user ? 'Confirm' : 'Sign in' }}`
 - refresh... `coffeeblack`, confirm... all good!
 - logout and login again as janeway
+
+## Super Admin Voter
+
+- `StarshipVoter` opens with an admin escape hatch - every voter repeats it
+- `config/packages/security.yaml` - role hierarchy can only go so far...
+- Let's make a level above admin: super admin
+- `src/Story/AppStory.php`
+    - change janeway from `ROLE_ADMIN` to `ROLE_SUPER_ADMIN`
+- `symfony console foundry:load-fixtures`
+- `symfony console make:voter SuperAdminVoter`
+- `src/Security/SuperAdminVoter.php`
+    - clear out everything...
+    - `supports()` - `return true`
+    - `voteOnAttribute()` `return in_array('ROLE_SUPER_ADMIN', $token->getRoleNames(), true);`
+- Small problem...
+- Some built-in attributes aren't for permission, but authentication status
+- `AuthenticatedVoter` constants...
+- `private const EXCLUSIONS = []` - add all the consts
+- in `supports()` - return `!in_array($attribute, self::EXCLUSIONS, true)`
+- login as janeway, visit `/starship`
+- We can edit any starship still, edit one...
+- Check the profiler - access decision tab
