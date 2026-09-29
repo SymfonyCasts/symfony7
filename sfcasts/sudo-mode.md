@@ -14,7 +14,7 @@ before they can continue.
 Copy that name. You can use this with any `#[IsGranted]`, but I want to blanket our
 whole admin section - everything under `/admin` - with this requirement.
 
-## An access_control Expression
+## An `access_control` Expression
 
 Go to `config/packages/security.yaml`. Down here in `access_control`, we already have
 a rule: for anything starting with `/admin`, we require `ROLE_ADMIN`.

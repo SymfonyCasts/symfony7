@@ -46,7 +46,7 @@ For `supports()`, we're going to support *everything*, so just return `true`:
 
 Any attribute, any subject: it doesn't matter, this voter supports it.
 
-## Voting on ROLE_SUPER_ADMIN
+## Voting on `ROLE_SUPER_ADMIN`
 
 Here's the important part: `voteOnAttribute()`. Whether they have permission or not
 is what we check here.

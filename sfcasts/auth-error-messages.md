@@ -55,7 +55,7 @@ job board, or a support community for a medical condition. Confirming an address
 registered, hands that fact to anyone who asks. And even on a boring site, a list of
 usernames that definitely exist makes a password-guessing attack much cheaper.
 
-## The Middle Ground: account_status
+## The Middle Ground: `account_status`
 
 There's an in-between. `expose_security_errors` is actually an enum: look up
 `ExposeSecurityLevel`. We can see `none` - that's the default - `all`, which is
@@ -84,7 +84,7 @@ This is maybe not as big a deal as exposing that a username doesn't exist - you
 probably won't have tens of thousands of disabled accounts for someone to farm. But
 it's still a small security hole that allows some user enumeration.
 
-## Moving the Check to checkPostAuth()
+## Moving the Check to `checkPostAuth()`
 
 The reason for this is how we wired up our user checker. Find it in
 `src/Security/UserChecker.php`.
