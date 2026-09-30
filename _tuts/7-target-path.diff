@@ -1,0 +1,12 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 51d04a9..5b42d76 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -26,6 +26,7 @@ security:
+                 login_path: app_login
+                 check_path: app_login
+                 enable_csrf: true
++                use_referer: true
+             logout:
+                 path: app_logout
+                 enable_csrf: true

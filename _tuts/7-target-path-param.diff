@@ -1,0 +1,25 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 5b42d76..51d04a9 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -26,7 +26,6 @@ security:
+                 login_path: app_login
+                 check_path: app_login
+                 enable_csrf: true
+-                use_referer: true
+             logout:
+                 path: app_logout
+                 enable_csrf: true
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index 94ca155..434034d 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -84,7 +84,7 @@
+                             <a class="hover:text-amber-400 pt-2" href="{{ path('app_register') }}">
+                                 Register
+                             </a>
+-                            <a class="hover:text-amber-400 pt-2" href="{{ path('app_login') }}">
++                            <a class="hover:text-amber-400 pt-2" href="{{ path('app_login', { _target_path: app.request.pathInfo }) }}">
+                                 Login
+                             </a>
+                         {% endif %}

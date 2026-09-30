@@ -49,7 +49,22 @@
             "id": "6-super-admin-supports",
             "name": "6. super admin supports",
             "description": null
+        },
+        {
+            "id": "7-target-path",
+            "name": "7. target-path",
+            "description": null
+        },
+        {
+            "id": "7-target-path-param",
+            "name": "7. target path param",
+            "description": null
+        },
+        {
+            "id": "7-custom-param",
+            "name": "7. custom param",
+            "description": null
         }
     ],
-    "sha": "7a5efcd9aec94cf7624d1ffad904793444e74e2b"
+    "sha": "09cfdfb91095c184cf8c6067f6e1775292fa7f90"
 }
