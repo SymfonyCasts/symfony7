@@ -98,6 +98,19 @@
 - Hide the "switch to" link with `is_granted('ROLE_ALLOWED_TO_SWITCH', user)`
 - `SuperAdminVoter` overrides this on purpose
 
+## Resetting a Forgotten Password
+- No way back in today if you forget your password
+- `composer require symfonycasts/reset-password-bundle`
+- `symfony console make:reset-password`
+- Walk the generated flow: request, email, token, reset
+- Tokens are hashed and single-use, with a short expiration
+
+## Adding a Change Password Form
+- For a user who *is* logged in and just wants a new password
+- Unmapped `plainPassword` field, hash it, flush
+- Changing the hash logs out their other sessions - `hasUserChanged()` again
+- Symfony re-authenticates the current session so they aren't kicked out
+
 ## `NotCompromisedPassword` Validator
 - Add `new NotCompromisedPassword()` to `plainPassword` in registration
 - Register with `password123` and watch it fail
@@ -146,6 +159,24 @@
 - Fires on every request of a stateful firewall - keep the listener cheap
 - Scope it per firewall with `dispatcher: 'security.event_dispatcher.main'`
 
+## Improved Sudo Mode (8.2)
+- Park until Symfony 8.2 is released
+- Our sudo mode chapter leans on `IS_AUTHENTICATED_FULLY`
+- But that says *how* you logged in, not *when*
+- A login from three hours ago still counts as "fully"
+- 8.2 adds `IS_AUTHENTICATED_RECENTLY` - credentials within 2 hours
+- And `IS_AUTHENTICATED_VERY_RECENTLY` - within 5 minutes
+- Tune both with `*_authentication_lifetime` config keys
+- Swap our `access_control` expression over to the new attribute
+- Expression functions too: `is_recently_authenticated()` and the very_ variant
+- Put `IS_AUTHENTICATED_VERY_RECENTLY` on something scary, like delete
+- A denial now starts a `ReAuthenticationEntryPointInterface`
+- Point it at a confirm-password page with `re_authentication_entry_point`
+- Our hand-rolled confirm form from earlier becomes a supported flow
+- `TokenInterface::getAuthenticationProofs()` holds the methods and timestamps
+- `AuthenticationMethod` + `AuthenticationMethodBadge` declare the method used
+- Subclass `AuthenticationTrustResolver` for custom rules
+- Blog post: https://symfony.com/blog/new-in-symfony-8-2-sudo-mode
+
 ## Advanced bonus topics
 - `debug:roles` + the role hierarchy graph in the profiler (8.2)
-- Reset password w/ `symfonycasts/reset-password-bundle`

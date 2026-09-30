@@ -26,6 +26,12 @@ chapters:
     impersonation-voter:
         tutsFirstStep: null
         tutsLastStep: null
+    reset-password:
+        tutsFirstStep: null
+        tutsLastStep: null
+    change-password:
+        tutsFirstStep: null
+        tutsLastStep: null
     not-compromised-password:
         tutsFirstStep: null
         tutsLastStep: null
@@ -39,5 +45,8 @@ chapters:
         tutsFirstStep: null
         tutsLastStep: null
     check-refreshed-user-event:
+        tutsFirstStep: null
+        tutsLastStep: null
+    improved-sudo-mode:
         tutsFirstStep: null
         tutsLastStep: null
