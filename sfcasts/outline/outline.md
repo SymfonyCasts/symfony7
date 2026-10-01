@@ -151,3 +151,57 @@
 - login as janeway, visit `/starship`
 - We can edit any starship still, edit one...
 - Check the profiler - access decision tab
+
+## Redirecting After Login with `_target_path`
+
+- when logged out and visiting `/admin/user`
+    - redirected to `/login`, then back to `/admin/user`
+- when logged out and on `/starship`
+    - click "Login" - redirected to homepage...
+- `symfony console config:dump security firewalls`
+    - find `form_login`
+        - `default_target_path: /`
+        - `use_referer: true
+- try again... didn't work... it get's muddled in the redirect
+- let's be explicit `target_path_parameter: _target_path`
+- `templates/base.html.twig`
+    - `{{ path('app_login', { _target_path: app.request.pathInfo }) }}`
+- try again... redirected back!
+- Query param feels a bit "internal"
+- `target_path_parameter: referrer`
+- `templates/base.html.twig`
+    - `{{ path('app_login', { referrer: app.request.pathInfo }) }}`
+- try again... still redirected back!
+- Small SEO thing:
+    - `templates/base.html.twig`: add `metadata` block
+    - `templates/security/login.html.twig`
+        - override block
+        - add `<link rel="canonical" href="{{ url('app_login') }}">`
+
+## Login with Username or Email
+
+- `symfony console make:entity User` - username
+- `User`
+    - duplicate `#[UniqueEntity]` and `#[ORM\UniqueConstraint]` for username
+    - `#[Assert\NotBlank]` to `$username`
+- `symfony console make:migration`
+- (migration) - `add user.username column`
+- `UserFactory` - `'username' => self::faker()->unique()->userName(),
+- `AppStory` - add username for picard and janeway
+- `symfony console foundry:load-fixtures`
+- `RegistrationFormType` - add username field
+- `login.html.twig`
+    - "Use your email/username..."
+    - label: "Email or Username"
+    - `type="text"` for username/email
+- `UserRepository` implements `UserLoaderInterface`
+    - implement method
+    - `return $this->createQueryBuilder('u')
+            ->where('u.email = :identifier')
+            ->orWhere('u.username = :identifier')
+            ->setParameter('identifier', $identifier)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;`
+- `security.yaml` - remove `property: email` from `app_user_provider`
+- try it out: login with username, then email - both work!
