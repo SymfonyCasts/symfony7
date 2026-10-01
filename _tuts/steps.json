@@ -64,7 +64,12 @@
             "id": "7-custom-param",
             "name": "7. custom param",
             "description": null
+        },
+        {
+            "id": "8-username",
+            "name": "8. username",
+            "description": null
         }
     ],
-    "sha": "09cfdfb91095c184cf8c6067f6e1775292fa7f90"
+    "sha": "28c0ec865b78d469d5e3bebee1c79f52dd73f658"
 }

@@ -1,0 +1,213 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 96c4533..c40ab16 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -11,7 +11,6 @@ security:
+         app_user_provider:
+             entity:
+                 class: App\Entity\User
+-                property: email
+ 
+     firewalls:
+         dev:
+diff --git a/migrations/Version20261001140901.php b/migrations/Version20261001140901.php
+new file mode 100644
+index 0000000..b256fb0
+--- /dev/null
++++ b/migrations/Version20261001140901.php
+@@ -0,0 +1,44 @@
++<?php
++
++declare(strict_types=1);
++
++namespace DoctrineMigrations;
++
++use Doctrine\DBAL\Schema\Schema;
++use Doctrine\Migrations\AbstractMigration;
++
++/**
++ * Auto-generated Migration: Please modify to your needs!
++ */
++final class Version20261001140901 extends AbstractMigration
++{
++    public function getDescription(): string
++    {
++        return 'add user.username column';
++    }
++
++    public function up(Schema $schema): void
++    {
++        // this up() migration is auto-generated, please modify it to your needs
++        $this->addSql('CREATE TEMPORARY TABLE __temp__user AS SELECT id, email, roles, password, name, last_login, starship_id, disabled_at FROM user');
++        $this->addSql('DROP TABLE user');
++        $this->addSql('CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles CLOB NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, last_login DATETIME DEFAULT NULL, starship_id INTEGER DEFAULT NULL, disabled_at DATETIME DEFAULT NULL, username VARCHAR(255) NOT NULL, CONSTRAINT FK_8D93D6499B24DF5 FOREIGN KEY (starship_id) REFERENCES starship (id) ON UPDATE NO ACTION ON DELETE NO ACTION NOT DEFERRABLE INITIALLY IMMEDIATE)');
++        $this->addSql('INSERT INTO user (id, email, roles, password, name, last_login, starship_id, disabled_at) SELECT id, email, roles, password, name, last_login, starship_id, disabled_at FROM __temp__user');
++        $this->addSql('DROP TABLE __temp__user');
++        $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON user (email)');
++        $this->addSql('CREATE INDEX IDX_8D93D6499B24DF5 ON user (starship_id)');
++        $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_USERNAME ON user (username)');
++    }
++
++    public function down(Schema $schema): void
++    {
++        // this down() migration is auto-generated, please modify it to your needs
++        $this->addSql('CREATE TEMPORARY TABLE __temp__user AS SELECT id, email, roles, password, name, last_login, disabled_at, starship_id FROM user');
++        $this->addSql('DROP TABLE user');
++        $this->addSql('CREATE TABLE user (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email VARCHAR(180) NOT NULL, roles CLOB NOT NULL, password VARCHAR(255) NOT NULL, name VARCHAR(255) NOT NULL, last_login DATETIME DEFAULT NULL, disabled_at DATETIME DEFAULT NULL, starship_id INTEGER DEFAULT NULL, CONSTRAINT FK_8D93D6499B24DF5 FOREIGN KEY (starship_id) REFERENCES starship (id) NOT DEFERRABLE INITIALLY IMMEDIATE)');
++        $this->addSql('INSERT INTO user (id, email, roles, password, name, last_login, disabled_at, starship_id) SELECT id, email, roles, password, name, last_login, disabled_at, starship_id FROM __temp__user');
++        $this->addSql('DROP TABLE __temp__user');
++        $this->addSql('CREATE INDEX IDX_8D93D6499B24DF5 ON user (starship_id)');
++        $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON user (email)');
++    }
++}
+diff --git a/src/Entity/User.php b/src/Entity/User.php
+index 640ffa2..5996347 100644
+--- a/src/Entity/User.php
++++ b/src/Entity/User.php
+@@ -11,7 +11,9 @@ use Symfony\Component\Validator\Constraints as Assert;
+ 
+ #[ORM\Entity(repositoryClass: UserRepository::class)]
+ #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
++#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_USERNAME', fields: ['username'])]
+ #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
++#[UniqueEntity(fields: ['username'], message: 'There is already an account with this username')]
+ class User implements UserInterface, PasswordAuthenticatedUserInterface
+ {
+     #[ORM\Id]
+@@ -49,6 +51,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+     #[ORM\Column(nullable: true)]
+     private ?\DateTimeImmutable $disabledAt = null;
+ 
++    #[Assert\NotBlank]
++    #[ORM\Column(length: 255)]
++    private ?string $username = null;
++
+     public function getId(): ?int
+     {
+         return $this->id;
+@@ -180,4 +186,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+ 
+         return $this;
+     }
++
++    public function getUsername(): ?string
++    {
++        return $this->username;
++    }
++
++    public function setUsername(string $username): static
++    {
++        $this->username = $username;
++
++        return $this;
++    }
+ }
+diff --git a/src/Factory/UserFactory.php b/src/Factory/UserFactory.php
+index e8243bc..5b6b780 100644
+--- a/src/Factory/UserFactory.php
++++ b/src/Factory/UserFactory.php
+@@ -41,6 +41,7 @@ final class UserFactory extends PersistentObjectFactory
+     {
+         return [
+             'email' => self::faker()->unique()->email(),
++            'username' => self::faker()->unique()->userName(),
+             'name' => self::faker()->name(),
+             'password' => 'engage',
+             'roles' => [],
+diff --git a/src/Form/RegistrationFormType.php b/src/Form/RegistrationFormType.php
+index 93e90e9..57feb56 100644
+--- a/src/Form/RegistrationFormType.php
++++ b/src/Form/RegistrationFormType.php
+@@ -18,6 +18,7 @@ class RegistrationFormType extends AbstractType
+     {
+         $builder
+             ->add('email')
++            ->add('username')
+             ->add('name')
+             ->add('agreeTerms', CheckboxType::class, [
+                 'mapped' => false,
+diff --git a/src/Repository/UserRepository.php b/src/Repository/UserRepository.php
+index 4f2804e..11726a4 100644
+--- a/src/Repository/UserRepository.php
++++ b/src/Repository/UserRepository.php
+@@ -5,14 +5,16 @@ namespace App\Repository;
+ use App\Entity\User;
+ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+ use Doctrine\Persistence\ManagerRegistry;
++use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
++use Symfony\Component\Security\Core\User\UserInterface;
+ 
+ /**
+  * @extends ServiceEntityRepository<User>
+  */
+-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
++class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserLoaderInterface
+ {
+     public function __construct(ManagerRegistry $registry)
+     {
+@@ -33,6 +35,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
+         $this->getEntityManager()->flush();
+     }
+ 
++    public function loadUserByIdentifier(string $identifier): ?UserInterface
++    {
++        return $this->createQueryBuilder('u')
++            ->where('u.email = :identifier')
++            ->orWhere('u.username = :identifier')
++            ->setParameter('identifier', $identifier)
++            ->getQuery()
++            ->getOneOrNullResult()
++        ;
++    }
++
+     //    /**
+     //     * @return User[] Returns an array of User objects
+     //     */
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 377cdf0..41a29ee 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -17,6 +17,7 @@ final class AppStory extends Story
+     {
+         UserFactory::createOne([
+             'email' => 'picard@enterprise.space',
++            'username' => 'picard',
+             'password' => 'makeitso',
+             'name' => 'Jean-Luc Picard',
+             'roles' => ['ROLE_CAPTAIN'],
+@@ -30,6 +31,7 @@ final class AppStory extends Story
+ 
+         UserFactory::createOne([
+             'email' => 'janeway@starfleet.space',
++            'username' => 'janeway',
+             'password' => 'coffeeblack',
+             'name' => 'Kathryn Janeway',
+             'roles' => ['ROLE_SUPER_ADMIN'],
+diff --git a/templates/security/login.html.twig b/templates/security/login.html.twig
+index d0254b0..fa24b0f 100644
+--- a/templates/security/login.html.twig
++++ b/templates/security/login.html.twig
+@@ -16,7 +16,7 @@
+                         <h1 class="mt-3 text-4xl font-semibold">Confirm your password</h1>
+                     {% else %}
+                         <h1 class="mt-3 text-4xl font-semibold">Sign in</h1>
+-                        <p class="mt-3 text-sm text-white/70">Use your email and password to continue.</p>
++                        <p class="mt-3 text-sm text-white/70">Use your email/username and password to continue.</p>
+                     {% endif %}
+                 </div>
+ 
+@@ -31,9 +31,9 @@
+                         <input type="hidden" name="_username" value="{{ app.user.userIdentifier }}">
+                     {% else %}
+                         <div>
+-                            <label for="username" class="mb-2 block text-sm font-medium text-white/80">Email</label>
++                            <label for="username" class="mb-2 block text-sm font-medium text-white/80">Email or Username</label>
+                             <input
+-                                type="email"
++                                type="text"
+                                 value="{{ last_username }}"
+                                 name="_username"
+                                 id="username"
