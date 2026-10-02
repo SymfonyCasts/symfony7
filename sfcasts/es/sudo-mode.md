@@ -1,6 +1,6 @@
-# Modo Sudo: se requiere autenticación completa
+# Modo sudo: se requiere autenticación completa
 
-Seguro que ya te has encontrado con esto antes. En sitios como GitHub, cuando vas a realizar una
+Seguro que ya lo has visto antes. En sitios como GitHub, cuando vas a realizar una
 operación delicada, te pide que confirmes tu contraseña. Vamos a incorporar eso a nuestra
 app.
 
@@ -11,8 +11,8 @@ atributos integrados. El que nos interesa es « `IS_AUTHENTICATED_FULLY` ». Pue
 y así, si un usuario solo está registrado, se le redirigirá a la página de inicio de sesión
 antes de que pueda continuar.
 
-Anota ese nombre. Puedes usarlo con cualquier ` `#[IsGranted]``, pero quiero aplicar este requisito a
-toda nuestra sección de administración —todo lo que esté bajo ` `/admin` —.
+Anota ese nombre. Puedes usarlo con cualquier ` `#[IsGranted]``, pero quiero aplicar esta
+restricción a toda nuestra sección de administración —todo lo que esté bajo ` `/admin` `—.
 
 ## Una expresión de `access_control` 
 
@@ -41,7 +41,7 @@ Copia el comando «Composer require» y pégalo en la terminal:
 composer require symfony/expression-language
 ```
 
-Actualiza de nuevo… y ya está.
+Actualiza de nuevo... y ya está.
 
 ## Viendo cómo funciona
 
@@ -63,9 +63,9 @@ Borra de nuevo la cookie de sesión, cierra esto y actualiza la página.
 Si has usado esto en GitHub, solo te pide la contraseña. Vamos a hacer que esto sea
 un poco más fácil de usar.
 
-Busca la plantilla: `templates/security/login.html.twig`. En la parte superior, envuelve el encabezado
+Busca la plantilla: `templates/security/login.html.twig`. En la parte superior, envuelve el título
 en un `{% if app.user %}`, con un `{% else %}` y un `{% endif %}`. Si no han
-iniciado sesión, en el «else», mueve el encabezado normal al interior. Si han iniciado sesión, copia solo
+iniciado sesión, en el «else», mete el título normal ahí dentro. Si han iniciado sesión, copia solo
 el `h1` y cámbialo por «Confirma tu contraseña»:
 
 [[[ code('2c8b51b7e6') ]]]
@@ -81,10 +81,10 @@ que coincida con el de aquí abajo — `_username` — y un valor de
 
 [[[ code('ad0cfafb0e') ]]]
 
-Actualiza la página para ver cómo queda. ¡Genial! ¡Así queda mucho mejor!
+Actualiza la página para ver cómo queda. ¡Genial! Así queda mucho mejor.
 
-Ya nos ha reconocido, así que podemos quitar la casilla «Recordarme» y simplemente hacer que
-nos vuelva a reconocer. Debajo, después de la contraseña, haz lo mismo: un `{% if app.user %}`,
+Ya nos ha reconocido, así que podemos quitar la casilla «Recordarme» y simplemente obligar al sistema a
+que nos vuelva a reconocer. Debajo, después de la contraseña, haz lo mismo: un `{% if app.user %}`,
 un `{% else %}` y un `{% endif %}`. La casilla de verificación va en el `else`, y dentro del`if`, otro campo de entrada oculto, llamado `_remember_me` con el valor `1`, que se
 interpreta como marcado:
 
