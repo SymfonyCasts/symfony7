@@ -1,9 +1,9 @@
 # Personalizar los mensajes de error de autenticación
 
-Hablemos de los distintos errores de seguridad que pueden aparecer en la página de inicio de sesión.
+Hablemos de los diferentes errores de seguridad que pueden aparecer en la página de inicio de sesión.
 
-Intenta iniciar sesión como `picard@enterprise.space` con la contraseña `enterprise` —una
-incorrecta—. Aparece el mensaje «Credenciales no válidas». Tiene sentido.
+Intenta iniciar sesión como `picard@enterprise.space` con la contraseña `enterprise`, que es
+incorrecta. Aparece el mensaje «Credenciales no válidas». Tiene sentido.
 
 Ahora intenta iniciar sesión con un correo que no existe: `picard@voyager.space` con la
 contraseña `makeitso`. También aparece «Credenciales no válidas».
@@ -48,7 +48,7 @@ Pero prueba con un correo que no exista: `picard@voyager.space`, contraseña `ma
 «No se ha encontrado el nombre de usuario». ¡Un error diferente!
 
 A esto me refería con lo de la enumeración de usuarios. Alguien podría hacer un ataque masivo y averiguar
-quién tiene una cuenta en esta web. Quizá pienses que no es para tanto, pero
+quién tiene una cuenta en esta web. Puede que pienses que no es para tanto, pero
 potencialmente podría serlo. Imagina un sitio en el que el mero hecho de tener una cuenta sea algo privado: una
 bolsa de empleo o una comunidad de apoyo para una enfermedad. Confirmar que una dirección está
 registrada es como darle esa información a cualquiera que la pida. E incluso en un sitio sin importancia, una lista de
@@ -65,7 +65,7 @@ Probemos con esa:
 [[[ code('c47cb14d9f') ]]]
 
 Vuelve atrás e intenta `picard@voyager.space` con la contraseña `makeitso`. «Credenciales
-no válidas». Perfecto: ya no se ve que tenemos un usuario inválido.
+no válidas». Perfecto: ya no se ve que tenemos un usuario que no existe.
 
 Ahora una contraseña incorrecta: `picard@enterprise.space` con `enterprise`. Seguimos viendo
 «Credenciales no válidas». Tiene sentido.
@@ -89,7 +89,7 @@ La razón de esto es cómo hemos configurado nuestro verificador de usuarios. Lo
 `src/Security/UserChecker.php`.
 
 Echa un vistazo a la interfaz: `checkPreAuth()` comprueba el usuario antes de la autenticación,
-y `checkPostAuth()` lo comprueba después de la autenticación. Así que, si trasladamos nuestra comprobación
+y `checkPostAuth()` lo comprueba después de la autenticación. Así que, si movemos nuestra comprobación
 a después de la autenticación, no se ejecutará hasta que se produzca la autenticación, es decir, hasta que se
 compruebe la contraseña. De esta forma, el mensaje solo se mostrará a quienes tengan la contraseña correcta,
 y eso es justo lo que queremos.
@@ -99,7 +99,7 @@ Copia esto de `checkPreAuth()` y pégalo en `checkPostAuth()`:
 [[[ code('5d2671f8c0') ]]]
 
 Ahora prueba `picard@enterprise.space` con la contraseña correcta, `makeitso`. Verás
-«La cuenta está desactivada». Pero con una contraseña incorrecta: «Credenciales no válidas». Exactamente
+«La cuenta está desactivada». Pero con la contraseña incorrecta: «Credenciales no válidas». Exactamente
 lo que queremos.
 
 Creo que ahí está el punto ideal. Quizá no quieras que un usuario desactivado vea que
@@ -108,14 +108,14 @@ los casos, está bien se lo muestres para que puedan averiguar por qué y poners
 
 ## Personalizar el mensaje
 
-Ahora echemos un vistazo a estos mensajes de error y a cómo podemos personalizarlos. Fíjate en
+Ahora echemos un vistazo a estos mensajes de error y a cómo podemos personalizarlos. Mira
 `templates/security/login.html.twig`: el `messageKey` se extrae de la
 excepción y se traduce en el dominio `security`. ¡Así que está traducido!
-Aunque tu sitio no sea multilingüe, puedes usar esta función para
+Aunque tu sitio web no sea multilingüe, puedes usar esta función para
 personalizar un solo idioma.
 
 Veamos rápidamente cómo funciona: copia «Credenciales no válidas», ve
-al directorio `vendor/`, busca el texto en los archivos y pégalo ahí.
+al directorio `vendor/`, haz una búsqueda en los archivos y pégalo ahí.
 
 Lo primero es `BadCredentialsException`. Esta es la excepción real que se lanza, y
 puedes ver que « `messageKey` » es lo que se está traduciendo. Todas las excepciones de autenticación
@@ -126,7 +126,7 @@ idiomas. Fíjate en la versión en inglés: simplemente se traduce palabra por p
 
 Así que podemos personalizarlo. Entra en `translations/` —yo tengo instalado el traductor de Symfony—
 y crea un nuevo archivo llamado `security.en.yaml`. Pega «Invalid
-credentials.» entre comillas y cambia el mensaje a «Tu correo o contraseña es incorrecta.»:
+credentials.» entre comillas y cambia el mensaje a «Tu correo electrónico o contraseña es incorrecta.»:
 
 [[[ code('b832c36e6d') ]]]
 
