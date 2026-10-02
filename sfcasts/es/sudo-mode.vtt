@@ -1,0 +1,283 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:02.386 align:middle
+Seguro que ya has visto esto antes.
+
+00:00:02.626 --> 00:00:06.066 align:middle
+En sitios como GitHub, cuando vas
+a realizar una operación delicada,
+
+00:00:06.226 --> 00:00:08.276 align:middle
+te pide que confirmes tu contraseña.
+
+00:00:08.706 --> 00:00:10.126 align:middle
+Vamos a incorporar eso a nuestra app.
+
+00:00:10.586 --> 00:00:15.546 align:middle
+A veces se le llama «modo sudo», en
+referencia al comando sudo de Linux.
+
+00:00:15.546 --> 00:00:17.166 align:middle
+Si te acuerdas del último curso,
+
+00:00:17.326 --> 00:00:21.346 align:middle
+vimos AuthenticatedVoter y
+sus atributos integrados.
+
+00:00:21.346 --> 00:00:23.656 align:middle
+IS_AUTHENTICATED_FULLY es el que nos interesa.
+
+00:00:24.186 --> 00:00:28.396 align:middle
+Puedes activarlo y, así, si un usuario
+solo está registrado, se le redirigirá
+
+00:00:28.396 --> 00:00:30.646 align:middle
+a la página de inicio de sesión
+antes de que pueda continuar.
+
+00:00:31.226 --> 00:00:31.996 align:middle
+Anota ese nombre.
+
+00:00:32.746 --> 00:00:37.006 align:middle
+Puedes usar esto con cualquier #[IsGranted], pero quiero aplicar
+este requisito a toda nuestra sección de administración —
+
+00:00:37.056 --> 00:00:39.576 align:middle
+todo lo que esté bajo /admin —.
+
+00:00:40.346 --> 00:00:43.366 align:middle
+Ve a config/packages/security.yaml.
+
+00:00:43.986 --> 00:00:47.916 align:middle
+Aquí abajo, en access_control, ya tenemos
+una regla: para cualquier cosa que empiece
+
+00:00:47.916 --> 00:00:50.646 align:middle
+por /admin, exigimos ROLE_ADMIN.
+
+00:00:51.316 --> 00:00:53.166 align:middle
+Quizá pienses que puedes usar
+simplemente un array aquí...
+
+00:00:53.276 --> 00:00:54.096 align:middle
+y puedes...
+
+00:00:54.366 --> 00:00:57.036 align:middle
+pero no es lo que quieres: es un «o».
+
+00:00:57.036 --> 00:01:02.936 align:middle
+¡Así que esto permitiría tanto a los administradores como a cualquier
+usuario totalmente autenticado acceder a la sección de administración!
+
+00:01:03.486 --> 00:01:08.646 align:middle
+Como es tan ambiguo, el uso de un array
+aquí está quedando obsoleto en Symfony 8.2.
+
+00:01:08.646 --> 00:01:11.206 align:middle
+Solo podrás usar un único rol.
+
+00:01:11.846 --> 00:01:13.776 align:middle
+En su lugar, usa una expresión.
+
+00:01:14.296 --> 00:01:19.696 align:middle
+Elimina el rol y usa allow_if:
+"is_granted('ROLE_ADMIN')
+
+00:01:20.096 --> 00:01:26.736 align:middle
+and is_granted('IS_AUTHENTICATED_FULLY')": Una
+expresión nos ofrece una forma mucho menos ambigua
+
+00:01:26.736 --> 00:01:30.646 align:middle
+de decir «el usuario debe ser administrador
+Y debe estar totalmente autenticado».
+
+00:01:31.316 --> 00:01:33.176 align:middle
+Vuelve a nuestra página de
+inicio y actualiza la página.
+
+00:01:33.986 --> 00:01:36.766 align:middle
+¡Error! Necesitamos tener instalado
+el lenguaje de expresiones...
+
+00:01:37.386 --> 00:01:40.616 align:middle
+Copia el comando «Composer
+require» y pégalo en la terminal:
+
+00:01:44.156 --> 00:01:48.896 align:middle
+composer require symfony/expression-language
+Actualiza de nuevo...
+
+00:01:48.896 --> 00:01:49.276 align:middle
+y ya está.
+
+00:01:49.276 --> 00:01:49.496 align:middle
+Ahora inicia sesión...
+
+00:01:49.496 --> 00:01:55.416 align:middle
+con el nombre de usuario janeway@starfleet.space y la contraseña
+coffeeblack, y asegúrate de que la casilla «Recordarme» esté marcada.
+
+00:01:56.026 --> 00:01:58.146 align:middle
+Ahora ve a /admin/user.
+
+00:01:58.816 --> 00:01:59.376 align:middle
+¡Ya lo vemos!
+
+00:01:59.806 --> 00:02:02.036 align:middle
+Pero fíjate en lo que pasa si
+borramos la cookie de sesión.
+
+00:02:02.446 --> 00:02:09.636 align:middle
+Inspecciona la página, búscala en la pestaña «Aplicación»,
+elimínala, cierra la ventana y actualiza la página.
+
+00:02:10.776 --> 00:02:12.456 align:middle
+Nos devuelve a la página de inicio de sesión.
+
+00:02:12.736 --> 00:02:15.456 align:middle
+Y puedes ver ese pequeño mensaje
+que dice que ya estamos conectados.
+
+00:02:15.456 --> 00:02:20.876 align:middle
+Así que tenemos que volver a iniciar
+sesión: janeway@starfleet.space, coffeeblack.
+
+00:02:21.856 --> 00:02:23.156 align:middle
+Efectivamente, ya estamos dentro.
+
+00:02:23.776 --> 00:02:27.576 align:middle
+Si te has fijado, era un poco molesto tener que
+volver a escribir también tu correo electrónico.
+
+00:02:28.226 --> 00:02:33.866 align:middle
+Borra otra vez la cookie de sesión,
+cierra esto y actualiza la página.
+
+00:02:33.866 --> 00:02:38.016 align:middle
+Si has usado esto en GitHub,
+solo te pide la contraseña.
+
+00:02:38.346 --> 00:02:40.366 align:middle
+Vamos a hacer que esto sea
+un poco más fácil de usar.
+
+00:02:40.366 --> 00:02:45.436 align:middle
+Busca la plantilla:
+templates/security/login.html.twig.
+
+00:02:45.946 --> 00:02:50.996 align:middle
+En la parte superior, envuelve el
+título en un ` {% if app.user %}`,
+
+00:02:50.996 --> 00:02:54.436 align:middle
+con un ` {% else %} ` y un ` {% endif %}`.
+
+00:02:54.436 --> 00:02:58.106 align:middle
+Si no han iniciado sesión, en el bloque
+«else», mete el título normal ahí dentro.
+
+00:02:58.106 --> 00:03:05.196 align:middle
+Si han iniciado sesión, copia solo el ` h1 `
+y cámbialo por «Confirma tu contraseña»:
+
+00:03:06.426 --> 00:03:09.796 align:middle
+Un poco más abajo, tenemos este mensaje
+que les dice que han iniciado sesión.
+
+00:03:10.066 --> 00:03:12.536 align:middle
+Elimínalo por completo; ya
+no queremos que aparezca.
+
+00:03:13.116 --> 00:03:17.906 align:middle
+Ahora cambia el campo de correo electrónico por un campo
+oculto, porque ya sabemos cuál es el correo electrónico.
+
+00:03:17.906 --> 00:03:25.416 align:middle
+Lo mismo: {% if app.user
+%}, {% else %}, {% endif %}.
+
+00:03:25.416 --> 00:03:27.046 align:middle
+Mueve todo esto dentro de else.
+
+00:03:29.046 --> 00:03:35.056 align:middle
+Y dentro de if, lo único que necesitamos es <input
+type="hidden"> con name coincidiendo con el que
+
+00:03:35.056 --> 00:03:43.186 align:middle
+hay aquí abajo — _username — y un valor de
+{{ app.user.userIdentifier }}, que es el correo
+
+00:03:43.186 --> 00:03:45.896 align:middle
+en nuestro caso: Actualiza la
+página para ver cómo queda.
+
+00:03:46.476 --> 00:03:48.176 align:middle
+Genial, ¡así queda mucho mejor!
+
+00:03:48.756 --> 00:03:52.336 align:middle
+Ya nos ha reconocido, así que podemos
+quitar la casilla «Recordarme»
+
+00:03:52.396 --> 00:03:54.266 align:middle
+y simplemente forzar que
+nos vuelva a reconocer.
+
+00:03:54.866 --> 00:03:59.506 align:middle
+Debajo, después de la contraseña,
+haz lo mismo: un {% if app.user %},
+
+00:03:59.506 --> 00:04:02.626 align:middle
+un {% else %} y un {% endif %}.
+
+00:04:02.626 --> 00:04:12.166 align:middle
+La casilla de selección va en else, y dentro de if,
+otro campo de entrada oculto llamado _remember_me
+
+00:04:13.326 --> 00:04:16.416 align:middle
+con el valor 1, que se interpreta como marcado:
+
+00:04:17.086 --> 00:04:19.106 align:middle
+Lo último: cambia el
+botón «Iniciar sesión».
+
+00:04:20.536 --> 00:04:22.236 align:middle
+Salida app.user ?
+
+00:04:22.576 --> 00:04:28.676 align:middle
+'Confirmar' : 'Iniciar sesión': Actualizar.
+
+00:04:29.526 --> 00:04:31.806 align:middle
+¡Genial! ¡Mira qué aspecto
+tan profesional tiene!
+
+00:04:32.346 --> 00:04:35.466 align:middle
+Contraseña, coffeeblack, y...
+
+00:04:35.466 --> 00:04:38.666 align:middle
+ya estamos dentro. Asegúrate de que nuestra página
+de inicio de sesión normal sigue funcionando.
+
+00:04:38.886 --> 00:04:40.796 align:middle
+Pulsa «Cerrar sesión» y
+luego «Iniciar sesión».
+
+00:04:41.416 --> 00:04:45.036 align:middle
+Efectivamente, volvemos al formulario normal,
+porque aún no hemos iniciado sesión.
+
+00:04:45.586 --> 00:04:49.376 align:middle
+janeway@starfleet.space,
+contraseña coffeeblack.
+
+00:04:50.226 --> 00:04:51.396 align:middle
+Perfecto: ya hemos vuelto a entrar.
+
+00:04:52.126 --> 00:04:53.706 align:middle
+Eso es el modo «sudo» en pocas palabras.
+
+00:04:54.306 --> 00:04:58.106 align:middle
+A continuación: vamos a crear un usuario especial
+que permita a los superadministradores hacer...
+
+00:04:58.106 --> 00:04:59.236 align:middle
+básicamente cualquier cosa.
