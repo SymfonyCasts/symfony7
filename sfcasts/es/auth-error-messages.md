@@ -1,6 +1,6 @@
 # Personalizar los mensajes de error de autenticación
 
-Hablemos de los diferentes errores de seguridad que pueden aparecer en la página de inicio de sesión.
+Hablemos de los distintos errores de seguridad que pueden aparecer en la página de inicio de sesión.
 
 Intenta iniciar sesión como `picard@enterprise.space` con la contraseña `enterprise` —una
 incorrecta—. Aparece el mensaje «Credenciales no válidas». Tiene sentido.
@@ -8,7 +8,7 @@ incorrecta—. Aparece el mensaje «Credenciales no válidas». Tiene sentido.
 Ahora intenta iniciar sesión con un correo que no existe: `picard@voyager.space` con la
 contraseña `makeitso`. También aparece «Credenciales no válidas».
 
-Ahora desactiva a Picard y fíjate en cuál es el mensaje. Ejecuta nuestro comando especial para desactivarlo:
+Ahora desactiva a Picard y mira qué mensaje aparece. Ejecuta nuestro comando especial para desactivarlo:
 
 ```terminal
 symfony console dbal:run-sql "UPDATE user SET disabled_at = datetime('now') WHERE email = 'picard@enterprise.space'"
@@ -30,27 +30,29 @@ o no.
 Puedes desactivar esto. Ve a `config/packages/security.yaml` y, en la parte superior,
 añade `expose_security_errors: all`:
 
+[[[ code('f4de45bffb') ]]]
+
 Vuelve atrás e introduce la contraseña correcta, `makeitso`. «La cuenta está desactivada».
 Ahora vemos el error real.
 
-Vuelve a cargar los fixtures para que Picard vuelva a estar activado:
+Actualiza los fixtures para que Picard vuelva a estar activado:
 
 ```terminal
 symfony console foundry:load-fixtures
 ```
 
-Ahora usa una contraseña incorrecta: `enterprise`. «Credenciales no válidas».
+Ahora introduce una contraseña incorrecta: `enterprise`. «Credenciales no válidas».
 Tiene sentido: las credenciales no eran válidas.
 
 Pero prueba con un correo que no exista: `picard@voyager.space`, contraseña `makeitso`.
 «No se ha encontrado el nombre de usuario». ¡Un error diferente!
 
 A esto me refería con lo de la enumeración de usuarios. Alguien podría hacer un ataque masivo y averiguar
-quién tiene una cuenta en esta web. Puede que pienses que no es para tanto, pero
-potencialmente podría serlo. Imagina un sitio en el que el mero hecho de tener una cuenta sea privado: una
+quién tiene una cuenta en esta web. Quizá pienses que no es para tanto, pero
+potencialmente podría serlo. Imagina un sitio en el que el mero hecho de tener una cuenta sea algo privado: una
 bolsa de empleo o una comunidad de apoyo para una enfermedad. Confirmar que una dirección está
 registrada es como darle esa información a cualquiera que la pida. E incluso en un sitio sin importancia, una lista de
-nombres de usuario que sin duda existen hace que un ataque de adivinación de contraseñas sea mucho más fácil.
+nombres de usuario que sin duda existen hace que un ataque de adivinación de contraseñas resulte mucho más fácil.
 
 ## El término medio: `account_status`
 
@@ -60,8 +62,10 @@ a la que lo cambiamos— y `account_status`.
 
 Probemos con esa:
 
+[[[ code('c47cb14d9f') ]]]
+
 Vuelve atrás e intenta `picard@voyager.space` con la contraseña `makeitso`. «Credenciales
-no válidas». Perfecto: ya no se ve que tenemos un usuario que no existe.
+no válidas». Perfecto: ya no se ve que tenemos un usuario inválido.
 
 Ahora una contraseña incorrecta: `picard@enterprise.space` con `enterprise`. Seguimos viendo
 «Credenciales no válidas». Tiene sentido.
@@ -85,27 +89,29 @@ La razón de esto es cómo hemos configurado nuestro verificador de usuarios. Lo
 `src/Security/UserChecker.php`.
 
 Echa un vistazo a la interfaz: `checkPreAuth()` comprueba el usuario antes de la autenticación,
-y `checkPostAuth()` lo comprueba después de la autenticación. Así que, si movemos nuestra comprobación
+y `checkPostAuth()` lo comprueba después de la autenticación. Así que, si trasladamos nuestra comprobación
 a después de la autenticación, no se ejecutará hasta que se produzca la autenticación, es decir, hasta que se
 compruebe la contraseña. De esta forma, el mensaje solo se mostrará a quienes tengan la contraseña correcta,
 y eso es justo lo que queremos.
 
 Copia esto de `checkPreAuth()` y pégalo en `checkPostAuth()`:
 
-Ahora prueba `picard@enterprise.space` con la contraseña correcta, `makeitso`. Veremos
+[[[ code('5d2671f8c0') ]]]
+
+Ahora prueba `picard@enterprise.space` con la contraseña correcta, `makeitso`. Verás
 «La cuenta está desactivada». Pero con una contraseña incorrecta: «Credenciales no válidas». Exactamente
 lo que queremos.
 
 Creo que ahí está el punto ideal. Quizá no quieras que un usuario desactivado vea que
-su cuenta está desactivada; eso es posible, y ya lo hemos mostrado antes. Pero en la mayoría de los
-casos, está bien que lo vean para que puedan averiguar por qué y ponerse en contacto con el servicio de asistencia.
+su cuenta está desactivada; eso es posible, y ya lo hemos mostrado antes. Pero en la mayoría de
+los casos, está bien se lo muestres para que puedan averiguar por qué y ponerse en contacto con el servicio de asistencia.
 
 ## Personalizar el mensaje
 
 Ahora echemos un vistazo a estos mensajes de error y a cómo podemos personalizarlos. Fíjate en
 `templates/security/login.html.twig`: el `messageKey` se extrae de la
 excepción y se traduce en el dominio `security`. ¡Así que está traducido!
-Aunque tu sitio web no sea multilingüe, puedes usar esta función para
+Aunque tu sitio no sea multilingüe, puedes usar esta función para
 personalizar un solo idioma.
 
 Veamos rápidamente cómo funciona: copia «Credenciales no válidas», ve
@@ -120,7 +126,9 @@ idiomas. Fíjate en la versión en inglés: simplemente se traduce palabra por p
 
 Así que podemos personalizarlo. Entra en `translations/` —yo tengo instalado el traductor de Symfony—
 y crea un nuevo archivo llamado `security.en.yaml`. Pega «Invalid
-credentials.» entre comillas y cambia el mensaje a «Tu correo electrónico o contraseña es incorrecta.»:
+credentials.» entre comillas y cambia el mensaje a «Tu correo o contraseña es incorrecta.»:
+
+[[[ code('b832c36e6d') ]]]
 
 Vuelve a la página de inicio de sesión e inténtalo de nuevo: `picard@enterprise.space` con una
 contraseña incorrecta. ¡Ahí está, nuestro nuevo mensaje!
