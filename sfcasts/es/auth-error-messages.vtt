@@ -1,0 +1,362 @@
+WEBVTT
+
+00:00:01.116 --> 00:00:04.726 align:middle
+Hablemos de los diferentes errores de seguridad que
+te pueden salir en la página de inicio de sesión.
+
+00:00:05.196 --> 00:00:10.866 align:middle
+Intenta iniciar sesión como picard@enterprise.space
+con la contraseña enterprise, que es incorrecta.
+
+00:00:11.416 --> 00:00:12.896 align:middle
+Aparece el mensaje
+«Credenciales no válidas».
+
+00:00:13.066 --> 00:00:13.876 align:middle
+Tiene sentido.
+
+00:00:14.236 --> 00:00:17.166 align:middle
+Ahora intenta iniciar sesión
+con un correo que no existe:
+
+00:00:17.336 --> 00:00:20.696 align:middle
+picard@voyager.space con
+la contraseña makeitso.
+
+00:00:21.416 --> 00:00:23.496 align:middle
+También aparece «Credenciales no válidas».
+
+00:00:24.106 --> 00:00:26.436 align:middle
+Ahora desactiva Picard y
+fíjate en qué mensaje sale.
+
+00:00:26.676 --> 00:00:32.266 align:middle
+Ejecuta nuestro comando especial para
+desactivarlo: symfony console dbal:run-sql
+
+00:00:32.626 --> 00:00:42.686 align:middle
+"UPDATE user SET disabled_at = datetime('now')
+WHERE email = 'picard@enterprise.space'" Tenemos
+
+00:00:42.686 --> 00:00:46.236 align:middle
+que poner todo esto entre comillas dobles
+porque usamos comillas simples dentro.
+
+00:00:47.356 --> 00:00:48.276 align:middle
+Una fila afectada.
+
+00:00:48.986 --> 00:00:53.666 align:middle
+Intenta iniciar sesión como Picard con el
+correo correcto — picard@enterprise.space —
+
+00:00:54.016 --> 00:00:55.966 align:middle
+y la contraseña correcta, makeitso.
+
+00:00:56.646 --> 00:00:59.236 align:middle
+Y... también nos sale
+«Credenciales no válidas».
+
+00:00:59.746 --> 00:01:03.366 align:middle
+Así que cada vez que haya cualquier problema,
+te aparecerá «Credenciales no válidas».
+
+00:01:03.666 --> 00:01:08.866 align:middle
+Es un comportamiento predeterminado a propósito: evita el
+problema de la enumeración de usuarios, en el que alguien entra
+
+00:01:08.866 --> 00:01:11.606 align:middle
+en tu página de inicio de sesión y comprueba
+miles de correos electrónicos para ver
+
+00:01:11.606 --> 00:01:13.266 align:middle
+si existen en el sistema o no.
+
+00:01:14.046 --> 00:01:15.076 align:middle
+Puedes desactivar esto.
+
+00:01:15.296 --> 00:01:22.936 align:middle
+Ve a config/packages/security.yaml y, en la parte
+superior, añade expose_security_errors: all:
+
+00:01:23.776 --> 00:01:26.236 align:middle
+Vuelve atrás e introduce la
+contraseña correcta, makeitso.
+
+00:01:27.376 --> 00:01:28.586 align:middle
+«La cuenta está desactivada».
+
+00:01:29.026 --> 00:01:30.436 align:middle
+Ahora vemos el error real.
+
+00:01:31.076 --> 00:01:33.366 align:middle
+Actualiza los fixtures para que
+Picard vuelva a estar activado:
+
+00:01:34.636 --> 00:01:37.566 align:middle
+symfony console foundry:load-fixtures Ahora
+usa una contraseña incorrecta: enterprise.
+
+00:01:38.976 --> 00:01:40.056 align:middle
+«Credenciales no válidas».
+
+00:01:40.396 --> 00:01:42.636 align:middle
+Tiene sentido: las
+credenciales no eran válidas.
+
+00:01:43.316 --> 00:01:48.696 align:middle
+Pero prueba con un correo que no exista:
+picard@voyager.space, contraseña makeitso.
+
+00:01:49.546 --> 00:01:51.066 align:middle
+«No se ha encontrado el nombre de usuario».
+
+00:01:51.286 --> 00:01:52.266 align:middle
+¡Un error diferente!
+
+00:01:53.136 --> 00:01:55.196 align:middle
+A esto me refería con lo de
+la enumeración de usuarios.
+
+00:01:55.446 --> 00:01:58.806 align:middle
+Alguien podría lanzar un ataque masivo y
+averiguar quién tiene una cuenta en esta web.
+
+00:01:59.286 --> 00:02:02.336 align:middle
+Puede que pienses que no es para tanto,
+pero potencialmente podría serlo.
+
+00:02:02.826 --> 00:02:06.916 align:middle
+Imagina una web en la que el mero hecho de tener
+una cuenta sea privado: una bolsa de empleo
+
+00:02:06.916 --> 00:02:09.266 align:middle
+o una comunidad de apoyo para una enfermedad.
+
+00:02:09.716 --> 00:02:14.376 align:middle
+Confirmar que una dirección está registrada
+le da esa información a cualquiera que la pida.
+
+00:02:15.066 --> 00:02:17.536 align:middle
+E incluso en un sitio web sin mayor
+importancia, una lista de nombres de usuario
+
+00:02:17.536 --> 00:02:21.206 align:middle
+que sin duda existen hace que un ataque de
+adivinación de contraseñas resulte mucho más fácil.
+
+00:02:22.586 --> 00:02:23.666 align:middle
+Hay un término medio.
+
+00:02:24.036 --> 00:02:29.326 align:middle
+expose_security_errors es, de hecho, una
+enumeración: echa un vistazo a ExposeSecurityLevel.
+
+00:02:30.356 --> 00:02:33.106 align:middle
+Podemos ver none —que es
+el valor por defecto—, all,
+
+00:02:33.196 --> 00:02:36.146 align:middle
+que es al que lo cambiamos, y account_status.
+
+00:02:36.506 --> 00:02:43.616 align:middle
+Probemos con este último: vuelve atrás e intenta
+picard@voyager.space con la contraseña makeitso.
+
+00:02:44.846 --> 00:02:46.016 align:middle
+«Credenciales no válidas».
+
+00:02:46.226 --> 00:02:49.266 align:middle
+Perfecto: ya no se ve que
+tenemos un usuario que no existe.
+
+00:02:50.026 --> 00:02:54.396 align:middle
+Ahora una contraseña incorrecta:
+picard@enterprise.space con enterprise.
+
+00:02:55.696 --> 00:02:57.496 align:middle
+Seguimos viendo «Credenciales no válidas».
+
+00:02:57.596 --> 00:02:58.466 align:middle
+Tiene sentido.
+
+00:02:59.116 --> 00:03:05.746 align:middle
+Ejecuta: nuestro comando SQL para desactivar a
+Picard: inicia sesión como picard@enterprise.space
+
+00:03:05.796 --> 00:03:07.836 align:middle
+con la contraseña correcta, makeitso.
+
+00:03:08.636 --> 00:03:09.806 align:middle
+«La cuenta está desactivada».
+
+00:03:10.286 --> 00:03:11.796 align:middle
+Pero si usas una contraseña incorrecta...
+
+00:03:12.616 --> 00:03:14.686 align:middle
+seguimos viendo «La
+cuenta está desactivada».
+
+00:03:15.226 --> 00:03:19.136 align:middle
+Quizá esto no sea tan grave como revelar
+que un nombre de usuario no existe —
+
+00:03:19.356 --> 00:03:22.736 align:middle
+probablemente no tendrás decenas de miles de
+cuentas desactivadas que alguien pueda explotar.
+
+00:03:23.076 --> 00:03:26.656 align:middle
+Pero sigue siendo un pequeño agujero de seguridad
+que permite cierta enumeración de usuarios.
+
+00:03:27.306 --> 00:03:30.096 align:middle
+La razón de esto es cómo hemos
+configurado nuestro verificador de usuarios.
+
+00:03:30.426 --> 00:03:33.216 align:middle
+Lo encontrarás en
+src/Security/UserChecker.php.
+
+00:03:33.216 --> 00:03:39.866 align:middle
+Echa un vistazo a la interfaz: checkPreAuth()
+comprueba el usuario antes de la autenticación,
+
+00:03:40.096 --> 00:03:43.736 align:middle
+y checkPostAuth() lo comprueba
+después de la autenticación.
+
+00:03:44.456 --> 00:03:48.896 align:middle
+Así que, si trasladamos nuestra comprobación a después de la
+autenticación, no se ejecutará hasta que se produzca la autenticación,
+
+00:03:49.166 --> 00:03:51.186 align:middle
+es decir, hasta que se
+compruebe la contraseña.
+
+00:03:51.926 --> 00:03:53.896 align:middle
+Así, el mensaje solo se mostrará a quienes
+
+00:03:53.896 --> 00:03:56.596 align:middle
+tengan la contraseña correcta,
+que es justo lo que queremos.
+
+00:03:57.256 --> 00:04:03.846 align:middle
+Copia esto de checkPreAuth() y pégalo en
+checkPostAuth(): Ahora prueba picard@enterprise.space
+
+00:04:03.846 --> 00:04:05.906 align:middle
+con la contraseña correcta, makeitso.
+
+00:04:07.016 --> 00:04:08.416 align:middle
+Aparece «La cuenta está desactivada».
+
+00:04:08.416 --> 00:04:12.466 align:middle
+Pero con la contraseña incorrecta:
+«Credenciales no válidas».
+
+00:04:12.736 --> 00:04:13.966 align:middle
+Justo lo que queremos.
+
+00:04:14.626 --> 00:04:15.966 align:middle
+Creo que ahí está el punto ideal.
+
+00:04:16.326 --> 00:04:19.736 align:middle
+Quizá no quieras que un usuario desactivado
+vea que su cuenta está desactivada;
+
+00:04:20.086 --> 00:04:21.936 align:middle
+eso es posible, y ya lo hemos mostrado antes.
+
+00:04:22.376 --> 00:04:27.196 align:middle
+Pero en la mayoría de los casos, está bien mostrárselo para que puedan
+averiguar por qué y ponerse en contacto con el servicio de asistencia.
+
+00:04:27.826 --> 00:04:31.186 align:middle
+Ahora echemos un vistazo a estos mensajes
+de error y a cómo podemos personalizarlos.
+
+00:04:31.186 --> 00:04:38.306 align:middle
+Fíjate en templates/security/login.html.twig:
+el « messageKey » se extrae de la excepción,
+
+00:04:38.306 --> 00:04:41.066 align:middle
+y se traduce en el dominio security.
+
+00:04:41.416 --> 00:04:42.706 align:middle
+¡Así que está traducido!
+
+00:04:43.236 --> 00:04:45.136 align:middle
+Aunque tu sitio no sea multilingüe,
+
+00:04:45.356 --> 00:04:48.316 align:middle
+aún así puedes usar esta función
+para personalizar un solo idioma.
+
+00:04:49.096 --> 00:04:53.996 align:middle
+Veamos rápidamente cómo funciona: copia
+«Invalid credentials.», ve al directorio vendor/,
+
+00:04:54.856 --> 00:04:56.996 align:middle
+haz una búsqueda en los
+archivos y pégalo ahí.
+
+00:04:57.936 --> 00:04:59.996 align:middle
+El primero es BadCredentialsException.
+
+00:05:00.456 --> 00:05:02.566 align:middle
+Esta es la excepción que se lanza realmente,
+
+00:05:02.776 --> 00:05:05.656 align:middle
+y puedes ver que « messageKey »
+es lo que se está traduciendo.
+
+00:05:06.346 --> 00:05:09.466 align:middle
+Todas las excepciones de autenticación
+usan un « messageKey » como este.
+
+00:05:10.196 --> 00:05:15.356 align:middle
+También lo vemos en los archivos XLIFF de security:
+las traducciones para los diferentes idiomas.
+
+00:05:15.826 --> 00:05:19.336 align:middle
+Fíjate en la versión en inglés:
+simplemente se traduce palabra por palabra.
+
+00:05:19.706 --> 00:05:20.986 align:middle
+Así que podemos personalizarlo.
+
+00:05:23.346 --> 00:05:27.016 align:middle
+Ve a translations/ —yo tengo
+instalado el traductor de Symfony—
+
+00:05:27.306 --> 00:05:30.866 align:middle
+y crea un nuevo archivo
+llamado security.en.yaml.
+
+00:05:31.426 --> 00:05:33.036 align:middle
+Pega «Invalid credentials.»
+
+00:05:33.036 --> 00:05:38.036 align:middle
+entre comillas y cambia el mensaje a «Tu correo
+electrónico o contraseña es incorrecta.»:
+
+00:05:39.026 --> 00:05:44.296 align:middle
+Vuelve a la página de inicio de sesión e inténtalo de
+nuevo: picard@enterprise.space con una contraseña incorrecta.
+
+00:05:45.656 --> 00:05:47.096 align:middle
+¡Ya está! Ahí está nuestro nuevo mensaje.
+
+00:05:47.556 --> 00:05:50.076 align:middle
+Puedes hacer lo mismo con todos
+los mensajes de excepción.
+
+00:05:50.436 --> 00:05:52.266 align:middle
+¡Pruébalo con el mensaje
+de cuenta desactivada!
+
+00:05:53.196 --> 00:05:57.406 align:middle
+Próximo paso: el modo «sudo», que confirma la
+contraseña de un usuario antes de que realice
+
+00:05:57.406 --> 00:05:58.836 align:middle
+operaciones delicadas.
