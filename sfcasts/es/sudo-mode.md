@@ -1,7 +1,7 @@
 # Modo Sudo: se requiere autenticación completa
 
-Seguro que ya has visto esto antes. En sitios como GitHub, cuando vas a realizar una
-operación sensible, te piden que confirmes tu contraseña. Vamos a incorporar eso a nuestra
+Seguro que ya te has encontrado con esto antes. En sitios como GitHub, cuando vas a realizar una
+operación delicada, te pide que confirmes tu contraseña. Vamos a incorporar eso a nuestra
 app.
 
 A veces se le llama «modo sudo», en referencia al comando `sudo` de Linux.
@@ -11,39 +11,41 @@ atributos integrados. El que nos interesa es « `IS_AUTHENTICATED_FULLY` ». Pue
 y así, si un usuario solo está registrado, se le redirigirá a la página de inicio de sesión
 antes de que pueda continuar.
 
-Anota ese nombre. Puedes usarlo con cualquier `#[IsGranted]`, pero quiero aplicar este
-requisito a toda nuestra sección de administración —todo lo que esté bajo `/admin` —.
+Anota ese nombre. Puedes usarlo con cualquier ` `#[IsGranted]``, pero quiero aplicar este requisito a
+toda nuestra sección de administración —todo lo que esté bajo ` `/admin` —.
 
 ## Una expresión de `access_control` 
 
 Ve a `config/packages/security.yaml`. Aquí abajo, en `access_control`, ya tenemos
 una regla: para cualquier cosa que empiece por `/admin`, exigimos `ROLE_ADMIN`.
 
-Quizá pienses que aquí puedes usar simplemente un array… y puedes… pero
+Quizá pienses que aquí basta con usar un array… y sí que puedes… pero
 no es lo que quieres: es un «o». ¡Así que esto permitiría tanto a los administradores como a cualquier
 usuario totalmente autenticado acceder a la sección de administración!
 
-Como es tan ambiguo, el uso de una matriz aquí está quedando obsoleto en Symfony 8.2.
+Como es tan ambiguo, el uso de un array aquí está quedando obsoleto en Symfony 8.2.
 Solo podrás usar un único rol.
 
-En su lugar, usa una expresión. Elimina el rol y utiliza
+En su lugar, usa una expresión. Elimina el rol y usa
 `allow_if: "is_granted('ROLE_ADMIN') and is_granted('IS_AUTHENTICATED_FULLY')"`:
+
+[[[ code('7dce874097') ]]]
 
 Una expresión nos ofrece una forma mucho menos ambigua de decir «el usuario debe ser un administrador Y debe
 estar totalmente autenticado».
 
-Vuelve a nuestra página de inicio y actualízala. ¡Error! Necesitamos tener instalado el lenguaje de expresiones...
+Vuelve a nuestra página de inicio y actualiza la página. ¡Error! Necesitamos tener instalado el lenguaje de expresiones...
 Copia el comando «Composer require» y pégalo en la terminal:
 
 ```terminal
 composer require symfony/expression-language
 ```
 
-Actualiza de nuevo... y ya está.
+Actualiza de nuevo… y ya está.
 
 ## Viendo cómo funciona
 
-Ahora inicia sesión… como `janeway@starfleet.space`, con la contraseña `coffeeblack`, y asegúrate
+Ahora inicia sesión... como `janeway@starfleet.space`, con la contraseña `coffeeblack`, y asegúrate
 de que la casilla «Recordarme» esté marcada.
 
 Ahora ve a `/admin/user`. ¡Ya lo vemos! Pero fíjate en lo que pasa si borramos la
@@ -58,21 +60,26 @@ ya hemos iniciado sesión. Así que tenemos que volver a iniciar sesión: `janew
 Si te has fijado, era un poco molesto tener que volver a escribir también tu correo electrónico.
 Borra de nuevo la cookie de sesión, cierra esto y actualiza la página.
 
-Si lo has usado en GitHub, solo te pide la contraseña. Vamos a hacer que esto sea
+Si has usado esto en GitHub, solo te pide la contraseña. Vamos a hacer que esto sea
 un poco más fácil de usar.
 
-Busca la plantilla: `templates/security/login.html.twig`. En la parte superior, envuelve el título
+Busca la plantilla: `templates/security/login.html.twig`. En la parte superior, envuelve el encabezado
 en un `{% if app.user %}`, con un `{% else %}` y un `{% endif %}`. Si no han
-iniciado sesión, en el «else», mete el título normal ahí dentro. Si han iniciado sesión, copia solo
+iniciado sesión, en el «else», mueve el encabezado normal al interior. Si han iniciado sesión, copia solo
 el `h1` y cámbialo por «Confirma tu contraseña»:
 
-Un poco más abajo, tenemos este mensaje que les indica que han iniciado sesión. Borra
-eso por completo; ya no queremos que aparezca.
+[[[ code('2c8b51b7e6') ]]]
+
+Un poco más abajo, tenemos este mensaje que les dice que han iniciado sesión. Borra
+eso por completo; ya no queremos que se vea.
 
 Ahora cambia el campo de correo electrónico por un campo oculto, porque ya sabemos cuál es el correo
 . Lo mismo de siempre: `{% if app.user %}`, `{% else %}`, `{% endif %}`. Mueve todo esto dentro de
-el `else`. Y dentro del `if`, lo único que necesitamos es `<input type="hidden">` con `name`
-que coincida con el de aquí abajo — `_username` — y un valor de`{{ app.user.userIdentifier }}`, que es el correo electrónico en nuestro caso:
+la etiqueta `else`. Y dentro de la etiqueta `if`, lo único que necesitamos es `<input type="hidden">` con `name`
+que coincida con el de aquí abajo — `_username` — y un valor de
+`{{ app.user.userIdentifier }}`, que es el correo electrónico en nuestro caso:
+
+[[[ code('ad0cfafb0e') ]]]
 
 Actualiza la página para ver cómo queda. ¡Genial! ¡Así queda mucho mejor!
 
@@ -81,15 +88,18 @@ nos vuelva a reconocer. Debajo, después de la contraseña, haz lo mismo: un `{%
 un `{% else %}` y un `{% endif %}`. La casilla de verificación va en el `else`, y dentro del`if`, otro campo de entrada oculto, llamado `_remember_me` con el valor `1`, que se
 interpreta como marcado:
 
-Lo último: cambia el botón «Iniciar sesión». Envía `app.user ? 'Confirm' : 'Sign in'`:
+[[[ code('b40ff35e6f') ]]]
+
+Lo último: cambia el botón «Iniciar sesión». Resultado: `app.user ? 'Confirm' : 'Sign in'`:
+
+[[[ code('c7020d9a16') ]]]
 
 Actualiza la página. ¡Genial! ¡Mira qué aspecto tan profesional tiene! Contraseña: `coffeeblack`, y… ya estamos dentro.
 
-Asegúrate de que nuestra página de inicio de sesión habitual sigue funcionando. Haz clic en «Cerrar sesión» y luego en «Iniciar sesión».
+Asegúrate de que nuestra página de inicio de sesión habitual sigue funcionando. Haz clic en «Cerrar sesión» y, a continuación, vuelve a iniciar sesión.
 
-Efectivamente, volvemos al formulario normal, porque aún no hemos iniciado sesión.
-`janeway@starfleet.space`, contraseña `coffeeblack`. Perfecto: ya hemos vuelto a entrar.
+Efectivamente, volvemos al formulario normal, porque aún no hemos iniciado sesión.`janeway@starfleet.space`, contraseña `coffeeblack`. Perfecto: ya hemos vuelto a entrar.
 
 Eso es el modo «sudo» en pocas palabras.
 
-A continuación: vamos a crear un usuario especial que permita a los superadministradores hacer... básicamente cualquier cosa.
+A continuación: vamos a crear un usuario especial que permita a los superadministradores hacer… básicamente lo que quieran.
