@@ -1,0 +1,324 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:05.506 align:middle
+Nuestra app tiene el concepto de «admin», y hemos
+usado una jerarquía de roles para asegurarnos
+
+00:00:05.506 --> 00:00:09.596 align:middle
+de que un «admin» también tenga
+ROLE_CAPTAIN y ROLE_ALLOWED_TO_SWITCH.
+
+00:00:10.286 --> 00:00:14.666 align:middle
+Y en nuestro StarshipVoter, tenemos esta «vía
+de escape» aquí abajo, en voteOnAttribute():
+
+00:00:15.146 --> 00:00:17.236 align:middle
+si eres «admin», puedes hacer lo que quieras.
+
+00:00:17.826 --> 00:00:22.446 align:middle
+Esto funciona y es genial para un control muy preciso:
+cuando tienes el concepto de «administrador»
+
+00:00:22.446 --> 00:00:24.716 align:middle
+y controlas específicamente
+lo que puede hacer.
+
+00:00:25.276 --> 00:00:30.136 align:middle
+Pero muchas de las apps en las que he trabajado tienen
+el concepto de «superadministrador»: alguien de TI,
+
+00:00:30.136 --> 00:00:33.326 align:middle
+o un administrador de la web, que
+puede hacer lo que le dé la gana.
+
+00:00:33.476 --> 00:00:34.966 align:middle
+Un nivel por encima del administrador.
+
+00:00:35.666 --> 00:00:39.346 align:middle
+Quizá pienses que puedes gestionarlo con una
+jerarquía de roles, pero hay tantos sitios
+
+00:00:39.346 --> 00:00:41.526 align:middle
+y tantos votantes que tendrías que actualizar.
+
+00:00:41.996 --> 00:00:46.686 align:middle
+Lo que me gusta hacer en su lugar es crear un
+votante específico para los superadministradores.
+
+00:00:47.126 --> 00:00:54.396 align:middle
+Primero, en src/Story/AppStory.php, cambia
+Janeway de ROLE_ADMIN a ROLE_SUPER_ADMIN:
+
+00:00:55.136 --> 00:00:58.586 align:middle
+Hemos actualizado los fixtures, así
+que en la terminal, recárgalos con:
+
+00:00:58.856 --> 00:01:04.896 align:middle
+symfony console foundry:load-fixtures
+Ahora crea nuestro «voter» personalizado:
+
+00:01:05.226 --> 00:01:10.266 align:middle
+symfony console make:voter
+Llámalo SuperAdminVoter.
+
+00:01:11.166 --> 00:01:17.386 align:middle
+Vuelve al IDE y búscalo:
+src/Security/Voter/SuperAdminVoter.php.
+
+00:01:18.166 --> 00:01:22.836 align:middle
+Borra todo: las constantes,
+supports() y voteOnAttribute().
+
+00:01:23.326 --> 00:01:24.516 align:middle
+Empezaremos de cero.
+
+00:01:25.336 --> 00:01:30.736 align:middle
+Para supports(), vamos a admitir todo, así que
+simplemente devuelve true: cualquier atributo,
+
+00:01:30.736 --> 00:01:33.576 align:middle
+cualquier tema: da igual,
+este votante lo apoya.
+
+00:01:34.286 --> 00:01:36.826 align:middle
+Aquí viene lo importante: voteOnAttribute().
+
+00:01:37.256 --> 00:01:39.866 align:middle
+Lo que comprobamos aquí
+es si tienen permiso o no.
+
+00:01:40.556 --> 00:01:42.356 align:middle
+Hay varias formas de hacerlo.
+
+00:01:42.546 --> 00:01:47.426 align:middle
+Recuerda que en StarshipVoter usamos el gestor de
+decisiones de acceso para decidir por el token;
+
+00:01:48.036 --> 00:01:49.866 align:middle
+podríamos inyectar eso y
+hacer exactamente lo mismo.
+
+00:01:50.456 --> 00:01:53.926 align:middle
+Lo hicimos así porque ROLE_ADMIN podría
+formar parte de una jerarquía de roles,
+
+00:01:54.196 --> 00:01:56.266 align:middle
+por lo que quizá no estuviera
+configurado correctamente en el usuario.
+
+00:01:56.916 --> 00:02:02.736 align:middle
+Pero voy a decir que los superadministradores tienen que
+tener ROLE_SUPER_ADMIN configurado directamente en el usuario.
+
+00:02:03.256 --> 00:02:07.786 align:middle
+Eso lo hace muy sencillo:return
+in_array('ROLE_SUPER_ADMIN',
+
+00:02:08.316 --> 00:02:14.596 align:middle
+$token->getRoleNames(), true);
+$token->getRoleNames() es básicamente un atajo
+
+00:02:14.596 --> 00:02:18.396 align:middle
+para obtener los roles de nuestro usuario
+y true nos da una coincidencia estricta.
+
+00:02:19.096 --> 00:02:23.246 align:middle
+Solo recuerda que, al comprobar los roles de esta forma,
+solo se comprueban los roles que están directamente
+
+00:02:23.246 --> 00:02:25.296 align:middle
+asignados al usuario, no
+la jerarquía de roles.
+
+00:02:26.146 --> 00:02:27.496 align:middle
+Esto casi es suficiente...
+
+00:02:27.636 --> 00:02:28.566 align:middle
+pero tenemos un problema...
+
+00:02:28.896 --> 00:02:31.416 align:middle
+Algunos atributos no se basan en permisos...
+
+00:02:31.756 --> 00:02:33.016 align:middle
+¿Se te ocurre cuáles son?
+
+00:02:33.606 --> 00:02:35.966 align:middle
+Echa un vistazo a las constantes
+en AuthenticatedVoter.
+
+00:02:36.416 --> 00:02:40.096 align:middle
+Estos son atributos que puedes comprobar,
+pero no tienen que ver con los permisos,
+
+00:02:40.476 --> 00:02:42.356 align:middle
+sino con cómo te has autenticado.
+
+00:02:43.036 --> 00:02:46.246 align:middle
+¡No queremos que los superadministradores
+puedan saltarse estas comprobaciones!
+
+00:02:46.586 --> 00:02:51.766 align:middle
+Si lo hicieran, ¡nuestro modo «sudo» que añadimos
+en el último capítulo quedaría completamente anulado!
+
+00:02:52.656 --> 00:02:58.616 align:middle
+Vuelve a SuperAdminVoter, añade un archivo
+« private const EXCLUSIONS » y, dentro,
+
+00:02:58.826 --> 00:03:01.436 align:middle
+añade todas esas constantes
+de AuthenticatedVoter.
+
+00:03:02.346 --> 00:03:03.266 align:middle
+IS_AUTHENTICATED
+
+00:03:04.356 --> 00:03:05.666 align:middle
+... IS_AUTHENTICATED_FULLY
+
+00:03:06.406 --> 00:03:07.796 align:middle
+... IS_AUTHENTICATED_REMEMBERED...
+
+00:03:08.486 --> 00:03:09.536 align:middle
+IS_IMPERSONATOR...
+
+00:03:10.706 --> 00:03:11.516 align:middle
+IS_REMEMBERED...
+
+00:03:12.576 --> 00:03:17.666 align:middle
+y... PUBLIC_ACCESS: Uno, dos, tres,
+cuatro, cinco, seis... y por aquí,
+
+00:03:17.716 --> 00:03:19.466 align:middle
+uno, dos, tres, cuatro, cinco, seis.
+
+00:03:19.656 --> 00:03:20.526 align:middle
+¡Genial, ya las tienes todas!
+
+00:03:21.136 --> 00:03:28.826 align:middle
+Ahora, en lugar de devolver true en supports(),
+devuelve !in_array($attribute, self::EXCLUSIONS,
+
+00:03:28.956 --> 00:03:33.896 align:middle
+true): Este votante ya nunca se ejecutará cuando
+comprobemos si existe alguno de esos atributos.
+
+00:03:34.346 --> 00:03:38.306 align:middle
+Tu app puede diferir en algunos aspectos:
+quizá tengas otros roles o permisos
+
+00:03:38.306 --> 00:03:40.926 align:middle
+de los que no quieras que se encargue
+el votante superadministrador.
+
+00:03:41.376 --> 00:03:43.756 align:middle
+Si es así, solo tienes que
+añadirlos a esta lista.
+
+00:03:44.616 --> 00:03:45.556 align:middle
+Ve a la página de inicio.
+
+00:03:45.866 --> 00:03:46.596 align:middle
+He iniciado sesión...
+
+00:03:46.836 --> 00:03:50.506 align:middle
+pero como hemos recargado los fixtures, debería
+salir de la sesión al actualizar la página.
+
+00:03:51.246 --> 00:03:54.726 align:middle
+Perfecto. Inicia sesión como
+janeway@starfleet.space —
+
+00:03:54.846 --> 00:03:57.956 align:middle
+ella es nuestra superadministradora
+— con la contraseña coffeeblack.
+
+00:03:59.166 --> 00:04:01.096 align:middle
+Ve a /admin/user.
+
+00:04:01.626 --> 00:04:05.526 align:middle
+Efectivamente, seguimos pudiendo acceder a
+esta página aunque requiera un administrador:
+
+00:04:06.036 --> 00:04:08.616 align:middle
+nuestro votante superadministrador
+nos está concediendo acceso.
+
+00:04:09.476 --> 00:04:11.826 align:middle
+Otra cosa que hay que
+comprobar: ve a /starship.
+
+00:04:12.226 --> 00:04:17.876 align:middle
+Si te acuerdas, los usuarios normales solo pueden editar su propia
+nave, pero los administradores pueden editar cualquier nave.
+
+00:04:18.316 --> 00:04:21.536 align:middle
+Y sí, ahora que somos superadministradores
+tenemos esa misma funcionalidad.
+
+00:04:22.236 --> 00:04:23.396 align:middle
+Edita una de las naves espaciales.
+
+00:04:23.796 --> 00:04:24.826 align:middle
+Veamos cómo funciona.
+
+00:04:25.256 --> 00:04:29.026 align:middle
+Ve a la barra de herramientas de depuración
+web, haz clic en el perfilador de seguridad
+
+00:04:29.216 --> 00:04:31.766 align:middle
+y echa un vistazo a la pestaña
+«Decisión de acceso».
+
+00:04:32.296 --> 00:04:34.386 align:middle
+Podemos ver todos los votantes
+que se están utilizando.
+
+00:04:34.996 --> 00:04:39.166 align:middle
+Abajo, en el registro de decisiones de
+acceso, vemos que se concedió ROLE_ADMIN.
+
+00:04:39.556 --> 00:04:42.496 align:middle
+No tenemos ese rol ni directamente ni
+a través de la jerarquía de roles.
+
+00:04:43.036 --> 00:04:44.546 align:middle
+Haz clic en «Mostrar detalles del votante».
+
+00:04:45.146 --> 00:04:49.566 align:middle
+El RoleHierarchyVoter nos lo denegó,
+pero el SuperAdminVoter nos lo concedió.
+
+00:04:50.196 --> 00:04:53.346 align:middle
+El siguiente nos muestra que se nos concedió
+permiso para editar una nave espacial.
+
+00:04:53.756 --> 00:04:57.786 align:middle
+«Mostrar detalles del votante» nos
+muestra que StarshipVoter nos lo concedió.
+
+00:04:58.186 --> 00:05:01.296 align:middle
+Esto se debe a la comprobación
+ROLE_ADMIN en StarshipVoter.
+
+00:05:01.756 --> 00:05:06.196 align:middle
+StarshipVoter comprobó ROLE_ADMIN, y
+el SuperAdminVoter nos lo concedió.
+
+00:05:06.956 --> 00:05:10.106 align:middle
+Aquí abajo, estas comprobaciones
+de IS_IMPERSONATOR fueron denegadas.
+
+00:05:10.416 --> 00:05:10.956 align:middle
+¡Eso está bien!
+
+00:05:11.196 --> 00:05:15.526 align:middle
+No tenemos ese atributo, ¡y nuestro votante
+superadministrador no lo concedió automáticamente!
+
+00:05:15.976 --> 00:05:18.296 align:middle
+¡Nuestro votante superadministrador
+funciona de maravilla!
+
+00:05:18.976 --> 00:05:22.236 align:middle
+A continuación: vamos a mejorar la experiencia de
+usuario de nuestro proceso de inicio de sesión.
