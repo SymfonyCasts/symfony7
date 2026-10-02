@@ -1,4 +1,4 @@
-# Crear un votante con derechos de superadministrador
+# Crear un votante con permisos de superadministrador
 
 Nuestra app tiene el concepto de «admin», y hemos usado una jerarquía de roles para asegurarnos de que
 un «admin» también tenga `ROLE_CAPTAIN` y `ROLE_ALLOWED_TO_SWITCH`. Y en nuestro
@@ -17,12 +17,11 @@ específico para los superadministradores.
 
 ## Un nuevo votante
 
-Primero, en `src/Story/AppStory.php`, cambia Janeway de `ROLE_ADMIN` a
-`ROLE_SUPER_ADMIN`:
+Primero, en `src/Story/AppStory.php`, cambia Janeway de `ROLE_ADMIN` a`ROLE_SUPER_ADMIN`:
 
 [[[ code('3ee1e55a43') ]]]
 
-Ya hemos actualizado los fixtures, así que en la terminal, recárgalos con:
+Ya hemos actualizado los fixtures, así que, en la terminal, recárgalos con:
 
 ```terminal
 symfony console foundry:load-fixtures
@@ -52,7 +51,7 @@ Aquí viene lo importante: `voteOnAttribute()`. Lo que comprobamos aquí es
 si tienen permiso o no.
 
 Hay varias formas de hacerlo. Recuerda que en `StarshipVoter` usamos el
-gestor de decisiones de acceso para decidir por el token; podríamos inyectarlo y hacer
+gestor de decisiones de acceso para decidir por el token; podríamos inyectar eso y hacer
 exactamente lo mismo. Lo hicimos así porque `ROLE_ADMIN` podría formar parte de una jerarquía de roles,
 por lo que quizá no esté configurado correctamente en el usuario.
 
@@ -92,8 +91,8 @@ Ahora, en lugar de devolver « `true` » en « `supports()` », devuelve
 Este votante ya nunca se ejecutará cuando comprobemos alguno de esos atributos.
 
 Tu app puede diferir en algunos aspectos: quizá tengas otros roles o permisos
-de los que no quieras que se encargue el votante superadministrador. Si es así, solo tienes que
-añadirlos a esta lista.
+de los que no quieras que se encargue el votante superadministrador. Si es así, solo tienes que añadirlos
+a esta lista.
 
 ## Probémoslo
 
@@ -104,7 +103,7 @@ Inicia sesión como `janeway@starfleet.space` —ella es nuestra superadministra
 `coffeeblack`.
 
 Ve a `/admin/user`. Efectivamente, seguimos pudiendo acceder a esta página aunque
-se requiera un administrador: nuestra superadministradora «voter» nos está dando acceso.
+se requiera un administrador: nuestra superadministradora «voter» nos está concediendo acceso.
 
 Otra cosa que hay que comprobar: ve a `/starship`. Si te acuerdas, los usuarios normales solo pueden
 editar su propia nave, pero los administradores pueden editar cualquier nave. Y sí, ahora tenemos esa misma
@@ -116,7 +115,7 @@ Veamos cómo funciona. Ve a la barra de herramientas de depuración web, haz cli
 perfilador de seguridad y echa un vistazo a la pestaña «Decisión de acceso». Podemos ver todos los
 votantes que se están utilizando.
 
-Abajo, en el registro de decisiones de acceso, vemos que se nos ha concedido `ROLE_ADMIN`. No tenemos
+En el registro de decisiones de acceso, vemos que se nos ha concedido el `ROLE_ADMIN`. No tenemos
 ese rol ni directamente ni a través de la jerarquía de roles. Haz clic en «Mostrar detalles del votante». El `RoleHierarchyVoter`
 nos lo denegó, pero el `SuperAdminVoter` nos lo concedió.
 
