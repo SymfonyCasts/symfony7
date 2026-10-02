@@ -31,7 +31,7 @@ or not.
 You can disable this. Go to `config/packages/security.yaml` and, at the very top,
 add `expose_security_errors: all`:
 
-
+[[[ code('f4de45bffb') ]]]
 
 Go back and try the correct password, `makeitso`. "Account is disabled."
 We see the real error now.
@@ -63,7 +63,7 @@ what we switched it to, and `account_status`.
 
 Let's try that one:
 
-
+[[[ code('c47cb14d9f') ]]]
 
 Jump back and try `picard@voyager.space` with password `makeitso`. "Invalid
 credentials." Perfect - it no longer exposes that we have an invalid user.
@@ -97,7 +97,7 @@ and that's what we want.
 
 Cut this from `checkPreAuth()` and paste it into `checkPostAuth()`:
 
-
+[[[ code('5d2671f8c0') ]]]
 
 Now try `picard@enterprise.space` with the correct password, `makeitso`. We see
 "Account is disabled." But with the wrong password: "Invalid credentials." Exactly
@@ -129,7 +129,7 @@ So we can customize it. Go into `translations/` - I do have Symfony's translator
 installed - and create a new file called `security.en.yaml`. Paste "Invalid
 credentials." in quotes and change the message to "Your email or password is incorrect.":
 
-
+[[[ code('b832c36e6d') ]]]
 
 Jump back to the login page and try again: `picard@enterprise.space` with the wrong
 password. There - our new message!

@@ -29,7 +29,7 @@ You'll only be able to use a single role.
 Instead, use an expression. Delete the role and use
 `allow_if: "is_granted('ROLE_ADMIN') and is_granted('IS_AUTHENTICATED_FULLY')"`:
 
-
+[[[ code('7dce874097') ]]]
 
 An expression gives us a much less ambiguous way to say "the user must be an admin AND they must
 be fully authenticated".
@@ -68,7 +68,7 @@ in an `{% if app.user %}`, with an `{% else %}` and an `{% endif %}`. If they're
 logged in, in the else, move the normal heading inside. If they *are* logged in, copy just
 the `h1` and change it to "Confirm your password":
 
-
+[[[ code('2c8b51b7e6') ]]]
 
 A bit further down, we have this message that tells them they're logged in. Delete
 that entirely - we don't want to show it anymore.
@@ -79,7 +79,7 @@ the `else`. And inside the `if`, all we need is `<input type="hidden">` with `na
 matching the one down here - `_username` - and a value of
 `{{ app.user.userIdentifier }}`, which is the email in our case:
 
-
+[[[ code('ad0cfafb0e') ]]]
 
 Refresh to see what that looks like. Cool - this looks much better!
 
@@ -89,11 +89,11 @@ an `{% else %}` and an `{% endif %}`. The checkbox goes in the `else`, and insid
 `if`, another hidden input, named `_remember_me` with a value of `1` - that gets
 interpreted as checked:
 
-
+[[[ code('b40ff35e6f') ]]]
 
 The last thing: change the "Sign in" button. Output `app.user ? 'Confirm' : 'Sign in'`:
 
-
+[[[ code('c7020d9a16') ]]]
 
 Refresh. Nice! Look how professional this looks!. Password, `coffeeblack`, and... we're in.
 

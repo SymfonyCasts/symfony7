@@ -20,7 +20,7 @@ specifically for super admins.
 First, in `src/Story/AppStory.php`, change Janeway from `ROLE_ADMIN` to
 `ROLE_SUPER_ADMIN`:
 
-
+[[[ code('3ee1e55a43') ]]]
 
 We've updated the fixtures, so over in the terminal, reload them with:
 
@@ -42,7 +42,7 @@ We'll start with a blank slate.
 
 For `supports()`, we're going to support *everything*, so just return `true`:
 
-
+[[[ code('dc3913f8cf') ]]]
 
 Any attribute, any subject: it doesn't matter, this voter supports it.
 
@@ -59,7 +59,7 @@ so it might not be set right on the user.
 But I'm going to say that super admins have to have `ROLE_SUPER_ADMIN` set directly
 on the user. That makes this real simple:`return in_array('ROLE_SUPER_ADMIN', $token->getRoleNames(), true);`
 
-
+[[[ code('e4e2711a87') ]]]
 
 `$token->getRoleNames()` is basically a shortcut to getting the roles off of our user and
 `true` gives us strict matching.
@@ -81,7 +81,7 @@ Back in `SuperAdminVoter`, add a `private const EXCLUSIONS` and, inside, add all
 those constants from `AuthenticatedVoter`. `IS_AUTHENTICATED`... `IS_AUTHENTICATED_FULLY`...
 `IS_AUTHENTICATED_REMEMBERED`... `IS_IMPERSONATOR`... `IS_REMEMBERED`... and... `PUBLIC_ACCESS`:
 
-
+[[[ code('f30adb2087') ]]]
 
 One, two, three, four, five, six - and over here, one, two, three, four, five, six.
 Great, got'em all!
@@ -89,7 +89,7 @@ Great, got'em all!
 Now, instead of returning `true` in `supports()`, return
 `!in_array($attribute, self::EXCLUSIONS, true)`:
 
-
+[[[ code('6ae9325bb1') ]]]
 
 This voter will now never run when we're checking for one of those attributes.
 

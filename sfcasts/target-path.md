@@ -26,6 +26,7 @@ set to our root - the homepage. That's why we end up there after logging in.
 But we also have this `use_referer` option. Let's check it out. In
 `config/packages/security.yaml`, under `form_login`, set `use_referer` to `true`:
 
+[[[ code('c248b104d3') ]]]
 
 Back over in our browser, logout... Ooops, I have a typo in my config... Not `user_referer`,
 it's `use_referer`.
@@ -53,7 +54,7 @@ Open `templates/base.html.twig` and find where we generate the login
 link - right here. We're generating a path to the `app_login` route. Add some parameters:
 `_target_path` set to `app.request.pathInfo`:
 
-
+[[[ code('f4bff617c4') ]]]
 
 Our `app_login` doesn't require any route parameters, so any extras are added as query parameters.
 Exactly what we want!
@@ -73,11 +74,11 @@ option sets which parameter we want to use.
 
 Back in `security.yaml`, set `target_path_parameter` to `referrer`:
 
-
+[[[ code('e2db3fe628') ]]]
 
 And in `base.html.twig`, use the same name:
 
-
+[[[ code('46428f3036') ]]]
 
 Go to a starship page. Now if we click login, sure enough, we're using `referrer` -
 and it looks a little nicer, I think. `picard@enterprise.space`, password
@@ -91,13 +92,13 @@ canonical link.
 
 In `base.html.twig`, in the `head`, add a `metadata` block... Leave it empty here:
 
-
+[[[ code('a735c732ef') ]]]
 
 Now, inside `templates/security/login.html.twig`, override that block and add a
 `link` tag with `rel="canonical"`. The `href` needs to be an *absolute* URL, so
 generate it with `url()` and the `app_login` route:
 
-
+[[[ code('0aa21f2ad1') ]]]
 
 I'm sure search engines are smart enough to not need this, but it is a good practice to be explicit.
 
