@@ -19,7 +19,7 @@ restricción a toda nuestra sección de administración —todo lo que esté baj
 Ve a `config/packages/security.yaml`. Aquí abajo, en `access_control`, ya tenemos
 una regla: para cualquier cosa que empiece por `/admin`, exigimos `ROLE_ADMIN`.
 
-Quizá pienses que aquí basta con usar un array… y sí que puedes… pero
+Quizá pienses que puedes usar simplemente un array aquí... y puedes… pero
 no es lo que quieres: es un «o». ¡Así que esto permitiría tanto a los administradores como a cualquier
 usuario totalmente autenticado acceder a la sección de administración!
 
