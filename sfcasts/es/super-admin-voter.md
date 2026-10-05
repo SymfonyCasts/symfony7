@@ -83,8 +83,7 @@ esas constantes de `AuthenticatedVoter`. `IS_AUTHENTICATED`... `IS_AUTHENTICATED
 Uno, dos, tres, cuatro, cinco, seis... y por aquí, uno, dos, tres, cuatro, cinco, seis.
 ¡Genial, los tienes todos!
 
-Ahora, en lugar de devolver « `true` » en « `supports()` », devuelve
-«`!in_array($attribute, self::EXCLUSIONS, true)` »:
+Ahora, en lugar de devolver `true` en `supports()`, devuelve `!in_array($attribute, self::EXCLUSIONS, true)`:
 
 [[[ code('6ae9325bb1') ]]]
 
@@ -99,11 +98,11 @@ a esta lista.
 Ve a la página de inicio. Estoy conectado... pero como hemos recargado los fixtures, debería
 desconectarme al actualizar la página. Perfecto.
 
-Inicia sesión como `janeway@starfleet.space` —ella es nuestra superadministradora— con la contraseña
+Inicia sesión como `janeway@starfleet.space` - ella es nuestra superadministradora - con la contraseña
 `coffeeblack`.
 
 Ve a `/admin/user`. Efectivamente, seguimos pudiendo acceder a esta página aunque
-se requiera un administrador: nuestra superadministradora «voter» nos está concediendo acceso.
+se requiera un administrador: nuestro votante superadministrador nos está concediendo acceso.
 
 Otra cosa que hay que comprobar: ve a `/starship`. Si te acuerdas, los usuarios normales solo pueden
 editar su propia nave, pero los administradores pueden editar cualquier nave. Y sí, ahora tenemos esa misma
