@@ -196,10 +196,10 @@ uno, dos, tres, cuatro, cinco, seis.
 
 00:03:21.136 --> 00:03:28.826 align:middle
 Ahora, en lugar de devolver true en supports(),
-devuelve !in_array($attribute, self::EXCLUSIONS,
+devuelve !in_array($attribute, self::EXCLUSIONS, true):
 
 00:03:28.956 --> 00:03:33.896 align:middle
-true): Este votante ya nunca se ejecutará cuando
+Este votante ya nunca se ejecutará cuando
 comprobemos si existe alguno de esos atributos.
 
 00:03:34.346 --> 00:03:38.306 align:middle
@@ -226,11 +226,11 @@ salir de la sesión al actualizar la página.
 
 00:03:51.246 --> 00:03:54.726 align:middle
 Perfecto. Inicia sesión como
-janeway@starfleet.space —
+janeway@starfleet.space
 
 00:03:54.846 --> 00:03:57.956 align:middle
-ella es nuestra superadministradora
-— con la contraseña coffeeblack.
+- ella es nuestra superadministradora -
+con la contraseña coffeeblack.
 
 00:03:59.166 --> 00:04:01.096 align:middle
 Ve a /admin/user.
