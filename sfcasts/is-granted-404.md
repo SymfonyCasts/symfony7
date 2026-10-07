@@ -1,3 +1,24 @@
+---
+challenges:
+    - key: why-404-not-403
+      question: |
+          Our `edit()` action uses `#[IsGranted('edit', subject: 'starship', statusCode: 404)]`.
+          What does the 404 buy us over the default 403?
+      answers:
+          - A 403 confirms the starship exists - a 404 keeps even its existence private.
+          - A 404 response is cacheable, so repeated unauthorized requests never hit the app.
+          - The voter is skipped entirely, so unauthorized requests cost less work.
+          - Symfony logs 403s as security incidents, while 404s stay out of the log.
+      explanation: |
+          A 403 says "this exists, but you can't have it". A 404 says nothing at all -
+          which is exactly what GitHub does for private repos. The authorization check
+          runs the same either way; only the status code changes.
+
+          It matters just as much when you're logged *out*: with the default 403, an
+          anonymous visitor is redirected to the login page, which leaks the starship's
+          existence every bit as loudly.
+---
+
 # Returning a 404 Instead of 403 with IsGranted
 
 Hey friends, welcome to Symfony Security: Going Further!
