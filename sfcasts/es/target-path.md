@@ -21,7 +21,7 @@ symfony console config:dump security firewalls
 ```
 
 Desplázate hacia arriba hasta encontrar « `form_login` ». Aquí está. Tenemos « `default_target_path` », y está
-configurado en nuestra página de inicio. Por eso acabamos ahí después de iniciar sesión.
+configurado en nuestra raíz: la página de inicio. Por eso acabamos ahí después de iniciar sesión.
 
 Pero también tenemos esta opción `use_referer`. Vamos a echarle un vistazo. En
 `config/packages/security.yaml`, en la sección `form_login`, cambia `use_referer` por `true`:
@@ -64,7 +64,7 @@ abajo, a la izquierda, puedes ver que `_target_path` está configurado como la r
 Haz clic en «Iniciar sesión» y lo verás aparecer en la barra de direcciones. Eso le indica a Symfony que redirija allí
 después.
 
-`picard@enterprise.space`, `makeitso` —¡y así es!
+`picard@enterprise.space`, `makeitso` —¡y así lo hace!
 
 ## Un nombre de parámetro más bonito
 
@@ -100,7 +100,7 @@ génala con `url()` y la ruta `app_login`:
 
 [[[ code('0aa21f2ad1') ]]]
 
-Estoy seguro de que los motores de búsqueda son lo suficientemente inteligentes como para no necesitar esto, pero es una buena práctica ser explícito.
+Seguro que los motores de búsqueda son lo suficientemente inteligentes como para no necesitar esto, pero es una buena práctica ser explícito.
 
 A continuación: veamos cómo podemos iniciar sesión con un correo electrónico o con un nuevo campo de nombre de usuario
 que añadiremos a nuestros usuarios.
