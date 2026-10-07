@@ -230,8 +230,8 @@ La mejor forma de hacerlo
 es con un enlace canónico.
 
 00:03:48.246 --> 00:03:52.746 align:middle
-En base.html.twig, en el head,
-añade un bloque « metadata »...
+En base.html.twig, en el archivo head,
+añade un bloque metadata...
 
 00:03:53.436 --> 00:04:01.596 align:middle
 Déjalo en blanco aquí: Ahora, dentro
@@ -243,7 +243,7 @@ etiqueta link con rel="canonical".
 
 00:04:08.596 --> 00:04:14.586 align:middle
 La URL href tiene que ser una URL absoluta,
-así que génala con url() y la ruta app_login:
+así que genérala con url() y la ruta app_login:
 
 00:04:15.286 --> 00:04:17.946 align:middle
 Estoy seguro de que los motores de búsqueda son lo
