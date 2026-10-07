@@ -1,0 +1,261 @@
+WEBVTT
+
+00:00:01.116 --> 00:00:06.396 align:middle
+Cuando estamos desconectados e intentamos acceder a
+un recurso protegido —por ejemplo, /admin/user —
+
+00:00:06.646 --> 00:00:08.186 align:middle
+nos redirige a la página de inicio de sesión.
+
+00:00:08.546 --> 00:00:12.936 align:middle
+Inicia sesión como nuestro administrador,
+janeway@starfleet.space, con la contraseña coffeeblack...
+
+00:00:12.936 --> 00:00:18.246 align:middle
+y, tras iniciar sesión, nos redirige
+al recurso al que intentábamos acceder.
+
+00:00:18.566 --> 00:00:20.026 align:middle
+Esa es la funcionalidad predeterminada.
+
+00:00:20.396 --> 00:00:21.196 align:middle
+Pero fíjate en esto.
+
+00:00:21.526 --> 00:00:24.996 align:middle
+Cierra sesión. Imaginemos que estamos en la página de
+la nave espacial y hacemos clic en «Iniciar sesión».
+
+00:00:25.546 --> 00:00:29.776 align:middle
+Esta vez, inicia sesión como
+picard@enterprise.space, con la contraseña makeitso.
+
+00:00:30.226 --> 00:00:33.316 align:middle
+Recuerda: cuando hicimos clic en «Iniciar sesión»,
+estábamos en la página de la nave espacial.
+
+00:00:33.556 --> 00:00:36.646 align:middle
+Pero ahora, tras iniciar sesión,
+hemos vuelto a la página de inicio.
+
+00:00:37.196 --> 00:00:40.836 align:middle
+Estaría bien que volviéramos a la página en la que
+estábamos cuando hicimos clic en «Iniciar sesión».
+
+00:00:41.326 --> 00:00:44.856 align:middle
+Ve a la terminal y echa un vistazo a las opciones de
+configuración de nuestro formulario de inicio de sesión:
+
+00:00:44.856 --> 00:00:52.516 align:middle
+symfony console config:dump security firewalls
+Desplázate hacia arriba hasta encontrar form_login.
+
+00:00:54.646 --> 00:00:55.126 align:middle
+Ahí lo tenemos.
+
+00:00:55.606 --> 00:00:59.556 align:middle
+Tenemos default_target_path, y está configurado
+en nuestra raíz: la página de inicio.
+
+00:00:59.986 --> 00:01:02.116 align:middle
+Por eso acabamos ahí
+después de iniciar sesión.
+
+00:01:02.116 --> 00:01:04.996 align:middle
+Pero también tenemos esta opción: use_referer
+
+00:01:05.356 --> 00:01:06.166 align:middle
+. Echemos un vistazo.
+
+00:01:06.576 --> 00:01:13.926 align:middle
+En config/packages/security.yaml, en la sección
+« form_login », cambia use_referer por true:
+
+00:01:14.986 --> 00:01:16.826 align:middle
+Vuelve al navegador y cierra sesión...
+
+00:01:17.526 --> 00:01:19.196 align:middle
+Ups, tengo un error tipográfico
+en mi configuración...
+
+00:01:19.556 --> 00:01:22.006 align:middle
+No es user_referer, sino use_referer.
+
+00:01:23.296 --> 00:01:24.036 align:middle
+Ahora actualiza la página...
+
+00:01:24.036 --> 00:01:25.456 align:middle
+y visita una página de naves espaciales.
+
+00:01:26.486 --> 00:01:28.126 align:middle
+Ah, asegúrate primero
+de haber cerrado sesión.
+
+00:01:29.746 --> 00:01:35.426 align:middle
+Haz clic en «Iniciar sesión» en esta página e inicia sesión
+como picard@enterprise.space, con la contraseña makeitso.
+
+00:01:36.106 --> 00:01:37.856 align:middle
+Y... ya estamos de vuelta
+en la página de inicio.
+
+00:01:38.136 --> 00:01:38.906 align:middle
+No ha funcionado...
+
+00:01:39.586 --> 00:01:41.886 align:middle
+use_referer le indica a Symfony que redirija
+
+00:01:41.886 --> 00:01:45.866 align:middle
+al encabezado HTTP Referer que los navegadores
+envían cuando haces clic en los enlaces.
+
+00:01:46.316 --> 00:01:49.156 align:middle
+Cuando visitamos la página de inicio de sesión
+por primera vez, está configurado correctamente...
+
+00:01:49.376 --> 00:01:52.176 align:middle
+pero en cuanto enviamos el formulario de
+inicio de sesión, lo hemos perdido...
+
+00:01:52.686 --> 00:01:56.476 align:middle
+Probablemente podrías hacer que funcionara con
+algún truco ingenioso, pero vamos a simplificarlo.
+
+00:01:57.086 --> 00:01:59.376 align:middle
+Vuelve al IDE y elimina use_referer.
+
+00:01:59.826 --> 00:02:01.566 align:middle
+Echa otro vistazo a la
+configuración en la terminal.
+
+00:02:01.826 --> 00:02:07.736 align:middle
+Hay otra opción: target_path_parameter,
+y está configurada como _target_path.
+
+00:02:07.736 --> 00:02:11.006 align:middle
+Podemos establecerla en la sesión
+o como parámetro de consulta.
+
+00:02:11.356 --> 00:02:12.566 align:middle
+Vamos a usar el parámetro de consulta.
+
+00:02:13.076 --> 00:02:20.106 align:middle
+Abre templates/base.html.twig y busca dónde
+generamos el enlace de inicio de sesión: justo aquí.
+
+00:02:20.606 --> 00:02:23.186 align:middle
+Estamos generando una ruta
+hacia la ruta app_login.
+
+00:02:23.666 --> 00:02:29.226 align:middle
+Añade algunos parámetros: _target_path
+establecido en app.request.pathInfo:
+
+00:02:29.926 --> 00:02:32.586 align:middle
+Nuestra ruta app_login no requiere
+ningún parámetro de ruta,
+
+00:02:32.586 --> 00:02:35.406 align:middle
+así que cualquier dato adicional se
+añade como parámetro de consulta.
+
+00:02:35.406 --> 00:02:36.606 align:middle
+¡Justo lo que queremos!
+
+00:02:37.236 --> 00:02:40.806 align:middle
+En el navegador, sal primero de tu sesión
+y luego haz clic en una nave espacial.
+
+00:02:41.426 --> 00:02:44.456 align:middle
+Ahora pasa el cursor por encima de «Iniciar sesión»:
+abajo a la izquierda, Haz clic en «Iniciar sesión »
+
+00:02:44.456 --> 00:02:48.646 align:middle
+verás que _target_path está
+configurado como la ruta de esta página.
+
+00:02:49.356 --> 00:02:51.936 align:middle
+y lo verás en la barra de direcciones.
+
+00:02:52.456 --> 00:02:55.336 align:middle
+Eso le indica a Symfony que
+te redirija allí después.
+
+00:02:55.806 --> 00:03:00.226 align:middle
+picard@enterprise.space,
+makeitso —¡y así lo hace!
+
+00:03:00.226 --> 00:03:04.806 align:middle
+Lo único que no me gusta es que
+_target_path parece un poco interno.
+
+00:03:05.176 --> 00:03:06.026 align:middle
+Quizá sea solo cosa mía.
+
+00:03:06.026 --> 00:03:07.486 align:middle
+Pero hay una forma de personalizarlo:
+
+00:03:07.876 --> 00:03:13.096 align:middle
+esa opción target_path_parameter
+establece qué parámetro queremos usar.
+
+00:03:13.096 --> 00:03:20.506 align:middle
+Vuelve a security.yaml y cambia target_path_parameter
+por referrer: Y en base.html.twig,
+
+00:03:20.786 --> 00:03:24.226 align:middle
+usa el mismo nombre: ve a la
+página de una nave espacial.
+
+00:03:25.546 --> 00:03:30.406 align:middle
+Ahora, si haces clic en «Iniciar sesión», efectivamente,
+estamos usando referrer, y creo que queda un poco mejor.
+
+00:03:31.176 --> 00:03:37.346 align:middle
+picard@enterprise.space,
+contraseña makeitso, y funciona.
+
+00:03:37.346 --> 00:03:38.266 align:middle
+Otra cosita más.
+
+00:03:38.516 --> 00:03:41.646 align:middle
+Como ahora cada página tiene su
+propio enlace de inicio de sesión,
+
+00:03:41.886 --> 00:03:44.736 align:middle
+queremos decirle a los motores de búsqueda
+que no rastreen todas y cada una de ellas.
+
+00:03:45.256 --> 00:03:47.466 align:middle
+La mejor forma de hacerlo
+es con un enlace canónico.
+
+00:03:48.246 --> 00:03:52.746 align:middle
+En base.html.twig, en el head,
+añade un bloque « metadata »...
+
+00:03:53.436 --> 00:04:01.596 align:middle
+Déjalo en blanco aquí: Ahora, dentro
+de templates/security/login.html.twig,
+
+00:04:02.576 --> 00:04:08.596 align:middle
+sobrescribe ese bloque y añade una
+etiqueta link con rel="canonical".
+
+00:04:08.596 --> 00:04:14.586 align:middle
+La URL href tiene que ser una URL absoluta,
+así que génala con url() y la ruta app_login:
+
+00:04:15.286 --> 00:04:17.946 align:middle
+Estoy seguro de que los motores de búsqueda son lo
+suficientemente inteligentes como para no necesitar esto,
+
+00:04:18.116 --> 00:04:20.786 align:middle
+pero es una buena práctica ser explícito.
+
+00:04:20.786 --> 00:04:24.036 align:middle
+A continuación: veamos cómo podemos iniciar
+sesión con un correo electrónico o con
+
+00:04:24.336 --> 00:04:27.286 align:middle
+un nuevo campo de nombre de usuario
+que añadiremos a nuestros usuarios.
