@@ -1,3 +1,23 @@
+---
+challenges:
+    - key: provider-property-vs-loader
+      question: |
+          We made `UserRepository` implement `UserLoaderInterface`. Why did we *also* have
+          to delete `property: email` from `app_user_provider`?
+      answers:
+          - With `property` set, the entity provider just queries that one field - removing it is what makes it call our `loadUserByIdentifier()`.
+          - "`property` has to go whenever the repository implements any extra interface."
+          - Leaving it would run both the property lookup and the loader, and Symfony would find two users.
+          - "`property` only applies to in-memory providers, so it was dead config anyway."
+      explanation: |
+          The entity provider works one way or the other, never both. With `property`, it
+          does a plain `findOneBy()` on that single field. Without it, it hands off to the
+          repository's `loadUserByIdentifier()` - the method we just wrote. Leave
+          `property: email` in place and our `orWhere()` never runs, so logging in by
+          username keeps failing. Drop it *without* implementing the interface and Symfony
+          throws an exception telling you to do one or the other.
+---
+
 # Logging in with a Username or Email
 
 I want to add the concept of a *username*: a unique string for each user. You've seen

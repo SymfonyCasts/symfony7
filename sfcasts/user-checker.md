@@ -1,3 +1,20 @@
+---
+challenges:
+    - key: why-disabledat-timestamp
+      question: |
+          We stored `disabledAt` as a nullable `datetime_immutable` instead of an
+          `enabled` boolean. What does that buy us?
+      answers:
+          - It records *when* the account was disabled, so the flag doubles as an audit trail.
+          - Doctrine can index a datetime column but not a boolean, so the lookup stays fast.
+          - A `null` datetime takes less space on disk than a boolean `false`.
+          - "`UserCheckerInterface` only reads datetime properties when deciding account status."
+      explanation: |
+          `null` means enabled, and any timestamp means disabled - with the moment the
+          status changed baked in. A boolean can answer "is this user disabled?" but
+          never "since when?".
+---
+
 # Disabling Users with a Custom UserChecker
 
 Let's add the concept of *disabled* users. These are users that have some kind of

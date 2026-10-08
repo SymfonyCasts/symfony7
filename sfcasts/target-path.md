@@ -1,3 +1,23 @@
+---
+challenges:
+    - key: use-referer-dead-end
+      question: |
+          We set `use_referer: true`, clicked "Login" from a starship page, logged in...
+          and still landed on the homepage. Why?
+      answers:
+          - The request that submits the form changes the referer to the login page itself.
+          - Browsers don't send a `Referer` header on POST requests.
+          - "`use_referer` only applies when Symfony redirected you to login from a protected page."
+          - "`default_target_path` always takes priority over `use_referer`."
+      explanation: |
+          `use_referer` redirects to whatever the `Referer` header holds *after* a
+          successful login. Clicking "Login" from a starship page sets that header
+          correctly - but the request that submits the form changes the referer to the
+          login page itself, and that's the one Symfony reads. Passing the path ourselves
+          through `target_path_parameter` survives both requests, which is why it's the
+          reliable fix.
+---
+
 # Redirecting After Login with _target_path
 
 When we're logged out and try to access a protected resource - say `/admin/user` -

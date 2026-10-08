@@ -1,3 +1,37 @@
+---
+challenges:
+    - key: why-role-disabled-logs-out
+      question: |
+          We add `ROLE_DISABLED` to `getRoles()` when a user is disabled. Nothing in the
+          app ever checks for that role - so why does adding it log them out?
+      answers:
+          - On every request Symfony reloads the user and compares them to the copy in the session - roles are part of that comparison, so any change deauthenticates the token.
+          - "`ROLE_DISABLED` is a reserved role that the firewall rejects automatically."
+          - Adding a role invalidates the signature on the session cookie.
+          - The user checker runs on every request and sees the new role.
+      explanation: |
+          Nothing grants or denies based on `ROLE_DISABLED` - it just has to *differ*
+          from what's stored in the session. Symfony refreshes the user from the provider
+          on each request and compares the password hash, the roles and the user
+          identifier. Any difference and the token is thrown out. It's the same mechanism
+          that logs out your other devices when you change your password.
+    - key: user-checker-not-per-request
+      question: |
+          We disabled Picard in the database while he was browsing, and he carried right
+          on. Why didn't the `UserChecker` from the last chapter stop him?
+      answers:
+          - A user checker only runs during authentication - nothing consults it on later requests.
+          - It only runs for form logins, not for requests authenticated from the session.
+          - "His session cached the old `disabledAt`, so `isEnabled()` still returned true."
+          - "`checkPreAuth()` did run, but exceptions it throws are ignored outside of login."
+      explanation: |
+          `UserCheckerInterface` is called by the authenticator - `checkPreAuth()` before
+          the password is verified, `checkPostAuth()` after - and by `switch_user`. Once
+          you're logged in, nothing calls it again. Symfony *does* reload the user from
+          the database on every request, so the new `disabledAt` is sitting right there
+          in memory; it's just that nobody asks the checker about it.
+---
+
 # Forcing Logout on Disabled Users
 
 We've successfully made it so that a disabled user can no longer log in. But what

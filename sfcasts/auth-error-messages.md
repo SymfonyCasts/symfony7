@@ -1,3 +1,43 @@
+---
+challenges:
+    - key: move-check-to-post-auth
+      question: |
+          Once `expose_security_errors` is set to `account_status`, why did we move the
+          disabled check from `checkPreAuth()` to `checkPostAuth()`?
+      answers:
+          - "`checkPreAuth()` runs before the password is verified, so anyone could type any password and learn the account is disabled."
+          - "`checkPreAuth()` doesn't receive the token, so it can't tell which account is being used."
+          - Account status exceptions thrown from `checkPreAuth()` are always masked as "Invalid credentials."
+          - "`checkPostAuth()` is the only one of the two that runs for remember-me logins."
+      explanation: |
+          `checkPreAuth()` runs as soon as the user is loaded from the provider, before
+          credentials are checked. `checkPostAuth()` waits until the password has passed.
+          With the real status message now exposed, leaving the check in pre-auth handed
+          "Account is disabled." to anyone who guessed an email address. After the move,
+          only someone who already knows the password sees it.
+    - key: customizing-disabled-message
+      question: |
+          We replaced "Invalid credentials." with an entry in `security.en.yaml`. How do
+          we do the same for the message a *disabled* user sees?
+      answers:
+          - Add a second entry keyed by "Account is disabled." - the `messageKey` that `DisabledException` returns.
+          - Pass our wording to the `DisabledException` constructor in `UserChecker`.
+          - Key it on `disabled`, since the exception's class name becomes the translation key.
+          - Nothing - with `account_status` set, Symfony already shows our custom text.
+      explanation: |
+          Every authentication exception exposes a `getMessageKey()`, and
+          `DisabledException` returns "Account is disabled." - the same string the bundled
+          XLIFF translates one-for-one. Add that as a key in
+          `translations/security.en.yaml` and the login page picks up your wording. Note
+          that the constructor message won't help: the template renders `messageKey`, not
+          `getMessage()`.
+
+          And this works even if your app is never translated into a second language.
+          The translator isn't only for multilingual sites - here it's just the override
+          layer that lets you reword a message coming from inside a vendor library,
+          without touching that library or writing any PHP.
+---
+
 # Customizing Authentication Error Messages
 
 Let's talk about the different security errors you can get on the login page.

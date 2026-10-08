@@ -1,3 +1,23 @@
+---
+challenges:
+    - key: super-admin-exclusions
+      question: |
+          Our `SuperAdminVoter` would happily say yes to *any* attribute for a super
+          admin. Why does `IS_AUTHENTICATED_FULLY` have to be in `EXCLUSIONS`?
+      answers:
+          - Otherwise a super admin browsing on just a remember-me cookie would pass the sudo-mode check without ever re-entering their password.
+          - "`AuthenticatedVoter` throws an exception if another voter also votes on its attributes."
+          - Those attributes are reserved - Symfony ignores custom voters that return true for them.
+          - The voter would recurse, since deciding `IS_AUTHENTICATED_FULLY` kicks off another access decision.
+      explanation: |
+          Those constants don't describe permissions, they describe *how* you
+          authenticated. One granting voter is all it takes - so if `SuperAdminVoter`
+          answered `IS_AUTHENTICATED_FULLY`, the `^/admin` rule from the sudo-mode chapter
+          would pass for a merely-remembered super admin and the "Confirm your password"
+          step would never appear. The other `AuthenticatedVoter` constants are in the
+          list for the same reason.
+---
+
 # Creating a Super Admin Voter
 
 Our app has the concept of an admin, and we've used role hierarchy to make sure that

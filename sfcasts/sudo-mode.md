@@ -1,3 +1,43 @@
+---
+challenges:
+    - key: access-control-roles-or
+      question: |
+          In `security.yaml`, our `access_control` rule for `^/admin` needs the user to be
+          an admin *and* fully authenticated. Why doesn't this do the job?
+
+          ```yaml
+          access_control:
+              - { path: ^/admin, roles: [ROLE_ADMIN, IS_AUTHENTICATED_FULLY] }
+          ```
+      answers:
+          - A list of attributes is an **or** - any fully authenticated user, admin or not, would get in.
+          - "`access_control` accepts only one role; a list is a configuration error."
+          - "`IS_AUTHENTICATED_FULLY` isn't allowed under `roles:`, only inside an expression."
+          - The list *is* an and, but it's evaluated before the user is loaded, so it always fails.
+      explanation: |
+          Attributes listed on an `access_control` rule are OR'd: access is granted the
+          moment one voter says yes, so any logged-in non-admin sails through on
+          `IS_AUTHENTICATED_FULLY` alone. That ambiguity is exactly why Symfony 8.2
+          deprecates putting several roles on one rule. An `allow_if` expression says what
+          you mean: `is_granted('ROLE_ADMIN') and is_granted('IS_AUTHENTICATED_FULLY')`.
+    - key: fully-vs-remembered
+      question: |
+          Janeway closed her browser days ago. She's back today and the remember-me cookie
+          logged her in automatically, without her typing anything. She opens
+          `/admin/user`, which now requires `IS_AUTHENTICATED_FULLY`. What happens?
+      answers:
+          - She's sent to the login page to enter her password again - the remember-me cookie isn't enough.
+          - She gets a 403 and no way forward, since remembered users are denied outright.
+          - "She gets in - `IS_AUTHENTICATED_FULLY` only shuts out anonymous visitors."
+          - Her remember-me cookie is deleted and she's logged out completely.
+      explanation: |
+          `IS_AUTHENTICATED_FULLY` is only granted when the user actually entered their
+          credentials. A remember-me cookie grants `IS_AUTHENTICATED_REMEMBERED` instead -
+          enough for Symfony to know who she is, not enough for anything sensitive. She
+          keeps her identity and gets bounced to the login form to re-authenticate, which
+          is the whole point of sudo mode.
+---
+
 # Sudo Mode: Requiring Full Authentication
 
 You've totally seen this before. On sites like GitHub, when you go to perform a
