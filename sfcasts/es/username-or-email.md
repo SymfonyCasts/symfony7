@@ -1,7 +1,7 @@
 # Iniciar sesión con un nombre de usuario o un correo electrónico
 
 Quiero añadir el concepto de nombre de usuario: una cadena única para cada usuario. Lo has visto
-en un montón de redes sociales, porque no quieres compartir los correos electrónicos de la gente. Si
+en montones de redes sociales, porque no quieres compartir los correos electrónicos de la gente. Si
 tienes una web con un perfil de usuario público, probablemente querrás un nombre de usuario para ello.
 
 Y lo que quiero para nuestros usuarios es que puedan iniciar sesión tanto con su correo electrónico como con
