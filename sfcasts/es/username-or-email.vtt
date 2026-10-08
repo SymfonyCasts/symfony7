@@ -1,0 +1,260 @@
+WEBVTT
+
+00:00:00.686 --> 00:00:05.216 align:middle
+Quiero añadir el concepto de nombre de
+usuario: una cadena única para cada usuario.
+
+00:00:05.586 --> 00:00:09.436 align:middle
+Lo has visto en un montón de redes sociales, porque no
+quieres compartir los correos electrónicos de la gente.
+
+00:00:09.846 --> 00:00:14.396 align:middle
+Si tienes una web con un perfil de usuario público,
+probablemente querrás un nombre de usuario para él.
+
+00:00:14.756 --> 00:00:17.526 align:middle
+Y lo que quiero para nuestros
+usuarios es que puedan iniciar
+
+00:00:17.526 --> 00:00:20.276 align:middle
+sesión tanto con su correo electrónico
+como con su nombre de usuario.
+
+00:00:20.276 --> 00:00:23.756 align:middle
+Primero, añade una columna « username
+» a nuestra entidad « User ».
+
+00:00:24.286 --> 00:00:31.036 align:middle
+En la terminal, usa el bundle Maker: symfony
+console make:entity Esto es para « User »,
+
+00:00:31.356 --> 00:00:36.586 align:middle
+la nueva propiedad es « username », será un «
+string » con una longitud de campo de « 255 ».
+
+00:00:37.126 --> 00:00:38.956 align:middle
+¿Puede este campo estar en
+nulo en la base de datos?
+
+00:00:38.956 --> 00:00:40.926 align:middle
+No, todos los usuarios
+necesitan un nombre de usuario.
+
+00:00:41.316 --> 00:00:41.916 align:middle
+Y eso es todo.
+
+00:00:41.916 --> 00:00:44.586 align:middle
+Ups, no quiero añadir una
+propiedad « exit »...
+
+00:00:44.586 --> 00:00:46.046 align:middle
+Simplemente forzaré el cierre del comando.
+
+00:00:47.296 --> 00:00:50.216 align:middle
+Ve a nuestra entidad de
+usuario en src/Entity/User.php.
+
+00:00:50.216 --> 00:00:54.256 align:middle
+Voy a comprobar que no se haya
+añadido la propiedad exit...
+
+00:00:54.466 --> 00:00:55.286 align:middle
+Bien, no se ha añadido.
+
+00:00:56.946 --> 00:01:01.896 align:middle
+Arriba, duplica la restricción de unicidad, porque
+queremos que los nombres de usuario también sean únicos:
+
+00:01:01.896 --> 00:01:07.826 align:middle
+añade el sufijo _USERNAME al
+nombre y cambia el campo a username.
+
+00:01:09.096 --> 00:01:13.946 align:middle
+A continuación, duplica la restricción de validación
+« UniqueEntity » para « username » con el mensaje
+
+00:01:14.116 --> 00:01:20.576 align:middle
+«Ya existe una cuenta con este nombre
+de usuario»: En la propia propiedad,
+
+00:01:20.576 --> 00:01:26.206 align:middle
+añade « #[Assert\NotBlank] »: Ahora que nuestra entidad
+está totalmente actualizada, crea una migración con:
+
+00:01:26.276 --> 00:01:32.616 align:middle
+symfony console make:migration Ve a la
+carpeta « migrations/ » y búscala.
+
+00:01:32.746 --> 00:01:39.546 align:middle
+Para la descripción, usa « add user.username
+column »: Ajusta la fábrica de Foundry.
+
+00:01:39.936 --> 00:01:47.566 align:middle
+En src/Factory/UserFactory.php, duplica el valor
+predeterminado « email », asígnale el nombre « username »,
+
+00:01:47.906 --> 00:01:50.746 align:middle
+y usa el generador Faker « ->userName() »:
+
+00:01:54.256 --> 00:01:59.816 align:middle
+En src/Story/AppStory.php, añade
+nombres de usuario a nuestros usuarios.
+
+00:01:59.816 --> 00:02:02.836 align:middle
+Para Picard, pon como nombre de
+usuario simplemente « picard ».
+
+00:02:02.836 --> 00:02:07.546 align:middle
+Y para Janeway, « janeway ».
+
+00:02:07.896 --> 00:02:11.766 align:middle
+Pan comido: ya hemos actualizado
+nuestros fixtures, así que recárgalos:
+
+00:02:11.766 --> 00:02:18.116 align:middle
+symfony console foundry:load-fixtures
+Ahora ajusta el formulario de registro.
+
+00:02:18.896 --> 00:02:28.836 align:middle
+En src/Form/RegistrationFormType.php, después de email, añade
+username: A continuación, la plantilla de inicio de sesión,
+
+00:02:29.096 --> 00:02:32.496 align:middle
+templates/security/login.html.twig.
+
+00:02:33.716 --> 00:02:41.056 align:middle
+Cambia la descripción para que mencione el nombre de usuario,
+cambia la etiqueta a «Correo electrónico o nombre de usuario»,
+
+00:02:41.366 --> 00:02:45.256 align:middle
+y cambia el campo de entrada type por text para que no
+obliguemos a nadie a poner un correo electrónico ahí:
+
+00:02:45.766 --> 00:02:49.466 align:middle
+El truco para que se pueda iniciar sesión tanto con el correo
+electrónico como con el nombre de usuario es bastante sencillo:
+
+00:02:49.766 --> 00:02:52.676 align:middle
+tenemos que hacer un pequeño ajuste
+en nuestro repositorio de usuarios.
+
+00:02:53.466 --> 00:03:00.946 align:middle
+En src/Repository/UserRepository.php,
+implementa otra interfaz: UserLoaderInterface.
+
+00:03:02.786 --> 00:03:06.606 align:middle
+Esta proviene del puente Symfony
+Doctrine y tiene un único método,
+
+00:03:06.746 --> 00:03:11.576 align:middle
+así que impleméntalo aquí
+abajo: loadUserByIdentifier().
+
+00:03:11.646 --> 00:03:17.436 align:middle
+Toma una cadena $identifier —en nuestro caso,
+lo que haya en el campo de nombre de usuario
+
+00:03:17.436 --> 00:03:22.876 align:middle
+de nuestro formulario de inicio de sesión— y
+devolvemos null si no se encuentra, o un UserInterface.
+
+00:03:23.586 --> 00:03:26.346 align:middle
+Como nuestra entidad User
+implementa UserInterface,
+
+00:03:26.516 --> 00:03:30.226 align:middle
+podemos usar simplemente las funciones habituales
+del generador de consultas de Doctrine.
+
+00:03:30.276 --> 00:03:40.096 align:middle
+return $this->createQueryBuilder('u') para
+empezar, luego ->where('u.email = :identifier')
+
+00:03:40.676 --> 00:03:44.346 align:middle
+y ->setParameter('identifier', $identifier).
+
+00:03:44.636 --> 00:03:49.406 align:middle
+Después, ->getQuery()->getOneOrNullResult()
+para rematar.
+
+00:03:49.406 --> 00:03:51.906 align:middle
+Esto funcionará exactamente
+igual que nuestro sistema actual.
+
+00:03:52.186 --> 00:03:55.526 align:middle
+Pero para añadir la posibilidad de usar tanto
+el correo electrónico como el nombre de usuario,
+
+00:03:55.736 --> 00:04:02.516 align:middle
+solo tienes que añadir ->orWhere('u.username
+= :identifier') al generador de consultas.
+
+00:04:03.756 --> 00:04:05.016 align:middle
+Eso es todo lo que tenemos que hacer aquí.
+
+00:04:05.356 --> 00:04:10.156 align:middle
+Pero ahora que nuestro repositorio de usuarios
+implementa UserLoaderInterface, hay una cosa más.
+
+00:04:10.866 --> 00:04:17.886 align:middle
+En config/packages/security.yaml, arriba,
+en la sección « app_user_provider »,
+
+00:04:18.096 --> 00:04:21.496 align:middle
+tenemos que eliminar la clave
+« property »: así se recurre
+
+00:04:21.496 --> 00:04:24.736 align:middle
+al método « loadUserByIdentifier()
+» de nuestro repositorio.
+
+00:04:27.176 --> 00:04:29.536 align:middle
+Vuelve a la app y actualiza nuestra
+página de inicio de sesión.
+
+00:04:30.666 --> 00:04:32.526 align:middle
+Genial: «Correo electrónico
+o nombre de usuario».
+
+00:04:32.726 --> 00:04:36.186 align:middle
+Intenta iniciar sesión solo con
+picard y la contraseña makeitso.
+
+00:04:36.896 --> 00:04:42.176 align:middle
+¡Ya estamos dentro! En la barra de herramientas de depuración web,
+sigue apareciendo el correo electrónico, no el nombre de usuario.
+
+00:04:44.186 --> 00:04:50.466 align:middle
+Eso es porque nuestra entidad ` User ` implementa
+` UserInterface`, que tiene ` getUserIdentifier() `
+
+00:04:50.576 --> 00:04:52.306 align:middle
+, y estamos usando el correo
+electrónico para eso.
+
+00:04:52.526 --> 00:04:56.516 align:middle
+Así que, dondequiera que se muestre un identificador
+de usuario, será el correo electrónico.
+
+00:04:56.956 --> 00:05:01.396 align:middle
+Si tienes contenido público, no uses el
+identificador de usuario para mostrar públicamente
+
+00:05:01.396 --> 00:05:04.186 align:middle
+quién es alguien: usa en
+su lugar getUsername().
+
+00:05:04.956 --> 00:05:08.036 align:middle
+Para asegurarte doblemente de que
+funciona en ambos sentidos, cierra sesión
+
+00:05:08.776 --> 00:05:13.576 align:middle
+y vuelve a iniciar sesión como
+picard@enterprise.space con la contraseña makeitso.
+
+00:05:14.086 --> 00:05:16.106 align:middle
+¡Ya está! Funciona en ambos sentidos.
+
+00:05:16.866 --> 00:05:20.096 align:middle
+Siguiente paso: vamos a mejorar nuestro sistema
+de suplantación de identidad de usuarios.
