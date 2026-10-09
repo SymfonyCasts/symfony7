@@ -74,7 +74,12 @@
             "id": "9-impersonate-voter",
             "name": "9. impersonate voter",
             "description": null
+        },
+        {
+            "id": "9-fix-buttons",
+            "name": "9. fix buttons",
+            "description": null
         }
     ],
-    "sha": "e1b9a8aecde1d5226a68e3469caadaa02b9c32ca"
+    "sha": "0847de22234a2db0f11d970acd55e62c25bca662"
 }

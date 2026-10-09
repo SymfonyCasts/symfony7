@@ -1,0 +1,18 @@
+diff --git a/templates/user_admin/index.html.twig b/templates/user_admin/index.html.twig
+index d2ef43e..93219bc 100644
+--- a/templates/user_admin/index.html.twig
++++ b/templates/user_admin/index.html.twig
+@@ -43,11 +43,11 @@
+                             {{ user.lastLogin ? user.lastLogin|date('Y-m-d H:i:s') : 'Never' }}
+                         </td>
+                         <td class="border-b p-4 border-gray-700 text-white">
+-                            <div class="flex gap-2">
++                            <div class="flex flex-start gap-2">
+                                 <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_user_admin_show', {'id': user.id}) }}">show</a>
+                                 <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_user_admin_edit', {'id': user.id}) }}">edit</a>
+                                 {% if is_granted('CAN_IMPERSONATE', user) %}
+-                                    <a class="bg-indigo-500 hover:bg-indigo-600 rounded p-1.5" href="{{ impersonation_path(user.userIdentifier) }}">switch to</a>
++                                    <a class="bg-indigo-500 hover:bg-indigo-600 rounded p-1.5 whitespace-nowrap" href="{{ impersonation_path(user.userIdentifier) }}">switch to</a>
+                                 {% endif %}
+                             </div>
+                         </td>
