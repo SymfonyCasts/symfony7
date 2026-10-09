@@ -205,3 +205,41 @@
         ;`
 - `security.yaml` - remove `property: email` from `app_user_provider`
 - try it out: login with username, then email - both work!
+
+## Custom Impersonation Voter
+
+- `/admin/user` - admins can impersonate any user
+    - rules: can't impersonate yourself! can't impersonate other admins
+- `security.yaml` - the default role is `ROLE_ALLOWED_TO_SWITCH` and we gave to admins
+- Symfony does an isGranted check for the configured role
+    - passes the user to be impersonated as the "subject"
+    - Ignored by default, but we can add a voter to customize
+- First thing: we need a custom role without the ROLE_ prefix
+    - This will prevent the default "role voter" from being called
+- `security.yaml` - remove `ROLE_ALLOWED_TO_SWITCH` from the role hierarchy
+- `switch_user.role: CAN_IMPERSONATE`
+- `user_admin/index.html.twig`, wrap the switch user link in an `is_granted('CAN_IMPERSONATE', user)` check
+- `SuperAdminVoter` - add `CAN_IMPERSONATE` to the exclusions
+- refresh page - links gone
+- `symfony console make:voter ImpersonationVoter`
+    - supports() - `return 'CAN_IMPERSONATE' === $attribute && $subject instanceof User;`
+    - voteOnAttribute()
+        - `@param User $subject`
+        - `if (!$currentUser = $token->getUser()) { return false; }`
+        - `if ($currentUser->getUserIdentifier() === $subject->getUserIdentifier()) { return false; }`
+        - `if (in_array('ROLE_SUPER_ADMIN', $token->getRoleNames(), true)) { return true; }`
+        - inject Security service
+        - `return !$this->security->isGrantedForUser($subject, 'ROLE_ADMIN');`
+- refresh page - links back just for picard
+- AppStory - add some users
+    - `UserFactory::createMany(5, ['roles' => ['ROLE_ADMIN']]);`
+    - `UserFactory::createMany(5, ['roles' => ['ROLE_USER']]);`
+- `symfony console foundry:load-fixtures`
+- refresh page - log back in janeway, can switch to everyone but myself
+- These buttons are driving me nuts
+    - `user_admin/index.html.twig`
+        - add `flex-start` to the button container
+        - add `whitespace-nowrap` to the switch to button
+- copy an admin's email, look at UserFactory - we default the password to `engage`
+- login as the admin...
+- `/admin/user` - no links to switch to other admins, but can switch to users
