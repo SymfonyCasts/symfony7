@@ -69,7 +69,12 @@
             "id": "8-username",
             "name": "8. username",
             "description": null
+        },
+        {
+            "id": "9-impersonate-voter",
+            "name": "9. impersonate voter",
+            "description": null
         }
     ],
-    "sha": "28c0ec865b78d469d5e3bebee1c79f52dd73f658"
+    "sha": "e1b9a8aecde1d5226a68e3469caadaa02b9c32ca"
 }

@@ -1,0 +1,108 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index c40ab16..757f016 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -43,6 +43,7 @@ security:
+             # https://symfony.com/doc/current/security/impersonating_user.html
+             switch_user:
+                 target_route: app_homepage
++                role: CAN_IMPERSONATE
+ 
+     # Note: Only the *first* matching rule is applied
+     access_control:
+@@ -52,7 +53,6 @@ security:
+     role_hierarchy:
+         ROLE_ADMIN:
+             - ROLE_CAPTAIN
+-            - ROLE_ALLOWED_TO_SWITCH
+ 
+ when@test:
+     security:
+diff --git a/src/Security/Voter/ImpersonationVoter.php b/src/Security/Voter/ImpersonationVoter.php
+new file mode 100644
+index 0000000..1747f7e
+--- /dev/null
++++ b/src/Security/Voter/ImpersonationVoter.php
+@@ -0,0 +1,41 @@
++<?php
++
++namespace App\Security\Voter;
++
++use App\Entity\User;
++use Symfony\Bundle\SecurityBundle\Security;
++use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
++use Symfony\Component\Security\Core\Authorization\Voter\Vote;
++use Symfony\Component\Security\Core\Authorization\Voter\Voter;
++
++final class ImpersonationVoter extends Voter
++{
++    public function __construct(private Security $security)
++    {
++    }
++
++    protected function supports(string $attribute, mixed $subject): bool
++    {
++        return 'CAN_IMPERSONATE' === $attribute && $subject instanceof User;
++    }
++
++    /**
++     * @param User $subject
++     */
++    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
++    {
++        if (!$currentUser = $token->getUser()) {
++            return false;
++        }
++
++        if ($currentUser->getUserIdentifier() === $subject->getUserIdentifier()) {
++            return false;
++        }
++
++        if (in_array('ROLE_SUPER_ADMIN', $token->getRoleNames(), true)) {
++            return true;
++        }
++
++        return !$this->security->isGrantedForUser($subject, 'ROLE_ADMIN');
++    }
++}
+diff --git a/src/Security/Voter/SuperAdminVoter.php b/src/Security/Voter/SuperAdminVoter.php
+index 556f22a..59f74bb 100644
+--- a/src/Security/Voter/SuperAdminVoter.php
++++ b/src/Security/Voter/SuperAdminVoter.php
+@@ -16,6 +16,7 @@ final class SuperAdminVoter extends Voter
+         AuthenticatedVoter::IS_IMPERSONATOR,
+         AuthenticatedVoter::IS_REMEMBERED,
+         AuthenticatedVoter::PUBLIC_ACCESS,
++        'CAN_IMPERSONATE',
+     ];
+ 
+     protected function supports(string $attribute, mixed $subject): bool
+diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
+index 41a29ee..d4f3683 100644
+--- a/src/Story/AppStory.php
++++ b/src/Story/AppStory.php
+@@ -29,6 +29,9 @@ final class AppStory extends Story
+             ]),
+         ]);
+ 
++        UserFactory::createMany(5, ['roles' => ['ROLE_ADMIN']]);
++        UserFactory::createMany(5, ['roles' => ['ROLE_CAPTAIN']]);
++
+         UserFactory::createOne([
+             'email' => 'janeway@starfleet.space',
+             'username' => 'janeway',
+diff --git a/templates/user_admin/index.html.twig b/templates/user_admin/index.html.twig
+index 179b973..d2ef43e 100644
+--- a/templates/user_admin/index.html.twig
++++ b/templates/user_admin/index.html.twig
+@@ -46,7 +46,9 @@
+                             <div class="flex gap-2">
+                                 <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_user_admin_show', {'id': user.id}) }}">show</a>
+                                 <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_user_admin_edit', {'id': user.id}) }}">edit</a>
+-                                <a class="bg-indigo-500 hover:bg-indigo-600 rounded p-1.5" href="{{ impersonation_path(user.userIdentifier) }}">switch to</a>
++                                {% if is_granted('CAN_IMPERSONATE', user) %}
++                                    <a class="bg-indigo-500 hover:bg-indigo-600 rounded p-1.5" href="{{ impersonation_path(user.userIdentifier) }}">switch to</a>
++                                {% endif %}
+                             </div>
+                         </td>
+                     </tr>
