@@ -243,3 +243,34 @@
 - copy an admin's email, look at UserFactory - we default the password to `engage`
 - login as the admin...
 - `/admin/user` - no links to switch to other admins, but can switch to users
+
+## Resetting a Forgotten Password
+
+- `symfony console make:reset-password`
+    - `symfony composer require symfonycasts/reset-password-bundle symfony/mailer`
+- `symfony console make:reset-password`
+    - route: `app_homepage`
+    - sender email: `support@starfleet.space`, `Starfleet Support`
+- `symfony console make:migration` - `add reset_password_request table`
+- `symfony console foundry:load-fixtures`
+- Creates a bunch of files...
+    - `src/Entity/ResetPasswordRequest.php`
+    - `src/Repository/ResetPasswordRequestRepository.php`
+    - `src/Form/ResetPasswordRequestFormType.php`
+    - `src/Form/ChangePasswordFormType.php`
+    - `src/Controller/ResetPasswordController.php`
+        - `request()` - request a reset
+        - `checkEmail()` - check email sent (faked if no account)
+        - `reset()` pulls the token from the URL, adds to session and redirects
+            - inject `Security $security`
+            - `$this->addFlash('success', 'Your password has been reset, you are now logged in!');`
+            - `$security->login($user);`
+    - templates (paste):
+        - `templates/reset_password/check_email.html.twig`
+        - `templates/reset_password/request.html.twig`
+        - `templates/reset_password/reset.html.twig`
+- `templates/security/login.html.twig` paste below the form...
+- test it out... new password: `makeitso1engage?`
+- `symfony console config:dump symfonycasts_reset_password`
+    - `lifetime` - how long the token is valid for
+    - `throttle_limit` - how many requests within the time
