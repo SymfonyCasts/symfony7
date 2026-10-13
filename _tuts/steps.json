@@ -79,7 +79,12 @@
             "id": "9-fix-buttons",
             "name": "9. fix buttons",
             "description": null
+        },
+        {
+            "id": "10-reset-password",
+            "name": "10. reset password",
+            "description": null
         }
     ],
-    "sha": "0847de22234a2db0f11d970acd55e62c25bca662"
+    "sha": "3701f4d141c436f37ed3b5debe101ddf4b225206"
 }
