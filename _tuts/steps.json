@@ -84,7 +84,17 @@
             "id": "10-reset-password",
             "name": "10. reset password",
             "description": null
+        },
+        {
+            "id": "11-change-password",
+            "name": "11. change password",
+            "description": null
+        },
+        {
+            "id": "11-current-password",
+            "name": "11. current password",
+            "description": null
         }
     ],
-    "sha": "3701f4d141c436f37ed3b5debe101ddf4b225206"
+    "sha": "27397544df40504d58bad88d7779a35f90d0973c"
 }
