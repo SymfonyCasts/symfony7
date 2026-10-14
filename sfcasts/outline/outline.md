@@ -274,3 +274,56 @@
 - `symfony console config:dump symfonycasts_reset_password`
     - `lifetime` - how long the token is valid for
     - `throttle_limit` - how many requests within the time
+
+## Adding a Change Password Form
+
+- `symfony console make:controller ChangePassword`
+- rename template to `change_password.html.twig`, move to `security`
+- `ChangePasswordController`
+    - rename path to `/change-password`
+    - render the proper template
+    - rename method to `__invoke()`
+    - inject `User`, `EntityManagerInterface`, `UserPasswordHasherInterface`, `Request`
+- we can reuse the `ChangePasswordFormType` from the reset password bundle
+- Back in controller
+    - `$form = $this->createForm(ChangePasswordFormType::class);`
+    - `$form->handleRequest($request);`
+    - `if ($form->isSubmitted() && $form->isValid()) {`
+    - `$password = $form->get('plainPassword')->getData();`
+    - `$user->setPassword($passwordHasher->hashPassword($user, $password));`
+    - `$em->flush();`
+    - `$this->addFlash('success', 'Your password has been changed!');`
+    - `return $this->redirectToRoute('app_homepage');`
+    - To the template, pass the form
+- `change_password.html.twig`
+    - clear out boilerplate, then `{{ form(form) }}`
+- Visit `/change-password`... login... works!
+- Need the current password, could require `IS_AUTHENTICATED_FULLY`
+  in the controller, but let's add a field to the form
+- `ChangePasswordFormType` - needs to be optional as it isn't required in the reset pw
+    - `public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'require_current' => false,
+        ]);
+        $resolver->setAllowedTypes('require_current', 'bool');
+    }`
+    - `buildForm()` - add a `require_current` option
+    - `if ($options['require_current']) {
+            $builder->add('currentPassword', PasswordType::class, [
+                'constraints' => [
+                    new NotBlank(
+                        message: 'Please enter your current password',
+                    ),
+                    new UserPassword(),
+                ],
+                'mapped' => false,
+                'label' => 'Current password',
+            ]);
+        }`
+- refresh `/change-password` - no new field
+- `ChangePasswordController` - pass `options: ['require_current' => true]` to the form
+- refresh, added!
+- paste some styling...
+- try a wrong current password - validation error!
+- change password to `makeitso1engage?` - works!
