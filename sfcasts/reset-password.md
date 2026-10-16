@@ -37,7 +37,7 @@ symfony console make:migration
 Find it under `migrations/` in your IDE and set the description to
 `add reset_password_request table`:
 
-
+[[[ code('1fef97f38c') ]]]
 
 Then reload the fixtures:
 
@@ -130,13 +130,13 @@ email sent to their address. It's almost like a login link.
 Up in the `reset()` method, tidy up these parameters a bit, because we're adding a new
 one: inject `Security` from the Symfony security bundle:
 
-
+[[[ code('65046bdb5a') ]]]
 
 Then down in the happy path, right before we redirect to the homepage, add
 `$this->addFlash('success', 'Your password has been reset, you are now logged in!');` and
 `$security->login($user);`:
 
-
+[[[ code('97aea1b8e4') ]]]
 
 I think this is a better user experience.
 
@@ -171,7 +171,7 @@ First, `check_email.html.twig`: what they see after submitting the request. Noti
 have - plus a link to try again. I'll paste in some nicer styling, you can find this in
 the script below:
 
-
+[[[ code('ab8ba748a1') ]]]
 
 Next is the email template itself. It looks pretty boring... but we'll keep it that way for
 now, the important part is that it generates an *absolute* URL to the reset
@@ -180,18 +180,18 @@ expires.
 
 Then `request.html.twig`, the form that asks for your email. I'll paste some styling here too:
 
-
+[[[ code('4aad2e1cd0') ]]]
 
 And the last one is the reset form: where they land after clicking a valid link. I'll make
 this one prettier too:
 
-
+[[[ code('65524e963b') ]]]
 
 One more thing - the login form needs a "forgot password" link. In
 `templates/security/login.html.twig`, just below the form, I'll paste a snippet
 you can find in the script below:
 
-
+[[[ code('b8df3de82d') ]]]
 
 If the user isn't already logged in, they see the link.
 

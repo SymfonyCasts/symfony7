@@ -28,18 +28,18 @@ just called `role`. We're going to use a custom one that *doesn't* include the
 `ROLE_` prefix, because we want Symfony's packaged role voter to ignore it completely
 and leave this to our custom voter. Call it `CAN_IMPERSONATE`:
 
-
+[[[ code('030d900337') ]]]
 
 Now, in `templates/user_admin/index.html.twig`, wrap the impersonation link in an
 `{% if is_granted('CAN_IMPERSONATE', user) %}` - passing the user from the current
 loop as the subject. Add `{% endif %}`... and indent the guts:
 
-
+[[[ code('e35524d55c') ]]]
 
 The other thing: our `SuperAdminVoter` in `src/Security/Voter/` has that `EXCLUSIONS`
 list. Add `CAN_IMPERSONATE` to that list, so super admins can't bypass our new voter.
 
-
+[[[ code('762e07dda1') ]]]
 
 Double-check that this is working. Back on the user admin, refresh. Sure enough, that
 link is gone - super admins can't bypass this check anymore.
@@ -59,23 +59,29 @@ clear out `supports()` and `voteOnAttribute()`.
 
 In `supports()`, `return 'CAN_IMPERSONATE' === $attribute && $subject instanceof User`:
 
-
+[[[ code('66c5be66a3') ]]]
 
 Add some docblocks to `voteOnAttribute()`: clear them all out except
 for the subject. Because of that check up above, we know the subject is going to be our
-`User` entity.
+`User` entity:
+
+[[[ code('4274623ed4') ]]]
 
 Now, get the `$currentUser` from the token and make sure it isn't null. If we can't get
-the current user, return `false`. Now check whether the subject's user identifier is the same as the
-current user's identifier - that's so we can't impersonate ourselves:
+the current user, return `false`:
 
+[[[ code('f188e6da50') ]]]
 
+Now check whether the subject's user identifier is the same as the current user's
+identifier - that's so we can't impersonate ourselves:
+
+[[[ code('77cfaa6c7f') ]]]
 
 Next, copy that `in_array()` check from our super admin voter: if the current user has
 `ROLE_SUPER_ADMIN`, return `true`. Super admins are allowed to impersonate anybody else -
 that's the bypass:
 
-
+[[[ code('802bc6f19e') ]]]
 
 Remember, when we created the super admin voter, we decided to check that role right
 off the user itself, *not* through the role hierarchy.
@@ -83,11 +89,11 @@ off the user itself, *not* through the role hierarchy.
 ## `isGrantedForUser()`
 
 But now we *do* want to check the role hierarchy, to see if the target user is an
-admin. For that, create a constructor... And inject the `Security` service as `$security`.
+admin. For that, create a constructor... And inject the `Security` service as `$security`:
 
-Back down in `voteOnAttribute()`, `return !$this->security->isGrantedForUser()`:
+[[[ code('89c2ef986d') ]]]
 
-
+Back down in `voteOnAttribute()`, `return !$this->security->isGrantedForUser()`.
 
 Normally you've used just `isGranted()`. `isGrantedForUser()` lets you check an
 *arbitrary* user instead of the currently logged-in one - really useful in things like
@@ -95,7 +101,9 @@ CLI commands where there is no current user. It works exactly like `isGranted()`
 except the first argument is the user you're checking, the second is the attribute, and the third
 is the optional subject.
 
-Pass `$subject` as the user and `ROLE_ADMIN` as the attribute.
+Pass `$subject` as the user and `ROLE_ADMIN` as the attribute:
+
+[[[ code('89c2ef986d') ]]]
 
 Back to the page and refresh. Cool! We can't switch to ourselves - that rule works -
 but we *can* switch to a captain.
@@ -107,7 +115,7 @@ Let's add some extra users to better see the feature. Go to
 `UserFactory::createMany(5)` with their roles set to `ROLE_ADMIN`. Duplicate
 this line to add 5 more but for `ROLE_CAPTAIN`:
 
-
+[[[ code('78024df228') ]]]
 
 That creates five admins and five captains on top of our existing users. Load them:
 
@@ -122,7 +130,7 @@ Before we go further, I want to fix something that's really driving me crazy: th
 ugly action buttons. Back over in `user_admin/index.html.twig`, fix the container with `flex-start`, and
 because that button has two words in it, add `whitespace-nowrap`:
 
-
+[[[ code('b17c1d4ce7') ]]]
 
 Refresh. There we go - much better.
 
