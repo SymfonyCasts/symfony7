@@ -1,4 +1,4 @@
-# Cómo restringir la suplantación de identidad con un votante
+# Cómo restringir la suplantación de identidad con un usuario
 
 En nuestra gestión de usuarios, los administradores pueden cambiar a diferentes usuarios usando
 la función de suplantación de identidad de Symfony (o « `switch_user` »). Funciona así: en
@@ -30,8 +30,7 @@ y deje esta tarea a nuestro «voter» personalizado. Llámalo « `CAN_IMPERSONAT
 
 [[[ code('030d900337') ]]]
 
-Ahora, en `templates/user_admin/index.html.twig`, envuelve el enlace de suplantación de identidad en un
-`{% if is_granted('CAN_IMPERSONATE', user) %}`, pasando al usuario del bucle actual
+Ahora, en `templates/user_admin/index.html.twig`, envuelve el enlace de suplantación de identidad en un`{% if is_granted('CAN_IMPERSONATE', user) %}`, pasando al usuario del bucle actual
 como sujeto. Añade `{% endif %}`... y sangra el código:
 
 [[[ code('e35524d55c') ]]]
