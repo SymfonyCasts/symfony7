@@ -1,3 +1,53 @@
+---
+challenges:
+    - key: why-no-role-prefix
+      question: |
+          We pointed `switch_user` at a custom attribute, and deliberately left the
+          `ROLE_` prefix off the name:
+
+          ```yaml
+          switch_user:
+              role: CAN_IMPERSONATE
+          ```
+
+          Why does leaving that prefix off matter?
+      answers:
+          - Symfony's packaged role voter only votes on attributes that start with `ROLE_`, so dropping the prefix keeps it out of this decision entirely.
+          - Only attributes *without* a `ROLE_` prefix can be passed a subject, so our voter would never see the target user.
+          - "The `role` option under `switch_user` rejects any value that already appears in `role_hierarchy`."
+          - Without the prefix, the check skips the access decision manager and goes straight to our voter.
+      explanation: |
+          `RoleVoter` abstains on anything that doesn't start with `ROLE_`, so
+          `CAN_IMPERSONATE` sails right past it and our `ImpersonationVoter` is the only
+          one with an opinion. Had we kept a `ROLE_` name that lived in `role_hierarchy`,
+          that voter would have granted access all on its own - and our careful rules
+          about *who* you're allowed to switch to would never have gotten a word in.
+    - key: is-granted-for-user-vs-is-granted
+      question: |
+          Our voter needs to know whether the *target* user - the one we're switching
+          to - is an admin. We injected the `Security` service and wrote:
+
+          ```php
+          return !$this->security->isGrantedForUser($subject, 'ROLE_ADMIN');
+          ```
+
+          Why not the more familiar `$this->security->isGranted('ROLE_ADMIN')`?
+      answers:
+          - "`isGranted()` only ever answers for the *currently logged-in* user - here, the admin doing the switching, not the one being switched to."
+          - "`isGranted()` can't be called from inside a voter, because it would re-enter the access decision and recurse forever."
+          - "`isGranted()` skips `role_hierarchy`, so `ROLE_ADMIN` would only match users who have it listed literally."
+          - "Both would work, but `isGranted()` is deprecated in favour of `isGrantedForUser()`."
+      explanation: |
+          `isGranted()` has exactly one user in mind: whoever is logged in right now. It
+          would have cheerfully told us that *Janeway* is an admin - which we already
+          knew! `isGrantedForUser()` takes the user as its first argument, so we can ask
+          the very same question about anybody else. That makes it a lovely tool outside
+          of voters too: CLI commands and background workers have no logged-in user at
+          all, and this works just fine there. And since it runs through the normal
+          access decision, `role_hierarchy` still applies - so a super admin counts as an
+          admin here too.
+---
+
 # Restricting Impersonation with a Voter
 
 In our user admin, admins have the ability to switch to different users using

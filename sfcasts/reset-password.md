@@ -1,3 +1,51 @@
+---
+challenges:
+    - key: fake-reset-token-enumeration
+      question: |
+          Submit the forgot-password form with an email that has no account, and the
+          controller doesn't tell you. It sends you to the very same "check your email"
+          page - and since that page shows how long the link is good for, it's handed a
+          *fake* token so the expiry reads exactly like the real thing.
+
+          Why go to that length?
+      answers:
+          - If the two cases looked any different at all, the reset form would become a handy tool for discovering which addresses have accounts.
+          - Generating a fake token keeps the response time identical, which is the only thing an attacker can actually measure.
+          - "The fake token reserves a row in `reset_password_request`, so the throttle limit applies to unknown addresses too."
+          - It gives the bundle's garbage collection something to clean up, keeping the table's behaviour consistent.
+      explanation: |
+          This is the same *user enumeration* problem from our authentication error
+          messages chapter, turning up on a different form. If an unknown address
+          produced "no account found" while a real one produced "check your email",
+          anyone could sit there feeding addresses into the form and quietly build a list
+          of your users. Keeping the two responses identical - right down to the expiry
+          on the page - means there's simply nothing to learn either way. And the fake
+          token is never stored anywhere: it exists purely so the page can render.
+    - key: programmatic-login-after-reset
+      question: |
+          After a successful reset, we log the user in ourselves - no password prompt, no
+          login form:
+
+          ```php
+          $this->addFlash('success', 'Your password has been reset, you are now logged in!');
+          $security->login($user);
+          ```
+
+          Why is it OK to skip the login form here?
+      answers:
+          - To get this far, they clicked a link emailed to their own address - proving they control that inbox - and then chose the new password themselves. There's nothing left for a login form to verify.
+          - "`login()` only grants `IS_AUTHENTICATED_REMEMBERED`, so anything sensitive will still ask for the password."
+          - The reset token counts as a credential of its own, so Symfony marks the session as authenticated whether we call `login()` or not.
+          - It isn't really OK - but the session is discarded on the next request, so the risk window is tiny.
+      explanation: |
+          Being suspicious of logging someone in without a password is a healthy
+          instinct! But look at what just happened: they proved they control the inbox for
+          that address by clicking the emailed link, and they picked the new password
+          themselves seconds ago. It's much the same idea as a login link. Asking them to
+          immediately type the password they just typed twice adds friction without
+          adding any proof.
+---
+
 # Resetting a Forgotten Password
 
 As soon as you have authentication that requires a password, you need a way for users

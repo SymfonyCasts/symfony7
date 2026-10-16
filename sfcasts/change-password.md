@@ -1,3 +1,60 @@
+---
+challenges:
+    - key: current-user-non-nullable-redirect
+      question: |
+          Our controller takes the user as a non-nullable argument:
+
+          ```php
+          public function __invoke(
+              #[CurrentUser]
+              User $user,
+              // ...
+          ): Response {
+          ```
+
+          We never added an `#[IsGranted]` or an `access_control` rule - yet visiting
+          `/change-password` while logged out sends us straight to the login page. Why?
+      answers:
+          - With nobody logged in, Symfony has no `User` to hand a non-nullable argument, so it denies access - and the firewall turns that into a redirect to the login form.
+          - "`#[CurrentUser]` implies `IS_AUTHENTICATED_FULLY` and runs an access check of its own before the controller is called."
+          - "Symfony passes `null`, and the redirect comes from the firewall noticing that `$user->setPassword()` failed."
+          - "Routes whose templates live under `security/` are covered by an `access_control` rule out of the box."
+      explanation: |
+          The rule is a simple one: if nobody is logged in and the argument isn't
+          nullable, Symfony won't call the controller at all - it denies access rather
+          than handing us `null`. The firewall catches that and, since we aren't
+          authenticated, sends us off to the login form. So writing `User $user` instead
+          of `?User $user` quietly became our access control - lovely when that's exactly
+          what you wanted! Make it nullable and the behaviour flips: we'd get `null`, and
+          the page would happily render.
+    - key: why-require-current-option
+      question: |
+          We tucked the `currentPassword` field behind an option that defaults to off:
+
+          ```php
+          if ($options['require_current']) {
+              $builder->add('currentPassword', PasswordType::class, [
+                  // ...
+              ]);
+          }
+          ```
+
+          Why not simply always add the field?
+      answers:
+          - The reset-password flow renders this very same form type - and someone resetting a forgotten password has no idea what their current one is.
+          - "`PasswordType` fields can't be added unconditionally when the form isn't bound to an object."
+          - "The `UserPassword` constraint only works on the first field of a form, so the field has to be added conditionally."
+          - "Always adding it would break `RepeatedType`, which needs to be the only field in the form."
+      explanation: |
+          `ChangePasswordFormType` came to us from the reset password maker, and it's
+          pulling double duty now: the reset flow renders it for someone who just clicked
+          a link in their email, and our new controller renders it for someone who's
+          already logged in. Those two people know very different things! Making the
+          field opt-in meant the reset flow kept working without us touching a single
+          line of it, while our controller switches the field on with
+          `createForm(ChangePasswordFormType::class, options: ['require_current' => true])`.
+---
+
 # Adding a Change Password Form & UserPassword
 
 We need a way for logged-in users to change their password if they want to.
