@@ -363,13 +363,13 @@
             - sliding window: same as fixed window, but moves with each hit (prevents bursts)
             - token bucket: start with x tokens, each hit consumes a token, tokens refill at a rate
             - we'll use `sliding_window`
-        - `limit: 5`
-        - `interval: '1 hour'
-        - 5 registration attempts per hour
+        - `limit: 1`
+        - `interval: '10 minutes'
+        - 1 registration per 10 minutes
 - `symfony console debug:autowiring RateLimiter`
 - `RegistrationController::register()`
     - Inject `RateLimiterFactoryInterface $limiterFactory` `#[Target('registration')]`
-    - `if ($form->isSubmitted()) {`
+    - when form submitted and valid
         - `$limit = $limiterFactory->create($request->getClientIp())->consume();`
         - `if (!$limit->isAccepted()) {`
             - `$this->addFlash('error', 'Too many registration attempts. Please try again later.');`
@@ -377,5 +377,11 @@
 - Rate limiters use our cache, to test it out, let's use the filesystem adapter
 - `config/packages/cache.yaml`
     - `app: cache.adapter.filesystem`
-- Visit `/register`, submit 5 times, then 6th time - "Too many registration attempts. Please try again later."
-- Next, some new security features in Symfony 8.2
+- Visit `/register`, let's fix this username field
+- In `templates/registration/register.html.twig`
+    - duplicate the email field, rename to username
+- Refresh `/register`
+    - `worf@enterprise.space`, `worf`... register...
+- Logout and register...
+    - `natasha@enterprise.space`, `natasha`... register...
+    - Too many registration attempts. Please try again later.
