@@ -327,3 +327,55 @@
 - paste some styling...
 - try a wrong current password - validation error!
 - change password to `makeitso1engage?` - works!
+
+## `NotCompromisedPassword` Validator
+
+- We have 3 places we require/validate passwords
+    - Registration
+    - Reset Password
+    - Change Password
+- Luckily, Change and Reset both use `ChangePasswordFormType`
+- `RegistrationFormType` has different constraints
+- Instead of duplicating, create `src/Validator/Constraints/Password.php`
+    - final, extends `Compound`
+    - `getConstraints()` - return an array of constraints
+    - paste from `ChangePasswordFormType`
+- In `RegistrationFormType` and `ChangePasswordFormType`,
+  replace the constraints with `new Password()`
+- Let's test these constants out!
+- Visit `/register`,
+    - try `password` fails - too short, not strong enough, compromised
+    - try `passwordpassword` fails - not strong enough, compromised
+- Look at `PasswordStrength` - uses some math to determine strength score
+    - can adjust the min score, medium is the default
+- Visit `/register`,
+    - try `correcthorsebatterystaple` - passes strength, but fails compromised
+- That's `NotCompromisedPassword` at work - checks haveibeenpwned.com for known compromised passwords
+    - doesn't actually send the password, just part of a hash of it
+
+## Rate Limiting Registration
+
+- Want to ratelimit `RegistrationController::register()`
+- create `config/packages/rate_limiter.yaml`
+    - `framework.rate_limiter.registration`
+        - `policy:`
+            - fixed window: x hits in y time (1 hits per hour)
+            - sliding window: same as fixed window, but moves with each hit (prevents bursts)
+            - token bucket: start with x tokens, each hit consumes a token, tokens refill at a rate
+            - we'll use `sliding_window`
+        - `limit: 5`
+        - `interval: '1 hour'
+        - 5 registration attempts per hour
+- `symfony console debug:autowiring RateLimiter`
+- `RegistrationController::register()`
+    - Inject `RateLimiterFactoryInterface $limiterFactory` `#[Target('registration')]`
+    - `if ($form->isSubmitted()) {`
+        - `$limit = $limiterFactory->create($request->getClientIp())->consume();`
+        - `if (!$limit->isAccepted()) {`
+            - `$this->addFlash('error', 'Too many registration attempts. Please try again later.');`
+            - `return $this->redirectToRoute('app_register');`
+- Rate limiters use our cache, to test it out, let's use the filesystem adapter
+- `config/packages/cache.yaml`
+    - `app: cache.adapter.filesystem`
+- Visit `/register`, submit 5 times, then 6th time - "Too many registration attempts. Please try again later."
+- Next, some new security features in Symfony 8.2
