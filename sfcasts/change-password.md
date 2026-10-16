@@ -43,7 +43,7 @@ Next we need to save the new password, so add `EntityManagerInterface $em`. We n
 hash it, so `UserPasswordHasherInterface $hasher`. And we need the `Request` from HTTP
 foundation:
 
-
+[[[ code('879d585119') ]]]
 
 ## Reusing the Form
 
@@ -58,9 +58,9 @@ So: `$form = $this->createForm(ChangePasswordFormType::class)`, then
 password off the form with `$form->get('plainPassword')->getData()`. Take the user we
 injected above, `setPassword()`, and hash it with `$hasher->hashPassword()`. Then
 `$em->flush()`, add a success flash - "Your password has been changed!" - and redirect
-to `app_homepage`. For the `render` below, pass the form to the template.
+to `app_homepage`. For the `render` below, pass the form to the template:
 
-
+[[[ code('45ff661c58') ]]]
 
 Let's check this out. Go to the app and manually visit `/change-password`. We're
 logged out right now, so this should redirect us to the login page... and it does!
@@ -70,7 +70,7 @@ Oops - you know what we forgot? We have to update the template. Over in
 `templates/security/change_password.html.twig`, clear out the body. For now, render
 the form with `{{ form(form) }}`:
 
-
+[[[ code('308cb27c0c') ]]]
 
 Refresh. Not styled yet - we'll get to that in a minute - but we have our new password
 and repeat password fields, just like the reset password page.
@@ -93,7 +93,7 @@ called `require_current` defaulting to `false`. Whenever you add an option, you 
 also say what type it is: `$resolver->setAllowedTypes('require_current', 'bool')`, so
 it can only be a boolean:
 
-
+[[[ code('e1369db882') ]]]
 
 Now up at the top of `buildForm()` - I want this to be the first field - add
 `if ($options['require_current'])` and inside, add a `currentPassword` field as a
@@ -107,7 +107,7 @@ user's *current* password. The hashing and verification is all handled for us - 
 Then set `mapped` to `false`, because it isn't mapped to any object, and set the label
 to "Current password":
 
-
+[[[ code('77fb62e866') ]]]
 
 To make sure it's truly optional, go back to the app and refresh. It's not there - and
 that's good! It means the field has to be *enabled*, which means we don't need to
@@ -116,7 +116,7 @@ change anything about our reset password flow.
 To enable it, head back to `ChangePasswordController` and pass an options array where
 we create the form: `require_current` set to `true`:
 
-
+[[[ code('c4fe4b776b') ]]]
 
 Refresh... perfect, there it is.
 
@@ -125,7 +125,7 @@ Refresh... perfect, there it is.
 Let's paste in some styling to make this look nicer. In the change password template,
 paste in this code - you'll find it in the script below:
 
-
+[[[ code('844a233610') ]]]
 
 Refresh. Much better.
 
