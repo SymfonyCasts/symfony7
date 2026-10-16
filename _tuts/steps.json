@@ -94,7 +94,17 @@
             "id": "11-current-password",
             "name": "11. current password",
             "description": null
+        },
+        {
+            "id": "12-password-validator",
+            "name": "12. password validator",
+            "description": null
+        },
+        {
+            "id": "13-rate-limit",
+            "name": "13. rate limit",
+            "description": null
         }
     ],
-    "sha": "27397544df40504d58bad88d7779a35f90d0973c"
+    "sha": "ad80c518eced6770d50fff0890ae1e3c50616474"
 }

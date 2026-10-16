@@ -1,0 +1,72 @@
+diff --git a/config/packages/cache.yaml b/config/packages/cache.yaml
+index 6336df2..ba3bfb7 100644
+--- a/config/packages/cache.yaml
++++ b/config/packages/cache.yaml
+@@ -14,7 +14,7 @@ framework:
+         # APCu (not recommended with heavy random-write workloads as memory fragmentation can cause perf issues)
+         #app: cache.adapter.apcu
+ 
+-        app: cache.adapter.array
++        app: cache.adapter.filesystem
+ 
+         # Namespaced pools use the above "app" backend by default
+         # pools:
+diff --git a/config/packages/rate_limiter.yaml b/config/packages/rate_limiter.yaml
+new file mode 100644
+index 0000000..5e374a7
+--- /dev/null
++++ b/config/packages/rate_limiter.yaml
+@@ -0,0 +1,6 @@
++framework:
++    rate_limiter:
++        registration:
++            policy: 'sliding_window'
++            limit: 5
++            interval: '1 hour'
+diff --git a/src/Controller/RegistrationController.php b/src/Controller/RegistrationController.php
+index b44f556..bad3d27 100644
+--- a/src/Controller/RegistrationController.php
++++ b/src/Controller/RegistrationController.php
+@@ -7,20 +7,40 @@ use App\Form\RegistrationFormType;
+ use Doctrine\ORM\EntityManagerInterface;
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+ use Symfony\Bundle\SecurityBundle\Security;
++use Symfony\Component\DependencyInjection\Attribute\Target;
++use Symfony\Component\Form\FormError;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
++use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
+ use Symfony\Component\Routing\Attribute\Route;
+ 
+ class RegistrationController extends AbstractController
+ {
+     #[Route('/register', name: 'app_register')]
+-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+-    {
++    public function register(
++        Request $request,
++        UserPasswordHasherInterface $userPasswordHasher,
++        Security $security,
++        EntityManagerInterface $entityManager,
++
++        #[Target('registration')]
++        RateLimiterFactoryInterface $limiterFactory,
++    ): Response {
+         $user = new User();
+         $form = $this->createForm(RegistrationFormType::class, $user);
+         $form->handleRequest($request);
+ 
++        if ($form->isSubmitted()) {
++            $limit = $limiterFactory->create($request->getClientIp())->consume();
++
++            if (!$limit->isAccepted()) {
++                $this->addFlash('error', 'Too many registration attempts. Please try again later.');
++
++                return $this->redirectToRoute('app_register');
++            }
++        }
++
+         if ($form->isSubmitted() && $form->isValid()) {
+             /** @var string $plainPassword */
+             $plainPassword = $form->get('plainPassword')->getData();
