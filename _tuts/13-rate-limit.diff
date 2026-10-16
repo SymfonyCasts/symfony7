@@ -13,7 +13,7 @@ index 6336df2..ba3bfb7 100644
          # pools:
 diff --git a/config/packages/rate_limiter.yaml b/config/packages/rate_limiter.yaml
 new file mode 100644
-index 0000000..5e374a7
+index 0000000..c65fa0b
 --- /dev/null
 +++ b/config/packages/rate_limiter.yaml
 @@ -0,0 +1,6 @@
@@ -21,13 +21,13 @@ index 0000000..5e374a7
 +    rate_limiter:
 +        registration:
 +            policy: 'sliding_window'
-+            limit: 5
-+            interval: '1 hour'
++            limit: 1
++            interval: '10 minutes'
 diff --git a/src/Controller/RegistrationController.php b/src/Controller/RegistrationController.php
-index b44f556..bad3d27 100644
+index b44f556..0332b72 100644
 --- a/src/Controller/RegistrationController.php
 +++ b/src/Controller/RegistrationController.php
-@@ -7,20 +7,40 @@ use App\Form\RegistrationFormType;
+@@ -7,21 +7,39 @@ use App\Form\RegistrationFormType;
  use Doctrine\ORM\EntityManagerInterface;
  use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  use Symfony\Bundle\SecurityBundle\Security;
@@ -57,7 +57,7 @@ index b44f556..bad3d27 100644
          $form = $this->createForm(RegistrationFormType::class, $user);
          $form->handleRequest($request);
  
-+        if ($form->isSubmitted()) {
+         if ($form->isSubmitted() && $form->isValid()) {
 +            $limit = $limiterFactory->create($request->getClientIp())->consume();
 +
 +            if (!$limit->isAccepted()) {
@@ -65,8 +65,19 @@ index b44f556..bad3d27 100644
 +
 +                return $this->redirectToRoute('app_register');
 +            }
-+        }
 +
-         if ($form->isSubmitted() && $form->isValid()) {
              /** @var string $plainPassword */
              $plainPassword = $form->get('plainPassword')->getData();
+ 
+diff --git a/templates/registration/register.html.twig b/templates/registration/register.html.twig
+index 06f2e5b..05f9378 100644
+--- a/templates/registration/register.html.twig
++++ b/templates/registration/register.html.twig
+@@ -16,6 +16,7 @@
+ 
+                 {{ form_start(registrationForm, { attr: { novalidate: true, class: 'space-y-6' } }) }}
+                     {{ form_row(registrationForm.email, { label_attr: { class: 'text-sm font-medium text-white/80' } }) }}
++                    {{ form_row(registrationForm.username, { label_attr: { class: 'text-sm font-medium text-white/80' } }) }}
+                     {{ form_row(registrationForm.name, { label_attr: { class: 'text-sm font-medium text-white/80' } }) }}
+                     {{ form_row(registrationForm.plainPassword, {
+                         label: 'Password',
