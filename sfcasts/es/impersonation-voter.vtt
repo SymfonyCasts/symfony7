@@ -1,0 +1,330 @@
+WEBVTT
+
+00:00:02.066 --> 00:00:04.896 align:middle
+En nuestro panel de administración de
+usuarios, los administradores pueden cambiar
+
+00:00:04.896 --> 00:00:09.506 align:middle
+a diferentes usuarios usando la función de suplantación
+de identidad de Symfony —o « switch_user »—.
+
+00:00:10.106 --> 00:00:13.836 align:middle
+Esto funciona así: en nuestra configuración,
+hemos usado una jerarquía de roles
+
+00:00:13.966 --> 00:00:16.636 align:middle
+para asignar a cada administrador
+el rol « ROLE_ALLOWED_TO_SWITCH ».
+
+00:00:17.146 --> 00:00:21.546 align:middle
+Eso es lo que comprueba Symfony: si tienes
+ese rol, puedes cambiar a cualquier usuario.
+
+00:00:22.056 --> 00:00:23.656 align:middle
+Quiero añadirle algo de lógica a esto.
+
+00:00:23.866 --> 00:00:26.606 align:middle
+Las reglas: no puedes
+cambiar a tu propia cuenta.
+
+00:00:26.606 --> 00:00:28.936 align:middle
+Estoy conectado como Janeway, y
+si hago clic en «cambiar a»...
+
+00:00:28.936 --> 00:00:30.896 align:middle
+Ni siquiera quiero saber qué pasa.
+
+00:00:30.896 --> 00:00:32.416 align:middle
+Probablemente el universo implosione.
+
+00:00:33.156 --> 00:00:36.686 align:middle
+Y no quiero que los administradores
+puedan suplantar a otros administradores.
+
+00:00:37.196 --> 00:00:40.186 align:middle
+En nuestra app, un administrador
+podría suplantar a un capitán,
+
+00:00:40.296 --> 00:00:42.476 align:middle
+pero no a otro administrador
+ni a un superadministrador.
+
+00:00:42.906 --> 00:00:46.026 align:middle
+Los superadministradores pueden suplantar
+a cualquiera, excepto a sí mismos.
+
+00:00:46.366 --> 00:00:50.626 align:middle
+Podemos hacer esto con nuestro propio «voter»
+personalizado, porque cuando Symfony comprueba ese rol,
+
+00:00:50.756 --> 00:00:55.156 align:middle
+también pasa al usuario de destino como
+sujeto de la comprobación « isGranted() ».
+
+00:00:55.736 --> 00:01:00.386 align:middle
+Lo primero: elimina « ROLE_ALLOWED_TO_SWITCH
+» de « role_hierarchy », porque vamos
+
+00:01:00.386 --> 00:01:04.126 align:middle
+a usar un «voter» para comprobar esto;
+ya no formará parte de « ROLE_ADMIN ».
+
+00:01:04.596 --> 00:01:08.036 align:middle
+El nombre de este rol se configura
+más arriba, en switch_user,
+
+00:01:08.386 --> 00:01:10.036 align:middle
+y la opción se llama simplemente « role ».
+
+00:01:10.766 --> 00:01:14.996 align:middle
+Vamos a usar uno personalizado
+que no incluya el prefijo ROLE_,
+
+00:01:15.266 --> 00:01:19.066 align:middle
+porque queremos que el «voter» de roles
+integrado en Symfony lo ignore por completo
+
+00:01:19.256 --> 00:01:20.946 align:middle
+y deje esta tarea a nuestro
+«voter» personalizado.
+
+00:01:21.406 --> 00:01:28.686 align:middle
+Llámalo « CAN_IMPERSONATE »: Ahora, en
+« templates/user_admin/index.html.twig »,
+
+00:01:28.686 --> 00:01:37.576 align:middle
+envuelve el enlace de suplantación de identidad en un
+« {% if is_granted('CAN_IMPERSONATE', user) %} » —
+
+00:01:37.576 --> 00:01:40.126 align:middle
+pasando al usuario del
+bucle actual como sujeto.
+
+00:01:40.546 --> 00:01:42.916 align:middle
+Añade « {% endif %} »...
+
+00:01:42.916 --> 00:01:47.596 align:middle
+e indenta el código: Otra cosa:
+nuestro « SuperAdminVoter »
+
+00:01:47.596 --> 00:01:51.376 align:middle
+en « src/Security/Voter/ »
+tiene esa lista « EXCLUSIONS ».
+
+00:01:51.976 --> 00:01:57.066 align:middle
+Añade CAN_IMPERSONATE a esa lista, para que los
+superadministradores no puedan saltarse nuestro nuevo votante.
+
+00:01:58.566 --> 00:01:59.936 align:middle
+Comprueba bien que esto funciona.
+
+00:02:00.256 --> 00:02:02.086 align:middle
+Vuelve a la página de administración
+de usuarios y actualiza la página.
+
+00:02:02.656 --> 00:02:06.896 align:middle
+Efectivamente, ese enlace ha desaparecido: los
+superadministradores ya no pueden saltarse esta comprobación.
+
+00:02:07.466 --> 00:02:09.506 align:middle
+En la terminal, crea un nuevo votante:
+
+00:02:09.666 --> 00:02:14.186 align:middle
+symfony console make:voter
+Llámalo ImpersonationVoter.
+
+00:02:15.456 --> 00:02:16.446 align:middle
+Vamos a echarle un vistazo.
+
+00:02:18.916 --> 00:02:20.866 align:middle
+Elimina las constantes
+—no las vamos a usar—
+
+00:02:21.136 --> 00:02:23.696 align:middle
+y borra supports() y voteOnAttribute().
+
+00:02:28.386 --> 00:02:36.486 align:middle
+En supports(), return 'CAN_IMPERSONATE' ===
+$attribute && $subject instanceof User:
+
+00:02:38.236 --> 00:02:43.526 align:middle
+Añade algunos bloques de documentación a
+voteOnAttribute(): borra todos menos el del sujeto.
+
+00:02:44.646 --> 00:02:52.716 align:middle
+Gracias a esa comprobación de antes, sabemos que
+el sujeto va a ser nuestra entidad User: Ahora,
+
+00:02:52.716 --> 00:02:55.966 align:middle
+obtén el $currentUser del token
+y asegúrate de que no sea nulo.
+
+00:02:55.966 --> 00:02:59.376 align:middle
+Si no podemos obtener el
+usuario actual, devuelve false:
+
+00:03:02.226 --> 00:03:06.646 align:middle
+Ahora comprueba si el identificador de usuario
+del sujeto es el mismo que el del usuario actual;
+
+00:03:06.926 --> 00:03:15.466 align:middle
+eso es para que no podamos suplantarnos a nosotros mismos:
+A continuación, copia esa comprobación de in_array()
+
+00:03:15.466 --> 00:03:27.886 align:middle
+de nuestro votante superadministrador: si el usuario
+actual tiene ROLE_SUPER_ADMIN, devuelve true.
+
+00:03:27.886 --> 00:03:33.356 align:middle
+Los superadministradores pueden hacerse pasar por
+cualquier otra persona; esa es la excepción: Recuerda que,
+
+00:03:33.356 --> 00:03:36.446 align:middle
+cuando creamos el votante
+superadministrador, decidimos comprobar
+
+00:03:36.446 --> 00:03:40.316 align:middle
+ese rol directamente en el propio usuario,
+no a través de la jerarquía de roles.
+
+00:03:40.866 --> 00:03:45.416 align:middle
+Pero ahora sí queremos comprobar la jerarquía de roles,
+para ver si el usuario de destino es un administrador.
+
+00:03:45.416 --> 00:03:48.026 align:middle
+Para eso, crea un constructor...
+
+00:03:48.026 --> 00:03:55.656 align:middle
+E inyecta el servicio « Security » como «
+$security »: Vuelve a « voteOnAttribute() »,
+
+00:03:56.476 --> 00:04:02.136 align:middle
+«return
+!$this->security->isGrantedForUser() ».
+
+00:04:02.626 --> 00:04:04.506 align:middle
+Normalmente habrás usado
+solo « isGranted() ».
+
+00:04:04.506 --> 00:04:10.196 align:middle
+«isGrantedForUser() » te permite comprobar a cualquier
+usuario en lugar del que está conectado actualmente —
+
+00:04:10.646 --> 00:04:14.436 align:middle
+algo muy útil en cosas como los comandos
+de la CLI, donde no hay un usuario actual.
+
+00:04:14.576 --> 00:04:18.916 align:middle
+Funciona exactamente igual que isGranted(), salvo que el
+primer argumento es el usuario que estás comprobando,
+
+00:04:19.196 --> 00:04:22.336 align:middle
+el segundo es el atributo y el
+tercero es el sujeto opcional.
+
+00:04:22.336 --> 00:04:29.316 align:middle
+Pasa $subject como usuario y ROLE_ADMIN como
+atributo: vuelve a la página y actualízala.
+
+00:04:31.016 --> 00:04:35.826 align:middle
+¡Genial! No podemos cambiar a nuestra propia cuenta —esa
+regla funciona—, pero sí podemos cambiar a un capitán.
+
+00:04:36.996 --> 00:04:39.636 align:middle
+Añadamos algunos usuarios más para
+ver mejor cómo funciona esta función.
+
+00:04:40.206 --> 00:04:46.756 align:middle
+Ve a src/Story/AppStory.php y, justo debajo
+de donde creamos a nuestros usuarios,
+
+00:04:46.756 --> 00:04:52.966 align:middle
+añade UserFactory::createMany(5) con
+sus roles configurados como ROLE_ADMIN.
+
+00:04:53.606 --> 00:04:59.476 align:middle
+Duplica esta línea para añadir 5 más, pero con
+ROLE_CAPTAIN: así se crean cinco administradores
+
+00:04:59.476 --> 00:05:02.366 align:middle
+y cinco capitanes además de
+nuestros usuarios actuales.
+
+00:05:03.656 --> 00:05:12.186 align:middle
+Cárgalos: symfony console foundry:load-fixtures
+Vuelve a la app y actualiza la página;
+
+00:05:12.426 --> 00:05:14.286 align:middle
+te desconectará, porque
+el usuario ha cambiado.
+
+00:05:15.146 --> 00:05:17.966 align:middle
+Vuelve a iniciar sesión con
+Janeway, contraseña coffeeblack.
+
+00:05:18.996 --> 00:05:22.086 align:middle
+Antes de seguir, quiero arreglar
+algo que me está volviendo loco:
+
+00:05:22.326 --> 00:05:24.216 align:middle
+estos feos botones de acción.
+
+00:05:25.616 --> 00:05:32.356 align:middle
+Vuelve a user_admin/index.html.twig,
+arregla el contenedor con flex-start,
+
+00:05:32.356 --> 00:05:39.636 align:middle
+y como ese botón tiene dos palabras,
+añade whitespace-nowrap: Actualiza.
+
+00:05:40.576 --> 00:05:41.846 align:middle
+Ya está, mucho mejor.
+
+00:05:42.826 --> 00:05:48.066 align:middle
+Como soy superadministrador, no puedo cambiar a mi propia
+cuenta, pero sí puedo cambiar a la de cualquier otra persona,
+
+00:05:48.066 --> 00:05:50.926 align:middle
+incluso a la de otros administradores:
+exactamente la regla que decidimos.
+
+00:05:52.806 --> 00:05:54.806 align:middle
+Ahora inicia sesión como uno de
+nuestros nuevos administradores
+
+00:05:54.956 --> 00:05:57.776 align:middle
+para ver si tienen bloqueada la opción de
+cambiar a la cuenta de otros administradores.
+
+00:05:58.396 --> 00:06:02.336 align:middle
+Copia uno de sus correos, cierra
+sesión y vuelve a iniciar sesión.
+
+00:06:04.486 --> 00:06:10.246 align:middle
+Si echas un vistazo a AppStory y UserFactory, verás
+que hemos establecido la contraseña como engage
+
+00:06:10.246 --> 00:06:12.476 align:middle
+para todos los usuarios,
+a menos que la cambiemos.
+
+00:06:14.776 --> 00:06:16.536 align:middle
+Así que escribe eso: engage.
+
+00:06:16.866 --> 00:06:18.556 align:middle
+Ahora estoy conectado como este administrador.
+
+00:06:22.516 --> 00:06:29.466 align:middle
+Vuelve a la lista en /admin/user y fíjate
+en esto: podemos cambiar a los capitanes,
+
+00:06:29.626 --> 00:06:33.616 align:middle
+pero no podemos cambiar al superadministrador
+ni a ninguno de los otros administradores.
+
+00:06:33.856 --> 00:06:35.536 align:middle
+¡Genial! ¡Ya tenemos todas las funciones!
+
+00:06:36.306 --> 00:06:39.076 align:middle
+Siguiente paso: vamos a configurar un
+sistema de restablecimiento de contraseñas.
