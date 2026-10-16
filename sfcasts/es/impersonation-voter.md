@@ -1,7 +1,7 @@
-# Cómo restringir la suplantación de identidad con un usuario
+# Cómo restringir la suplantación de identidad con un votante
 
-En nuestro panel de administración de usuarios, los administradores pueden cambiar a diferentes usuarios usando
-la función de suplantación de identidad de Symfony —o « `switch_user` ». Funciona así: en
+En nuestra gestión de usuarios, los administradores pueden cambiar a diferentes usuarios usando
+la función de suplantación de identidad de Symfony (o « `switch_user` »). Funciona así: en
 nuestra configuración, usamos una jerarquía de roles para asignar a cada administrador el rol « `ROLE_ALLOWED_TO_SWITCH` ».
 Eso es lo que comprueba Symfony: si tienes ese rol, puedes cambiar a cualquier
 usuario.
@@ -28,12 +28,18 @@ se llama simplemente « `role` ». Vamos a usar uno personalizado que no incluya
 prefijo «`ROLE_` », porque queremos que el «voter» de roles integrado en Symfony lo ignore por completo
 y deje esta tarea a nuestro «voter» personalizado. Llámalo « `CAN_IMPERSONATE` »:
 
+[[[ code('030d900337') ]]]
+
 Ahora, en `templates/user_admin/index.html.twig`, envuelve el enlace de suplantación de identidad en un
 `{% if is_granted('CAN_IMPERSONATE', user) %}`, pasando al usuario del bucle actual
 como sujeto. Añade `{% endif %}`... y sangra el código:
 
+[[[ code('e35524d55c') ]]]
+
 Otra cosa: nuestro `SuperAdminVoter` en `src/Security/Voter/` tiene esa lista `EXCLUSIONS`
 . Añade `CAN_IMPERSONATE` a esa lista, para que los superadministradores no puedan saltarse nuestro nuevo votante.
+
+[[[ code('762e07dda1') ]]]
 
 Comprueba bien que esto funciona. Vuelve a la gestión de usuarios y actualiza la página. Efectivamente, ese
 enlace ya no está: los superadministradores ya no pueden saltarse este control.
@@ -53,17 +59,29 @@ borra `supports()` y `voteOnAttribute()`.
 
 En `supports()` y `return 'CAN_IMPERSONATE' === $attribute && $subject instanceof User`:
 
+[[[ code('66c5be66a3') ]]]
+
 Añade algunos bloques de documentación a `voteOnAttribute()`: borra todos menos
 el del sujeto. Gracias a esa comprobación de antes, sabemos que el sujeto va a ser nuestra
-entidad`User`.
+entidad`User`:
 
-Ahora, obtén el `$currentUser` del token y asegúrate de que no sea nulo. Si no podemos obtener
-al usuario actual, devuelve `false`. Ahora comprueba si el identificador de usuario del sujeto es el mismo que el
-del usuario actual; esto es para que no podamos suplantarnos a nosotros mismos:
+[[[ code('4274623ed4') ]]]
+
+Ahora, recupera el `$currentUser` a partir del token y asegúrate de que no sea nulo. Si no podemos obtener
+al usuario actual, devuelve `false`:
+
+[[[ code('f188e6da50') ]]]
+
+Ahora comprueba si el identificador de usuario del sujeto es el mismo que el del usuario actual
+—esto es para que no podamos suplantarnos a nosotros mismos—:
+
+[[[ code('77cfaa6c7f') ]]]
 
 A continuación, copia esa comprobación de « `in_array()` » de nuestro votante superadministrador: si el usuario actual tiene
 `ROLE_SUPER_ADMIN`, devuelve `true`. Los superadministradores pueden suplantar a cualquier otra persona;
 esa es la excepción:
+
+[[[ code('802bc6f19e') ]]]
 
 Recuerda que, cuando creamos el votante superadministrador, decidimos comprobar ese rol directamente
 en el propio usuario, no a través de la jerarquía de roles.
@@ -71,9 +89,11 @@ en el propio usuario, no a través de la jerarquía de roles.
 ## `isGrantedForUser()`
 
 Pero ahora sí que queremos comprobar la jerarquía de roles, para ver si el usuario de destino es un
-administrador. Para eso, crea un constructor... E inyecta el servicio `Security` como `$security`.
+administrador. Para eso, crea un constructor... E inyecta el servicio `Security` como `$security`:
 
-Volviendo a `voteOnAttribute()`, `return !$this->security->isGrantedForUser()`:
+[[[ code('89c2ef986d') ]]]
+
+Volvamos a `voteOnAttribute()`, `return !$this->security->isGrantedForUser()`.
 
 Normalmente solo has usado `isGranted()`. `isGrantedForUser()` te permite comprobar a un
 usuario cualquiera en lugar del que está conectado actualmente; es muy útil en cosas como
@@ -81,7 +101,9 @@ los comandos de la CLI, donde no hay ningún usuario actual. Funciona exactament
 excepto que el primer argumento es el usuario que estás comprobando, el segundo es el atributo y el tercero
 es el sujeto opcional.
 
-Pasa `$subject` como usuario y `ROLE_ADMIN` como atributo.
+Pasa `$subject` como usuario y `ROLE_ADMIN` como atributo:
+
+[[[ code('89c2ef986d') ]]]
 
 Vuelve a la página y actualízala. ¡Genial! No podemos cambiar a nuestra propia cuenta —esa regla funciona—,
 pero sí podemos cambiar a la de un capitán.
@@ -89,9 +111,11 @@ pero sí podemos cambiar a la de un capitán.
 ## Más usuarios con los que jugar
 
 Añadamos algunos usuarios más para ver mejor cómo funciona esta función. Ve a
-`src/Story/AppStory.php` y, justo debajo de donde creamos a nuestros usuarios, añade
-`UserFactory::createMany(5)` con sus roles establecidos en `ROLE_ADMIN`. Duplica
+`src/Story/AppStory.php` y, justo debajo de donde creamos nuestros usuarios, añade
+`UserFactory::createMany(5)` con sus roles configurados como `ROLE_ADMIN`. Duplica
 esta línea para añadir 5 más, pero con `ROLE_CAPTAIN`:
+
+[[[ code('78024df228') ]]]
 
 Así se crean cinco administradores y cinco capitanes, además de nuestros usuarios actuales. Cárgalos:
 
@@ -100,11 +124,13 @@ symfony console foundry:load-fixtures
 ```
 
 Vuelve a la app y actualiza la página; te desconectará porque el usuario ha cambiado. Inicia sesión con
-«Janeway» otra vez, con la contraseña « `coffeeblack` ».
+Janeway otra vez, con la contraseña `coffeeblack`.
 
 Antes de seguir, quiero arreglar algo que me está volviendo loco: estos
-feos botones de acción. Vuelve a `user_admin/index.html.twig`, arregla el contenedor con `flex-start`, y
+feos botones de acción. Vuelve a `user_admin/index.html.twig`, arregla el contenedor con `flex-start` y,
 como ese botón tiene dos palabras, añade `whitespace-nowrap`:
+
+[[[ code('b17c1d4ce7') ]]]
 
 Actualizar. Ya está, mucho mejor.
 
