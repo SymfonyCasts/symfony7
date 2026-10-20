@@ -1,1 +1,16 @@
-chapters: []
+chapters:
+    upgrade:
+        tutsFirstStep: null
+        tutsLastStep: null
+    logout-form:
+        tutsFirstStep: null
+        tutsLastStep: null
+    hardening-impersonation:
+        tutsFirstStep: null
+        tutsLastStep: null
+    check-refreshed-user-event:
+        tutsFirstStep: null
+        tutsLastStep: null
+    improved-sudo-mode:
+        tutsFirstStep: null
+        tutsLastStep: null
