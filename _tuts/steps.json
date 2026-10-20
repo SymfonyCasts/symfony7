@@ -9,7 +9,12 @@
             "id": "add-migration",
             "name": "add migration",
             "description": null
+        },
+        {
+            "id": "1-upgrade-to-8-2",
+            "name": "1. upgrade to 8.2",
+            "description": null
         }
     ],
-    "sha": "10e4a3427110d6e10aafb29ea8f50dbc7c1f8b7c"
+    "sha": "10a4f45f6b9ba46e45713f85967537fefb06b00c"
 }
