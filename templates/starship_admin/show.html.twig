@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Starship{% endblock %}
+
+{% block body %}
+    <div class="max-w-7xl mx-auto px-5 mt-4">
+        <a class="hover:text-gray-400 underline" href="{{ path('app_starship_admin_index') }}"> << back to list</a>
+
+        <h1 class="text-[32px] font-semibold border-b border-white/10 pb-5 mb-5 mt-8">{{ starship.name }}</h1>
+
+        <table class="table-fixed">
+            <tbody>
+            <tr>
+                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Id</th>
+                <td class="text-[22px] font-semibold pl-5">{{ starship.id }}</td>
+            </tr>
+            <tr>
+                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Name</th>
+                <td class="text-[22px] font-semibold pl-5">{{ starship.name }}</td>
+            </tr>
+            <tr>
+                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Class</th>
+                <td class="text-[22px] font-semibold pl-5">{{ starship.class }}</td>
+            </tr>
+            <tr>
+                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Captain</th>
+                <td class="text-[22px] font-semibold pl-5">{{ starship.captain }}</td>
+            </tr>
+            <tr>
+                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Status</th>
+                <td class="text-[22px] font-semibold pl-5">{{ starship.status.value }}</td>
+            </tr>
+            <tr>
+                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">ArrivedAt</th>
+                <td class="text-[22px] font-semibold pl-5">{{ starship.arrivedAt ? starship.arrivedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">Slug</th>
+                <td class="text-[22px] font-semibold pl-5">{{ starship.slug }}</td>
+            </tr>
+            <tr>
+                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">CreatedAt</th>
+                <td class="text-[22px] font-semibold pl-5">{{ starship.createdAt ? starship.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th class="text-xs text-slate-300 font-semibold mt-2 uppercase">UpdatedAt</th>
+                <td class="text-[22px] font-semibold pl-5">{{ starship.updatedAt ? starship.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="flex gap-3 mt-5">
+            {% if is_granted('edit', starship) %}
+                <a class="text-white bg-green-700 hover:bg-green-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer" href="{{ path('app_starship_admin_edit', {'id': starship.id}) }}">Edit</a>
+            {% endif %}
+            {% if is_granted('delete', starship) %}
+                {{ include('starship_admin/_delete_form.html.twig') }}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

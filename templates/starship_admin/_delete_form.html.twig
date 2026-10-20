@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_starship_admin_delete', {'id': starship.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ starship.id) }}">
+    <button class="text-white bg-red-700 hover:bg-red-800 rounded-lg px-5 py-2.5 me-2 mb-2 cursor-pointer">Delete</button>
+</form>

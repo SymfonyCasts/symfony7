@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Check your email{% endblock %}
+
+{% block body %}
+    <section class="px-6 py-10 sm:py-16">
+        <div class="mx-auto max-w-md">
+            <div class="rounded-2xl border border-white/10 bg-[#16202A]/80 p-8 shadow-2xl shadow-black/30 backdrop-blur-sm">
+                <div class="mb-8">
+                    <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-300">Security</p>
+                    <h1 class="mt-3 text-4xl font-semibold">Check your email</h1>
+                </div>
+
+                <div class="space-y-4 text-sm leading-6 text-white/70">
+                    <p>
+                        If an account matching your email exists, we've sent a password reset link. The link will expire in
+                        {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
+                    </p>
+                    <p>
+                        If you don't receive an email, check your spam folder or
+                        <a class="font-medium text-cyan-300 transition hover:text-cyan-200" href="{{ path('app_forgot_password_request') }}">try again</a>.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
