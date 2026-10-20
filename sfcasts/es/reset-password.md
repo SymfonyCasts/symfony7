@@ -24,7 +24,7 @@ symfony console make:reset-password
 
 ¿A qué ruta deberían ser redirigidos los usuarios después de que su contraseña se haya
 restablecido correctamente? Por defecto es `app_home`, pero la ruta de nuestra página de inicio es `app_homepage`. A continuación, el
-correo electrónico del remitente —es decir, nuestra app la que envía el correo—; así que usa `support@starfleet.space`,
+correo electrónico del remitente —es decir, nuestra app la que envía el correo— así que usa `support@starfleet.space`,
 con el nombre `Starfleet Support`. ¿Pruebas unitarias? No.
 
 Esto genera un montón de archivos, y lo primero que nos dice es que creemos una
@@ -49,9 +49,9 @@ symfony console foundry:load-fixtures
 
 Echemos un vistazo a algunos de los archivos que se han creado. Así es como funciona este sistema: cuando
 realizas una petición de restablecimiento, se genera un token, y ese token se almacena en la base de datos
-bajo una nueva entidad: `ResetPasswordRequest`.
+en una nueva entidad: `ResetPasswordRequest`.
 
-Cada token está vinculado a un usuario, así que sabemos quién ha realizado la petición del restablecimiento. Y utiliza
+Cada token está vinculado a un usuario, así que sabemos quién ha realizado la petición de restablecimiento. Y utiliza
 «`ResetPasswordRequestTrait` » del bundle SymfonyCasts, que añade cosas como un
 hash seguro del token y su fecha de caducidad: todo lo que el bundle necesita.
 
@@ -85,7 +85,7 @@ correo electrónico y llama a `processSendingPasswordResetEmail()` —un método
 en un momento—. De lo contrario, muestra la plantilla de petición.
 
 Una vez enviado el correo, te redirige a la página `checkEmail()`, que simplemente te indica
-que revises tu correo.
+que compruebes tu correo.
 
 Una cosa interesante: ¿te acuerdas de la enumeración de usuarios del capítulo sobre mensajes de error de autenticación
 —cuando alguien sondea la web para averiguar qué direcciones tienen cuentas?—. El
@@ -98,7 +98,7 @@ a la plantilla, que parece uno auténtico.
 Lo siguiente es la ruta `reset()`: ahí es donde te lleva ese enlace especial del correo.
 Y hace algo ingenioso. Si el token está en la URL, lo guarda en la
 sesión y te redirige a esta misma ruta sin el token en la URL, para luego
-leerlo de nuevo desde la sesión.
+recuperarlo de la sesión.
 
 ¿Para qué molestarse? Porque una URL es un lugar poco seguro para guardar un secreto. Se queda en el
 historial del navegador, se envía en el encabezado `Referer` a cualquier script de terceros de la
@@ -112,9 +112,9 @@ A continuación, usamos un helper del bundle para validar el token y recuperar l
 garantiza que el token sea válido y no haya caducado. Si hay algún
 problema, añadimos un error al flash y te redirigimos al formulario de petición.
 
-Ahora, el caso normal. Si el token es válido, creamos el `ChangePasswordFormType`, gestionamos
+Ahora, el caso ideal. Si el token es válido, creas el `ChangePasswordFormType`, gestionas
 la petición del formulario y, si se envía y es válida... un token de restablecimiento solo se puede usar una vez,
-así que lo eliminamos de la base de datos. A continuación, cogemos la contraseña sin cifrar validada, la aplicamos
+así que esto lo elimina de la base de datos. A continuación, cogemos la contraseña sin cifrar validada, la aplicamos
 al usuario —la variable `$user` proviene de la validación del token anterior—, la guardamos
 en la caché, hacemos un poco de limpieza y redirigimos a la página de inicio.
 
@@ -171,9 +171,9 @@ el script de abajo:
 
 [[[ code('ab8ba748a1') ]]]
 
-Lo siguiente es la plantilla de correo electrónico en sí. Parece bastante sosa… pero la dejaremos así por
+A continuación está la plantilla de correo en sí. Parece bastante sosa… pero la dejaremos así por
 ahora; lo importante es que genera una URL absoluta a la ruta de restablecimiento
-de contraseña con el token —eso es en lo que hace clic el usuario— y también le indica cuándo
+de contraseña con el token —que es donde el usuario hace clic— y también les indica cuándo
 caduca.
 
 Luego está `request.html.twig`, el formulario que te pide tu correo. Aquí también voy a añadir un poco de estilo:
@@ -227,8 +227,8 @@ symfony config:dump symfonycasts_reset_password
 ```
 
 Además del `request_password_repository` obligatorio, puedes establecer un `lifetime` —el
-tiempo que los tokens permanecen válidos, una hora (`3600` segundos) por defecto— y un `throttle_limit`,
-que indica la frecuencia con la que se puede realizar una petición para restablecer el sistema. Por defecto, es una petición por hora.
+tiempo que los tokens siguen siendo válidos, una hora (`3600` segundos) por defecto— y un `throttle_limit`,
+que indica la frecuencia con la que se puede realizar una petición para restablecer el sistema. Por defecto, es una vez por hora.
 
 Luego está `enable_garbage_collection`. Cuando la gente realiza peticiones de restablecimientos y nunca utiliza
 los tokens, esa tabla no hace más que crecer. La recolección de basura elimina los tokens caducados
