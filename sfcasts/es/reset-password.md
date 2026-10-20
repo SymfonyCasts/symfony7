@@ -49,7 +49,7 @@ symfony console foundry:load-fixtures
 
 Echemos un vistazo a algunos de los archivos que se han creado. Así es como funciona este sistema: cuando
 realizas una petición de restablecimiento, se genera un token, y ese token se almacena en la base de datos
-en una nueva entidad: `ResetPasswordRequest`.
+bajo una nueva entidad: `ResetPasswordRequest`.
 
 Cada token está vinculado a un usuario, así que sabemos quién ha realizado la petición del restablecimiento. Y utiliza
 «`ResetPasswordRequestTrait` » del bundle SymfonyCasts, que añade cosas como un
@@ -69,7 +69,7 @@ Aquí también podrías añadir una restricción « `Email` ».
 Lo siguiente es `ChangePasswordFormType`. Cuando haces la petición de restablecimiento, recibes un correo
 con un enlace y, si tu token es válido, te lleva al formulario para cambiar tu contraseña.
 Aquí tenemos una restricción `PasswordType` envuelta en una `RepeatedType`, así que se repite dos veces:
-«nueva contraseña» y «nueva contraseña de nuevo». Las restricciones también se aplican al tipo de formulario:
+«nueva contraseña» y «confirma la nueva contraseña». Las restricciones también se aplican al tipo de formulario:
 `NotBlank`, `Length`, además de `PasswordStrength` y `NotCompromisedPassword`; de estos dos
 hablaremos un poco más adelante. `RepeatedType` exige que los
 dos campos coincidan, así que eso ya lo tenemos de serie.
@@ -96,9 +96,9 @@ a la plantilla, que parece uno auténtico.
 ### El token en la sesión
 
 Lo siguiente es la ruta `reset()`: ahí es donde te lleva ese enlace especial del correo.
-Y hace algo muy ingenioso. Si el token está en la URL, lo guarda en la
+Y hace algo ingenioso. Si el token está en la URL, lo guarda en la
 sesión y te redirige a esta misma ruta sin el token en la URL, para luego
-recuperarlo de la sesión.
+leerlo de nuevo desde la sesión.
 
 ¿Para qué molestarse? Porque una URL es un lugar poco seguro para guardar un secreto. Se queda en el
 historial del navegador, se envía en el encabezado `Referer` a cualquier script de terceros de la
@@ -112,9 +112,9 @@ A continuación, usamos un helper del bundle para validar el token y recuperar l
 garantiza que el token sea válido y no haya caducado. Si hay algún
 problema, añadimos un error al flash y te redirigimos al formulario de petición.
 
-Ahora, el caso ideal. Si el token es válido, creamos el `ChangePasswordFormType`, gestionamos
+Ahora, el caso normal. Si el token es válido, creamos el `ChangePasswordFormType`, gestionamos
 la petición del formulario y, si se envía y es válida... un token de restablecimiento solo se puede usar una vez,
-así que esto lo elimina de la base de datos. A continuación, cogemos la contraseña sin cifrar validada, la aplicamos
+así que lo eliminamos de la base de datos. A continuación, cogemos la contraseña sin cifrar validada, la aplicamos
 al usuario —la variable `$user` proviene de la validación del token anterior—, la guardamos
 en la caché, hacemos un poco de limpieza y redirigimos a la página de inicio.
 
@@ -125,8 +125,8 @@ Se le redirige a la página de inicio, pero tiene que iniciar sesión manualment
 Creo que está bien iniciar sesión de forma automática: sabes que es él, porque ha hecho clic en un enlace de un
 correo enviado a su dirección. Es casi como un enlace de inicio de sesión.
 
-Arriba, en el método `reset()`, ordena un poco estos parámetros, porque vamos a añadir uno nuevo:
-inyecta `Security` del bundle de seguridad de Symfony:
+Arriba, en el método ` `reset()` `, ordena un poco estos parámetros, porque vamos a añadir uno
+nuevo: inyecta ` `Security` ` del bundle de seguridad de Symfony:
 
 [[[ code('65046bdb5a') ]]]
 
@@ -152,7 +152,7 @@ Esta sección comentada te permite explicar el motivo al usuario. Está comentad
 mostrar ese mensaje puede reabrir la enumeración que habíamos cerrado antes: alguien envía
 el formulario dos veces seguidas para la misma dirección, y un «ya has realizado una petición
 hace poco» en el segundo intento significa que la cuenta existe. Si la dirección es desconocida, se muestra la
-misma página genérica las dos veces.
+misma página genérica en ambas ocasiones.
 
 En su lugar, redirigimos a la página de comprobación de correo con ese mismo mensaje genérico.
 
@@ -164,13 +164,14 @@ el token de restablecimiento a la plantilla, lo enviamos, hacemos un poco de lim
 
 Ha sido bastante información que asimilar; echemos un vistazo a las plantillas de `templates/reset_password/`.
 
-Primero, `check_email.html.twig`: lo que ven tras enviar la petición. Fíjate en`resetToken` aquí: sacamos la fecha de caducidad directamente del token para decirles cuánto tiempo
+Primero, `check_email.html.twig`: lo que ven tras enviar la petición. Fíjate en
+`resetToken` aquí: sacamos la fecha de caducidad directamente del token para decirles cuánto tiempo
 les queda, además de un enlace para volver a intentarlo. Voy a añadir un estilo más bonito; lo puedes encontrar en
 el script de abajo:
 
 [[[ code('ab8ba748a1') ]]]
 
-A continuación está la plantilla de correo en sí. Parece bastante sosa… pero la dejaremos así por
+Lo siguiente es la plantilla de correo electrónico en sí. Parece bastante sosa… pero la dejaremos así por
 ahora; lo importante es que genera una URL absoluta a la ruta de restablecimiento
 de contraseña con el token —eso es en lo que hace clic el usuario— y también le indica cuándo
 caduca.
@@ -222,12 +223,12 @@ Para la configuración del bundle, la única opción obligatoria es el repositor
 sepa en qué repositorio se encuentra esa entidad de token. Para ver la configuración completa, ejecuta:
 
 ```terminal
-symfony console config:dump symfonycasts_reset_password
+symfony config:dump symfonycasts_reset_password
 ```
 
 Además del `request_password_repository` obligatorio, puedes establecer un `lifetime` —el
-tiempo que los tokens siguen siendo válidos, una hora (`3600` segundos) por defecto— y un `throttle_limit`,
-que indica la frecuencia con la que se puede realizar una petición para restablecer. Por defecto, es uno por hora.
+tiempo que los tokens permanecen válidos, una hora (`3600` segundos) por defecto— y un `throttle_limit`,
+que indica la frecuencia con la que se puede realizar una petición para restablecer el sistema. Por defecto, es una petición por hora.
 
 Luego está `enable_garbage_collection`. Cuando la gente realiza peticiones de restablecimientos y nunca utiliza
 los tokens, esa tabla no hace más que crecer. La recolección de basura elimina los tokens caducados

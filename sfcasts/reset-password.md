@@ -273,7 +273,7 @@ For the bundle's configuration, the only required option is the repository, so i
 knows which repository holds that token entity. To see the full config, run:
 
 ```terminal
-symfony console config:dump symfonycasts_reset_password
+symfony config:dump symfonycasts_reset_password
 ```
 
 Along with the required `request_password_repository`, you can set a `lifetime` - how
