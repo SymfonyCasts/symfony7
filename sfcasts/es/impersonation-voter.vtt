@@ -195,23 +195,22 @@ para ver si el usuario de destino es un administrador.
 Para eso, crea un constructor...
 
 00:03:48.026 --> 00:03:55.656 align:middle
-E inyecta el servicio « Security » como «
-$security »: Vuelve a « voteOnAttribute() »,
+E inyecta el servicio Security como $security:
+Volvamos a voteOnAttribute(),
 
 00:03:56.476 --> 00:04:02.136 align:middle
-«return
-!$this->security->isGrantedForUser() ».
+return !$this->security->isGrantedForUser().
 
 00:04:02.626 --> 00:04:04.506 align:middle
-Normalmente habrás usado
-solo « isGranted() ».
+Normalmente solo has
+usado isGranted().
 
 00:04:04.506 --> 00:04:10.196 align:middle
-«isGrantedForUser() » te permite comprobar a cualquier
-usuario en lugar del que está conectado actualmente —
+isGrantedForUser() te permite comprobar a cualquier
+usuario en lugar del que está conectado actualmente;
 
 00:04:10.646 --> 00:04:14.436 align:middle
-algo muy útil en cosas como los comandos
+es muy útil en cosas como los comandos
 de la CLI, donde no hay un usuario actual.
 
 00:04:14.576 --> 00:04:18.916 align:middle
