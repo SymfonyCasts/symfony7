@@ -113,7 +113,7 @@ requires: the new password, twice. We can reuse it - I love that.
 So: `$form = $this->createForm(ChangePasswordFormType::class)`, then
 `$form->handleRequest($request)`. If the form is submitted and valid, grab the
 password off the form with `$form->get('plainPassword')->getData()`. Take the user we
-injected above, `setPassword()`, and hash it with `$hasher->hashPassword()`. Then
+injected above, `setPassword()`, and hash it with `$hasher->hashPassword($user, $password)`. Then
 `$em->flush()`, add a success flash - "Your password has been changed!" - and redirect
 to `app_homepage`. For the `render` below, pass the form to the template:
 
