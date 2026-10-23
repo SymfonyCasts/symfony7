@@ -1,3 +1,58 @@
+---
+challenges:
+    - key: strong-but-compromised
+      question: |
+          We tried `correcthorsebatterystaple` - long, four whole words - and
+          `PasswordStrength` was perfectly happy with it. But the form rejected it
+          anyway:
+
+          > This password has been leaked in a data breach, it must not be used.
+
+          How can a password be strong *and* rejected?
+      answers:
+          - "The two constraints measure completely different things: `PasswordStrength` does math on the password itself, while `NotCompromisedPassword` asks whether it has turned up in a real breach - and that particular phrase very much has."
+          - "`PasswordStrength` only looks at length, so any password of 12 characters or more sails past it."
+          - "`NotCompromisedPassword` runs first and short-circuits the rest, so the strength score was never actually calculated."
+          - "Four lowercase words can't score above `STRENGTH_WEAK` - the strength error was just hidden behind the breach error."
+      explanation: |
+          A password can be mathematically excellent and still be a poor choice, because
+          strength tells us nothing about whether anyone *else* has already used it.
+          `PasswordStrength` only looks at the characters in front of it - how many
+          distinct ones, drawn from how big a pool - and `correcthorsebatterystaple`
+          scores just fine on that. `NotCompromisedPassword` asks an entirely different
+          question: has this exact password shown up in a real data breach? For a phrase
+          that's been famous on the internet for over a decade, the answer is a
+          resounding yes! That's exactly why both are worth having - neither one can
+          catch what the other does.
+    - key: compound-tightened-registration
+      question: |
+          Before the refactor, `RegistrationFormType` had just two constraints on
+          `plainPassword`:
+
+          ```php
+          'constraints' => [
+              new NotBlank(message: 'Please enter a password'),
+              new Length(min: 6, max: 4096),
+          ],
+          ```
+
+          Then we replaced that whole array with `new Password()`. What did that do to
+          the registration form?
+      answers:
+          - "It tightened it: the minimum jumped from 6 characters to 12, and registration picked up the strength and breach checks it never had."
+          - "Nothing - `Compound` merges its constraints with whatever is already on the field, so `min: 6` still applies."
+          - It loosened it - a compound constraint only runs on a non-empty value, so a blank password now gets through.
+          - Nothing visible, since a compound constraint has to be registered as a service before it takes effect.
+      explanation: |
+          This is the quiet win of the refactor. The two forms had drifted apart: change
+          password demanded 12 characters plus the strength and breach checks, while
+          registration was happy with 6 characters and nothing else. Pointing both at
+          `Password` didn't only delete duplication - it closed that gap, and from here
+          on there's exactly one place to go when the rules need to change. It's worth a
+          quick look at both forms whenever you consolidate like this, because one of
+          them is usually about to get stricter!
+---
+
 # Requiring Strong, Uncompromised Passwords
 
 We now have three places where we ask someone to create a new password: our change password

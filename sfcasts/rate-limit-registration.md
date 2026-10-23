@@ -1,3 +1,73 @@
+---
+challenges:
+    - key: consume-only-on-valid
+      question: |
+          We put the limiter inside the block that runs only when the form is submitted
+          *and* valid, right before the new user is created:
+
+          ```php
+          if ($form->isSubmitted() && $form->isValid()) {
+              $limit = $limiterFactory->create($request->getClientIp())->consume();
+
+              if (!$limit->isAccepted()) {
+                  // ...
+              }
+
+              // ... create the user
+          }
+          ```
+
+          Why not consume a token as soon as the form is submitted?
+      answers:
+          - Our rule allows one registration every 10 minutes - if invalid submissions counted too, a single typo in the password would lock someone out for the next 10.
+          - "`consume()` throws if the form has validation errors, so it can only be called on a valid form."
+          - The client IP isn't available until the form has been validated.
+          - Tokens consumed before validation are refunded automatically, so calling it earlier would make no difference.
+      explanation: |
+          Counting *attempts* and counting *registrations* are two very different things.
+          Our password rules are strict - 12 characters, real strength, nothing that's
+          turned up in a breach - so someone acting in complete good faith can easily
+          miss two or three times before getting it right. If each of those cost a token,
+          they'd be locked out for 10 minutes for the crime of fumbling a password!
+          Keeping `consume()` behind the validity check means we're counting accounts
+          actually created, which is the thing we were worried about to begin with.
+    - key: limiter-key-client-ip
+      question: |
+          We created the limiter using the client's IP address:
+
+          ```php
+          $limit = $limiterFactory->create($request->getClientIp())->consume();
+          ```
+
+          What is that argument actually doing?
+      answers:
+          - It's the key that separates one counter from another - each distinct value gets its own independent budget, so one visitor's registrations don't eat into anyone else's.
+          - "It names which limiter from `rate_limiter.yaml` to build, so a different value would select a different policy."
+          - "It's an optional label, used only for the `Retry-After` header and logging."
+          - It restricts the limiter to that IP - requests from any other address skip the limiter entirely.
+      explanation: |
+          A limiter factory builds one limiter *per key*, and the key decides who shares
+          a budget. We passed the client IP, so every address gets its own "one
+          registration per 10 minutes". Pass a user ID instead and the limit follows that
+          person across devices; pass a constant string and the entire internet shares a
+          single budget! It's worth a moment's thought, because the key really *is* the
+          policy - whatever you pass in is the thing you're limiting.
+
+          Keying on the IP does come with a catch worth knowing about: an office, a
+          school or a coffee shop usually shares one public address between everybody in
+          the building. So "one registration per 10 minutes" quietly becomes one for the
+          whole company - which is fine until a dozen new colleagues try to sign up on
+          their first morning. There's no perfect answer here, just a trade-off between
+          turning away bots and inconveniencing real people, but it's a good reason to be
+          generous with the limit.
+
+          It's also worth remembering that our app doesn't have to carry this on its own.
+          A service like Cloudflare sits in front of the site and turns away obvious bot
+          traffic before it ever reaches Symfony, which pairs really nicely with a limit
+          like ours: the edge handles the floods, and our limiter handles the patient,
+          one-at-a-time stuff that slips through.
+---
+
 # Rate Limiting the Registration Form
 
 In the last course, we added login throttling to our login form to limit how many login
