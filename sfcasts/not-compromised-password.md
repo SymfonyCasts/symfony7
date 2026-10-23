@@ -20,23 +20,21 @@ them.
 
 In `src/`, add a new PHP class called `Password` in the `App\Validator\Constraints`
 namespace. Make it `final` and extend `Compound` - the one the Symfony validator component.
-Then implement the single method: `getConstraints()`:
-
-
+Then implement the single method: `getConstraints()`.
 
 Inside, we return an array of the constraints this one should expand into. We want the
 full set, so hop back to `ChangePasswordFormType`, copy all four... back in
-`Password::getConstraints()`... return... and paste.
+`Password::getConstraints()`... return... and paste:
 
-
+[[[ code('269f086e44') ]]]
 
 Now, in `ChangePasswordFormType`, replace that entire array with just `new Password()`:
 
-
+[[[ code('9cf866f5f0') ]]]
 
 And do the same over in `RegistrationFormType`:
 
-
+[[[ code('3ba1d69ef4') ]]]
 
 Perfect. That's a *great* way to cut down on duplication.
 

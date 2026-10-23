@@ -10,7 +10,7 @@ First though, let's clean up that weird username field at the bottom of the form
 `templates/registration/register.html.twig` and, right after the email row, duplicate
 that line and change it to `username`:
 
-
+[[[ code('820ec6d9c2') ]]]
 
 Easy peasy. Refresh... perfect.
 
@@ -37,7 +37,7 @@ The easiest one to reason about - and the most flexible, I think - is `sliding_w
 Use that. Then we need a `limit` of `1` and an `interval` of `10 minutes`. So: you can
 only create one user every 10 minutes:
 
-
+[[[ code('0bffa32719') ]]]
 
 ## Injecting the Limiter Factory
 
@@ -45,7 +45,7 @@ Now over to `src/Controller/RegistrationController.php`. We need to inject a new
 service. Let me expand this argument list a bit so we have more room. The service we
 want is `RateLimiterFactoryInterface`, and we'll call it `$limiterFactory`:
 
-
+[[[ code('febc14a593') ]]]
 
 But hold on - we want *our* configured limiter, not just any one. That means named
 autowiring with a `#[Target]` attribute. To figure out what the target string should
@@ -62,7 +62,7 @@ right here: `registration`. Copy that.
 Back in the controller, above the `RateLimiterFactoryInterface` argument, add a
 `#[Target]` attribute with the string `registration`:
 
-
+[[[ code('5dcf8f9b9f') ]]]
 
 Notice that we're injecting the *factory*, not the limiter itself.
 
@@ -78,7 +78,7 @@ easiest option is `$request->getClientIp()`. That gives us the limiter itself, a
 we consume a token - or really, record a hit: `->consume()`. By default, that consumes a
 single token:
 
-
+[[[ code('bd4ddea7dc') ]]]
 
 What `consume()` returns is a special `RateLimit` object with some interesting methods
 on it. We can ask whether we were accepted. We could call `ensureAccepted()`, which
@@ -91,7 +91,7 @@ We'll keep it friendly. Write `if (!$limit->isAccepted())`, and inside, add a fl
 Then send them back to the registration page so they can wait it out:
 `return $this->redirectToRoute('app_register')`:
 
-
+[[[ code('c78e06e063') ]]]
 
 ## Making the Cache Real
 
@@ -101,7 +101,7 @@ cache by default. And earlier, we changed our default cache. Open
 cache that forgets everything at the end of the request. Switch that to
 `cache.adapter.filesystem`:
 
-
+[[[ code('b8af97756f') ]]]
 
 Time to test. Head to the registration page and register a new user: email
 `worf@enterprise.space`, username `worf`, name `Worf`, and for the password, something
