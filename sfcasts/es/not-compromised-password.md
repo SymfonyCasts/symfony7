@@ -12,13 +12,13 @@ En nuestro `ChangePasswordFormType`, tenemos cuatro restricciones para el campo 
 acepta sin problemas una contraseña de 6 caracteres.
 
 Así que, en lugar de copiar las restricciones de un formulario al otro —y luego tener que
-mantener las dos listas sincronizadas para siempre—, crea una restricción compuesta personalizada que las incluya a todas
-.
+mantener las dos listas sincronizadas para siempre—, crea una restricción compuesta personalizada que las incluya
+todas.
 
 ## Creación de la restricción compuesta
 
 En `src/`, añade una nueva clase PHP llamada `Password` en el espacio de nombres `App\Validator\Constraints`
-. Hazla `final` y extiéndela desde `Compound` —la del componente validador de Symfony—.
+. Hazla `final` y hereda de `Compound` —la del componente validador de Symfony—.
 A continuación, implementa el único método: `getConstraints()`.
 
 Dentro, devolvemos un array con las restricciones en las que este debería expandirse. Queremos el
@@ -76,7 +76,7 @@ parte del hash de la contraseña, recibe una lista de posibles coincidencias y l
 localmente. La contraseña en sí nunca sale de tu servidor.
 
 Así que busquemos algo que supere las cuatro pruebas. Prueba `makeitso1engage?` y regístrate.
-Genial: ¡ni un solo error en el campo de la contraseña! Y como es un campo de contraseña,
+Genial, ¡ni un solo error en el campo de la contraseña! Y como es un campo de contraseña,
 se borra solo, así que tenemos que rellenarlo cada vez que enviamos el formulario.
 
 Es una forma muy ordenada de agrupar las restricciones de cualquier campo en una sola
