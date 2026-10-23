@@ -50,7 +50,7 @@ Ahora, crea el formulario. ¿Pero qué formulario?
 
 Lo mejor es que el generador de restablecimiento de contraseña ya ha creado el formulario que necesitamos. Echa un vistazo
 a `src/Form/ChangePasswordFormType.php`, del último capítulo. Eso es todo lo que
-hace falta: la nueva contraseña, dos veces. Podemos reutilizarlo, y eso me encanta.
+hace falta: la nueva contraseña, dos veces. Podemos reutilizarlo; me encanta eso.
 
 Así que: `$form = $this->createForm(ChangePasswordFormType::class)`, y luego
 `$form->handleRequest($request)`. Si el formulario se envía y es válido, saca la
@@ -71,7 +71,7 @@ el formulario con `{{ form(form) }}`:
 
 [[[ code('308cb27c0c') ]]]
 
-Actualiza la página. Todavía no tiene estilo —ya nos ocuparemos de eso en un momento—, pero ya tenemos nuestros nuevos campos de
+Actualiza la página. Aún no tiene estilo —ya nos ocuparemos de eso en un momento—, pero ya tenemos nuestros nuevos campos de
 contraseña y de confirmación de contraseña, igual que en la página de restablecimiento de contraseña.
 
 ## Solicitar la contraseña actual
@@ -108,7 +108,7 @@ en «Contraseña actual»:
 [[[ code('77fb62e866') ]]]
 
 Para asegurarte de que es realmente opcional, vuelve a la app y actualiza la página. Ya no aparece, y
-¡eso es bueno! Significa que hay que habilitar el campo, así que no hace falta
+¡eso está bien! Significa que hay que habilitar el campo, lo que implica que no tenemos que
 cambiar nada en nuestro proceso de restablecimiento de contraseña.
 
 Para habilitarlo, vuelve a `ChangePasswordController` y pasa un array de opciones donde
@@ -127,16 +127,17 @@ pega este código; lo encontrarás en el script de abajo:
 
 Actualiza la página. Mucho mejor.
 
-Ahora vamos a hacer que este formulario dé error a propósito. En la contraseña actual, introduce `engage`, pero
-en realidad es `makeitso`. Y para la nueva contraseña, usa `1234` en el primer campo y`4321` en el otro, para que no coincidan. Pulsa «Cambiar contraseña» y… ahí lo
+Ahora vamos a hacer que este formulario falle a propósito. En la contraseña actual, introduce `engage`, pero
+en realidad es `makeitso`. Y para la nueva contraseña, usa `1234` en el primer campo y
+`4321` en el otro, para que no coincidan. Pulsa «Cambiar contraseña» y… ahí lo
 tienes: «El valor debe ser la contraseña actual del usuario». La verdad es que podríamos hacer que ese
 mensaje fuera un poco más amable.
 
-Vale, ¿cuál es la contraseña actual? `makeitso`. Y para nuestra nueva contraseña,`makeitso1engage?` dos veces. Cambiar contraseña… ¡perfecto! «¡Tu contraseña se ha
+Vale, ¿y cuál es la contraseña actual? `makeitso`. Y para nuestra nueva contraseña,`makeitso1engage?` dos veces. Cambiar contraseña... ¡perfecto! «¡Tu contraseña se ha
 cambiado!»
 
 Quizá deberíamos comprobarlo bien. Cierra sesión y luego inicia sesión como `picard@enterprise.space` con la nueva
 contraseña `makeitso1engage?`. Genial, todo ha funcionado.
 
 A continuación: echemos un vistazo a esas restricciones específicas de la contraseña en nuestro formulario de cambio de contraseña
-y eliminemos algunas repeticiones en la validación de la contraseña.
+y eliminemos algunas repeticiones en nuestra validación de la contraseña.
