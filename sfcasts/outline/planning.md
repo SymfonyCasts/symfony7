@@ -42,12 +42,13 @@
 - Swap our `access_control` expression over to the new attribute
 - Expression functions too: `is_recently_authenticated()` and the very_ variant
 - Put `IS_AUTHENTICATED_VERY_RECENTLY` on something scary, like delete
-- A denial now starts a `ReAuthenticationEntryPointInterface`
-- Point it at a confirm-password page with `re_authentication_entry_point`
-- Our hand-rolled confirm form from earlier becomes a supported flow
-- `TokenInterface::getAuthenticationProofs()` holds the methods and timestamps
-- `AuthenticationMethod` + `AuthenticationMethodBadge` declare the method used
-- Subclass `AuthenticationTrustResolver` for custom rules
+- Fix a bug in that form: it always sends a hidden `_remember_me=1`
+- Before, only remember-me users saw the form, so they had already opted in
+- Now a fully authenticated user with an old login lands there too
+- So a "don't remember me" login quietly becomes a remembered one
+- Fix: only send the hidden field `{% if is_granted('IS_REMEMBERED') %}`, else show the normal checkbox
+- No session needed, the remember-me cookie already records the choice
+- Promised in a comment reply on the original course, so don't skip it
 - Blog post: https://symfony.com/blog/new-in-symfony-8-2-sudo-mode
 
 ## Advanced bonus topics
