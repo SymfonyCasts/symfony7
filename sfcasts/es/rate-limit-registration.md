@@ -12,7 +12,7 @@ esa línea y cámbiala por `username`:
 
 [[[ code('820ec6d9c2') ]]]
 
-Pan comido. Actualiza la página… perfecto.
+Pan comido. Actualiza la página... perfecto.
 
 ## Configurar el limitador
 
@@ -26,12 +26,12 @@ Todo limitador de frecuencia necesita un « `policy` », y Symfony te ofrece tre
 `fixed_window` Te permite X intentos en un tiempo Y: un intento por hora, cinco
 intentos cada cinco minutos, ese tipo de cosas.
 
-`sliding_window` funciona con la misma idea, salvo que la ventana se desplaza según el momento en que se producen las peticiones.
+`sliding_window` funciona con la misma idea, salvo que la ventana se adapta al ritmo de las peticiones.
 Esto evita que alguien lance un montón de peticiones al final de una ventana y
-luego vuelva a lanzarlas inmediatamente al inicio de la siguiente.
+vuelva a lanzarlas inmediatamente al inicio de la siguiente.
 
 Y `token_bucket`: empiezas con un «bucket» de X tokens, cada acceso consume uno, y cuando
-el «bucket» está vacío, ¡no se permiten más accesos! Luego, el «bucket» se rellena a un ritmo fijo.
+el «bucket» está vacío, ¡no se permiten más accesos! El «bucket» se rellena luego a un ritmo fijo.
 
 El más fácil de entender —y el más flexible, creo— es `sliding_window`.
 Usa ese. Luego necesitamos un `limit` de `1` y un `interval` de `10 minutes`. Así que: solo puedes
