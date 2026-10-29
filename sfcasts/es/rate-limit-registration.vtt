@@ -1,0 +1,322 @@
+WEBVTT
+
+00:00:01.106 --> 00:00:04.526 align:middle
+En el último curso, añadimos una limitación de intentos de
+inicio de sesión a nuestro formulario de inicio de sesión
+
+00:00:04.726 --> 00:00:07.176 align:middle
+para limitar el número de
+intentos que puede hacer alguien.
+
+00:00:07.756 --> 00:00:10.246 align:middle
+Ahora quiero limitar el número de
+registros en la página de registro,
+
+00:00:10.306 --> 00:00:12.986 align:middle
+para que nadie pueda quedarse
+ahí registrando mil usuarios.
+
+00:00:12.986 --> 00:00:17.006 align:middle
+Pero primero, vamos a arreglar ese campo raro del
+nombre de usuario que hay al final del formulario.
+
+00:00:17.516 --> 00:00:23.666 align:middle
+Abre templates/registration/register.html.twig y,
+justo después de la línea del correo electrónico,
+
+00:00:23.976 --> 00:00:27.666 align:middle
+duplica esa línea y cámbiala
+por username: Pan comido.
+
+00:00:28.276 --> 00:00:28.776 align:middle
+Actualiza la página...
+
+00:00:29.676 --> 00:00:32.006 align:middle
+perfecto. Ahora necesitamos
+un limitador de frecuencia.
+
+00:00:32.356 --> 00:00:35.186 align:middle
+Ya instalamos el componente del
+limitador de tasa cuando configuramos
+
+00:00:35.186 --> 00:00:37.166 align:middle
+la limitación de accesos,
+así que ya está disponible.
+
+00:00:37.636 --> 00:00:43.966 align:middle
+Para configurarlo, ve a config/packages/ y crea
+un nuevo archivo YAML llamado rate_limiter.yaml.
+
+00:00:44.936 --> 00:00:48.976 align:middle
+Dentro, la configuración se encuentra bajo la
+clave framework y, a continuación, rate_limiter.
+
+00:00:49.476 --> 00:00:50.866 align:middle
+Llámalo registration.
+
+00:00:51.646 --> 00:00:55.516 align:middle
+Todo limitador de frecuencia necesita un « policy
+», y Symfony te ofrece tres entre los que elegir.
+
+00:00:55.516 --> 00:01:01.126 align:middle
+«fixed_window » significa que se permiten X
+intentos en un tiempo Y: un intento por hora,
+
+00:01:01.126 --> 00:01:03.526 align:middle
+cinco intentos cada cinco
+minutos, ese tipo de cosas
+
+00:01:03.526 --> 00:01:09.766 align:middle
+. «sliding_window » es lo mismo, pero la ventana se
+ajusta según el momento en que se realizan los intentos.
+
+00:01:09.956 --> 00:01:13.636 align:middle
+Esto evita que alguien lance un montón
+de peticiones al final de un intervalo
+
+00:01:13.696 --> 00:01:17.176 align:middle
+y vuelva a hacerlo inmediatamente
+al inicio del siguiente.
+
+00:01:17.176 --> 00:01:22.296 align:middle
+Y token_bucket: empiezas con un «cubo»
+de X tokens, cada acceso consume uno,
+
+00:01:22.426 --> 00:01:24.946 align:middle
+y cuando el cubo se vacía,
+¡no se permiten más accesos!
+
+00:01:25.426 --> 00:01:27.846 align:middle
+El cubo se vuelve a llenar a un ritmo fijo.
+
+00:01:28.566 --> 00:01:32.636 align:middle
+El más fácil de entender —y el más
+flexible, creo— es sliding_window.
+
+00:01:33.116 --> 00:01:38.006 align:middle
+Usa ese. Luego necesitamos un limit
+de 1 y un interval de 10 minutes.
+
+00:01:38.276 --> 00:01:42.316 align:middle
+Así que: solo puedes crear
+un usuario cada 10 minutos:
+
+00:01:42.316 --> 00:01:45.386 align:middle
+Ahora pasemos a
+src/Controller/RegistrationController.php.
+
+00:01:45.386 --> 00:01:48.476 align:middle
+Tenemos que añadir un nuevo servicio.
+
+00:01:48.776 --> 00:01:51.476 align:middle
+Voy a ampliar un poco esta lista de
+argumentos para que tengamos más espacio.
+
+00:01:56.736 --> 00:02:00.286 align:middle
+El servicio que queremos es
+RateLimiterFactoryInterface,
+
+00:02:00.386 --> 00:02:03.336 align:middle
+y lo llamaremos $limiterFactory:
+Pero espera un momento...
+
+00:02:03.396 --> 00:02:06.536 align:middle
+queremos nuestro limitador
+configurado, no uno cualquiera.
+
+00:02:07.116 --> 00:02:10.006 align:middle
+Eso significa autowiring con
+nombre y con el atributo #[Target].
+
+00:02:10.506 --> 00:02:14.516 align:middle
+Para averiguar cuál debe ser la cadena
+de destino, ve a la terminal y ejecuta:
+
+00:02:14.516 --> 00:02:22.046 align:middle
+symfony console debug:autowiring ratelimiter Los dos primeros
+resultados son los limitadores de inicio de sesión que configuramos
+
+00:02:22.046 --> 00:02:23.596 align:middle
+en el último curso.
+
+00:02:23.596 --> 00:02:27.146 align:middle
+Y este de aquí —el limitador de
+registro— es el que acabamos de configurar.
+
+00:02:27.506 --> 00:02:29.896 align:middle
+Podemos ver el valor de destino
+justo aquí: registration.
+
+00:02:30.176 --> 00:02:30.736 align:middle
+Cópialo.
+
+00:02:31.516 --> 00:02:35.766 align:middle
+De vuelta en el controlador, encima del
+argumento RateLimiterFactoryInterface,
+
+00:02:35.766 --> 00:02:38.936 align:middle
+añade un atributo #[Target]
+con la cadena registration:
+
+00:02:39.516 --> 00:02:43.616 align:middle
+Fíjate en que estamos inyectando
+la fábrica, no el limitador en sí.
+
+00:02:43.616 --> 00:02:45.766 align:middle
+Ahora crea el limitador
+a partir de la fábrica.
+
+00:02:46.326 --> 00:02:47.846 align:middle
+¿Dónde debería aplicarse
+la limitación de tasa?
+
+00:02:47.846 --> 00:02:51.136 align:middle
+Una vez que se haya enviado el
+formulario y se haya validado,
+
+00:02:51.366 --> 00:02:54.556 align:middle
+justo antes de crear realmente el
+nuevo usuario en la base de datos.
+
+00:02:54.556 --> 00:03:00.546 align:middle
+Así que, al principio de ese bloque, escribe
+« $limit = $limiterFactory->create() ».
+
+00:03:00.586 --> 00:03:06.106 align:middle
+«create() » toma la clave de este limitador, es
+decir, lo que debería ser diferente para cada usuario.
+
+00:03:06.686 --> 00:03:10.276 align:middle
+La opción más sencilla es
+$request->getClientIp().
+
+00:03:10.786 --> 00:03:14.296 align:middle
+Eso nos da el limitador en sí,
+y ahora consumimos un token —
+
+00:03:14.466 --> 00:03:17.336 align:middle
+o, mejor dicho, registramos
+una solicitud: ->consume().
+
+00:03:17.966 --> 00:03:24.336 align:middle
+Por defecto, eso consume un solo token: Lo que devuelve
+consume() es un objeto especial de tipo RateLimit
+
+00:03:24.336 --> 00:03:25.946 align:middle
+con algunos métodos interesantes.
+
+00:03:26.266 --> 00:03:28.106 align:middle
+Podemos comprobar si nos han aceptado.
+
+00:03:28.496 --> 00:03:33.166 align:middle
+Podríamos llamar a ensureAccepted(), que lanza
+un RateLimitExceededException si no lo hemos sido.
+
+00:03:33.766 --> 00:03:37.306 align:middle
+Y nos da información muy útil:
+cuándo puedes volver a intentarlo,
+
+00:03:37.516 --> 00:03:40.106 align:middle
+cuántos tokens quedan y cuál es el límite.
+
+00:03:40.456 --> 00:03:43.566 align:middle
+Incluso puedes llamar a wait() para quedarte ahí
+a la espera hasta que haya tokens disponibles.
+
+00:03:43.816 --> 00:03:44.376 align:middle
+¡Genial!
+
+00:03:45.986 --> 00:03:46.766 align:middle
+Lo haremos de forma amable.
+
+00:03:47.456 --> 00:03:53.076 align:middle
+Escribe if (!$limit->isAccepted())
+y, dentro, añade un flash:
+
+00:03:53.316 --> 00:03:58.356 align:middle
+$this->addFlash('error',
+'Demasiados intentos de registro.
+
+00:03:58.826 --> 00:04:00.626 align:middle
+Inténtalo de nuevo más tarde.').
+
+00:04:00.626 --> 00:04:03.836 align:middle
+Después, redirígelos a la página
+de registro para que puedan esperar:
+
+00:04:04.196 --> 00:04:11.166 align:middle
+return $this->redirectToRoute('app_register'): Hay
+algo que tenemos que hacer antes de poder probar esto:
+
+00:04:11.456 --> 00:04:14.546 align:middle
+los limitadores de frecuencia guardan
+su estado en la caché por defecto.
+
+00:04:14.806 --> 00:04:17.186 align:middle
+Y antes cambiamos nuestra caché por defecto.
+
+00:04:17.666 --> 00:04:20.536 align:middle
+Abre config/packages/cache.yaml...
+
+00:04:21.166 --> 00:04:25.316 align:middle
+Sí: app: cache.adapter.array,
+que es una caché en memoria
+
+00:04:25.316 --> 00:04:27.546 align:middle
+que se olvida de todo al final de la petición.
+
+00:04:27.546 --> 00:04:32.886 align:middle
+Cambia eso a cache.adapter.filesystem:
+es hora de probarlo.
+
+00:04:32.886 --> 00:04:38.596 align:middle
+Ve a la página de registro y crea una nueva
+cuenta: correo electrónico worf@enterprise.space,
+
+00:04:38.846 --> 00:04:46.206 align:middle
+nombre de usuario worf, nombre Worf y, para la
+contraseña, algo complejo: makeitso1engage?.
+
+00:04:46.206 --> 00:04:48.946 align:middle
+Acepta las condiciones y envía el formulario.
+
+00:04:49.696 --> 00:04:52.946 align:middle
+Perfecto: ya estamos registrados
+e iniciados sesión como Worf.
+
+00:04:52.946 --> 00:04:58.946 align:middle
+Ahora cierra sesión, vuelve a hacer clic en «Registrarse»
+e intenta con un segundo usuario: natasha@enterprise.space,
+
+00:04:59.196 --> 00:05:05.666 align:middle
+nombre de usuario natasha, nombre Natasha Yar,
+la misma contraseña, acepta los términos...
+
+00:05:06.466 --> 00:05:09.156 align:middle
+y ahí está: «Demasiados
+intentos de registro».
+
+00:05:09.226 --> 00:05:10.366 align:middle
+Inténtalo de nuevo más tarde.
+
+00:05:10.926 --> 00:05:13.616 align:middle
+De hecho, tenemos un límite de
+intentos; no hemos podido superarlo.
+
+00:05:14.256 --> 00:05:16.466 align:middle
+En unos 10 minutos, podremos
+volver a registrarnos.
+
+00:05:16.466 --> 00:05:19.736 align:middle
+Y esto es todo por hoy en «Seguridad
+en Symfony: ¡un paso más allá!»
+
+00:05:19.736 --> 00:05:21.296 align:middle
+Gracias por programar conmigo.
+
+00:05:21.626 --> 00:05:24.366 align:middle
+Si tienes alguna pregunta,
+déjanosla en los comentarios.
+
+00:05:24.736 --> 00:05:26.336 align:middle
+Hasta la próxima. ¡Feliz programación!
