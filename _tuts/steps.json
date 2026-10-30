@@ -19,7 +19,12 @@
             "id": "2-logout-button",
             "name": "2. logout_button",
             "description": null
+        },
+        {
+            "id": "3-switch-user-hardening",
+            "name": "3. switch user hardening",
+            "description": null
         }
     ],
-    "sha": "26d405ec3ec74104d749e7724d64f0a21ef7cc5d"
+    "sha": "f60e8a05b0b1dcfd11bf1f5091929c1df32f1e16"
 }

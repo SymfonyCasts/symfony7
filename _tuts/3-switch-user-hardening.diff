@@ -1,0 +1,61 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 757f016..518e8c9 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -44,6 +44,8 @@ security:
+             switch_user:
+                 target_route: app_homepage
+                 role: CAN_IMPERSONATE
++                path: app_impersonate_user
++                enable_csrf: true
+ 
+     # Note: Only the *first* matching rule is applied
+     access_control:
+diff --git a/config/routes.yaml b/config/routes.yaml
+index cef258c..0535009 100644
+--- a/config/routes.yaml
++++ b/config/routes.yaml
+@@ -9,3 +9,7 @@
+ 
+ controllers:
+     resource: routing.controllers
++
++app_impersonate_user:
++    path: /impersonate
++    methods: [POST]
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index 060773f..4e5626a 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -72,9 +72,11 @@
+                             Contact
+                         </a>
+                         {% if is_granted('IS_IMPERSONATOR') %}
+-                            <a class="hover:text-amber-400 pt-2" href="{{ impersonation_exit_path(path('app_user_admin_index')) }}">
+-                                Exit Impersonation
+-                            </a>
++                            {{ impersonation_exit_button(
++                                'Exit Impersonation',
++                                path('app_user_admin_index'),
++                                attr: {class: 'hover:text-amber-400 pt-2'}
++                            ) }}
+                         {% elseif is_granted('ROLE_USER') %}
+                             {{ logout_button(
+                                 'Logout',
+diff --git a/templates/user_admin/index.html.twig b/templates/user_admin/index.html.twig
+index 93219bc..8c22c27 100644
+--- a/templates/user_admin/index.html.twig
++++ b/templates/user_admin/index.html.twig
+@@ -47,7 +47,11 @@
+                                 <a class="bg-green-600 hover:bg-green-800 rounded p-1.5" href="{{ path('app_user_admin_show', {'id': user.id}) }}">show</a>
+                                 <a class="bg-red-500 hover:bg-red-600 rounded p-1.5" href="{{ path('app_user_admin_edit', {'id': user.id}) }}">edit</a>
+                                 {% if is_granted('CAN_IMPERSONATE', user) %}
+-                                    <a class="bg-indigo-500 hover:bg-indigo-600 rounded p-1.5 whitespace-nowrap" href="{{ impersonation_path(user.userIdentifier) }}">switch to</a>
++                                    {{ impersonation_button(
++                                        'switch to',
++                                        user.userIdentifier,
++                                        attr: {class: 'bg-indigo-500 hover:bg-indigo-600 rounded p-1.5 whitespace-nowrap'}
++                                    ) }}
+                                 {% endif %}
+                             </div>
+                         </td>
