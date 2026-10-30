@@ -14,7 +14,12 @@
             "id": "1-upgrade-to-8-2",
             "name": "1. upgrade to 8.2",
             "description": null
+        },
+        {
+            "id": "2-logout-button",
+            "name": "2. logout_button",
+            "description": null
         }
     ],
-    "sha": "10a4f45f6b9ba46e45713f85967537fefb06b00c"
+    "sha": "26d405ec3ec74104d749e7724d64f0a21ef7cc5d"
 }

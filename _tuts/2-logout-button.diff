@@ -1,0 +1,22 @@
+diff --git a/templates/base.html.twig b/templates/base.html.twig
+index 36b0186..060773f 100644
+--- a/templates/base.html.twig
++++ b/templates/base.html.twig
+@@ -76,12 +76,11 @@
+                                 Exit Impersonation
+                             </a>
+                         {% elseif is_granted('ROLE_USER') %}
+-                            <form action="{{ logout_path() }}" method="post" class="inline">
+-                                <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('logout') }}">
+-                                <button type="submit" class="hover:text-amber-400 pt-2 cursor-pointer">
+-                                    Logout
+-                                </button>
+-                            </form>
++                            {{ logout_button(
++                                'Logout',
++                                attr: {class: 'hover:text-amber-400 pt-2 cursor-pointer'},
++                                formAttr: {class: 'inline'}
++                            ) }}
+                         {% else %}
+                             <a class="hover:text-amber-400 pt-2" href="{{ path('app_register') }}">
+                                 Register
