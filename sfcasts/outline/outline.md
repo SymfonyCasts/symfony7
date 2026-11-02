@@ -30,3 +30,35 @@
 - test login as `picard@enterprise.space`, `makeitso`
 - inspect element
 - Logout works!
+
+## Hardening Impersonation with POST & CSRF
+- Login as `janeway@starfleet.space`, `coffeeblack`, visit `/admin/user`
+- We can impersonate users and we have a voter to prevent impersonating ourself
+- Hover over: `?_switch_user=`, problems:
+    - GET, email in the url, no CSRF protection
+- We can make it POST and add CSRF protection in 8.2!
+- First we need a route. In `SecurityController` we added a stub just to use `Route`
+- `config/routes/security.yaml`
+    - `app_impersonate_user:
+        path: /impersonate
+        methods: [POST]`
+    - No need for a controller, the impersonation listener will handle
+- `config/packages/security.yaml`, under `switch_user` add:
+    - `path: app_impersonate_user
+     enable_csrf: true`
+- `templates/user_admin/index.html.twig`, inside the `is_granted`
+    - `{{ impersonation_button(
+        'switch to',
+        user.userIdentifier,
+        attr: {class: 'bg-indigo-500 hover:bg-indigo-600 rounded p-1.5 whitespace-nowrap'}
+    ) }}`
+- `templates/base.html.twig` - find the exit button
+    - `{{ impersonation_exit_button(
+          'Exit Impersonation',
+          path('app_user_admin_index'),
+          attr: {class: 'hover:text-amber-400 pt-2'}
+      ) }}`
+- Back to user listing page...
+- Inspect one of the buttons... Builds the whole form!
+- Click... on homepage and impersonating!
+- Exit... and we're back!
