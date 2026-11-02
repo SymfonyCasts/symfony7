@@ -28,7 +28,7 @@ Step one: upgrade to 8.2!
 Over in `composer.json`, the easiest way to do this is with find and replace. Find
 `8.0.*` and replace it with `8.2.*`. There are 23 matches - hit "Replace all":
 
-
+[[[ code('2395355c26') ]]]
 
 Now jump over to the terminal and run:
 
@@ -45,7 +45,7 @@ they don't match our minimum stability. In `composer.json`, we have
 this, you won't hit this error. But since I'm recording before the release, change it to
 `dev`:
 
-
+[[[ code('0fb9aaf740') ]]]
 
 That's how you can always try out pre-release Symfony versions - and the more people that
 do, the more it helps the core team.
@@ -62,7 +62,7 @@ More errors! This one is a bit more subtle: `symfony/asset` 8.2-dev requires PHP
 higher. Down under `config.platform.php`, we're set to just `8.4`. That needs to be at least
 `8.4.1`, so set it to a version higher than that... `8.4.26`:
 
-
+[[[ code('e4590636b6') ]]]
 
 Run the composer update again:
 
@@ -82,12 +82,12 @@ version of `symfony/ux-turbo` in our lock file doesn't allow it. Good news: the 
 versions of Symfony UX have been released! Find `symfony/ux-turbo` in `composer.json` and
 change it to `^3.0`:
 
-
+[[[ code('d0101ef627') ]]]
 
 Run again... and we need to do the same for `symfony/stimulus-bundle`.
 Find it and set it to `^3.0` too:
 
-
+[[[ code('3fcac3b356') ]]]
 
 One more time:
 
@@ -111,7 +111,7 @@ This is auto-generated and helps your editor auto-complete and validate your YAM
 files. Since it's generated, I like to ignore it. Open `.gitignore` and, just like we did
 for `config/reference.php`, add `config/schema.json`:
 
-
+[[[ code('d045dd1341') ]]]
 
 Run `git status` again:
 
