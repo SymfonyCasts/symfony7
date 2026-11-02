@@ -19,7 +19,7 @@ stub. It's never actually called - it only exists so we have somewhere to put th
 cleaner alternative is to configure it in `config/routes.yaml`. Below the existing
 routes, add `app_impersonate_user`, with `path: /impersonate` and `methods: [POST]`:
 
-
+[[[ code('306a98292e') ]]]
 
 We don't need a controller, because the impersonation system takes over completely,
 just like logout does. And we don't need any `access_control` for this route either -
@@ -34,7 +34,7 @@ we require to impersonate. Add `path` set to our new route, `app_impersonate_use
 impersonation *only* happens on that route - and since it requires POST, so does
 impersonation. Then enable CSRF with `enable_csrf: true`:
 
-
+[[[ code('cb5671d7a1') ]]]
 
 ## The `impersonation_button()` Function
 
@@ -54,7 +54,7 @@ Set the label to `switch to`. Then add `attr`, and since it's the full set of HT
 attributes, set `class` inside. Copy all the classes from the old link and paste them in
 there. Now remove the old link:
 
-
+[[[ code('2af01eff95') ]]]
 
 ## The `impersonation_exit_button()` Function
 
@@ -69,15 +69,13 @@ Set the label to `Exit Impersonation`. The second argument is the path from belo
 which sends us back to the user admin when we exit. Last, pass `attr` with `class`, then
 copy the classes from the old link and paste them inside:
 
-
+[[[ code('89d7e19b97') ]]]
 
 Now delete the old link.
 
 Oh, and I just realized we forgot something on the user admin's
 `impersonation_button()`. We passed the label and the attributes, but not the user
-identifier! Add `user.userIdentifier` as the second argument:
-
-
+identifier! Add `user.userIdentifier` as the second argument.
 
 ## Trying It Out
 

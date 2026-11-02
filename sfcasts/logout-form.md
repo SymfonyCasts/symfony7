@@ -33,7 +33,7 @@ attributes. Add `attr`, and since this holds *all* the attributes, it needs a se
 level: `{class: '...'}`. Copy and paste the button's classes in there. Then do the same
 with `formAttr`, setting `class` to `inline`. Cool! Now remove the old form:
 
-
+[[[ code('46b4d9ef40') ]]]
 
 ## Testing It Out
 
