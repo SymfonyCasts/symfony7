@@ -24,7 +24,12 @@
             "id": "3-switch-user-hardening",
             "name": "3. switch user hardening",
             "description": null
+        },
+        {
+            "id": "4-check-refreshed-user-event",
+            "name": "4. check refreshed user event",
+            "description": null
         }
     ],
-    "sha": "f60e8a05b0b1dcfd11bf1f5091929c1df32f1e16"
+    "sha": "12be080a2ecced01c593cd07c2a81c3141a76e3b"
 }

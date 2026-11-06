@@ -1,0 +1,27 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 518e8c9..5fbfd36 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -21,6 +21,7 @@ security:
+             lazy: true
+             provider: app_user_provider
+             user_checker: App\Security\UserChecker
++            user_checker_on_refresh: true
+             form_login:
+                 login_path: app_login
+                 check_path: app_login
+diff --git a/src/Entity/User.php b/src/Entity/User.php
+index 5996347..3b007e4 100644
+--- a/src/Entity/User.php
++++ b/src/Entity/User.php
+@@ -91,10 +91,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
+         // guarantee every user at least has ROLE_USER
+         $roles[] = 'ROLE_USER';
+ 
+-        if (!$this->isEnabled()) {
+-            $roles[] = 'ROLE_DISABLED';
+-        }
+-
+         return array_unique($roles);
+     }
+ 
