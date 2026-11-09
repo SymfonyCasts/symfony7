@@ -1,0 +1,277 @@
+WEBVTT
+
+00:00:00.036 --> 00:00:03.756 align:middle
+¡Hola, amigos!
+
+00:00:03.986 --> 00:00:08.126 align:middle
+Bienvenidos a nuestro recorrido por las novedades
+del sistema de seguridad de Symfony 8.2.
+
+00:00:08.126 --> 00:00:12.236 align:middle
+Symfony 8.2 está resultando ser una de las
+versiones más importantes de la historia,
+
+00:00:12.476 --> 00:00:15.926 align:middle
+¡probablemente la más importante
+desde el salto de la 1.4 a la 2.0!
+
+00:00:16.386 --> 00:00:19.936 align:middle
+Una de las principales razones es que los flujos
+de trabajo asistidos por IA han acelerado mucho
+
+00:00:19.936 --> 00:00:23.046 align:middle
+la velocidad a la que se implementan las
+nuevas funciones y se corrigen los errores.
+
+00:00:23.656 --> 00:00:25.966 align:middle
+Muchos de esos cambios afectan
+al componente de seguridad,
+
+00:00:25.966 --> 00:00:30.566 align:middle
+y como acabamos de terminar unos cursos sobre
+seguridad, es el momento perfecto para analizarlos.
+
+00:00:31.116 --> 00:00:33.476 align:middle
+Muchas de estas funciones
+refuerzan de verdad la seguridad
+
+00:00:33.476 --> 00:00:35.676 align:middle
+de tu aplicación, así
+que veamos cómo se usan.
+
+00:00:36.386 --> 00:00:41.196 align:middle
+Este curso continúa justo donde lo dejó nuestro
+curso «Symfony Security: Going Further».
+
+00:00:41.196 --> 00:00:43.816 align:middle
+Si lo has hecho y todavía tienes
+el código en tu ordenador,
+
+00:00:44.026 --> 00:00:45.686 align:middle
+puedes seguir trabajando directamente con él.
+
+00:00:46.156 --> 00:00:49.046 align:middle
+Si prefieres empezar de cero, descárgate
+el código del curso desde esta página.
+
+00:00:49.506 --> 00:00:53.666 align:middle
+En el directorio « start/ », encontrarás un archivo
+« README.md » con todos los pasos de configuración.
+
+00:00:53.996 --> 00:00:59.076 align:middle
+Una vez que inicies el servidor con: symfony
+serve -d, verás nuestra app Starshop.
+
+00:00:59.596 --> 00:01:02.996 align:middle
+Fíjate en la barra de herramientas de
+depuración web: estamos en Symfony 8.0.
+
+00:01:02.996 --> 00:01:05.756 align:middle
+Paso uno: ¡actualiza a la versión 8.2!
+
+00:01:06.386 --> 00:01:11.076 align:middle
+En composer.json, la forma más fácil de hacerlo
+es con la función «Buscar y reemplazar».
+
+00:01:14.446 --> 00:01:18.616 align:middle
+Busca « 8.0.* » y cámbialo por « 8.2.* ».
+
+00:01:18.616 --> 00:01:25.256 align:middle
+Hay 23 coincidencias: pulsa «Reemplazar
+todo»: Ahora ve a la terminal y
+
+00:01:25.256 --> 00:01:29.326 align:middle
+ejecuta: « symfony composer
+update » Y… ¡tenemos
+
+00:01:29.326 --> 00:01:30.096 align:middle
+un error! Desplázate
+
+00:01:30.096 --> 00:01:31.246 align:middle
+hacia arriba. Dependiendo
+
+00:01:31.986 --> 00:01:35.066 align:middle
+de cuándo estés siguiendo estos
+pasos, puede que no veas esto. Te
+
+00:01:35.466 --> 00:01:38.896 align:middle
+indica que ninguna de las versiones de
+Symfony 8.2 se puede instalar porque
+
+00:01:39.096 --> 00:01:41.436 align:middle
+no cumplen con nuestro nivel
+mínimo de estabilidad. En
+
+00:01:41.996 --> 00:01:45.366 align:middle
+composer.json, tenemos
+"minimum-stability": "stable". Si
+
+00:01:45.916 --> 00:01:50.336 align:middle
+la 8.2 ya se ha lanzado oficialmente cuando veas
+esto, no te encontrarás con este error. Pero
+
+00:01:50.836 --> 00:01:55.756 align:middle
+como estoy grabando antes del lanzamiento,
+cámbialo a dev: Así es como siempre puedes probar
+
+00:01:55.756 --> 00:02:00.666 align:middle
+las versiones preliminares de Symfony, y cuanta más gente
+lo haga, más ayuda le das al equipo principal. Ejecuta
+
+00:02:01.186 --> 00:02:04.516 align:middle
+de nuevo la actualización:
+¡Más errores! Este
+
+00:02:05.106 --> 00:02:11.306 align:middle
+es un poco más sutil: symfony/asset
+8.2-dev requiere PHP 8.4.1 o superior.
+
+00:02:12.056 --> 00:02:16.536 align:middle
+En config.platform.php, tenemos
+configurado solo 8.4. Tiene
+
+00:02:17.036 --> 00:02:21.646 align:middle
+que ser al menos 8.4.1, así que cámbialo
+a una versión superior a esa... 8.4.26:
+
+00:02:21.856 --> 00:02:27.776 align:middle
+Ejecuta de nuevo la actualización de Composer:
+¿Ves esas advertencias en la parte de arriba? Son
+
+00:02:28.006 --> 00:02:30.446 align:middle
+de la CLI de Symfony, no de Composer.
+
+00:02:30.966 --> 00:02:35.936 align:middle
+Lee config.platform.php para decidir
+qué binario de PHP ejecutar, y
+
+00:02:36.206 --> 00:02:42.926 align:middle
+como no tengo instalado exactamente el 8.4.26,
+recurre a la última versión 8.4 que sí tengo. Todo
+
+00:02:43.656 --> 00:02:45.916 align:middle
+sigue funcionando, pero para que no te moleste,
+
+00:02:46.116 --> 00:02:49.836 align:middle
+puedes configurar config.platform.php
+con tu versión exacta. Vale,
+
+00:02:50.646 --> 00:02:52.946 align:middle
+tenemos otro error al actualizar Composer. Este
+
+00:02:53.336 --> 00:02:57.126 align:middle
+dice que estamos intentando instalar
+symfony/asset-mapper 8.2, pero
+
+00:02:57.426 --> 00:03:01.436 align:middle
+la versión de symfony/ux-turbo en nuestro
+archivo de bloqueo no lo permite. Buenas
+
+00:03:02.016 --> 00:03:06.136 align:middle
+noticias: ¡ya han salido las
+versiones 3.0 de Symfony UX! Busca
+
+00:03:06.136 --> 00:03:13.846 align:middle
+symfony/ux-turbo en composer.json
+y cámbialo por ^3.0: Ejecuta:
+
+00:03:14.796 --> 00:03:17.326 align:middle
+tenemos que hacer lo mismo con
+symfony/stimulus-bundle. Búscalo
+
+00:03:17.326 --> 00:03:28.366 align:middle
+y cámbialo también por ^3.0: Una
+vez más: ¡Ya está! Perfecto.
+
+00:03:28.526 --> 00:03:31.766 align:middle
+Vuelve a la app, actualiza.... y
+
+00:03:33.366 --> 00:03:35.866 align:middle
+ya estamos en 8.2.x-dev. ¡Éxito!
+
+00:03:36.156 --> 00:03:40.376 align:middle
+Vuelve al terminal y comprueba
+qué ha cambiado: git
+
+00:03:40.616 --> 00:03:45.906 align:middle
+status assets/controllers.json han cambiado
+tras la actualización de Stimulus, además de
+
+00:03:46.166 --> 00:03:49.246 align:middle
+los habituales composer.json
+y composer.lock. Pero
+
+00:03:49.826 --> 00:03:53.036 align:middle
+también hay un nuevo archivo
+config/schema.json. Este
+
+00:03:53.526 --> 00:03:56.616 align:middle
+se genera automáticamente y ayuda
+a tu editor a autocompletar y
+
+00:03:56.616 --> 00:03:59.036 align:middle
+validar tus archivos de
+configuración YAML. Como
+
+00:03:59.036 --> 00:04:01.606 align:middle
+se genera automáticamente,
+prefiero ignorarlo. Abre
+
+00:04:02.036 --> 00:04:05.606 align:middle
+.gitignore y, igual que hicimos
+con config/reference.php, añade
+
+00:04:05.606 --> 00:04:12.256 align:middle
+config/schema.json: Ejecuta
+git status: Perfecto. Confirma
+
+00:04:12.706 --> 00:04:20.236 align:middle
+todo con: git commit -a -m "Upgrade
+to Symfony 8.2" El siguiente paso en
+
+00:04:20.236 --> 00:04:23.026 align:middle
+cualquier actualización es actualizar
+tus recetas de Flex: symfony
+
+00:04:23.026 --> 00:04:29.846 align:middle
+composer recipe:update Esto te da una
+lista enorme, y es que hay muchas. No
+
+00:04:30.196 --> 00:04:32.466 align:middle
+te voy a hacer ver cómo
+las reviso una por una, pero
+
+00:04:32.756 --> 00:04:35.646 align:middle
+revisarlas debería formar parte de tu
+proceso de actualización. Dicho esto
+
+00:04:35.966 --> 00:04:41.496 align:middle
+, como solo estamos pasando de la 8.0 a la 8.2, hoy por hoy no
+es estrictamente necesario. Las actualizaciones de las recetas
+
+00:04:41.916 --> 00:04:44.726 align:middle
+entre versiones menores
+suelen consistir en cosas como
+
+00:04:44.726 --> 00:04:47.836 align:middle
+habilitar nuevas funciones y
+corregir elementos obsoletos. Donde
+
+00:04:48.146 --> 00:04:53.466 align:middle
+realmente importan es cuando das el salto a la siguiente
+versión mayor —como de la 8.4 a la 9.0—, porque
+
+00:04:53.696 --> 00:04:55.776 align:middle
+es ahí cuando las cosas realmente
+dejan de funcionar. Así que
+
+00:04:55.776 --> 00:04:57.506 align:middle
+las dejaré para más adelante. Para
+
+00:04:57.856 --> 00:05:03.326 align:middle
+ver una actualización mayor completa, con recetas y todo, échale un
+vistazo a nuestro curso de actualización a Symfony 8. A continuación
+
+00:05:03.326 --> 00:05:06.426 align:middle
+: ¡vamos a ver algunas mejoras en
+el sistema de cierre de sesión!

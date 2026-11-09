@@ -1,0 +1,293 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:03.096 align:middle
+Echemos un vistazo al sistema de
+suplantación de identidad de nuestra web.
+
+00:00:03.476 --> 00:00:08.776 align:middle
+Inicia sesión como superadministrador:
+janeway@starfleet.space, contraseña coffeeblack.
+
+00:00:09.756 --> 00:00:13.316 align:middle
+Ve a /admin/user para ver una
+lista de todos los usuarios
+
+00:00:13.316 --> 00:00:15.736 align:middle
+de nuestra web, cada uno con
+la opción «cambiar a».
+
+00:00:16.586 --> 00:00:19.236 align:middle
+Tenemos un mecanismo de seguridad que se asegura
+de que no podamos cambiar a nuestra propia cuenta;
+
+00:00:19.396 --> 00:00:21.696 align:middle
+por eso no aparece «cambiar
+a» en mi propia fila.
+
+00:00:22.656 --> 00:00:25.846 align:middle
+Pero pasa el cursor por encima de uno de estos enlaces y
+fíjate en la esquina inferior izquierda de tu navegador.
+
+00:00:26.306 --> 00:00:27.536 align:middle
+Tenemos algunos problemas.
+
+00:00:27.536 --> 00:00:31.236 align:middle
+En primer lugar, es una petición GET, así
+que cualquier cosa que siga a los enlaces,
+
+00:00:31.236 --> 00:00:33.686 align:middle
+como que el navegador precargue
+páginas, podría activarla.
+
+00:00:34.056 --> 00:00:38.406 align:middle
+En segundo lugar, el correo electrónico del usuario
+aparece justo ahí, en la URL, por lo que acaba en sitios
+
+00:00:38.406 --> 00:00:40.536 align:middle
+como los registros de tu
+servidor web y de tu proxy.
+
+00:00:41.296 --> 00:00:43.656 align:middle
+Y en tercer lugar, no hay protección CSRF.
+
+00:00:43.656 --> 00:00:47.096 align:middle
+Symfony 8.2 nos ofrece una
+forma de resolver los tres.
+
+00:00:47.366 --> 00:00:48.146 align:middle
+¡Vamos a implementarlo!
+
+00:00:48.146 --> 00:00:50.106 align:middle
+Primero, necesitamos una ruta.
+
+00:00:50.376 --> 00:00:55.026 align:middle
+En src/Controller/SecurityController.php,
+tenemos el stub logout().
+
+00:00:55.646 --> 00:00:59.906 align:middle
+En realidad nunca se llama; solo existe para que
+tengamos un sitio donde poner el atributo #[Route].
+
+00:01:00.356 --> 00:01:03.136 align:middle
+Podríamos añadir aquí una ruta de
+suplantación de identidad de la misma manera.
+
+00:01:03.506 --> 00:01:07.436 align:middle
+Pero una alternativa más limpia es
+configurarla en config/routes.yaml.
+
+00:01:08.176 --> 00:01:14.146 align:middle
+Debajo de las rutas existentes, añade
+app_impersonate_user, con path: /impersonate
+
+00:01:14.426 --> 00:01:20.006 align:middle
+y methods: [POST]: No necesitamos un controlador, porque
+el sistema de suplantación de identidad se encarga
+
+00:01:20.006 --> 00:01:22.316 align:middle
+de todo, igual que ocurre
+con el cierre de sesión.
+
+00:01:22.596 --> 00:01:26.136 align:middle
+Y tampoco necesitamos ningún «
+access_control » para esta ruta; de nuevo,
+
+00:01:26.316 --> 00:01:28.406 align:middle
+el sistema de suplantación de
+identidad se encarga de eso.
+
+00:01:28.846 --> 00:01:31.476 align:middle
+Lo único que necesitamos es una
+ruta que requiera el método POST.
+
+00:01:32.126 --> 00:01:36.996 align:middle
+Ahora abre config/packages/security.yaml y
+busca la configuración de « switch_user ».
+
+00:01:37.586 --> 00:01:41.286 align:middle
+«target_route » le indica adónde redirigirte
+tras el cambio —la página de inicio—
+
+00:01:41.596 --> 00:01:44.646 align:middle
+y « role » es el rol personalizado
+que necesitamos para suplantar.
+
+00:01:45.266 --> 00:01:48.906 align:middle
+Añade « path » y configúralo con
+nuestra nueva ruta: app_impersonate_user.
+
+00:01:49.456 --> 00:01:52.076 align:middle
+Ahora la suplantación solo
+se produce en esa ruta,
+
+00:01:52.196 --> 00:01:55.166 align:middle
+y como requiere POST, la
+suplantación también lo hace.
+
+00:01:55.816 --> 00:01:58.896 align:middle
+A continuación, activa
+CSRF con enable_csrf: true:
+
+00:01:58.896 --> 00:02:02.826 align:middle
+Como ahora se trata de una petición
+POST con CSRF, necesitamos un formulario.
+
+00:02:03.206 --> 00:02:06.366 align:middle
+Y al igual que la función Twig
+logout_button() del capítulo anterior,
+
+00:02:06.616 --> 00:02:08.616 align:middle
+ahora también existe impersonation_button().
+
+00:02:09.416 --> 00:02:14.366 align:middle
+Abre templates/user_admin/index.html.twig
+y desplázate hacia abajo hasta
+
+00:02:14.366 --> 00:02:16.306 align:middle
+donde mostramos el enlace de suplantación.
+
+00:02:16.696 --> 00:02:20.546 align:middle
+Estamos usando el enlace original
+impersonation_path() para el enlace «cambiar a».
+
+00:02:21.066 --> 00:02:25.446 align:middle
+Arriba, añade impersonation_button(), que funciona
+de forma muy parecida al botón de cierre de sesión.
+
+00:02:25.446 --> 00:02:30.036 align:middle
+Si le echas un vistazo, verás que toma
+la etiqueta, el identificador de usuario
+
+00:02:30.286 --> 00:02:34.466 align:middle
+y, a continuación, un URI de destino opcional: adónde
+enviar al usuario después de que se haya suplantado.
+
+00:02:34.716 --> 00:02:38.416 align:middle
+Si no lo configuras, se recurre a la ruta
+app_homepage de nuestra configuración.
+
+00:02:39.086 --> 00:02:44.846 align:middle
+Y igual que con el botón de cerrar sesión, puedes
+pasar attr para el botón y formAttr para el formulario.
+
+00:02:46.396 --> 00:02:48.036 align:middle
+Pon la etiqueta en switch to.
+
+00:02:48.656 --> 00:02:54.046 align:middle
+Luego añade attr y, como se trata del conjunto completo
+de atributos HTML, introduce class en su interior.
+
+00:02:54.686 --> 00:02:57.306 align:middle
+Copia todas las clases del
+enlace antiguo y pégalas ahí.
+
+00:02:59.666 --> 00:03:03.876 align:middle
+Ahora elimina el enlace antiguo: El otro sitio
+donde necesitamos esto es el enlace de salida,
+
+00:03:03.916 --> 00:03:06.166 align:middle
+en templates/base.html.twig.
+
+00:03:06.786 --> 00:03:07.546 align:middle
+Desplázate un poco hacia arriba...
+
+00:03:08.166 --> 00:03:08.776 align:middle
+aquí está.
+
+00:03:08.906 --> 00:03:12.736 align:middle
+is_granted('IS_IMPERSONATOR') significa que
+ahora mismo estamos suplantando a alguien,
+
+00:03:12.966 --> 00:03:16.606 align:middle
+y dentro tenemos un enlace creado
+con impersonation_exit_path().
+
+00:03:17.136 --> 00:03:20.296 align:middle
+Arriba, añade impersonation_exit_button().
+
+00:03:20.846 --> 00:03:26.936 align:middle
+Este solo necesita una etiqueta, luego el URI
+de destino opcional, además de attr y formAttr.
+
+00:03:27.596 --> 00:03:31.366 align:middle
+Estamos pasando un URI de destino
+a impersonation_exit_path(),
+
+00:03:31.366 --> 00:03:32.596 align:middle
+así que haremos lo mismo con el botón.
+
+00:03:33.256 --> 00:03:35.426 align:middle
+Pon la etiqueta en Exit Impersonation.
+
+00:03:35.706 --> 00:03:38.056 align:middle
+El segundo argumento es la ruta de abajo,
+
+00:03:38.186 --> 00:03:40.776 align:middle
+que nos lleva de vuelta a la
+gestión de usuarios cuando salimos.
+
+00:03:41.496 --> 00:03:46.476 align:middle
+Por último, pasa attr con class, y
+luego copia las clases del enlace antiguo
+
+00:03:46.476 --> 00:03:49.216 align:middle
+y pégalas ahí dentro: Ahora
+borra el enlace antiguo.
+
+00:03:49.806 --> 00:03:53.866 align:middle
+Ah, y acabo de darme cuenta de que se nos ha olvidado algo en la
+página de administración de usuarios impersonation_button().
+
+00:03:54.226 --> 00:03:57.676 align:middle
+Hemos pasado la etiqueta y los atributos,
+¡pero no el identificador de usuario!
+
+00:03:58.056 --> 00:04:01.316 align:middle
+Añade user.userIdentifier
+como segundo argumento.
+
+00:04:01.966 --> 00:04:04.186 align:middle
+Vuelve a la página de administración
+de usuarios y actualiza la página.
+
+00:04:05.216 --> 00:04:08.066 align:middle
+Pasa el cursor por encima de uno de los
+dos interruptores; ahora es un botón...
+
+00:04:08.426 --> 00:04:13.136 align:middle
+Échale un vistazo y verás que es un formulario
+completo, con su action apuntando a /impersonate.
+
+00:04:13.656 --> 00:04:17.346 align:middle
+Hay un campo que contiene el usuario al
+que nos vamos a cambiar; como es un POST,
+
+00:04:17.526 --> 00:04:19.966 align:middle
+eso es lo que hace que el
+identificador no aparezca en la URL.
+
+00:04:20.486 --> 00:04:23.166 align:middle
+Luego tenemos el token
+CSRF y el botón de enviar.
+
+00:04:23.596 --> 00:04:28.646 align:middle
+¡Perfecto! Cierra eso e intenta suplantar
+a Picard: haz clic en «cambiar a»...
+
+00:04:29.276 --> 00:04:32.736 align:middle
+¡Perfecto! Estamos en la página de inicio
+y hemos suplantado su identidad con éxito.
+
+00:04:33.296 --> 00:04:36.996 align:middle
+Ahora haz clic en «Salir de la suplantación» y
+deberíamos volver al panel de administración de usuarios.
+
+00:04:37.526 --> 00:04:38.896 align:middle
+Y… ¡ya está!
+
+00:04:39.216 --> 00:04:39.876 align:middle
+Ha funcionado.
+
+00:04:40.086 --> 00:04:45.096 align:middle
+¡Genial! A continuación, veamos algunas mejoras
+en el verificador de usuarios de Symfony 8.2.

@@ -1,0 +1,146 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:02.526 align:middle
+Echemos un vistazo a nuestro
+sistema de cierre de sesión.
+
+00:00:02.916 --> 00:00:06.056 align:middle
+Abre src/Controller/SecurityController.php.
+
+00:00:06.056 --> 00:00:09.846 align:middle
+Tenemos este fragmento de código
+logout() donde solo definimos la ruta;
+
+00:00:10.196 --> 00:00:12.396 align:middle
+el sistema de seguridad se
+encarga de todo el resto.
+
+00:00:13.026 --> 00:00:17.986 align:middle
+Pero fíjate en que hemos establecido methods: 'POST',
+así que solo una petición POST puede cerrar tu sesión.
+
+00:00:18.266 --> 00:00:22.476 align:middle
+Eso es genial: si una petición GET pudiera hacerlo, los
+escáneres de enlaces y similares podrían cerrar tu sesión.
+
+00:00:23.276 --> 00:00:26.536 align:middle
+Ahora abre config/packages/security.yaml.
+
+00:00:27.196 --> 00:00:29.676 align:middle
+Debajo del cortafuegos «
+main », configuramos logout.
+
+00:00:30.166 --> 00:00:34.926 align:middle
+Establecemos su « path » en nuestra ruta de cierre de
+sesión y también configuramos « enable_csrf: true » —
+
+00:00:35.216 --> 00:00:37.006 align:middle
+otra cosa que siempre deberías
+hacer al cerrar sesión.
+
+00:00:37.616 --> 00:00:42.836 align:middle
+A continuación, abre templates/base.html.twig y desplázate
+hacia abajo hasta encontrar el enlace de cierre de sesión.
+
+00:00:44.256 --> 00:00:44.826 align:middle
+Aquí está.
+
+00:00:45.256 --> 00:00:48.406 align:middle
+Como el cierre de sesión requiere un
+POST, vamos a crear un formulario a mano.
+
+00:00:48.826 --> 00:00:53.266 align:middle
+Dentro, mostramos el token CSRF,
+generado con csrf_token('logout').
+
+00:00:53.836 --> 00:00:56.996 align:middle
+logout es el ID de token predeterminado
+que usa el sistema de seguridad,
+
+00:00:57.026 --> 00:01:00.106 align:middle
+así que es una de esas cosas que tienes
+que saber cuando creas la plantilla.
+
+00:01:00.586 --> 00:01:02.736 align:middle
+Luego, por supuesto, mostramos
+el botón de cerrar sesión.
+
+00:01:03.316 --> 00:01:08.946 align:middle
+En Symfony 8.2, todo esto se puede sustituir
+por una nueva función de Twig: logout_button().
+
+00:01:08.946 --> 00:01:13.316 align:middle
+Si te fijas en el código PHP que
+lo genera, verás que toma un label,
+
+00:01:13.316 --> 00:01:15.996 align:middle
+cuyo valor por defecto es Log
+out, y luego el firewall key.
+
+00:01:16.416 --> 00:01:22.036 align:middle
+También puedes pasar attr —atributos
+HTML para el botón— y formAttr —
+
+00:01:22.176 --> 00:01:25.236 align:middle
+atributos HTML para el propio
+elemento de formulario—.
+
+00:01:25.236 --> 00:01:29.596 align:middle
+Y no tienes que preocuparte por el ID del token CSRF,
+ni siquiera por la ruta de tu ruta de cierre de sesión.
+
+00:01:29.806 --> 00:01:33.026 align:middle
+Lo sabe todo automáticamente
+al leer tu configuración.
+
+00:01:33.666 --> 00:01:37.836 align:middle
+Volviendo a la plantilla, dentro de ` logout_button()
+`, establece el primer argumento, la etiqueta,
+
+00:01:37.936 --> 00:01:40.036 align:middle
+en ` Logout`, tal y como te
+mostramos a continuación.
+
+00:01:40.646 --> 00:01:44.976 align:middle
+Tanto nuestro botón como nuestro formulario tienen
+clases, así que tenemos que pasarlas como atributos.
+
+00:01:45.206 --> 00:01:48.546 align:middle
+Añade ` attr`, y como esto
+contiene todos los atributos,
+
+00:01:48.686 --> 00:01:51.286 align:middle
+necesita un segundo nivel: ` {class: '...'}`.
+
+00:01:51.286 --> 00:01:53.446 align:middle
+Copia y pega ahí las clases del botón.
+
+00:01:55.286 --> 00:01:59.496 align:middle
+Luego haz lo mismo con formAttr,
+configurando class como inline.
+
+00:02:00.076 --> 00:02:04.316 align:middle
+¡Genial! Ahora elimina el
+formulario antiguo: ¡Probémoslo!
+
+00:02:04.316 --> 00:02:09.646 align:middle
+En la app, inicia sesión con
+picard@enterprise.space y la contraseña makeitso.
+
+00:02:11.046 --> 00:02:14.596 align:middle
+Haz clic con el botón derecho en el botón de cerrar
+sesión y elige «Inspeccionar» para ver qué se muestra.
+
+00:02:15.136 --> 00:02:20.586 align:middle
+Efectivamente, genera el mismo código HTML que
+teníamos antes, incluido el token CSRF correcto.
+
+00:02:20.586 --> 00:02:23.306 align:middle
+Para comprobar que funciona, haz clic en él...
+
+00:02:24.106 --> 00:02:24.976 align:middle
+¡y ya nos hemos desconectado!
+
+00:02:25.706 --> 00:02:29.346 align:middle
+A continuación, veamos cómo se ha mejorado
+la suplantación de identidad en Symfony 8.2.
