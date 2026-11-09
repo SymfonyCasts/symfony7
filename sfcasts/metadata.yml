@@ -8,7 +8,7 @@ chapters:
     hardening-impersonation:
         tutsFirstStep: null
         tutsLastStep: null
-    check-refreshed-user-event:
+    user-checker-on-refresh:
         tutsFirstStep: null
         tutsLastStep: null
     improved-sudo-mode:
