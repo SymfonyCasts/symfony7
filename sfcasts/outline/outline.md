@@ -62,3 +62,47 @@
 - Inspect one of the buttons... Builds the whole form!
 - Click... on homepage and impersonating!
 - Exit... and we're back!
+
+## Improved Sudo Mode (8.2)
+
+- https://symfony.com/blog/new-in-symfony-8-2-sudo-mode
+- Our sudo mode was a bit of a misnomer
+- Real sudo mode is based on time since last pw entry
+- First, in our `SuperAdminVoter`, we need to exclude the new attributes
+  - `AuthenticatedVoter::IS_AUTHENTICATED_RECENTLY,`
+  - `AuthenticatedVoter::IS_AUTHENTICATED_VERY_RECENTLY,`
+  - We also have a bug in supports()
+    - set `mixed $attribute`
+    - `return is_string($attribute) && ...`
+- in `login.html.twig`, we need to adjust our remember me check for already authenticated users
+  - swap `if app.user` for `if is_granted('IS_REMEMBERED')`
+- In `security.yaml` under `access_control`
+  - `is_granted('IS_AUTHENTICATED_VERY_RECENTLY')` for the sudo mode route
+- Keep in mind this one could be annoying for a route like this!
+- On site, login as `janeway@starfleet.space`, `coffeeblack`
+- Visit `/admin/user`, all good
+- Wait around 5 mins...
+- While we wait, in the terminal:
+  - `symfony console config:dump security` and scroll up to find the attribute config
+- Refresh... We are redirected to `/login` and we see the remember me option
+- `coffeeblack`
+- Back on user admin
+- Next, simplify your rate limiter creation
+
+## RateLimiterBuilder (8.2)
+
+- Our registration limiter is a one-off, but it's managed in two places
+- The limit lives in `rate_limiter.yaml`, the usage in the controller, wired up with `#[Target('registration')]`
+- To tweak it, you have to bounce between the two
+- 8.2 adds `RateLimiterBuilder`
+- In `RegistrationController`
+  - inject `RateLimiterBuilder $limiterBuilder` instead
+  - `$limiterBuilder->` (see the methods)
+  - `->slidingWindow()` click into, needs $id, $limit, $interval
+  - $id: 'registration', $limit: 5, $interval: '10 minutes'
+  - `$limit = $limiterBuilder
+         ->slidingWindow('registration', 1, '10 minutes')
+         ->create($request->getClientIp())
+         ->consume();`
+- Since rate_limiter.yaml, is just a single limiter, we can delete
+- register worf, then natasha, rate limited
