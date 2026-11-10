@@ -113,6 +113,19 @@ Now, instead of returning `true` in `supports()`, return
 
 This voter will now never run when we're checking for one of those attributes.
 
+> [!CAUTION]
+> There's a bug here: `supports()` also returns `true` for `Expression` attributes
+> (since they can be converted to strings), so a super admin passes *every* `allow_if`
+> rule in `access_control` - including our sudo-mode check. Only support string
+> attributes:
+>
+> ```php
+> protected function supports(mixed $attribute, mixed $subject): bool
+> {
+>     return is_string($attribute) && !in_array($attribute, self::EXCLUSIONS, true);
+> }
+> ```
+
 Your app might differ in certain ways - you might have other roles or permissions
 that you don't want the super admin voter to answer for. If that's the case, just add
 them to this list.
