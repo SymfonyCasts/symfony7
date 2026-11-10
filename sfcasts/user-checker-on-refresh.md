@@ -85,7 +85,7 @@ if it throws an exception, marks the user as changed. We just need to turn it on
 In `security.yaml`, add a new 8.2 option to our `main` firewall:
 `user_checker_on_refresh: true`:
 
-[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "4-check-refreshed-user-event", "file": "config/packages/security.yaml", "lines": "1,15,20,23-24"}) ]]]
+[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "4-check-refreshed-user-event", "file": "config/packages/security.yaml", "lines": "1,15,20,24"}) ]]]
 
 Now the user checker runs every time the user is refreshed - on every request. One thing
 to be aware of: if you enable this, keep your user checker *fast*. Doing a bunch of

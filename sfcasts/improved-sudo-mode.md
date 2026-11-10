@@ -64,7 +64,7 @@ want our super admin blindly bypassing those. Add the two new attributes to the
 exclusions: `AuthenticatedVoter::IS_AUTHENTICATED_RECENTLY` and
 `AuthenticatedVoter::IS_AUTHENTICATED_VERY_RECENTLY`:
 
-
+[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "5-sudo-mode", "file": "src/Security/Voter/SuperAdminVoter.php", "lines": "10-12,19-20,22,33"}) ]]]
 
 ## Fixing a Sneaky Bug in `supports()`
 
@@ -81,7 +81,7 @@ To fix it, change `string $attribute` to `mixed $attribute`. Now the `Expression
 is passed as-is, without being cast. Then add an `is_string($attribute)` check in front
 of the `in_array()`:
 
-
+[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "5-sudo-mode", "file": "src/Security/Voter/SuperAdminVoter.php", "lines": "10-11,24-27,33"}) ]]]
 
 That squashes the bug.
 
@@ -98,7 +98,7 @@ didn't hurt anything. But now these two new attributes can send you here too, an
 that case we shouldn't assume you want to be remembered. Change `if app.user` to
 `if is_granted('IS_REMEMBERED')`:
 
-
+[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "5-sudo-mode", "file": "templates/security/login.html.twig", "lines": "9-12,23,62-64,69,74,81-84"}) ]]]
 
 Now we only force remember me if you're *already* remembered.
 
@@ -107,7 +107,7 @@ Now we only force remember me if you're *already* remembered.
 Time to turn it on! Back in `security.yaml`, in the `access_control` `allow_if`, change
 `IS_AUTHENTICATED_FULLY` to `IS_AUTHENTICATED_VERY_RECENTLY`:
 
-
+[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "5-sudo-mode", "file": "config/packages/security.yaml", "lines": "1,52-53"}) ]]]
 
 Keep in mind: with this one, users have to re-enter their password every five minutes -
 every two hours with `IS_AUTHENTICATED_RECENTLY`. If your admins work in the admin area

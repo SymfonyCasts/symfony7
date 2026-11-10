@@ -34,7 +34,7 @@ In 8.2, there's a new `RateLimiterBuilder` that lets you build rate limiters inl
 Delete the `#[Target]` argument, and in its place, inject `RateLimiterBuilder` and call it
 `$limiterBuilder`:
 
-
+[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "6-rate-limiter-builder", "file": "src/Controller/RegistrationController.php", "lines": "15,19-22,27-28,62-63"}) ]]]
 
 Down below, expand the line where we create the limit a bit. Instead of `$limiterFactory`,
 which no longer exists, use `$limiterBuilder`. Its methods let you create any of the
@@ -47,7 +47,7 @@ config: `registration`. Look inside `slidingWindow()`, and you'll see it needs a
 and an interval, just like the config. Our limit is `1` and our interval is
 `'10 minutes'`:
 
-
+[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "6-rate-limiter-builder", "file": "src/Controller/RegistrationController.php", "lines": "19-22,28,33-37,57,62-63"}) ]]]
 
 That's it! We no longer need the config at all. And since it's the only rate limiter
 we've configured, delete `config/packages/rate_limiter.yaml` entirely.
