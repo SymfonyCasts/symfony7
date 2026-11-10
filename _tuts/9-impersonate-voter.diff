@@ -66,7 +66,7 @@ index 0000000..1747f7e
 +    }
 +}
 diff --git a/src/Security/Voter/SuperAdminVoter.php b/src/Security/Voter/SuperAdminVoter.php
-index 556f22a..59f74bb 100644
+index 60eb133..48b6997 100644
 --- a/src/Security/Voter/SuperAdminVoter.php
 +++ b/src/Security/Voter/SuperAdminVoter.php
 @@ -16,6 +16,7 @@ final class SuperAdminVoter extends Voter
@@ -76,7 +76,7 @@ index 556f22a..59f74bb 100644
 +        'CAN_IMPERSONATE',
      ];
  
-     protected function supports(string $attribute, mixed $subject): bool
+     protected function supports(mixed $attribute, mixed $subject): bool
 diff --git a/src/Story/AppStory.php b/src/Story/AppStory.php
 index 41a29ee..d4f3683 100644
 --- a/src/Story/AppStory.php

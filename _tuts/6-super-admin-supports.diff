@@ -1,5 +1,5 @@
 diff --git a/src/Security/Voter/SuperAdminVoter.php b/src/Security/Voter/SuperAdminVoter.php
-index 3fc062f..556f22a 100644
+index 3fc062f..60eb133 100644
 --- a/src/Security/Voter/SuperAdminVoter.php
 +++ b/src/Security/Voter/SuperAdminVoter.php
 @@ -3,14 +3,24 @@
@@ -12,6 +12,7 @@ index 3fc062f..556f22a 100644
  
  final class SuperAdminVoter extends Voter
  {
+-    protected function supports(string $attribute, mixed $subject): bool
 +    private const EXCLUSIONS = [
 +        AuthenticatedVoter::IS_AUTHENTICATED,
 +        AuthenticatedVoter::IS_AUTHENTICATED_FULLY,
@@ -21,10 +22,10 @@ index 3fc062f..556f22a 100644
 +        AuthenticatedVoter::PUBLIC_ACCESS,
 +    ];
 +
-     protected function supports(string $attribute, mixed $subject): bool
++    protected function supports(mixed $attribute, mixed $subject): bool
      {
 -        return true;
-+        return !in_array($attribute, self::EXCLUSIONS, true);
++        return is_string($attribute) && !in_array($attribute, self::EXCLUSIONS, true);
      }
  
      protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
