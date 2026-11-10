@@ -75,7 +75,7 @@ gets logged out. That's how we sneak around it.
 In Symfony 8.2, you can have your user checker run on every request instead. That means
 we can delete this hacky code entirely:
 
-
+[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "4-check-refreshed-user-event", "file": "src/Entity/User.php", "lines": "17-18,88-89,92-95,197"}) ]]]
 
 How? Symfony 8.2 dispatches a new `CheckRefreshedUserEvent` right after the user is
 refreshed, and a listener can use it to mark the user as changed, which logs them out.
@@ -85,7 +85,7 @@ if it throws an exception, marks the user as changed. We just need to turn it on
 In `security.yaml`, add a new 8.2 option to our `main` firewall:
 `user_checker_on_refresh: true`:
 
-
+[[[ code_block({"sha": "a8f893665d4e61508c27feaffaad85109a6c0ecc", "step": "4-check-refreshed-user-event", "file": "config/packages/security.yaml", "lines": "1,15,20,23-24"}) ]]]
 
 Now the user checker runs every time the user is refreshed - on every request. One thing
 to be aware of: if you enable this, keep your user checker *fast*. Doing a bunch of
