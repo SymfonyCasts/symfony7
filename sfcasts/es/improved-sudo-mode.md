@@ -2,7 +2,7 @@
 
 Abre `config/packages/security.yaml` y desplázate hacia abajo hasta `access_control`. Aquí tenemos una regla:
 cualquiera que acceda a una ruta que empiece por `/admin` debe tener `ROLE_ADMIN` y estar`IS_AUTHENTICATED_FULLY`. Esa segunda parte significa que has iniciado sesión con tu contraseña durante
-esta sesión, así que excluye a los usuarios que ya están recordados. Si solo estás recordado, te redirigen
+esta sesión, así que excluye a los usuarios que están recordados. Si solo estás recordado, te redirigen
 a la página de inicio de sesión y tienes que confirmar tu contraseña.
 
 He estado llamando a esto «modo sudo», como en macOS o Linux, donde vuelves a introducir tu
@@ -25,9 +25,11 @@ Probemos esto en nuestra app. Pero primero, tenemos que ocuparnos de algunas cos
 Open `src/Security/Voter/SuperAdminVoter.php`. Esto permite que cualquiera con `ROLE_SUPER_ADMIN`
 se salte la mayoría de las comprobaciones de `is_granted()` en nuestra app. Pero excluimos algunos atributos que no
 tienen que ver realmente con los permisos, como `IS_AUTHENTICATED` y `IS_AUTHENTICATED_FULLY`: no
-queremos que nuestro superadministrador se salte esos sin más. Añade los dos nuevos atributos a las
+queremos que nuestro superadministrador los omita sin más. Añade los dos nuevos atributos a las
 exclusiones: `AuthenticatedVoter::IS_AUTHENTICATED_RECENTLY` y
 `AuthenticatedVoter::IS_AUTHENTICATED_VERY_RECENTLY`:
+
+[[[ code('00c69ccc8620985a6ce4f963b2a29e9c') ]]]
 
 ## Corregir un error engañoso en `supports()`
 
@@ -35,12 +37,14 @@ También tenemos un error molesto en `supports()`. Vuelve a `security.yaml` y f�
 expresión; eso es lo que estamos haciendo aquí. Se convierte en un objeto `Expression`,
 y ese objeto se pasa a `supports()` como atributo. Pero nuestro argumento `$attribute` está definido como
 `string`, y un `Expression` se puede convertir en una cadena… ¡así que PHP lo convierte sin avisar!
-La cadena completa de la expresión llega hasta aquí, no está en nuestras exclusiones, así que decimos «claro,
+La cadena completa de la expresión llega aquí, no está en nuestras exclusiones, así que decimos «claro,
 puedes saltártela». ¿El resultado? A los superadministradores nunca les aplica esta regla:
 se la saltan por completo.
 
 Para solucionarlo, cambia `string $attribute` por `mixed $attribute`. Ahora el objeto `Expression` se pasa tal cual, sin convertir su tipo. A continuación, añade una comprobación `is_string($attribute)` delante
 de `in_array()`:
+
+[[[ code('690ddf6488d250428ce9802b8bd858d8') ]]]
 
 Eso soluciona el error.
 
@@ -57,12 +61,16 @@ no hacía ningún daño. Pero ahora estos dos nuevos atributos también pueden l
 ese caso no deberíamos dar por hecho que quieres que te recuerden. Cambia `if app.user` por
 `if is_granted('IS_REMEMBERED')`:
 
+[[[ code('c8a9418dc70e52bcfd4937eb146f5037') ]]]
+
 Ahora solo forzamos la opción «Recordarme» si ya estás registrado.
 
 ## Activar el modo Sudo
 
 ¡Es hora de activarlo! Vuelve a `security.yaml`, en la sección `access_control` `allow_if` , cambia
 `IS_AUTHENTICATED_FULLY` por `IS_AUTHENTICATED_VERY_RECENTLY`:
+
+[[[ code('66575797f16bc29c3641db05e40b3329') ]]]
 
 Ten en cuenta que, con esta configuración, los usuarios tendrán que volver a introducir su contraseña cada cinco minutos —
 cada dos horas con `IS_AUTHENTICATED_RECENTLY`. Si tus administradores trabajan en el área de administración
@@ -85,7 +93,7 @@ valores. En tu terminal, ejecuta:
 symfony console config:dump security
 ```
 
-Desplázate hasta la parte de arriba… allá vamos. `recent_authentication_lifetime` sirve para
+Desplázate hasta arriba del todo… allá vamos. `recent_authentication_lifetime` sirve para
 `IS_AUTHENTICATED_RECENTLY` y el valor por defecto es `7200` segundos, es decir, dos horas. Y
 `very_recent_authentication_lifetime` tiene por defecto `300`, que son nuestros cinco minutos. Así es como
 los ajustas.
