@@ -13,15 +13,16 @@ TI o un administrador de la web que puede hacer lo que quiera. Un nivel por enci
 
 Quizá pienses que puedes gestionarlo con una jerarquía de roles, pero hay tantos sitios
 y tantos «votantes» que tendrías que actualizar. Lo que me gusta hacer en su lugar es crear un «votante»
-específico para los superadministradores.
+específicamente para los superadministradores.
 
 ## Un nuevo votante
 
-Primero, en `src/Story/AppStory.php`, cambia Janeway de `ROLE_ADMIN` a`ROLE_SUPER_ADMIN`:
+Primero, en `src/Story/AppStory.php`, cambia Janeway de `ROLE_ADMIN` a
+`ROLE_SUPER_ADMIN`:
 
 [[[ code('3ee1e55a43') ]]]
 
-Ya hemos actualizado los fixtures, así que, en la terminal, recárgalos con:
+Ya hemos actualizado los fixtures, así que en la terminal, recárgalos con:
 
 ```terminal
 symfony console foundry:load-fixtures
@@ -51,7 +52,7 @@ Aquí viene lo importante: `voteOnAttribute()`. Lo que comprobamos aquí es
 si tienen permiso o no.
 
 Hay varias formas de hacerlo. Recuerda que en `StarshipVoter` usamos el
-gestor de decisiones de acceso para decidir por el token; podríamos inyectar eso y hacer
+gestor de decisiones de acceso para decidir por el token; podríamos inyectarlo y hacer
 exactamente lo mismo. Lo hicimos así porque `ROLE_ADMIN` podría formar parte de una jerarquía de roles,
 por lo que quizá no esté configurado correctamente en el usuario.
 
@@ -62,7 +63,7 @@ en el usuario. Eso hace que esto sea muy sencillo:`return in_array('ROLE_SUPER_A
 
 `$token->getRoleNames()` es básicamente un atajo para obtener los roles de nuestro usuario y`true` nos ofrece una coincidencia estricta.
 
-Solo recuerda que, al comprobar los roles de esta forma, solo se comprueban los roles que están directamente asignados al usuario,
+Solo recuerda que, al comprobar los roles de esta forma, solo se comprueban los roles que están directamente asociados al usuario,
 no la jerarquía de roles.
 
 ## Excluir los atributos de autenticación
@@ -83,26 +84,39 @@ esas constantes de `AuthenticatedVoter`. `IS_AUTHENTICATED`... `IS_AUTHENTICATED
 Uno, dos, tres, cuatro, cinco, seis... y por aquí, uno, dos, tres, cuatro, cinco, seis.
 ¡Genial, los tienes todos!
 
-Ahora, en lugar de devolver `true` en `supports()`, devuelve `!in_array($attribute, self::EXCLUSIONS, true)`:
+Ahora, en lugar de devolver « `true` » en « `supports()` », devuelve
+«`!in_array($attribute, self::EXCLUSIONS, true)` »:
 
 [[[ code('6ae9325bb1') ]]]
 
-Este votante ya nunca se ejecutará cuando comprobemos alguno de esos atributos.
+Ahora este votante nunca se ejecutará cuando comprobemos si hay alguno de esos atributos.
 
-Tu app puede diferir en algunos aspectos: quizá tengas otros roles o permisos
-de los que no quieras que se encargue el votante superadministrador. Si es así, solo tienes que añadirlos
+***CAUTION
+Aquí hay un error: `supports()` también devuelve `true` para los atributos de `Expression` (ya que se pueden convertir en cadenas), por lo que un superadministrador supera todas las reglas de `allow_if`
+en `access_control`, incluida nuestra comprobación del modo «sudo». Admite solo atributos de cadena:
+
+```php
+protected function supports(mixed $attribute, mixed $subject): bool
+{
+    return is_string($attribute) && !in_array($attribute, self::EXCLUSIONS, true);
+}
+```
+***
+
+Tu app puede diferir en ciertos aspectos; quizá tengas otros roles o permisos
+sobre los que no quieras que el superadministrador tenga que decidir. Si es así, solo tienes que añadirlos
 a esta lista.
 
-## Probémoslo
+## Probándolo
 
-Ve a la página de inicio. Estoy conectado... pero como hemos recargado los fixtures, debería
-desconectarme al actualizar la página. Perfecto.
+Ve a la página de inicio. He iniciado sesión... pero como hemos recargado los datos de prueba, debería
+salir de sesión al actualizar la página. Perfecto.
 
-Inicia sesión como `janeway@starfleet.space` - ella es nuestra superadministradora - con la contraseña
+Inicia sesión como `janeway@starfleet.space` —ella es nuestra superadministradora— con la contraseña
 `coffeeblack`.
 
 Ve a `/admin/user`. Efectivamente, seguimos pudiendo acceder a esta página aunque
-se requiera un administrador: nuestro votante superadministrador nos está concediendo acceso.
+se requiera un administrador: nuestra superadministradora «voter» nos está concediendo acceso.
 
 Otra cosa que hay que comprobar: ve a `/starship`. Si te acuerdas, los usuarios normales solo pueden
 editar su propia nave, pero los administradores pueden editar cualquier nave. Y sí, ahora tenemos esa misma
@@ -114,7 +128,7 @@ Veamos cómo funciona. Ve a la barra de herramientas de depuración web, haz cli
 perfilador de seguridad y echa un vistazo a la pestaña «Decisión de acceso». Podemos ver todos los
 votantes que se están utilizando.
 
-En el registro de decisiones de acceso, vemos que se nos ha concedido el `ROLE_ADMIN`. No tenemos
+En el registro de decisiones de acceso, vemos que se nos ha concedido `ROLE_ADMIN`. No tenemos
 ese rol ni directamente ni a través de la jerarquía de roles. Haz clic en «Mostrar detalles del votante». El `RoleHierarchyVoter`
 nos lo denegó, pero el `SuperAdminVoter` nos lo concedió.
 
