@@ -63,7 +63,7 @@ en el usuario. Eso hace que esto sea muy sencillo:`return in_array('ROLE_SUPER_A
 
 `$token->getRoleNames()` es básicamente un atajo para obtener los roles de nuestro usuario y`true` nos ofrece una coincidencia estricta.
 
-Solo recuerda que, al comprobar los roles de esta forma, solo se comprueban los roles que están directamente asociados al usuario,
+Solo recuerda que, al comprobar los roles de esta forma, solo se comprueban los roles que están directamente asignados al usuario,
 no la jerarquía de roles.
 
 ## Excluir los atributos de autenticación
@@ -87,7 +87,7 @@ Uno, dos, tres, cuatro, cinco, seis... y por aquí, uno, dos, tres, cuatro, cinc
 Ahora, en lugar de devolver « `true` » en « `supports()` », devuelve
 «`!in_array($attribute, self::EXCLUSIONS, true)` »:
 
-[[[ code('6ae9325bb1') ]]]
+[[[ code('d0ae9f9f2f') ]]]
 
 Ahora este votante nunca se ejecutará cuando comprobemos si hay alguno de esos atributos.
 
@@ -110,7 +110,7 @@ a esta lista.
 ## Probándolo
 
 Ve a la página de inicio. He iniciado sesión... pero como hemos recargado los datos de prueba, debería
-salir de sesión al actualizar la página. Perfecto.
+cerrarse la sesión cuando actualice la página. Perfecto.
 
 Inicia sesión como `janeway@starfleet.space` —ella es nuestra superadministradora— con la contraseña
 `coffeeblack`.
