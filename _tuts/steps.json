@@ -29,7 +29,12 @@
             "id": "4-check-refreshed-user-event",
             "name": "4. check refreshed user event",
             "description": null
+        },
+        {
+            "id": "5-sudo-mode",
+            "name": "5. sudo mode",
+            "description": null
         }
     ],
-    "sha": "12be080a2ecced01c593cd07c2a81c3141a76e3b"
+    "sha": "7506050cf72c12476990906614122c9dd4010f8a"
 }

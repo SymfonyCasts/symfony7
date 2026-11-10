@@ -1,0 +1,47 @@
+diff --git a/config/packages/security.yaml b/config/packages/security.yaml
+index 5fbfd36..30342fd 100644
+--- a/config/packages/security.yaml
++++ b/config/packages/security.yaml
+@@ -50,7 +50,7 @@ security:
+ 
+     # Note: Only the *first* matching rule is applied
+     access_control:
+-        - { path: ^/admin, allow_if: "is_granted('ROLE_ADMIN') and is_granted('IS_AUTHENTICATED_FULLY')" }
++        - { path: ^/admin, allow_if: "is_granted('ROLE_ADMIN') and is_granted('IS_AUTHENTICATED_VERY_RECENTLY')" }
+         # - { path: ^/profile, roles: ROLE_USER }
+ 
+     role_hierarchy:
+diff --git a/src/Security/Voter/SuperAdminVoter.php b/src/Security/Voter/SuperAdminVoter.php
+index 59f74bb..56e6cd2 100644
+--- a/src/Security/Voter/SuperAdminVoter.php
++++ b/src/Security/Voter/SuperAdminVoter.php
+@@ -16,12 +16,14 @@ final class SuperAdminVoter extends Voter
+         AuthenticatedVoter::IS_IMPERSONATOR,
+         AuthenticatedVoter::IS_REMEMBERED,
+         AuthenticatedVoter::PUBLIC_ACCESS,
++        AuthenticatedVoter::IS_AUTHENTICATED_RECENTLY,
++        AuthenticatedVoter::IS_AUTHENTICATED_VERY_RECENTLY,
+         'CAN_IMPERSONATE',
+     ];
+ 
+-    protected function supports(string $attribute, mixed $subject): bool
++    protected function supports(mixed $attribute, mixed $subject): bool
+     {
+-        return !in_array($attribute, self::EXCLUSIONS, true);
++        return is_string($attribute) && !in_array($attribute, self::EXCLUSIONS, true);
+     }
+ 
+     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
+diff --git a/templates/security/login.html.twig b/templates/security/login.html.twig
+index e771728..b2ba4ee 100644
+--- a/templates/security/login.html.twig
++++ b/templates/security/login.html.twig
+@@ -59,7 +59,7 @@
+ 
+                     <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+ 
+-                    {% if app.user %}
++                    {% if is_granted('IS_REMEMBERED') %}
+                         <input type="hidden" name="_remember_me" value="1">
+                     {% else %}
+                         <div class="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
