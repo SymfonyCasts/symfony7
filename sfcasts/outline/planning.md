@@ -51,5 +51,18 @@
 - Promised in a comment reply on the original course, so don't skip it
 - Blog post: https://symfony.com/blog/new-in-symfony-8-2-sudo-mode
 
+## `RateLimiterBuilder` (8.2)
+- Our registration limiter is a one-off, but it's managed in two places
+- The limit lives in `rate_limiter.yaml`, the usage in the controller, wired up with `#[Target('registration')]`
+- To tweak it, you have to bounce between the two
+- 8.2 adds `RateLimiterBuilder`: define the limiter right where you use it, in code
+- `slidingWindow()`, `fixedWindow()`, `tokenBucket()`, `compound()` - each takes an id, limit and interval
+- Autowire it, `$builder->slidingWindow('registration', 3, '10 minutes')`, then `create($ip)->consume()` as before
+- Delete the YAML limiter and the `#[Target]` argument
+- Storage defaults to the `cache.rate_limiter` pool; tune via `rate_limiter.builder` (`cache_pool`, `storage_service`, `lock_factory`)
+- Aside: 8.2 also moves the config from `framework.rate_limiter` to a top-level `rate_limiter` key (new `RateLimiterBundle`)
+- Maybe: recoverable `#[RateLimit]` (pass `?RateLimitExceededException` to the controller) as an alternative
+    - https://symfony.com/blog/new-in-symfony-8-2-recovering-from-controller-attribute-failures
+
 ## Advanced bonus topics
 - `debug:roles` + the role hierarchy graph in the profiler (8.2)

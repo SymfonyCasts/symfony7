@@ -14,3 +14,6 @@ chapters:
     improved-sudo-mode:
         tutsFirstStep: null
         tutsLastStep: null
+    rate-limiter-builder:
+        tutsFirstStep: null
+        tutsLastStep: null
