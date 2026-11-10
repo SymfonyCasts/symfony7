@@ -1,0 +1,46 @@
+diff --git a/config/packages/rate_limiter.yaml b/config/packages/rate_limiter.yaml
+deleted file mode 100644
+index c65fa0b..0000000
+--- a/config/packages/rate_limiter.yaml
++++ /dev/null
+@@ -1,6 +0,0 @@
+-framework:
+-    rate_limiter:
+-        registration:
+-            policy: 'sliding_window'
+-            limit: 1
+-            interval: '10 minutes'
+diff --git a/src/Controller/RegistrationController.php b/src/Controller/RegistrationController.php
+index 0332b72..e925aa1 100644
+--- a/src/Controller/RegistrationController.php
++++ b/src/Controller/RegistrationController.php
+@@ -12,6 +12,7 @@ use Symfony\Component\Form\FormError;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Component\HttpFoundation\Response;
+ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
++use Symfony\Component\RateLimiter\RateLimiterBuilder;
+ use Symfony\Component\RateLimiter\RateLimiterFactoryInterface;
+ use Symfony\Component\Routing\Attribute\Route;
+ 
+@@ -23,16 +24,17 @@ class RegistrationController extends AbstractController
+         UserPasswordHasherInterface $userPasswordHasher,
+         Security $security,
+         EntityManagerInterface $entityManager,
+-
+-        #[Target('registration')]
+-        RateLimiterFactoryInterface $limiterFactory,
++        RateLimiterBuilder $limiterBuilder,
+     ): Response {
+         $user = new User();
+         $form = $this->createForm(RegistrationFormType::class, $user);
+         $form->handleRequest($request);
+ 
+         if ($form->isSubmitted() && $form->isValid()) {
+-            $limit = $limiterFactory->create($request->getClientIp())->consume();
++            $limit = $limiterBuilder
++                ->slidingWindow('registration', 1, '10 minutes')
++                ->create($request->getClientIp())
++                ->consume();
+ 
+             if (!$limit->isAccepted()) {
+                 $this->addFlash('error', 'Too many registration attempts. Please try again later.');

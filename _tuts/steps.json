@@ -34,7 +34,12 @@
             "id": "5-sudo-mode",
             "name": "5. sudo mode",
             "description": null
+        },
+        {
+            "id": "6-rate-limiter-builder",
+            "name": "6. rate limiter builder",
+            "description": null
         }
     ],
-    "sha": "7506050cf72c12476990906614122c9dd4010f8a"
+    "sha": "2024cd10205faec377286ff23338aaec3db37791"
 }
