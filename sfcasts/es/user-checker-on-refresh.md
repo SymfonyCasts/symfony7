@@ -1,7 +1,7 @@
 # Volver a comprobar los usuarios con user_checker_on_refresh
 
 Los usuarios de nuestra app se pueden desactivar. Así es como funciona: la entidad « `User` » tiene un
-campo de fecha y hora llamado «`disabledAt` ». Cuando está en « `null` », el usuario está activado. Cuando tiene un valor,
+campo de marca de tiempo llamado «`disabledAt` ». Cuando está en « `null` », el usuario está activado. Cuando tiene un valor,
 está desactivado. Ya he desactivado a nuestro usuario «Picard» para que podamos ver cómo queda. Ve
 a la página de inicio de sesión e inicia sesión con el nombre de usuario `picard@enterprise.space` y la contraseña `makeitso`... y
 veremos «Esta cuenta está desactivada».
@@ -16,7 +16,7 @@ iniciar sesión.
 
 Esto va genial para el inicio de sesión, pero el verificador de usuarios solo se ejecuta durante el inicio de sesión. Entonces, ¿qué pasa con un
 usuario al que se le desactiva la cuenta mientras ya está conectado? Veamos qué ocurre ahora. Inicia
-sesión como `janeway@starfleet.space`, contraseña `coffeeblack`: ella no está desactivada. Ya estamos dentro,
+sesión como `janeway@starfleet.space`, con la contraseña `coffeeblack`: ella no está desactivada. Ya estamos dentro,
 y si actualizamos la página, seguimos sin problemas.
 
 ## Desactivar a un usuario que ya ha iniciado sesión
@@ -36,7 +36,7 @@ petición. En nuestra entidad ` `User` `, busca ` `getRoles()``. Aquí vamos a a
 si el usuario no está habilitado, añadimos `ROLE_DISABLED`. No se usa en ningún otro sitio. En cada
 petición, el usuario almacenado en la sesión se compara con una copia nueva cargada desde la
 base de datos, y los roles son uno de los elementos que se comparan. Si son diferentes, el usuario
-se desconecta. Así es como nos las ingeniamos para sortearlo.
+se desconecta. Así es como nos las apañamos.
 
 ## Hola `user_checker_on_refresh`
 
@@ -45,14 +45,14 @@ que podemos eliminar por completo este código improvisado:
 
 [[[ code('d95f2d908108c732f21a4887346ba192') ]]]
 
-¿Cómo? Symfony 8.2 envía un nuevo evento « `CheckRefreshedUserEvent` » justo después de que se
+¿Cómo? Symfony 8.2 envía un nuevo ` `CheckRefreshedUserEvent` ` justo después de que se
 actualice el usuario, y un listener puede usarlo para marcar al usuario como modificado, lo que le desconecta.
 Symfony incluye uno, `RefreshedUserCheckerListener`, que ejecuta tu verificador de usuario y,
 si lanza una excepción, marca al usuario como modificado. Solo tenemos que activarlo.
 
 En `security.yaml`, añade una nueva opción 8.2 a nuestro firewall `main`:`user_checker_on_refresh: true`:
 
-[[[ code('f7e76715480496b76592824c1b6a003b') ]]]
+[[[ code('7f6133791892bd3e6f9a4b93dfa2fc75') ]]]
 
 Ahora el verificador de usuarios se ejecuta cada vez que se actualiza el usuario, es decir, en cada petición. Una cosa
 que debes tener en cuenta: si activas esto, asegúrate de que tu verificador de usuarios sea rápido. Hacer un montón de
