@@ -1,3 +1,21 @@
+---
+challenges:
+    - key: logout-button-config
+      question: |
+          Our old template hard-coded `csrf_token('logout')` and `logout_path()`. With
+          `logout_button()`, we don't pass a token ID or a path at all. How does it know what
+          to use?
+      answers:
+          - It reads them from the `logout` config of the current firewall
+          - It always uses the `logout` token ID and the `/logout` path
+          - It looks for a controller method named `logout()` and uses its route
+          - It skips CSRF entirely, since the route already requires POST
+      explanation: |
+          `logout_button()` pulls the logout path and CSRF settings straight from your
+          firewall's `logout` config. Change them in `security.yaml`, and the button keeps up,
+          with no hidden knowledge baked into your templates.
+---
+
 # Rendering a Logout Button with logout_button()
 
 Let's look at our logout system. Open `src/Controller/SecurityController.php`. We have

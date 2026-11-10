@@ -1,3 +1,21 @@
+---
+challenges:
+    - key: platform-php-version
+      question: |
+          After bumping to Symfony 8.2, Composer refuses to install `symfony/asset` because it
+          needs PHP 8.4.1 or higher. You're running PHP 8.4.27 locally! Why does Composer think
+          your PHP is too old?
+      answers:
+          - "`config.platform.php` is set to `8.4`, which Composer reads as exactly `8.4.0`"
+          - "Composer checks the lowest PHP version allowed by `\"php\": \">=8.4\"` in `require`"
+          - The Symfony CLI is running an older PHP binary than the one on your system
+          - "`minimum-stability` is set to `stable`, which blocks newer PHP versions"
+      explanation: |
+          When `config.platform.php` is set, Composer pretends that's your PHP version and
+          ignores the one you're actually running. `8.4` means `8.4.0`, so bumping it to a real
+          patch version, like `8.4.26`, gets things moving again.
+---
+
 # Upgrading to Symfony 8.2
 
 Hey friends! Welcome to our tour of what's new in the Symfony 8.2 security system.

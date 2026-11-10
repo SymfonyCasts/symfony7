@@ -1,3 +1,37 @@
+---
+challenges:
+    - key: fully-vs-recently
+      question: |
+          Janeway logged in with her password three hours ago, and she's still logged in.
+          Which of `IS_AUTHENTICATED_FULLY` and `IS_AUTHENTICATED_RECENTLY` will she pass
+          right now?
+      answers:
+          - Only `IS_AUTHENTICATED_FULLY`
+          - Only `IS_AUTHENTICATED_RECENTLY`
+          - Both, because she logged in with her password
+          - Neither, because her login is more than two hours old
+      explanation: |
+          `IS_AUTHENTICATED_FULLY` cares about *how* she logged in: with her password, in this
+          session. `IS_AUTHENTICATED_RECENTLY` cares about *when*: within the last two hours
+          by default. Her three-hour-old password login still counts as "fully", but not as
+          "recently", which is what makes it a real sudo mode.
+    - key: remembered-user-very-recently
+      question: |
+          Picard checked "remember me" last week. Today he opened his browser, and the
+          remember-me cookie logged him back in a minute ago. Which of
+          `IS_AUTHENTICATED_FULLY` and `IS_AUTHENTICATED_VERY_RECENTLY` will he pass right now?
+      answers:
+          - Neither, because he hasn't entered his password
+          - Only `IS_AUTHENTICATED_VERY_RECENTLY`, because he was logged in a minute ago
+          - Only `IS_AUTHENTICATED_FULLY`, because he's logged in
+          - Both, because the cookie counts as a fresh login
+      explanation: |
+          A remember-me cookie isn't proof that Picard still knows his password, so it never
+          counts as `IS_AUTHENTICATED_FULLY`. And both recency attributes imply
+          `IS_AUTHENTICATED_FULLY`, so even a login a minute ago won't pass
+          `IS_AUTHENTICATED_VERY_RECENTLY`. He'll need to enter his password first.
+---
+
 # Improved Sudo Mode with IS_AUTHENTICATED_RECENTLY
 
 Open `config/packages/security.yaml` and scroll down to `access_control`. We have a rule

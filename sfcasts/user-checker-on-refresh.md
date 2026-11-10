@@ -1,3 +1,35 @@
+---
+challenges:
+    - key: disabled-role-hack
+      question: |
+          Before 8.2, we added a fake `ROLE_DISABLED` in `getRoles()` whenever a user was
+          disabled. Nothing ever checked for that role, so why did it log disabled users out?
+      answers:
+          - On each request, Symfony compares the user in the session to a fresh copy from the database, and different roles count as a changed user
+          - Symfony automatically denies access to any user with a role starting with `ROLE_DISABLED`
+          - Our user checker ran on every request and saw the new role
+          - The `access_control` rules require users to have only the roles listed in `role_hierarchy`
+      explanation: |
+          When the user is refreshed from the session, Symfony checks whether they've changed,
+          and their roles are part of that check. Adding a role made the user look different,
+          so they were logged out. With `user_checker_on_refresh`, our user checker gets a say
+          on every request instead, and the hack can go.
+    - key: user-checker-adds-to-refresh-check
+      question: |
+          With `user_checker_on_refresh: true` turned on, what happens to Symfony's built-in
+          check that compares the user in the session with the fresh copy from the database?
+      answers:
+          - It still runs, and our user checker adds one more reason to log the user out
+          - It's replaced by our user checker, so only `checkPostAuth()` decides
+          - It's skipped whenever the user checker passes
+          - It only runs when the user checker throws an exception
+      explanation: |
+          Symfony still compares the session user with the refreshed one and passes that
+          verdict along in `CheckRefreshedUserEvent`. The built-in listener runs your user
+          checker and, if it throws, marks the user as changed. It only *adds* a way to log
+          users out, so nothing you relied on before goes away.
+---
+
 # Rechecking Users with user_checker_on_refresh
 
 Our app's users can be disabled. Here's how it works: the `User` entity has a

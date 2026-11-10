@@ -1,3 +1,21 @@
+---
+challenges:
+    - key: shared-rate-limiter
+      question: |
+          You want the registration form and the password reset form to share *one* rate
+          limiter: a single count of attempts per IP, with its limit and interval defined in
+          one place. How should you set it up?
+      answers:
+          - Define it in the rate limiter config, then inject it into both controllers
+          - Call `RateLimiterBuilder` in each controller, copying the same ID, limit and interval
+          - Call `RateLimiterBuilder` in one controller, which makes it available to the other
+          - Define it in a Twig template, so both forms can reach it
+      explanation: |
+          `RateLimiterBuilder` shines for one-off limiters, defined right where they're used.
+          When a limiter is shared, the config is still the way to go: its settings live in
+          one place, and every controller that uses it stays in sync.
+---
+
 # Creating Rate Limiters with RateLimiterBuilder
 
 This last one isn't strictly security-related, but you could argue it is. In

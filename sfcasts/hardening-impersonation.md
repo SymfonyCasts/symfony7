@@ -1,3 +1,34 @@
+---
+challenges:
+    - key: impersonation-path-post-only
+      question: |
+          We added an `app_impersonate_user` route with `methods: [POST]`, then pointed
+          `switch_user`'s `path` option at it. Why does that make impersonation POST-only?
+      answers:
+          - With `path` set, impersonation only happens on that route, and a GET request doesn't match it
+          - "`path` tells Symfony to reject every GET request that has a `_switch_user` parameter"
+          - The route's controller checks the request method before switching users
+          - "`enable_csrf: true` is what blocks GET requests, and `path` just renames the URL"
+      explanation: |
+          Once `path` is set, the switch-user listener stops watching every URL and only acts
+          on that route. Since the route only matches POST, a GET request never triggers a
+          switch, and there's no controller needed at all.
+    - key: impersonation-who-is-allowed
+      question: |
+          Our new `/impersonate` route has no controller and no `access_control` rule. So what
+          stops any logged-in user from posting to it and switching to Captain Picard?
+      answers:
+          - The switch-user listener checks the `role` from our `switch_user` config, `CAN_IMPERSONATE`, before switching
+          - Nothing - we need to add an `access_control` rule for `^/impersonate`
+          - The CSRF token can only be generated for admins
+          - Symfony only allows impersonation from pages under `/admin`
+      explanation: |
+          The switch-user listener handles the request before any controller or
+          `access_control` rule runs, and it checks the configured `role` - our
+          `CAN_IMPERSONATE` - itself. The CSRF token guards against forged requests, while
+          `CAN_IMPERSONATE` decides who's allowed.
+---
+
 # Hardening Impersonation with POST & CSRF
 
 Let's look at our site's impersonation system. Log in as our super admin:
