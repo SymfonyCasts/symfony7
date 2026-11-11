@@ -1,0 +1,215 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:02.736 align:middle
+Los usuarios de nuestra
+app se pueden desactivar.
+
+00:00:03.036 --> 00:00:06.926 align:middle
+Así es como funciona: la entidad « User » tiene
+un campo de fecha y hora llamado « disabledAt ».
+
+00:00:07.396 --> 00:00:09.206 align:middle
+Cuando el valor es « null
+», el usuario está activado.
+
+00:00:09.426 --> 00:00:11.366 align:middle
+Si tiene algún valor, el
+usuario está desactivado.
+
+00:00:12.186 --> 00:00:15.496 align:middle
+Ya he desactivado a nuestro usuario
+«Picard» para que podamos ver cómo queda.
+
+00:00:16.056 --> 00:00:21.326 align:middle
+Ve a la página de inicio de sesión e inicia sesión con el nombre
+de usuario picard@enterprise.space y la contraseña makeitso...
+
+00:00:21.906 --> 00:00:23.946 align:middle
+y verás que aparece «Esta
+cuenta está desactivada».
+
+00:00:24.776 --> 00:00:25.626 align:middle
+¿Y cómo funciona esto?
+
+00:00:26.026 --> 00:00:29.996 align:middle
+En config/packages/security.yaml,
+hemos configurado un user_checker —
+
+00:00:30.156 --> 00:00:31.846 align:middle
+uno personalizado que hemos
+creado para nuestra app.
+
+00:00:32.226 --> 00:00:36.106 align:middle
+Entra en src/Security/UserChecker.php.
+
+00:00:36.106 --> 00:00:37.956 align:middle
+Después de que se compruebe la
+contraseña al iniciar sesión,
+
+00:00:38.206 --> 00:00:41.236 align:middle
+checkPostAuth() comprueba si
+el usuario está habilitado y,
+
+00:00:41.236 --> 00:00:43.496 align:middle
+si no lo está, lanza un DisabledException.
+
+00:00:43.886 --> 00:00:45.396 align:middle
+Eso es lo que impide que pueda iniciar sesión.
+
+00:00:45.946 --> 00:00:49.626 align:middle
+Esto va genial para el inicio de sesión, pero el verificador
+de usuarios solo se ejecuta durante el inicio de sesión.
+
+00:00:50.026 --> 00:00:53.296 align:middle
+¿Y qué pasa con un usuario al que se le
+desactiva la cuenta mientras ya está conectado?
+
+00:00:53.836 --> 00:00:55.026 align:middle
+Veamos qué ocurre ahora.
+
+00:00:55.476 --> 00:01:00.986 align:middle
+Inicia sesión como janeway@starfleet.space, con la
+contraseña coffeeblack: ella no está desactivada.
+
+00:01:01.706 --> 00:01:04.386 align:middle
+Ya estamos dentro, y si actualizamos
+la página, todo sigue bien.
+
+00:01:05.066 --> 00:01:07.596 align:middle
+Ahora imaginemos que un
+administrador desactiva su cuenta.
+
+00:01:08.076 --> 00:01:12.866 align:middle
+Lo haremos directamente desde la
+terminal: symfony console dbal:run-sql
+
+00:01:13.226 --> 00:01:18.656 align:middle
+"UPDATE user SET disabled_at = datetime('now')
+
+00:01:18.996 --> 00:01:24.966 align:middle
+WHERE email = 'janeway@starfleet.space'"
+Una fila afectada.
+
+00:01:25.386 --> 00:01:27.446 align:middle
+Ten en cuenta que esta sintaxis es para SQLite;
+
+00:01:27.446 --> 00:01:30.696 align:middle
+si usas otra base de datos,
+tendrás que ajustar la consulta.
+
+00:01:31.386 --> 00:01:33.326 align:middle
+Vuelve al navegador, actualiza la página...
+
+00:01:34.356 --> 00:01:35.196 align:middle
+¡y ya nos hemos desconectado!
+
+00:01:35.486 --> 00:01:38.866 align:middle
+Así que sí que funciona, pero estamos
+usando un pequeño truco para conseguirlo.
+
+00:01:39.256 --> 00:01:42.096 align:middle
+Recuerda que el verificador de usuarios
+no se invoca en cada petición.
+
+00:01:42.756 --> 00:01:45.186 align:middle
+En nuestra entidad ` User
+`, busca ` getRoles()`.
+
+00:01:45.646 --> 00:01:50.276 align:middle
+Aquí añadimos un rol ficticio: si el usuario
+no está habilitado, añadimos ROLE_DISABLED.
+
+00:01:50.276 --> 00:01:52.236 align:middle
+No se usa en ningún otro sitio.
+
+00:01:52.716 --> 00:01:57.456 align:middle
+En cada petición, se compara el usuario almacenado
+en la sesión con una copia nueva cargada
+
+00:01:57.456 --> 00:02:00.896 align:middle
+desde la base de datos, y los roles son
+uno de los elementos que se comparan.
+
+00:02:01.316 --> 00:02:03.426 align:middle
+Si son diferentes, se cierra
+la sesión del usuario.
+
+00:02:03.846 --> 00:02:07.856 align:middle
+Así es como lo sorteamos.
+
+00:02:08.406 --> 00:02:12.826 align:middle
+En Symfony 8.2, puedes hacer que tu verificador
+de usuarios se ejecute en cada petición.
+
+00:02:13.146 --> 00:02:16.526 align:middle
+Eso significa que podemos eliminar por
+completo este código improvisado: ¿Cómo?
+
+00:02:16.856 --> 00:02:21.346 align:middle
+Symfony 8.2 envía un nuevo `
+CheckRefreshedUserEvent ` justo
+
+00:02:21.346 --> 00:02:24.586 align:middle
+después de que se actualice el
+usuario, y un listener puede usarlo
+
+00:02:24.586 --> 00:02:27.176 align:middle
+para marcar al usuario como
+modificado, lo que te desconecta.
+
+00:02:27.716 --> 00:02:30.896 align:middle
+Symfony incluye uno, `
+RefreshedUserCheckerListener`,
+
+00:02:31.056 --> 00:02:35.896 align:middle
+que ejecuta tu verificador de usuario y, si lanza
+una excepción, marca al usuario como modificado.
+
+00:02:36.126 --> 00:02:37.396 align:middle
+Solo tenemos que activarlo.
+
+00:02:38.026 --> 00:02:44.876 align:middle
+En security.yaml, añade una nueva opción 8.2 a nuestro
+filtro « main »: user_checker_on_refresh: true:
+
+00:02:45.596 --> 00:02:49.926 align:middle
+Ahora el verificador de usuarios se ejecuta cada
+vez que se actualiza el usuario, en cada petición.
+
+00:02:50.646 --> 00:02:54.836 align:middle
+Una cosa que debes tener en cuenta: si habilitas esto,
+asegúrate de que tu verificador de usuarios sea rápido.
+
+00:02:55.126 --> 00:02:59.566 align:middle
+Hacer un montón de consultas a la base de datos ahí dentro
+ralentizaría cada una de las peticiones autenticadas.
+
+00:03:00.416 --> 00:03:01.026 align:middle
+¡Probémoslo!
+
+00:03:01.246 --> 00:03:09.906 align:middle
+Recarga los datos de prueba para que nadie esté desactivado:
+symfony console foundry:load-fixtures Ahora vuelve a
+
+00:03:09.906 --> 00:03:14.466 align:middle
+iniciar sesión como janeway@starfleet.space,
+con la contraseña coffeeblack.
+
+00:03:15.626 --> 00:03:21.826 align:middle
+¡Ya estamos dentro! Ahora ejecuta nuevamente nuestra
+consulta para desactivarla: Actualiza la página y...
+
+00:03:22.296 --> 00:03:22.956 align:middle
+¡ya nos hemos desconectado!
+
+00:03:23.456 --> 00:03:26.446 align:middle
+Se ha llamado al verificador de usuarios,
+y ya no necesitamos ese pequeño truco
+
+00:03:26.446 --> 00:03:28.496 align:middle
+para que el usuario
+actualizado parezca diferente.
+
+00:03:29.156 --> 00:03:32.226 align:middle
+A continuación: ¡Symfony 8.2
+añade un auténtico «modo sudo»!
