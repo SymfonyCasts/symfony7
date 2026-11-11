@@ -1,7 +1,7 @@
 # Volver a comprobar los usuarios con user_checker_on_refresh
 
 Los usuarios de nuestra app se pueden desactivar. Así es como funciona: la entidad « `User` » tiene un
-campo de marca de tiempo llamado «`disabledAt` ». Cuando está en « `null` », el usuario está activado. Cuando tiene un valor,
+campo de fecha y hora llamado «`disabledAt` ». Cuando está en « `null` », el usuario está activado. Cuando tiene un valor,
 está desactivado. Ya he desactivado a nuestro usuario «Picard» para que podamos ver cómo queda. Ve
 a la página de inicio de sesión e inicia sesión con el nombre de usuario `picard@enterprise.space` y la contraseña `makeitso`... y
 veremos «Esta cuenta está desactivada».
@@ -45,7 +45,7 @@ que podemos eliminar por completo este código improvisado:
 
 [[[ code('d95f2d908108c732f21a4887346ba192') ]]]
 
-¿Cómo? Symfony 8.2 envía un nuevo ` `CheckRefreshedUserEvent` ` justo después de que se
+¿Cómo? Symfony 8.2 envía un nuevo evento « `CheckRefreshedUserEvent` » justo después de que se
 actualice el usuario, y un listener puede usarlo para marcar al usuario como modificado, lo que le desconecta.
 Symfony incluye uno, `RefreshedUserCheckerListener`, que ejecuta tu verificador de usuario y,
 si lanza una excepción, marca al usuario como modificado. Solo tenemos que activarlo.
@@ -74,6 +74,6 @@ symfony console dbal:run-sql "UPDATE user SET disabled_at = datetime('now') WHER
 ```
 
 Actualiza la página y... ¡ya nos hemos desconectado! Se ha llamado al verificador de usuarios y ya no necesitamos ese
-pequeño truco para que el usuario actualizado parezca diferente.
+pequeño truco para que el usuario actualizado tenga un aspecto diferente.
 
 A continuación: ¡Symfony 8.2 añade un auténtico «modo sudo»!
