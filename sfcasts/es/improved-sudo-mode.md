@@ -7,7 +7,7 @@ a la página de inicio de sesión y tienes que confirmar tu contraseña.
 
 He estado llamando a esto «modo sudo», como en macOS o Linux, donde vuelves a introducir tu
 contraseña para obtener privilegios elevados. Pero ese nombre no es del todo acertado. El verdadero «modo sudo» tiene que
-ver con cuánto tiempo hace que introdujiste tu contraseña por última vez, no con si estás registrado. El nuestro
+ver con cuánto tiempo hace que introdujiste tu contraseña por última vez, no con si el sistema te ha reconocido. El nuestro
 simplemente se parecía un poco a eso.
 
 ## El verdadero modo «sudo»
@@ -25,7 +25,7 @@ Probemos esto en nuestra app. Pero primero, tenemos que ocuparnos de algunas cos
 Open `src/Security/Voter/SuperAdminVoter.php`. Esto permite que cualquiera con `ROLE_SUPER_ADMIN`
 se salte la mayoría de las comprobaciones de `is_granted()` en nuestra app. Pero excluimos algunos atributos que no
 tienen que ver realmente con los permisos, como `IS_AUTHENTICATED` y `IS_AUTHENTICATED_FULLY`: no
-queremos que nuestro superadministrador los omita sin más. Añade los dos nuevos atributos a las
+queremos que nuestro superadministrador se salte esos sin más. Añade los dos nuevos atributos a las
 exclusiones: `AuthenticatedVoter::IS_AUTHENTICATED_RECENTLY` y
 `AuthenticatedVoter::IS_AUTHENTICATED_VERY_RECENTLY`:
 
@@ -75,7 +75,7 @@ Ahora solo forzamos la opción «Recordarme» si ya estás registrado.
 Ten en cuenta que, con esta configuración, los usuarios tendrán que volver a introducir su contraseña cada cinco minutos —
 cada dos horas con `IS_AUTHENTICATED_RECENTLY`. Si tus administradores trabajan en el área de administración
 todo el día, ¡les resultará muy molesto tener que teclear su contraseña cada cinco minutos! Reserva estos
-atributos para acciones realmente peligrosas. Se trata de encontrar un equilibrio entre usabilidad y seguridad.
+atributos para acciones realmente peligrosas. Se trata de encontrar un equilibrio entre la facilidad de uso y la seguridad.
 Sinceramente, para esta ruta probablemente me quedaría con `IS_AUTHENTICATED_FULLY`: los
 usuarios que han iniciado sesión confirman su contraseña una vez y ya están listos para el resto del día, hasta que
 cierren el navegador.
@@ -93,7 +93,7 @@ valores. En tu terminal, ejecuta:
 symfony console config:dump security
 ```
 
-Desplázate hasta arriba del todo… allá vamos. `recent_authentication_lifetime` sirve para
+Desplázate hasta la parte de arriba… allá vamos. `recent_authentication_lifetime` sirve para
 `IS_AUTHENTICATED_RECENTLY` y el valor por defecto es `7200` segundos, es decir, dos horas. Y
 `very_recent_authentication_lifetime` tiene por defecto `300`, que son nuestros cinco minutos. Así es como
 los ajustas.
