@@ -1,0 +1,325 @@
+WEBVTT
+
+00:00:01.086 --> 00:00:05.796 align:middle
+Abre config/packages/security.yaml
+y baja hasta access_control.
+
+00:00:06.636 --> 00:00:09.466 align:middle
+Aquí tenemos una regla: cualquiera
+que acceda a una ruta que empiece
+
+00:00:09.466 --> 00:00:14.166 align:middle
+por /admin debe tener ROLE_ADMIN
+y estar IS_AUTHENTICATED_FULLY.
+
+00:00:15.006 --> 00:00:18.626 align:middle
+Esa segunda parte significa que has iniciado
+sesión con tu contraseña durante esta sesión,
+
+00:00:18.926 --> 00:00:20.816 align:middle
+así que excluye a los usuarios
+que ya han iniciado sesión.
+
+00:00:21.276 --> 00:00:25.536 align:middle
+Si solo estás registrado, te redirigen a la página de
+inicio de sesión y tienes que confirmar tu contraseña.
+
+00:00:26.136 --> 00:00:29.526 align:middle
+A esto lo he llamado «modo
+sudo», como en macOS o Linux,
+
+00:00:29.526 --> 00:00:32.556 align:middle
+donde vuelves a introducir tu contraseña
+para obtener privilegios elevados.
+
+00:00:32.976 --> 00:00:34.436 align:middle
+Pero ese nombre no es del todo acertado.
+
+00:00:34.896 --> 00:00:38.896 align:middle
+El verdadero «modo sudo» tiene que ver con cuánto tiempo
+hace que introdujiste tu contraseña por última vez,
+
+00:00:39.186 --> 00:00:40.416 align:middle
+no con si estás registrado.
+
+00:00:40.996 --> 00:00:42.566 align:middle
+El nuestro solo se parecía un poco.
+
+00:00:43.046 --> 00:00:49.436 align:middle
+En Symfony 8.2, tenemos un verdadero «modo sudo»,
+gracias a dos nuevos atributos: IS_AUTHENTICATED_RECENTLY
+
+00:00:49.676 --> 00:00:51.666 align:middle
+y IS_AUTHENTICATED_VERY_RECENTLY.
+
+00:00:52.466 --> 00:00:55.666 align:middle
+El primero comprueba que hayas introducido
+tu contraseña en las últimas dos horas.
+
+00:00:55.996 --> 00:00:58.026 align:middle
+El segundo, en los últimos cinco minutos.
+
+00:00:58.486 --> 00:01:03.796 align:middle
+Y ambos implican IS_AUTHENTICATED_FULLY, así que un usuario
+que haya iniciado sesión nunca podrá tener ninguno de ellos.
+
+00:01:04.196 --> 00:01:05.736 align:middle
+Siempre tienen que pasar por el
+proceso de inicio de sesión.
+
+00:01:06.666 --> 00:01:07.896 align:middle
+Probemos esto en nuestra app.
+
+00:01:08.046 --> 00:01:10.086 align:middle
+Pero primero, tenemos que
+ocuparnos de algunas cosas.
+
+00:01:10.526 --> 00:01:14.366 align:middle
+Abre src/Security/Voter/SuperAdminVoter.php.
+
+00:01:14.366 --> 00:01:19.436 align:middle
+Esto permite que cualquiera con ROLE_SUPER_ADMIN se salte la
+mayoría de las comprobaciones de is_granted() en nuestra app.
+
+00:01:19.436 --> 00:01:24.536 align:middle
+Pero excluimos algunos atributos que en realidad no
+tienen que ver con los permisos, como IS_AUTHENTICATED
+
+00:01:24.536 --> 00:01:29.336 align:middle
+y IS_AUTHENTICATED_FULLY: no queremos que
+nuestro superadministrador los omita sin más.
+
+00:01:29.846 --> 00:01:35.346 align:middle
+Añade los dos nuevos atributos a las exclusiones:
+AuthenticatedVoter::IS_AUTHENTICATED_RECENTLY
+
+00:01:36.056 --> 00:01:38.996 align:middle
+y AuthenticatedVoter::IS_AUTHENTICATED_VERY_RECENTLY:
+También
+
+00:01:39.836 --> 00:01:42.166 align:middle
+tenemos un error molesto en supports(). Vuelve
+
+00:01:42.806 --> 00:01:45.596 align:middle
+a security.yaml y fíjate en
+nuestro allow_if. En cualquier sitio
+
+00:01:45.956 --> 00:01:47.996 align:middle
+donde puedas hacer una
+comprobación de is_granted(),
+
+00:01:48.086 --> 00:01:51.236 align:middle
+también puedes pasar una expresión;
+eso es lo que estamos haciendo aquí. Se
+
+00:01:51.716 --> 00:01:54.126 align:middle
+convierte en un objeto Expression, y
+
+00:01:54.356 --> 00:01:57.466 align:middle
+ese objeto se pasa a
+supports() como atributo. Pero
+
+00:01:57.996 --> 00:02:00.466 align:middle
+nuestro argumento $attribute
+tiene el tipo string, y
+
+00:02:00.696 --> 00:02:03.226 align:middle
+un Expression se puede convertir
+en una cadena... así que
+
+00:02:03.546 --> 00:02:05.766 align:middle
+¡PHP lo convierte sin avisar! La
+
+00:02:06.266 --> 00:02:10.186 align:middle
+cadena completa de la expresión acaba aquí,
+no está en nuestras exclusiones, así que
+
+00:02:10.366 --> 00:02:12.736 align:middle
+decimos «claro, puedes saltarte esto». ¿ El
+
+00:02:12.996 --> 00:02:13.696 align:middle
+resultado? A los
+
+00:02:13.916 --> 00:02:18.626 align:middle
+superadministradores nunca les aplica
+esta regla: la eluden por completo. Para
+
+00:02:19.526 --> 00:02:23.336 align:middle
+solucionarlo, cambia string
+$attribute por mixed $attribute. Ahora
+
+00:02:23.756 --> 00:02:27.636 align:middle
+el objeto Expression se pasa tal cual,
+sin convertir su tipo. A continuación,
+
+00:02:28.076 --> 00:02:33.286 align:middle
+añade una comprobación is_string($attribute) antes
+de in_array(): eso soluciona el error. Lo siguiente
+
+00:02:34.106 --> 00:02:39.016 align:middle
+es nuestra plantilla de inicio de sesión:
+templates/security/login.html.twig. Si
+
+00:02:39.626 --> 00:02:41.726 align:middle
+ya estás autenticado cuando llegas aquí,
+
+00:02:41.956 --> 00:02:44.796 align:middle
+ocultamos el campo del nombre de
+usuario, ya que sabemos quién eres. Y
+
+00:02:45.396 --> 00:02:47.046 align:middle
+en la casilla «recordarme», si
+
+00:02:47.046 --> 00:02:50.366 align:middle
+estás autenticado, siempre activamos la opción
+de «recordarme» de forma obligatoria. Eso
+
+00:02:51.166 --> 00:02:54.866 align:middle
+estaba bien antes, porque
+IS_AUTHENTICATED_FULLY era lo único que
+
+00:02:54.866 --> 00:02:58.666 align:middle
+enviaba aquí a un usuario autenticado, lo que
+significaba que había que recordarlo; mantener
+
+00:02:58.986 --> 00:03:00.696 align:middle
+esa opción activada no
+hacía ningún daño. Pero
+
+00:03:01.186 --> 00:03:03.896 align:middle
+ahora estos dos nuevos atributos
+también pueden llevarte aquí, y
+
+00:03:04.286 --> 00:03:07.036 align:middle
+en ese caso no deberíamos dar por hecho
+que quieres que te recuerden. Cambia
+
+00:03:07.566 --> 00:03:12.106 align:middle
+if app.user por if
+is_granted('IS_REMEMBERED'): ahora
+
+00:03:12.866 --> 00:03:15.706 align:middle
+solo activamos la opción «Recordarme»
+si ya estás registrado. ¡ Es hora
+
+00:03:16.426 --> 00:03:17.266 align:middle
+de activarla! Vuelve
+
+00:03:17.726 --> 00:03:23.436 align:middle
+a security.yaml, en access_control allow_if
+, cambia IS_AUTHENTICATED_FULLY por
+
+00:03:23.646 --> 00:03:27.666 align:middle
+IS_AUTHENTICATED_VERY_RECENTLY: Ten en
+cuenta que, con esta opción, los usuarios
+
+00:03:27.856 --> 00:03:30.846 align:middle
+tienen que volver a introducir su
+contraseña cada cinco minutos —cada
+
+00:03:31.076 --> 00:03:33.466 align:middle
+dos horas con IS_AUTHENTICATED_RECENTLY —. Si
+
+00:03:34.046 --> 00:03:36.396 align:middle
+tus administradores trabajan en el área
+de administración todo el día, ¡se
+
+00:03:36.666 --> 00:03:39.356 align:middle
+harán un rollo teniendo que teclear su
+contraseña cada cinco minutos! Reserva
+
+00:03:39.876 --> 00:03:42.886 align:middle
+estas opciones para acciones
+realmente peligrosas. Se trata de
+
+00:03:43.266 --> 00:03:45.386 align:middle
+encontrar el equilibrio entre
+usabilidad y seguridad. Sinceramente,
+
+00:03:46.056 --> 00:03:49.526 align:middle
+para esta opción yo probablemente me quedaría con
+IS_AUTHENTICATED_FULLY: los usuarios que hayan iniciado sesión
+
+00:03:49.956 --> 00:03:53.316 align:middle
+confirman su contraseña una vez y
+ya están listos para el resto del
+
+00:03:53.316 --> 00:03:55.066 align:middle
+día, hasta que cierren
+el navegador. ¡ Vamos a
+
+00:03:55.816 --> 00:03:56.526 align:middle
+probarlo! Ve
+
+00:03:56.796 --> 00:04:02.736 align:middle
+a la página de inicio de sesión e inicia sesión como
+janeway@starfleet.space, con la contraseña coffeeblack. A continuación,
+
+00:04:03.856 --> 00:04:07.036 align:middle
+ve a una página de administración,
+como /admin/user. Ya estamos
+
+00:04:07.676 --> 00:04:12.056 align:middle
+dentro. Para ver cómo se activa la reautenticación,
+tenemos que esperar cinco minutos, ya que
+
+00:04:12.056 --> 00:04:14.396 align:middle
+hemos usado
+IS_AUTHENTICATED_VERY_RECENTLY. Mientras
+
+00:04:14.996 --> 00:04:18.026 align:middle
+esperamos, te voy a enseñar cómo
+personalizar estos valores. En
+
+00:04:18.446 --> 00:04:25.586 align:middle
+tu terminal, ejecuta: symfony console config:dump
+security Desplázate hasta la parte de arriba... aquí
+
+00:04:29.056 --> 00:04:29.566 align:middle
+lo tenemos. recent_authentication_lifetime
+
+00:04:29.926 --> 00:04:33.536 align:middle
+corresponde a IS_AUTHENTICATED_RECENTLY y
+
+00:04:33.766 --> 00:04:36.996 align:middle
+su valor por defecto es 7200
+segundos, es decir, dos horas. Y
+
+00:04:37.346 --> 00:04:42.066 align:middle
+very_recent_authentication_lifetime tiene por defecto
+300, es decir, nuestros cinco minutos. Así es
+
+00:04:42.476 --> 00:04:43.496 align:middle
+como los ajustas. Voy a
+
+00:04:44.056 --> 00:04:45.366 align:middle
+viajar un poco en el tiempo… Vale,
+
+00:04:46.086 --> 00:04:47.736 align:middle
+han pasado unos cinco
+minutos. Actualiza la página
+
+00:04:47.946 --> 00:04:48.926 align:middle
+y… efectivamente,
+
+00:04:49.646 --> 00:04:53.096 align:middle
+nos devuelve al formulario de inicio de
+sesión para confirmar nuestra contraseña. Y
+
+00:04:53.406 --> 00:04:57.166 align:middle
+como no nos recuerda automáticamente, nos
+da la opción de que nos recuerde. Introduce
+
+00:04:57.746 --> 00:04:59.886 align:middle
+coffeeblack, confirma... ¡ y
+
+00:05:00.296 --> 00:05:01.106 align:middle
+ya estamos dentro otra vez!
+
+00:05:01.446 --> 00:05:04.796 align:middle
+Tenemos otros cinco minutos en el panel de administración
+antes de tener que volver a autenticarnos. A continuación,
+
+00:05:05.436 --> 00:05:08.896 align:middle
+¡vamos a ver algunas mejoras en el
+limitador de tasas de Symfony 8.2!
