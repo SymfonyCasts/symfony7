@@ -1,0 +1,181 @@
+WEBVTT
+
+00:00:01.066 --> 00:00:04.996 align:middle
+Esto último no tiene que ver estrictamente con
+la seguridad, pero se podría decir que sí.
+
+00:00:05.546 --> 00:00:09.586 align:middle
+En src/Controller/RegistrationController.php,
+usamos la limitación de tasa
+
+00:00:09.586 --> 00:00:12.156 align:middle
+para que nadie pueda registrar
+nuevos usuarios una y otra vez.
+
+00:00:12.156 --> 00:00:16.226 align:middle
+Y Symfony 8.2 añade algunas mejoras
+interesantes a los limitadores de tasa.
+
+00:00:16.596 --> 00:00:20.446 align:middle
+En nuestra acción register(), inyectamos
+un RateLimiterFactoryInterface,
+
+00:00:20.716 --> 00:00:22.126 align:middle
+usando el autowiring con nombre —
+
+00:00:22.256 --> 00:00:24.866 align:middle
+#[Target('registration')] —
+para obtener el de registration.
+
+00:00:25.496 --> 00:00:28.966 align:middle
+Eso está configurado en
+config/packages/rate_limiter.yaml.
+
+00:00:29.566 --> 00:00:33.566 align:middle
+Pero este es un limitador de tasa de uso
+único: solo lo usamos para el registro.
+
+00:00:33.796 --> 00:00:36.166 align:middle
+Así que resulta un poco molesto
+configurarlo en un sitio,
+
+00:00:36.326 --> 00:00:38.266 align:middle
+y luego tener que ir a otra parte
+para usarlo en el controlador.
+
+00:00:38.756 --> 00:00:44.126 align:middle
+En la versión 8.2, hay un nuevo ` RateLimiterBuilder ` que te
+permite crear limitadores de tasa directamente en el código.
+
+00:00:44.666 --> 00:00:48.866 align:middle
+Elimina el argumento ` #[Target] ` y, en
+su lugar, inyecta ` RateLimiterBuilder `
+
+00:00:49.126 --> 00:00:54.056 align:middle
+y llámalo ` $limiterBuilder`: Más abajo, amplía
+un poco la línea donde creamos el límite.
+
+00:00:54.536 --> 00:00:58.736 align:middle
+En lugar de $limiterFactory, que
+ya no existe, usa $limiterBuilder.
+
+00:00:59.296 --> 00:01:04.466 align:middle
+Sus métodos te permiten crear cualquiera de los limitadores
+directamente en el código: slidingWindow(), compound() —
+
+00:01:04.496 --> 00:01:07.966 align:middle
+una combinación de varios limitadores
+— fixedWindow(), noop() —
+
+00:01:08.236 --> 00:01:10.546 align:middle
+un limitador de tasa nulo — y tokenBucket().
+
+00:01:10.896 --> 00:01:12.496 align:middle
+Aquí tienes todos los
+limitadores de tasa disponibles.
+
+00:01:13.016 --> 00:01:13.996 align:middle
+Elige « slidingWindow() ».
+
+00:01:14.686 --> 00:01:16.466 align:middle
+Lo primero que necesitas es un ID.
+
+00:01:16.886 --> 00:01:19.416 align:middle
+Usa el nombre que teníamos en la
+configuración: « registration ».
+
+00:01:21.086 --> 00:01:23.966 align:middle
+Echa un vistazo a « slidingWindow()
+» y verás que necesita un límite
+
+00:01:24.096 --> 00:01:26.096 align:middle
+y un intervalo, igual que en la configuración.
+
+00:01:26.906 --> 00:01:31.006 align:middle
+Nuestro límite es 1 y nuestro
+intervalo es '10 minutes': ¡Y ya está!
+
+00:01:31.256 --> 00:01:32.796 align:middle
+Ya no necesitamos la
+configuración en absoluto.
+
+00:01:33.136 --> 00:01:35.456 align:middle
+Y como es el único limitador
+de tasa que hemos configurado,
+
+00:01:35.666 --> 00:01:38.996 align:middle
+elimina por completo
+config/packages/rate_limiter.yaml.
+
+00:01:39.686 --> 00:01:42.956 align:middle
+Solo incluye un limitador de tasa así en
+el código si realmente es algo puntual.
+
+00:01:43.486 --> 00:01:47.696 align:middle
+Si usas el mismo limitador de tasa en varios
+sitios, sigue configurándolo como hacíamos antes.
+
+00:01:48.096 --> 00:01:50.996 align:middle
+Ese método no va a desaparecer;
+no se va a dejar de usar.
+
+00:01:51.746 --> 00:01:52.526 align:middle
+¡Probémoslo!
+
+00:01:52.816 --> 00:02:00.096 align:middle
+Ve a la página de registro y regístrate como
+worf@enterprise.space, con el nombre de usuario worf, el nombre Worf,
+
+00:02:00.536 --> 00:02:02.096 align:middle
+y una contraseña compleja.
+
+00:02:02.576 --> 00:02:03.926 align:middle
+Acepta los términos y…
+
+00:02:04.706 --> 00:02:06.926 align:middle
+¡Genial! Ya estamos registrados
+e iniciados sesión como Worf.
+
+00:02:07.546 --> 00:02:14.066 align:middle
+Ahora cierra sesión y regístrate de nuevo, esta vez como
+natasha@enterprise.space, con el nombre de usuario natasha,
+
+00:02:14.266 --> 00:02:19.406 align:middle
+el nombre Natasha Yar, otra contraseña
+compleja, acepta los términos y…
+
+00:02:19.796 --> 00:02:20.826 align:middle
+¡nos han limitado la frecuencia de acceso!
+
+00:02:21.226 --> 00:02:25.536 align:middle
+Efectivamente, funciona exactamente igual que
+antes, solo que te hace la vida un poco más fácil.
+
+00:02:26.306 --> 00:02:29.866 align:middle
+¡Y con esto terminamos nuestro repaso a
+las novedades de seguridad de Symfony 8.2!
+
+00:02:30.336 --> 00:02:35.126 align:middle
+Como te dije al principio, la versión 8.2 está resultando ser
+una de las versiones más importantes de Symfony hasta la fecha.
+
+00:02:35.616 --> 00:02:39.896 align:middle
+Echa un vistazo al blog de Symfony para ver entradas
+sobre todas las nuevas funciones: hay docenas de ellas,
+
+00:02:40.126 --> 00:02:41.476 align:middle
+y es una forma estupenda de ponerte al día.
+
+00:02:41.976 --> 00:02:44.796 align:middle
+Hay aún más funciones de seguridad
+que no he mencionado aquí.
+
+00:02:45.416 --> 00:02:48.746 align:middle
+Si tienes alguna pregunta sobre todo esto,
+estamos aquí para ayudarte en los comentarios.
+
+00:02:49.276 --> 00:02:50.086 align:middle
+Bueno, amigos...
+
+00:02:50.246 --> 00:02:51.926 align:middle
+¡Hasta la próxima, y feliz programación!
