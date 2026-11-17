@@ -1,11 +1,12 @@
 # Cómo crear limitadores de tasa con RateLimiterBuilder
 
-Esto último no tiene que ver estrictamente con la seguridad, pero se podría decir que sí. En`src/Controller/RegistrationController.php`, usamos la limitación de tasa para que nadie pueda registrar
+Esto último no tiene que ver estrictamente con la seguridad, pero se podría decir que sí. En
+`src/Controller/RegistrationController.php`, usamos la limitación de tasa para que nadie pueda registrar
 nuevos usuarios una y otra vez. Y Symfony 8.2 añade algunas mejoras interesantes a los limitadores de tasa.
 
 En nuestra acción `register()`, inyectamos un ` `RateLimiterFactoryInterface``, utilizando el
 autowiring por nombre — `#[Target('registration')]` — para obtener el de ` `registration` `. Eso está
-configurado en `config/packages/rate_limiter.yaml`. Pero este es un limitador de tasa de uso único:
+configurado en `config/packages/rate_limiter.yaml`. Pero se trata de un limitador de tasa de uso único:
 solo lo usamos para el registro. Así que resulta un poco molesto configurarlo en un sitio
 y luego tener que saltar a otra parte para usarlo en el controlador.
 
@@ -42,7 +43,7 @@ va a desaparecer: no se va a dejar de usar.
 nombre de usuario `worf`, nombre `Worf`, con una contraseña compleja. Acepta los
 términos y... ¡genial! Ya estamos registrados e iniciados sesión como Worf.
 
-Ahora cierra la sesión y regístrate de nuevo, esta vez como `natasha@enterprise.space`, con el nombre de usuario`natasha`, el nombre `Natasha Yar` y otra contraseña compleja; acepta los términos y… ¡nos han
+Ahora cierra la sesión y regístrate de nuevo, esta vez como `natasha@enterprise.space`, con el nombre de usuario`natasha`, el nombre `Natasha Yar` y otra contraseña compleja; acepta las condiciones y… ¡nos han
 limitado la frecuencia de acceso! Efectivamente, funciona exactamente igual que antes, solo que te hace la vida
 un poco más fácil.
 
