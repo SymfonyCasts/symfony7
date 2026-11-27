@@ -1,5 +1,5 @@
 diff --git a/composer.json b/composer.json
-index 7869bfe..25d9e33 100644
+index 2b7cde3..a37f0a5 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -30,6 +30,7 @@
@@ -11,15 +11,15 @@ index 7869bfe..25d9e33 100644
          "symfony/stimulus-bundle": "^2.13",
          "symfony/twig-bundle": "7.3.*",
 diff --git a/composer.lock b/composer.lock
-index 476862a..1ee90bd 100644
+index b764135..03c33f4 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "24aa7a4505bd57af84f59675b43bbc20",
-+    "content-hash": "c3616f6eda4343d8906fefb1e48815a6",
+-    "content-hash": "df884920f6d1377d57841ec65f107d34",
++    "content-hash": "9e2be4a1dd9fa56bb2eb35a145646c79",
      "packages": [
          {
              "name": "babdev/pagerfanta-bundle",

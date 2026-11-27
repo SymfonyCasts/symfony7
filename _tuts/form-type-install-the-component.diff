@@ -1,5 +1,5 @@
 diff --git a/composer.json b/composer.json
-index 149c105..cea5f94 100644
+index b7436f7..510827a 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -23,6 +23,7 @@
@@ -11,15 +11,15 @@ index 149c105..cea5f94 100644
          "symfony/http-client": "7.3.*",
          "symfony/monolog-bundle": "^3.0",
 diff --git a/composer.lock b/composer.lock
-index c62df07..276cfd2 100644
+index 2994cc6..0df9bdc 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "2c56f0afef04982dcdcb28a6aa849ef0",
-+    "content-hash": "d22b4144688daa10d7626fb63c2782ea",
+-    "content-hash": "e5a6e70c467f50b4423fd2c9e9075756",
++    "content-hash": "6ae0f089ca63ccb75491e5a8709cd1d6",
      "packages": [
          {
              "name": "babdev/pagerfanta-bundle",
