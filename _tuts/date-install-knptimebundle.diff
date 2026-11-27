@@ -1,5 +1,5 @@
 diff --git a/composer.json b/composer.json
-index 958a01c..bdffc8d 100644
+index 22cb323..8720e83 100644
 --- a/composer.json
 +++ b/composer.json
 @@ -7,6 +7,7 @@
@@ -11,15 +11,15 @@ index 958a01c..bdffc8d 100644
          "phpdocumentor/reflection-docblock": "^5.3",
          "phpstan/phpdoc-parser": "^1.25",
 diff --git a/composer.lock b/composer.lock
-index 46a1aa5..92f9f27 100644
+index 7cefa0f..6b89f5f 100644
 --- a/composer.lock
 +++ b/composer.lock
 @@ -4,7 +4,7 @@
          "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
          "This file is @generated automatically"
      ],
--    "content-hash": "4ac9116bfe9ed44dd75b7bf4dfc3be13",
-+    "content-hash": "4677a4eefb32d6c62e99fccad9f70cf9",
+-    "content-hash": "8a168ed7d811d7b1f85f5e3d5271b1dd",
++    "content-hash": "72661c2bdfe47d1a24a53ac227b0e24c",
      "packages": [
          {
              "name": "composer/semver",
